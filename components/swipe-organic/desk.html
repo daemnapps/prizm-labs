@@ -91,36 +91,96 @@ th{color:var(--mut);font-weight:500}
 .bq .brieftext{max-height:460px;overflow:auto;background:var(--bg);border:1px solid var(--line);border-radius:var(--r);padding:14px;font-size:13px;white-space:pre-wrap;line-height:1.6}
 .bq .verdict{display:flex;gap:8px;margin-top:12px;align-items:center}.bq .verdict .no{color:var(--bad)}
 .kp{color:var(--go)}.dr{color:var(--bad)}
+.lede{margin:6px 0 0;color:var(--body);font-size:14px}
+.fresh{margin:8px 0 0;font-size:12.5px;color:var(--mut)}.fresh.old{color:var(--hot);font-weight:600}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin:14px 0 0}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.tile .big{font-size:26px;font-weight:700;color:var(--ink);line-height:1.1}
+.tile .lbl{font-size:12.5px;color:var(--ink);margin-top:2px;font-weight:600}
+.tile .what{font-size:11.5px;color:var(--mut);margin-top:2px}
+.tile .q{float:right;width:18px;height:18px;border-radius:50%;border:1px solid var(--line2);color:var(--mut);font-size:11px;text-align:center;line-height:16px;cursor:help}
+.tile.good .big{color:var(--go)}.tile.warn .big{color:var(--hot)}.tile.bad .big{color:var(--bad)}.tile.grey .big{color:var(--mut)}
+.meter{height:6px;border-radius:3px;background:var(--raise);margin-top:8px;overflow:hidden}.meter i{display:block;height:100%;background:var(--go)}
+.meter.warn i{background:var(--hot)}.meter.bad i{background:var(--bad)}
+.legend{font-size:11.5px;color:var(--mut);margin-top:6px}
+.fname{font-size:10.5px;color:var(--mut);margin-top:4px;opacity:.8;word-break:break-all}
+.bd.hot{color:#f87171}
 @media(max-width:800px){.pipe{grid-template-columns:1fr 1fr}.two,.bq{grid-template-columns:1fr}}
+/* inside Outlier (18 Oct, the owner: "remove anything that doesn't describe something or give an action"): Outlier's header
+   already names the page, so no second title, intro, stale-date line, help marks or tile captions */
+html[data-framed] .wrap>header,html[data-framed] .lede,html[data-framed] #fresh,html[data-framed] .tile .q,html[data-framed] .tile .what{display:none}
+/* Organic | Paid (18 Oct, like daemn.co/feeds): one board, two sides */
+.thumb video{width:100%;height:100%;object-fit:cover;display:block}
+#paidbar{display:none}body.paid #paidbar{display:flex}
+body.paid #orgbar,body.paid #avatarsel,body.paid #stats,body.paid .ask,body.paid #feedhead,body.paid #chainbox{display:none!important}
+.card .adv{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.card .hl{font-weight:600;margin:2px 0 4px}
 @media(max-width:600px){.wrap{padding:0 16px}.grid{grid-template-columns:repeat(2,1fr);gap:10px}select{max-width:100%}}
-</style></head><body>
+@media(max-width:600px){ /* phone first (19 Oct): posts first; dig, filters and search in compact rows; chips small; cards full width */
+html,body{overflow-x:clip;max-width:100%}
+.wrap{padding:0 12px}
+header,.lede,.fresh,.tiles{display:none!important}
+.ask{padding:8px 0;margin:0;border:0;background:none}.ask label{display:none}
+.ask .row{display:flex;gap:6px;align-items:center}
+.ask textarea{flex:1;min-width:0;height:40px!important;min-height:40px!important;resize:none;padding:9px 12px;font-size:14px;border-radius:99px;overflow:hidden;white-space:nowrap}
+.ask textarea:focus{height:90px!important;white-space:normal;border-radius:12px}
+.ask .go{flex:0 0 auto;min-height:40px;padding:0 16px;font-size:0}.ask .go::after{content:"Dig";font-size:14px}
+.bar,.bar2{display:flex;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;gap:6px;padding:4px 0;margin:0;align-items:center}
+.bar::-webkit-scrollbar,.bar2::-webkit-scrollbar{display:none}
+.bar>*,.bar2>*{flex:0 0 auto}.bar2 .spacer{display:none}
+.seg{flex-wrap:nowrap;white-space:nowrap}.seg button{padding:5px 10px;font-size:12px;min-height:34px}
+select{min-height:36px;max-width:150px;font-size:13px}
+#q{flex:0 0 40px!important;width:40px;min-width:0!important;min-height:36px;padding:0 0 0 34px!important;color:transparent;border-radius:99px;
+  background:var(--panel) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235f584c' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='6'/%3E%3Cpath d='m20 20-4-4'/%3E%3C/svg%3E") no-repeat 11px center/17px}
+#q::placeholder{color:transparent}#q:focus,#q:not(:placeholder-shown){flex:0 0 220px!important;color:inherit;padding-right:10px!important}#q:focus::placeholder{color:var(--faint,#8f8676)}
+.chip{min-height:34px;display:inline-flex;align-items:center;white-space:nowrap}
+.grid{grid-template-columns:minmax(0,1fr)!important;gap:12px}
+.grid>*{min-width:0;max-width:100%}
+.grid img,.grid video{width:100%;max-width:100%}
+.grid video{aspect-ratio:9/16;height:auto;object-fit:cover}
+.feedhead{margin:6px 0}
+img,video,iframe,table,pre{max-width:100%}
+}
+</style><script>document.documentElement.dataset.skin="feeds";document.head.appendChild(Object.assign(document.createElement("link"),{rel:"stylesheet",href:location.protocol+"//"+location.hostname+":8880/skin.css"}));document.head.appendChild(Object.assign(document.createElement("script"),{src:location.protocol+"//"+location.hostname+":8880/skin.js"}))</script></head><body>
 <div class="wrap">
-<header><h1>My Feeds</h1><a class="chip" href="/formats" target="_blank">Format library</a><a class="chip" href="/sounds" target="_blank">Trending sounds</a><span class="sub" id="stats"></span></header>
+<header><h1>My Feeds</h1><a class="chip" href="/formats" target="_blank" title="Format library: the kinds of videos that keep working, so we can copy the shape">Format library</a><a class="chip" href="/sounds" target="_blank" title="Trending sounds: songs and sounds lots of people are using on TikTok this week">Trending sounds</a></header>
+<p class="lede">This is where you find what a customer scrolls and laughs at, then pick the best posts to tear down into our own ads. A feed is one avatar's scroll.</p>
+<div class="fresh" id="fresh"></div>
+<div class="tiles" id="stats"></div>
 <div id="feedsbox">
   <div class="ask">
-    <label>Start a dig — say whose scroll you want, it becomes a feed</label>
-    <div class="row"><textarea id="ask" placeholder="Whose scroll is it? Who are they, what do they laugh at, what do they send their friends?"></textarea>
-    <button class="go" id="go">Dig</button></div>
+    <label>Start a dig: whose scroll do you want?</label>
+    <div class="row"><textarea id="ask" placeholder="Who are they, what do they laugh at, what do they send their friends?"></textarea>
+    <button class="go" id="go" title="Dig: collects posts from TikTok, Instagram and YouTube into a new feed. Uses a little scraping money.">Dig (uses scraping money)</button></div>
     <div id="jobsbox"><div id="jobs"></div></div>
   </div>
   <div class="bar">
+    <span class="seg" id="sides"></span>
     <span class="seg" id="brands"></span>
     <select id="avatarsel" aria-label="Avatar"></select>
     <input type="search" id="q" placeholder="Search every post — captions, creators, hashtags, formats">
   </div>
-  <div class="bar2">
+  <div class="bar2" id="paidbar">
+    <select id="advsel" aria-label="Advertiser"></select>
+    <span class="seg" id="pkinds"></span>
+    <span class="seg" id="pwins"></span>
+    <span class="spacer"></span>
+    <a class="chip" id="fullbd" href="#">One brand's full breakdown</a>
+    <select id="psortsel" aria-label="Sort"></select>
+  </div>
+  <div class="bar2" id="orgbar">
     <span class="seg" id="lanes"></span>
     <span class="seg" id="shapes"></span>
     <span class="seg" id="plats"></span>
     <span class="seg" id="wins"></span>
     <span class="spacer"></span>
     <select id="sortsel" aria-label="Sort"></select>
-    <button class="chip" id="dropped">Show thrown out</button>
+    <button class="chip" id="dropped" title="Posts we sorted out as ads, off-topic or junk">Show thrown out</button>
   </div>
   <div class="feedhead" id="feedhead"></div>
   <div class="grid" id="grid"></div>
   <div id="chainbox" style="display:none"></div>
-  <details class="drawer"><summary>The nightly run</summary><div class="in" id="daily"></div></details>
+  <details class="drawer"><summary>The nightly run (automatic 5:30 run is OFF since Sep 23)</summary><div class="in" id="daily"></div></details>
   <details class="drawer"><summary>The prompts — exactly as sent</summary><div class="in" id="prompts"></div></details>
 </div>
 </div>
@@ -132,20 +192,70 @@ let S=null, feed="all", sort="in", plat="all", win="all", showOut=false, lane="e
 const P={tiktok:["TIKTOK",""],instagram:["REEL",""],youtube:["YOUTUBE",""]};
 const SORTS=[["in","Just in"],["sent","Most sent"],["rise","Rising"],["punch","Punching above"],["views","Most viewed"],["new","Newest post"]];
 const WINS=[["7","7d"],["30","30d"],["90","90d"],["all","All time"]];
+// a link can open one feed on one side: ?feed=<id>&lane=selling (offer feeds open on their offers)
+{const q=new URLSearchParams(location.search);if(q.get("feed"))feed=q.get("feed");if(["entertainment","educational","selling","all"].includes(q.get("lane")))lane=q.get("lane");if(SORTS.some(([v])=>v==q.get("sort")))sort=q.get("sort");}
 const esc=s=>(s??"").toString().replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const fmt=n=>n==null?"":n>=1e6?(n/1e6).toFixed(1)+"M":n>=1e3?Math.round(n/1e3)+"K":""+n;
+const KIND={dig:"Dig",teardown:"Tear down",sounds:"Trending sounds",pull:"Pull"};
+const STAT={running:"working",done:"done",failed:"didn't finish"};
+const dayName=d=>d.toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"});
+const plainErr=l=>{l=(l||[]).filter(Boolean);if(!l.length)return "No problems";const t=l.join(" ");
+  if(/No such file|apify/i.test(t))return "Couldn't collect new videos — the scraping tool wasn't found";
+  if(/limit|credit|usage/i.test(t))return "Couldn't collect — scraping money is used up";
+  return "Something went wrong while collecting — try \u201cPull now\u201d on the feed"};
+const tile=(cls,big,lbl,what,tip,extra)=>`<div class="tile ${cls}"><span class="q" title="${esc(tip)}">?</span><div class="big">${big}</div><div class="lbl">${lbl}</div><div class="what">${what}</div>${extra||""}</div>`;
 const ago=s=>{if(!s)return "never";const h=(Date.now()-new Date(s))/36e5;return h<1?"just now":h<48?Math.round(h)+"h ago":Math.round(h/24)+"d ago"};
 function chips(el,opts,cur,set){el.innerHTML=opts.map(([v,l])=>`<button class="chip ${v==cur?"on":""}" data-v="${v}">${l}</button>`).join(" ");
   el.querySelectorAll("button").forEach(b=>b.onclick=()=>{set(b.dataset.v);draw()})}
 
+let side=new URLSearchParams(location.search).get("t")=="paid"?"paid":"organic", ADS=null, adv="all", pkind="all", pwin="all", psort="days";
+async function loadAds(){if(ADS)return;ADS=await(await fetch("/api/ads")).json();draw()}
+function drawPaid(){
+  if(!ADS){grid.innerHTML=`<div class="empty">Bringing the competitors' ads in…</div>`;loadAds();return}
+  const bl=["Brand A","Brand B","general"].filter(b=>ADS.advertisers.some(a=>a.brands.includes(b)));
+  chips(brands,[["all","All brands"],...bl.map(b=>[b,b=="general"?"General":b.toUpperCase()])],brand,v=>{brand=v;adv="all"});
+  const advs=ADS.advertisers.filter(a=>brand=="all"||a.brands.includes(brand));
+  if(adv!="all"&&!advs.some(a=>a.id==adv))adv="all";
+  advsel.innerHTML=`<option value="all">All advertisers</option>`+advs.map(a=>`<option value="${a.id}" ${adv==a.id?"selected":""}>${esc(a.name)} (${a.ads})</option>`).join("");
+  advsel.onchange=()=>{adv=advsel.value;draw()};
+  chips(pkinds,[["all","All"],["video","Video"],["image","Image"]],pkind,v=>pkind=v);
+  chips(pwins,WINS,pwin,v=>pwin=v);
+  psortsel.innerHTML=[["days","Running longest"],["new","Newest ad"],["copies","Most copies"]].map(([v,l])=>`<option value="${v}" ${v==psort?"selected":""}>Sort: ${l}</option>`).join("");
+  psortsel.onchange=()=>{psort=psortsel.value;draw()};
+  fullbd.href=location.protocol+"//"+location.hostname+":8765/";
+  const ok=new Set(advs.map(a=>a.id)), name=id=>(ADS.advertisers.find(a=>a.id==id)||{}).name||id;
+  const words=q.value.toLowerCase().split(/\s+/).filter(Boolean), now=Date.now();
+  let as=ADS.ads.filter(a=>(adv=="all"?ok.has(a.adv):a.adv==adv)&&(pkind=="all"||(pkind=="video")==a.video)
+    &&(pwin=="all"||(a.last&&(now-new Date(a.last))/864e5<=+pwin)));
+  if(words.length)as=as.filter(a=>{const h=[name(a.adv),a.headline,a.copy].join(" ").toLowerCase();return words.every(w=>h.includes(w))});
+  if(psort=="new")as.sort((x,y)=>(y.first||"").localeCompare(x.first||""));else if(psort=="copies")as.sort((x,y)=>y.copies-x.copies);
+  grid.innerHTML=as.length?as.slice(0,240).map(a=>`<div class="card"><a class="thumb" href="${esc(a.url)}" target="_blank">
+    ${a.video?`<video muted playsinline preload="metadata" src="${esc(a.url)}#t=1"></video>`:a.thumb?`<img loading="lazy" referrerpolicy="no-referrer" src="${esc(a.thumb)}" onerror="this.remove()">`:""}<span class="pb" style="background:#1c1a16">${a.video?"VIDEO":"IMAGE"}</span></a>
+    <div class="body"><div class="adv">${esc(name(a.adv))}</div>${a.headline?`<div class="hl">${esc(a.headline)}</div>`:""}<div class="cap">${esc(a.copy)}</div>
+    <div class="meta">${[a.days?a.days+" days running":"",a.copies>1?fmt(a.copies)+" copies":"",a.first?"started "+a.first:"",a.last?"last seen "+a.last:""].filter(Boolean).join(" · ")}</div>
+    <div class="acts"><a href="${esc(a.url)}" target="_blank">Open</a></div></div></div>`).join("")
+    :`<div class="empty">No ads match these filters.</div>`;
+}
 function draw(){
   if(!S)return;
+  chips(sides,[["organic","Organic"],["paid","Paid"]],side,v=>{side=v;brand="all";history.replaceState(null,"",v=="paid"?"?t=paid":location.pathname)});
+  document.body.classList.toggle("paid",side=="paid");
+  if(side=="paid"){drawPaid();return}
   const sp=S.spend, newToday=S.cards.filter(c=>c.seen_days===0&&c.keep!==false).length;
-  stats.textContent=`${S.feeds.length} feeds · ${S.cards.length.toLocaleString()} posts · ${newToday} new today`+(sp.used!=null?` · scraping $${sp.used} of $${sp.cap} this month`:"");
+  const lastAt=S.feeds.map(f=>f.last&&f.last.at?new Date(f.last.at):null).filter(Boolean).sort((a,b)=>b-a)[0];
+  if(lastAt){const old=(Date.now()-lastAt)/864e5>1;fresh.className="fresh"+(old?" old":"");
+    fresh.textContent=old?`Numbers up to ${dayName(lastAt)} — that's more than a day old, so newer videos may be missing.`:`Numbers up to ${dayName(lastAt)} — fresh.`}
+  else{fresh.className="fresh old";fresh.textContent="No videos collected yet."}
+  const pct=sp.used!=null&&sp.cap?Math.min(100,Math.round(sp.used/sp.cap*100)):null, mcls=pct==null?"":pct>=85?"bad":pct>=60?"warn":"";
+  stats.innerHTML=tile("",S.feeds.length,"Feeds","Each feed is one avatar's scroll.","A feed is the videos one kind of customer watches. More feeds = more ideas to learn from.")
+   +tile("",S.cards.length.toLocaleString(),"Posts","Every video we have collected, across all feeds.","The pile you pick from. Bigger pile = more chances to find a winner.")
+   +tile(newToday?"good":"grey",newToday,"New today","Videos found for the first time today.","Green means fresh ideas arrived today. Grey means nothing new yet.")
+   +(sp.used!=null?tile(mcls=="bad"?"bad":mcls=="warn"?"warn":"good","$"+sp.used,"Scraping spend",`Out of $${sp.cap} we allow for collecting videos.`,"Money paid to the service that collects videos. Green = plenty left, amber = over half used, red = almost out.",`<div class="meter ${mcls}"><i style="width:${pct}%"></i></div>`)
+     :tile("grey","Not loaded","Scraping spend","Couldn't read the amount right now.","Money paid to the service that collects videos."));
   // brand → avatar: two controls instead of a wall of tabs
-  const bl=[...new Set(S.feeds.map(f=>f.core&&f.brand!="owner"?f.brand:"general"))].sort((x,y)=>(x=="general")-(y=="general")||x.localeCompare(y));
+  const bl=[...new Set(S.feeds.map(f=>f.core&&f.brand!="the owner"?f.brand:"general"))].sort((x,y)=>(x=="general")-(y=="general")||x.localeCompare(y));
   chips(brands,[["all","All brands"],...bl.map(b=>[b,b=="general"?"General":b.toUpperCase()])],brand,v=>{brand=v;feed="all";view="feed"});
-  const fb=f=>f.core&&f.brand!="owner"?f.brand:"general";
+  const fb=f=>f.core&&f.brand!="the owner"?f.brand:"general";
   // A feed with no avatar of its own (his saves) is never filtered out by a
   // brand chip — each of its cards carries the brand it was saved for.
   const own=f=>!f.core, inBrand=S.feeds.filter(f=>brand=="all"||own(f)||fb(f)==brand);
@@ -157,7 +267,7 @@ function draw(){
   avatarsel.onchange=()=>{feed=avatarsel.value;if(feed=="all")view="feed";draw()};
   sortsel.innerHTML=SORTS.map(([v,l])=>`<option value="${v}" ${v==sort?"selected":""}>Sort: ${l}</option>`).join("");
   sortsel.onchange=()=>{sort=sortsel.value;draw()};
-  chips(lanes,[["entertainment","Entertainment"],["educational","Educational"],["all","Both"]],lane,v=>lane=v);
+  chips(lanes,[["entertainment","Entertainment"],["educational","Educational"],["selling","Offers"],["all","All"]],lane,v=>lane=v);
   chips(wins,WINS,win,v=>win=v);
   chips(plats,[["all","All"],["tiktok","TikTok"],["instagram","Instagram"],["youtube","YouTube"]],plat,v=>plat=v);
   // his saves carry their own read — ad-shaped or culture. Other feeds have none
@@ -168,8 +278,8 @@ function draw(){
   const f=S.feeds.find(x=>x.id==feed);
   feedhead.innerHTML=f?`${f.whose?`<div class="askline">${esc(f.whose)}</div>`:f.ask?`<div class="askline">“${esc(f.ask.slice(0,240))}”</div>`:""}
     ${f.sources} sources${f.probation?` · ${f.probation} on trial (found by following winners)`:""} · ${f.sweeps} pulls so far
-    · <button class="chip" id="pull">Pull now</button> <button class="chip ${view=="chain"?"on":""}" id="chainbtn">The research chain</button>
-    <details><summary>What it watches, and why</summary>${f.source_list.map(s=>`<span class="src ${s.status=="probation"?"pro":""}" title="${esc(s.receipt)}">${s.platform.slice(0,2).toUpperCase()} ${s.kind=="hashtag"?"#":s.kind=="account"?"@":"“"}${esc(s.value)}${s.kind=="search"?"”":""}</span>`).join("")}</details>`:"";
+    · <button class="chip" id="pull" title="Pull now: collects new posts for this feed. Uses a little scraping money.">Pull now (uses scraping money)</button> <button class="chip ${view=="chain"?"on":""}" id="chainbtn" title="Shows each step that built this feed, and the prompts the AI got">${view=="chain"?"Back to the posts":"The research chain"}</button>
+    <details><summary>What it watches, and why</summary><div class="legend"># = hashtag · @ = account · “quotes” = search. Hover any one to see why we picked it.</div>${f.source_list.map(s=>`<span class="src ${s.status=="probation"?"pro":""}" title="${esc(s.receipt)}">${s.platform.slice(0,2).toUpperCase()} ${s.kind=="hashtag"?"#":s.kind=="account"?"@":"“"}${esc(s.value)}${s.kind=="search"?"”":""}</span>`).join("")}</details>`:"";
   if(f){pull.onclick=()=>post("/api/pull",{feed:f.id});chainbtn.onclick=()=>{view=view=="chain"?"feed":"chain";draw()}}
   if(f&&view=="chain"){grid.style.display="none";chainbox.style.display="";drawChain(f.id)}else{grid.style.display="";chainbox.style.display="none"}
 
@@ -189,21 +299,21 @@ function draw(){
     return `<div class="card ${c.keep===false?"out":""}"><a class="thumb" href="${esc(c.url)}" target="_blank">
     ${c.cover?`<img loading="lazy" referrerpolicy="no-referrer" src="${esc(c.cover)}" onerror="this.remove()">`:""}
     <span class="pb" style="background:${col}">${b}</span><span class="badges">
-    ${c.seen_days===0?`<span class="bd new">NEW</span>`:""}${c.rise>=5?`<span class="bd rise">▲ ${Math.round(c.rise)}%/day</span>`:""}
-    ${c.sent>=5?`<span class="bd rise">↗ sent ${c.sent}/1K views</span>`:""}${c.punch>=3?`<span class="bd punch">${c.punch>=100?Math.round(c.punch):c.punch}× their following</span>`:""}</span></a>
+    ${c.seen_days===0?`<span class="bd new" title="First found today">NEW</span>`:""}${c.rise>=5?`<span class="bd rise" title="Rising: views are climbing fast, in % per day. Green = good.">▲ ${Math.round(c.rise)}%/day</span>`:""}
+    ${c.sent>=5?`<span class="bd rise" title="Sends per 1,000 views: how often people send this to friends. Higher = more shareable.">↗ sent ${c.sent}/1K views</span>`:""}${c.punch>=3?`<span class="bd hot" title="Outlier: this post got far more views than the creator has followers, so it is going viral.">${c.punch>=100?Math.round(c.punch):c.punch}× their following</span>`:""}</span></a>
     <div class="body"><div class="author">@${esc(c.author)}${c.kind?` <span class="sub">· ${esc(c.kind)}</span>`:""}</div>
     ${c.what?`<div class="what">${esc(c.what)}</div>`:""}<div class="cap">${esc(c.caption)}</div>
-    <div class="meta">${[c.views?fmt(c.views)+" views":"",c.likes?fmt(c.likes)+" likes":"",c.posted||"",c.age!=null?c.age+"d old":""].filter(Boolean).join(" · ")}</div>
+    <div class="meta">${[c.views?fmt(c.views)+" views":"",c.likes?fmt(c.likes)+" likes":"",c.posted||"",c.age!=null?(c.age==0?"posted today":c.age+(c.age==1?" day":" days")+" old"):""].filter(Boolean).join(" · ")}</div>
     ${c.format&&c.format!="unread"?`<div class="fmt">format: ${esc(c.format)}</div>`:""}
     ${c.why?`<div class="why">${esc(c.why)}</div>`:""}
-    <div class="acts"><a href="${esc(c.url)}" target="_blank">Open</a>
-    ${c.platform=="instagram"?`<a href="/handoff/${esc(c.key.split(":").pop())}" target="_blank">Sheet</a>`:""}
-    <button data-i="${i}" class="tear">Tear down</button></div></div></div>`}).join("")
-    :`<div class="empty">Nothing matches. ${S.feeds.length?"":"Start a dig above — that's the whole setup."}</div>`;
-  const send=async(b,c,brand,route)=>{b.disabled=true;b.textContent="Running…";
+    <div class="acts"><a href="${esc(c.url)}" target="_blank" title="Opens the post on its own site">Open</a>
+    ${c.platform=="instagram"?`<a href="/handoff/${esc(c.key.split(":").pop())}" target="_blank" title="A page showing the post and how to remake it">Sheet</a>`:""}
+    <button data-i="${i}" class="tear" title="Tear down: reads this post and writes down why it works. Uses AI. Nothing is made or posted.">Tear down (uses AI)</button></div></div></div>`}).join("")
+    :`<div class="empty">Nothing matches these filters. ${S.feeds.length?"Try \u201cAll time\u201d or \u201cBoth\u201d above.":"Start a dig above \u2014 type whose scroll you want and press \u201cDig\u201d."}</div>`;
+  const send=async(b,c,brand,route)=>{b.disabled=true;b.textContent="Working…";
     const r=await post("/api/tear",{feed:c.feed,item:c.key,brand,route});
     // the run shows in the strip at the top of the page, with a link to it
-    if(r&&r.job){b.textContent="Running — see the top";jobsbox.scrollIntoView({behavior:"smooth",block:"nearest"})}
+    if(r&&r.job){b.textContent="Working — see the top of the page";jobsbox.scrollIntoView({behavior:"smooth",block:"nearest"})}
     setTimeout(()=>tick(true),1500)};
   // The route lock (the owner, 2026-09-30): writing starts only on a route he
   // picks. Teardown only = the swipe is torn down and waits for a route.
@@ -224,43 +334,43 @@ function draw(){
     b.textContent="Which brand?";b.disabled=true;
     (S.brands||[]).forEach(br=>{const p=document.createElement("button");p.className="tear pick";
       p.textContent=br.toUpperCase();p.onclick=()=>askRoute(b,c,br);acts.appendChild(p)})});
-  daily.innerHTML=S.daily.length?`<table><tr><th>when</th><th>feeds pulled</th><th>new posts</th><th>kept</th><th>scraping</th><th>trouble</th></tr>${
-    S.daily.slice().reverse().map(d=>`<tr><td>${ago(d.at)}</td><td>${d.feeds.length}</td><td>${d.feeds.reduce((a,f)=>a+(f.new||0),0)}</td><td>${d.feeds.reduce((a,f)=>a+(f.kept||0),0)}</td><td>${d.spend!=null?"$"+d.spend.toFixed(2):"—"}</td><td>${esc(d.feeds.flatMap(f=>f.errors||[]).join("; ")||"none")}</td></tr>`).join("")}</table>`
-    :"Switched off for now. Pull now refreshes a feed; Tear down on any card sends it through the chain.";
+  daily.innerHTML=S.daily.length?`<div class="sub" style="margin-bottom:8px">Each row is one overnight run. The automatic 5:30 run is OFF since Sep 23 (no automatic scraping spend).</div><table><tr><th>When</th><th>Feeds pulled</th><th>New posts</th><th>Kept</th><th>Scraping spend</th><th>Trouble</th></tr>${
+    S.daily.slice().reverse().map(d=>`<tr><td>${ago(d.at)}</td><td>${d.feeds.length}</td><td>${d.feeds.reduce((a,f)=>a+(f.new||0),0)}</td><td>${d.feeds.reduce((a,f)=>a+(f.kept||0),0)}</td><td>${d.spend!=null?"$"+d.spend.toFixed(2):"not counted"}</td><td class="${d.feeds.some(f=>(f.errors||[]).length)?"dr":"kp"}">${esc(plainErr(d.feeds.flatMap(f=>f.errors||[])))}</td></tr>`).join("")}</table>`
+    :"The automatic 5:30 overnight run is OFF since Sep 23 (no automatic scraping spend). Pull now refreshes a feed; Tear down on any card sends it through the chain.";
   prompts.innerHTML=Object.entries(S.prompts).map(([n,t])=>`<h4>${esc(n)}</h4><pre>${esc(t)}</pre>`).join("");
   drawJobs(S.jobs);
 }
 async function drawChain(id){
-  if(!CH||CH.feed!=id){chainbox.innerHTML='<div class="empty">Reading the chain…</div>';CH=await(await fetch("/api/chain/"+id)).json()}
+  if(!CH||CH.feed!=id){chainbox.innerHTML='<div class="empty">Loading the steps…</div>';CH=await(await fetch("/api/chain/"+id)).json()}
   const st=CH.stages, o=n=>st[n-1].output;
-  const big=[o(1)?["TIKTOK_SEARCHES","TIKTOK_HASHTAGS","INSTAGRAM_HASHTAGS","YOUTUBE_SEARCHES"].reduce((a,k)=>a+(o(1)[k]||[]).length,0)+" searches":"built by hand",
-    o(2)?`${o(2).new} new of ${Object.values(o(2).by_source||{}).reduce((a,x)=>a+x.returned,0)||o(2).observed} returned`:"not yet",
-    (()=>{const k=Object.values(o(3).kinds);const a=k.reduce((x,y)=>x+y.kept,0),d=k.reduce((x,y)=>x+y.dropped,0);return a+d?`${a} in · ${d} out`:"not sifted"})(),
-    `${o(4).length} creators found`,`${o(5).pulls_so_far} pulls so far`];
+  const big=[o(1)?["TIKTOK_SEARCHES","TIKTOK_HASHTAGS","INSTAGRAM_HASHTAGS","YOUTUBE_SEARCHES"].reduce((a,k)=>a+(o(1)[k]||[]).length,0)+" searches":"set up by hand",
+    o(2)?`${o(2).new} new out of ${Object.values(o(2).by_source||{}).reduce((a,x)=>a+x.returned,0)||o(2).observed} found`:"not yet",
+    (()=>{const k=Object.values(o(3).kinds);const a=k.reduce((x,y)=>x+y.kept,0),d=k.reduce((x,y)=>x+y.dropped,0);return a+d?`${a} kept · ${d} skipped`:"not sorted yet"})(),
+    `${o(4).length} creators found`,`checked ${o(5).pulls_so_far} times`];
   chainbox.innerHTML=`<div class="pipe">${st.map((x,i)=>`<div class="st ${stageOn==x.n?"on":""}" data-n="${x.n}"><div class="n">Stage ${x.n}</div><div class="nm">${x.name}</div><div class="d">${esc(x.does)}</div><div class="big">${big[i]}</div><div class="mdl">${esc(x.model)}</div></div>`).join("")}</div><div class="stage" id="stagebox"></div>`;
   chainbox.querySelectorAll(".st").forEach(e=>e.onclick=()=>{stageOn=+e.dataset.n;drawChain(id)});
   const x=st[stageOn-1]; let out="";
-  if(x.n==1)out=x.output?`<table>${Object.entries(x.output).map(([k,v])=>`<tr><th>${esc(k)}</th><td>${esc(Array.isArray(v)?v.map(y=>typeof y=="object"?JSON.stringify(y):y).join(" · "):v)}</td></tr>`).join("")}</table>`:"This feed's sources were seated by hand from the avatar's receipts — no plan stage ran.";
-  if(x.n==2)out=x.output?`<p class="sub">Door rules: nothing older than ${x.entry?.max_age_days??"—"} days · search finds need ${fmt(x.entry?.hashtag_min_views)} views or ${fmt(x.entry?.hashtag_min_likes)} likes · declared ads never enter</p>
-    <table><tr><th>source</th><th>returned</th><th>new in</th><th>ads</th><th>too old</th><th>too small</th></tr>${Object.entries(x.output.by_source||{}).map(([k,v])=>`<tr><td>${esc(k)}</td><td>${v.returned}</td><td class="kp">${v.new}</td><td>${v.ad}</td><td>${v.too_old}</td><td>${v.too_small}</td></tr>`).join("")}</table>${(x.output.errors||[]).length?`<p class="dr">${esc(x.output.errors.join("; "))}</p>`:""}`:"Hasn't pulled yet.";
+  if(x.n==1)out=x.output?`<table>${Object.entries(x.output).map(([k,v])=>`<tr><th>${esc(k.replace(/_/g," ").toLowerCase())}</th><td>${esc(Array.isArray(v)?v.map(y=>typeof y=="object"?JSON.stringify(y):y).join(" · "):v)}</td></tr>`).join("")}</table>`:"This feed was set up by hand from notes about the customer, so there was no planning step.";
+  if(x.n==2)out=x.output?`<p class="sub">Door rules: nothing older than ${x.entry?.max_age_days??"a set number of"} days · videos found by search need ${x.entry?.hashtag_min_views!=null?fmt(x.entry.hashtag_min_views)+" views":"enough views"} or ${x.entry?.hashtag_min_likes!=null?fmt(x.entry.hashtag_min_likes)+" likes":"enough likes"} · ads are never let in</p>
+    <table><tr><th>Source</th><th>Returned</th><th>New in</th><th>Ads</th><th>Too old</th><th>Too small</th></tr>${Object.entries(x.output.by_source||{}).map(([k,v])=>`<tr><td>${esc(k)}</td><td>${v.returned}</td><td class="kp">${v.new}</td><td>${v.ad}</td><td>${v.too_old}</td><td>${v.too_small}</td></tr>`).join("")}</table>${(x.output.errors||[]).length?`<p class="dr">${esc(plainErr(x.output.errors))}</p>`:""}`:"Hasn't collected any videos yet.";
   if(x.n==3){const rows=l=>l.map(r=>`<tr><td><a href="${esc(r.url)}" target="_blank" style="color:var(--blue)">@${esc(r.author)}</a></td><td>${esc(r.kind)}</td><td>${esc(r.why)}</td></tr>`).join("");
-    out=Object.keys(x.output.kinds).length?`<table><tr><th>kind</th><th>kept</th><th>thrown out</th></tr>${Object.entries(x.output.kinds).map(([k,v])=>`<tr><td>${esc(k)}</td><td class="kp">${v.kept||""}</td><td class="dr">${v.dropped||""}</td></tr>`).join("")}</table>
-    <div class="two"><div><h4 class="kp">Kept — and why</h4><table>${rows(x.output.kept)}</table></div><div><h4 class="dr">Thrown out — and why</h4><table>${rows(x.output.dropped)}</table></div></div>`:"No sift on this feed — it has no ask to sift against."}
-  if(x.n==4)out=x.output.length?`<table>${x.output.map(d=>`<tr><td>${esc(d.platform||"")}</td><td>@${esc(d.value||d.handle||"")}</td><td>${esc(d.receipt||d.why||"")}</td></tr>`).join("")}</table>`:"Nothing followed yet.";
-  if(x.n==5)out=`Runs on its own at 5:30 every morning. The log is in “The daily run” at the bottom of this page.`;
+    out=Object.keys(x.output.kinds).length?`<table><tr><th>Kind</th><th>Kept</th><th>Thrown out</th></tr>${Object.entries(x.output.kinds).map(([k,v])=>`<tr><td>${esc(k)}</td><td class="kp">${v.kept||""}</td><td class="dr">${v.dropped||""}</td></tr>`).join("")}</table>
+    <div class="two"><div><h4 class="kp">Kept — and why</h4><table>${rows(x.output.kept)}</table></div><div><h4 class="dr">Thrown out — and why</h4><table>${rows(x.output.dropped)}</table></div></div>`:"Nothing was sorted for this feed — it has no description of what to keep."}
+  if(x.n==4)out=x.output.length?`<table>${x.output.map(d=>`<tr><td>${esc(d.platform||"")}</td><td>@${esc(d.value||d.handle||"")}</td><td>${esc(d.receipt||d.why||"")}</td></tr>`).join("")}</table>`:"No creators followed yet.";
+  if(x.n==5)out=`Turned off since Sep 23, so no scraping money is spent without you. Press “Pull now” on a feed to get fresh posts.`;
   stagebox.innerHTML=`<h3>Stage ${x.n} — ${x.name}</h3><div class="sub">${esc(x.does)}</div>
-    <div class="two"><div><h4>What it was sent${x.prompt_file?` — ${x.prompt_file}`:""}</h4>${x.prompt?`<pre>${esc(x.prompt)}</pre>`:`<div class="sub">No prompt at this stage.</div>`}</div>
+    <div class="two"><div><h4>What it was sent${x.prompt_file?` <span class="fname">file name: ${esc(x.prompt_file)}</span>`:""}</h4>${x.prompt?`<pre>${esc(x.prompt)}</pre>`:`<div class="sub">No prompt at this stage.</div>`}</div>
     <div><h4>What came back</h4>${out}</div></div>`;
 }
 function drawJobs(js){
   const live=js.filter(j=>j.status=="running"), fresh=js.filter(j=>j.status!="running"&&Date.now()-new Date(j.updated||j.started)<6e5).slice(0,1), show=(live.length?live:fresh).slice(0,3);
-  jobs.innerHTML=show.map(j=>`<div class="job"><span class="dot ${j.status}"></span><b>${esc(j.title||j.ask||j.feed||j.label||j.kind)}</b>
-    <span class="sub"> · ${j.kind} · ${ago(j.started)}</span>
-    ${j.kind=="teardown"&&j.label?`<span class="sub"> · <a href="/run/${esc(j.label)}" target="_blank">open the run →</a></span>`:""}
+  jobs.innerHTML=show.map(j=>`<div class="job"><span class="dot ${j.status}"></span><b>${esc(j.title||(j.ask||"").slice(0,90)||KIND[j.kind]||"Working on it")}</b>
+    <span class="sub"> · ${KIND[j.kind]||"Working"} · ${STAT[j.status]||j.status} · ${ago(j.started)}</span>
+    ${j.kind=="teardown"&&j.label?`<span class="sub"> · <a href="/run/${esc(j.label)}" target="_blank">see the breakdown →</a></span>`:""}
     <div class="steps">${esc((j.steps||[]).slice(-5).map(s=>s.say).join("\n"))}</div></div>`).join("");
   go.disabled=live.some(j=>j.kind=="dig");
 }
-async function post(u,b){const r=await fetch(u,{method:"POST",body:JSON.stringify(b)});const j=await r.json();if(j.error)alert(j.error);tick(true);return j}
+async function post(u,b){const r=await fetch(u,{method:"POST",body:JSON.stringify(b)});const j=await r.json();if(j.error)alert("Couldn't do that: "+j.error);tick(true);return j}
 let wasLive=false;
 async function load(){S=await(await fetch("/api/state")).json();draw()}
 async function tick(force){const js=(await(await fetch("/api/jobs")).json()).jobs;const live=js.some(j=>j.status=="running");

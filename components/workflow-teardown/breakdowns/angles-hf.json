@@ -1,0 +1,96 @@
+{
+ "id": "angles-hf",
+ "name": "Multi-Camera Angles (/angles)",
+ "kind": "video",
+ "makes": "Re-shoots a user's one-take clip as a bold multi-camera edit with new lenses and angles, keeping the people, performance, words, timing and original audio.",
+ "source": [
+  "angles-hf/SKILL.md",
+  "angles-hf/scripts/sheets.py.md",
+  "commands/angles.md"
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "name": "Probe and frame sheets",
+   "model": "none",
+   "cheap": "local ffmpeg + Whisper (free)"
+  },
+  {
+   "n": 2,
+   "name": "Read every sheet",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 3,
+   "name": "Find the camera directions",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 4,
+   "name": "Break the take down, then plan shots",
+   "model": "none",
+   "cheap": "Claude on the plan (free to us)"
+  },
+  {
+   "n": 5,
+   "name": "Cost line",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 6,
+   "name": "Generate",
+   "model": "seedance_2_5",
+   "cheap": "`gemini_omni_flash_1_2` mode `edit`, 360p (source 3-15 s, up to 7 image refs): the same 7.5 credits per 10 s tier as its quoted reference-to-video; the edit price itself is not quoted, re-quote first"
+  },
+  {
+   "n": 7,
+   "name": "Put original audio back",
+   "model": "none",
+   "cheap": "local ffmpeg remux (free)"
+  },
+  {
+   "n": 8,
+   "name": "Check from result sheets",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 9,
+   "name": "Deliver",
+   "model": "none",
+   "cheap": null
+  }
+ ],
+ "prompts": [
+  {
+   "label": "Multi-camera prompt template",
+   "source": "angles-hf/SKILL.md",
+   "text": "Multi-camera re-shoot of @Video1: the same take — the same people, performance, words, sound and timing as @Video1, in real time from 0 to {L} s — covered by many cameras with different lenses around the same {place} and cut together into a bold, dynamic edit. Only the cameras change; nothing in front of them changes. The edit opens on shot 1 from its very first frame. {N} shots, hard cuts at {t1} s, {t2} s, …. Time runs on across every cut: nothing repeats, skips, slows down or speeds up.\n\n@Video1: {one sentence: the place and its landmarks, the people (look, clothes, where they are), the key props, the light}.\n\nPhotoreal, cinematic. {aspect_ratio}. {L}s. Same light, colour and sound as @Video1. No music, no extra people.\n\nShot 1, 0.0–{t1} s, from the first frame — {lens}, {camera position by the set and the people, height}, {move}: {what fills the frame}; {what is now behind or around}. Accent: {the moment this shot catches}.\nShot 2, {t1}–{t2} s — …\n\n{Gaze sentence, when someone talks to or looks at the original camera, written without the word camera.}\nFaces, clothes, props and the place stay exactly as in @Video1 in every shot; the sound runs on unbroken across the cuts.\n{On-screen text sentence when the clip has captions, titles or logos; otherwise: No text.}"
+  },
+  {
+   "label": "One-angle prompt template",
+   "source": "angles-hf/SKILL.md",
+   "text": "Single-camera re-shoot of @Video1: the same take — the same people, performance, words, sound and timing as @Video1, in real time from 0 to {L} s — filmed from one new camera position. One continuous shot from 0 to {L} s with no cuts: the view never switches to another angle. Only the camera position changes; nothing in front of it changes. Time runs on: nothing repeats, skips, slows down or speeds up.\n\n@Video1: {one sentence: the place and its landmarks, the people (look, clothes, where they are), the key props, the light}.\n\nPhotoreal, cinematic. {aspect_ratio}. {L}s. Same light, colour and sound as @Video1. No music, no extra people.\n\nThe camera, 0.0–{L} s — {lens}, {camera position by the set and the people, height}, {move; a static camera: completely still for the whole shot, no pan, tilt, zoom or shake}: {what fills the frame, and how much of the face turns to us}; {what is now behind or around}.\n\n{Gaze sentence, when someone talks to or looks at the original camera, written without the word camera.}\nFaces, clothes, props and the place stay exactly as in @Video1 for the whole shot.\n{On-screen text sentence when the clip has captions, titles or logos; otherwise: No text.}"
+  },
+  {
+   "label": "Generation request",
+   "source": "angles-hf/SKILL.md",
+   "text": "{\"params\":{\"model\":\"seedance_2_5\",\"mode\":\"video_edit\",\"prompt\":\"<the shot-list prompt>\",\"count\":1,\"duration\":<L>,\"resolution\":\"1080p\",\"aspect_ratio\":\"auto\",\"generate_audio\":false,\"medias\":[{\"value\":\"<clip media id>\",\"role\":\"video\"}]}}"
+  },
+  {
+   "label": "Audio restore command",
+   "source": "angles-hf/SKILL.md",
+   "text": "     && ffmpeg -v error -y -i edit.mp4 -i src.mp4 -map 0:v:0 -map 1:a:0 -c:v copy -c:a aac -b:a 192k \\\n        -shortest -movflags +faststart final.mp4 \\\n     && curl -f -X PUT -H 'Content-Type: video/mp4' -H 'If-None-Match: *' --upload-file final.mp4 "
+  },
+  {
+   "label": "Frame-sheet command",
+   "source": "angles-hf/SKILL.md",
+   "text": " ~/angles/<MEDIA_ID> && curl -sfL '<SRC_URL>' -o src.mp4 \\\n     && python3 \"$HF_WORKFLOWS/angles-hf/scripts/sheets.py\" src.mp4 -o ~/angles/<MEDIA_ID>/sheets"
+  }
+ ],
+ "price": "Quotes by length at the chosen resolution. `seedance_2_5` video_edit is not quoted in `_prices.md`; its nearest quote is the omni_reference draft (480p, 10 s) at 30 credits and 1080p at 160. Treat a 10 s 1080p re-shoot as likely near 160: re-quote before running.",
+ "cheap_price": "about 160 -> 7.5 per 10 s (Gemini edit 360p, quote first)"
+}

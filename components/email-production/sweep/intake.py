@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Design intake — a brand's Figma email board, from the export to the
-format bank, in one command. The same steps that built the Brand B bank
+format bank, in one command. The same steps that built the brand_a bank
 (2026-09-02/03), so the next brand's board goes through the same door.
 
     python3 sweep/intake.py <export.zip or folder> --brand <brand> [--serve-port 8791]
@@ -21,7 +21,7 @@ What happens, in order (each step writes where the next one reads):
               QA page and the team mirror (design-formats/rebuild-qa.md)
 
 The export is expected as Figma's HTML export (Components.bundle.js per
-board under boards/), the shape Brand B's bank arrived in. A different shape
+board under boards/), the shape brand_a's bank arrived in. A different shape
 stops at step 1 with a message saying what was found.
 """
 import argparse
@@ -31,6 +31,8 @@ import subprocess
 import sys
 import zipfile
 from pathlib import Path
+sys.path.append(next(str(d / "components" / "run-kit") for d in Path(__file__).resolve().parents if (d / "components" / "run-kit").is_dir()))
+from run_kit import paths as _rk_paths
 
 HERE = Path(__file__).resolve().parent.parent
 SCRATCH = Path(os.environ.get("SWEEP_SCRATCH", "/private/tmp/claude-501/sweep"))
@@ -50,7 +52,7 @@ def main():
     ap.add_argument("--serve-port", type=int, default=8791)
     ap.add_argument("--skip-pictures", action="store_true", help="stop after QC (no clean renders)")
     a = ap.parse_args()
-    env = dict(os.environ, AI_WORKSPACE=os.environ.get("AI_WORKSPACE", "."))
+    env = dict(os.environ, AI_WORKSPACE=str(_rk_paths.repo()))
 
     # 1 unpack
     bank = SCRATCH / f"format-bank-{a.brand}"

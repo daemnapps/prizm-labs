@@ -51,8 +51,10 @@ _spec.loader.exec_module(CAL)
 def runnable_brand():
     root = P.WORKSPACE / "brands"
     for d in sorted(root.iterdir()) if root.is_dir() else []:
-        if d.is_dir() and not any(L["verdict"] == "blocked" for L in CH.readiness(d)) \
-                and (d / "calendar" / "moments.json").is_file():
+        # a real brand: `_TEMPLATE` holds the shape with nothing in it. Moments live at strategy/moments.json
+        # since the brand folders were reshaped; the old calendar/ path only still exists in the template.
+        if d.is_dir() and not d.name.startswith("_") and not any(L["verdict"] == "blocked" for L in CH.readiness(d)) \
+                and P.BP.brand_path(d.name, "strategy", "moments.json", root=root).is_file():
             return d.name
     return None
 
@@ -317,12 +319,19 @@ class Tiers(unittest.TestCase):
         def refused(*a, **k):
             calls.append(1)
             return types.SimpleNamespace(returncode=1, stdout="", stderr="Claude usage limit reached")
+        # one call per account, no retries: the door tries each account once (claude_door, owner 2026-10-23), so
+        # this holds the account list to one, as the machine this test runs on may hold several
+        from run_kit import claude_door as door
         keep, R.subprocess.run = R.subprocess.run, refused
+        keep_door, door.subprocess.run = door.subprocess.run, refused
+        keep_creds, door.credentials = door.credentials, lambda: [("one account", {})]
+        keep_codex, door.codex_binary = door.codex_binary, lambda: None
         try:
             with self.assertRaises(SystemExit) as stop:
                 R.claude("a prompt", "a-model")
         finally:
             R.subprocess.run = keep
+            door.subprocess.run, door.credentials, door.codex_binary = keep_door, keep_creds, keep_codex
         self.assertEqual(len(calls), 1)
         self.assertIn("out of usage", str(stop.exception.code))
 

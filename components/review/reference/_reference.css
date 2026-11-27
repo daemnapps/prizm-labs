@@ -1,5 +1,5 @@
 /* The reference pages' whole stylesheet. DELIBERATELY PLAIN (card RV-6's
-   never: "no styling investment that the team would have to undo") — system
+   never: "no styling investment that the email lead would have to undo") — system
    font, one border, one accent. It is here to keep the pages readable while
    they are read, not to propose a look. */
 :root { --line:#d7d7db; --faint:#6b6b70; --warn:#8a3b12; --ground:#f7f7f8; }

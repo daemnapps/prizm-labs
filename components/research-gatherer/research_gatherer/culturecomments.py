@@ -7,14 +7,14 @@ they watch, filed into the avatar's bank as prospect rows.
     python3 components/research-gatherer/gather.py digcomments  --all [--apply]
     (any of them: --dry-run pulls and counts, reads and files nothing)
 
-the owner, 2026-10-06 (the bottom-up culture build): the culture map is built from
+owner, 2026-10-06 (the bottom-up culture build): the culture map is built from
 the real language only, so the comments under the posts each avatar's feed
 already found, and the comments a culture dig already captured, go into the
 bank as rows.
 
 FREE ONLY — Apify is never called here. A feed post's comments come through
 yt-dlp, by the video-teardown machine's own function
-(`tools/video-teardown/machine/culture.py` › `pull`, imported, never
+(`components/video-teardown/machine/culture.py` › `pull`, imported, never
 copied). This yt-dlp no longer reads TikTok comments at all (the extractor
 returns the post with none), so a TikTok post that comes back empty is read
 from TikTok's public web comment list instead — one plain GET per 50
@@ -110,14 +110,14 @@ def map_feed(feed_id, root=None):
 
 
 def bank_file(brand, avatar, root=None):
-    return (Path(root) if root else ws()) / "brands" / brand / "core-avatars" / avatar / "language" / "prospects.json"
+    return (Path(root) if root else ws()) / "brands" / brand / "core-avatars" / A.avatar_folder(brand, avatar) / "language" / "prospects.json"
 
 
 # ---------------------------------------------------------------- dedupe
 
 def bank_keys(brand, avatar, root=None):
     """{(source.ref, source.id)} across the whole avatar bank (sub folders included)."""
-    base = (Path(root) if root else ws()) / "brands" / brand / "core-avatars" / avatar
+    base = (Path(root) if root else ws()) / "brands" / brand / "core-avatars" / A.avatar_folder(brand, avatar)
     keys = set()
     for f in base.rglob("*.json") if base.is_dir() else []:
         if "/used/" in f.as_posix() or "/language/" not in f.as_posix():
@@ -185,7 +185,7 @@ def rank_posts(items, obs, top, done=()):
 
 def _culture():
     """The video-teardown machine's yt-dlp reader, imported in place."""
-    p = ws() / "tools" / "video-teardown" / "machine"
+    p = ws() / "components" / "video-teardown" / "machine"
     if str(p) not in sys.path:
         sys.path.append(str(p))
     import culture   # noqa: E402

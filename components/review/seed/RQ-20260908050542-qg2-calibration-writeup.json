@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "kind": "review",
+  "reviewer": "the developer",
+  "item": "RQ-20260908050542-qg2-calibration-writeup",
+  "verdict": {
+    "event": "request",
+    "type": "md",
+    "asset": {
+      "warehouse": "repo",
+      "ref": "new-workflow-design/builds/qc-gate-runner/2026-08-24-QG-2-calibration.md",
+      "title": "QG-2 calibration — the three assertion defects, and what did not run"
+    },
+    "reviewers": [
+      "the email lead",
+      "the developer"
+    ],
+    "lane": "dev-qc",
+    "on_accept": {
+      "action": "file-workflow-request",
+      "item": "impl-qg-recalibration-followup",
+      "lane": "dev",
+      "requester": "the developer",
+      "note": "Illustrative on_accept only — RV-3 (on_accept adapter) owns what this shape actually means and is the card that files it. Nothing acts on this seed."
+    },
+    "note": "SEED (RV-1). The dev-qc lane: a dev artifact judged by two named reviewers. This request is deliberately on the EXPLICIT half of the close rule — two reviewers AND an `on_accept` — so it never auto-closes and the surface must label it as waiting on an explicit close from the requester or owner. It is the counterpart to the email-sends seed, which is the auto-close half; between them the two branches of the close rule are both exercised by a real record."
+  },
+  "notes": "",
+  "created": "2026-09-08T05:05:42Z",
+  "via": "rv1-seed"
+}

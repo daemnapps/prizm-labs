@@ -11,10 +11,10 @@
   "fx-ready": {"expect": ["final-needs-you", "ready"],
                "card": {"status": "draft", "subjects": [{"subject": "Ready one"}], "sections_ok": [1],
                         "final_check": [{"result": "ok", "detail": "all good"}]}},
-  "fx-designer": {"expect": ["final-needs-you", "designer-done"],
-             "card": {"status": "draft", "subjects": [{"subject": "the team finished"}],
+  "fx-the editor": {"expect": ["final-needs-you", "the editor-done"],
+             "card": {"status": "draft", "subjects": [{"subject": "the editor finished"}],
                       "final_check": [{"result": "ok", "detail": "all good"}],
-                      "eve_done": {"by": "the team", "at": "2026-10-21T10:00:00+00:00"}}},
+                      "the editor_done": {"by": "the editor", "at": "2026-10-21T10:00:00+00:00"}}},
   "fx-draft": {"expect": ["launch", "klaviyo-draft"],
                "card": {"status": "approved", "subjects": [{"subject": "In Klaviyo"}],
                         "final_check": [{"result": "ok", "detail": "all good"}],
@@ -23,7 +23,7 @@
                    "card": {"status": "scheduled", "subjects": [{"subject": "Scheduled one"}],
                             "final_check": [{"result": "ok", "detail": "all good"}],
                             "klaviyo": {"campaign_id": "fixture-campaign-2"},
-                            "scheduled": {"by": "the team", "at": "2026-10-21T11:00:00+00:00"}}},
+                            "scheduled": {"by": "the email lead", "at": "2026-10-21T11:00:00+00:00"}}},
   "fx-old": {"no_design": true, "card": {"status": "draft"}}
  }
 }

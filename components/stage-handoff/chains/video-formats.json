@@ -1,0 +1,391 @@
+{
+ "_what": "Each ad format traced through the four components: alone = the chain runs it with no person; person = a person has to step in; no = not built or it stops; na = does not apply. Traced from the code and the run folders 2026-11-17.",
+ "status": "draft",
+ "as_of": "2026-11-17",
+ "columns": [
+  "Teardown",
+  "Writing",
+  "Production: the chain",
+  "Production: the Studio",
+  "Edit",
+  "Proof it has run"
+ ],
+ "rows": [
+  {
+   "format": "Song ad",
+   "cells": [
+    {
+     "state": "alone",
+     "note": "reads sung vs spoken"
+    },
+    {
+     "state": "alone",
+     "note": "writes the sung brief; the lyric plan is made later, in production"
+    },
+    {
+     "state": "person",
+     "note": "song made by hand in Suno; 3 owner reviews and an editor review"
+    },
+    {
+     "state": "alone",
+     "note": "song row"
+    },
+    {
+     "state": "person",
+     "note": "editor writes the cut decisions; 2 stops"
+    }
+   ],
+   "proof": "20 production runs; the most finished cuts"
+  },
+  {
+   "format": "Single presenter",
+   "cells": [
+    {
+     "state": "alone",
+     "note": ""
+    },
+    {
+     "state": "alone",
+     "note": "has its own recipe"
+    },
+    {
+     "state": "person",
+     "note": "20 stations written, 12 of them reviews"
+    },
+    {
+     "state": "alone",
+     "note": "real or AI lane"
+    },
+    {
+     "state": "person",
+     "note": "2 stops"
+    }
+   ],
+   "proof": "16 runs, 9 reached clips"
+  },
+  {
+   "format": "Demonstration",
+   "cells": [
+    {
+     "state": "alone",
+     "note": ""
+    },
+    {
+     "state": "alone",
+     "note": "no recipe of its own"
+    },
+    {
+     "state": "no",
+     "note": "falls to a 4-step default that stops before any picture"
+    },
+    {
+     "state": "person",
+     "note": "partly"
+    },
+    {
+     "state": "person",
+     "note": ""
+    }
+   ],
+   "proof": "8 runs, 1 finished cut"
+  },
+  {
+   "format": "Expert consultation",
+   "cells": [
+    {
+     "state": "alone",
+     "note": ""
+    },
+    {
+     "state": "alone",
+     "note": "no recipe of its own"
+    },
+    {
+     "state": "no",
+     "note": "same 4-step default"
+    },
+    {
+     "state": "person",
+     "note": "partly"
+    },
+    {
+     "state": "person",
+     "note": ""
+    }
+   ],
+   "proof": "10 runs, 1 finished cut"
+  },
+  {
+   "format": "Meme",
+   "cells": [
+    {
+     "state": "alone",
+     "note": ""
+    },
+    {
+     "state": "alone",
+     "note": "no recipe of its own"
+    },
+    {
+     "state": "no",
+     "note": "same 4-step default"
+    },
+    {
+     "state": "person",
+     "note": "partly, from our footage"
+    },
+    {
+     "state": "person",
+     "note": ""
+    }
+   ],
+   "proof": "3 runs, 1 finished cut"
+  },
+  {
+   "format": "Micro-drama",
+   "cells": [
+    {
+     "state": "alone",
+     "note": ""
+    },
+    {
+     "state": "alone",
+     "note": "no recipe of its own"
+    },
+    {
+     "state": "no",
+     "note": "same 4-step default"
+    },
+    {
+     "state": "person",
+     "note": "partly"
+    },
+    {
+     "state": "person",
+     "note": ""
+    }
+   ],
+   "proof": "2 runs, none finished"
+  },
+  {
+   "format": "Testimonial montage",
+   "cells": [
+    {
+     "state": "alone",
+     "note": ""
+    },
+    {
+     "state": "alone",
+     "note": "no recipe of its own"
+    },
+    {
+     "state": "no",
+     "note": "written down only"
+    },
+    {
+     "state": "no",
+     "note": ""
+    },
+    {
+     "state": "person",
+     "note": ""
+    }
+   ],
+   "proof": "8 teardowns, never produced"
+  },
+  {
+   "format": "Remedy",
+   "cells": [
+    {
+     "state": "alone",
+     "note": ""
+    },
+    {
+     "state": "alone",
+     "note": "has its own recipe"
+    },
+    {
+     "state": "no",
+     "note": "recipe has no stations"
+    },
+    {
+     "state": "person",
+     "note": "partly"
+    },
+    {
+     "state": "person",
+     "note": "its caption look is filed under another name, so it gets the default"
+    }
+   ],
+   "proof": "4 runs, 4 finished cuts"
+  },
+  {
+   "format": "Comedy skit",
+   "cells": [
+    {
+     "state": "person",
+     "note": "often comes back as a new format and waits for the owner's call"
+    },
+    {
+     "state": "alone",
+     "note": "no recipe of its own"
+    },
+    {
+     "state": "no",
+     "note": "the 3D skit tool is separate and run by hand"
+    },
+    {
+     "state": "no",
+     "note": ""
+    },
+    {
+     "state": "person",
+     "note": ""
+    }
+   ],
+   "proof": "1 run, none finished"
+  },
+  {
+   "format": "Narrator montage",
+   "cells": [
+    {
+     "state": "alone",
+     "note": ""
+    },
+    {
+     "state": "alone",
+     "note": "has its own recipe"
+    },
+    {
+     "state": "no",
+     "note": "19 stations written, no code behind them"
+    },
+    {
+     "state": "person",
+     "note": "partly: the narration"
+    },
+    {
+     "state": "person",
+     "note": ""
+    }
+   ],
+   "proof": "5 briefs, never produced on the chain"
+  },
+  {
+   "format": "Text thread",
+   "cells": [
+    {
+     "state": "no",
+     "note": "no run has ever read one"
+    },
+    {
+     "state": "no",
+     "note": "every check assumes a voice and people"
+    },
+    {
+     "state": "no",
+     "note": "no station"
+    },
+    {
+     "state": "no",
+     "note": ""
+    },
+    {
+     "state": "person",
+     "note": "a separate tool, fed a hand-written file"
+    }
+   ],
+   "proof": "3 finished cuts, all made by hand"
+  },
+  {
+   "format": "Ad series",
+   "cells": [
+    {
+     "state": "no",
+     "note": ""
+    },
+    {
+     "state": "no",
+     "note": "its check is not wired in"
+    },
+    {
+     "state": "no",
+     "note": ""
+    },
+    {
+     "state": "no",
+     "note": ""
+    },
+    {
+     "state": "no",
+     "note": ""
+    }
+   ],
+   "proof": "none produced"
+  },
+  {
+   "format": "Creator or founder filming brief",
+   "cells": [
+    {
+     "state": "alone",
+     "note": ""
+    },
+    {
+     "state": "person",
+     "note": "written on older prompts that never see the format; no founder brief exists"
+    },
+    {
+     "state": "na",
+     "note": "a person films it"
+    },
+    {
+     "state": "person",
+     "note": "creator lane adds it to the hub"
+    },
+    {
+     "state": "person",
+     "note": ""
+    }
+   ],
+   "proof": "920 creator runs"
+  },
+  {
+   "format": "Idea only, no swipe",
+   "cells": [
+    {
+     "state": "person",
+     "note": "every pick (format, style, story) has to be filled in by hand"
+    },
+    {
+     "state": "no",
+     "note": "stops at the first writing step: 0 of 17 reached a brief"
+    },
+    {
+     "state": "na",
+     "note": "then as its format"
+    },
+    {
+     "state": "na",
+     "note": "then as its format"
+    },
+    {
+     "state": "na",
+     "note": "then as its format"
+    }
+   ],
+   "proof": "0 of 17"
+  }
+ ],
+ "finding": "A format is only a label today. Naming it changes nothing in production: what differs comes from what the brief happens to contain. Step-by-step recipes are written for 4 formats and connected to the engine for none. The word format lives in 5 lists that disagree (12, 20, 14 with 31 variants, 13 owner calls, 2 caption picks).",
+ "needs": "What each format must declare for the chain to run it alone: 1 the sound (spoken, sung, none) · 2 who is on screen · 3 how each scene is made (generated, our footage, drawn in code, a 3D world) · 4 voice or song first · 5 the edit road and caption look · 6 the owner's stops, three at most. One format list, read by all four stages.",
+ "definition": {
+  "source": "Owner rulings 2026-09-11 (avatar, sub-avatar, angle and format are four things; format = how it is built) and 2026-11-02 (a video names a script format and a production format; production has one line per execution type). The sort of bank rows into script and production is a draft and the owner's to correct.",
+  "what": "**A format is how the ad is built.** It is two choices, and every ad names both.\n**Script format: what it says.** The shape of the argument. Writing reads it.\n**Production format: how it is made.** What is on screen and what carries the sound. Production and the edit read it, and each one is its own production line.\n**It is not** the avatar (who), the angle (what we claim), the style (the look) or the maker (AI, creator, founder). Any of those pairs with any format.\n_From your rulings of 11 Sep and 2 Nov._",
+  "lists": "**Script formats in the bank (7):** remedy · demonstration · expert consultation · testimonial montage · meme · micro-drama · comedy skit\n**Production formats in the bank (3):** single presenter · song ad · text thread\n**Not sorted yet (2), your call:** narrator montage (reads as production) · ad series (reads as neither: a run of ads, each with its own format)\n**Production recipes written outside the bank (8):** multi-speaker scene · short movie · voiceover explainer · sports interview · talking object · freestyle battle · two stunt recipes",
+  "example": "**Example: one idea, two ads**\n**Script format:** remedy. What people used to put on it at home, then today's version.\n**× single presenter:** one person to camera. Voice first, then talking clips. Captions at the bottom.\n**× song ad:** the same argument as lyric lines. Song first, then a clip per line. Lyric captions.\nSame avatar, same angle, same script format. Only the production line changes.\n_Today a run holds one name, so this pairing cannot be written down._",
+  "carry": "**How it carries through: today → needed**\n**Teardown:** reads one format off the swipe → reads both, against one list.\n**Writing:** gets the format as a paragraph of text → the script format sets the argument; the production format sets which kinds of scene it may write.\n**Production:** stamps the name and does the same thing whatever it is → the production format picks the line and its stations.\n**Edit:** has a caption pick for 2 formats → the production format picks the road, the caption look and the pace.\n**Results:** score the ad → score script × production, so the numbers say which pairing earns.",
+  "system": "**In the system: three changes**\n**1** Every run carries two names, not one.\n**2** One list holds both kinds; the other four lists read from it.\n**3** Each production format's recipe drives the engine instead of sitting beside it."
+ },
+ "format_map": "https://claude.ai/artifact/GNn1yBAtYuiwKJ4Hf5bc3h",
+ "creative_system": "https://claude.ai/artifact/2TgVZ54rsm2EQtnfEGt7w4"
+}

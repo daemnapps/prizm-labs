@@ -2,7 +2,7 @@
 """LD-76 (email layout file): an email's section map is measured once at build and kept beside it as
 <run>/klaviyo/layout.json, and adapter/sync.py reads it instead of running Chrome — proven offline.
 
-    python3 tools/email-production/design/test_ld76_layout_file.py     (from any folder outside email-production)
+    python3 components/email-production/design/test_ld76_layout_file.py     (from any folder outside email-production)
 
 Chrome is a fake on CHROME_BIN (a small script that writes one line per call to a counter file and, for --dump-dom,
 prints a fixed position dump; for --screenshot, writes a PNG). The Drive is a fake reach patched over look.reach().
@@ -13,6 +13,7 @@ PIL is stood in only when this interpreter has none, so build.py imports; test 7
   1  write(): layout.json is schema 1, height 900, both sections in pixels, "from" and "html" the two sha256s
   2  read(): returns it; after email.html changes -> None (and a wrong schema -> None)
   3  rows(): a fresh layout.json -> no --dump-dom call, fractions = layout / height; no file -> measured once, named
+  3c a page with no sections (held for rebuild) -> one row naming why, no Chrome; 3d-e any other email that will not load is one held row too
   4  stale(): design/email.json alone changes -> True, and the row says "layout_stale": true
   5  CLI: list --no-steps has no _steps; plain list still has them; steps <brand>__<label> prints them; unknown -> exit 2
   6  write_safe() on a Chrome that prints nothing -> one --no-sandbox retry, None, "layout: NOT written";
@@ -46,7 +47,7 @@ except ImportError:                                  # build.py and engine.py im
         setattr(_pil, _n, types.ModuleType("PIL." + _n))
         sys.modules["PIL." + _n] = getattr(_pil, _n)
     sys.modules["PIL"] = _pil
-sys.path.insert(0, str(HERE))      # design/ FIRST; never tools/email-production (its email.py shadows the stdlib's)
+sys.path.insert(0, str(HERE))      # design/ FIRST; never components/email-production (its email.py shadows the stdlib's)
 import layout_file as LF           # noqa: E402
 import look as L                   # noqa: E402
 
@@ -182,6 +183,44 @@ class TestLayoutFile(Base):
         self.assertEqual(err, "layout: measured %s (no fresh layout.json)\n" % LABEL)
         self.assertEqual(got[0]["sections"][1]["top"], 0.3333)
         self.assertIs(got[0]["layout_stale"], False)                       # no file: nothing to be stale
+
+    def test_3c_a_page_held_for_rebuild_is_one_row_and_the_list_stays_up(self):
+        page = self.run / "klaviyo" / "email.html"
+        page.write_text('<!doctype html><meta charset="utf-8"><title>Rebuild required</title><p>Held for rebuild.</p>')
+        card = self.run / "klaviyo" / "card.json"
+        c = json.loads(card.read_text())
+        c["manual_repair"] = "Offer/copy changed; rebuild required before approval."
+        card.write_text(json.dumps(c))
+        got, _ = self.rows()
+        self.assertEqual(len(got), 1)
+        self.assertEqual(self.calls("--dump-dom"), [])                     # nothing to measure, so no Chrome
+        self.assertEqual(got[0]["sections"], [])
+        self.assertNotIn("_picture", got[0])
+        self.assertIn(c["manual_repair"], got[0]["for_email_lead"])
+        self.assertEqual(got[0]["status"], "held")                         # no build, no Done button
+        self.assertIn(c["manual_repair"], got[0]["held"])
+
+    def test_3d_one_email_that_will_not_load_is_one_held_row_and_the_others_still_list(self):
+        LF.write(self.run)
+        self.picture()
+        bad = self.runs / BRAND / "bad-email"
+        (bad / "design").mkdir(parents=True)
+        (bad / "klaviyo").mkdir()
+        (bad / "design" / "email.json").write_text("{ not json")
+        (bad / "klaviyo" / "email.html").write_text(HTML)
+        (bad / "klaviyo" / "card.json").write_text(json.dumps({"date": "2026-11-02", "subjects": [{"subject": "Bad"}]}))
+        got, err = self.rows()
+        self.assertEqual({r["label"]: r["status"] for r in got}, {"bad-email": "held", LABEL: "ready"})
+        row = next(r for r in got if r["label"] == "bad-email")
+        self.assertEqual((row["title"], row["send_day"], row["sections"]), ("Bad", "2026-11-02", []))
+        self.assertIn("could not be loaded", row["held"][0])
+        self.assertIn("bad-email", err)
+
+    def test_3e_a_page_that_will_not_measure_is_one_held_row_naming_why(self):
+        os.environ["FAKE_CHROME_MODE"] = "empty"
+        got, _ = self.rows()
+        self.assertEqual(got[0]["status"], "held")
+        self.assertIn("could not measure", got[0]["held"][0])
 
     def test_4_stale_after_the_layout_alone_changes(self):
         LF.write(self.run)

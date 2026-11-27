@@ -2,7 +2,7 @@
 *.jpg
 *.jpeg
 *.png
-records/owner-saves/covers/
+records/the owner-saves/covers/
 records/teardowns/media/
 records/swipe-videos/*/video.mp4
 records/swipe-videos/*/strip/
@@ -12,10 +12,3 @@ records/desk/media/
 *.webm
 *.mp3
 records/sounds/audio/
-# Public copy: the pool is yours, never shipped (records, creators, handle pools, seeds)
-records/
-creators/
-/*/posts.json
-/*/posts/
-seeds/*.json
-!seeds/_TEMPLATE.json

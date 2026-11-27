@@ -1,5 +1,5 @@
-"""PF-21 (pictures reach every Mac): an email's pictures reach every Mac and page server that draws it (the team,
-2026-10-29: the team's 47 designed pictures were on no other Mac and not on Drive, and a page server shot whole emails
+"""PF-21 (pictures reach every Mac): an email's pictures reach every Mac and page server that draws it (email_lead,
+2026-10-29: editor's 47 designed pictures were on no other Mac and not on Drive, and a page server shot whole emails
 with their cut pictures missing).
 
 Offline: a fake Drive (put / get), no Chrome, no git, no network.
@@ -107,7 +107,7 @@ class TheDone(Base):
         fake = types.ModuleType("review_request")
         fake.file_request = lambda **kw: filed.append(kw) or {"path": "review/x.json"}
         with mock.patch.dict(sys.modules, {"review_request": fake}), mock.patch.object(look, "reach", lambda: drive):
-            ok, said = ask.mark_done({"brand": BRAND, "label": LABEL, "by": "the team", "code": "nov-03"}, root=self.root)
+            ok, said = ask.mark_done({"brand": BRAND, "label": LABEL, "by": "editor", "code": "nov-03"}, root=self.root)
         card = json.loads((self.run_dir / "klaviyo" / "card.json").read_text())
         return ok, said, card, filed
 
@@ -117,7 +117,7 @@ class TheDone(Base):
         ok, said, card, filed = self.done(drive)
         self.assertTrue(ok)
         self.assertEqual(drive.puts[0][0], ["hero.png", "routine.png"])
-        self.assertEqual(card["eve_done"]["by"], "the team")
+        self.assertEqual(card["editor_done"]["by"], "editor")
         self.assertEqual(len(filed), 1)
 
     def test_a_picture_nowhere_stops_the_done_by_name(self):
@@ -125,7 +125,7 @@ class TheDone(Base):
         ok, said, card, filed = self.done(Drive())
         self.assertFalse(ok)
         self.assertIn("routine.png", said)
-        self.assertNotIn("eve_done", card)
+        self.assertNotIn("editor_done", card)
         self.assertEqual(filed, [])
 
     def test_a_failed_put_stops_the_done_by_name(self):
@@ -134,10 +134,10 @@ class TheDone(Base):
         self.assertFalse(ok)
         self.assertIn("Drive said 403", said)
         self.assertIn("hero.png", said)
-        self.assertNotIn("eve_done", card)
+        self.assertNotIn("editor_done", card)
 
     def test_pictures_already_up_from_another_mac_let_the_done_through(self):
-        """Up once (in the ledger), absent here: the team's Done on the team's email is not stopped."""
+        """Up once (in the ledger), absent here: email_lead's Done on editor's email is not stopped."""
         (self.run_dir / "media" / LF.MEDIA_LEDGER).write_text(json.dumps({"put": {"hero.png": "a", "routine.png": "b"}}))
         ok, said, card, filed = self.done(Drive())
         self.assertTrue(ok, said)

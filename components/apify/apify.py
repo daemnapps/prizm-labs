@@ -27,40 +27,38 @@ HERE = Path(__file__).resolve().parent
 WORKSPACE = HERE.parent.parent
 
 
-
-def _shared_keys():
-    """The repo's one key loader (components/keys/loader.py): the environment,
-    then the repo's .env, then — quietly — the owner's personal fallbacks."""
+def _keys_loader():
+    """components/keys/loader.py, loaded by path (never on sys.path), found from this file."""
     import importlib.util
-    import sys as _sys
-    from pathlib import Path as _Path
-    mod = _sys.modules.get("shared_keys_loader")
+    mod = sys.modules.get("upright_keys_loader")
     if mod is None:
-        path = next(p / "components" / "keys" / "loader.py"
-                    for p in _Path(__file__).resolve().parents
-                    if (p / "components" / "keys" / "loader.py").is_file())
-        spec = importlib.util.spec_from_file_location("shared_keys_loader", str(path))
+        d = os.path.dirname(os.path.abspath(__file__))
+        while not os.path.isfile(os.path.join(d, "components", "keys", "loader.py")):
+            if os.path.dirname(d) == d:
+                raise RuntimeError("components/keys/loader.py not found above " + __file__)
+            d = os.path.dirname(d)
+        spec = importlib.util.spec_from_file_location(
+            "upright_keys_loader", os.path.join(d, "components", "keys", "loader.py"))
         mod = importlib.util.module_from_spec(spec)
-        _sys.modules["shared_keys_loader"] = mod
-        try:
-            spec.loader.exec_module(mod)
-        except Exception:
-            _sys.modules.pop("shared_keys_loader", None)
-            raise
+        sys.modules["upright_keys_loader"] = mod
+        spec.loader.exec_module(mod)
     return mod
 
 
 def _vault(name):
     """The key, from wherever this machine keeps it.
 
-    Order: the environment (cloud routines, a teammate's machine, CI), then
-    the repo's .env, through components/keys/loader.py. This used to import
-    the video teardown machine's own `keys.py`, which made the Apify layer
-    depend on another tool's internals and broke wherever that tool was not
-    checked out beside it.
+    Order (the one key loader, components/keys/loader.py): the environment
+    (cloud routines, a teammate's machine, CI), then ~/.upright-keys.env. This
+    used to import the video teardown machine's own `keys.py`, which made the
+    Apify layer depend on another tool's internals and broke wherever that
+    tool was not checked out beside it.
     """
+    v = os.environ.get(name)
+    if v:
+        return v
     try:
-        return _shared_keys().lookup(name) or None
+        return _keys_loader().key(name, required=False) or None
     except Exception:
         return None
 
@@ -86,11 +84,30 @@ def say(m):
 
 
 def token():
-    # Host-agnostic: an env var wins, then the repo's .env.
+    # Host-agnostic: an env var wins (cloud routines, teammate machines),
+    # the local keys file is the fallback (owner's Mac).
     t = _vault("APIFY_TOKEN")
     if not t:
-        sys.exit("This tool needs APIFY_TOKEN. Add it to .env (see .env.example).")
+        sys.exit("no APIFY_TOKEN — set the env var, or add APIFY_TOKEN=value to ~/.upright-keys.env")
     return t
+
+
+def tokens():
+    """Every Apify account on this machine, main first: APIFY_TOKEN, APIFY_TOKEN_PERSONAL, APIFY_TOKEN_2 to _9."""
+    names = ["APIFY_TOKEN", "APIFY_TOKEN_PERSONAL"] + [f"APIFY_TOKEN_{n}" for n in range(2, 10)]
+    return list(dict.fromkeys(t for t in (_vault(n) for n in names) if t)) or [token()]
+
+
+def each_account(call):
+    """call(token) on each account in turn, moving on when one is spent (402) or refused (403)."""
+    accounts = tokens()
+    for i, tok in enumerate(accounts):
+        try:
+            return call(tok)
+        except urllib.error.HTTPError as e:
+            if e.code not in (401, 402, 403) or i == len(accounts) - 1:       # 401: that account's key is dead
+                raise
+            say(f"  {e.code} — that Apify account is spent, trying the next one")
 
 
 def _call(actor, payload, tok, timeout):
@@ -103,18 +120,53 @@ def _call(actor, payload, tok, timeout):
 
 
 def run(actor, payload, timeout=900):
-    """Run an actor, falling back to the spare account when the first is spent."""
-    tok = token()
-    try:
-        return _call(actor, payload, tok, timeout)
-    except urllib.error.HTTPError as e:
-        if e.code != 403:
-            raise
-        spare = _vault("APIFY_TOKEN_PERSONAL")
-        if not spare or spare == tok:
-            raise
-        say("  403 — the main account looks spent, retrying on the spare")
-        return _call(actor, payload, spare, timeout)
+    """Run an actor on the first account with room."""
+    return each_account(lambda tok: _call(actor, payload, tok, timeout))
+
+
+def run_async(actor, payload, run_id=None, poll=15, timeout=7200):
+    """A long run (a comment section for 80 posts runs past the sync call's gateway window, which answers 502):
+    start it, or pick up `run_id` already going, wait for it, then read its dataset. Never starts a second paid run
+    for the same ask when a run id is given."""
+    import time, urllib.request as U
+    def call_as(t, url, body=None):
+        req = U.Request(url, data=json.dumps(body).encode() if body is not None else None,
+                        headers={"Authorization": f"Bearer {t}", "Content-Type": "application/json"})
+        return json.loads(U.urlopen(req, timeout=120).read())
+    if run_id:
+        # A run belongs to the account that started it: find which one answers for it.
+        tok, last = None, None
+        for t in tokens():
+            try:
+                call_as(t, f"{API}/actor-runs/{run_id}")
+                tok = t
+                break
+            except urllib.error.HTTPError as e:
+                last = e
+        if tok is None:
+            raise last
+    else:
+        # Same rule as run(): a spent account moves on to the next one.
+        tok, run_id = each_account(lambda t: (t, call_as(t, f"{API}/acts/{actor}/runs", payload)["data"]["id"]))
+    def call(url, body=None):
+        return call_as(tok, url, body)
+    end = time.time() + timeout
+    while True:
+        r = call(f"{API}/actor-runs/{run_id}")["data"]
+        if r["status"] in ("SUCCEEDED", "FAILED", "ABORTED", "TIMED-OUT"):
+            break
+        if time.time() > end:
+            raise RuntimeError(f"run {run_id} still {r['status']} after {timeout}s")
+        time.sleep(poll)
+    if r["status"] != "SUCCEEDED":
+        raise RuntimeError(f"run {run_id} ended {r['status']}")
+    items, off = [], 0
+    while True:
+        page = call(f"{API}/datasets/{r['defaultDatasetId']}/items?clean=true&offset={off}&limit=1000")
+        items += page
+        if len(page) < 1000:
+            return items
+        off += 1000
 
 
 def sign(url):
@@ -127,15 +179,20 @@ def fetch(url, dest, tries=3):
     url = sign(url)
     if not url:
         return False
+    # Only a COMPLETE dest counts as done: the stream lands in dest.part and is
+    # renamed onto dest when it finishes, so an interrupted download leaves no
+    # dest and the next call fetches it again. A leftover .part is overwritten.
     if dest.exists() and dest.stat().st_size > 0:
         return True
     dest.parent.mkdir(parents=True, exist_ok=True)
+    part = dest.with_name(dest.name + ".part")
     for n in range(tries):
         try:
             req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
-            with urllib.request.urlopen(req, timeout=300) as r, open(dest, "wb") as f:
+            with urllib.request.urlopen(req, timeout=300) as r, open(part, "wb") as f:
                 while chunk := r.read(1 << 16):
                     f.write(chunk)
+            os.replace(part, dest)
             return True
         except Exception as e:
             if n == tries - 1:

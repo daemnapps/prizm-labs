@@ -1,7 +1,7 @@
 # components/identity-training — the identity engine, as a component
 
 **Owner: the developer (ruled 2026-09-01).** Extracted from
-`tools/video-teardown/machine/train_identity.py` under IDT-1 on the developer's
+`components/video-teardown/machine/train_identity.py` under IDT-1 on the developer's
 ruling relayed through ◆ PLAN, so that trained identities are a curated,
 findable asset of the org rather than a side-product of one machine.
 
@@ -12,7 +12,7 @@ video tool, a brand tool, or anybody's workflow. The training standard is
 the owner's and stays his; the code that executes it is owned here.
 
 **the owner's machine keeps working, and that is a hard constraint of the move**
-(ruled). `tools/video-teardown/machine/train_identity.py` is now a thin
+(ruled). `components/video-teardown/machine/train_identity.py` is now a thin
 shim over this engine: same command, same flags, same output, same key vault,
 same Drive fallback. Nothing was asked of him and nothing changed on his side.
 The shim is the ONLY file IDT-1 touched in his folder.
@@ -45,19 +45,19 @@ python3 components/identity-training/train_identity.py --brand <brand> \
 
 | flag | means |
 |---|---|
-| `--brand` | required. Resolves `brands/<brand>/` (the one brand home; `brands/` is gone since 2026-09-02, engine.py `brand_dir`) |
+| `--brand` | required. Resolves `brands/<brand>/` (the one brand home; `lab/the owner/brands/` is gone since 2026-09-02, engine.py `brand_dir`) |
 | `--character NAME` \| `--product SLUG` | **exactly one.** Naming both, or neither, exits non-zero |
 | `--steps N` | override. Default **1000** character, **2000** product |
 | `--out DIR` | where `lora.json` lands, and the only place a run may write. **Omitted = beside the brand source, exactly as before the move** |
 | `--dry-run` | resolve inputs, trigger word, steps and destination; print them; **call nothing, write nothing, read no credential** |
 
-Workspace root: `AI_WORKSPACE` when set, else `the workspace` — the
+Workspace root: `AI_WORKSPACE` when set, else `~/Projects/ai-workspace` — the
 same path it always resolved, now overridable so a test or the mini can point
 it somewhere else (rule 8).
 
 ### 2. `lora.json` — the record IS the asset
 
-Written beside the brand source (`brands/<b>/ai-cast/<name>/` or
+Written beside the source (`runs/ai-elements/<b>/casting/<name>/` when the person is there — the one cast home since 2026-10-28 — else the older `brands/<b>/ai-cast/<name>/`, or
 `brands/<b>/products/<slug>/`), or under `--out`:
 
 ```json
@@ -88,7 +88,7 @@ repo wins on images. A host with neither loses nothing — it just needs
 | `drive_lookup(rel)` | a brand path has no images in the repo | `chain.drive_root() / rel` — his Drive mount |
 
 The seams exist so that this engine imports **nothing** from
-`tools/video-teardown/` (rule 2 both ways): `keys.py` and `chain.py` are
+`components/video-teardown/` (rule 2 both ways): `keys.py` and `chain.py` are
 that machine's internals and stay there.
 
 ## Rules
@@ -105,7 +105,7 @@ that machine's internals and stay there.
   fails the run loudly. There is no second write call site.
 - **Brand-agnostic** (workspace rule 7): no brand, product, avatar or category
   name appears in this code or in a default. Brand facts arrive as `--brand`
-  and resolve from the brand folder, `brands/<brand>/` only — `brands/`
+  and resolve from the brand folder, `brands/<brand>/` only — `lab/the owner/brands/`
   was merged into `brands/` and left the lookup on 2026-09-02.
 - **the owner's standard is the owner's.** What makes a good training set — which
   boards, which crops, how many steps — is his call; changing the curriculum
@@ -128,7 +128,7 @@ cross-checked against `git show HEAD` when git is available), and its `main`,
 component entry point, on a fixture workspace, with **no `FAL_KEY` and an
 empty `HOME`** — which is what proves no credential is read; importing either
 module in a fresh interpreter reads no credential and no network; and a
-sentinel fingerprint over `tools/video-teardown/`, `platform/workers/`
+sentinel fingerprint over `components/video-teardown/`, `platform/workers/`
 and `lab/` is byte-unchanged across the whole run.
 
 ## Kill-condition

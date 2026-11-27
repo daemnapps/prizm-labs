@@ -44,19 +44,19 @@ const REVIEW_KIND = "review";
 // The frozen grammar (platform/data/kinds/review.json), mirrored for
 // validation only. Cross-checked against the manifest by the declared test.
 //
-// `seen` (the team, ruled 2026-09-09, card RV-16a) is a reviewer OPENING the
+// `seen` (developer, ruled 2026-09-09, card RV-16a) is a reviewer OPENING the
 // request: no judgment, no close, and it never satisfies the close rule's "one
 // reviewer". THIS LINE IS INLINED BYTE-FOR-BYTE INTO pm.html — it is edited
 // HERE and mirrored there, never the other way round (ONE FIX, NOT THREE), and
 // new-workflow-design/builds/pm-tool/test_pm_view.py proves the two are equal.
-// `url` (the team, ruled 2026-09-10, card RV-34 (url and viewport)) is a thing that
+// `url` (developer, ruled 2026-09-10, card RV-34 (url and viewport)) is a thing that
 // lives somewhere the platform does not own — a Figma file, a Netlify preview,
 // any link — whose `ref` IS the url. It exists so `blob` can keep meaning A
 // CAPTURE WE MADE AND HOLD: until this word, a link could only be filed as a
 // blob, which is a lie about provenance nothing catches. IT GOES LAST, in the
 // order the manifest's `asset` note declares the words, because pm.html's
 // lifted copy of the line below is compared against that note.
-// `page` (the team, ruled 2026-09-10, card RV-47 (type page)) is a DEPLOYED WEB
+// `page` (developer, ruled 2026-09-10, card RV-47 (type page)) is a DEPLOYED WEB
 // PAGE, FRAMED AT A DECLARED WIDTH, beside `link` — a thing we deliberately do
 // NOT embed, a Figma frame whose comments belong in Figma. ONE VALUE AND NO NEW
 // WAREHOUSE WORD: both species are warehouse `url`, and the distinction is not
@@ -72,7 +72,7 @@ const REVIEW_DECISIONS = ["accepted", "rejected", "parked"];
 
 /* ---------- the two optional fields RV-23 declares ------------------------ */
 // `anchors: [{quote, prefix, suffix, comment, row?}]` on the verdict block, and
-// `at` on a repo `asset` pointer — the team's rulings A and B of 2026-09-09, the
+// `at` on a repo `asset` pointer — developer's rulings A and B of 2026-09-09, the
 // second amendment the frozen manifest has taken. MIRRORED FOR VALIDATION ONLY:
 // the manifest owns both shapes and the declared test reads them OFF THE
 // MANIFEST and compares them with these, so this file agrees with the CONTRACT
@@ -254,7 +254,7 @@ function reviewEventsOf(records) {
 //     ask (RV-17 (ask structure)), when the filer wrote one;
 //   - `seen_by` is WHO LOOKED, one entry per reviewer in the order they FIRST
 //     looked, however many times they looked after that.
-// `seen` CHANGES NOTHING ELSE ABOUT THIS ANSWER (the team, ruled 2026-09-09, card
+// `seen` CHANGES NOTHING ELSE ABOUT THIS ANSWER (developer, ruled 2026-09-09, card
 // RV-16a; carried into this port by RV-16b). It carries no judgment, so it
 // never enters `verdicts`; it never closes, so `status`, `decision` and
 // `accepted` cannot move on it; and it never satisfies the close rule's "one
@@ -533,7 +533,7 @@ function reviewRequestBody(input) {
 // Checked for SHAPE only: whether a repo ref exists on disk is not this
 // page's question, exactly as it is not the module's.
 //
-// ...AND `viewport?` SINCE RV-34 (url and viewport), the team's ruling of
+// ...AND `viewport?` SINCE RV-34 (url and viewport), developer's ruling of
 // 2026-09-10: at what width the thing was meant to be read, `mobile` or
 // `desktop`. LAST AND ONLY WHEN GIVEN, so a pointer that names none carries
 // the exact keys it carried before the field existed — ABSENT IS UNSTATED,
@@ -603,7 +603,7 @@ function reviewSignIn(el, after) {
     browser's localStorage and is never written into a record), or open this page from a
     <code>#k=…&amp;as=…</code> link.</p>
     <label>review key <input name="k" type="password" autocomplete="off"></label>
-    <label>your name <input name="as" placeholder="pm"></label>
+    <label>your name <input name="as" placeholder="email_lead"></label>
     <button>Use this key</button></form>`;
   el.querySelector("#rvkey").addEventListener("submit", (e) => {
     e.preventDefault();
@@ -732,7 +732,7 @@ function mountReviewCreate(el) {
     <label>type <select name="type">${REVIEW_TYPES.map((t) => `<option>${t}</option>`).join("")}</select></label>
     <label>warehouse <select name="warehouse">${REVIEW_WAREHOUSES.map((w) => `<option>${w}</option>`).join("")}</select></label>
     <label>ref <input name="ref" size="60" placeholder="repo path · drive file id · blob url"></label>
-    <label>reviewers <input name="reviewers" placeholder="pm, owner"></label>
+    <label>reviewers <input name="reviewers" placeholder="email_lead, owner"></label>
     <label>lane <input name="lane" value="dev-qc" placeholder="email-sends · static-ads · dev-qc · …"></label>
     <label>due <span class="faint">(optional)</span> <input name="due" placeholder="YYYY-MM-DD"></label>
     <label>your words <span class="faint">(optional, rides in the envelope's notes)</span>

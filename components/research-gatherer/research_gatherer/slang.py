@@ -2,7 +2,7 @@
 
     python3 components/research-gatherer/slang.py --brand B --avatar A [--dry-run] [--limit 40]
 
-the owner, 2026-10-27, on a picture swipe captioned "how to get the best NECK" the chain read as nonsense: "Getting neck
+owner, 2026-10-27, on a picture swipe captioned "how to get the best NECK" the chain read as nonsense: "Getting neck
 is slang ... we'll probably see more of the slang and things like that, mostly in comments on posts ... for
 definitions of these things that you're uncertain of or not clear, then it's like have to go trigger research. There's
 websites like Urban Dictionary ... And then that also is then loaded into a culture index per avatar." Then: "culture
@@ -132,7 +132,7 @@ def research(brand, avatar, limit=40, dry_run=False, model=None, ws=None, ask=No
     ids = CM.pack_ids(pack)
     terms = [t for t in _json_list(ask(prompt1)) if t.get("term")]
     if trends_for:
-        # cutting edge (the owner, 2026-10-27: "like this 6-7 thing, like, I don't even know what the fuck that is ... we want
+        # cutting edge (owner, 2026-10-27: "like this 6-7 thing, like, I don't even know what the fuck that is ... we want
         # to be cutting edge with our language awareness"): the web's newest terms for this audience join the room's own
         new = trends(trends_for, gemini)
         have = {x["term"].lower() for x in terms}
@@ -176,7 +176,7 @@ def told_path(brand, avatar, ws=None):
 
 
 def tell(brand, avatar, term, meaning, by, double_meaning=None, line=None, ws=None):
-    """A term a person tells us, in their words (the owner, 2026-10-27: "not everything's going to be in the culture map
+    """A term a person tells us, in their words (owner, 2026-10-27: "not everything's going to be in the culture map
     right away, but I'm telling you what it is now"). Kept apart from the research, never overwritten by it; its
     receipt is who said it and when."""
     f = told_path(brand, avatar, ws)

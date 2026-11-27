@@ -1,0 +1,12 @@
+{
+ "brand": "fxbrand",
+ "label": "fxbrand-nov-06",
+ "date": "2026-11-06",
+ "subjects": [{"subject": "Held on a picture and a price", "preview": "p"}],
+ "status": "approved",
+ "product_check": [{"result": "fail", "detail": "2 picture slot(s) still to fill", "about": "picture"},
+                   {"result": "fail", "detail": "price $9.99 · not in the brand's price list"},
+                   {"result": "ok", "detail": "product named"}],
+ "final_check": [{"result": "note", "detail": "a picture shared with another email", "about": "picture"},
+                 {"result": "by-hand", "detail": "links checked by hand"}]
+}

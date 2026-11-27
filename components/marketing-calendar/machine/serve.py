@@ -117,7 +117,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 
     # ---------------------------------------------------------------- GET ---
     def do_GET(self):
-        # THE CALENDAR IS THE FRONT PAGE. the owner, 2026-09-14: "I just need to see
+        # THE CALENDAR IS THE FRONT PAGE. owner, 2026-09-14: "I just need to see
         # the days the emails and such — we don't need this big page with the
         # buttons to generate text just yet, just a calendar." The review board
         # is still one click away, for the day the reviewing starts.
@@ -137,7 +137,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def serve_source(self):
         """The email a send is written off, readable.
 
-        the owner, 2026-09-14: "I need a deep link into... the format. Where is it
+        owner, 2026-09-14: "I need a deep link into... the format. Where is it
         coming from? I need you to make it so those links are actually
         clickable, so that way we can actually see what the copy would be
         based on."

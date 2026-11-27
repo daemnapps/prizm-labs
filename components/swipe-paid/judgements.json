@@ -1,1 +1,17 @@
-{}
+{
+ "swipe:paid:resilia:161927390": {
+  "fields": {},
+  "verdict": "pass"
+ },
+ "swipe:paid:resilia:162098799": {
+  "fields": {
+   "angle": "unsigned",
+   "concept": "botanicalpair",
+   "format": "animatedstory",
+   "problem": "gutbalance",
+   "source": "ai",
+   "talent": "none"
+  },
+  "verdict": "swipe"
+ }
+}

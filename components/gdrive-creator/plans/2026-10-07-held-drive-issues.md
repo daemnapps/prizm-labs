@@ -1,6 +1,6 @@
 # Drive triage issues held for the keys / clean-up phase
 
-Read from origin/main at 075dd518c2, 7 Oct 2026. Ruling (the team, typed to ◆ PLAN · dev-engineer, relayed verbatim to the lead): "address all of the google drive component updates, future structure all together as part of the keys / clean up migration phase", and "ok page 8 go".
+Read from origin/main at 075dd518c2, 7 Oct 2026. Ruling (the developer, typed to ◆ PLAN · dev-the developer, relayed verbatim to the lead): "address all of the google drive component updates, future structure all together as part of the keys / clean up migration phase", and "ok page 8 go".
 
 **This phase (decided 7 Oct, triage page #8):** people may use their Drive mount. Everything the mini runs reaches Drive through the API by file id (O9 reworded for this phase). One Drive client per side (D1-A). The shared helpers become "mount if there is one, gdrive-creator by id if not". Hard-coded the owner-account paths go. The image-teardown Drive delete and the dead mirror are fixed. The swipe libraries are copied to their ruled home, Shared Assets/swipe/, and the code switches at midnight BKK.
 
@@ -28,5 +28,5 @@ casting#2, naming#7, research-gatherer#5, video-edit#2, video-edit#3, video-tear
 3. The missing functions: update by id, export, list and rename.
 4. Callers store the file ids they write in their run records; later reads go by id.
 5. Merge the mini worker's built-in client onto gdrive-creator (the mini's /usr/bin/python3 3.9.6 imports googleapiclient, checked 7 Oct).
-6. The long-term owner: the owner today; platform ownership (the team) is the open question.
+6. The long-term owner: the owner today; platform ownership (the designer) is the open question.
 7. The swipe libraries' repo-side move (components/swipe-* data → swipe/, ~3,700 tracked files, ~86 readers) and reading by id, by 2 Nov.

@@ -1,6 +1,5 @@
 # The local studio
 
-## How to use it → (team dashboard)
 
 Every editing job that runs on this Mac (M3 Max, 64 GB), behind one launcher.
 the owner never runs this. Claude sessions and the pipeline call it. Brought into
@@ -27,8 +26,6 @@ python3 components/local-studio/local.py runs     # every run so far: time + pea
 | Captions / STT | `stt audio.mp3 -o out.json [--language en]` | Whisper large-v3-turbo (mlx-whisper) | 3:46 song: **7.3 s** (≈31× real time), 3.6 GB. Writes json/srt/vtt/txt with word timestamps |
 | Stems | `stems song.mp3 -o dir` | Demucs htdemucs_ft (PyTorch MPS) | 3:46 song: **29.4 s** (≈7.8 s per audio-minute), 3.3 GB. 38.7 s loop: 7.5 s |
 | Voice (stock only) | `tts "text" -o out.wav [--voice am_michael]` | Kokoro-82M (MLX, mlx-audio) | 11.9 s of speech in **3.8 s** incl. load. Stock voices only — no cloning |
-| Image edit / outfit swap | `edit "prompt" --ref a.jpg [--ref b.jpg] -o out.png` | FLUX.2 klein 4B, 4-bit (mflux) | 1 ref, 688×1024: **33.9 s**. 3 refs, 864×1536: **95.5 s**, 15.1 GB MLX peak |
-| Still | `image "prompt" -o out.png [-W 864 -H 1536]` | FLUX.2 klein 4B, 4-bit (mflux) | 864×1536, 4 steps: **32.4 s** |
 | 3D object | `3d ref.png -o out.glb` | TRELLIS.2-4B (components/3d/make3d) | carousel: **399 s** (load 101, generate 272, finish 20), 22.8 GB |
 | Image → video | `i2v still.jpg "prompt" -o out.mp4` | LTX-2.5 distilled 4-bit (MLX) | **Not installed.** Needs ~29 GB of weights; see "Not local" |
 

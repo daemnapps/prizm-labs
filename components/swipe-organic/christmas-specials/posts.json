@@ -1,0 +1,27 @@
+{
+ "_what": "christmas-specials \u2014 swipes added by hand through add.py. Media in the library and on the Drive; this file is what the intake index reads.",
+ "brand": "Brand B",
+ "platform": "",
+ "pulled": "2026-11-02",
+ "group": "christmas-specials",
+ "source": "organic",
+ "owner": "creator",
+ "drive_root": "",
+ "posts_seen": 1,
+ "posts": [
+  {
+   "file": "01_swipe-christmas-special-rival-brag-song.md",
+   "id": "christmas-special-rival-brag-song",
+   "creator": "",
+   "views": 0,
+   "engagement": 0,
+   "url": "",
+   "caption": "",
+   "seconds": 229,
+   "source": "organic",
+   "owner": "creator",
+   "kind": "video",
+   "drive": "Shared Assets/swipe/organic/records/swipe-videos/christmas-special-rival-brag-song/video.mp4"
+  }
+ ]
+}

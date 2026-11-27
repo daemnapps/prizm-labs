@@ -4,7 +4,7 @@
 named `calendar` until LD-49 (stdlib-name renames) made it
 marketing_calendar.py) — proven offline.
 
-    python3 tools/email-production/test_line_calendar_shadow.py
+    python3 components/email-production/test_line_calendar_shadow.py
 
 A child process (sys.executable) runs design/line.py as run_month.py runs it —
 `design/line.py <brand> --run <run>` from this folder, as __main__ — with a

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""python3 send_plan.py <calendar run> [--brand brand-a] — the month's sends, as a page
-the owner approves. Reads the calendar's own slots.json and copy_plan's flags; invents nothing.
+"""python3 send_plan.py <calendar run> [--brand brand_a] — the month's sends, as a page
+owner approves. Reads the calendar's own slots.json and copy_plan's flags; invents nothing.
 Writes send-plan.html + SEND-PLAN.md beside this file."""
 import json, sys, html, datetime, pathlib
 
@@ -158,7 +158,7 @@ Nothing goes near Klaviyo until you have read the words and the pictures.</p>
 <h2>The month</h2>{''.join(rows)}
 <h2>Out of the month</h2>{heldhtml}
 <h2>Say one word</h2><div class="trig">{trig}</div>
-<footer>rebuilt by tools/email-production/send_plan.py from {html.escape(run.name)}/slots.json · mirror SEND-PLAN.md</footer>
+<footer>rebuilt by components/email-production/send_plan.py from {html.escape(run.name)}/slots.json · mirror SEND-PLAN.md</footer>
 </div>"""
 
 (HERE / "send-plan.html").write_text(page)

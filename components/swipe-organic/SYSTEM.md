@@ -34,7 +34,7 @@ signal; IG second — unlocks suggested-accounts; YT third). Each persona:
 - **Registry** (`records/personas/<avatar>/persona.json`) — handle,
   platform, status (warming | trained | flagged | retired), created
   date, device/IP note. **Never credentials** — logins live in the key
-  file (this repo's `.env`), not in git.
+  file (`~/.upright-keys.env`), not in git.
 - **Watch sessions**: scheduled browser sessions at human pace, 1–2/day.
   Watch-through = vote yes; fast skip = vote no; the kit's categories
   define which is which. Watch only — never post, comment, follow-spam.
@@ -68,7 +68,7 @@ copying."
   same field.
 - **Download**: kept items get pulled down automatically (video +
   cover + caption) to Drive, mirroring the repo path —
-  `Shared Assets/lab/owner/swipe-organic/avatar-feeds/<avatar>/kept/<item-id>/`
+  `Shared Assets/lab/the owner/swipe-organic/avatar-feeds/<avatar>/kept/<item-id>/`
   (media never in git; the item record gets a `**Drive:**` pointer).
 - **Organize**: nothing new to invent — the item already carries its
   avatar (folder), category, source, receipt, and signal history. Kept
@@ -96,7 +96,7 @@ so the stations build independently.
   capture flows into the backend, zero flags.
 - **Phase 2 (fleet)**: one persona per avatar per platform, staggered
   creation (never a batch of signups from one device/IP in one day),
-  one device profile each. Fed-up-king and <brand> spot-hider next —
+  one device profile each. Fed-up-king and Brand B spot-hider next —
   their kits generate from the same data the moment their feeds exist.
 - **Phase 3 (full loop)**: keep-interface live for the team, download
   + teardown hookup running, briefs flowing to production.

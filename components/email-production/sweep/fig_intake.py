@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """A Figma file (.fig) → the format bank, the same door the HTML export
-went through. the owner drops the .fig in Downloads; this reads it whole.
+went through. owner drops the .fig in Downloads; this reads it whole.
 
     python3 sweep/fig_intake.py "<file>.fig" --brand <brand> [--out <bank dir>]
 
@@ -24,6 +24,8 @@ import re
 import subprocess
 import sys
 from pathlib import Path
+sys.path.append(next(str(d / "components" / "run-kit") for d in Path(__file__).resolve().parents if (d / "components" / "run-kit").is_dir()))
+from run_kit import paths as _rk_paths
 
 HERE = Path(__file__).resolve().parent.parent
 SCRATCH = Path(os.environ.get("SWEEP_SCRATCH", "/private/tmp/claude-501/sweep"))
@@ -118,7 +120,7 @@ def main():
     img_files = {Path(nm).name: nm for nm in z.namelist() if nm.startswith("images/") and not nm.endswith("/")}
 
     # the wordmark: the brand's identity svg, copied into the bank's assets
-    ws = Path(os.environ.get("AI_WORKSPACE", "."))
+    ws = _rk_paths.repo()
     sys.path.append(str(ws / "components" / "brandpath"))
     import brandpath as BP  # noqa: E402  brand-identity (was identity/) by plan name
     for svg in sorted(BP.brand_path(a.brand, "brand-identity", root=ws / "brands").glob("*.svg")):

@@ -1,0 +1,106 @@
+{
+ "id": "ad-multiplier",
+ "name": "Ad Multiplier",
+ "kind": "video",
+ "makes": "N versions of one 4-30 s ad: named people, products or backgrounds swapped in the same footage (edit) or the ad re-shot for a new market (recreate).",
+ "source": [
+  "ad-multiplier/SKILL.md",
+  "ad-multiplier/references/prompt-writer.md",
+  "ad-multiplier/references/recreate.md",
+  "ad-multiplier/references/media-pipeline.md"
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "name": "Pick mode and intake once",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 2,
+   "name": "Probe source (ffprobe)",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 3,
+   "name": "Read source scenes and timing",
+   "model": "video_analysis_create",
+   "cheap": "local Whisper plus ffmpeg frames, free"
+  },
+  {
+   "n": 4,
+   "name": "Generate missing adult replacement people",
+   "model": "soul_2",
+   "cheap": "already about 0.12 credit"
+  },
+  {
+   "n": 5,
+   "name": "Write one edit prompt per output",
+   "model": "none",
+   "cheap": "Claude writes it, free"
+  },
+  {
+   "n": 6,
+   "name": "Silent video edit per output",
+   "model": "ad_multiplier",
+   "cheap": "wan3_0 480p draft 7.5 per 10 s, regenerates not edits"
+  },
+  {
+   "n": 7,
+   "name": "Restore source audio, trim, QC, upload",
+   "model": "none",
+   "cheap": "ffmpeg, free; Real-ESRGAN upscale instead of 1080p"
+  },
+  {
+   "n": 8,
+   "name": "Recreate mode: one request per output",
+   "model": "ad_multiplier_v2",
+   "cheap": "wan3_0 480p draft 7.5 per 10 s"
+  }
+ ],
+ "price": "ad_multiplier 10 s 720p = 70 credits per output; recreate about 7 per source second at 720p (inferred); 3 outputs of a 10 s ad about 210.",
+ "cheap_price": "wan3_0 480p draft about 7.5 per output (about 22 for 3) plus free local upscale, but a regenerate, not a true edit.",
+ "prompts": [
+  {
+   "label": "Missing-person image prompt example (Soul 2.0 call, prose form only)",
+   "source": "ad-multiplier/SKILL.md",
+   "text": "{\"params\":{\"model\":\"soul_2\",\"prompt\":\"A straight-on, eye-level full-body portrait features a strikingly beautiful 24-year-old Afro-Caribbean woman with supermodel facial features, symmetrical features, a well-proportioned figure, warm deep-brown skin with natural texture, and long dark softly waved hair. She stands poised with shoulders back, one foot angled outward, arms relaxed, and a direct camera gaze. She wears a structured matte-black blazer, opaque high-neck top, tailored wide-leg trousers, pointed-toe heels, thin gold chain, and small stud earrings. Her complete outfit and both feet are visible. A seamless matte-white studio backdrop and matching floor contain no props, furniture, text, logos, or clutter, leaving generous negative space around her centered figure. Soft, evenly diffused high-key natural studio lighting creates gentle grounded shadows, authentic skin detail, and controlled highlights without harsh contrast or overexposure. A crisp black, white, and subtle gold palette supports the modern fashion-editorial mood. Captured on a professional high-resolution digital camera with balanced vertical framing, deep depth of field, ample dynamic range, minimal noise, and razor-sharp focus from face to footwear, the image preserves realistic anatomy, natural hands and limbs, and a photogenic unretouched editorial finish without distortion or exaggerated traits.\",\"count\":1,\"aspect_ratio\":\"3:4\",\"quality\":\"2k\"}}"
+  },
+  {
+   "label": "Source-text preservation block (appears once in every edit prompt)",
+   "source": "ad-multiplier/references/prompt-writer.md",
+   "text": "Preserve every caption, subtitle, and other untargeted on-screen text element from @Video1 exactly as it appears, including its wording, styling, placement, animation, and timing. Text physically attached to a replaced target follows that replacement."
+  },
+  {
+   "label": "Person-replacement exclusion line (once per replaced person)",
+   "source": "ad-multiplier/references/prompt-writer.md",
+   "text": "The original source person identified as [target] in @Video1 must never appear in any frame of the output. Replace that person completely with [ALIAS] from [@ImageN] in every appearance, transferring the complete reference-defined look and retaining only the original performance, pose, blocking, interactions, and timing."
+  },
+  {
+   "label": "COMPACT edit template",
+   "source": "ad-multiplier/references/prompt-writer.md",
+   "text": "TASK - VIDEO EDIT:\nPreserve every caption, subtitle, and other untargeted on-screen text element from @Video1 exactly as it appears, including its wording, styling, placement, animation, and timing. Text physically attached to a replaced target follows that replacement.\n<start>-<end>s: keep everything exactly the same\n<start>-<end>s: <one operation sentence>. Keep every unrequested element, camera motion, lighting treatment, and overall color grading from @Video1 exactly the same."
+  },
+  {
+   "label": "DETAILED edit template",
+   "source": "ad-multiplier/references/prompt-writer.md",
+   "text": "[@ImageN] — [ALIAS], the complete replacement look for [TARGET]: [complete visible identity, optional visible build/stature when discernible, hair, outfit, footwear, headwear, eyewear, jewelry, and accessories]. Transfer this entire look from @ImageN, including the full outfit and all worn accessories.\nPreserve every caption, subtitle, and other untargeted on-screen text element from @Video1 exactly as it appears, including its wording, styling, placement, animation, and timing. Text physically attached to a replaced target follows that replacement.\nVideo edit. Keep this @Video1 clip exactly as it is — the same shots and cuts, camera moves, framing, composition, unmapped performers, setting, untargeted held and environmental props, lighting, pacing, and timing. Change only [complete scope], keeping source blocking, poses, motion, position, screen placement, and timing while rendering each replacement person's complete image-defined look.\n1. [REPLACE | MODIFY | REMOVE | ADD] — [mapped target and operation, complete-look @ImageN binding when present, resolved clothing override when present, temporal scope, source-person exclusion when required, and interaction/reflection handling].\n[IDENTITY | REFERENCE | EDIT] lock: [every mapping, untouched-content protection, anti-bleed rules, and generated two-axis profile when present].\nRender [one imperative summary transferring each replacement's complete reference-defined look, including clothing and accessories, while inheriting only source performance and timing].\nEverything else — [untouched people, objects, untargeted wardrobe, text, environment, lighting, the camera moves and all timing] — stays exactly the same."
+  },
+  {
+   "label": "Edit submission (silent video edit)",
+   "source": "ad-multiplier/SKILL.md",
+   "text": "{\"params\":{\"model\":\"ad_multiplier\",\"prompt\":\"<validated prompt verbatim>\",\"count\":1,\"duration\":8,\"duration_policy\":\"strict\",\"aspect_ratio\":\"auto\",\"resolution\":\"720p\",\"mode\":\"video_edit\",\"generate_audio\":false,\"medias\":[{\"value\":\"<source media id>\",\"role\":\"video\"},{\"value\":\"<@Image1 confirmed user media id>\",\"role\":\"image\"},{\"value\":\"<@Image2 approved generated-person job id>\",\"role\":\"image\"}]}}"
+  },
+  {
+   "label": "Recreate submission",
+   "source": "ad-multiplier/references/recreate.md",
+   "text": "{\"params\":{\"model\":\"ad_multiplier_v2\",\"prompt\":\"Recreate this ad for the German market in German, with the presenter in the image replacing the main presenter.\",\"count\":1,\"resolution\":\"720p\",\"medias\":[{\"value\":\"<source media id>\",\"role\":\"video\"},{\"value\":\"<presenter image media id>\",\"role\":\"image\"}]}}"
+  },
+  {
+   "label": "Hook-only submission (hook / cta / both)",
+   "source": "ad-multiplier/references/recreate.md",
+   "text": "{\"params\":{\"model\":\"ad_multiplier_v2\",\"mode\":\"sections\",\"section\":\"hook\",\"prompt\":\"New hook: open on a close-up of the product with the question \\\"Still tired at 3 pm?\\\"\",\"count\":1,\"resolution\":\"720p\",\"medias\":[{\"value\":\"<source media id>\",\"role\":\"video\"}]}}"
+  }
+ ]
+}

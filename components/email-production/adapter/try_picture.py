@@ -1,6 +1,6 @@
 """Try a picture change first, add the one she picks — LD-83 (picture try first).
 
-the team, 2026-10-22: "the team rarely just has one iteration … its better for the default prompt to be regenerating results
+developer, 2026-10-22: "editor rarely just has one iteration … its better for the default prompt to be regenerating results
 she can see faster (as opposed to wait to for it to update on the page). And then once complete she adds it", and
 "lets already build in the ability for her to try different models as well". A picture change she asks for IN CLAUDE
 makes numbered TRIES she sees at once, on any selectable house model, and nothing is committed; she ADDS the one she
@@ -8,7 +8,7 @@ picks. The page's own "change this picture" button keeps the apply path (adapter
 
     try_picture.py try <run> <P-code> "<change>" [--model M] [--count N] [--from-try K] [--brand B] [--by P]
         edits the picture from its record (picture_record.edit_inputs: the same references a remake uses) through
-        tools/image-edit, into <run>/tries/<P>/: try-<n>.jpg per result, one line each in tries.json. Each try
+        components/image-edit, into <run>/tries/<P>/: try-<n>.jpg per result, one line each in tries.json. Each try
         opens on her screen the moment it exists, before the judge answers; the verdict is advisory (never blocks,
         never deletes). design/email.json is not touched: no rebuild, no learning, no commit.
     try_picture.py add <run> <P-code> <n> [--alt "<words>"] [--no-drive] [--commit] [--brand B] [--by P]
@@ -50,7 +50,7 @@ REPO = OP.REPO
 JOB = "pictures.edit"
 OUTCOME_ROOT = REPO              # where model-outcome records land: <root>/platform/data/records/model-outcome/
 OUTCOME_KIND = "model-outcome"
-NO_DOOR = "%s: no door for it yet (the owner's follow-up) — pick %s"
+NO_DOOR = "%s: no door for it yet (owner's follow-up) — pick %s"
 _MH = []
 
 
@@ -74,18 +74,45 @@ def _house():
 
 def _rows():
     """image-production's declared model rows (route.table(), its public surface): {row id: row}."""
-    ip = str(REPO / "tools" / "image-production")
+    ip = str(REPO / "components" / "image-production")
     if ip not in sys.path:
         sys.path.append(ip)
     from image_production import route
     return {k: v for k, v in (route.table().get("models") or {}).items() if isinstance(v, dict)}
 
 
+def _keys_env(env):
+    """`env` as given; when None, os.environ with every pictures.edit door key the one key loader finds added
+    (components/keys/loader.py: the environment first, then ~/.upright-keys.env) — LD-108 (picture tries keys
+    file): a Mac whose Higgsfield keys live only in the key file is no longer told "no HIGGSFIELD_KEY_ID". A key
+    found nowhere is simply absent, so pick still refuses it by name. Values are never printed."""
+    if env is not None:
+        return env
+    names = []
+    for c in _house().choices(JOB):
+        for k in (c["key_env"] if isinstance(c["key_env"], list) else [c["key_env"]] if c["key_env"] else []):
+            if k not in names:
+                names.append(k)
+    out = dict(os.environ)
+    try:
+        spec = importlib.util.spec_from_file_location(
+            "upright_keys_loader", str(REPO / "components" / "keys" / "loader.py"))
+        mod = sys.modules.get("upright_keys_loader")
+        if mod is None:
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            sys.modules["upright_keys_loader"] = mod
+        out.update(mod.load(names, required=False))
+    except Exception:
+        pass                                                    # no loader: the environment alone, as before
+    return out
+
+
 def selectable(env=None):
     """The model house's choices for pictures.edit, each with "label" (<registry id>@<door>), "row" (the
     image-production row that makes it through image-edit, or None), "why" (None, or the no-door line) and
-    "has_key" (its door key is in `env`, os.environ by default). Never a list of its own."""
-    env = os.environ if env is None else env
+    "has_key" (its door key is in `env`; by default os.environ plus the key file, LD-108 (picture tries keys file)). Never a list of its own."""
+    env = _keys_env(env)
     rows = _rows()
     out = []
     for c in _house().choices(JOB):
@@ -106,6 +133,7 @@ def choose(model=None, env=None):
     """A person's pick, resolved: the house default when `model` is None, else model_house.pick (a model not in the
     choices, or a missing door key, is refused by name with its KeyError, never swapped). A model sold at one door
     image-edit can reach is that door; one with no door yet raises NoDoor. Returns the pick + label + row."""
+    env = _keys_env(env)
     sel = selectable(env)
     if model:
         rid, _, door = str(model).partition("@")
@@ -192,7 +220,7 @@ def _open(path):
 
 
 def _real_judge():
-    ip = str(REPO / "tools" / "image-production")
+    ip = str(REPO / "components" / "image-production")
     if ip not in sys.path:
         sys.path.append(ip)
     from image_production import judge as J
@@ -200,7 +228,7 @@ def _real_judge():
 
 
 def _real_edit():
-    ie = str(REPO / "tools" / "image-edit")
+    ie = str(REPO / "components" / "image-edit")
     if ie not in sys.path:
         sys.path.append(ie)
     import image_edit
@@ -394,7 +422,7 @@ def main(argv=None):
     for p in (t, a, c):
         p.add_argument("--brand")
     for p in (t, a):
-        p.add_argument("--by", default="the team")
+        p.add_argument("--by", default="editor")
     x = ap.parse_args(argv)
     if x.cmd == "models":
         print(json.dumps(selectable(), indent=1, ensure_ascii=False))

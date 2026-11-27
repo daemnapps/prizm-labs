@@ -8,13 +8,12 @@ Each ad is broken into its assets (a video, an image, or the cards of a
 carousel) and each asset's media is downloaded once, so the tagger reads the
 real ad, not a thumbnail.
 
-    python3 components/creative-diversity/pull.py brand-b
-    python3 components/creative-diversity/pull.py brand-a
+    python3 components/creative-diversity/pull.py brand_a
+    python3 components/creative-diversity/pull.py brand_b
 
 Writes runs/creative-diversity/<brand>/<date>/ads.json, assets.json, media/.
 """
 import json
-import os
 import sys
 import urllib.request
 from datetime import date
@@ -24,14 +23,9 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "components" / "meta-upload"))
 from meta import Meta  # noqa: E402
 
-
-def _account(m):
-    """The ad account id comes from the environment (META_AD_ACCOUNT_ID), never from this file."""
-    return os.environ.get("META_AD_ACCOUNT_ID") or m.ACCOUNT
-
-NO_META = ("Direct Meta reads are off (the owner, 2026-10-08: \"You're not supposed to pull from Meta anymore\"). "
+NO_META = ("Direct Meta reads are off (owner, 2026-10-08: \"You're not supposed to pull from Meta anymore\"). "
            "Meta numbers come from the team warehouse (Supabase meta_ads / meta_ad_insights; local copy "
-           "$WAREHOUSE_DB). What the warehouse lacks — per-piece grades, ad media — "
+           "lab/owner/asset-ledger/db/raw.db). What the warehouse lacks — per-piece grades, ad media — "
            "has to be added to the warehouse sync, not read here.")
 
 
@@ -53,7 +47,7 @@ def paged(m, path, **params):
 
 
 def spend_30d(m):
-    rows = paged(m, f"act_{_account(m)}/insights", level="ad",
+    rows = paged(m, f"act_{m.ACCOUNT}/insights", level="ad",
                  fields="ad_id,spend", date_preset="last_30d", limit=500)
     return {r["ad_id"]: float(r["spend"]) for r in rows}
 
@@ -123,7 +117,7 @@ def stills(m, brand, assets, ads_by_id, out):
     ad_ids = list(dict.fromkeys(s["ads"][0] for s in need))
     thumb = {}
     for i in range(0, len(ad_ids), 50):
-        for a in paged(m, f"act_{_account(m)}/ads", limit=200,
+        for a in paged(m, f"act_{m.ACCOUNT}/ads", limit=200,
                        fields="id,creative.thumbnail_width(1080).thumbnail_height(1080){thumbnail_url}",
                        filtering=json.dumps([{"field": "ad.id", "operator": "IN",
                                               "value": ad_ids[i:i + 50]}])):
@@ -141,7 +135,7 @@ def main(brand, day=None):
     sys.exit(NO_META)
     day = day or date.today().isoformat()
     out = ROOT / "runs" / "creative-diversity" / brand / day
-    # the owner, 2026-10-06: "do not pull on Meta too much for anything."
+    # owner, 2026-10-06: "do not pull on Meta too much for anything."
     # One pull per brand per day; everything downstream reads the saved copy.
     if (out / "assets.json").exists() and "--force" not in sys.argv:
         print(f"{brand}: already pulled today ({out.relative_to(ROOT)}). "
@@ -151,7 +145,7 @@ def main(brand, day=None):
     m = Meta(brand)
     page = Meta(brand, tok=m.get(m.PAGE, fields="access_token")["access_token"])
 
-    ads = paged(m, f"act_{_account(m)}/ads", fields=AD_FIELDS,
+    ads = paged(m, f"act_{m.ACCOUNT}/ads", fields=AD_FIELDS,
                 effective_status='["ACTIVE"]', limit=200)
     spend = spend_30d(m)
     mode = "active"
@@ -160,7 +154,7 @@ def main(brand, day=None):
         ids = [a for a, s in spend.items() if s > 0]
         ads = []
         for i in range(0, len(ids), 50):
-            ads += paged(m, f"act_{_account(m)}/ads", fields=AD_FIELDS, limit=200,
+            ads += paged(m, f"act_{m.ACCOUNT}/ads", fields=AD_FIELDS, limit=200,
                          filtering=json.dumps([{"field": "ad.id", "operator": "IN",
                                                 "value": ids[i:i + 50]}]))
     print(f"{brand}: {len(ads)} ads ({mode})")
@@ -195,7 +189,7 @@ def main(brand, day=None):
     # image hashes -> full-size urls
     hl = list(hashes)
     for i in range(0, len(hl), 50):
-        r = m.get(f"act_{_account(m)}/adimages", hashes=json.dumps(hl[i:i + 50]),
+        r = m.get(f"act_{m.ACCOUNT}/adimages", hashes=json.dumps(hl[i:i + 50]),
                   fields="hash,url,permalink_url")
         for img in r.get("data", []):
             for s in assets.values():
@@ -252,7 +246,7 @@ def pieces(brand, day=None):
     for kind in ("body", "title", "video", "image"):
         bd = f"{kind}_asset"
         try:
-            got = paged(m, f"act_{_account(m)}/insights", level="ad", breakdowns=bd, date_preset="last_30d",
+            got = paged(m, f"act_{m.ACCOUNT}/insights", level="ad", breakdowns=bd, date_preset="last_30d",
                         fields="ad_id,spend,impressions,actions,action_values", limit=500)
         except SystemExit as e:
             print(f"  {bd}: {str(e)[:160]}", file=sys.stderr)

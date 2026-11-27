@@ -12,8 +12,8 @@ as ~50 lines of stdlib. What it is not: a finder of brand CONTENT, a reader of
 anything, or anybody's policy about which tree to prefer.
 
 **Why it exists as one home.** The same question had three implementations,
-converging by copy-paste: `lab/copy/machine/paths.py`,
-`lab/email-production/paths.py` (which copied copy.py's probing at
+converging by copy-paste: `lab/the owner/copy/machine/paths.py`,
+`lab/the owner/email-production/paths.py` (which copied copy.py's probing at
 7345d2c63 — and the copy is DEAD there, its first candidate can never exist)
 and `components/chain-runner/runner/brandhome.py`. Same drift class the
 language layer just cured.
@@ -25,8 +25,8 @@ shared locator must never pick a winner:
 
 | machine | default when `AI_WORKSPACE` is unset |
 |---|---|
-| `lab/copy/machine/paths.py` | `$AI_WORKSPACE` (the repo root) |
-| `lab/email-production/paths.py` | `$AI_WORKSPACE/lab` |
+| `lab/the owner/copy/machine/paths.py` | `~/Projects/ai-workspace` (the repo root) |
+| `lab/the owner/email-production/paths.py` | `~/Projects/ai-workspace/lab/the owner` |
 
 So **this module has no default of its own, structurally**: `workspace()`
 takes the caller's default positionally and there is nowhere a fallback could
@@ -79,8 +79,8 @@ home_of(path)              # that checkout's brands/, or None
 
 | consumer | what it takes | what stayed its own |
 |---|---|---|
-| `lab/copy/machine/paths.py` | `workspace()` | `HERE`, and its default tree |
-| `lab/email-production/paths.py` | `workspace()` | `HERE`, and its default tree |
+| `lab/the owner/copy/machine/paths.py` | `workspace()` | `HERE`, and its default tree |
+| `lab/the owner/email-production/paths.py` | `workspace()` | `HERE`, and its default tree |
 | `components/chain-runner/runner/brandhome.py` | `HOME`, `checkout_of` | **all of the FINDING logic** — which declared roots take brand content from outside the home, the CR-7 table, the messages |
 
 The two lab files are thin shims with their public names unchanged

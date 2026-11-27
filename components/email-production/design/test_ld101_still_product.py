@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""LD-101 (Brand-B house look), the team 2026-10-30: a customer section's stills show the email's own product. A
+"""LD-101 (brand_b house look), email_lead 2026-10-30: a customer section's stills show the email's own product. A
 face-scrub still in a body-scrub email is held, and so is a still whose record names no product at all (nobody
 can say what it shows).
 
-    /usr/bin/python3 tools/email-production/design/test_ld101_still_product.py
+    /usr/bin/python3 components/email-production/design/test_ld101_still_product.py
 
 Offline: a fixture look and fixture product slugs (no brand file is read); the asset-index search is a stand-in.
 
@@ -23,7 +23,7 @@ import unittest
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE))      # design/ FIRST; never tools/email-production (its email.py shadows the stdlib's)
+sys.path.insert(0, str(HERE))      # design/ FIRST; never components/email-production (its email.py shadows the stdlib's)
 import look as L                   # noqa: E402
 import line as LN                  # noqa: E402
 

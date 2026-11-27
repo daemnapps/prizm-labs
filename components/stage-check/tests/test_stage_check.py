@@ -83,7 +83,7 @@ class Six(unittest.TestCase):
         p = FakePiece()
         p.out("04-headlines.md").write_text("**STAGE-2 DEFECT — Missing headline word ceiling** ... stop here")
         self.assertFalse(S.check(p, "headline_set")[0])
-        # the variations record (the owner, 2026-10-27: the approved picture + 5 one-change variations)
+        # the variations record (owner, 2026-10-27: the approved picture + 5 one-change variations)
         rows = [{"id": f"v{i}", "label": f"v{i}", "words": ["w"]} for i in range(1, 6)]
         p.out("variations.json").write_text(json.dumps({"variations": rows}))
         self.assertTrue(S.check(p, "variation_set")[0])

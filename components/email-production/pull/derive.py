@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """Derive the calendar's numbers straight from Klaviyo's REST API.
 
-    python3 derive.py --brand brand-a [--months 24]
+    python3 derive.py --brand brand_a [--months 24]
 
 Why this exists rather than the MCP connector: the one call that returns
 monthly order totals (`/api/metric-aggregates`) needs a structured request
 body, and the connector only accepts flat text arguments — the call cannot be
 made through it. Pulling the same data order-by-order works but takes roughly
 a hundred separate requests for two years, which is not a sensible way to ask
-a question. This is the fallback the team wrote down on 2026-08-14 as option 2,
+a question. This is the fallback developer wrote down on 2026-08-14 as option 2,
 and its kill-condition has now fired.
 
 Produces, per brand:

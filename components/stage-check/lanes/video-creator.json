@@ -1,0 +1,52 @@
+{
+ "lane": "video-creator",
+ "status": "draft",
+ "about": "Creator/founder filming brief readiness only. Does not require AI clips, production run, edit or ad card. Passing this checklist is not filming completion or launch approval.",
+ "steps": [
+  {
+   "id": "route",
+   "name": "maker route",
+   "checks": [
+    "maker_route"
+   ],
+   "fix": null,
+   "why_no_fix": "Resolve explicit creator/founder route and any conflicting registry data."
+  },
+  {
+   "id": "teardown",
+   "name": "source teardown",
+   "checks": [
+    "file:{work}/stages/2-spec.md"
+   ],
+   "fix": null,
+   "why_no_fix": "Resume the existing teardown only within its creator/founder route and authorized scope."
+  },
+  {
+   "id": "writing",
+   "name": "creator writing",
+   "checks": [
+    "json:{work}/run.json:stages.stage5.status=done"
+   ],
+   "fix": null,
+   "why_no_fix": "Resume the recorded creator/founder v1 writing loop; do not invoke the AI v2 writer."
+  },
+  {
+   "id": "filming-brief",
+   "name": "creator filming brief",
+   "checks": [
+    "creator_brief"
+   ],
+   "fix": null,
+   "why_no_fix": "Complete Film/Say/Hear/Wearing/On-screen instructions in the creator brief; keep unresolved items held."
+  },
+  {
+   "id": "number",
+   "name": "registered brief",
+   "checks": [
+    "brief_number"
+   ],
+   "fix": null,
+   "why_no_fix": "Register/reconcile the existing video-creator brief identity; do not mint another brief or switch route."
+  }
+ ]
+}

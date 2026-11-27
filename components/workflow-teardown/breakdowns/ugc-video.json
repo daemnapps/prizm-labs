@@ -1,0 +1,115 @@
+{
+ "id": "ugc-video",
+ "name": "UGC Video",
+ "kind": "video",
+ "makes": "A finished 9:16 creator-style ad video: review, product voiceover, unboxing, try-on, tutorial or website tour.",
+ "source": [
+  "ugc-video/SKILL.md",
+  "ugc-video/references/formats/review.md",
+  "ugc-video/references/ugc-board.md",
+  "ugc-video/references/ugc-clip.md",
+  "ugc-video/references/ugc-character.md",
+  "ugc-video/references/boards.md",
+  "ugc-video/references/formats/website.md"
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "name": "Safety, truth gate and one intake question",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 2,
+   "name": "Normalize product, write claims allowlist",
+   "model": "none",
+   "cheap": "Claude on the plan, free"
+  },
+  {
+   "n": 3,
+   "name": "Lock the creator image",
+   "model": "soul_2",
+   "cheap": "already about 0.12"
+  },
+  {
+   "n": 4,
+   "name": "Plan clip durations and write the monologue",
+   "model": "none",
+   "cheap": "Claude, free"
+  },
+  {
+   "n": 5,
+   "name": "Storyboard sheet per board",
+   "model": "gpt_image_2_6",
+   "cheap": "seedream_5_0_flash 2k 0.5 or gpt_image_2_6_flare 1k low 0.75"
+  },
+  {
+   "n": 6,
+   "name": "Board cleanup",
+   "model": "seedream_5_5",
+   "cheap": "seedream_5_0_flash 2k 0.5"
+  },
+  {
+   "n": 7,
+   "name": "Clip with native speech, one per board",
+   "model": "seedance_2_5",
+   "cheap": "wan3_0 480p 7.5 per 10 s or gemini_omni_flash_1_2 360p"
+  },
+  {
+   "n": 8,
+   "name": "Inspect clips, retry failed ones once",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 9,
+   "name": "Assemble, captions, deliver",
+   "model": "none",
+   "cheap": "ffmpeg and local Whisper, free"
+  }
+ ],
+ "price": "Seedance 2.5 1080p about 16 per second (15 s about 240) plus 0.12 creator plus about 5 for pictures: about 245 per 15 s review video.",
+ "cheap_price": "wan3_0 480p about 11 per 15 s plus 0.5-1 for pictures: about 13 per 15 s, as a draft.",
+ "prompts": [
+  {
+   "label": "Creator (Soul 2.0) prompt structure, review format",
+   "source": "ugc-video/references/ugc-character.md",
+   "text": "A [age band from Variety pool] [man/woman], [expression — pick one from the Approved mid-action expressions list], [hair color + length from Variety pool], [build vibe], with high model facial features, symmetrical features, well-proportioned figure, natural skin texture, standing in a [specific location with architectural details].\n[Light direction and quality — MUST be cool/neutral daylight, NEVER golden hour, NEVER warm sunset, NEVER orange/amber cast] falls across her face — neutral, clean, no warm cast, no retouched glow. Skin texture is real, with visible pores and natural unevenness.\n[He/She] wears [outfit matching category × tier from the matrix — pick a non-default option from the matrix's list; a dressed option realizes as the Wardrobe Bank recipe — layered with the Universal modesty triplet and any per-garment specifics]. Body in a calm neutral pose — relaxed standing, one hand resting naturally.\nThe background features [specific details: materials, colors, furniture].\nColor palette dominated by [space colors — keep neutrals; avoid amber/orange dominance].\nCasual handheld iPhone selfie taken by [her/him] at arm's length — head and shoulders fill the frame, slight natural tilt, slightly off-center, intuitive composition, captured mid-moment. Subject in clear focus with the background naturally falling out as in any phone photo.\nShot on iPhone front-facing camera. Phone-sensor grain and realistic skin texture preserved, no retouch, no smooth-skin filter. No fisheye lens, no ultra-wide distortion. Authentic UGC creator phone selfie, NOT editorial portrait, NOT fashion magazine."
+  },
+  {
+   "label": "Creator closing block, appended verbatim to every creator prompt",
+   "source": "ugc-video/references/ugc-character.md",
+   "text": "Self-portrait selfie shot on iPhone front-facing camera held by the subject at arm's length — head and shoulders fill the frame, casual handheld framing, slight natural tilt, slightly off-center, slightly imperfect, not posed. Phone-sensor grain and realistic skin texture preserved, no retouch, no smooth-skin filter. No fisheye lens, no ultra-wide distortion. Authentic UGC creator phone selfie, NOT editorial portrait, NOT fashion magazine."
+  },
+  {
+   "label": "Storyboard sheet prompt template (8 slots, review)",
+   "source": "ugc-video/references/ugc-board.md",
+   "text": "[@Image1 product reference + ANGLE LOCK if product is present.] [@Image2 character reference, or @Image1 if no product.] [@Image3 previous-board reference if K > 1, with explicit instruction to preserve identity / location / lighting / wardrobe / product from this reference.] The same person appears in every slot with identical face, hair, body, and identity — no changes to features, hair, or proportions between slots.\n\nA single horizontal storyboard sheet composed of exactly EIGHT equal-size 9:16 vertical slots arranged in ONE HORIZONTAL ROW, separated by thin white gutters on a clean white background, total sheet aspect 21:9. Do NOT make two rows and do NOT make a grid — exactly eight panels in one row, never ten, never twelve. All eight slots are active photorealistic UGC iPhone-style stills that tell one continuous [clip_duration]-second video clip as eight sequential beats — slot 1 is beat 1 (opening), slot 8 is beat 8 (closing). There are no placeholder slots. Each adjacent pair of slots is a DIFFERENT camera setup — a different POV (selfie vs static camera), a different distance band (tight/macro vs medium vs wide), and a different action — so every beat boundary reads as a crisp hard cut, never a morph.\n\nSetting and lighting in all eight slots default to the same environment, time of day, and light direction visible in the character reference image (and previous-board reference if provided), unless the story requires a different location. Outfit stays identical across slots within the same location.\n\nProduct (if present) appears at realistic real-world scale, approximately [X cm] in real size, fitting naturally in the character's hand without enlargement. Exactly one [product] appears in frame in every slot where it is visible — never a duplicate, never a look-alike clone. Product placement in every slot is clean: either fully visible held in one hand, fully hidden inside a closed bag/box/pocket, or absent from the frame — never half-sticking out, never balancing awkwardly, never partial.\n\nThe character has exactly two hands. In selfie POV slots, one hand is occupied by the phone (off-frame or visible at edge), so only one hand is available for action — never two objects in selfie POV. Every slot names what EACH hand is doing — one role per hand, the idle hand parked explicitly (holding the phone, resting at her side, flat on the counter) — never more than two simultaneous hand-roles. Slots requiring two free hands are static camera POV with the phone not in frame. POV may change between slots — every POV change aligns with a hard cut between slots, never a smooth transition.\n\nSlot 1 — exact 9:16 vertical photorealistic UGC iPhone still, [selfie/static camera POV], [distance band]: [camera framing, character action, product placement (visible in hand / hidden inside X / absent), explicit hand allocation naming BOTH hands' roles (e.g. \"left hand holds phone off-frame, right hand holds product\"; an idle hand is parked — resting at her side, flat on the counter), micro-behavior, light/setting note].\n\nSlot 2 — exact 9:16 vertical still, [POV — different framing from slot 1], [distance band — different from slot 1]: [...].\n\nSlot 3 — exact 9:16 vertical still, [POV/band different from slot 2]: [...].\n\nSlot 4 — exact 9:16 vertical still, [POV/band different from slot 3]: [...].\n\nSlot 5 — exact 9:16 vertical still, [POV/band different from slot 4]: [...].\n\nSlot 6 — exact 9:16 vertical still, [POV/band different from slot 5]: [...].\n\nSlot 7 — exact 9:16 vertical still, [POV/band different from slot 6]: [...].\n\nSlot 8 — exact 9:16 vertical still, [POV/band different from slot 7]: [...].\n\nRendering rules: every slot is an exact 9:16 vertical rectangle, all eight slots identical in size, arranged in ONE HORIZONTAL ROW (do NOT make two rows or a grid — exactly eight panels in one row, never ten, never twelve) with thin white gutters on a clean white background, total sheet aspect 21:9. All eight slots are active — there are no placeholder slots. No two adjacent slots share both their POV and their distance band. Active slots are photorealistic iPhone-style UGC stills with natural light and casual real-life feel. The character's identity is identical across all eight panels. The character has exactly two hands; selfie POV occupies one hand with the phone, leaving one hand for action; two-handed actions are static camera POV; every slot names each hand's single role, the idle hand parked explicitly, and the total simultaneous hand-roles never exceed two. POV may change between slots; every POV change aligns with a hard cut, never a smooth transition. The product (if present) appears at realistic real-world scale relative to the character's hand and body, never enlarged for visibility, and keeps the same visible angle from the reference image across all appearances. Product placement is always clean: fully held in hand, fully hidden inside a closed container, or absent — never partial, never sticking out, never balancing awkwardly. Exactly one product in frame wherever it appears — never duplicated. Each prop holds exactly one state per slot — a cap is on or off, never both. No on-image text of any kind: no header, no metadata, no captions, no pop-text, no badges, no numbers, no subtitles, no watermarks. No legible text or numbers on any prop beyond the product's own label and the garment's own large fictional print. No shallow depth of field, no bokeh, no lens flare, no beauty filter, no cinematic color grade [omit these negatives when user_request explicitly asks for a cinematic look]. No fisheye lens, no ultra-wide distortion. No mirror or reflection shots (unavoidable mirror = partial reflection only, matching the subject exactly). No deformed hands. No third arm, no extra hands, no duplicated limbs. No additional brands or logos beyond the user's product. No invented product claims."
+  },
+  {
+   "label": "Board cleanup prompt (seedream_5_5, shared by every board)",
+   "source": "ugc-video/references/boards.md",
+   "text": "KEEP EXACTLY the framing, composition, slot layout, camera distances, poses,\nidentity, body, product geometry and real label. Change only micro-realism:\nnatural skin/material texture, gentle daylight and fine sensor noise, authentic\nphone photo, deep focus. Preserve face proportions exactly. Avoid waxy skin,\nbeauty filters, oversaturation, HDR glow, oversharpening and cinematic bokeh.\nNo added watermark or text. Preserve existing tutorial Step N headings exactly."
+  },
+  {
+   "label": "Seedance clip prompt structure (review)",
+   "source": "ugc-video/references/ugc-clip.md",
+   "text": "Style & Mood: UGC iPhone aesthetic, [light description matching the board], [SELFIE: front-facing camera, intimate handheld feel | STATIC: locked-off static camera, completely static, frozen frame | MIXED: starts SELFIE handheld, hard-cuts to STATIC locked-off, hard-cuts back to SELFIE handheld — POV alternates per cut], social media vertical format.\n\nNarrative Summary: [1 sentence stating what happens in this clip — references the arc_role and the throughline of the 8 cuts. Close it with a register calibration phrase, gated THREE ways by `user_request`: NATURAL (DEFAULT — no signals needed) — close with `performed by a natural, engaged creator — genuine reactions, lively but human, never staged screaming energy` (or near-equivalent). HYPED (opt-in ONLY) — when `user_request` carries an explicit energy signal (`hyped` / `hype` / `energetic` / `explosive` / `high-energy` / `viral energy` / `insane energy`), close with `performed by an INSANELY hyped creator with explosive screaming energy throughout` (or near-equivalent). CALM — skip the calibration phrase entirely when `user_request` signals a calm-tone aesthetic (`goth` / `vampire` / `cinematic noir` / `cold` / `passive` / `deadpan` / `clinical` / `refined` / `luxury-passive` / `minimal` / `somber` / `serious` / `dark` / `shadowy` / `quiet` / `GRWM` / `routine` / `process-led`). The explicit `user_request` word always wins].\n\nDynamic Description:\nCut 1 (0-Xs) — [framing distance per board slot 1, e.g. MEDIUM CLOSE-UP, TIGHT CLOSE-UP, MACRO, WIDER, PRODUCT-EXTENDED] [POV per slot 1]: [action from slot 1, explicit hand allocation (role of EACH hand, ≤ 2 simultaneous hand roles), 2+ micro-behaviors, expression, and — only when present — product placement]. Hard cut to.\nCut 2 (...) — [framing distance / POV per slot 2, a DIFFERENT framing from cut 1]: [action from slot 2, hand allocation, 2+ micro-behaviors, expression, and optional product placement]. Hard cut to.\nCut 3 (...) — [per slot 3, different framing from cut 2]: [action from slot 3, hand allocation, 2+ micro-behaviors, expression, and optional product placement]. Hard cut to.\nCut 4 (...) — [per slot 4, different from cut 3]: [action from slot 4, hand allocation, 2+ micro-behaviors, expression, and optional product placement]. Hard cut to.\nCut 5 (...) — [per slot 5, different from cut 4]: [action from slot 5, hand allocation, 2+ micro-behaviors, expression, and optional product placement]. Hard cut to.\nCut 6 (...) — [per slot 6, different from cut 5]: [action from slot 6, hand allocation, 2+ micro-behaviors, expression, and optional product placement]. Hard cut to.\nCut 7 (...) — [per slot 7, different from cut 6]: [action from slot 7, hand allocation, 2+ micro-behaviors, expression, and optional product placement]. Hard cut to.\nCut 8 (Ys-end) — [per slot 8, different from cut 7]: [action from slot 8, hand allocation, 2+ micro-behaviors, expression, and optional product placement].\n\nStatic Description: [1-2 sentences: setting, ambient details, props, light direction — match the board image's environment].\n\nAudio: She speaks to camera, iPhone microphone audio with natural room tone[, IF K==1 AND non-verbal cues used: include bracketed sounds at the start of Cut 1, e.g. [*small bright laugh*] [*soft gasp*] [*delighted 'oh!'*] (HYPED register only: [*explosive gasp*] [*hyped yelp*])]: \"[monologue_segment, distributed across the 8 cuts at natural phrase boundaries]\"\n\n[ONLY when user_request explicitly asks for music or names a genre/mood — Music: [genre/mood], low in the mix under the voice, swells at [the peak beat], returns under the closer.]\n\nFacial features clear and undistorted, consistent clothing throughout. Shot on iPhone, natural lighting, social media aesthetic. [SELFIE-only: slight natural handheld micro-shake from her grip | STATIC-only: locked-off static camera, absolutely static, zero camera movement of any kind, no shake, no drift, no breathing wobble | MIXED: handheld micro-shake during selfie cuts, locked-off frozen frame during static-camera cuts]. No on-screen text, no subtitles, no captions, no watermarks, no legible text on any object except [when a product exists: the product's own label and] the garment's own large fictional print, no real brand logos anywhere, no cinematic grade, no film grain, no bokeh, no lens flare, no fisheye lens, no ultra-wide distortion, no slow motion, no beauty filter, no third arm, no extra hands, no duplicated limbs, no deformed hands."
+  },
+  {
+   "label": "Seedance quality suffix (end of every clip prompt)",
+   "source": "ugc-video/references/ugc-clip.md",
+   "text": "Facial features clear and undistorted, consistent clothing throughout. Shot on iPhone, natural lighting, social media aesthetic, [POV-matched movement language]. No on-screen text, no subtitles, no captions, no watermarks, no legible text on any object except [when a product exists: the product's own label and] the garment's own large fictional print, no real brand logos anywhere, no cinematic grade, no film grain, no bokeh, no lens flare, no fisheye lens, no ultra-wide distortion, no slow motion, no beauty filter, no third arm, no extra hands, no duplicated limbs, no deformed hands."
+  },
+  {
+   "label": "Website format: creator de-slop prompt (seedream_5_5)",
+   "source": "ugc-video/references/formats/website.md",
+   "text": "KEEP EXACTLY the framing, composition, pose, subject and identity of this\nvertical portrait — no reframe, no zoom, no crop, no change to the person's\nface / hair / body / clothing. CHANGE ONLY micro-realism: true-to-life\npore-level skin with natural texture and fine vellus hair, real material\ndetail, even natural daytime light with gentle highlight roll-off and faint\ntrue sensor noise, a flat authentic iPhone selfie, deep focus. PRESERVE the\nface's exact shape / width / proportions 1:1 — do NOT squeeze / narrow / slim /\nstretch the face. AVOID AI-slop: waxy plastic skin, airbrushed poreless skin,\nbeauty-filter smoothing, over-saturation, HDR glow / bloom / halos,\noversharpening, teal-orange grade, shallow depth of field, bokeh, cinematic /\nDSLR look. No added text, no watermark."
+  },
+  {
+   "label": "Website format: no-UI ban line (every clip)",
+   "source": "ugc-video/references/saas-clip-prompt.md",
+   "text": "_No website, no web interface, no app UI, no screen / monitor / browser / rendered content on any\nphone or device screen anywhere in the shot._"
+  }
+ ]
+}

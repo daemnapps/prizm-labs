@@ -1,0 +1,19 @@
+{
+  "_note": "Empty on purpose. Fill this in for your brand \u2014 the keys below are what the tools read.",
+  "_shape_from": "the same file in a live brand",
+  "_example_keys": {
+    "brand": "",
+    "products": [
+      {
+        "product": "\u2026",
+        "active": "\u2026",
+        "weight_g": "\u2026",
+        "unit_cost": "\u2026",
+        "currency": "\u2026",
+        "production_days": "\u2026",
+        "note": "\u2026",
+        "skus": "\u2026"
+      }
+    ]
+  }
+}

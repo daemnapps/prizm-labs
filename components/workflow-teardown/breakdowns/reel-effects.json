@@ -1,0 +1,100 @@
+{
+ "id": "reel-effects",
+ "name": "Reel Effects (/text-behind, /grade-wipe, /katana-*)",
+ "kind": "effect",
+ "makes": "Applies prebuilt, parameterised effects (text behind the head, grade wipe, tier list, katana kinetic type and inserts, captions) to a vertical talking-head clip, rendered frame by frame in headless Chromium.",
+ "source": [
+  "reel-effects/SKILL.md",
+  "commands/text-behind.md",
+  "commands/grade-wipe.md",
+  "commands/katana-bold.md",
+  "reel-effects/scripts/effects.py.md",
+  "reel-effects/scripts/render.mjs.md",
+  "reel-effects/scripts/templates/effect-kit.js.md",
+  "reel-effects/scripts/templates/katana-kit.js.md",
+  "reel-effects/scripts/sfx/catalog.json.md"
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "name": "Media",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 2,
+   "name": "Matte (only if needed)",
+   "model": "remove_background",
+   "cheap": "local BiRefNet matte (free)"
+  },
+  {
+   "n": 3,
+   "name": "Prepare and transcribe",
+   "model": "none",
+   "cheap": "local Whisper stt (free)"
+  },
+  {
+   "n": 4,
+   "name": "Build",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 5,
+   "name": "Check",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 6,
+   "name": "Render",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 7,
+   "name": "Deliver",
+   "model": "none",
+   "cheap": null
+  }
+ ],
+ "prompts": [
+  {
+   "label": "Prepare and transcribe",
+   "source": "reel-effects/SKILL.md",
+   "text": "B=~/fx/<short-id> && mkdir -p $B/src && curl -sfL '<CLIP_URL>' -o $B/src/in.mp4 \\\n  && curl -sfL '<MATTE_URL>' -o $B/src/in_matte.mp4 \\\n  && python3 $FX/effects.py prepare $B $B/src/in.mp4 --matte $B/src/in_matte.mp4 \\\n  && python3 $FX/effects.py transcribe $B"
+  },
+  {
+   "label": "Build one effect",
+   "source": "reel-effects/SKILL.md",
+   "text": "python3 $FX/effects.py link $W $B && python3 $FX/effects.py build\n   $W <effect> --params '<JSON>'"
+  },
+  {
+   "label": "Check stills",
+   "source": "reel-effects/SKILL.md",
+   "text": "python3 $FX/effects.py render $W --stills <up to 4 times inside different moments>"
+  },
+  {
+   "label": "Render",
+   "source": "reel-effects/SKILL.md",
+   "text": "python3 $FX/effects.py render $W"
+  },
+  {
+   "label": "Stack effects (layer order and command)",
+   "source": "reel-effects/SKILL.md",
+   "text": " (the grain is applied\n  once, on top). Render the first, then start each next workspace from the previous render with `effects.py stack\n  $W_next $W_prev` instead of `link`; the matte and transcript carry over. "
+  },
+  {
+   "label": "Parameter table, core effects",
+   "source": "reel-effects/SKILL.md",
+   "text": "| Effect              | Command              | Matte | Per moment (defaults)                                                                                               | Whole clip (defaults)                                                                                              | Moments |\n| ------------------- | -------------------- | ----- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------- |\n| `text-behind`       | `/text-behind`       | yes   | `word` (required, ≤ 24 chars), `seconds` (2.2)                                                                      | `color` (`#ffffff`), `font_px` (330), `head_y` px (auto per moment)                                                | ≤ 12    |\n| `tier-list`         | `/tier-list`         | no    | — (items below)                                                                                                     | `topic` (required), `items` (required), `logos`, `hold` s after the last item (2), `panel_top` px (auto)           | —       |\n| `freeze-frame`      | `/freeze-frame`      | yes   | `name` (required, ≤ 24 chars: a name, item or key phrase), `role` (small line), `seconds` (2.5)                     | `tag_y` px (auto)                                                                                                  | ≤ 8     |\n| `glass-graph`       | `/glass-graph`       | no    | `title`, `from_value` (line start), `to_value` (line end) (required numbers such as `1,204`, `412K`), `seconds` (3) | `color` (`#D97757`), `card_top` px (auto)                                                                          | ≤ 6     |\n| `over-the-shoulder` | `/over-the-shoulder` | yes   | `before_value`, `after_value` (required, ≤ 16 chars), `before_label`, `after_label`, `seconds` (2.8)                | `card_y` px (auto)                                                                                                 | ≤ 6     |\n| `captions`          | `/captions`          | no    | — (whole clip, from the transcript)                                                                                 | `look` (`spotlight`, `cascade`, `classic`), `color` (style accent), `upper` (true), `y` px (1380), `max_words` (3) | —       |\n| `grade-wipe`        | `/grade-wipe`        | no    | `seconds` (3)                                                                                                       | `labels` (true), `before_label`, `after_label`, `keep_after` (false), `warmth`, `teal`, `vignette`                 | 1       |"
+  },
+  {
+   "label": "Parameter table, katana looks and inserts",
+   "source": "reel-effects/SKILL.md",
+   "text": "| Effect               | Command               | Matte    | Per moment (defaults)                                                                                                                                      | Whole clip (defaults)                                                                                                                                                       | Moments |\n| -------------------- | --------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |\n| `katana-bold`        | `/katana-bold`        | yes      | `punch` (required, ≤ 16 chars), `lead` (the words said just before it, ≤ 40), `behind` (true: behind the head; false: big in front), `seconds` (2.4)       | `color` (`#FAE67A`, front punch words), `grade` (true), `lead_y` px (auto)                                                                                                  | ≤ 12    |\n| `katana-cool-girl`   | `/katana-cool-girl`   | no       | `italic` (required, ≤ 18), `small` (the words before it, ≤ 40), `seconds` (2.6)                                                                            | `color` (`#FAE67A`), `position` (`low`, `top`), `sparkles` (true), `grade` (true), `block_y` px (auto)                                                                      | ≤ 10    |\n| `katana-cool-dude`   | `/katana-cool-dude`   | optional | `serif` (required, ≤ 16), `caps` (the words before it, ≤ 40), `italic` (false), `seconds` (2.6)                                                            | `grade` (true), `push` (true), `sweep` (true), `serif_y` px (auto)                                                                                                          | ≤ 10    |\n| `katana-orbit`       | `/katana-orbit`       | yes      | `seconds` (3)                                                                                                                                              | `tiles` (3-8 images or videos of the creator's own reels; default: stills of this clip), `radius` (380), `turn` s per lap (5.2), `center_y` px (auto)                       | ≤ 4     |\n| `katana-reel-cards`  | `/katana-reel-cards`  | no       | `file`, `handle` (required: the reel and its creator's @handle), `file2`, `handle2` (a second card), `seconds` (2)                                         | `card_y` px (auto)                                                                                                                                                          | ≤ 6     |\n| `katana-ig-follow`   | `/katana-ig-follow`   | no       | `seconds` (3.2)                                                                                                                                            | `handle`, `posts`, `followers`, `following`, `keyword` (required), `name`, `bio` (≤ 3 lines), `link`, `verified` (false), `avatar`, `grid` (≤ 6 images or videos), `card_y` | ≤ 2     |\n| `katana-app-window`  | `/katana-app-window`  | yes      | `screen` (the user's screenshot or screen recording of the app) or `prompt` + `steps` (1-4 lines of ≤ 32) + `result` (a file name, ≤ 28); `seconds` (4.35) | `app` (`Assistant`), `logo`, `color` (brand accent), `theme` (`light`, `dark`), `window_y` px (auto)                                                                        | ≤ 3     |\n| `katana-file-scroll` | `/katana-file-scroll` | no       | `title` (required, the file name), `text` (required, the file's text, ≤ 3000 chars), `highlight` (a phrase whose line glows), `seconds` (2.4)              | `card_top` px (auto)                                                                                                                                                        | ≤ 3     |"
+  }
+ ],
+ "price": "Only paid step is the person matte (`remove_background`); not quoted in `_prices.md`. Everything else renders in the sandbox at no credit cost.",
+ "cheap_price": "matte credits -> 0 (local BiRefNet)"
+}

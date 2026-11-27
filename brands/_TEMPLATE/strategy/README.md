@@ -1,10 +1,4 @@
-# strategy/
-
-The brand's plan: calendar/, angles.json (the one angle source) and goals/ (KPIs per function).
-
----
-
-## strategy — the brand's claims
+# strategy — the brand's claims
 
 **`angles.json` is the one angle source.** Every page, ad and email names the
 angle it argues; reports group on it. Nothing else in the brand folder may hold
@@ -28,7 +22,7 @@ The other three live elsewhere, and that separation is the whole point:
 |---|---|---|
 | Avatar | `core-avatars/` in this folder's parent | per brand |
 | **Angle** | **`strategy/angles.json` — here** | **per brand** |
-| Channel | `copy/bank/channel-map.json` | shared |
+| Channel | `components/copywriter/bank/channel-map.json` | shared |
 | Format | 25 banks, one per asset type — `components/naming/registry.json` | mixed |
 
 ## The three rules that keep this folder honest

@@ -63,7 +63,7 @@ class OneLocator(unittest.TestCase):
             write(ws / "brands" / "zz-a" / "offers" / "objection-answers.md", "answer one\n")
             # today's place for customer-experience is `customer/` — brandpath finds it
             write(ws / "brands" / "zz-a" / "customer" / "objection-bank.md", 'doubt: "does it last"\n')
-            self.assertNotEqual(ws.resolve(), (Path.home() / "Projects" / "workspace").resolve())
+            self.assertNotEqual(ws.resolve(), (Path.home() / "Projects" / "ai-workspace").resolve())
             with unittest.mock.patch.dict(os.environ, {"AI_WORKSPACE": str(ws)}):
                 V = load_viewer()
                 self.assertEqual(Path(V.WS).resolve(), ws.resolve())

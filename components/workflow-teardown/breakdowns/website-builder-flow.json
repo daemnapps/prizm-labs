@@ -1,0 +1,90 @@
+{
+ "id": "website-builder-flow",
+ "name": "Website Builder Flow",
+ "kind": "other",
+ "makes": "Builds a website, app, landing page or browser game on Higgsfield (not an ad): a phased image-grounded pipeline that ends in a deployed Cloudflare Worker with a generated cover.",
+ "source": [
+  "website-builder-flow/SKILL.md",
+  "website-builder-flow/references/website-flow.md",
+  "website-builder-flow/references/scroll-scrub.md",
+  "website-builder-flow/references/asset-system.md",
+  "website-builder-flow/references/reference-boards.md",
+  "website-builder-flow/references/app-cover.md",
+  "website-builder-flow/references/app-flow.md",
+  "website-builder-flow/references/game-flow.md"
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "name": "Resolve type",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 2,
+   "name": "Create site",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 3,
+   "name": "Concept and reference boards",
+   "model": "gpt_image_2_6 or nano_banana_pro",
+   "cheap": "`seedream_5_0_flash` 2k: 0.5 credits a picture quoted, against 1.75-2.5 for 2k pictures; `gpt_image_2_6_flare` 1k low: 0.75 credits a picture quoted"
+  },
+  {
+   "n": 4,
+   "name": "Asset system",
+   "model": "gpt_image_2_6 / nano_banana_pro / seedance_2_0",
+   "cheap": "`wan3_0` 480p: 7.5 credits per 10 s quoted, against 30 for a `seedance_2_5` 480p draft (a quarter)"
+  },
+  {
+   "n": 5,
+   "name": "Film (animated sites)",
+   "model": "seedance_2_0",
+   "cheap": "`wan3_0` 480p: 7.5 credits per 10 s quoted, against 30 for a `seedance_2_5` 480p draft (a quarter)"
+  },
+  {
+   "n": 6,
+   "name": "Cover and metadata",
+   "model": "soul_cinematic or gpt_image_2_6",
+   "cheap": "`seedream_5_0_flash` 2k: 0.5 credits a picture quoted, against 1.75-2.5 for 2k pictures"
+  },
+  {
+   "n": 7,
+   "name": "Build to boards, motion, mechanical gate",
+   "model": "none",
+   "cheap": "Claude on the plan (free)"
+  },
+  {
+   "n": 8,
+   "name": "Deploy and optional publish",
+   "model": "none",
+   "cheap": null
+  }
+ ],
+ "prompts": [
+  {
+   "label": "Cover scene prompt doctrine (six blocks)",
+   "source": "website-builder-flow/references/app-cover.md",
+   "text": "1. Subject + action, concrete and physical (\"a film editor in a bold red\n   bomber jacket mid-leap, cutting a giant arc of 35mm film with oversized\n   chrome scissors\").\n2. **World + props (story density)**: name 2–4 supporting elements that fill\n   the frame around the subject. Add \"no readable screens\" whenever\n   screens/props could sprout text.\n3. **Scale + placement**: \"waist-up, subject fills two thirds of the frame,\n   positioned right-of-center\" — and reserve the block side: \"soft open\n   negative space upper-left on a warm white wall\". Negative space = a real\n   surface (wall, sky, backdrop), NOT a black void.\n4. Palette, committed and saturated: name 2–3 colors. Avoid lime/acid\n   yellow-green.\n5. Light + lens: \"bright soft key with punchy shadows, low wide angle,\n   commercial editorial grade\".\n6. Always end with: \"no text, no letters, no logos, no captions, no UI\"."
+  },
+  {
+   "label": "Rule that no model renders text",
+   "source": "website-builder-flow/references/app-cover.md",
+   "text": "**The image model NEVER renders text. Not the title, not the wordmark, not\nlabels, not UI. It renders ONLY the scene.** Every glyph on the cover is drawn\nby `compose_cover.py` from the Inter font — that is why the type is identical\nand crisp on every cover, like the official ones. If a generated scene comes\nback with lettering in it, the candidate is DEAD. Regenerate with \"no text, no\nletters, no logos, no captions\" appended."
+  },
+  {
+   "label": "Single-shot film rules",
+   "source": "website-builder-flow/references/scroll-scrub.md",
+   "text": "ONE `generate_video` call. Drive the video model at its highest\nquality with the approved storyboard as a **style/look reference**, and put the\ncontinuous move in the PROMPT:\n\n- Pass the storyboard with the model's GENERIC image/reference role — **not\n  `start_image`**. As a start frame it becomes the literal first frame, so the\n  page opens on a static storyboard for a second or two before motion begins.\n- Ask for the longest single take the model supports (~15s), 16:9, highest\n  resolution, and audio off — the page scrubs frames, not sound, and off is\n  cheaper.\n- Name the grade and the hexes; restate \"no cuts, no camera shake, slow steady\n  motion only, locked exposure, no on-screen text\"."
+  },
+  {
+   "label": "Mandatory animation question rules",
+   "source": "website-builder-flow/references/website-flow.md",
+   "text": "1. **Animation — MANDATORY, ALWAYS ask on every `type: \"website\"` build.** This\n   question is NEVER skipped — ask it even when the request seems to imply a\n   choice (\"an animated site\", \"a plain static page\"), even for a \"simple\" or\n   \"quick\" site, even when you think you already know the answer. The user must\n   make this call, not you. Offer exactly two options:\n   - **Animated (recommended)** → sets `Animation mode: animated-website` — the\n     scroll-scrub camera journey (the product default; mark it Recommended).\n   - **Non-animated** → sets `Animation mode: non-animated` — a well-crafted site\n     with lighter/optional motion, no mandatory camera journey.\n\n   If the request already leans one way, still ask — just point the Recommended\n   marker at the implied option. Record the picked value on the brief's\n   `Animation mode` line (Phase 0). ONLY if the user is genuinely unreachable /\n   never answers do you proceed on the default (**Animated**) and say so in one\n   line — never as a shortcut to avoid asking."
+  }
+ ],
+ "price": "Not quoted: `gpt_image_2_6`, `nano_banana_pro`, `seedance_2_0` and Soul are not in `_prices.md`. The generation spend is boards, asset images, a ~15 s film (one long Seedance take, comparable to or above the 10 s quotes) and two cover candidates; every generation is quoted before it runs.",
+ "cheap_price": "not quoted; film ~15 s -> ~11 credits on Wan, images ~0.5 each"
+}

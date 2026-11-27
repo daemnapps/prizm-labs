@@ -1,0 +1,16 @@
+{
+  "_what": "The stop point every hypothesis carries, set before its test can run. Same block as the funnel repos' pv-tests.json and the page list's tests. Curator: the owner. Change it here only, then rerun the tests.",
+  "status": "draft",
+  "stop": {
+    "min_days": 7, "max_days": 21,
+    "min_visitors_per_group": 800, "max_visitors_per_group": 3000,
+    "min_orders_per_group": 25,
+    "decide": "variant wins at >=95% chance AND >=20% more checkout_reached, orders per visitor not lower",
+    "early_stop": "after 400 per group, >=95% chance the variant is worse by 30%+",
+    "at_cap": "control holds"
+  },
+  "pick": {
+    "_what": "How many recordings a teardown reads, and the floor for a page to count as a leak.",
+    "left": 30, "converted": 10, "min_active_seconds": 5, "min_visitors": 200, "days": 14
+  }
+}

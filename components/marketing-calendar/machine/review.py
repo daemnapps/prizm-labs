@@ -199,3 +199,86 @@ def applied(slots, data):
         merged["_copy"] = data["copy"].get(s["id"], {})
         out.append(merged)
     return out
+
+
+# ------------------------------------------------------------------ mark: one verdict from outside the board
+# The emails page's Calendar tab lets a reviewer judge an unwritten send where he sees it (email_lead, 2026-11-06: "you
+# fix it, owner reviews"; owner reviews every send of the month). It writes through the same set_status / set_note
+# the board uses, into the same review.json, and commits that one file by path; the page server's sync pushes it.
+#     python3 review.py mark <brand> <YYYY-MM> <slot id> <approved|needs-work|cut|pending> --by <person>
+#                           [--note "<one line>"] [--no-commit]
+#     python3 review.py edit <brand> <YYYY-MM> <slot id> <field> --value "<new value>" --by <person> [--no-commit]
+#                           (field: one of EDITABLE; an empty value clears the rewrite)
+# Exit 0 marked (and committed) · 2 refused, nothing written (no such month or slot, bad status) · 1 the commit failed
+# (the file is written; the server's next sync commits it).
+def mark(brand, month, slot_id, status, by, note=None, root=None, commit=True, run=None):
+    if status not in STATUSES:
+        raise ValueError("unknown status %r: one of %s" % (status, ", ".join(STATUSES)))
+
+    def act(run_dir, slot):
+        set_status(run_dir, slot_id, status, who=by, slot=slot)
+        if note is not None:
+            set_note(run_dir, slot_id, note.strip(), who=by, slot=slot)
+    return _write(brand, month, slot_id, by, root, commit, run, act, status)
+
+
+def edit(brand, month, slot_id, field, value, by, root=None, commit=True, run=None):
+    """One field of a planned send rewritten from the emails page (L61 (rewrite a planned send)), through the board's
+    own set_edit: an empty value clears the rewrite. Committed by path like mark()."""
+    return _write(brand, month, slot_id, by, root, commit, run,
+                  lambda run_dir, slot: set_edit(run_dir, slot_id, field, value, who=by, slot=slot),
+                  "%s %s" % (field, "rewritten" if (value or "").strip() else "put back to the plan"))
+
+
+def _write(brand, month, slot_id, by, root, commit, run, act, what):
+    import re
+    import subprocess
+    if not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,40}", brand or "") or not re.fullmatch(r"\d{4}-\d{2}", month or ""):
+        raise ValueError("want a brand and a month YYYY-MM")
+    repo = Path(root) if root else Path(__file__).resolve().parents[3]
+    run_dir = repo / "runs" / "marketing-calendar" / brand / month
+    slot = next((s for s in month_slots(run_dir) if s.get("id") == slot_id), None)
+    if slot is None:
+        raise ValueError("%s %s has no slot %r" % (brand, month, slot_id))
+    act(run_dir, slot)
+    said = "%s %s %s: %s by %s" % (brand, month, slot_id, what, by)
+    if not commit:
+        return said
+    rel = str(path(run_dir).relative_to(repo))
+    run = run or subprocess.run
+    for argv in (["git", "add", "--", rel],
+                 ["git", "commit", "-q", "-m", "calendar review: %s" % said, "--", rel]):
+        r = run(argv, cwd=str(repo), capture_output=True, text=True, stdin=subprocess.DEVNULL)
+        if r.returncode != 0:
+            raise RuntimeError("written, not committed: %s" % ((r.stderr or r.stdout or "").strip()[-200:]))
+    return said + " · committed"
+
+
+def main(argv=None):
+    import argparse
+    import sys
+    ap = argparse.ArgumentParser(description="One reviewer's verdict on one planned send, into review.json")
+    sub = ap.add_subparsers(dest="cmd", required=True)
+    m = sub.add_parser("mark")
+    m.add_argument("brand"); m.add_argument("month"); m.add_argument("slot"); m.add_argument("status")
+    m.add_argument("--by", required=True); m.add_argument("--note"); m.add_argument("--no-commit", action="store_true")
+    e = sub.add_parser("edit")
+    e.add_argument("brand"); e.add_argument("month"); e.add_argument("slot"); e.add_argument("field")
+    e.add_argument("--value", default=""); e.add_argument("--by", required=True)
+    e.add_argument("--no-commit", action="store_true")
+    a = ap.parse_args(argv)
+    try:
+        if a.cmd == "edit":
+            print(edit(a.brand, a.month, a.slot, a.field, a.value, a.by, commit=not a.no_commit))
+        else:
+            print(mark(a.brand, a.month, a.slot, a.status, a.by, a.note, commit=not a.no_commit))
+    except ValueError as e:
+        print("refused: %s" % e, file=sys.stderr)
+        sys.exit(2)
+    except RuntimeError as e:
+        print(str(e), file=sys.stderr)
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

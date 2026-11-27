@@ -1,5 +1,5 @@
 """THE QC LOG — every QC round on a run, filed in the repo beside the run
-(the owner, 2026-10-02: "each qc log needs to be filed in the repo … so improvements
+(owner, 2026-10-02: "each qc log needs to be filed in the repo … so improvements
 to the chain can be made").
 
     <run>/qc-log/QC-LOG.md                      one row per round, newest last
@@ -26,7 +26,7 @@ HEAD = """# QC log
 
 Every QC round on this run, filed automatically (`machine/qc_log.py`). One row per
 round; the raw findings sit beside this file. A cause that would recur becomes a
-chain change, named in the last column (tools/video-teardown/CHAIN-FIXES.md).
+chain change, named in the last column (components/video-teardown/CHAIN-FIXES.md).
 
 | Round | When | Step | Checked by | Method | Passed | Sent back | Causes | Chain fix | Findings |
 |---|---|---|---|---|---|---|---|---|---|

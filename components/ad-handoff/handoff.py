@@ -5,7 +5,7 @@
     handoff.py --brand <brand> --drop <drop> --check        # verify, change nothing
     handoff.py --dir runs/image-teardown/<brand>/<drop>/deliverable --for …
 
-the owner, 2026-09-24, after a handoff reached the person without the pictures:
+owner, 2026-09-24, after a handoff reached the person without the pictures:
 *"stop these types of issues from happening. Make sure these things are
 clean, consolidated, and systemized so that when I just do ad handoffs,
 everything is ready to go. There should be no question. You're wasting my
@@ -128,7 +128,7 @@ def drive_service():
     """The same door every other tool opens Drive through — the keys module
     beside video-teardown loads this machine's vault into the environment."""
     sys.path.insert(0, str(WS / "components/gdrive-creator"))
-    sys.path.insert(0, str(WS / "tools/video-teardown/machine"))
+    sys.path.insert(0, str(WS / "components/video-teardown/machine"))
     import keys
     for k, v in (keys.all_keys() or {}).items():
         os.environ.setdefault(k, v)

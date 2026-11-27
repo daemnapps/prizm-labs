@@ -1,0 +1,101 @@
+{
+ "_what": "becleana's slideshow posts \u2014 organic swipe library entry. Built 2026-09-22 by slideshows.py from the Apify TikTok pull; every number is the post's own.",
+ "creator": "becleana",
+ "platform": "tiktok",
+ "pulled": "2026-09-22",
+ "group": "tye-clipping-examples",
+ "followers": 19300,
+ "profile": "https://www.tiktok.com/@becleana",
+ "slideshows_seen": 40,
+ "posts_seen": 40,
+ "posts": [
+  {
+   "file": "01_becleana-7634860162985053462.md",
+   "id": "7634860162985053462",
+   "views": 5700000,
+   "engagement": 170475,
+   "slides": 6,
+   "url": "https://www.tiktok.com/@becleana/video/7634860162985053462",
+   "posted": "2026-05-01",
+   "hashtags": "#glowup #menshair #selfcare #fyp #men",
+   "sound": "original sound"
+  },
+  {
+   "file": "02_becleana-7629787741902966038.md",
+   "id": "7629787741902966038",
+   "views": 4600000,
+   "engagement": 166637,
+   "slides": 5,
+   "url": "https://www.tiktok.com/@becleana/video/7629787741902966038",
+   "posted": "2026-04-17",
+   "hashtags": "#glowup #menshair #fyp #selfcare #men",
+   "sound": "original sound"
+  },
+  {
+   "file": "03_becleana-7631182049449168150.md",
+   "id": "7631182049449168150",
+   "views": 3200000,
+   "engagement": 141865,
+   "slides": 6,
+   "url": "https://www.tiktok.com/@becleana/video/7631182049449168150",
+   "posted": "2026-04-21",
+   "hashtags": "#glowup #menshair #fyp #selfcare #men",
+   "sound": "original sound - Vinxi"
+  },
+  {
+   "file": "04_becleana-7674677607698337057.md",
+   "id": "7674677607698337057",
+   "views": 2700000,
+   "engagement": 144972,
+   "slides": 6,
+   "url": "https://www.tiktok.com/@becleana/video/7674677607698337057",
+   "posted": "2026-08-16",
+   "hashtags": "#menshair #hairstyle #modcut #haircut #selfimprovement",
+   "sound": "som original"
+  },
+  {
+   "file": "05_becleana-7676469971228069152.md",
+   "id": "7676469971228069152",
+   "views": 1900000,
+   "engagement": 103459,
+   "slides": 6,
+   "url": "https://www.tiktok.com/@becleana/video/7676469971228069152",
+   "posted": "2026-08-21",
+   "hashtags": "#menshair #shorthair #glowup #hairinspo #hairstyle",
+   "sound": "original sound"
+  },
+  {
+   "file": "06_becleana-7679921279972953366.md",
+   "id": "7679921279972953366",
+   "views": 1800000,
+   "engagement": 64628,
+   "slides": 6,
+   "url": "https://www.tiktok.com/@becleana/video/7679921279972953366",
+   "posted": "2026-08-30",
+   "hashtags": "#glowup #menshair #hairstyle #hairinspo #turkish",
+   "sound": "\u043e\u0440\u0438\u0433\u0438\u043d\u0430\u043b\u044c\u043d\u044b\u0439 \u0437\u0432\u0443\u043a"
+  },
+  {
+   "file": "07_becleana-7667521000841694486.md",
+   "id": "7667521000841694486",
+   "views": 1700000,
+   "engagement": 66388,
+   "slides": 5,
+   "url": "https://www.tiktok.com/@becleana/video/7667521000841694486",
+   "posted": "2026-07-28",
+   "hashtags": "#men #hairstyles #menshair #glowup #summerhair",
+   "sound": "som original"
+  },
+  {
+   "file": "08_becleana-7672790494199516438.md",
+   "id": "7672790494199516438",
+   "views": 1500000,
+   "engagement": 95678,
+   "slides": 5,
+   "url": "https://www.tiktok.com/@becleana/video/7672790494199516438",
+   "posted": "2026-08-11",
+   "hashtags": "#menshair #hairstyle #glowup #haircuts #turkish",
+   "sound": "original sound"
+  }
+ ]
+}

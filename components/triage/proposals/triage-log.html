@@ -93,18 +93,18 @@ footer{font-size:13px;color:var(--ink3)}
     <!-- actors -->
     <rect x="20" y="40" width="230" height="96" rx="10" fill="var(--paper)" stroke="var(--ink2)" stroke-width="1.5"/>
     <text x="34" y="64" font-size="14" font-weight="600" fill="var(--ink)">The list's triage owner</text>
-    <text x="34" y="84" font-size="12.5" fill="var(--ink2)">the team · component issues</text>
-    <text x="34" y="101" font-size="12.5" fill="var(--ink2)">the team · red tests</text>
+    <text x="34" y="84" font-size="12.5" fill="var(--ink2)">the email lead · component issues</text>
+    <text x="34" y="101" font-size="12.5" fill="var(--ink2)">the developer · red tests</text>
     <text x="34" y="122" font-size="12" fill="var(--ink3)">change · draft · close · answer · forward</text>
 
     <rect x="20" y="160" width="230" height="82" rx="10" fill="var(--paper)" stroke="var(--ink2)" stroke-width="1.5"/>
     <text x="34" y="184" font-size="14" font-weight="600" fill="var(--ink)">Component owners</text>
-    <text x="34" y="204" font-size="12.5" fill="var(--ink2)">the owner · the team · the team</text>
+    <text x="34" y="204" font-size="12.5" fill="var(--ink2)">the owner · the designer · the developer</text>
     <text x="34" y="226" font-size="12" fill="var(--ink3)">sign · undo</text>
 
     <rect x="20" y="266" width="230" height="82" rx="10" fill="var(--paper)" stroke="var(--ink2)" stroke-width="1.5"/>
     <text x="34" y="290" font-size="14" font-weight="600" fill="var(--ink)">Deciders</text>
-    <text x="34" y="310" font-size="12.5" fill="var(--ink2)">the team or the team, an owner</text>
+    <text x="34" y="310" font-size="12.5" fill="var(--ink2)">the developer or the designer, an owner</text>
     <text x="34" y="332" font-size="12" fill="var(--ink3)">decide</text>
 
     <!-- decision log -->
@@ -157,7 +157,7 @@ footer{font-size:13px;color:var(--ink3)}
 
       <rect x="700" y="278" width="240" height="56" rx="10" fill="var(--paper)" stroke="var(--ink2)" stroke-width="1.5"/>
       <text x="714" y="301" font-size="13.5" font-weight="600" fill="var(--ink)">Atlas component pages</text>
-      <text x="714" y="321" font-size="12" fill="var(--ink2)">closed issues, "closed by the team"</text>
+      <text x="714" y="321" font-size="12" fill="var(--ink2)">closed issues, "closed by the email lead"</text>
 
       <rect x="700" y="350" width="240" height="56" rx="10" fill="var(--paper)" stroke="var(--ink2)" stroke-width="1.5"/>
       <text x="714" y="373" font-size="13.5" font-weight="600" fill="var(--ink)">Any machine</text>
@@ -187,12 +187,12 @@ footer{font-size:13px;color:var(--ink3)}
 
 <section class="sec">
   <h2>What one record holds</h2>
-  <p class="sub">Example: the record that would be written when the team fixes intake#6. Every field is something a person or a machine can look up later.</p>
+  <p class="sub">Example: the record that would be written when the email lead fixes intake#6. Every field is something a person or a machine can look up later.</p>
   <div class="grid2">
 <div class="rec"><span class="c"># example record: nothing has been written</span>
 <span class="k">act</span>      change
 <span class="k">item</span>     intake-6
-<span class="k">who</span>      pm
+<span class="k">who</span>      the email lead
 <span class="k">when</span>     2026-10-06T09:12Z
 <span class="k">areas</span>    components/intake/tools/pools.py
 <span class="k">commit</span>   (the commit's id)
@@ -245,7 +245,7 @@ These are facts, not instructions.
 2026-10-06 · intake#6 · copy pointers use the
   slug as the file name (all 614 pointed at
   missing files) · test: copy rows' files
-  exist · triage, the team</div>
+  exist · triage, the email lead</div>
   </div>
   <div class="test">
     <div class="res ok"><h3><span class="tag ex">works</span> Session started at the workspace root</h3><p>As soon as Claude opened a file in the component, it had the component's instructions <i>and</i> the imported context file under <code>runs/</code>. This is how teammates normally work.</p></div>
@@ -257,11 +257,11 @@ These are facts, not instructions.
   <h2>the owner's case, step by step</h2>
   <p class="sub">The question this answers: what if the owner later runs into something a triage decision changed, without knowing about it?</p>
   <div class="steps">
-    <div class="step"><span class="when">Tue 6 Oct</span><b>the team fixes intake#6</b><p>One commit, with a test. A <i>change</i> record is written.</p></div>
+    <div class="step"><span class="when">Tue 6 Oct</span><b>the email lead fixes intake#6</b><p>One commit, with a test. A <i>change</i> record is written.</p></div>
     <div class="step"><span class="when">same minute</span><b>Context updates</b><p>intake's context file gains one line: what changed, why, and the guarding test.</p></div>
     <div class="step"><span class="when">Fri 9 Oct</span><b>Digest goes out</b><p>the owner's weekly digest lists it, with an undo button. the owner skims it, or doesn't.</p></div>
     <div class="step"><span class="when">Tue 20 Oct</span><b>the owner reworks pools.py</b><p>Claude opens the file and already knows about the change, so it won't bring the bug back, and can explain the change if asked.</p></div>
-    <div class="step alt"><span class="when">or: the owner disagrees</span><b>Undo</b><p>An <i>undo</i> record with the owner's reason. Both context and digest update, so the team's Claude sees it won't be retried.</p></div>
+    <div class="step alt"><span class="when">or: the owner disagrees</span><b>Undo</b><p>An <i>undo</i> record with the owner's reason. Both context and digest update, so the email lead's Claude sees it won't be retried.</p></div>
   </div>
 </section>
 
@@ -301,7 +301,7 @@ These are facts, not instructions.
     <div class="guard"><h3>Only what shapes the next edit</h3><p>Changes, drafts, signatures, undos and binding rulings. Closes and forwards stay in the log only: in a coder's context they'd be noise.</p></div>
     <div class="guard"><h3>Can't be used to steer Claude</h3><p>A file that loads into Claude's instructions could be used to slip in commands. So it's built only from the records' fixed fields plus each one-line reason, never from issue text or web pages. It opens by saying it's a record, not instructions, and only the triage writer may write it.</p></div>
     <div class="guard"><h3>One rule, one home</h3><p>Rulings stay in the decision log. A record points at the ruling's line; it never restates the ruling.</p></div>
-    <div class="guard"><h3>The owner's file stays the owner's</h3><p>The generated file lives under <code>runs/</code>, where machines write. The component folder only gains one import line, added once by a person: the team drafts it, each owner signs.</p></div>
+    <div class="guard"><h3>The owner's file stays the owner's</h3><p>The generated file lives under <code>runs/</code>, where machines write. The component folder only gains one import line, added once by a person: the email lead drafts it, each owner signs.</p></div>
     <div class="guard"><h3>Logged before changed</h3><p>No change lands in someone's component before its record and context line exist. It's proposed as a fifth limit on Option 3.</p></div>
   </div>
 </section>
@@ -310,7 +310,7 @@ These are facts, not instructions.
   <h2>What it takes, in order</h2>
   <ol class="plan">
     <li><b>Extend the <code>triage</code> record kind</b> with the five new acts and the areas, commit and test fields, and add the reopen sentence to SCHEMA §5a. Both change shared rules, so the lead cards them.</li>
-    <li><b>Rule the import line as a convention</b> (the team, or the team as conventions curator). Then the team drafts it into the 44 component instructions files, and each owner signs once.</li>
+    <li><b>Rule the import line as a convention</b> (the developer, or the email lead as conventions curator). Then the email lead drafts it into the 44 component instructions files, and each owner signs once.</li>
     <li><b>Build the context generator and the digest view</b> over the log. This is in the atlas stream's own area; both are generated, never hand-edited.</li>
     <li><b>Then start the Option 3 trial</b> in the quiet components, logged first.</li>
   </ol>
@@ -319,7 +319,7 @@ These are facts, not instructions.
 </section>
 
 <footer>
-  <p>Proposal by the atlas stream, 2026-10-02, for the team's discussion. Related: the Option 3 proposal (<code>triage/proposals/triage-owner-scope.json</code>), the example owner digest (<code>triage/proposals/owner-digest-example.html</code>), the <code>triage</code> record kind (<code>platform/data/kinds/triage.json</code>, ATL-28 (triage record kind)). The intake#6 entries are examples. That issue is real; no record or change has been made.</p>
+  <p>Proposal by the atlas stream, 2026-10-02, for the developer's discussion. Related: the Option 3 proposal (<code>triage/proposals/triage-owner-scope.json</code>), the example owner digest (<code>triage/proposals/owner-digest-example.html</code>), the <code>triage</code> record kind (<code>platform/data/kinds/triage.json</code>, ATL-28 (triage record kind)). The intake#6 entries are examples. That issue is real; no record or change has been made.</p>
 </footer>
 
 </div>

@@ -12,8 +12,8 @@ and there is no default: a run that does not declare one is writing to nobody.
 |---|---|
 | `{avatar}` | `core-avatars/<avatar>/profile.md` |
 | `{language_bank}` | `core-avatars/<avatar>/language/rules.md` |
-| `{offer_file}` | `offers/offer-bank.md` |
+| `{offer_file}` | `products/offer-bank.md` |
 
-Sub-avatars, the objection bank and `intake/angles.md` are
+Sub-avatars, the objection bank and `existing-content/angles.md` are
 deliberately unmapped — indexed, selected per source by the context
 scout, never loaded wholesale.

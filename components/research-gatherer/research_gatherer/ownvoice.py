@@ -7,7 +7,7 @@
 The deep pull (engine.deep_for) files what OUTSIDE rooms say; `comments`
 files the comments on any post; this files what OUR audience says: comments
 under the brand's own ads and the customer emails in its support inbox.
-Built 2026-09-28 on the owner's ruling ("build inside of there").
+Built 2026-09-28 on owner's ruling ("build inside of there").
 
 Sources, read from the brand's own `operations/brand.json`, never from here:
   - `ad_accounts[network=meta]` -> ad comments: the warehouse's
@@ -64,7 +64,7 @@ def _cfg():
 
 def _vault(name):
     # SI-194 (readers use loader): by NAME through rg_keys and the one loader —
-    # the environment, then this repo's .env. SUPABASE_DB_URL keeps
+    # the environment, then ~/.upright-keys.env. SUPABASE_DB_URL keeps
     # its name (G-A1); the loader's alias also finds DATABASE_URL.
     try:
         from . import rg_keys
@@ -357,7 +357,10 @@ def main(argv=None):
     ap.add_argument("--since", help="YYYY-MM-DD; default = the last run, else the config's first_run_since")
     ap.add_argument("--no-scrape", action="store_true", help="warehouse only, spend nothing on Apify")
     ap.add_argument("--dry-run", action="store_true", help="pull and count; spend nothing on Apify, read and file nothing")
-    a = ap.parse_args(argv)
+    import importlib.util as _u, pathlib as _pl
+    _s = _u.spec_from_file_location("profile_arg", next(q for q in _pl.Path(__file__).resolve().parents if q.name == "components") / "naming" / "profile_arg.py")
+    _PA = _u.module_from_spec(_s); _s.loader.exec_module(_PA)   # --profile <avatar>[_<sub>][_<demographic>] (naming/PEOPLE.md)
+    a = ap.parse_args(_PA.expand(argv, has=('avatar',)))
     cfg = _cfg()
     bj = brand_json(a.brand)
     label = bj.get("label") or a.brand

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Where the email system is, and where the brand context it reads lives.
 
-The tool lives in daemn — the owner's repo, where he builds and tests. The brand
-context it reads lives in the shared workspace, read-only, the same way
+The tool lives in daemn — owner's repo, where he builds and tests. The brand
+context it reads lives in the shared ai-workspace, read-only, the same way
 his chain-variables map points into it. Those are two different trees, so
 neither path may be derived by counting folders up from this file: that is
 why this is named rather than derived by counting folders up from this file.
@@ -15,9 +15,9 @@ moved to `components/brand-finder/` so rule-9's "where is brands/" has one
 home; it had three, and this file's copy came from copy.py's. This file is the
 same file it always was: same names, same answers, same command. **The default
 below stays HERE**, because it is this machine's own policy. RULED 2026-09-09
-(the owner, "it lives in the repo and everything's reflective"): the repo root,
+(owner, "it lives in the repo and everything's reflective"): the repo root,
 the same as `lab/owner/copy/machine/paths.py` — the BH-1 divergence is closed. That divergence is written
-down for the 09-03 the owner batch in
+down for the 09-03 owner batch in
 `new-workflow-design/builds/brand-home/DIVERGENCE.md`; nothing here decided it.
 """
 
@@ -31,11 +31,11 @@ HERE = Path(__file__).resolve().parent
 # The tree that CONTAINS brands/ — the lab, not the repo root. Both this
 # runner and copy's context.py resolve <root>/brands/<brand>, so they must be
 # handed the same root or the scout indexes a different tree than the one
-# the runner reads (which is exactly what broke the first BRAND-A attempt).
-_DEFAULT_WS = _rk_paths.repo(Path(__file__))      # brands/ at the repo root (the owner, 2026-09-09)
+# the runner reads (which is exactly what broke the first brand_a attempt).
+_DEFAULT_WS = _rk_paths.repo(Path(__file__))      # brands/ at the repo root (owner, 2026-09-09)
 
 # FOUND, never counted: this folder moved lab/owner/email-production ->
-# tools/email-production on 2026-09-19, and parents[3] silently pointed one
+# components/email-production on 2026-09-19, and parents[3] silently pointed one
 # level too high the moment it did.
 _REPO = next((d for d in Path(__file__).resolve().parents if (d / "components" / "brand-finder").is_dir()), None)
 _COMPONENT = (_REPO / "components" / "brand-finder") if _REPO else None
@@ -82,7 +82,7 @@ def component(*parts):
 
 
 def lab_tool(*parts):
-    """Another of the owner's machines, still in lab/owner/ — found by walking up,
+    """Another of owner's machines, still in lab/owner/ — found by walking up,
     so this component can move again without every reach breaking."""
     for d in Path(__file__).resolve().parents:
         cand = d.joinpath("lab", "owner", *parts)

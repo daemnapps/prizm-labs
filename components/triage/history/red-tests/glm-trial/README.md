@@ -1,6 +1,6 @@
 # Red-test triage trial on GLM: the exact rerun of c0ce1a03f
 
-the team, 2026-10-02 at ~02:20Z, "trial", answering ◆ PLAN [6beb2b]: "Say "trial 1" and I'll ask the atlas stream to rerun the red-test trial on GLM." the team confirmed "go" in the atlas stream after red tests had been set aside for this round. The question is whether the engine's bulk passes can move off Claude limits onto the GLM plan.
+the developer, 2026-10-02 at ~02:20Z, "trial", answering ◆ PLAN [6beb2b]: "Say "trial 1" and I'll ask the atlas stream to rerun the red-test trial on GLM." the developer confirmed "go" in the atlas stream after red tests had been set aside for this round. The question is whether the engine's bulk passes can move off Claude limits onto the GLM plan.
 
 ## What is the same as the Claude run (c0ce1a03f)
 
@@ -27,7 +27,7 @@ the team, 2026-10-02 at ~02:20Z, "trial", answering ◆ PLAN [6beb2b]: "Say "tri
 
 The rubric is the same as `../trial-2026-10-02.html`: agree · same fix, different label · partial · differ. The run is scored against ◆ PLAN's 34 hand rows (e9995982a) and against the Claude run's verdicts (`../engine-verdicts-2026-10-02.json`, 30 of 34 leading to the same action).
 
-Decision line (◆ PLAN's, the team's to apply):
+Decision line (◆ PLAN's, the developer's to apply):
 - 28 or more of 34 → the engine's bulk passes move to GLM;
 - under 26 → they stay on Claude;
 - 26 or 27 → a second trial on another list.

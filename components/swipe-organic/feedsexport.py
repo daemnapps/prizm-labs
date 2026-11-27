@@ -6,7 +6,7 @@
     python3 feedsexport.py --records <records dir> # read another checkout's records
     python3 feedsexport.py --dry-run               # build + check, write nothing
 
-the owner reversed the "never public" ruling on 1 Oct 2026: My Feeds goes on the
+owner reversed the "never public" ruling on 1 Oct 2026: My Feeds goes on the
 site as ONE read-only page. The same day he ruled the redesign wrong — the site
 shows HIS board (desk.html, port 8820): same controls, same cards, same
 behaviour, inside the site shell, read-only. So this export writes what the
@@ -47,7 +47,7 @@ import packs                 # noqa: E402  (the guard)
 
 # Pictures are shown in cards that are 200-280 CSS px wide, so on any retina
 # screen a 220px source was being upscaled — which is why the thumbnails
-# looked soft (the owner, 2 Oct: "the quality of all these thumbnails is shit").
+# looked soft (owner, 2 Oct: "the quality of all these thumbnails is shit").
 # AdPlexity serves its originals at 720x1280, so the detail was always there.
 # Measured on a real ad: 220px/q38 = 3.1 KB, 440px/q56 = 8.6 KB — about what
 # the average thumbnail already weighed, for twice the resolution.
@@ -80,7 +80,7 @@ OUR_BRANDS = tuple(sorted(p.name for p in (packs._workspace() / "brands").iterdi
 # ---------------------------------------------------------------- the scan
 # On top of packs.OURS (our names, a person's disk, secrets): the things the
 # plan names as never public. Since 1 Oct 2026 the two brand NAMES may show
-# (the owner wants to see them); a brand-keyed folder id still may not.
+# (owner wants to see them); a brand-keyed folder id still may not.
 OURS_PUBLIC = re.compile("|".join(a for a in packs.OURS.pattern.split("|")
                                   if a.lower() not in OUR_BRANDS), re.I)
 NEVER = re.compile(
@@ -95,7 +95,7 @@ def own_account_ids(ws):
 
 
 # The one AdPlexity address allowed through: the creative file itself on their
-# CDN. the owner ruled it 2 Oct 2026 — Open must go to "the Adplexity file link",
+# CDN. owner ruled it 2 Oct 2026 — Open must go to "the Adplexity file link",
 # not the Facebook Ad Library — and the tool is already named on daemn.co's own
 # cost table, so its name is not what this guard protects. Everything else about
 # AdPlexity (our account, our searches, our API calls) stays refused below.
@@ -395,7 +395,7 @@ def build(records, ws, stage, old, repix=False):
                    "first": (a.get("first_seen") or "")[:10] or None, "last": (a.get("last_seen") or "")[:10] or None,
                    "video": bool(a.get("video_url")),
                    # The creative itself, on AdPlexity, not the Facebook Ad
-                   # Library (the owner, 2 Oct). The library page often shows a
+                   # Library (owner, 2 Oct). The library page often shows a
                    # dead ad or nothing at all; the file is the ad. Video ads
                    # open the mp4, image ads the jpg. Both are public.
                    "url": a.get("video_url") or a.get("image_url")
@@ -429,8 +429,8 @@ def build(records, ws, stage, old, repix=False):
 def prompts(ws, ids):
     """The prompts the desk shows verbatim — templates only, never as-sent."""
     files = [*sorted(D.PROMPTS.glob("feed-*.md")),
-             *sorted((ws / "tools/video-writing/prompts/stage-1b-audience").glob("*-v10-*.md")),
-             *sorted((ws / "tools/video-writing/prompts/stage-4-loop/4b-hook").glob("*-v15-*.md"))]
+             *sorted((ws / "components/video-writing/prompts/stage-1b-audience").glob("*-v10-*.md")),
+             *sorted((ws / "components/video-writing/prompts/stage-4-loop/4b-hook").glob("*-v15-*.md"))]
     return {p.name: p.read_text() for p in files if not dirty(p.read_text(), ids)}
 
 
@@ -500,9 +500,9 @@ def competitors(ws):
     return out
 
 
-NAMES = {"marsmen": "Mars Men", "froya": "Frøya Organics", "competitor-a": "Competitor-A", "sprtn": "Sprtn",
+NAMES = {"marsmen": "Mars Men", "froya": "Frøya Organics", "brand_c": "brand_c", "sprtn": "Sprtn",
          "nuora": "Nuora", "lasta": "Lasta", "resilia": "Resilia", "consciousbar": "The Conscious Bar",
-         "competitor-c": "Competitor-C"}
+         "brand_d": "brand_d"}
 
 
 def paid_ads(ws, comp):

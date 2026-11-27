@@ -1,4 +1,4 @@
-"""Every link in an email carries the tracking standard's email tags (the owner, 2026-10-12:
+"""Every link in an email carries the tracking standard's email tags (owner, 2026-10-12:
 "make sure when we ... schedule emails that utm parameters are all set up properly so we can
 also stitch together our funnel data end to end").
 

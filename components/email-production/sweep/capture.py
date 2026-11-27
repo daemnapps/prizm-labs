@@ -26,9 +26,11 @@ import sys
 import time
 from pathlib import Path
 
-HERE = Path(__file__).resolve().parent.parent
-CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 import os as _os
+
+HERE = Path(__file__).resolve().parent.parent
+_HS = _os.path.expanduser("~/Library/Caches/chrome-headless-shell/chrome-headless-shell-mac-arm64/chrome-headless-shell")   # background-only browser: no Dock icon; Chrome is the fallback
+CHROME = (_HS if _os.path.exists(_HS) else "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
 OUT = Path(_os.environ["FORMAT_BANK_DIR"]).resolve() if _os.environ.get("FORMAT_BANK_DIR") else HERE / "results" / "format-bank"
 URLBASE = f"/results/{OUT.name}"          # the local server's path to it
 

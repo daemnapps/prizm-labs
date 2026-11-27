@@ -13,7 +13,7 @@ The ids are in the email's deliverable/check.json (`delivery.items`). The
 record is filed through dispatch_card.write_record under
 platform/data/records/fact-rulings/ in the workspace (AI_WORKSPACE, else this
 checkout) and its path printed. NOTHING IS COMMITTED and nothing is written
-under brands/ — folding the verified facts into the brand files stays the team's
+under brands/ — folding the verified facts into the brand files stays email_lead's
 own hand. A price is never ruled: a wrong price is fixed in the offer bank.
 """
 import argparse
@@ -76,7 +76,7 @@ def record_for(run, pid, ruling, fact="", reason="", by=None, root=None):
     kind = it.get("kind")
     if kind == "price" and ruling != "wrong":
         raise Refused(f"a wrong price is fixed in brands/{brand}/products/offer-bank.md "
-                      "(the team's fold) — a ruling never clears a price")
+                      "(email_lead's fold) — a ruling never clears a price")
     if kind not in R.RULABLE:
         raise Refused(f"a `{kind}` problem is not rulable — fix the email, not rulable")
     if ruling not in R.RULABLE[kind]:
@@ -87,7 +87,7 @@ def record_for(run, pid, ruling, fact="", reason="", by=None, root=None):
                       f"rule.py {run} {pid} {ruling} \"the fact\"")
     if ruling in ("true", "fill") and Q.prices_in(fact):
         raise Refused("the fact text names a price — a wrong price is fixed in "
-                      f"brands/{brand}/products/offer-bank.md (the team's fold) — a ruling never clears a price")
+                      f"brands/{brand}/products/offer-bank.md (email_lead's fold) — a ruling never clears a price")
     if ruling == "true-once" and not reason:
         raise Refused(f"`true-once` needs --reason — why it is true for {run.name} only")
     root = Path(root or workspace())

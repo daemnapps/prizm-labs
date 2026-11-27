@@ -1,0 +1,70 @@
+{
+  "_note": "Empty on purpose. Fill this in for your brand \u2014 the keys below are what the tools read.",
+  "_shape_from": "the same file in a live brand",
+  "_example_keys": {
+    "_brand": "",
+    "_what": "",
+    "_why": "",
+    "_rule": "",
+    "_where": "",
+    "_lesson": "",
+    "elements": {
+      "0fa7420f-c30b-4197-aeb7-e35643bfcf8a": {
+        "name": "\u2026",
+        "kind": "\u2026",
+        "thumb": "\u2026",
+        "warning": "\u2026",
+        "blocked": "\u2026"
+      },
+      "8fad5612-d46f-4c19-baec-c3a636f22a4e": {
+        "name": "\u2026",
+        "kind": "\u2026",
+        "canonical": "\u2026",
+        "thumb": "\u2026",
+        "facts": "\u2026",
+        "forbids": "\u2026",
+        "note": "\u2026"
+      },
+      "797158d0-bb68-4b50-81ed-b345bb523d71": {
+        "name": "\u2026",
+        "facts": "\u2026",
+        "forbids": "\u2026",
+        "kind": "\u2026",
+        "thumb": "\u2026"
+      },
+      "c9e9c9fa-8b4f-40c4-80f9-5103e78da92f": {
+        "name": "\u2026",
+        "facts": "\u2026",
+        "forbids": "\u2026",
+        "kind": "\u2026",
+        "thumb": "\u2026"
+      },
+      "983f612c-9924-4e7c-afb9-b1c13dfc87a5": {
+        "name": "\u2026",
+        "facts": "\u2026",
+        "forbids": "\u2026",
+        "kind": "\u2026",
+        "thumb": "\u2026"
+      },
+      "b79f6fb5-5abc-4843-b978-ad14314632d9": {
+        "name": "\u2026",
+        "facts": "\u2026",
+        "forbids": "\u2026",
+        "kind": "\u2026",
+        "thumb": "\u2026"
+      },
+      "4157e549-dd65-450e-995d-cc50e369d107": {
+        "name": "\u2026",
+        "facts": "\u2026",
+        "kind": "\u2026",
+        "thumb": "\u2026"
+      },
+      "0b1ec59d-03b2-4e23-80cb-8405769ae88c": {
+        "name": "\u2026",
+        "facts": "\u2026",
+        "kind": "\u2026",
+        "thumb": "\u2026"
+      }
+    }
+  }
+}

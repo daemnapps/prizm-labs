@@ -1,0 +1,13 @@
+{
+ "_what": "Who fills the picker role in creator_picks.py. command null = the built-in default (proven sources only (TrendTrack ads already swept, TikTok Shop videos), each ranked on its proof, the winners slot from runs/winners/<brand>/brief-next.json on top). Set command to a repo-relative script (e.g. the creative-strategist component's picker) that prints [{\"item\", \"why\"}] (item = \"trendtrack:<ad id>\" or \"tiktok-shop:<post id>\") for --brand B --max N, and filled_by to its name; the door does not change. owner_yes true = picks wait as draft until creator_picks.py mark --approve.",
+ "role": "creative strategist",
+ "filled_by": "default: proven sources ranked on proof + winners slot",
+ "command": null,
+ "owner_yes": true,
+ "mix": {
+  "_what": "How a week's picks are split between the two kinds of source. `market_now` = what the avatar's market is watching now (the organic feeds); `adjacent` = adjacent markets and competitors (the proven paid sources this picker reads). The two numbers are parts of a whole: 4 and 1 means four picks in five from the market's own feeds and one in five from adjacent markets and competitors. `applies` false = the split is worked out and printed with every pick run and written on each pick, and changes no pick; true = this picker takes only the adjacent side's share of the week. The numbers are the default offered 2026-11-18; `applies` turns on only by the owner's ruling.",
+  "market_now": 4,
+  "adjacent": 1,
+  "applies": false
+ }
+}

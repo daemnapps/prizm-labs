@@ -24,7 +24,7 @@ sys.path.insert(0, str(HERE))
 import marketing_chain_checks as Q                          # noqa: E402
 from marketing_chain_checks import rulings as R             # noqa: E402
 from marketing_chain_checks.facts import brand_facts        # noqa: E402
-sys.path.append(str(REPO / "tools" / "email-production" / "machine"))
+sys.path.append(str(REPO / "components" / "email-production" / "machine"))
 import brand_facts as BF                                    # noqa: E402
 
 BRAND = "fixturebrand"
@@ -66,12 +66,12 @@ def plant(root, pid, ruling, fact="", kind="fact", brand=BRAND):
     d = root / R.RECORDS_REL
     d.mkdir(parents=True, exist_ok=True)
     at = "2026-10-02T10:%02d:00Z" % N[0]
-    rec = {"schema": 1, "kind": "fact-rulings", "reviewer": "pm", "item": pid,
+    rec = {"schema": 1, "kind": "fact-rulings", "reviewer": "email_lead", "item": pid,
            "verdict": {"brand": brand, "problem_id": pid, "email": "e1", "kind": kind,
                        "quote": "q", "files_say": None, "ruling": ruling, "fact": fact,
-                       "reason": "", "by": "pm", "at": at},
+                       "reason": "", "by": "email_lead", "at": at},
            "notes": "", "created": at, "via": "test"}
-    (d / ("%04d--pm--%s.json" % (N[0], pid))).write_text(json.dumps(rec))
+    (d / ("%04d--email_lead--%s.json" % (N[0], pid))).write_text(json.dumps(rec))
 
 
 class ProductFacts(unittest.TestCase):

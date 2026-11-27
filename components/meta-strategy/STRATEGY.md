@@ -4,7 +4,7 @@
 
 We are hooked straight into Meta, our data lives in Meta, and every ad and page is made to sell to Meta's audience. So the process is built to what Meta has published (sources and quotes: `components/creative-diversity/META.md`), in Meta's words. Each rule says whose it is: **Meta** = Meta's own guidance · **ours** = our working rule built on it. The machine-readable copy is `rules.json`; `audit.py` grades every brand against it; the approval card enforces it per ad.
 
-Live page: The Diversity System — (private page)
+Live page: The Diversity System — https://claude.ai/artifact/44oyMM2QD7WkgY3HrJVFuh
 
 ## 1. How Meta picks an ad (why this works)
 
@@ -21,7 +21,7 @@ Live page: The Diversity System — (private page)
 | Assets | Each ad is a flexible ad, up to 10 assets: 9:16 video with music/voiceover, 4:5, image, carousel if it fits; different faces and settings; ≥20% of the ad set's assets 9:16 with sound; key messages in the safe zone | Meta |
 | Creators | Partnership ads | Meta (19% lower acquisition cost) |
 
-**The one offer:** <brand> → NOVA (`flex.<brand>.com/icon/flex/`) · <brand> → face scrub (`recipe.<brand>.com/<brand>-facescrub-cpk/landing/`).
+**The one offer:** Brand A → FLEX (`flex.Brand A.com/icon/flex/`) · Brand B → face scrub (`recipe.Brand B.com/Brand B-facescrub-cpk/landing/`).
 
 **Budget:** each ad set needs about 50 results a week to exit learning (Meta), so the campaign's daily budget is about **7 × cost per purchase × live ad sets** (ours). Face scrub break-even $38.81: ≈ $270/day per ad set, ≈ $550/day for its two. Add ad sets as budget allows.
 
@@ -64,6 +64,6 @@ Iteration (hook text, caption, CTA, music swap) happens only inside a creative t
 
 ## 7. Section swaps are graded by Meta (2026-10-08)
 
-Run each section swap (a new hook, proof or offer staging) as its own asset inside the version's flexible ad. Meta then reports spend and purchases per asset (`body_asset`, `title_asset`, `video_asset`, `image_asset`), so every section earns its own score. Confirmed on a live <brand> ad (`creative-diversity/META.md` §7). This is the score the section index and the mix-and-match generator will run on.
+Run each section swap (a new hook, proof or offer staging) as its own asset inside the version's flexible ad. Meta then reports spend and purchases per asset (`body_asset`, `title_asset`, `video_asset`, `image_asset`), so every section earns its own score. Confirmed on a live Brand B ad (`creative-diversity/META.md` §7). This is the score the section index and the mix-and-match generator will run on.
 
 **Watch:** when an ad is duplicated in Ads Manager (a "- Copy" ad set) and the original archived, the approval card still holds the old ad id. The daily read has to follow the copy, or results stop joining back to the brief.

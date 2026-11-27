@@ -14,7 +14,7 @@ import sys
 from pathlib import Path
 
 TOOL = "intake"                                   # the name we say out loud: runs/<TOOL>/...
-# Both pools graduated out of the lab to components/ on 2026-09-22 (the owner:
+# Both pools graduated out of the lab to components/ on 2026-09-22 (owner:
 # "swipe paid, swipe organic, intake all need to move to components now").
 # The DRIVE mirror deliberately did not move — the media stays where every
 # link already handed out points at it.

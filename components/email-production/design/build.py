@@ -1,7 +1,7 @@
 """Build a designed email for Klaviyo, any brand: <run>/design/email.json in, <run>/klaviyo/ out.
 
-Lifted from runs/email-production/brand-a/week-2026-10-12/klaviyo_build.py (the BRAND-A week of 12 Oct 2026),
-with everything that was BRAND-A moved into the brand's design-system.json.
+Lifted from runs/email-production/brand_a/week-2026-10-12/klaviyo_build.py (the brand_a week of 12 Oct 2026),
+with everything that was brand_a moved into the brand's design-system.json.
 
     python3 design/build.py <run folder> [<run folder> ...]
 
@@ -9,7 +9,7 @@ Writes <run>/klaviyo/:
     email.html   a 600px table: designed sections cut as crisp pictures (headless Chrome, the brand's own
                  fonts and colours); letters, buttons, GIFs, footer, and any section the brand keeps live
                  (`live_sections` in its look) as live HTML; every own link tagged for tracking
-    assets/      every picture the email uses (uploaded to Klaviyo only on the owner's Approve)
+    assets/      every picture the email uses (uploaded to Klaviyo only on owner's Approve)
     layout.json  where each section sits, measured once here (design/layout_file.py, LD-76 (email layout file))
     whole-email.jpg  the whole email as one picture; it and assets/ go to the run's Drive mirror
     card.json   what the Klaviyo approval page shows, with the product check (EMAIL-LINE step 4)
@@ -17,6 +17,7 @@ Writes <run>/klaviyo/:
 Nothing here talks to Klaviyo. The approval page (approve_klaviyo.py) does, on a person's click, as a DRAFT.
 A rebuild keeps what a person already did on the card (the draft, the approval, the schedule).
 """
+import functools
 import html
 import json
 import os
@@ -35,18 +36,30 @@ import email_links  # noqa: E402  (the team's tracking standard: every own link 
 import engine as EN  # noqa: E402
 import layout_file as LF  # noqa: E402  (LD-76 (email layout file): the section map kept beside the email)
 import look as L  # noqa: E402
+sys.path.append(str(HERE.parent))
+import calendar_handoff as CH  # noqa: E402
 
 E = html.escape
 _HS = os.path.expanduser("~/Library/Caches/chrome-headless-shell/chrome-headless-shell-mac-arm64/chrome-headless-shell")   # background-only browser: no Dock icon; Chrome is the fallback
 CHROME = os.environ.get("CHROME_BIN") or (_HS if os.path.exists(_HS) else "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
 CSS_W, SCALE = 400, 3
 MAGENTA = (255, 0, 255)
-LIVE = ("letter", "cta", "foot", "gif", "hero_blink")
+LIVE = ("letter", "cta", "foot", "gif", "hero_blink", "fg_foot")
 
 
 def utm(url, label):
     """Links go in plain; email_links.tag() tags every own link once the email is whole."""
     return url
+
+
+def _live_hero(s):
+    """A hero_bg whose style says live_button: the button over the photo is a live link, not part of the picture."""
+    return s.get("s") == "hero_bg" and bool((s.get("style") or {}).get("live_button")) and bool(s.get("cta"))
+
+
+def _no_button(h):
+    """The section's picture without its drawn button (the live one goes on top of the photo)."""
+    return re.sub(r'<a class="m-btn"[^>]*>.*?</a>', "", h, count=1, flags=re.S)
 
 
 def alt_of(sec):
@@ -142,9 +155,40 @@ class Live:
                     'letter-spacing:.12em;color:%s;text-decoration:none;text-transform:uppercase;text-align:center%s">%s</a></td></tr></table>') % (
                 bg or lay.get("button_bg") or self.t["button"], rad, g, E(url), lay.get("button_pad") or "28px 10px", int(lay.get("button_font") or 13), self.sans, ink or self.t["button_ink"], tg, E(label))
         return ('<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto"><tr>'
-                '<td bgcolor="%s" style="border-radius:999px%s"><a class="cta-btn" href="%s" style="display:inline-block;padding:%s;font:600 %dpx/1 %s;'
+                '<td bgcolor="%s" style="border-radius:%s%s"><a class="cta-btn" href="%s" style="display:inline-block;padding:%s;font:600 %dpx/1 %s;'
                 'letter-spacing:.12em;color:%s;text-decoration:none;text-transform:uppercase%s">%s</a></td></tr></table>') % (
-            bg or lay.get("button_bg") or self.t["button"], g, E(url), "24px 20px;min-width:280px;text-align:center;white-space:nowrap" if big else "18px 44px", 17 if big else 14, self.sans, ink or self.t["button_ink"], tg, E(label))
+            bg or lay.get("button_bg") or self.t["button"], lay.get("button_live_radius") or "999px", g, E(url), "24px 20px;min-width:280px;text-align:center;white-space:nowrap" if big else (lay.get("button_live_pad") or "18px 44px"), 17 if big else int(lay.get("button_live_font") or 14), self.sans, ink or self.t["button_ink"], tg, E(label))
+
+    def hero_live(self, s, link, name, alt, size):
+        """A hero whose button is live and sits ON the photo (style.live_button, editor 2026-11-10): the picture (words drawn,
+        no button) is the cell's background, a spacer puts the live button where the drawn one would be; Outlook gets the
+        same picture as a VML fill. The spacer is a link too, so the photo itself stays clickable."""
+        st = s.get("style") or {}
+        H = int(round(size[1] * 600.0 / size[0]))
+        btn_h = 50    # the live button: 18px + 14px text + 18px
+        top = max(0, int(round(H - 1.5 * float(st.get("btn_bottom", 14)) - btn_h)))
+        base = st.get("base") or self.t["canvas"]
+        if not str(base).startswith("#"):
+            base = "#D9D8CF"
+        btn = self.button(s["cta"], link, bg=st.get("button"), ink=st.get("button_ink"))
+        src = "assets/%s" % name
+        bot = max(0, H - top - btn_h)
+        k = getattr(self, "hero_n", 0) + 1
+        self.hero_n = k
+        # on a phone the email is as wide as the screen, so the picture and both spacers shrink with it (vw), the button stays its own size
+        self.mobile_css = getattr(self, "mobile_css", "") + (
+            "@media (max-width:620px){.hl%d-td{height:%.3fvw!important;background-size:cover!important}.hl%d-a{height:%.3fvw!important;line-height:%.3fvw!important}"
+            ".hl%d-b{height:calc(%.3fvw - 43px)!important;line-height:0!important}}") % (k, H / 6.0, k, top / 6.0, top / 6.0, k, bot / 6.0)
+        inner = ('<a class="hl%d-a" href="%s" style="display:block;height:%dpx;line-height:%dpx;font-size:1px;text-decoration:none;color:%s">&nbsp;</a>%s'
+                 '<div class="hl%d-b" style="height:%dpx;line-height:%dpx;font-size:1px">&nbsp;</div>') % (
+            k, E(link), top, top, base, btn, k, bot, bot)
+        vml_open = ('<!--[if gte mso 9]><v:rect xmlns:v="urn:schemas-microsoft-com:vml" fill="true" stroke="false" style="width:600px;height:%dpx"><v:fill type="frame" src="%s" color="%s"/><v:textbox inset="0,0,0,0"><![endif]-->') % (H, src, base)
+        vml_close = '<!--[if gte mso 9]></v:textbox></v:rect><![endif]-->'
+        said = '<div style="display:none;max-height:0;overflow:hidden;font-size:0;line-height:0">%s</div>' % E(alt)
+        cell = ('<td class="hl%d-td" width="600" height="%d" valign="top" bgcolor="%s" background="%s" style="padding:0;height:%dpx;background-color:%s;background-image:url(%s);'
+                'background-size:cover;background-repeat:no-repeat;background-position:center top">%s%s%s%s</td>') % (
+            k, H, base, src, H, base, src, vml_open, said + inner, "", vml_close)
+        return '<tr>%s</tr>' % cell
 
     def blink(self, s, link, assets):
         """The hero with its neon word blinking: the lit and dim frames cut like any section, one looping GIF.
@@ -221,8 +265,9 @@ class Live:
             if s.get("greeting"):
                 out += '<p style="margin:0 0 16px;font:400 26px/1.2 %s;color:%s">%s</p>' % (self.serif, t["ink"], EN._t(s["greeting"]))
             for p in s["paras"]:
-                out += '<p style="margin:0 0 16px;font:400 16px/1.6 %s;color:%s">%s</p>' % (self.sans, t["ink"], EN._t(p).replace("<i>", "<em>").replace("</i>", "</em>"))
-            return self.row(out, "6px 33px 10px")
+                out += '<p style="margin:0 0 16px;font:400 %dpx/1.6 %s;color:%s">%s</p>' % (int((self.lk.get("layout") or {}).get("body_px") or 16), self.sans, t["ink"], EN._t(p).replace("<i>", "<em>").replace("</i>", "</em>"))
+            py = s.get("pad_y") or {}    # this email only: room above and below the letter, {"top": px, "bottom": px}
+            return self.row(out, "%dpx 33px %dpx" % (int(py["top"]) if py.get("top") is not None else 6, int(py["bottom"]) if py.get("bottom") is not None else 10))
         if n == "hero_blink":
             return self.blink(s, link, assets)
         if n == "cta":
@@ -245,7 +290,7 @@ class Live:
             return self.row(lead + btn, st.get("pad") or "8px 33px 28px", st.get("bg"), st.get("bottom_line"), st.get("bg_image"))
         if n == "product":
             # a brand that keeps card text live (its look's live_sections): picture above, words and button live.
-            # The picture was never written (2026-10-18: Brand-B's Black Friday card reached Klaviyo with no product
+            # The picture was never written (2026-10-18: brand_b's Black Friday card reached Klaviyo with no product
             # in it); it is cut here from the same figure the design shows, the product filling its square.
             top = ""
             if s.get("picture"):
@@ -268,10 +313,35 @@ class Live:
         if n == "gif":
             p = self.lk.path(s["gif"]); name = p.name
             (assets / name).write_bytes(p.read_bytes())
+            if s.get("full"):    # this email only: the animated picture runs the full width of the email, nothing around it (the words box is drawn into it)
+                return self.row('<a href="%s"><img src="assets/%s" width="600" alt="%s" style="display:block;width:100%%;max-width:600px;border:0"></a>' % (
+                    E(utm(s.get("link", ""), self.spec["label"])), name, E(s.get("alt", s.get("caption", "")))), "0", s.get("bg"))
+            gst = s.get("style") or {}
+            if gst.get("round_frame"):    # this email only: a title, the animated picture in a round gold border, her words and name, on one dark ground (title/words may be left out: they sit in cut sections around it, in the brand's own font)
+                ink, soft = gst.get("ink", "#FBFAF5"), gst.get("soft", "#D2BC8A")
+                ttl = '<div style="font:300 26px/1.2 %s;color:%s;padding:0 0 22px;text-align:center">%s</div>' % (self.serif, ink, E(s["title"])) if s.get("title") else ""
+                words = ('<p style="margin:18px 0 0;text-align:center;font:300 18px/1.35 %s;color:%s">\u201c%s\u201d</p>'
+                         '<p style="margin:10px 0 0;text-align:center;font:400 11.5px/1.5 %s;letter-spacing:.14em;text-transform:uppercase;color:%s">%s</p>' % (
+                             self.serif, ink, E(s["quote"]), self.sans, soft, E(s["caption"]))) if s.get("quote") else ""
+                return self.row(ttl + '<a href="%s"><img src="assets/%s" width="330" alt="%s" style="display:block;margin:0 auto;width:330px;max-width:100%%;border:2px solid %s;border-radius:26px"></a>' % (
+                                    E(utm(s.get("link", ""), self.spec["label"])), name, E(s.get("alt", s["caption"])), soft) + words,
+                                gst.get("pad") or ("44px 33px 46px" if s.get("title") else "10px 33px 46px"), gst.get("bg", "#3A2820"))
             note = ' · <a href="%s" style="color:%s">%s</a>' % (E(s.get("link", "")), t["muted"], E(s["note"])) if s.get("note") else ""
             return self.row('<a href="%s"><img src="assets/%s" width="330" alt="%s" style="display:block;margin:0 auto;width:330px;max-width:100%%;border-radius:16px"></a>'
                             '<p style="margin:10px 0 0;text-align:center;font:400 13px/1.4 %s;color:%s"><b style="color:%s;font-weight:600">%s</b>%s</p>' % (
-                                E(s.get("link", "")), name, E(s["caption"]), self.sans, t["muted"], t["ink"], E(s["caption"]), note), "22px 33px 22px")
+                                E(s.get("link", "")), name, E(s["caption"]), self.sans, t["muted"], t["ink"], E(s["caption"]), note) if not s.get("quote") else
+                            '<a href="%s"><img src="assets/%s" width="330" alt="%s" style="display:block;margin:0 auto;width:330px;max-width:100%%;border-radius:16px"></a>'
+                            '<p style="margin:12px 0 0;text-align:center;font:400 14px/1.5 %s;color:%s">%s <b style="color:%s;font-weight:600">%s</b></p>' % (
+                                E(s.get("link", "")), name, E(s["caption"]), self.sans, t["muted"], E(s["quote"]), t["ink"], E(s["caption"])), "22px 33px 22px")    # quote: this email only, the words in normal text and only the name (caption) bold
+        if n == "fg_foot":    # editor's Figma footer (opt-in, nov-33): the logo and four icons as one picture, the unsubscribe and address lines live
+            with tempfile.TemporaryDirectory() as tmp:
+                top = slices(self.spec, self.lk, [(None, EN.SECTIONS["fg_foot"](self.lk, dict(s, top_only=True), self.spec.get("theme")))], tmp)[0]
+            top.save(assets / "foot-top.jpg", quality=88, optimize=True)
+            f = self.lk.get("footer") or {}
+            logo_link = (self.lk.get("logo") or {}).get("link", "")
+            return (self.row('<a href="%s"><img src="assets/foot-top.jpg" width="600" alt="brand_b Skincare. Instagram, Facebook, TikTok, YouTube." style="display:block;width:100%%;max-width:600px;border:0"></a>' % E(logo_link), "0", "#19110E") +
+                    self.row('<p class="ft" style="margin:0;text-align:center;font:400 11px/1.6 %s;color:#CFC8BC">No longer want to receive these emails? '
+                             '{%% unsubscribe "Unsubscribe." %%} &nbsp;·&nbsp; {%% manage_preferences "Preferences" %%}<br>%s</p>' % (self.sans, E(f.get("line", ""))), "0 33px 50px", "#19110E"))
         if n == "foot":
             f = self.lk.get("footer") or {}
             fst = s.get("style") or {}    # this email only: {"bg", "ink"} (colours of the footer row)
@@ -312,7 +382,7 @@ def _guarantee_rows(brand):
 def guarantees(brand, look_words):
     """[(name, verbatim)] an email may quote: the look's guarantee, then every surface wording in the brand's
     offers/guarantees.json. A brand can sign one wording per surface (a device, its formulations); an email quotes the
-    one for what it sells, word for word, so any signed one passes and the check names it (the team, 2026-10-22: a CRUSH
+    one for what it sells, word for word, so any signed one passes and the check names it (email_lead, 2026-10-22: a CRUSH
     email quoting the formulations wording was held for not matching the device's)."""
     rows = _guarantee_rows(brand)
     return [("the look's", look_words)] + [(k, r["verbatim"]) for k, r in rows.items() if isinstance(r, dict) and r.get("verbatim")]
@@ -329,10 +399,10 @@ def term_problems(terms, text):
 
 def guarantee_hit(brand, look_words, words, text=""):
     """(name, how) of the signed guarantee the email keeps, or (None, why not). Word for word anywhere in the email,
-    the first letter's case free to follow its sentence ("In place of a date sixty days to ask…", brand-b-nov-08);
+    the first letter's case free to follow its sentence ("In place of a date sixty days to ask…", brand_b-nov-08);
     or, for a guarantee whose row carries "terms", in other words inside the guarantee section itself (`text`) as long
-    as it keeps every term (the team, 2026-10-27: Brand-B's email guarantee may be paraphrased; BRAND-A's stay word for
-    word until the owner says)."""
+    as it keeps every term (email_lead, 2026-10-27: brand_b's email guarantee may be paraphrased; brand_a's stay word for
+    word until owner says)."""
     for k, v in guarantees(brand, look_words):
         if v and (v in words or (v[:1].lower() + v[1:]) in words):
             return k, "word for word"
@@ -363,6 +433,28 @@ def picture_alts(spec):
     return out
 
 
+def Q_prices(block):
+    """Every $ figure in a bank block, with and without its cents ($39.98, $100.00 and $100)."""
+    out = set()
+    for p in re.findall(r"\$\d+(?:\.\d\d)?", block or ""):
+        out.add(p)
+        if p.endswith(".00"):
+            out.add(p[:-3])
+    return out
+
+
+def gift_pictures_ok(x, spec, words):
+    """A picture may show a not-in-the-box item while the brand's offer gives it away, only when the email itself states
+    that gift word for word (one of `except`) and sends inside the gift's window (`except_pictures` from/until).
+    email_lead, 2026-11-19: the King Set + Free FLEX Charging Case emails showed the case and were held as "sold separately";
+    a picture of the case as the free gift is the offer, a picture of it as if it came in the box is still held."""
+    win = x.get("except_pictures") or {}
+    day = str(spec.get("date") or "")[:10]
+    if not (win.get("from") and win.get("until") and day and win["from"] <= day <= win["until"]):
+        return False
+    return any(e.lower() in (words or "").lower() for e in x.get("except", []))
+
+
 def product_check(spec, lk, words):
     """EMAIL-LINE step 4: every price, refused word and box fact in what this email shows, against the brand's look file."""
     ck = lk.get("check") or {}
@@ -371,7 +463,7 @@ def product_check(spec, lk, words):
     if not prices:                           # no price list in the look file: the offer bank's live prices are the list
         import gaps as G
         for row in G.offer_bank(spec["brand"]).values():
-            for k in ("price", "funnel"):
+            for k in ("price", "was", "funnel"):    # the bank's own was-price is a bank figure too (2026-11-08)
                 if row.get(k):
                     prices.setdefault(row[k], "%s · offer bank" % row["name"])
                     prices.setdefault(row[k].replace(".00", ""), "%s · offer bank" % row["name"])
@@ -379,7 +471,15 @@ def product_check(spec, lk, words):
         sale = G.sale_offer(spec["brand"], ((rj.get("assignment") or {}).get("occasion")) or "")
         for p in (sale or {}).get("prices", []):
             prices.setdefault(p, "%s · offer bank" % sale["name"])
-    for p in sorted(set(re.findall(r"\$\d+(?:\.\d\d)?", words))):
+    found = sorted(set(re.findall(r"\$\d+(?:\.\d\d)?", words)))
+    if any(p not in prices for p in found) and spec.get("_run"):
+        # the delivery gate's own list for this send (its offer's bank entry, a free gift at its bank price, a bank
+        # guarantee quoted whole), so the two checks never disagree on a price (2026-11-11)
+        import simple_email as SE
+        block, offer = SE.send_price_block(spec["brand"], spec["_run"], words)
+        for p in Q_prices(block):
+            prices.setdefault(p, "%s · the send's offer, offer bank" % offer)
+    for p in found:
         out.append(("ok" if p in prices else "PROBLEM", "price %s · %s" % (p, prices.get(p, "not in the brand's price list"))))
     for n in ck.get("never_words", []):
         if re.search(r"(?<!\w)%s(?!\w)" % re.escape(n), words, re.I):
@@ -392,10 +492,18 @@ def product_check(spec, lk, words):
                    ("PROBLEM", "guarantee not word for word" + (" nor by its terms (%s)" % how if how else "")))
     for x in ck.get("not_in_box", []):
         pat = r"\b%s\b" % re.escape(x["word"])
-        pics = [(sec, a) for sec, a in picture_alts(spec) if re.search(pat, a, re.I)]
+        # `except`: the brand's own word-for-word lines that may name it (an offer that gives it away free,
+        # 2026-11-07); only those exact lines are cleared, any other mention still holds the email
+        clear = lambda t: functools.reduce(lambda acc, e: re.sub(re.escape(e), " ", acc, flags=re.I), x.get("except", []), t)
+        pics = [(sec, a) for sec, a in picture_alts(spec) if re.search(pat, clear(a), re.I)]
+        named = pics or re.search(pat, clear(words), re.I)
+        if named and gift_pictures_ok(x, spec, words):   # the gift, in its window, stated by the email: pictures and words
+            out.append(("ok", "the %s is shown or named as the free gift this email states (%s)" % (
+                x["word"], x["except_pictures"].get("why", "offer bank"))))
+            continue
         for sec, a in pics:                  # a picture shows it: say which one and why, so the designer sees it at once
             out.append(("PROBLEM", "the %s picture shows the %s (\"%s\"): %s. Use a picture without it." % (sec, x["word"], a[:90], x["why"]), "picture"))
-        if not pics and re.search(pat, words, re.I):
+        if not pics and re.search(pat, clear(words), re.I):
             out.append(("PROBLEM", "mentions \"%s\": %s" % (x["word"], x["why"])))
     if "in the box" in words.lower() and ck.get("in_the_box"):
         out.append(("ok", "in the box: %s (product file)" % ck["in_the_box"]))
@@ -403,6 +511,11 @@ def product_check(spec, lk, words):
         out.append(("PROBLEM", "an unfilled gap is still in the email: %s (run design/gaps.py --fill)" % m))
     for f in ck.get("flags", []):
         out.append(("PROBLEM", f))
+    # WHO SAID IT (LD-105 (check the designed email)): a quote's credit matches where the language bank has it
+    import designed_email as DE      # this folder's parent, on the path above
+    import paths as EP
+    for p in DE.credit_problems(spec, spec["brand"], EP.WORKSPACE):
+        out.append(("PROBLEM", p))
     todo = [s for s in json.dumps(spec["sections"]).split('"todo"')[1:]]
     if todo:
         out.append(("PROBLEM", "%d picture slot(s) still to fill" % len(todo), "picture"))
@@ -415,7 +528,19 @@ def build(run_dir):
     run_dir = Path(run_dir).resolve()
     spec = json.loads((run_dir / "design" / "email.json").read_text()); spec["_run"] = str(run_dir)
     lk = L.load(spec["brand"], run_dir)
-    spec = EN.house(spec, lk)            # LD-101 (Brand-B house look): the live rows take the house styles too
+    card_path = run_dir / 'klaviyo/card.json'
+    old = CH.read(card_path, {})
+    handoff = CH.metadata(L.REPO, spec['brand'], run_dir, spec, lk, old)
+    if handoff['calendar_handoff']['problems']:
+        card = dict(old or dict(brand=spec['brand'], label=spec['label'], status='draft'))
+        card.update(handoff)
+        card['flags'] = list(dict.fromkeys(card.get('flags', []) + handoff['calendar_handoff']['problems']))
+        card_path.parent.mkdir(parents=True, exist_ok=True)
+        card_path.write_text(json.dumps(card, indent=1, ensure_ascii=False)+'\n')
+        print('HELD calendar handoff %s: %s' % (run_dir.name, '; '.join(handoff['calendar_handoff']['problems'])))
+        return card
+    spec = EN.house(spec, lk)            # LD-101 (brand_b house look): the live rows take the house styles too
+    spec = dict(spec, sections=EN.buying_defaults(spec))   # the live rows get the same button/price defaults as the pictures
     label = spec["label"]
     link = utm(spec.get("link", ""), label)
     live = set(LIVE) | set(lk.get("live_sections", []))
@@ -429,7 +554,7 @@ def build(run_dir):
     assets = out / "assets"; assets.mkdir(parents=True, exist_ok=True)
     for f in assets.glob("*"):
         f.unlink()
-    pics = [h for (s, n), chunk in zip(order, _chunks(secs, [n for _, n in order])) if s["s"] not in live for _, h in chunk]
+    pics = [(_no_button(h) if _live_hero(s) else h) for (s, n), chunk in zip(order, _chunks(secs, [n for _, n in order])) if s["s"] not in live for _, h in chunk]
     with tempfile.TemporaryDirectory() as tmp:
         cut = slices(spec, lk, [(None, h) for h in pics], tmp) if pics else []
     lv = Live(lk, spec)
@@ -446,15 +571,20 @@ def build(run_dir):
             name = "s%02d.jpg" % n
             cut[ci].save(assets / name, quality=86, optimize=True, progressive=True); ci += 1
             href = utm((lk.get("logo") or {}).get("link", ""), label) if s["s"] in ("band", "mark") else link
+            if s.get("link") and s["s"] == "picture":    # this email only (editor, 2026-11-19): a picture of another deal opens that deal's page
+                href = utm(s["link"], label)
+            if _live_hero(s):    # style.live_button: the photo is the row's background, the button on it is live
+                rows.append(lv.hero_live(s, link, name, alt_of(h), cut[ci - 1].size).replace("<tr>", '<tr data-sec="%d">' % si, 1))
+                continue
             rows.append(tag(lv.row('<a href="%s"><img src="assets/%s" width="600" alt="%s" style="display:block;width:100%%;max-width:600px;border:0"></a>' % (
                 E(href), name, E(alt_of(h)))), si))
     t = lv.t
     doc = ('<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
-           '<title>%s</title><style>body{margin:0;padding:0;background:%s}a{color:%s}.ft a{color:inherit!important}@media (max-width:620px){.wrap{width:100%%!important}.cta-btn{padding:15px 22px!important;font-size:13px!important;min-width:0!important;letter-spacing:.1em!important}.cta-wide{padding:4.3vw 10px!important;font-size:3.2vw!important;letter-spacing:.12em!important}}</style></head>'
+           '<title>%s</title><style>body{margin:0;padding:0;background:%s}a{color:%s}.ft a{color:inherit!important}@media (max-width:620px){.wrap{width:100%%!important}.cta-btn{padding:15px 22px!important;font-size:13px!important;min-width:0!important;letter-spacing:.1em!important}.cta-wide{padding:4.3vw 10px!important;font-size:3.2vw!important;letter-spacing:.12em!important}}%s</style></head>'
            '<body style="margin:0;padding:0;background:%s"><div style="display:none;max-height:0;overflow:hidden">%s</div>'
            '<table role="presentation" width="100%%" cellpadding="0" cellspacing="0" border="0" bgcolor="%s"><tr><td align="center">'
            '<table role="presentation" class="wrap" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px">%s</table>'
-           '</td></tr></table></body></html>') % (E(spec["subject"]), t["canvas"], t["ink"], t["canvas"], E(spec.get("preview", "")), t["canvas"], "".join(rows))
+           '</td></tr></table></body></html>') % (E(spec["subject"]), t["canvas"], t["ink"], getattr(lv, "mobile_css", ""), t["canvas"], E(spec.get("preview", "")), t["canvas"], "".join(rows))
     doc = email_links.tag(doc, spec["brand"], label, term=email_links.term_for(spec.get("segments", [])))
     left = email_links.problems(doc, spec["brand"])
     (out / "email.html").write_text(doc)
@@ -469,13 +599,22 @@ def build(run_dir):
                 audience=audience_of(spec), segments=[s for s in spec.get("segments") or [] if isinstance(s, str) and s],
                 subjects=[{"subject": spec["subject"], "preview": spec.get("preview", "")}], links=links, pictures=n,
                 product_check=checks, flags=["Product check: " + c["detail"] for c in checks if c["result"] != "ok"],
-                notes=spec.get("notes", []), status="draft", built_from="tools/email-production/design/build.py")
+                notes=spec.get("notes", []), status="draft", built_from="components/email-production/design/build.py")
     if spec.get("from_label"):       # the email's own from-name (a founder's letter); else the brand's, as before
         card["from_label"] = spec["from_label"]
     old = json.loads((out / "card.json").read_text()) if (out / "card.json").is_file() else {}
-    for k in ("klaviyo", "approval", "scheduled", "sent_back", "status", "segments", "audience", "final_check", "sections_ok", "eve_done", "links_confirmed", "eve_due"):
+    for k in ("klaviyo", "approval", "scheduled", "sent_back", "status", "final_check", "sections_ok", "editor_done", "links_confirmed", "editor_due"):
         if k in old:
             card[k] = old[k]
+    # an older build's final check is not this one's (brand_b-nov-23, 2026-11-16): kept only for the same email.html
+    import check as FC
+    if card.get("final_check") and old.get("final_check_of") == FC.html_sha(out / "email.html"):
+        card["final_check_of"] = old["final_check_of"]
+    else:
+        card.pop("final_check", None)
+    card.update(handoff)
+    if card['calendar_handoff']['problems']:
+        card['flags'] += card['calendar_handoff']['problems']
     if not [s for s in card.get("segments") or [] if isinstance(s, str) and s]:
         card["flags"].append("Segment unknown: the send names no segment — set it before approving")
     (out / "card.json").write_text(json.dumps(card, indent=1, ensure_ascii=False) + "\n")

@@ -3,10 +3,10 @@
 
     python3 slideshow_teardown.py --pool <pool> --brand <brand> [--top 20] [--workers 6]
 
-the owner, 2026-10-24, on the clipping campaign: "run teardown on all of the assets ... so that way we can build a
+owner, 2026-10-24, on the clipping campaign: "run teardown on all of the assets ... so that way we can build a
 variation matrix". Each slideshow in `<pool>/posts.json` whose slides are in the library
 (`records/swipe-videos/<id>/slides/slide-NN.jpg`) goes through
-`tools/image-teardown/prompts/stage1-sequence-teardown-v*` (the newest), on the image chain's own Gemini
+`components/image-teardown/prompts/stage1-sequence-teardown-v*` (the newest), on the image chain's own Gemini
 door, with every slide attached in order. Biggest first (views from the pool row, or from a Content Rewards
 snapshot beside it). Writes runs/swipe-organic/<brand>/<pool>-teardowns/<id>.md; a teardown already written is
 kept. Nothing here is brand-specific: the brand only names where the run is filed.
@@ -19,7 +19,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.append(str(HERE.parent / "run-kit"))
 from run_kit.paths import repo  # noqa: E402
 
-IT = repo() / "tools" / "image-teardown"
+IT = repo() / "components" / "image-teardown"
 GEMINI = IT / "tools" / "gemini_image.py"
 DOCTRINE = repo() / "components" / "marketing-doctrine" / "slices"
 LIB = HERE / "records" / "swipe-videos"

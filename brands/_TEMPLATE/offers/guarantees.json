@@ -1,0 +1,47 @@
+{
+  "_note": "Empty on purpose. Fill this in for your brand \u2014 the shape below is what the tools read.",
+  "_shape_from": "the same file in a live brand",
+  "_example_keys": {
+    "_readme": "",
+    "guarantees": {
+      "flex-device": {
+        "surface": "",
+        "short": "",
+        "verbatim": "",
+        "plus": "",
+        "receipts": [
+          "\u2026"
+        ],
+        "signed": {
+          "by": "\u2026",
+          "on": "\u2026"
+        }
+      },
+      "formulations": {
+        "surface": "",
+        "short": "",
+        "verbatim": "",
+        "receipts": [
+          "\u2026"
+        ],
+        "signed": {
+          "by": "\u2026",
+          "on": "\u2026"
+        }
+      }
+    },
+    "_open": [
+      ""
+    ],
+    "canonical": {
+      "name": "",
+      "supersedes": "",
+      "scope": "",
+      "note": "",
+      "signed": {
+        "by": "",
+        "on": ""
+      }
+    }
+  }
+}

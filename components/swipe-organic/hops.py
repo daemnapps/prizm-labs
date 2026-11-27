@@ -17,10 +17,10 @@ receipt naming the exact winner that surfaced it. Probation sources get
 pulled like any other — they earn a permanent seat (or retirement) by
 what they deliver. Every adoption is logged to discoveries.jsonl.
 
-    python3 hops.py --avatar brand-a--glow-up [--max 8] [--dry-run]
+    python3 hops.py --avatar brand_a--glow-up [--max 8] [--dry-run]
 
 A winner = a post with views >= 50k, or rising >= 10%/day between
-observations. No human input feeds this (the owner's ruling 2026-08-30).
+observations. No human input feeds this (owner's ruling 2026-08-30).
 """
 import argparse, json, re
 from datetime import datetime, timezone

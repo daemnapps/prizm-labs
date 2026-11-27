@@ -1,6 +1,6 @@
 # The Viewer Chain
 
-Page (every run, one tab each): (private page) · built by `viewer_chain.py` into `runs/viewer-check/INDEX.html`
+Page (every run, one tab each): https://claude.ai/artifact/W5ciMmuPqkkaTLNhZR4Sbe · built by `viewer_chain.py` into `runs/viewer-check/INDEX.html`
 
 the owner, 2026-10-02: *"consolidate the viewer check and the ad signal tools … build a chain now for this process … I think this is literally it."*
 
@@ -25,5 +25,5 @@ One brief in; one folder and one page out at `runs/viewer-check/<brand>/<label>/
 The video and statics chains run steps 1–7 at their own gate (`viewer.check`), using the same code. Their send-back re-makes the real writing step, and a pass after a fail is learned there too.
 
 ## First live runs (2 Oct)
-- **Silent Chair** (<brand> · glow-up, video): FAILED. Belief 0/5, and 5/5 felt the refund line was a pitch. The refund line is not in the objection bank, so it's a new worry. It goes back to the lines that sound like a sales pitch.
-- **p005 marker on belly** (<brand>, static; run as fed-up-king because the brief records no avatar): FAILED. Belief 0/5, 3 said it looked fake or staged, 5 said it was a pitch. "TRY <brand> NOVA", the device and the face sit partly under Reels' bottom bar. It goes back to the shot that looks fake or staged.
+- **Silent Chair** (Brand A · glow-up, video): FAILED. Belief 0/5, and 5/5 felt the refund line was a pitch. The refund line is not in the objection bank, so it's a new worry. It goes back to the lines that sound like a sales pitch.
+- **p005 marker on belly** (Brand A, static; run as fed-up-king because the brief records no avatar): FAILED. Belief 0/5, 3 said it looked fake or staged, 5 said it was a pitch. "TRY Brand A FLEX", the device and the face sit partly under Reels' bottom bar. It goes back to the shot that looks fake or staged.

@@ -35,8 +35,8 @@ What a brand folder must hold for the machine to run (the contract):
 | History (fills over time) | `email/ledger.json`, `sends/`, `classified.json`, `performance.json`, `learnings.md` | `pull/` scripts against the brand's Klaviyo |
 | Design | `email/design-formats/` | from workflow 2 |
 
-State on 2026-09-09: **<brand> 19/19 rows connected. <brand> 10/19** — missing
-the history rows (no Klaviyo access yet — connector `klaviyo-<brand>` needs
+State on 2026-09-09: **Brand A 19/19 rows connected. Brand B 10/19** — missing
+the history rows (no Klaviyo access yet — connector `klaviyo-Brand B` needs
 the owner to authorise it once), the design bank (workflow 2, waiting on the
 Figma board), and the adopted calendar (workflow 3 writes it).
 
@@ -45,15 +45,15 @@ Figma board), and the adopted calendar (workflow 3 writes it).
 The Figma file itself (File → Save local copy → `.fig`), dropped anywhere.
 It is decoded locally: every page becomes a board, every email-sized frame
 an artboard, every image fill an asset, and a reference picture is drawn per
-artboard. Then the same engine as <brand>'s bank: rebuild → checks →
+artboard. Then the same engine as Brand A's bank: rebuild → checks →
 pictures → contact sheets → QA page and team mirror, into
-`results/format-bank-<brand>/`. <brand>'s file went through on 2026-09-09:
+`results/format-bank-<brand>/`. Brand B's file went through on 2026-09-09:
 122 emails, 115 clean on the first pass.
 
 (`python3 sweep/intake.py <figma-html-export.zip> --brand <brand>` is the
-same door for a Figma HTML export, the shape <brand>'s bank arrived in.)
+same door for a Figma HTML export, the shape Brand A's bank arrived in.)
 
-Figma board → format bank, the same door <brand>'s 381 emails went through:
+Figma board → format bank, the same door Brand A's 381 emails went through:
 unpack → capture every artboard → the layout index (families, variants,
 theme tags) → every export rebuilt as clean HTML on the brand's bedrock with
 a replication spec per email → objective checks (copy, pictures, buttons,
@@ -66,7 +66,7 @@ modules — is read from `brands/<brand>/email/design-formats/components.json`;
 the first intake of a brand writes a starter from the layouts it finds and
 `identity/` (wordmark svg, `palette.md`), which the designer then tightens.
 
-## 3 · Build a month — **`lab/owner/marketing-calendar/`**
+## 3 · Build a month — **`lab/the owner/marketing-calendar/`**
 
     python3 machine/marketing_calendar.py YYYY-MM --brand <brand> [--start-day N]
     python3 machine/serve.py                 # review it before any copy is written
@@ -108,22 +108,22 @@ the record.
 ## 5b · (retired) Draft in Figma — `python3 figma_draft.py results/<slot>`
 
 RULED 2026-09-09 (the owner): the drafts are built directly in Figma from the
-brand's existing templates; the team tweaks them there and puts the finals into
+brand's existing templates; the editor tweaks them there and puts the finals into
 Klaviyo herself. Per run, `figma_draft.py` picks the nearest template in the
 brand's file (`design-formats/figma-templates.json`), writes
 `results/<slot>/figma-draft.js`, and the session runs that code through the
 Figma connector (`use_figma`, file key in `email/machine.json`). One frame
 per run, named by slot, on the page "Drafts - YYYY-MM (machine)" (a SECTION
-of that name on the `_ Approved` page in <brand>'s file, whose plan caps
+of that name on the `_ Approved` page in Brand A's file, whose plan caps
 pages), with the copy typed in and a notes card beside it — subject,
 preview, date, segments, open facts, pictures to place, and the font note
 (the brand faces are not loadable by the connector; copy is typed in Inter
-and restored by the team in one action). `--record` stores the frame's link in
+and restored by the editor in one action). `--record` stores the frame's link in
 `results/<slot>/figma-draft.json`; the review page and the runs tab show it.
 Details and limits: `DELIVERY.md`. The Klaviyo push (`push_klaviyo.py
---draft`) stays available but is not the line — the team delivers from Figma.
+--draft`) stays available but is not the line — the editor delivers from Figma.
 
-## Doing it for the next brand (<brand>, 2026-09-09)
+## Doing it for the next brand (Brand B, 2026-09-09)
 
 1. Workflow 1 ran: the folder is scaffolded (machine, moments starter,
    segments by rule, types, sender rule, affiliates, product images).
@@ -131,13 +131,13 @@ Details and limits: `DELIVERY.md`. The Klaviyo push (`push_klaviyo.py
    in `email/machine.json`; `design-formats/figma-templates.json` lists
    the campaign frames the drafts clone.
 3. **No Klaviyo history yet → the send library comes from the designs:**
-   `python3 pull/sends_from_bank.py --brand <brand>` (90 emails from the
+   `python3 pull/sends_from_bank.py --brand Brand B` (90 emails from the
    bank, dated from the frame names), `python3 pull/classify.py --brand
-   <brand>` (tags them) — both PROPOSE under
+   Brand B` (tags them) — both PROPOSE under
    `runs/email-production/<brand>/facts-<YYYY-MM-DD>/` and a person folds
-   them into the brand (K2 (brands write wall), SI-21 (email facts proposals)), then `python3 ../marketing-calendar/machine/marketing_calendar.py 2026-09 --brand <brand>
+   them into the brand (K2 (brands write wall), SI-21 (email facts proposals)), then `python3 ../marketing-calendar/machine/marketing_calendar.py 2026-09 --brand Brand B
    --start-day 14 --reorder` finds a source per slot. Workflow 3 ran for
    Sep (from the 14th), Oct, Nov.
-4. Workflow 4 runs with a `<brand>-` prefix on every run folder
-   (`results/<brand>-sep-01`), so two brands never share a folder.
-5. Workflow 5 follows the copy; the <brand> team's connector is not capped.
+4. Workflow 4 runs with a `Brand B-` prefix on every run folder
+   (`results/Brand B-sep-01`), so two brands never share a folder.
+5. Workflow 5 follows the copy; the Brand B team's connector is not capped.

@@ -81,7 +81,7 @@ function banners() {
   const b = document.getElementById("banners");
   b.replaceChildren();
   if (data.fake) b.append(el("div", { class: "banner fake" }, "FAKE Klaviyo — a trial; nothing reaches Klaviyo."));
-  if (data.switch !== "on") b.append(el("div", { class: "banner off" }, "The email off-switch is OFF (send-switch.json) — every Approve → Schedule is refused until the team turns it on."));
+  if (data.switch !== "on") b.append(el("div", { class: "banner off" }, "The email off-switch is OFF (send-switch.json) — every Approve → Schedule is refused until the designer turns it on."));
 }
 
 function approvers() {
@@ -100,28 +100,36 @@ function when(c) {
 function card(c) {
   const msg = el("div", { class: "msg" });
   const say = (text, good) => { msg.className = "msg " + (good ? "good" : "bad"); msg.textContent = text; };
-  const facts = el("div", { class: "facts" },
+  const sms = c.kind === "sms";
+  const facts = sms ? el("div", { class: "facts" },
+    el("b", {}, "SMS"), el("span", {}, c.text || ""),
+    el("b", {}, "Platform"), el("span", {}, c.platform || ""),
+    el("b", {}, "Follows"), el("span", {}, `the email ${c.follows || ""}`),
+    el("b", {}, "Audience"), el("span", {}, (c.audience || []).join(", ") + " — SMS-consented members only"),
+    el("b", {}, "Send"), el("span", {}, `${(c.send || {}).at || ""} (${(c.send || {}).is || ""})`),
+  ) : el("div", { class: "facts" },
     el("b", {}, "Subject"), el("span", {}, c.subject || ""),
     el("b", {}, "Preview"), el("span", {}, c.preview || ""),
     el("b", {}, "Audience"), el("span", {}, (c.audience || []).map(a => `${a.segment} (${a.id})`).join(", ")),
     el("b", {}, "Send"), el("span", {}, when(c)),
     el("b", {}, "Campaign"), el("span", {}, el("a", { href: c.klaviyo_link, target: "_blank", rel: "noopener" }, c.campaign_id || "")),
   );
-  if (c.approval) facts.append(el("b", {}, "Decision"), el("span", {}, `${c.approval.decision} by ${c.approval.by} at ${c.approval.at}` + (c.approval.note ? ` — ${c.approval.note}` : "")));
+  if (c.approval && sms) facts.append(el("b", {}, "Decision"), el("span", {}, `approved by ${c.approval.by} at ${c.approval.at}`));
+  else if (c.approval) facts.append(el("b", {}, "Decision"), el("span", {}, `${c.approval.decision} by ${c.approval.by} at ${c.approval.at}` + (c.approval.note ? ` — ${c.approval.note}` : "")));
   if (c.scheduled) facts.append(el("b", {}, "Scheduled"), el("span", {}, `${c.scheduled.at} — Klaviyo: ${c.scheduled.klaviyo_status}`));
   if (c.schedule_error) facts.append(el("b", {}, "Klaviyo error"), el("span", { class: "msg bad" }, `${c.schedule_error.at}: ${c.schedule_error.error}`));
   const checks = el("table", {}, ...(c.checks || []).map(r => el("tr", {}, el("td", {}, r.check), el("td", { class: r.result }, r.result), el("td", {}, r.detail))));
 
   const actions = el("div", { class: "actions" });
   const box = el("div", { class: "sendback" });
-  if (c.state === "waiting" || c.state === "approved") {
+  if (c.state === "waiting" || (c.state === "approved" && !sms)) {
     const off = data.switch !== "on" || !c.checks_ok;
     const go = el("button", { class: "go", disabled: off, title: off ? "the off-switch is off, or a check failed when the card was made" : "" },
       c.state === "approved" ? "Retry schedule" : "Approve → Schedule");
     go.onclick = async () => {
       go.disabled = true; say("Re-running every check and reading Klaviyo…", true);
       const out = await post(c.state === "approved" ? "/api/retry" : "/api/approve", { id: c.id, by: who() });
-      if (out.ok) { say(`Scheduled in Klaviyo (campaign ${out.campaign_id}).`, true); setTimeout(load, 1200); }
+      if (out.ok) { say(sms && out.state !== "scheduled" ? `Approved: ${out.state}.` : `Scheduled in Klaviyo (campaign ${out.campaign_id}).`, true); setTimeout(load, 1200); }
       else { say(out.error || "refused", false); go.disabled = false; }
     };
     const back = el("button", {}, "Send back");
@@ -144,7 +152,8 @@ function card(c) {
       el("div", { class: "muted" }, `${c.id} · ${c.state}` + (c.checks_ok ? "" : " · a check failed")),
       facts, actions, box, msg,
       el("details", {}, el("summary", {}, `Checks (${(c.checks || []).length})`), checks)),
-    el("iframe", { src: c.preview_url, sandbox: "", title: "the email as Klaviyo holds it" }));
+    sms ? el("div", { class: "muted" }, "An SMS: the words above are the whole message.")
+        : el("iframe", { src: c.preview_url, sandbox: "", title: "the email as Klaviyo holds it" }));
 }
 
 async function load() {

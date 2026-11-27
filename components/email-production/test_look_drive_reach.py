@@ -3,7 +3,7 @@
 lists the brand's photos through the Drive API when the mount does not read —
 proven offline.
 
-    python3 tools/email-production/test_look_drive_reach.py
+    python3 components/email-production/test_look_drive_reach.py
 
 The mount is patched in every test (a temp folder or None). The Drive is a
 fake engine and a fake service under gdrive-creator's REAL reach.list_tree,

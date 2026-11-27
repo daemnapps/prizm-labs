@@ -1,0 +1,467 @@
+{
+ "_what": "The creative system as one standard: the loop from research to iteration, the ladder from avatar to opening swaps, the parts of one ad, one meaning per word, the brief's fields, and where the video chain does or does not carry each step. Built from the owner's written procedures and recorded walkthroughs (read 2026-11-17) reconciled with the chain as it runs. A PROPOSAL: status draft until the owner rules each call. Brand-agnostic; the source texts stay in the owner's own knowledge store.",
+ "status": "deprecated",
+ "as_of": "2026-11-17",
+ "sources": "75 pages and 30 recorded walkthroughs: the creative process hub and its parent, the procedures on research, thinking, architecture, approval, prioritization, iteration and compounding, the four brief prompts, the glossary, the creation, editing and remix procedures, the strategist and creator training, three brief queues, the feedback record, the research index, the static analysis, hand-off, daily check-in and media buying procedures, and the creator and agency briefs. One page (the AI video analysis) could not be opened; older archived briefs were listed, not read.",
+ "calls": [
+  {
+   "n": 1,
+   "q": "A brief has three ways in: from a viral post (inspiration), from customer insight (research), from a winner (iteration).",
+   "yes": "All three become front doors of the chain. Today only the first runs end to end."
+  },
+  {
+   "n": 2,
+   "q": "The ladder is avatar, angle, concept, script, variations, opening swaps.",
+   "yes": "The chain gains a concept step; today it goes from angle straight to a script."
+  },
+  {
+   "n": 3,
+   "q": "Two names for the body's two choices: framework (the shape of the argument) and format (how it is presented and made). The training already files briefs this way.",
+   "yes": "These replace script format and production format. Demonstration and testimonial move to formats, where the training has them."
+  },
+  {
+   "n": 4,
+   "q": "The opening is three parts: scroll stopper (seen), headline (read), hook (heard). The glossary uses hook for all three; the procedures use it for the spoken line.",
+   "yes": "Hook means the first spoken line everywhere; the three together are the opening."
+  },
+  {
+   "n": 5,
+   "q": "Every ad carries five things: the problem, why it matters, the mechanism, the transformation, the ask.",
+   "yes": "The older line about asking for nothing is retired."
+  },
+  {
+   "n": 6,
+   "q": "Working means spend: a winner takes at least half of its test's budget within 14 days, at or under the cost per customer the campaign is running at.",
+   "yes": "One test, one grade scale, and one cost target per brand instead of the four different numbers on file."
+  },
+  {
+   "n": 7,
+   "q": "The weekly mix: five new concepts, three built on winners, one from research, one from a viral post. Sources: mostly what the avatar already watches, the rest adjacent markets.",
+   "yes": "The queue and the swipe picks are planned to that mix."
+  },
+  {
+   "n": 8,
+   "q": "Per brief: four variations. Per variation: the same body under three hooks and three scroll stoppers.",
+   "yes": "Production and the edit count to these numbers."
+  },
+  {
+   "n": 9,
+   "q": "People step in at three points only: choosing the angle and concept, reading the script aloud, approving the finished ad.",
+   "yes": "Everything else runs on its own."
+  },
+  {
+   "n": 10,
+   "q": "One format list and one framework list, merged from the training and the bank, as in the table below.",
+   "yes": "Every list in the chain reads from them, and the Format Map is re-sorted to match."
+  }
+ ],
+ "loop": [
+  {
+   "name": "1 Research",
+   "sop": "Customer words first: surveys, lost checkouts, ad comments, reviews. Then the wider market, then deeper: stories, science, root cause, a day in their life.",
+   "chain": "partly",
+   "now": "Research and language tools exist and feed writing.",
+   "gap": "Runs when asked, not on a weekly and monthly rhythm."
+  },
+  {
+   "name": "2 Creative research",
+   "sop": "Find what the avatar already watches: a fresh feed trained as them. Save the formats and how they talk.",
+   "chain": "partly",
+   "now": "The organic feed board and 52 saved structures.",
+   "gap": "50 of 52 structures were never reviewed; formats and structures are filed apart."
+  },
+  {
+   "name": "3 Angle and concept",
+   "sop": "Find the belief, find the gap in it: that is the angle. Then the concept. Then the elements for that angle: avatar snapshot, hooks, scroll stoppers, mechanism, tone, objections, numbers. Check it twice.",
+   "chain": "partly",
+   "now": "Angles sit in each brand's list; the strategist's ask names one.",
+   "gap": "No concept step. The elements are spread across several writing stages, never held as one checked set per angle."
+  },
+  {
+   "name": "4 Brief",
+   "sop": "Three ways in: inspiration, research, iteration. Three shapes out, by who makes it: an angle brief for an agency, a format brief for an in-house shoot, a creator brief.",
+   "chain": "partly",
+   "now": "Inspiration runs: swipe, teardown, writing. Briefs for the AI line and for creators both exist.",
+   "gap": "The research door stops at the first writing step. The iteration door has a planner nothing reads."
+  },
+  {
+   "name": "5 Approve the structure",
+   "sop": "A gate before anything is made: the five things every ad carries, the right words, still feels native.",
+   "chain": "partly",
+   "now": "Writing has an audit and checks.",
+   "gap": "The checks are not these five; some are run twice, some are notes only."
+  },
+  {
+   "name": "6 Produce",
+   "sop": "Check what footage exists. Make what is missing: voice, B-roll, pictures. Statics from the same script.",
+   "chain": "partly",
+   "now": "Voice, pictures and clips are made; footage is searched.",
+   "gap": "Two production lines; owned footage that is picked never reaches the edit."
+  },
+  {
+   "name": "7 Edit and remix",
+   "sop": "Tight opening, natural captions, cut to the beat. Then remix: new openings on a body that works.",
+   "chain": "partly",
+   "now": "The edit makes one version per hook on the same body.",
+   "gap": "No scroll stopper or headline swaps as such; no search for hooks hiding inside the body."
+  },
+  {
+   "name": "8 Launch",
+   "sop": "Name it angle, concept, actor so results join back. Hand over the video, three texts, three headlines, two descriptions and the checked link. Approve.",
+   "chain": "runs",
+   "now": "Naming, ad words from a live card, the approval card, the click to go live.",
+   "gap": "Names carry no concept today. Sits outside the four mapped components."
+  },
+  {
+   "name": "9 Analyze and grade",
+   "sop": "Every two weeks: top ads by spend. Break each down part by part, video and static. File what was learned. Grade it.",
+   "chain": "partly",
+   "now": "The winners tool ranks by spend and banks the top ads.",
+   "gap": "No part-by-part breakdown of our own winners; no grade on the brief."
+  },
+  {
+   "name": "10 Iterate",
+   "sop": "Keep what works, change one layer: the opening, the concept, the format, or the awareness level it enters at. Then hand the proven brief to creators.",
+   "chain": "missing",
+   "now": "A variation planner writes a plan.",
+   "gap": "Nothing reads the plan, so a winner never becomes the next brief by itself."
+  }
+ ],
+ "ladder": [
+  {
+   "name": "Avatar",
+   "is": "Who it is for.",
+   "gives": "The angle, the language and the tone come from them.",
+   "eg": "a young man, bumps after shaving"
+  },
+  {
+   "name": "Angle",
+   "is": "How we open the conversation. The door.",
+   "gives": "Found in the gap in something they already believe.",
+   "eg": "Relationship"
+  },
+  {
+   "name": "Concept",
+   "is": "The voice and situation that carries the angle.",
+   "gives": "One angle holds many concepts.",
+   "eg": "Girlfriend advice"
+  },
+  {
+   "name": "Framework and format",
+   "is": "Framework: the shape of the argument. Format: how it is presented and made.",
+   "gives": "The format gives the hook, the scroll stopper and the lead.",
+   "eg": "before and after, as a reaction video"
+  },
+  {
+   "name": "Script",
+   "is": "One execution of the concept.",
+   "gives": "One concept holds many scripts.",
+   "eg": "Shower · Night routine · Spa day"
+  },
+  {
+   "name": "Variations",
+   "is": "Four takes on one brief.",
+   "gives": "Each is a full ad.",
+   "eg": "a different person, room or proof"
+  },
+  {
+   "name": "Opening swaps",
+   "is": "The same body under a new scroll stopper, headline or hook.",
+   "gives": "Three by three per variation.",
+   "eg": "3 hooks × 3 scroll stoppers"
+  }
+ ],
+ "ladder_rule": "When an ad fails, check the script first, then the concept, then the angle. When one wins, write more scripts under the same concept, then new concepts under the same angle.",
+ "parts": {
+  "cols": [
+   "Part",
+   "What it is",
+   "Comes from",
+   "When iterating"
+  ],
+  "rows": [
+   [
+    "Scroll stopper",
+    "What you see first",
+    "The format",
+    "Swap"
+   ],
+   [
+    "Headline",
+    "The words on screen at the start",
+    "The format",
+    "Swap"
+   ],
+   [
+    "Hook",
+    "The first spoken line: the angle in words",
+    "The angle",
+    "Swap"
+   ],
+   [
+    "Lead",
+    "Sets up the conversation and the tone",
+    "The format and the tone",
+    "Hold or swap"
+   ],
+   [
+    "Body",
+    "The story that earns trust",
+    "The concept",
+    "Hold"
+   ],
+   [
+    "Problem and why it matters",
+    "Named in their words, with the stakes",
+    "Research",
+    "Hold"
+   ],
+   [
+    "Mechanism",
+    "Why this works when the rest did not",
+    "The product",
+    "Hold"
+   ],
+   [
+    "Transformation",
+    "The result, shown or said",
+    "Proof",
+    "Hold"
+   ],
+   [
+    "Offer and guarantee",
+    "What they get and why it is safe",
+    "The offer bank",
+    "Change when the offer changes"
+   ],
+   [
+    "The ask",
+    "What to do next",
+    "The offer bank",
+    "Hold"
+   ]
+  ]
+ },
+ "words": {
+  "cols": [
+   "Word",
+   "The one meaning",
+   "Also used for (to retire)"
+  ],
+  "rows": [
+   [
+    "Angle",
+    "How we open the conversation",
+    "A problem; an ad set name"
+   ],
+   [
+    "Concept",
+    "The voice and situation carrying an angle",
+    "Any idea; the title of a brief"
+   ],
+   [
+    "Framework",
+    "The shape of the argument",
+    "Script format; structure; purpose"
+   ],
+   [
+    "Format",
+    "How it is presented and made",
+    "Length; archetype; a platform; a copy type"
+   ],
+   [
+    "Structure",
+    "The beat-by-beat build of one proven post",
+    "Framework; the approval gate"
+   ],
+   [
+    "Hook",
+    "The first spoken line",
+    "The whole opening; the headline"
+   ],
+   [
+    "Headline",
+    "The words on screen at the start",
+    "Hook; the offer line"
+   ],
+   [
+    "Scroll stopper",
+    "The first visual",
+    "Hook; the first ten seconds"
+   ],
+   [
+    "Variation",
+    "A full new take on one brief",
+    "An opening swap"
+   ],
+   [
+    "Iteration",
+    "A new brief built on a winner",
+    "Any edit; an opening swap"
+   ],
+   [
+    "Awareness",
+    "How much they already know",
+    "Ad type; funnel stage"
+   ],
+   [
+    "Length",
+    "Short, mid or long",
+    "Format"
+   ],
+   [
+    "Winner",
+    "Takes the most spend at a clean cost",
+    "High views; a favourite"
+   ]
+  ]
+ },
+ "brief": {
+  "cols": [
+   "Field",
+   "Choices"
+  ],
+  "rows": [
+   [
+    "Brief type",
+    "Inspiration · Research · Iteration"
+   ],
+   [
+    "Avatar and identity",
+    "From the brand's avatars"
+   ],
+   [
+    "Awareness",
+    "Unaware · Problem aware · Solution aware · Product aware · Most aware"
+   ],
+   [
+    "Problem",
+    "From the brand's problems"
+   ],
+   [
+    "Angle",
+    "From the brand's angle list"
+   ],
+   [
+    "Concept",
+    "Named under its angle"
+   ],
+   [
+    "Framework",
+    "From the framework list"
+   ],
+   [
+    "Format",
+    "From the format list"
+   ],
+   [
+    "Length",
+    "Short · Mid · Long · Static"
+   ],
+   [
+    "Maker",
+    "AI · Creator · Founder"
+   ],
+   [
+    "Their words",
+    "Quoted, with the source"
+   ],
+   [
+    "Belief to shift",
+    "One line"
+   ],
+   [
+    "The opening",
+    "3 scroll stoppers · 3 headlines · 3 hooks"
+   ],
+   [
+    "The script",
+    "Lead, body, problem, mechanism, transformation, offer, ask"
+   ],
+   [
+    "Grade, after launch",
+    "S · A · B · Did not perform · Testing"
+   ]
+  ]
+ },
+ "retired": [
+  "Going straight to editing or to creators with no research.",
+  "Copying competitors as the main source.",
+  "Old-style direct response as the whole ad: it goes in the back half now.",
+  "Long forced video as the only form.",
+  "The brief as law: it sets tone, scene and language.",
+  "Copy written by AI alone with no person reading it.",
+  "Three different status lists, and tools that are no longer used.",
+  "Four different cost-per-customer targets and two different creator deals on file at once."
+ ],
+ "links": {
+  "format_map": "https://claude.ai/artifact/GNn1yBAtYuiwKJ4Hf5bc3h",
+  "canvas": "https://claude.ai/artifact/H1WiuMEqNKAE7n8ZNYeb1h"
+ },
+ "frameworks": "**Frameworks in the training (5):** Before and after · I had this problem, now I don't · Real person, real problem, real solution · This is what actually works · The belief shift. Each names its emotional arc and the awareness stage it fits. **The brief's foundation:** format + framework + emotion, on one angle for one avatar.",
+ "formats": {
+  "cols": [
+   "Format",
+   "In your training",
+   "In the chain's bank and recipes"
+  ],
+  "rows": [
+   [
+    "One person to camera, with cutaways",
+    "Cut-to · Founder talk · Authority figure",
+    "Single presenter"
+   ],
+   [
+    "Conversation",
+    "Podcast conversation · Street interview",
+    "Multi-speaker scene · sports interview"
+   ],
+   [
+    "Reaction",
+    "Reaction videos · React and duet",
+    "No recipe; two saved structures"
+   ],
+   [
+    "Streamer style",
+    "Streamer style",
+    "None"
+   ],
+   [
+    "Skit",
+    "Engagebait skits · POV skit",
+    "Comedy skit · micro-drama · the 3D skit tool"
+   ],
+   [
+    "Demonstration",
+    "Demonstration",
+    "Demonstration, filed as a script format"
+   ],
+   [
+    "Real people vouching",
+    "Testimonial-style",
+    "Testimonial montage, filed as a script format"
+   ],
+   [
+    "Voice over pictures",
+    "Voiceover",
+    "Narrator montage, under five names"
+   ],
+   [
+    "Song",
+    "None",
+    "Song ad"
+   ],
+   [
+    "Wordless story",
+    "None",
+    "Short movie"
+   ],
+   [
+    "Text on screen, no people",
+    "Meme format",
+    "Text thread · meme"
+   ]
+  ]
+ },
+ "state": "superseded by video-decision-logic.json on 2026-11-17: the chain as it runs is the authority; the older material fills gaps only"
+}

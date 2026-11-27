@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Build a brand's offer bank.
 
-    python3 offer_bank_build.py --brand brand-b
-    python3 offer_bank_build.py --brand brand-b --write   # propose products/offer-bank.md under runs/
+    python3 offer_bank_build.py --brand brand_b
+    python3 offer_bank_build.py --brand brand_b --write   # propose products/offer-bank.md under runs/
 
-RULED 2026-09-13 (the owner): "we're just trying to get the offer bank together, and
+RULED 2026-09-13 (owner): "we're just trying to get the offer bank together, and
 then you link to whatever hosts that offer… stop overcomplicating these things."
 
 An offer bank is one shape for every brand: the offers, what each costs, what it
@@ -123,7 +123,7 @@ def from_next(brand):
             "sizes": [f"{money(p)} ({t})" for p, _, t in prices[:4]] if len(prices) > 1 else [],
             "handle": d.get("slug"),
             # 29 Next serves a product at /catalogue/<slug>_<id>/ on the store's
-            # own domain; /products/<slug> is a 404 (every Brand-B link was, 1 Oct).
+            # own domain; /products/<slug> is a 404 (every brand_b link was, 1 Oct).
             "url": f"{store_domain(brand) or f'https://{s}.29next.store'}/catalogue/{d.get('slug')}_{d.get('id')}/",
         })
     return out
@@ -141,8 +141,8 @@ def store_domain(brand):
 
 def apply_links(brand, offers):
     """The link an offer carries is the one the brand's own rule names
-    (brands/<brand>/products/heroes.json, `sellable[].url` — e.g. Brand-B's
-    recipe.brand-b.com CPK funnel), never the bare store when a rule exists;
+    (brands/<brand>/products/heroes.json, `sellable[].url` — e.g. brand_b's
+    recipe.brand_b.com CPK funnel), never the bare store when a rule exists;
     an offer the rule lists under `never` carries no link at all (1 Oct 2026:
     every email had been linking a dead 29next.store page off this file)."""
     f = WORKSPACE / "brands" / brand / "products" / "heroes.json"

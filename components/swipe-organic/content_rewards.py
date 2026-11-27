@@ -4,7 +4,7 @@
     python3 content_rewards.py <report share link> --brand <brand> --pool <name>
     python3 content_rewards.py <report share link> --brand <brand> --pool <name> --no-media   numbers only
 
-the owner, 2026-10-24, on the clipping campaign the partner runs for us: "digest all these assets ... download them ...
+owner, 2026-10-24, on the clipping campaign Tye runs for us: "digest all these assets ... download them ...
 tracking their results internally". The report's share link is public; its own data feed (the one the report
 page reads) gives every clip: the post link, views, likes, comments, shares, spend and the slide images.
 
@@ -15,7 +15,7 @@ and files each clip into the organic swipe pool `<pool>` through the save door (
 lane own-campaign (source organic, owner creator), with all its slides kept beside the cover in the library.
 Run it again any day: a new dated snapshot, and only clips not yet in the pool are downloaded.
 
-`--deep` (the owner's go, 24 Oct 2026, ~$12 of Apify): every comment on every clip, then every commenter's profile
+`--deep` (owner's go, 24 Oct 2026, ~$12 of Apify): every comment on every clip, then every commenter's profile
 and last 10 posts, into `deep/` beside the snapshot (comments.json, commenters.json, commenter-posts.json) —
 the raw material for the language index and the avatar profile of who actually engages.
 """

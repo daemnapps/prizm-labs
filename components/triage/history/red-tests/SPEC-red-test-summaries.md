@@ -1,6 +1,6 @@
 # Spec: summaries for the 34 red tests, written on the GLM route and evaluated against Claude
 
-2026-10-02, ≈ STREAM · atlas [6941d8]. the team, typed to this stream: "Add red test summaries" and then "But red test summaries try glm route and evaluate".
+2026-10-02, ≈ STREAM · atlas [6941d8]. the developer, typed to this stream: "Add red test summaries" and then "But red test summaries try glm route and evaluate".
 
 ## What to write
 

@@ -11,3 +11,7 @@ LICENSE|dixon
 components/briefs/tests/|@example.test
 components/video-production/machine/|test@example.invalid
 components/video-edit/microdrama/template/gsap.min.js|jack@greensock.com
+components/research-gatherer/|@x.com
+components/research-gatherer/|@y.com
+components/research-gatherer/|me@mail.com
+components/workflow-teardown/|@0.5-morning.txt

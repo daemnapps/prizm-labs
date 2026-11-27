@@ -1,5 +1,5 @@
 """BiRefNet cut-out on PyTorch MPS. Image -> RGBA PNG. Video -> ProRes 4444 .mov with alpha
-(+ a VP9 .webm with alpha beside it, + a black/white matte .mp4). Runs in tools/av/.venv."""
+(+ a VP9 .webm with alpha beside it, + a black/white matte .mp4). Runs in components/local-studio/.venv (setup.sh)."""
 import argparse, subprocess, tempfile, time, json
 from pathlib import Path
 import torch

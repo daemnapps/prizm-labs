@@ -1,0 +1,331 @@
+{
+ "_what": "The values the Galaxy filter runs on (creative_filter.py holds the rules). Change a number here, never in code. Every weight says where it comes from.",
+ "gates": {
+  "_why": "A candidate is cut before scoring when it has no proof, no real line to open on, or a cap is already full.",
+  "min_purchases": 1,
+  "min_said": 1,
+  "points_per_person": 40
+ },
+ "depth": {
+  "_why": "A profile filled from more real lines is a truer target. Under these counts a profile is marked thin and weighs less (it is never cut).",
+  "full_rows_read": 1500,
+  "thin_rows_read": 600,
+  "thin_points": 250
+ },
+ "weights": {
+  "_why": "Exponents on each part of the score: proof (sales) leads, watch (hold + click) next, then the point, then profile depth.",
+  "proof": 1.0,
+  "watch": 0.8,
+  "point": 0.6,
+  "depth": 0.5
+ },
+ "media": {
+  "_why": "Meta: 9:16 video with audio has 34.5% lower cost per result than image ads; ad sets need at least 20% of assets 9:16 with sound (META.md section 3).",
+  "video": 1.0,
+  "image": 0.75
+ },
+ "point_kind": {
+  "_why": "What a hook can open on. A lived moment or a feeling stops the scroll fastest; a doubt is better answered mid-ad.",
+  "experience": 1.0,
+  "feeling": 0.95,
+  "desire": 0.9,
+  "belief": 0.8,
+  "doubt": 0.75,
+  "role": 0.7,
+  "behavior": 0.7
+ },
+ "caps": {
+  "_why": "Spread inside one lane's picks, so Meta gets truly different creatives and not one idea many times (dimensions.json spread rule: no value fills more than half).",
+  "per_winner": 2,
+  "person_share": 0.2,
+  "storyline_share": 0.35
+ },
+ "opening_same_at": 0.45,
+ "watch_prior_n": 3,
+ "settings": {
+  "_what": "Where the ad is seen, from the matrix's own setting list. A point whose words name a place opens there; otherwise the least-used setting is taken.",
+  "words": [
+   [
+    "barber",
+    "barbershop"
+   ],
+   [
+    "lineup",
+    "barbershop"
+   ],
+   [
+    "line up",
+    "barbershop"
+   ],
+   [
+    "haircut",
+    "barbershop"
+   ],
+   [
+    "fresh cut",
+    "barbershop"
+   ],
+   [
+    "mirror",
+    "bathroom-mirror"
+   ],
+   [
+    "bathroom",
+    "bathroom-mirror"
+   ],
+   [
+    "sink",
+    "bathroom-mirror"
+   ],
+   [
+    "shower",
+    "shower"
+   ],
+   [
+    "bed",
+    "bedroom"
+   ],
+   [
+    "pillow",
+    "bedroom"
+   ],
+   [
+    "car",
+    "car"
+   ],
+   [
+    "drive",
+    "car"
+   ],
+   [
+    "gym",
+    "gym"
+   ],
+   [
+    "workout",
+    "gym"
+   ],
+   [
+    "sweat",
+    "gym"
+   ],
+   [
+    "work",
+    "work"
+   ],
+   [
+    "job",
+    "work"
+   ],
+   [
+    "office",
+    "work"
+   ],
+   [
+    "meeting",
+    "work"
+   ],
+   [
+    "interview",
+    "work"
+   ],
+   [
+    "boss",
+    "work"
+   ],
+   [
+    "school",
+    "school"
+   ],
+   [
+    "class",
+    "school"
+   ],
+   [
+    "college",
+    "school"
+   ],
+   [
+    "prom",
+    "school"
+   ],
+   [
+    "kitchen",
+    "kitchen-home"
+   ],
+   [
+    "home",
+    "kitchen-home"
+   ],
+   [
+    "wedding",
+    "family-event"
+   ],
+   [
+    "family",
+    "family-event"
+   ],
+   [
+    "holiday",
+    "family-event"
+   ],
+   [
+    "christmas",
+    "family-event"
+   ],
+   [
+    "thanksgiving",
+    "family-event"
+   ],
+   [
+    "photo",
+    "family-event"
+   ],
+   [
+    "picture",
+    "family-event"
+   ],
+   [
+    "party",
+    "family-event"
+   ],
+   [
+    "date",
+    "street"
+   ],
+   [
+    "club",
+    "street"
+   ],
+   [
+    "street",
+    "street"
+   ],
+   [
+    "outside",
+    "street"
+   ],
+   [
+    "golf",
+    "golf-outdoors"
+   ],
+   [
+    "instagram",
+    "phone-screen"
+   ],
+   [
+    "tiktok",
+    "phone-screen"
+   ],
+   [
+    "text",
+    "phone-screen"
+   ],
+   [
+    "dm",
+    "phone-screen"
+   ]
+  ],
+  "open": {
+   "video": [
+    "bathroom-mirror",
+    "barbershop",
+    "car",
+    "bedroom",
+    "gym",
+    "work",
+    "street",
+    "kitchen-home",
+    "family-event",
+    "school",
+    "shower"
+   ],
+   "image": [
+    "bathroom-mirror",
+    "barbershop",
+    "car",
+    "bedroom",
+    "gym",
+    "work",
+    "street",
+    "kitchen-home",
+    "family-event",
+    "school",
+    "shower",
+    "phone-screen",
+    "studio-void",
+    "graphic"
+   ]
+  }
+ },
+ "not_an_opener": {
+  "_why": "A line about ordering, shipping, discounts or the brand itself is a service note, not a moment a hook can open on. Such a line weighs this much.",
+  "weight": 0.3,
+  "words": [
+   "order",
+   "ordered",
+   "shipping",
+   "shipped",
+   "delivery",
+   "discount",
+   "code",
+   "coupon",
+   "refund",
+   "subscription",
+   "customer service",
+   "email",
+   "travel case",
+   "your product",
+   "your products",
+   "your ad",
+   "this brand",
+   "your brand",
+   "the brand",
+   "website",
+   "online store",
+   "checkout",
+   "package",
+   "charger",
+   "warranty",
+   "replacement",
+   "military",
+   "veteran"
+  ]
+ },
+ "daily": {
+  "_what": "How many picks per lane each day, in the order they are chosen (later lanes are kept apart from earlier ones). Video first: it is the core (owner, 2026-11-27).",
+  "video-internal": 8,
+  "creators": 7,
+  "images": 5
+ },
+ "lanes": {
+  "_what": "The three lanes. media: what is made. per_winner: rows one proven ad may have in a lane. needs: which formats qualify (formats-standard.json internal / creators flags). The maker and door per lane live in formats-standard.json.",
+  "video-internal": {
+   "media": "video",
+   "per_winner": 2,
+   "needs": "internal"
+  },
+  "creators": {
+   "media": "video",
+   "per_winner": 2,
+   "needs": "creators"
+  },
+  "images": {
+   "media": "image",
+   "per_winner": 1,
+   "needs": null
+  }
+ },
+ "image_formats_fallback": [
+  "caption-box",
+  "two-panel",
+  "notes-app",
+  "ugc-screenshot",
+  "before-after-split-claim",
+  "portrait-void",
+  "distressed-poster",
+  "us-vs-them",
+  "checklist",
+  "comment-reply"
+ ]
+}

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The brand's designed emails, as its send library.
 
-    python3 pull/sends_from_bank.py --brand brand-b
+    python3 pull/sends_from_bank.py --brand brand_b
 
 A brand whose Klaviyo history is not on file still has every email it ever
 designed: the Figma file that went through workflow 2 (the format bank,

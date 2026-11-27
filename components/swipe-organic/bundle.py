@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Package the production kit as one zip the owner can send to anyone.
+"""Package the production kit as one zip owner can send to anyone.
 
 Everything a maker needs and nothing they don't: how the process runs,
 the format library, a rebuild sheet per swiped video filed under its
@@ -39,7 +39,7 @@ VID = HERE / "records/swipe-videos"
 SAVES = HERE / "records/owner-saves"
 REPO = _workspace()
 DEFAULT_OUT = REPO / "runs" / "swipe-organic" / "bundle"
-CHAIN = REPO / "tools/video-teardown"
+CHAIN = REPO / "components/video-teardown"
 EMPLOYEE = ("https://higgsfield.ai/supercomputer/skills"
             "?employeeId=0d38d619-0ac2-45c9-bfd5-3371837ccad3")
 for _r in HERE.parents:                # the swipe home, one definition for both pools
@@ -120,17 +120,20 @@ def main():
         ev = (f.get("evidence") or [{}])[0]
         mine = sorted(used.get(folder, []), reverse=True)
         card = [f"# {f['name']}", "",
-                f"**{ev.get('views', 0):,} views proved it** · {len(mine)} of the owner's swipes use this format", "",
+                f"**{ev.get('views', 0):,} views proved it** · {len(mine)} of owner's swipes use this format", "",
                 "## What it is", "", f["mechanic"], "",
                 "## Why it works", "", f["why_it_works"], "",
                 "## The beats, in order", ""]
         card += [f"{i+1}. {b}" for i, b in enumerate(f["beats"])]
         card += ["", "## On-screen text", "", f.get("text_behaviour", "—"),
                  "", "## Camera", "", f.get("camera", "—"),
-                 "", "## Higgsfield — image prompt", "", "```", f["higgsfield"]["image"], "```",
+                 "", "## The picture: 3D set print words", "",
+                 "Build the scene as a 3D Jutsu set at true size and print it with these words, the cast board as the "
+                 "reference (image-production picture_sets.py, cast_board.py). Never a flat picture made by hand.", "",
+                 "```", f["higgsfield"]["image"], "```",
                  "", "## Higgsfield — motion", "", "```", f["higgsfield"]["motion"], "```",
                  "", "## Produce it", "",
-                 f"Paste those into the Higgsfield employee: {EMPLOYEE}", "",
+                 f"The print is the start picture; paste the motion into the Higgsfield employee: {EMPLOYEE}", "",
                  "## The references in this folder", ""]
         card += [f"- **@{au or c}** — {v:,} views — https://www.instagram.com/p/{c}/"
                  for v, au, c in mine[:15]]

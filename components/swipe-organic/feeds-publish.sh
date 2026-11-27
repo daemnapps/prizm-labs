@@ -3,7 +3,7 @@
 #
 #   components/swipe-organic/feeds-publish.sh
 #
-# Never scheduled: releasing to the public is a person's act (the developer, 2026-10-07;
+# Never scheduled: releasing to the public is a person's act (developer, 2026-10-07;
 # O5b (export replace is deploy) in components/system-integration/conventions.md).
 # It never pulls anything and never spends: feedsexport.py only reads what the
 # last Pull already filed. It publishes ONLY docs/feeds/data, and only when the

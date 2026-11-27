@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""LD-90 (the team takes newest): "<id> P<n>: use my newest" — the newest picture in her team folder is MOVED into the run's
+"""LD-90 (editor takes newest): "<id> P<n>: use my newest" — the newest picture in her team folder is MOVED into the run's
 Drive media, placed, both refs and made_with stored, one model-outcome record, history appended — proven offline, on a
 temp fixture run.
 
-    python3 tools/email-production/adapter/test_use_my_newest.py     (from the repo root: never with the working
-                                                                           folder inside tools/email-production,
+    python3 components/email-production/adapter/test_use_my_newest.py     (from the repo root: never with the working
+                                                                           folder inside components/email-production,
                                                                            whose email.py shadows the stdlib's)
 
 Faked at the seams take_newest exposes: the Drive lister (a dict of folders), the mover (LD-89 (tracked Drive moves)'s
@@ -35,7 +35,7 @@ from pathlib import Path
 from unittest import mock
 
 HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE))      # this folder FIRST; never tools/email-production (its email.py)
+sys.path.insert(0, str(HERE))      # this folder FIRST; never components/email-production (its email.py)
 import own_picture as OP           # noqa: E402
 import try_picture as TP           # noqa: E402
 import prepare                     # noqa: E402
@@ -47,14 +47,14 @@ from gdrive_creator import reach as REAL_REACH  # noqa: E402  (kind() only: stdl
 
 BRAND = "zz-brand"
 LABEL = "zz-brand-nov-99"
-EVE = ("runs", "handoffs", "graphic-designer", BRAND, LABEL, "returned")    # the email's returned/ for the role (2026-10-27)
+editor = ("runs", "handoffs", "graphic-designer", BRAND, LABEL, "returned")    # the email's returned/ for the role (2026-10-27)
 MEDIA = ["runs", "email-production", BRAND, LABEL, "media"]
 JPEG = b"\xff\xd8\xff\xe0"
 QUESTION = "what made it — Higgsfield, Photoshop, a real photo…?"
 
 
 class TestRole(unittest.TestCase):
-    """The folder is the asker's ROLE, never their name (the owner, 2026-10-27: "make this name agnostic")."""
+    """The folder is the asker's ROLE, never their name (owner, 2026-10-27: "make this name agnostic")."""
     def test_role_from_the_one_setting_and_a_default(self):
         roles = (json.loads(OP.ROLES.read_text()).get("roles") or {}) if OP.ROLES.is_file() else {}
         for role, v in roles.items():
@@ -91,13 +91,13 @@ class Base(unittest.TestCase):
             indent=1))
         # the fake Drive: folder parts -> rows; a subfolder is a row with folder true
         self.drive = {
-            EVE: [{"id": "id-old", "name": "old.jpg", "modified": "2026-10-20T09:00:00.000Z"},
+            editor: [{"id": "id-old", "name": "old.jpg", "modified": "2026-10-20T09:00:00.000Z"},
                   {"id": "id-new", "name": "new.png", "modified": "2026-10-23T05:00:00.000Z"},
                   {"id": "id-note", "name": "notes.txt", "modified": "2026-10-23T06:00:00.000Z"},
                   {"id": "f-brief", "name": "nov-brief", "folder": True}],
-            EVE + ("nov-brief",): [{"id": "id-sub", "name": "sub.jpg", "modified": "2026-10-22T09:00:00.000Z"},
+            editor + ("nov-brief",): [{"id": "id-sub", "name": "sub.jpg", "modified": "2026-10-22T09:00:00.000Z"},
                                    {"id": "f-deep", "name": "deeper", "folder": True}],
-            EVE + ("nov-brief", "deeper"): [{"id": "id-deep", "name": "deep.jpg", "modified": "2026-10-24T00:00:00.000Z"}]}
+            editor + ("nov-brief", "deeper"): [{"id": "id-deep", "name": "deep.jpg", "modified": "2026-10-24T00:00:00.000Z"}]}
         self.moves, self.fetched, self.puts, self.rebuilds = [], [], [], 0
         self.out = io.StringIO()
 
@@ -160,7 +160,7 @@ class Base(unittest.TestCase):
     def take(self, made_with="Higgsfield", alt="a jar on a sink in morning light", **k):
         k.setdefault("mover", self.mover)
         with contextlib.redirect_stdout(self.out):
-            return OP.take_newest(self.run, "P1", alt, "the team", made_with, lister=self.lister, fetcher=self.fetcher,
+            return OP.take_newest(self.run, "P1", alt, "editor", made_with, lister=self.lister, fetcher=self.fetcher,
                                   outcome_root=self.tmp / "plane", **k)
 
     def picture(self):
@@ -170,18 +170,18 @@ class Base(unittest.TestCase):
         d = self.tmp / "plane" / "platform" / "data" / "records" / "model-outcome"
         return [json.loads(f.read_text()) for f in sorted(d.glob("*.json"))] if d.is_dir() else []
 
-    def names(self, parts=EVE):
+    def names(self, parts=editor):
         return [r["name"] for r in self.drive.get(tuple(parts), [])]
 
 
 class TestNewest(Base):
     def test_1_newest_over_older_and_subfolder_files(self):
-        got = OP.newest(list(EVE), lister=self.lister)
+        got = OP.newest(list(editor), lister=self.lister)
         self.assertEqual(got, {"id": "id-new", "name": "new.png", "modified": "2026-10-23T05:00:00.000Z",
-                               "folder": "Shared Assets/" + "/".join(EVE)})       # not notes.txt, not deep.jpg
-        self.drive[EVE + ("nov-brief",)][0]["modified"] = "2026-10-23T08:00:00.000Z"      # one level down counts
-        got = OP.newest(list(EVE), lister=self.lister)
-        self.assertEqual((got["id"], got["folder"]), ("id-sub", "Shared Assets/" + "/".join(EVE) + "/nov-brief"))
+                               "folder": "Shared Assets/" + "/".join(editor)})       # not notes.txt, not deep.jpg
+        self.drive[editor + ("nov-brief",)][0]["modified"] = "2026-10-23T08:00:00.000Z"      # one level down counts
+        got = OP.newest(list(editor), lister=self.lister)
+        self.assertEqual((got["id"], got["folder"]), ("id-sub", "Shared Assets/" + "/".join(editor) + "/nov-brief"))
         self.assertIsNone(OP.newest(["handoffs", "graphic-designer", BRAND, "nobody", "returned"], lister=self.lister))
         self.drive[("handoffs", "graphic-designer", BRAND, "empty", "returned")] = [{"id": "x", "name": "a.txt", "modified": "z"}]
         self.assertIsNone(OP.newest(["handoffs", "graphic-designer", BRAND, "empty", "returned"], lister=self.lister))
@@ -191,10 +191,10 @@ class TestTake(Base):
     def test_2_moved_once_into_the_run_media_and_gone_from_her_folder(self):
         r = self.take()
         self.assertEqual(len(self.moves), 1)
-        self.assertEqual(self.moves[0], {"id": "id-new", "to": MEDIA, "by": "the team",
+        self.assertEqual(self.moves[0], {"id": "id-new", "to": MEDIA, "by": "editor",
                                          "why": LABEL + " P1: use my newest", "k": {}})
         self.assertNotIn("new.png", self.names())                                           # gone from her folder
-        self.assertNotEqual(OP.newest(list(EVE), lister=self.lister)["id"], "id-new")
+        self.assertNotEqual(OP.newest(list(editor), lister=self.lister)["id"], "id-new")
         self.assertIn("new.png", self.names(MEDIA))
         self.assertEqual(self.fetched, ["id-new"])                                          # read back by id
         self.assertTrue(Path(r["moved"]["record"]).is_file())
@@ -215,10 +215,10 @@ class TestTake(Base):
         self.assertEqual(p["email_copy"], {"drive_id": "id-copy-1", "label": "Shared Assets/%s/%s" % ("/".join(MEDIA), name)})
         self.assertEqual(p["drive_id"], "id-copy-1")                                        # unchanged for old readers
         self.assertEqual((p["made_with"], p["source"], p["alt"], p["by"]),
-                         ("Higgsfield", "made", "a jar on a sink in morning light", "the team"))
+                         ("Higgsfield", "made", "a jar on a sink in morning light", "editor"))
         self.assertFalse(any(str(v).startswith(("/private", "/var/", "/Users/", "/tmp")) for v in
                              (p["original"]["label"], p["email_copy"]["label"], p["photo"])))
-        self.drive[EVE].append({"id": "id-cam", "name": "cam.heic", "modified": "2026-10-23T07:00:00.000Z"})
+        self.drive[editor].append({"id": "id-cam", "name": "cam.heic", "modified": "2026-10-23T07:00:00.000Z"})
         r = self.take(made_with="a real photo")
         p = self.picture()
         self.assertEqual((p["made_with"], p["source"], p["original"]["drive_id"]), ("a real photo", "photo", "id-cam"))
@@ -239,10 +239,10 @@ class TestTake(Base):
         self.assertIn("new.png was not moved (a file with more than one parent)", str(c.exception))
         self.assertIn("new.png", self.names())
         self.assertEqual((self.spec.read_bytes(), self.fetched, self.outcomes(), self.rebuilds), (before, [], [], 0))
-        self.drive[EVE] = []
+        self.drive[editor] = []
         with self.assertRaises(SystemExit) as c:
             self.take()
-        self.assertIn("no picture in Shared Assets/%s/" % "/".join(EVE), str(c.exception))
+        self.assertIn("no picture in Shared Assets/%s/" % "/".join(editor), str(c.exception))
 
     def test_5_one_model_outcome_record(self):
         r = self.take()
@@ -251,7 +251,7 @@ class TestTake(Base):
         rec = recs[0]
         self.assertEqual(r["outcome"], str(sorted((self.tmp / "plane").rglob("*.json"))[0]))
         self.assertEqual((rec["schema"], rec["kind"], rec["reviewer"], rec["via"]),
-                         (1, "model-outcome", "designer", "email-production/own_picture"))
+                         (1, "model-outcome", "editor", "email-production/own_picture"))
         self.assertRegex(rec["item"], r"^%s-P1-own-\d{8}T\d{6}Z$" % LABEL)
         self.assertEqual(rec["verdict"], {"model": "Higgsfield", "door": "own", "purpose": "email-story", "brand": BRAND,
                                           "judge": "not judged", "picked": True, "tries_before_pick": None,
@@ -274,7 +274,7 @@ class TestTake(Base):
         self.assertNotEqual(second["photo"], first["photo"])                                 # same second: not overwritten
         self.assertTrue(back.read_bytes().endswith(b"id-new"))
         with contextlib.redirect_stdout(self.out):
-            OP.place(self.run, "P1", str(back), first["alt"], "the team", first["made_with"], "own", None, False)
+            OP.place(self.run, "P1", str(back), first["alt"], "editor", first["made_with"], "own", None, False)
         third = self.picture()
         self.assertEqual(third["history"][:2], second["history"])
         self.assertEqual(len(third["history"]), 3)
@@ -318,7 +318,7 @@ class TestAsk(Base):
         said = self.out.getvalue()
         self.assertEqual(code, 0, said)
         self.assertIn("✓ nov-99 P1 · newest: a jar in morning light — new.png (newest in Shared Assets/%s) as P1; "
-                      "new.png moved from Shared Assets/%s to " % ("/".join(EVE), "/".join(EVE)), said)
+                      "new.png moved from Shared Assets/%s to " % ("/".join(editor), "/".join(editor)), said)
         self.assertIn("to Shared Assets/" + "/".join(MEDIA), said)
         self.assertIn("platform/data/records/drive-move/20261023T070000Z--graphic-designer--id-new.json", said)
         self.assertEqual(len(self.moves), 1)

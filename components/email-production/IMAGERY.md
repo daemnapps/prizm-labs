@@ -18,8 +18,8 @@ boards, email placeholders, anything.
 | **The product files on Drive** | Per-product source frames, models, clips | `Shared Assets/brands/<brand>/products/<product>/` on the Drive: your mount (components/brandpath drive_index.mount()), or by id from `brands/<brand>/products/DRIVE-INDEX.json` |
 | **The storefront photos** | The live product photography, straight from the store | `brands/<brand>/products/images.json` |
 
-<brand> reference elements on file (2026-09-09): `NOVA-real-CGI` (the canonical
-NOVA, off the brand's own CGI turntable — supersedes every earlier NOVA),
+Brand A reference elements on file (2026-09-09): `FLEX-real-CGI` (the canonical
+FLEX, off the brand's own CGI turntable — supersedes every earlier FLEX),
 `flex-360-true`, `WAR-storefront-LIVE`, `PRIME-storefront-LIVE`,
 `CRUSH-storefront-LIVE`, `MIRO-storefront-LIVE`, `CORE-storefront-LIVE`,
 `FIELD-real-CGI`. The casting roster that used to sit beside them (Ray,
@@ -60,20 +60,20 @@ remember we have actual avatars to pull from".** A person in any brief is a
 character on the roster, passed as a reference — never a description of a
 stranger for the model to invent. The roster is written to the lanes:
 
-**2026-09-29: the roster is empty.** Every <brand> AI character was retired
+**2026-09-29: the roster is empty.** Every Brand A AI character was retired
 (no casting sheet); the rows are in
-`brands/<brand>/archive/retired-ai-characters-2026-09-29/`. Until a character is
+`brands/Brand A/archive/retired-ai-characters-2026-09-29/`. Until a character is
 banked to the sheet standard, a person in an email frame is cut from real
 creator footage or the brief holds. Read the current roster from
-`brands/<brand>/ai-elements/characters/casting/roster.json` and
+`brands/Brand A/ai-elements/characters/casting/roster.json` and
 `authority.json` before every run — never from this page.
 
 ## The product references
 
 | Product | Reference id |
 |---|---|
-| NOVA (canonical, off the brand's own turntable) | `0fa7420f-c30b-4197-aeb7-e35643bfcf8a` (`NOVA-real-CGI`) |
-| NOVA 360 (seven real frames, handleless pod, domed base) | `8fad5612-d46f-4c19-baec-c3a636f22a4e` (`flex-360-true`) |
+| FLEX (canonical, off the brand's own turntable) | `0fa7420f-c30b-4197-aeb7-e35643bfcf8a` (`FLEX-real-CGI`) |
+| FLEX 360 (seven real frames, handleless pod, domed base) | `8fad5612-d46f-4c19-baec-c3a636f22a4e` (`flex-360-true`) |
 | WAR | `797158d0-bb68-4b50-81ed-b345bb523d71` |
 | PRIME | `c9e9c9fa-8b4f-40c4-80f9-5103e78da92f` … see `show_reference_elements` |
 | CRUSH | `a66c1b39-5ca0-4c7c-94af-41bfa7f554f5`-era `CRUSH-storefront-LIVE` |

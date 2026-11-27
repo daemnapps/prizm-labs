@@ -19,7 +19,7 @@
      "fix_group": "qc-test-private-lock",
      "severity": "P3",
      "lane": "maker",
-     "decider": "the team",
+     "decider": "the developer",
      "confidence": "high"
     }
    ],
@@ -52,7 +52,7 @@
      "fix_group": "fix-after-ac3b0cedd",
      "severity": "P1",
      "lane": "maker",
-     "decider": "the team (metrics/dashboard owner)",
+     "decider": "the designer (metrics/dashboard owner)",
      "confidence": "high"
     }
    ],
@@ -60,16 +60,16 @@
     "id": "C02",
     "suite": "new-workflow-design/builds/dashboard/test_performance_viewer.py",
     "clearing_commit": "842eb66ee",
-    "clearing_subject": "dashboard refresh: brand-a-inventory, brand-a-performance, brand-a-routes, brand-b-inventory, brand-b-performance \u2014 numbers moved",
+    "clearing_subject": "dashboard refresh: Brand A-inventory, Brand A-performance, Brand A-routes, Brand B-inventory, Brand B-performance \u2014 numbers moved",
     "how": "ENV",
-    "action": "No fix; the scheduled dashboard data refresh rewrote the brand-b performance data.json and the baseline comparison then matched.",
+    "action": "No fix; the scheduled dashboard data refresh rewrote the Brand B performance data.json and the baseline comparison then matched.",
     "card": null,
     "confidence": "medium"
    }
   },
   {
    "id": "C03",
-   "suite": "new-workflow-design/builds/brand-a-pnl/test_brand_a_performance_source.py",
+   "suite": "new-workflow-design/builds/Brand A-pnl/test_Brand A_performance_source.py",
    "red": [
     "2026-09-20T15:43:37Z",
     "2026-09-24T10:23:06Z"
@@ -77,25 +77,25 @@
    "engine": [
     {
      "id": "C03",
-     "suite": "new-workflow-design/builds/brand-a-pnl/test_brand_a_performance_source.py",
+     "suite": "new-workflow-design/builds/Brand A-pnl/test_Brand A_performance_source.py",
      "class": "REAL",
-     "cause": "Its single problem is that it executes the brand-b test test_performance_viewer.py (C02), which is red because of the off() rounding bug.",
+     "cause": "Its single problem is that it executes the Brand B test test_performance_viewer.py (C02), which is red because of the off() rounding bug.",
      "causing_commit": "ac3b0cedd",
      "fix": "Clears when the C02 helper is fixed; no change of its own.",
      "fix_group": "fix-after-ac3b0cedd",
      "severity": "P1",
      "lane": "maker",
-     "decider": "the team (metrics owner)",
+     "decider": "the designer (metrics owner)",
      "confidence": "medium"
     }
    ],
    "truth": {
     "id": "C03",
-    "suite": "new-workflow-design/builds/brand-a-pnl/test_brand_a_performance_source.py",
+    "suite": "new-workflow-design/builds/Brand A-pnl/test_Brand A_performance_source.py",
     "clearing_commit": "842eb66ee",
-    "clearing_subject": "dashboard refresh: brand-a-inventory, brand-a-performance, brand-a-routes, brand-b-inventory, brand-b-performance \u2014 numbers moved",
+    "clearing_subject": "dashboard refresh: Brand A-inventory, Brand A-performance, Brand A-routes, Brand B-inventory, Brand B-performance \u2014 numbers moved",
     "how": "ENV",
-    "action": "No fix; the same scheduled data refresh turned test_performance_viewer green, which this suite runs as one of its brand-b tests.",
+    "action": "No fix; the same scheduled data refresh turned test_performance_viewer green, which this suite runs as one of its Brand B tests.",
     "card": null,
     "confidence": "medium"
    }
@@ -112,13 +112,13 @@
      "id": "C04",
      "suite": "new-workflow-design/builds/mini-cockpit/test_cockpit_actions.py",
      "class": "STALE",
-     "cause": "It pins the lead seat command as '--model opus' (the 2026-09-04 pilot). e40a82f66 changed the lead and plan cells in seat_kinds.sh to claude-opus-5-5 on the team's pilot ruling.",
+     "cause": "It pins the lead seat command as '--model opus' (the 2026-09-04 pilot). e40a82f66 changed the lead and plan cells in seat_kinds.sh to claude-opus-5-5 on the developer's pilot ruling.",
      "causing_commit": "e40a82f66",
      "fix": "Read the expected model from the seat_kinds.sh row, not a literal.",
      "fix_group": "repin-after-e40a82f66",
      "severity": "P2",
      "lane": "maker",
-     "decider": "the team (cockpit owner; the pilot is his ruling)",
+     "decider": "the developer (cockpit owner; the pilot is his ruling)",
      "confidence": "high"
     }
    ],
@@ -151,7 +151,7 @@
      "fix_group": "repin-after-b7365c566",
      "severity": "P2",
      "lane": "maker",
-     "decider": "the team (worker owner)",
+     "decider": "the developer (worker owner)",
      "confidence": "high"
     }
    ],
@@ -184,7 +184,7 @@
      "fix_group": "repin-after-b7365c566",
      "severity": "P2",
      "lane": "maker",
-     "decider": "the team (worker owner)",
+     "decider": "the developer (worker owner)",
      "confidence": "high"
     }
    ],
@@ -217,7 +217,7 @@
      "fix_group": "repin-after-b7365c566",
      "severity": "P2",
      "lane": "maker",
-     "decider": "the team (review engine / worker owner)",
+     "decider": "the developer (review engine / worker owner)",
      "confidence": "high"
     }
    ],
@@ -250,7 +250,7 @@
      "fix_group": "unique",
      "severity": "P3",
      "lane": "maker",
-     "decider": "the team (review engine owner)",
+     "decider": "the developer (review engine owner)",
      "confidence": "high"
     }
    ],
@@ -283,7 +283,7 @@
      "fix_group": "repin-after-b7365c566",
      "severity": "P2",
      "lane": "maker",
-     "decider": "the team (review engine / worker owner)",
+     "decider": "the developer (review engine / worker owner)",
      "confidence": "high"
     }
    ],
@@ -316,7 +316,7 @@
      "fix_group": "unique",
      "severity": "P0",
      "lane": "owner",
-     "decider": "the team (metrics owner)",
+     "decider": "the designer (metrics owner)",
      "confidence": "high"
     }
    ],
@@ -349,7 +349,7 @@
      "fix_group": "unique",
      "severity": "P0",
      "lane": "owner",
-     "decider": "the team (components/metrics owner)",
+     "decider": "the designer (components/metrics owner)",
      "confidence": "high"
     }
    ],
@@ -382,7 +382,7 @@
      "fix_group": "unique",
      "severity": "P3",
      "lane": "maker",
-     "decider": "the team (red reporter owner)",
+     "decider": "the developer (red reporter owner)",
      "confidence": "low"
     }
    ],
@@ -415,7 +415,7 @@
      "fix_group": "narrow-no-drop-for-pm55a",
      "severity": "P2",
      "lane": "maker",
-     "decider": "the team (records plane / worker owner)",
+     "decider": "the developer (records plane / worker owner)",
      "confidence": "medium",
      "blindness_note": "C22's window (657826c4c) shows b04d717b4 committing exactly this and 0b3d39876 narrowing this file for it. That is outside C13's window and was not used for the call above."
     }
@@ -449,20 +449,20 @@
      "fix_group": "stub-worker-env-file",
      "severity": "P3",
      "lane": "maker",
-     "decider": "the team",
+     "decider": "the designer",
      "confidence": "high"
     },
     {
      "id": "C14b",
      "suite": "new-workflow-design/builds/dashboard/test_dashboard_tick.py",
      "class": "STALE",
-     "cause": "The plist check requires every plist in mini-worker/ to start with com.company.workflow-worker; WM-70 (publisher process) deliberately added com.company.workflow-publisher.plist.",
+     "cause": "The plist check requires every plist in mini-worker/ to start with com.the company.workflow-worker; WM-70 (publisher process) deliberately added com.the company.workflow-publisher.plist.",
      "causing_commit": "521fa46d3",
      "fix": "Narrow to intent: no dashboard-specific plist exists (allow the declared worker and publisher plists).",
      "fix_group": "repin-launchagent-census",
      "severity": "P2",
      "lane": "maker",
-     "decider": "the team",
+     "decider": "the designer",
      "confidence": "high"
     }
    ],
@@ -491,11 +491,11 @@
      "class": "STALE",
      "cause": "batch_records() json.loads every file in platform/data/records/inbox/ before filtering by via; three mini-worker filed-index records (20260902T111356Z, 20260903T103706Z, 20260904T103713Z) were written truncated at the 16KB cap by candidate_scan and WM-24 (index truncation) ruled they stay on disk (create-never-edit), so the check raises JSONDecodeError ('could not run').",
      "causing_commit": "e8185ba91",
-     "fix": "Make the reader skip unparseable records (or allowlist the three known-corrupt names exactly as test_index_cap.py does) before filtering by via; alternatively the team rules PLANE-10 (record refusal)'s open 'regenerate the three files' question.",
+     "fix": "Make the reader skip unparseable records (or allowlist the three known-corrupt names exactly as test_index_cap.py does) before filtering by via; alternatively the developer rules PLANE-10 (record refusal)'s open 'regenerate the three files' question.",
      "fix_group": "tolerate-three-corrupt-index-records",
      "severity": "P2",
      "lane": "maker",
-     "decider": "the team",
+     "decider": "the developer",
      "confidence": "medium"
     }
    ],
@@ -528,7 +528,7 @@
      "fix_group": "repin-launchagent-census",
      "severity": "P2",
      "lane": "maker",
-     "decider": "the team",
+     "decider": "the developer",
      "confidence": "high"
     }
    ],
@@ -561,7 +561,7 @@
      "fix_group": "fixture-live-review-records",
      "severity": "P3",
      "lane": "maker",
-     "decider": "the team",
+     "decider": "the developer",
      "confidence": "high"
     }
    ],
@@ -594,7 +594,7 @@
      "fix_group": "repin-after-c5c6cce05",
      "severity": "P2",
      "lane": "maker",
-     "decider": "the team (worker owner)",
+     "decider": "the developer (worker owner)",
      "confidence": "medium"
     }
    ],
@@ -627,7 +627,7 @@
      "fix_group": "repin-after-481b32299",
      "severity": "P2",
      "lane": "maker",
-     "decider": "the team",
+     "decider": "the developer",
      "confidence": "high"
     }
    ],
@@ -660,7 +660,7 @@
      "fix_group": "repin-after-670912b39",
      "severity": "P2",
      "lane": "maker",
-     "decider": "the team (worker owner)",
+     "decider": "the developer (worker owner)",
      "confidence": "high"
     }
    ],
@@ -693,7 +693,7 @@
      "fix_group": "repin-after-f894d6a34",
      "severity": "P2",
      "lane": "maker",
-     "decider": "the team",
+     "decider": "the developer",
      "confidence": "high"
     }
    ],
@@ -726,7 +726,7 @@
      "fix_group": "repin-after-8a8d95ffb",
      "severity": "P2",
      "lane": "maker",
-     "decider": "the team (records plane / worker owner)",
+     "decider": "the developer (records plane / worker owner)",
      "confidence": "medium"
     }
    ],
@@ -759,7 +759,7 @@
      "fix_group": "repin-after-8a8d95ffb",
      "severity": "P2",
      "lane": "maker",
-     "decider": "the team (records plane / worker owner)",
+     "decider": "the developer (records plane / worker owner)",
      "confidence": "medium"
     }
    ],
@@ -792,7 +792,7 @@
      "fix_group": "repin-after-ddea7ff21",
      "severity": "P2",
      "lane": "maker",
-     "decider": "the team (records-plane / review engine owner)",
+     "decider": "the developer (records-plane / review engine owner)",
      "confidence": "medium"
     }
    ],
@@ -825,7 +825,7 @@
      "fix_group": "py39-pep604-annotations",
      "severity": "P1",
      "lane": "owner",
-     "decider": "the team",
+     "decider": "the developer",
      "confidence": "high"
     },
     {
@@ -838,7 +838,7 @@
      "fix_group": "fix-after-a6374f84e",
      "severity": "P1",
      "lane": "owner",
-     "decider": "the team",
+     "decider": "the designer",
      "confidence": "high"
     }
    ],
@@ -846,7 +846,7 @@
     "id": "C25",
     "suite": "new-workflow-design/builds/pm-tool/test_pm6_report.py",
     "clearing_commit": "525a2b75c",
-    "clearing_subject": "lead: merge INV-C22 (inventory report control) \u2014 inventory carries the report affordance; two the team suites narrowed per the ruling",
+    "clearing_subject": "lead: merge INV-C22 (inventory report control) \u2014 inventory carries the report affordance; two the designer suites narrowed per the ruling",
     "how": "FIXED-CODE",
     "action": "INV-C22 put the report-affordance block back on the inventory viewer template.",
     "card": "INV-C22",
@@ -871,7 +871,7 @@
      "fix_group": "repin-after-d4f4e9894",
      "severity": "P2",
      "lane": "maker",
-     "decider": "the team (re-point vs retire)",
+     "decider": "the developer (re-point vs retire)",
      "confidence": "high"
     }
    ],
@@ -904,7 +904,7 @@
      "fix_group": "unique",
      "severity": "P1",
      "lane": "owner",
-     "decider": "the team (worker / machine credential inventory)",
+     "decider": "the developer (worker / machine credential inventory)",
      "confidence": "high"
     }
    ],
@@ -931,13 +931,13 @@
      "id": "C28",
      "suite": "new-workflow-design/builds/chain-qa/test_adapter_video.py",
      "class": "STALE",
-     "cause": "The test pins exactly two golden videos for the video-teardown chain; BV-1 deliberately added two more fixtures (kerin-01, creator-a-01).",
+     "cause": "The test pins exactly two golden videos for the video-teardown chain; BV-1 deliberately added two more fixtures (kerin-01, a creator-01).",
      "causing_commit": "ec0fc2a8d",
      "fix": "Assert at least the two original goldens are declared (or re-pin to four), not an exact count of two.",
      "fix_group": "repin-after-ec0fc2a8d",
      "severity": "P2",
      "lane": "maker",
-     "decider": "the team",
+     "decider": "the developer",
      "confidence": "high"
     }
    ],
@@ -970,7 +970,7 @@
      "fix_group": "repin-after-65049954b",
      "severity": "P2",
      "lane": "maker",
-     "decider": "the team (worker owner)",
+     "decider": "the developer (worker owner)",
      "confidence": "high"
     }
    ],
@@ -1003,7 +1003,7 @@
      "fix_group": "repin-viewer-census",
      "severity": "P2",
      "lane": "maker",
-     "decider": "the team",
+     "decider": "the developer",
      "confidence": "high"
     }
    ],
@@ -1030,13 +1030,13 @@
      "id": "C31",
      "suite": "new-workflow-design/builds/cs-loop/test_cs_viewer.py",
      "class": "STALE",
-     "cause": "PM-6 (report affordance) inlined the report nova into every viewer template, adding five fetch calls (/api/health, /api/review, /api/mint ...) to cs.html; the GORG-C2b (cs viewer) test strips only the session-bootstrap block and still requires exactly one fetch.",
+     "cause": "PM-6 (report affordance) inlined the report widget into every viewer template, adding five fetch calls (/api/health, /api/review, /api/mint ...) to cs.html; the GORG-C2b (cs viewer) test strips only the session-bootstrap block and still requires exactly one fetch.",
      "causing_commit": "88b5aa2a3",
-     "fix": "Strip the shared report-nova block before counting fetches (as is done for the session bootstrap), keeping the one-gated-read rule for the page's own code.",
+     "fix": "Strip the shared report-widget block before counting fetches (as is done for the session bootstrap), keeping the one-gated-read rule for the page's own code.",
      "fix_group": "repin-after-88b5aa2a3",
      "severity": "P2",
      "lane": "maker",
-     "decider": "the team (cs-loop owner)",
+     "decider": "the designer (cs-loop owner)",
      "confidence": "high"
     }
    ],
@@ -1069,7 +1069,7 @@
      "fix_group": "repin-after-bc877e51b",
      "severity": "P2",
      "lane": "maker",
-     "decider": "the team",
+     "decider": "the designer",
      "confidence": "high"
     }
    ],
@@ -1102,7 +1102,7 @@
      "fix_group": "unique",
      "severity": "P2",
      "lane": "decision",
-     "decider": "the team",
+     "decider": "the developer",
      "confidence": "medium"
     }
    ],
@@ -1129,13 +1129,13 @@
      "id": "C34",
      "suite": "new-workflow-design/builds/atlas/test_atl9_definitions.py",
      "class": "STALE",
-     "cause": "ATL-9 (53d1c19ce) pinned TOOLS_AT_HEAD = 52, the live-tree count on the day it was written; new tool folders landed hours later without moving the pin (tools/image-production c808e39a5; components/system-integration 2aee7d34f is the likely second). The count keeps rising (54, 55, 56), and the compiler walks the folders on disk, so untracked folders count too (inferred).",
+     "cause": "ATL-9 (53d1c19ce) pinned TOOLS_AT_HEAD = 52, the live-tree count on the day it was written; new tool folders landed hours later without moving the pin (components/image-production c808e39a5; components/system-integration 2aee7d34f is the likely second). The count keeps rising (54, 55, 56), and the compiler walks the folders on disk, so untracked folders count too (inferred).",
      "causing_commit": "c808e39a5",
      "fix": "Replace the exact pin with a floor (or a count derived from the tracked tree) so a folder landing does not turn the suite red.",
      "fix_group": "unique",
      "severity": "P2",
      "lane": "maker",
-     "decider": "the team (atlas engine owner)",
+     "decider": "the developer (atlas engine owner)",
      "confidence": "high"
     }
    ],
@@ -1162,13 +1162,13 @@
      "id": "C35",
      "suite": "new-workflow-design/builds/mini-cockpit/test_dispatch_skill.py",
      "class": "ENV",
-     "cause": "Not reproducible from history: evaluated at 83a3c431c, team/dispatch-grants.json (incl. the team's new runs-only row a422c8b1f) passes every assertion of the seeded-grant test. The reporter runs suites in the worker's live clone, so the likeliest cause is that clone's working-tree state during the pass (unpulled or mid-edit grants file).",
+     "cause": "Not reproducible from history: evaluated at 83a3c431c, team/dispatch-grants.json (incl. the designer's new runs-only row a422c8b1f) passes every assertion of the seeded-grant test. The reporter runs suites in the worker's live clone, so the likeliest cause is that clone's working-tree state during the pass (unpulled or mid-edit grants file).",
      "causing_commit": null,
      "fix": "Re-run once on a clean, pulled clone; if green, record as transient and move the reporter toward a clean worktree; if red, inspect the clone's grants file diff.",
      "fix_group": "unique",
      "severity": "P3",
      "lane": "maker",
-     "decider": "the team",
+     "decider": "the developer",
      "confidence": "low"
     }
    ],
@@ -1201,7 +1201,7 @@
      "fix_group": "repin-after-48a91ace9",
      "severity": "P2",
      "lane": "maker",
-     "decider": "the team (pm-tool owner)",
+     "decider": "the designer (pm-tool owner)",
      "confidence": "high"
     }
    ],
@@ -1228,13 +1228,13 @@
      "id": "C37",
      "suite": "new-workflow-design/builds/language-layer/test_language_layer.py",
      "class": "STALE",
-     "cause": "The test pins the owner's live copy-lab file lab/owner/copy/machine/language.py and its public surface; the owner moved the copy machine to tools/copywriter (ec7321d2f), so the file is gone (FileNotFoundError), and the surface lists (bank_dir, later load_used/used_ids) drifted with his deliberate edits.",
+     "cause": "The test pins the owner's live copy-lab file lab/the owner/copy/machine/language.py and its public surface; the owner moved the copy machine to components/copywriter (ec7321d2f), so the file is gone (FileNotFoundError), and the surface lists (bank_dir, later load_used/used_ids) drifted with his deliberate edits.",
      "causing_commit": "ec7321d2f",
-     "fix": "Repoint OWNER_LIVE to tools/copywriter/machine/language.py and re-pin OWNER_PUBLIC/PUBLIC to the current surfaces (or assert pins cover the surface rather than equal it).",
+     "fix": "Repoint the owner_LIVE to components/copywriter/machine/language.py and re-pin the owner_PUBLIC/PUBLIC to the current surfaces (or assert pins cover the surface rather than equal it).",
      "fix_group": "repin-after-ec7321d2f",
      "severity": "P2",
      "lane": "maker",
-     "decider": "the team",
+     "decider": "the developer",
      "confidence": "medium"
     }
    ],
@@ -1267,7 +1267,7 @@
      "fix_group": "repin-after-88b5aa2a3",
      "severity": "P2",
      "lane": "maker",
-     "decider": "the team",
+     "decider": "the developer",
      "confidence": "medium"
     }
    ],
@@ -1300,7 +1300,7 @@
      "fix_group": "repin-after-985a0ebac",
      "severity": "P2",
      "lane": "maker",
-     "decider": "the team (pm-tool owner)",
+     "decider": "the designer (pm-tool owner)",
      "confidence": "medium"
     }
    ],
@@ -1327,13 +1327,13 @@
      "id": "C40",
      "suite": "new-workflow-design/builds/worker-multirepo/test_scoped_env.py",
      "class": "STALE",
-     "cause": "The lead's WM-86 grant (8f1aa0568, one minute before the red) added a 'worker-heartbeat' row to job_env.JOB_ENV, ruled by the team's 'Go', but did not add it to this test's EXPECTED. The coverage test does exactly its job. The second line (a spawn site with no env=) does not reproduce on the committed tree at 76f0071af: every subprocess call in SPAWN_FILES and push.py carries env=, so that failure comes from a later observation.",
+     "cause": "The lead's WM-86 grant (8f1aa0568, one minute before the red) added a 'worker-heartbeat' row to job_env.JOB_ENV, ruled by the developer's 'Go', but did not add it to this test's EXPECTED. The coverage test does exactly its job. The second line (a spawn site with no env=) does not reproduce on the committed tree at 76f0071af: every subprocess call in SPAWN_FILES and push.py carries env=, so that failure comes from a later observation.",
      "causing_commit": "8f1aa0568",
      "fix": "Add \"worker-heartbeat\": {\"PLANE_DB_URL\", \"SUPABASE_DB_URL\"} to EXPECTED.",
      "fix_group": "repin-after-8f1aa0568",
      "severity": "P2",
      "lane": "maker",
-     "decider": "the team (job_env grant surface)",
+     "decider": "the developer (job_env grant surface)",
      "confidence": "high"
     }
    ],
@@ -1366,7 +1366,7 @@
      "fix_group": "repin-after-3118ec83c",
      "severity": "P2",
      "lane": "maker",
-     "decider": "the team",
+     "decider": "the developer",
      "confidence": "high"
     },
     {
@@ -1379,7 +1379,7 @@
      "fix_group": "atlas-compile-5s-bound",
      "severity": "P3",
      "lane": "maker",
-     "decider": "the team",
+     "decider": "the developer",
      "confidence": "medium"
     }
    ],
@@ -1412,7 +1412,7 @@
      "fix_group": "fix-preview-payload-network-tokens",
      "severity": "P1",
      "lane": "owner",
-     "decider": "the team",
+     "decider": "the developer",
      "confidence": "high"
     }
    ],
@@ -1445,7 +1445,7 @@
      "fix_group": "unique",
      "severity": "P3",
      "lane": "maker",
-     "decider": "the team (atlas engine owner)",
+     "decider": "the developer (atlas engine owner)",
      "confidence": "medium"
     }
    ],
@@ -1478,7 +1478,7 @@
      "fix_group": "atlas-compile-5s-bound",
      "severity": "P3",
      "lane": "maker",
-     "decider": "the team",
+     "decider": "the developer",
      "confidence": "medium"
     }
    ],
@@ -1511,7 +1511,7 @@
      "fix_group": "slow-suite-timeouts",
      "severity": "P3",
      "lane": "maker",
-     "decider": "the team (red reporter owner)",
+     "decider": "the developer (red reporter owner)",
      "confidence": "medium"
     }
    ],
@@ -1538,13 +1538,13 @@
      "id": "C46",
      "suite": "new-workflow-design/builds/fulfillment-routes/test_routes_contract.py",
      "class": "REAL",
-     "cause": "Its single problem is that it executes test_brand_a_performance_source.py (C03), which executes test_performance_viewer.py (C02), which is red. The defect is in C02's comparison helper, not in the routes run.",
+     "cause": "Its single problem is that it executes test_Brand A_performance_source.py (C03), which executes test_performance_viewer.py (C02), which is red. The defect is in C02's comparison helper, not in the routes run.",
      "causing_commit": "ac3b0cedd",
      "fix": "Clears when the C02 helper is fixed; no change of its own.",
      "fix_group": "fix-after-ac3b0cedd",
      "severity": "P1",
      "lane": "maker",
-     "decider": "the team (metrics owner)",
+     "decider": "the designer (metrics owner)",
      "confidence": "medium"
     }
    ],
@@ -1577,7 +1577,7 @@
      "fix_group": "relative-dates-in-tests",
      "severity": "P3",
      "lane": "maker",
-     "decider": "the team",
+     "decider": "the designer",
      "confidence": "high"
     }
    ],
@@ -1610,7 +1610,7 @@
      "fix_group": "repin-after-603fe7689",
      "severity": "P2",
      "lane": "maker",
-     "decider": "the team (qc-gate-runner / atlas engine owner)",
+     "decider": "the developer (qc-gate-runner / atlas engine owner)",
      "confidence": "high"
     }
    ],
@@ -1643,7 +1643,7 @@
      "fix_group": "slow-suite-timeouts",
      "severity": "P3",
      "lane": "maker",
-     "decider": "the team (red reporter owner)",
+     "decider": "the developer (red reporter owner)",
      "confidence": "medium"
     }
    ],
@@ -1676,7 +1676,7 @@
      "fix_group": "unique",
      "severity": "P3",
      "lane": "maker",
-     "decider": "the team (worker / reporter owner)",
+     "decider": "the developer (worker / reporter owner)",
      "confidence": "medium"
     }
    ],
@@ -1709,7 +1709,7 @@
      "fix_group": "rule-viewer-census-idiom",
      "severity": "P2",
      "lane": "decision",
-     "decider": "the team (consumer-plane owner)",
+     "decider": "the developer (consumer-plane owner)",
      "confidence": "medium"
     }
    ],
@@ -1769,13 +1769,13 @@
      "id": "C53",
      "suite": "new-workflow-design/builds/mini-cockpit/test_mini_verbs.py",
      "class": "STALE",
-     "cause": "test_both_hats_mint_the_same_shape pins the plan seat's argv as '--model fable'. e40a82f66 (the team: 'Plan and lead both use opus 5.5', the weekend pilot) changed the seat_kinds.sh model cells for lead and plan to claude-opus-5-5. The separate HUNG observation (killed at the reporter's 90 s cap) cannot be explained from history up to this sha.",
+     "cause": "test_both_hats_mint_the_same_shape pins the plan seat's argv as '--model fable'. e40a82f66 (the developer: 'Plan and lead both use opus 5.5', the weekend pilot) changed the seat_kinds.sh model cells for lead and plan to claude-opus-5-5. The separate HUNG observation (killed at the reporter's 90 s cap) cannot be explained from history up to this sha.",
      "causing_commit": "e40a82f66",
      "fix": "Have the test read the model from the seat_kinds.sh row, not a literal, so the pilot and its revert both stay green; re-check the HUNG once this is green.",
      "fix_group": "repin-after-e40a82f66",
      "severity": "P2",
      "lane": "maker",
-     "decider": "the team (cockpit owner; the pilot is his ruling)",
+     "decider": "the developer (cockpit owner; the pilot is his ruling)",
      "confidence": "medium"
     }
    ],
@@ -1808,7 +1808,7 @@
      "fix_group": "unique",
      "severity": "P3",
      "lane": "maker",
-     "decider": "the team (worker owner)",
+     "decider": "the developer (worker owner)",
      "confidence": "medium"
     }
    ],

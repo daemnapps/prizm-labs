@@ -112,7 +112,7 @@ def controls(brand):
                                "sign": (o.get("math") or {}).get("sign")} for o in b.get("offers", []) if o.get("status") in ("live", "test", None)]
         except (OSError, ValueError):
             pass
-    # products = what the brand's offers sell (runs/business-review/offer-products.json, kept fresh by the owner's Outlier)
+    # products = what the brand's offers sell (runs/business-review/offer-products.json, kept fresh by owner's Outlier)
     prods = []
     try:
         _op = REPO / "runs" / "business-review" / "offer-products.json"
@@ -149,7 +149,7 @@ def make(body):
     import asks as K
     c = body.get("concept") or {}
     title = c.get("title") or f"{body['hook']} × {body['moment']}"
-    note = (f"From the creative matrix (Outlier → Create). Write the BRIEF for this one concept and stop for the owner's OK — "
+    note = (f"From the creative matrix (Outlier → Create). Write the BRIEF for this one concept and stop for owner's OK — "
             f"use the outlier-brief skill (.claude/skills/outlier-brief) and file it in the brief register so it shows in the "
             f"Queue at Brief · needs you. Do not make the finished {t['name'].lower()} and spend nothing. "
             f"Concept: {title}. {c.get('idea') or ''} Type: {t['name']}. Avatar: {body['avatar']}. "
@@ -309,7 +309,10 @@ def main():
     ap.add_argument("--n-bodies", type=int, default=4)
     ap.add_argument("--body-pool", type=int, default=50, help="how many of his top problem posts the bodies come from")
     ap.add_argument("--out")
-    build(ap.parse_args())
+    import importlib.util as _u, pathlib as _pl
+    _s = _u.spec_from_file_location("profile_arg", next(q for q in _pl.Path(__file__).resolve().parents if q.name == "components") / "naming" / "profile_arg.py")
+    _PA = _u.module_from_spec(_s); _s.loader.exec_module(_PA)   # --profile <avatar>[_<sub>][_<demographic>] (naming/PEOPLE.md)
+    build(ap.parse_args(_PA.expand(None, has=('avatar',))))
 
 
 if __name__ == "__main__":

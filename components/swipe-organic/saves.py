@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""the owner's saved posts — the human-taste intake stream.
+"""owner's saved posts — the human-taste intake stream.
 
 He curates by saving on Instagram, exactly as he always has. A sweep
 (via his own logged-in Chrome) drops the URLs into records/owner-saves/captured-urls.json;
 this scrapes each post publicly and writes one intake row per save with
 its receipts. Grading (bucket: viral | novel-format | market-opportunity,
 awareness grade, route) is a judgment layer on top — the session proposes,
-the owner overrides.
+owner overrides.
 
     python3 saves.py [--inbox records/owner-saves/captured-urls.json] [--dry-run]
 """

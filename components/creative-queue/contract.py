@@ -5,7 +5,7 @@
                                        own adapter folder), repo-relative, one a line — found the way the page kit
                                        finds _templates/<family>.sources.json: by its fixed name, never registered
 
-The shape and the word lists are contract.schema.json (definitions, the team's). An adapter.json names its `kind` (a
+The shape and the word lists are contract.schema.json (definitions, email_lead's). An adapter.json names its `kind` (a
 components/naming/stages.json `types` id), the argv of `report`, `detail` and `apply` (argv[0] a file under
 components/: no lab code, builder card rule 12) and the change `words` it takes — the shared ones, plus any
 kind-specific word it lists in `kind_words`. go / schedule / send / approve and any paid or outbound effect are never
@@ -126,7 +126,7 @@ def warnings(m):
     kw = m.get("kind_words") if isinstance(m, dict) else None
     if isinstance(kw, dict) and len(kw) > KILL_AT:
         return ["kind_words: %d kind-specific words (more than %d): the spec's kill — the shared level may be wrong; "
-                "tell the team" % (len(kw), KILL_AT)]
+                "tell email_lead" % (len(kw), KILL_AT)]
     return []
 
 

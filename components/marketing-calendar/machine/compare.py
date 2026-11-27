@@ -2,9 +2,9 @@
 """Two brands, side by side — what they share, where they drifted.
 
     python3 compare.py                          # every brand the workspace has
-    python3 compare.py --brands brand-a brand-b
+    python3 compare.py --brands brand_a brand_b
 
-the owner, 2026-09-14: *"Some of the way that the blocks are set up looks
+owner, 2026-09-14: *"Some of the way that the blocks are set up looks
 inconsistent between both brands as well. I need you to run a check."*
 
 Everything the chain reads from a brand has a shape, and the shape is supposed

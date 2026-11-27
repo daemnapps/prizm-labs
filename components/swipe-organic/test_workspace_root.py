@@ -21,7 +21,7 @@ import desklib as D  # noqa: E402
 FILES = ("desk.py", "briefs.py", "subfeeds.py", "organic_profile.py", "app.py", "formats.py", "paidpack.py",
          # SI-111 (organic one locator): the hand-rolled walks that passed the first scan
          "add.py", "packs.py", "paiddata.py", "bundle.py", "slideshows.py", "apify.py", "feedsexport.py")
-BAD = (r"/Users/[a-z]+/Projects/workspace|\.parent\.parent\.parent"
+BAD = (r"/Users/[a-z]+/Projects/ai-workspace|\.parent\.parent\.parent"
        r'|\bHERE\.parent\.parent\b'
        r'|\(d / "components"\)\.is_dir\(\) and \(d / "brands"\)')
 

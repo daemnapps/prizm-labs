@@ -1,0 +1,141 @@
+{
+  "schema": 1,
+  "what": "The craft doctrine every video tool cites: how any video is read, written, shot and cut. Brand, product, avatar, model and platform free.",
+  "updated": "2026-11-02",
+  "rule": "This is the default language of craft for every video. The swipe's own read wins over a default, and VIDEO-RULINGS wins over this file. Model-specific wording lives in the model inputs, never here.",
+  "sources": {
+    "shots": "https://www.studiobinder.com/blog/ultimate-guide-to-camera-shots/",
+    "lenses": "https://www.studiobinder.com/blog/focal-length-camera-lenses-explained/",
+    "veo": "https://cloud.google.com/blog/products/ai-machine-learning/ultimate-prompting-guide-for-veo-3-1",
+    "sora": "https://developers.openai.com/cookbook/examples/sora/sora2_prompting_guide",
+    "model_sheet": "https://en.wikipedia.org/wiki/Model_sheet",
+    "look_dev": "https://disneyanimation.com/process/look-development",
+    "color_script": "https://www.studiobinder.com/blog/what-is-a-color-script-definition/"
+  },
+  "shot_language": {
+    "rule": "Name every shot by how close it is, the angle, how much the lens sees and how the camera moves. Size sets how close the viewer feels: wide gives facts, close gives feeling.",
+    "groups": [
+      {"name": "Size", "ref": "shots", "rows": [
+        {"id": "wide", "name": "Wide", "job": "The room and where everyone stands", "status": "draft"},
+        {"id": "full", "name": "Full", "job": "Head to toe; body and clothes read", "status": "draft"},
+        {"id": "medium", "name": "Medium", "job": "Waist up; talk and hands", "status": "draft"},
+        {"id": "two-shot", "name": "Two-shot", "job": "Two people; the relationship", "status": "draft"},
+        {"id": "close-up", "name": "Close-up", "job": "A face or object; a thought changes", "status": "draft"},
+        {"id": "extreme-close-up", "name": "Extreme close-up", "job": "One detail; texture or proof", "status": "draft"}
+      ]},
+      {"name": "Angle", "ref": "shots", "rows": [
+        {"id": "eye-level", "name": "Eye level", "job": "Equal; a person talking to you", "status": "draft"},
+        {"id": "low", "name": "Low angle", "job": "Power or size", "status": "draft"},
+        {"id": "high", "name": "High angle", "job": "Small, watched or overwhelmed", "status": "draft"},
+        {"id": "overhead", "name": "Overhead", "job": "Hands, surfaces, steps of a process", "status": "draft"},
+        {"id": "odd", "name": "Odd angle", "job": "Stops the scroll; use with a reason", "status": "draft"}
+      ]},
+      {"name": "Lens and focus", "ref": "lenses", "rows": [
+        {"id": "24mm", "name": "24mm", "job": "Sees more; stretches faces up close", "status": "draft"},
+        {"id": "35mm", "name": "35mm", "job": "Natural scene default", "status": "draft"},
+        {"id": "50mm", "name": "50mm", "job": "Neutral", "status": "draft"},
+        {"id": "85mm", "name": "85mm", "job": "Flattering face; soft background", "status": "draft"},
+        {"id": "shallow", "name": "Shallow focus", "job": "Points the eye at one thing", "status": "draft"},
+        {"id": "deep", "name": "Deep focus", "job": "Keeps the room in play", "status": "draft"}
+      ]},
+      {"name": "Move", "ref": "veo", "rows": [
+        {"id": "locked-off", "name": "Locked-off", "job": "Still; the action carries it", "status": "draft"},
+        {"id": "handheld", "name": "Handheld", "job": "Phone-in-hand presence", "status": "draft"},
+        {"id": "push-in", "name": "Push-in", "job": "Tension or attention rises", "status": "draft"},
+        {"id": "pull-out", "name": "Pull-out", "job": "A reveal or release", "status": "draft"},
+        {"id": "pan-tilt", "name": "Pan or tilt", "job": "Follows or finds something", "status": "draft"},
+        {"id": "tracking", "name": "Tracking", "job": "Moves with a person", "status": "draft"},
+        {"id": "whip", "name": "Whip", "job": "Fast energy; hides a cut", "status": "draft"}
+      ]}
+    ]
+  },
+  "look": {
+    "rule": "Name where the light comes from, its quality, and the colors in frame. Never write a mood word the camera cannot photograph.",
+    "groups": [
+      {"name": "Light", "ref": "veo", "rows": [
+        {"id": "source", "name": "Source and side", "job": "Window left, overhead strip, ring light, phone screen", "status": "draft"},
+        {"id": "quality", "name": "Hard or soft", "job": "Soft flatters; hard adds edge and drama", "status": "draft"},
+        {"id": "time", "name": "Time of day", "job": "Sets color and believability", "status": "draft"}
+      ]},
+      {"name": "Color", "ref": "color_script", "rows": [
+        {"id": "palette", "name": "Palette line", "job": "Two to four named colors per scene, kept across shots", "status": "draft"},
+        {"id": "shift", "name": "Planned shift", "job": "A color change marks a story change", "status": "draft"}
+      ]}
+    ]
+  },
+  "staging": {
+    "rule": "Say who stands where, who moves, and what must match from shot to shot. A wardrobe, prop or position that changes without a story reason is a defect.",
+    "groups": [
+      {"name": "Blocking", "ref": "shots", "rows": [
+        {"id": "positions", "name": "Positions", "job": "Who is where in the room at the start of the shot", "status": "draft"},
+        {"id": "eyelines", "name": "Eyelines", "job": "Where each person looks", "status": "draft"},
+        {"id": "the-move", "name": "One clear move", "job": "One action per shot, with its start and end", "status": "draft"}
+      ]},
+      {"name": "Continuity", "ref": "model_sheet", "rows": [
+        {"id": "wardrobe", "name": "Wardrobe", "job": "Same clothes in wides and close-ups", "status": "draft"},
+        {"id": "props", "name": "Props", "job": "Same object, size, state and hand", "status": "draft"},
+        {"id": "direction", "name": "Screen direction", "job": "People stay on their side and keep moving the same way", "status": "draft"},
+        {"id": "light-match", "name": "Light match", "job": "Same light direction through a scene", "status": "draft"}
+      ]}
+    ]
+  },
+  "cutting": {
+    "rule": "Every cut gives something new: new information, a reaction, or a new size. Cut when the point lands. Sound is planned with the picture, never added as an afterthought.",
+    "groups": [
+      {"name": "Pace", "ref": "shots", "rows": [
+        {"id": "new-info", "name": "New information", "job": "No shot outstays its point", "status": "draft"},
+        {"id": "size-change", "name": "Size change", "job": "Move between sizes to refresh the eye", "status": "draft"},
+        {"id": "reaction", "name": "Reaction", "job": "The listener's face carries the beat", "status": "draft"},
+        {"id": "speed-up", "name": "Pace by stakes", "job": "Tightest before the product and the ask", "status": "draft"}
+      ]},
+      {"name": "Sound", "ref": "veo", "rows": [
+        {"id": "ambient", "name": "Ambient", "job": "The room tone that makes it real", "status": "draft"},
+        {"id": "sfx", "name": "Effects", "job": "Named sounds tied to on-screen actions", "status": "draft"},
+        {"id": "voice", "name": "Voice", "job": "Always on top of everything else", "status": "draft"},
+        {"id": "music", "name": "Music", "job": "Say if there is none; silence is a choice", "status": "draft"}
+      ]}
+    ]
+  },
+  "consistency": {
+    "rule": "Decide once, on paper, then every shot copies the paper. Animation studios work this way, and it applies to every generated video.",
+    "rows": [
+      {"id": "model-sheet", "name": "Model sheet", "job": "One locked reference per character, attached to every shot", "ref": "model_sheet", "status": "draft"},
+      {"id": "style-line", "name": "Style line", "job": "One written look, pasted word for word into every shot", "ref": "look_dev", "status": "draft"},
+      {"id": "look-test", "name": "Look test", "job": "One approved test frame before a run", "ref": "look_dev", "status": "draft"},
+      {"id": "color-plan", "name": "Color plan", "job": "Palette per scene, set up front", "ref": "color_script", "status": "draft"},
+      {"id": "set-sheet", "name": "Set sheet", "job": "One locked version of each location", "ref": "look_dev", "status": "draft"},
+      {"id": "boards", "name": "Boards", "job": "Start pictures approved before motion", "ref": "look_dev", "status": "draft"}
+    ]
+  },
+  "shapes": {
+    "rule": "These are defaults by format from the format bank. A format is a choice, never a house style; read the row that matches this video and ignore the rest. Short drama is one row among many. Script and production formats are named separately.",
+    "rows": [
+      {"format": "single-presenter", "kind": "production", "shots": "Medium and close-up, eye level", "camera": "Handheld or locked-off", "cutting": "Cut on thoughts; size changes replace b-roll gaps", "sound": "Voice leads, room tone under", "protect": "Face and voice", "status": "draft"},
+      {"format": "song-ad", "kind": "production", "shots": "One clear picture per lyric line", "camera": "Moves on the beat", "cutting": "Shot length equals line spacing", "sound": "The song leads", "protect": "Style line across every shot", "status": "draft"},
+      {"format": "demonstration", "kind": "script", "shots": "Overhead and extreme close-up on hands and surfaces", "camera": "Locked-off, or slow push-in", "cutting": "One action per shot", "sound": "Real contact sounds", "protect": "Product truth", "status": "draft"},
+      {"format": "testimonial-montage", "kind": "script", "shots": "Same size and framing, repeated", "camera": "Same each time", "cutting": "Fast repetition; accumulation is the argument", "sound": "Voices butt together", "protect": "Sameness of the frame", "status": "draft"},
+      {"format": "expert-consult", "kind": "script", "shots": "Two-shot, then over-the-shoulder and close-up", "camera": "Calm, mostly locked-off", "cutting": "Reaction after each answer", "sound": "Clean room, clear voices", "protect": "Each room stays distinct", "status": "draft"},
+      {"format": "remedy", "kind": "script", "shots": "Close-up of hands, jars and ingredients; medium for the speaker", "camera": "Handheld, domestic", "cutting": "Step by step", "sound": "Kitchen sounds", "protect": "Texture and steps", "status": "draft"},
+      {"format": "meme", "kind": "script", "shots": "Keep the source's framing", "camera": "Keep the source's move", "cutting": "Keep the source's beat", "sound": "Keep the source's sound", "protect": "The decisive action", "status": "draft"},
+      {"format": "comedy-skit", "kind": "script", "shots": "Medium and two-shot, close-up for reactions", "camera": "Simple, so the performance plays", "cutting": "Cut to the reaction", "sound": "Room tone; let jokes land", "protect": "Timing", "status": "draft"},
+      {"format": "micro-drama", "kind": "script", "shots": "Wide to set positions, then sizes tighten as stakes rise", "camera": "Locked-off, pushing in at the turn", "cutting": "Hook, conflict, turn, payoff", "sound": "Ambient, with silence at the turn", "protect": "Wardrobe and positions across sizes", "status": "draft"}
+    ]
+  },
+  "shot_brief": {
+    "rule": "Every shot fills these lines. A blank line means the model picks for you. Say what the camera sees and hears; skip words you could not photograph. Write each prompt as if the model has seen nothing else, and change one thing per retry.",
+    "ref": "sora",
+    "lines": [
+      {"slot": "Shot", "asks": "Size, angle, lens", "status": "draft"},
+      {"slot": "Who", "asks": "Each person and object, bound to its reference", "status": "draft"},
+      {"slot": "Action", "asks": "One clear move", "status": "draft"},
+      {"slot": "Move", "asks": "What the camera does", "status": "draft"},
+      {"slot": "Where", "asks": "The set, bound to its reference, and the time", "status": "draft"},
+      {"slot": "Light", "asks": "Source, side, quality", "status": "draft"},
+      {"slot": "Color", "asks": "Palette line", "status": "draft"},
+      {"slot": "Sound", "asks": "Ambient, effects, music or none", "status": "draft"},
+      {"slot": "Line", "asks": "Exact words, or none", "status": "draft"},
+      {"slot": "Style", "asks": "The same style line as every other shot", "status": "draft"},
+      {"slot": "Length", "asks": "Seconds", "status": "draft"}
+    ]
+  }
+}

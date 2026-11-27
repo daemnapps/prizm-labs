@@ -105,7 +105,7 @@
   "A": {
    "applies": true,
    "case_only_rename": false,
-   "test_ran": "test_doctrine.py: new 3 checks ok; tests-only on base -> all 3 FAIL; one pre-existing unrelated FAIL (brand-b/position.md template) at base and patched",
+   "test_ran": "test_doctrine.py: new 3 checks ok; tests-only on base -> all 3 FAIL; one pre-existing unrelated FAIL (Brand B/position.md template) at base and patched",
    "errors": []
   },
   "B": {
@@ -182,8 +182,8 @@
    "test_ran": "n/a (not drafted); verified RULES.md:23 names components/run-kit/TEMPLATE/ and CLAUDE.md:27 says copy `TEMPLATE/`",
    "errors": [
     {
-     "what": "reason calls RULES.md:23 the 'one reader outside the folder'; lab/owner/control-room/registry/machines.json:680,685 also names components/run-kit/TEMPLATE",
-     "where": "reason text; lab/owner/control-room/registry/machines.json:680,685"
+     "what": "reason calls RULES.md:23 the 'one reader outside the folder'; lab/the owner/control-room/registry/machines.json:680,685 also names components/run-kit/TEMPLATE",
+     "where": "reason text; lab/the owner/control-room/registry/machines.json:680,685"
     }
    ]
   },
@@ -193,8 +193,8 @@
    "test_ran": "git apply --check FAILS in the worktree on this case-insensitive FS ('template/CLAUDE.md already exists'); --check --cached (index, case-sensitive) OK; no test exists or was added",
    "errors": [
     {
-     "what": "does not repoint lab/owner/system-blueprint/briefs/RULES.md:23 (brief: same commit), leaving it pointing at a folder that no longer exists (machines.json:680,685 too)",
-     "where": "lab/owner/system-blueprint/briefs/RULES.md:23 (untouched)"
+     "what": "does not repoint lab/the owner/system-blueprint/briefs/RULES.md:23 (brief: same commit), leaving it pointing at a folder that no longer exists (machines.json:680,685 too)",
+     "where": "lab/the owner/system-blueprint/briefs/RULES.md:23 (untouched)"
     },
     {
      "what": "no test proves the rename or the repoint",

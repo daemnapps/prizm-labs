@@ -36,9 +36,9 @@ makes:
 `go`, `scheduled` (and every other approval) are refused, exit 2, naming the approval path. words / picture / fill
 keep the card's marks across the rebuild and stamp the build, as ask.py does (prepare.keep_card, prepare.stamp).
 
-The stage each email reports — PROPOSED, the team confirms after:
+The stage each email reports — PROPOSED, email_lead confirms after:
     scheduled set -> launch · klaviyo set (a Klaviyo draft) -> launch · held reasons -> making + held ·
-    no final check yet (designed, checks pending) -> making · eve_done -> final-needs-you + approved_by ·
+    no final check yet (designed, checks pending) -> making · editor_done -> final-needs-you + approved_by ·
     otherwise (ready) -> final-needs-you.
     live is UNREACHABLE: no card field records a send yet, so no email is ever reported live (said in the output).
 """
@@ -73,17 +73,17 @@ SYNC = HERE / "sync.py"
 WORDS = tuple(json.loads((HERE / "adapter.json").read_text())["words"])
 TRY_WORDS = tuple(json.loads((HERE / "adapter.json").read_text()).get("try_words") or ())
 APPROVALS = {
-    "go": "the Klaviyo draft is an approval, not a change: the team's or the owner's Go on the email approval page "
-          "(tools/email-production/email_approve.py) or ask.py's \"make the Klaviyo draft (Go)\" line, recorded "
+    "go": "the Klaviyo draft is an approval, not a change: email_lead's or owner's Go on the email approval page "
+          "(components/email-production/email_approve.py) or ask.py's \"make the Klaviyo draft (Go)\" line, recorded "
           "on the queue as a decision (cq.py approve)",
-    "scheduled": "marking an email scheduled is the team's own act after she schedules it in Klaviyo: ask.py's "
+    "scheduled": "marking an email scheduled is email_lead's own act after she schedules it in Klaviyo: ask.py's "
                  "\"I scheduled it in Klaviyo\" line, until the queue records it as a decision",
 }
 for _w in ("schedule", "send", "approve", "publish", "launch"):
     APPROVALS[_w] = "a send, schedule or approval is never a change word: it stays an approval — a queue decision " \
                     "(cq.py approve) plus a person's press on the email approval page, with a receipt"
 LIVE = ("live: unreachable — no card field records a send yet, so no email is reported live (QB-5 (production "
-        "contract) gap (b)); the stage mapping is PROPOSED until the team confirms")
+        "contract) gap (b)); the stage mapping is PROPOSED until email_lead confirms")
 MEDIA = {".png", ".jpg", ".jpeg", ".webp", ".gif", ".mp4", ".mov", ".mp3", ".wav", ".psd", ".zip"}
 KEEP_MARKS = {"words", "picture", "fill"}    # sync actions that rebuild the same parts (ask.py KEEP_MARKS)
 SLUG = re.compile(r"[^a-z0-9._-]+")
@@ -166,9 +166,9 @@ def observe(run):
         state, stage = "held", "making"
     elif not c.get("final_check"):
         state, stage = "checks-pending", "making"
-    elif c.get("eve_done"):
-        state, stage = "designer-done", "final-needs-you"
-        e["approved_by"] = str((c["eve_done"] or {}).get("by") or "designer").lower() if isinstance(c["eve_done"], dict) else "designer"
+    elif c.get("editor_done"):
+        state, stage = "editor-done", "final-needs-you"
+        e["approved_by"] = str((c["editor_done"] or {}).get("by") or "editor").lower() if isinstance(c["editor_done"], dict) else "editor"
     else:
         state, stage = "ready", "final-needs-you"
     s0 = (c.get("subjects") or [{}])[0]
@@ -364,7 +364,7 @@ def apply(item_id, part, word, payload=None, by=None):
     except (OSError, ValueError, AttributeError):
         drafted = None
     if drafted and k["action"] != "ok":
-        warn = (" — already a Klaviyo draft (%s): this changes the email here, not the draft in Klaviyo; tell the team "
+        warn = (" — already a Klaviyo draft (%s): this changes the email here, not the draft in Klaviyo; tell email_lead "
                 "to make the same change there" % drafted)
     before = _snapshot(run)
     if k["action"] in KEEP_MARKS:

@@ -5,7 +5,7 @@ Shared Assets/runs/email-production/<brand>/<label>/media/<the layout's name>,
 so look.py's run: fallback (LD-34 (run pictures from Drive)) finds it on any
 other Mac — proven offline.
 
-    cd tools/email-production/design && python3 test_ld75_design_pictures_to_drive.py
+    cd components/email-production/design && python3 test_ld75_design_pictures_to_drive.py
 
 The Drive is a fake reach patched over look.reach(); no key, no network, no
 Google package, no image engine. PIL is stood in only when this interpreter
@@ -42,7 +42,7 @@ except ImportError:
         setattr(PIL, _n, types.ModuleType("PIL." + _n))
         sys.modules["PIL." + _n] = getattr(PIL, _n)
     sys.modules["PIL"] = PIL
-sys.path.insert(0, str(HERE))      # design/ FIRST; never tools/email-production (its email.py shadows the stdlib's)
+sys.path.insert(0, str(HERE))      # design/ FIRST; never components/email-production (its email.py shadows the stdlib's)
 import look as L                   # noqa: E402
 import picture_record as PR        # noqa: E402
 

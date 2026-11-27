@@ -4,6 +4,6 @@
  "date": "someday",
  "subjects": [],
  "klaviyo": {"campaign_id": "FX9", "message_id": "FX10"},
- "scheduled": {"by": "the team", "at": "2026-10-22T13:20:00Z"},
+ "scheduled": {"by": "the email lead", "at": "2026-10-22T13:20:00Z"},
  "status": "scheduled"
 }

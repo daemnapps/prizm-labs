@@ -1,0 +1,41 @@
+{
+ "_what": "cellimure — swipes added by hand through add.py. Media in the library and on the Drive; this file is what the intake index reads.",
+ "brand": "Brand B",
+ "platform": "instagram",
+ "pulled": "2026-10-09",
+ "group": "cellimure",
+ "source": "organic",
+ "owner": "competitor",
+ "drive_root": "",
+ "posts_seen": 2,
+ "posts": [
+  {
+   "file": "01_swipe-Dd5_BEfxwaG.md",
+   "id": "Dd5_BEfxwaG",
+   "creator": "cellimure_korea",
+   "views": 0,
+   "engagement": 524352,
+   "url": "https://www.instagram.com/reel/Dd5_BEfxwaG/",
+   "caption": "여권사진 속 나랑 실제 나랑 화해하는 중\n\n#cellimure",
+   "seconds": 27,
+   "source": "organic",
+   "owner": "competitor",
+   "kind": "video",
+   "drive": "Shared Assets/swipe/organic/records/swipe-videos/Dd5_BEfxwaG/video.mp4"
+  },
+  {
+   "file": "02_swipe-Dd_AUuyuGHd.md",
+   "id": "Dd_AUuyuGHd",
+   "creator": "cellimure_korea",
+   "views": 0,
+   "engagement": 163183,
+   "url": "https://www.instagram.com/reel/Dd_AUuyuGHd/",
+   "caption": "외출 할 뻔 했네 ㄷㄷ\n\n#cellimure",
+   "seconds": 26,
+   "source": "organic",
+   "owner": "competitor",
+   "kind": "video",
+   "drive": "Shared Assets/swipe/organic/records/swipe-videos/Dd_AUuyuGHd/video.mp4"
+  }
+ ]
+}

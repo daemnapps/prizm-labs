@@ -111,7 +111,7 @@ have not injected anything.
 
 ## THE CUSTOMER'S OWN WORDS — the copywriter's rules, word for word
 
-Carried from `tools/copywriter/prompts/stage3-injection-v2-owner.md` on
+Carried from `components/copywriter/prompts/stage3-injection-v2-owner.md` on
 2026-09-19 (the owner: "hook up email to the actual customer"). Email's writer had
 the voice rules but never the queried rows, and never these rules for using them.
 

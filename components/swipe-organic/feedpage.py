@@ -2,9 +2,9 @@
 """Render an avatar feed's page from its store. The page is a WINDOW:
 it reads the backend, computes what's rising, and shows it — it holds
 no data of its own and takes no input that feeds the learning loop
-(the owner's ruling 2026-08-30: no human in the loop).
+(owner's ruling 2026-08-30: no human in the loop).
 
-    python3 feedpage.py --avatar brand-a--glow-up
+    python3 feedpage.py --avatar brand_a--glow-up
 
 feed.py calls this after every sweep, so the page rebuilds itself
 whenever the data moves. Output: <feed folder>/feed.html (committed —

@@ -20,7 +20,7 @@ never land here. Ranked by views; `--top N` keeps the N hottest.
 (needs `shouldDownloadSlideshowImages`, or the actor answers with empty
 media) + one comments read. Roughly $0.50 an account at --top 8.
 
-`--group` records which set an account belongs to (the partner's example list, a
+`--group` records which set an account belongs to (Tye's example list, a
 competitor sweep) in posts.json; nothing else changes.
 """
 import argparse, json, os, re, sys
@@ -89,7 +89,7 @@ def block_md(n, handle, p, slides, comments, drive_rel, rank_of):
         f"**Post:** {p.get('webVideoUrl')}  ",
         f"**Type:** Slideshow — {len(slides)} stills, no motion  ",
         f"**Sound:** {music.get('musicName') or '?'} — {music.get('musicAuthor') or '?'}  ",
-        f"**Format:** UNNAMED in `components/swipe-organic/formats.json`. the owner names it, not this pull.  ",
+        f"**Format:** UNNAMED in `components/swipe-organic/formats.json`. owner names it, not this pull.  ",
         f"**Drive:** `{drive_rel}` — mirrored {date.today()}, `photos/01.jpg … {len(slides):02d}.jpg` in posted order",
         "", "## Caption (verbatim, as posted)", "",
         "> " + (p.get("text") or "").replace("\n", "\n> "), "",

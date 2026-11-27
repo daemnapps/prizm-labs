@@ -1,0 +1,96 @@
+{
+ "id": "product-photoshoot",
+ "name": "Product Photoshoot",
+ "kind": "picture",
+ "makes": "Finished product stills in 10 modes: packshots, lifestyle scenes, product-with-person closeups, Pinterest pins, hero banners, social carousels, static ad packs, virtual try-ons, conceptual CGI-style images, restyles.",
+ "source": [
+  "product-photoshoot/SKILL.md",
+  "product-photoshoot/_files.md",
+  "product-photoshoot/ui.yaml.md",
+  "product-photoshoot/references/ (10 mode files, typography, photography-vocabulary, photographer-references, negative-prompts, refinement-pass)"
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "name": "Parse the brief; silent defaults on 'full auto'; ask at most 3 gap questions",
+   "model": "none",
+   "cheap": "Claude on the plan: free"
+  },
+  {
+   "n": 2,
+   "name": "Upload or import the product image (or use a text-only description)",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 3,
+   "name": "Pick one mode; load its reference + typography, vocabulary, photographers, negatives, refinement",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 4,
+   "name": "models_explore check on nano_banana_pro (image refs + 2K)",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 5,
+   "name": "Assemble the mode's named-section prompt per variant, ending 'resolution: 2k'",
+   "model": "none",
+   "cheap": "Claude on the plan: free"
+  },
+  {
+   "n": 6,
+   "name": "First pass via generate_image_batch (index 0 first when text-only product, then reuse it as reference)",
+   "model": "nano_banana_pro",
+   "cheap": "seedream_5_0_flash 2k (0.5)"
+  },
+  {
+   "n": 7,
+   "name": "Optional visual QA, then focused refinement (max 2 per index)",
+   "model": "nano_banana_pro",
+   "cheap": "seedream_5_0_flash 2k i2i"
+  },
+  {
+   "n": 8,
+   "name": "Show the final job per index once",
+   "model": "none",
+   "cheap": null
+  }
+ ],
+ "price": "Not quoted for nano_banana_pro 2k. A set is variants (default 3) x 1 call each plus up to 2 refinements per index (max 3 generations per final output). Quotes before paying.",
+ "cheap_price": "Drafts on seedream_5_0_flash 2k at 0.5 per picture: a default 3-variant set about 1.5 credits.",
+ "prompts": [
+  {
+   "label": "Product-shot prompt template",
+   "source": "product-photoshoot/references/product-shot.md",
+   "text": "```\n[SUBJECT]\nHero shot of {{exact product description from reference or user input}}, {{material/finish details}}, {{label/branding visible if applicable}}.\n\n[COMPOSITION]\n{{Camera angle}}, {{framing}}, {{rule-of-thirds placement}}, {{negative space directive}}.\n\n[LIGHTING]\n{{Lighting setup with direction and quality from photography-vocabulary.md}}. {{Color temperature in Kelvin}}. {{Shadow behavior}}.\n\n[LENS & CAMERA]\nShot on {{focal length}} lens, aperture {{f-stop}}, {{depth of field directive}}, sharp focus on {{specific area}}.\n\n[MATERIALS & TEXTURE]\n{{Surface treatments}}, {{reflections}}, {{micro-details}}.\n\n[COLOR PALETTE]\nDominant tones: {{2-3 colors aligned with known brand context}}. {{Contrast directive}}.\n\n[STYLE REFERENCE]\n{{Concrete craft descriptors extracted from 2-3 matching entries in photographer-references.md}}. Commercial product photography, magazine editorial quality. Never include the source names.\n\n[BRAND INTEGRATION]\n{{Known brand colors}}, {{brand mood — clean / warm / edgy / refined}}.\n\n[QUALITY MARKERS]\nTack-sharp, hyper-detailed, photorealistic, commercial-grade.\n\n[AVOID]\n{{universal + anti-text-warp from negative-prompts.md}}\n\nresolution: 2k\n```"
+  },
+  {
+   "label": "Universal negative block",
+   "source": "product-photoshoot/references/negative-prompts.md",
+   "text": "```\n[AVOID]\nno AI artifacts, no warped or smeared text, no fake words baked into the image,\nno plastic look, no waxy surface, no cartoonish rendering,\nno extra fingers, no extra limbs, no melted geometry, no doubled subjects,\nno oversaturated HDR, no HDR halos, no oversharpened look,\nno flat fluorescent lighting, no harsh on-camera flash,\nno generic stock photography poses, no cliché compositions,\nno random unrelated brand logos, no watermarks, no signatures,\nno AI sheen on hair or skin, no doll-like rendering, no airbrush look,\nno flat solid color bands, no empty rectangular areas, no dull gradient zones\nthat look out of place from the rest of the scene.\n```"
+  },
+  {
+   "label": "Refinement prompt structure",
+   "source": "product-photoshoot/references/refinement-pass.md",
+   "text": "```\nRefine the previous image. Keep composition, subject, framing, and overall scene IDENTICAL.\nOnly change: {{specific photographic instruction targeting the weakest area}}.\n{{Mode-specific preservation directive}}.\n```\n\n### Fix-prompt language by issue type\n\n**Lighting flat:**\n> Add directional key light from camera-left at 45°, 4500K, with stronger rim separation on the opposite side. Deepen contact shadow at the base. Increase tonal range between highlight and shadow.\n\n**Plastic surface:**\n> Refine surface to show realistic micro-texture. Add tactile detail — visible weave / brushstroke / pore / grain depending on material. Remove rendered-looking sheen.\n\n**Warped text:**\n> Sharpen the product label text to fully legible commercial-print quality. Letters must be crisp and intact, not warped or merged.\n\n**Anatomy off:**\n> Correct the {{specific body part — fingers / hands / face / eye placement}}. Anatomically correct human proportions, natural realistic detail. Preserve facial likeness.\n\n**Composition imbalance:**\n> Reposition subject toward {{specific anchor — left third / right third}}. Strengthen focal hierarchy, focal anchor moved off dead-center.\n\n**Palette drift:**\n> Shift palette toward {{specific known brand colors}}. Reduce {{drifting color}} dominance. Bring {{brand accent}} forward.\n\n**Stock feel:**\n> Move away from generic staging. Add lived-in detail, intentional asymmetry, and one specific narrative cue {{name a cue}}. Photographic, not staged-stock aesthetic.\n\n**AI sheen:**\n> Remove rendered-looking sheen. Add film-grain photographic feel. Realistic skin texture with natural micro-imperfection. Hyper-realistic, not hyper-smooth.\n\n**Aesthetic half-applied (restyle):**\n> Source unchanged. Push aesthetic harder toward {{preset specifics — palette, surface, light, mood}}. Stronger {{specific element}} commitment. Source's previous aesthetic completely gone.\n\n**Flat color band:**\n> Replace the flat solid-color {{top / bottom / left / right}} area with natural scene continuation — extend the actual environment (sky, blurred background, surface texture, atmospheric gradient) into that area. The frame must read as one cohesive scene, no artificial empty rectangles."
+  },
+  {
+   "label": "Ad-creative-pack per-variant template",
+   "source": "product-photoshoot/references/ad-creative-pack.md",
+   "text": "## Per-variant Prompt Template\n\n```\n[VISUAL SYSTEM]\n{{Locked specifications copied verbatim}}\n\n[VARIANT {{N}}: {{Hook Angle}} — {{Aspect Ratio}}]\n\n[HOOK VISUAL]\n{{Specific visual that delivers the chosen hook angle}}.\n\n[COMPOSITION]\n{{Variant-specific framing}}, {{focal anchor placement using rule of thirds}}, strong eye-leading hierarchy.\n\n[LIGHTING]\n{{Lighting tuned to deliver the hook — dramatic for problem-solution, warm aspirational for lifestyle, clean clinical for feature-zoom}}.\n\n[CONTRAST & SATURATION]\nHigher saturation and contrast than organic content — must fight the feed. Bold tonal range, deep shadows, bright highlights.\n\n[STYLE REFERENCE]\n{{Locked style references from visual system}}.\n\n[QUALITY MARKERS]\nScroll-stopping, magazine-quality, hyper-detailed, performance-ad ready.\n\n[AVOID]\n{{universal + anti-stock-feel}}\nno inconsistent palette across variants, no flat lighting, no synthetic stock look.\n\nresolution: 2k\n```"
+  },
+  {
+   "label": "First-pass request shape",
+   "source": "product-photoshoot/SKILL.md",
+   "text": "Each first-pass request is:\n\n```json\n{\n  \"index\": 0,\n  \"params\": {\n    \"model\": \"nano_banana_pro\",\n    \"prompt\": \"<assembled mode prompt>\\n\\nresolution: 2k\",\n    \"aspect_ratio\": \"<mode ratio>\",\n    \"resolution\": \"2k\",\n    \"count\": 1,\n    \"medias\": [{\"value\": \"<confirmed media_id when present>\", \"role\": \"image_references\"}]\n  }\n}\n```"
+  },
+  {
+   "label": "Typography three-case rule",
+   "source": "product-photoshoot/references/typography.md",
+   "text": "## Case 1 — User specified concrete text to include in the image\n\nIf the user wrote exact words they want on the image (`\"the headline should say 'New Drop'\"`, `\"add 'Sale ends Friday'\"`, `\"with the text 'Made with love'\"`), include the text DIRECTLY in the prompt as part of the composition. nano_banana_pro will render it as integrated typography inside the scene.\n\nIn the prompt, write something like:\n```\n[TYPOGRAPHY]\nIntegrated typography in the scene reads \"New Drop\" — set in {{font style: bold sans-serif / elegant serif / hand-lettered / clean modern}}, positioned {{naturally within the composition}}, color {{contrasting with background for legibility}}.\n```\n\n## Case 2 — User wants to overlay text themselves (in Figma, Canva, Photoshop)\n\nIf the user explicitly says they will add text afterward (`\"I'll add the headline in Figma\"`, `\"leaving space for typography\"`, `\"need clear area for overlay\"`), THEN — and only then — instruct the composition to leave a tonally uniform area:\n\n```\n[COMPOSITION FOR TEXT OVERLAY]\nLeave one area of the frame visually calm and tonally uniform — natural soft gradient, atmospheric blur, or smooth surface — so the user can overlay typography in post-production. This area must still feel like part of the scene (sky, blurred background, surface), NOT a hard-edged empty rectangle.\n```\n\nThe key word: **tonally uniform area within the natural scene**. Never `clean negative space` or `reserved white space` — those phrases trigger the model to draw a flat band.\n\n## Case 3 — User said nothing about text (default)\n\nDon't mention text or overlay zones at all. Let the model compose freely for maximum visual quality."
+  }
+ ]
+}

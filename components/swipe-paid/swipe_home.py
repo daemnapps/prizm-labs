@@ -87,7 +87,7 @@ def _drive_api():
 
 
 def shared_assets() -> Path:
-    """`Shared Assets`: the API copy's root when the Drive is reached through the API (the default, the owner
+    """`Shared Assets`: the API copy's root when the Drive is reached through the API (the default, owner
     20 Oct 2026), else this machine's Drive folder, or NO_MOUNT (which never exists, so a caller's
     is_dir()/exists() check still reports "not mounted")."""
     SH = _drive_api()

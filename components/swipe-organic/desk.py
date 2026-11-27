@@ -16,7 +16,7 @@ import desklib as D
 
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8820
 WS = D.WS
-MACHINE = WS / "tools/video-teardown/machine"
+MACHINE = WS / "components/video-teardown/machine"
 
 
 def _vt_workdir():
@@ -25,7 +25,7 @@ def _vt_workdir():
     if m is None:
         import importlib.util
         spec = importlib.util.spec_from_file_location(
-            "vt_workdir", Path(__file__).resolve().parents[2] / "tools" / "video-teardown" / "machine" / "workdir.py")
+            "vt_workdir", Path(__file__).resolve().parents[2] / "components" / "video-teardown" / "machine" / "workdir.py")
         m = importlib.util.module_from_spec(spec)
         sys.modules["vt_workdir"] = m
         spec.loader.exec_module(m)
@@ -97,11 +97,30 @@ def brief_worker(feed, item, job, route=None):
                 else f"Stopped: {(r.stdout or r.stderr or '')[-200:]}")
 
 
-def tear_worker(url, author, brand, job, route=None):
-    """Same hand-off the feed board uses: download, then the real teardown machine."""
+def creator_queue(brand, label, state, feed=None, item=None, why=None):
+    """A creator-route click goes on the one creator-picks queue (creator_picks.py)
+    and is marked as its teardown moves. The queue never stops a teardown."""
+    try:
+        import creator_picks as CP
+        if feed and item and not CP.find(brand, label):
+            CP.main(["add", "--brand", brand, "--feed", feed, "--item", item, "--label", label,
+                     "--by", "desk"] + (["--why", why] if why else []))   # no reason given: the queue reads the card
+        run = _vt_workdir().run_dir(label, WS)
+        CP.main(["mark", "--brand", brand, "--label", label, "--state", state]
+                + (["--run", str(run)] if run.exists() else []))
+    except (Exception, SystemExit) as e:
+        print(f"creator picks queue not updated: {e}", file=sys.stderr)
+
+
+def tear_worker(url, author, brand, job, route=None, feed=None, item=None, why=None):
+    """Same hand-off the feed board uses: download, then the real teardown machine. `why` is the one line
+    kept with the click (desklib.hand_pick_why): it is saved on the job and goes into the run."""
     label = re.sub(r"[^a-z0-9]+", "-", f"feed-{author}-{job[-6:]}".lower()).strip("-")[:40]
+    why = why or D.HAND_PICK
+    if route == "creator":
+        creator_queue(brand, label, "tearing", feed, item, why)
     D.job_write(job, kind="teardown", status="running", url=url, brand=brand, label=label,
-                step="Downloading the video")
+                picked_why=why, step="Downloading the video")
     media = D.HERE / "records" / "desk" / "media" / label
     media.mkdir(parents=True, exist_ok=True)
     try:
@@ -113,14 +132,19 @@ def tear_worker(url, author, brand, job, route=None):
         D.job_write(job, step=f"Teardown machine running — label {label}")
         with (media / "machine.log").open("w") as log:
             r = subprocess.run([sys.executable, str(MACHINE / "run.py"), str(vids[0]),
-                                "--brand", brand, "--label", label]
+                                "--brand", brand, "--label", label,
+                                "--picked-why", why, "--picked-by", "a person on the feed page"]
                                + (["--route", route] if route else []),
                                stdout=log, stderr=subprocess.STDOUT, cwd=str(MACHINE), timeout=3 * 3600)
         D.job_write(job, status="done" if r.returncode == 0 else "failed",
                     step="Brief is on the teardowns board" if r.returncode == 0
                     else f"Machine stopped (exit {r.returncode})")
+        if route == "creator":
+            creator_queue(brand, label, "torn" if r.returncode == 0 else "failed")
     except Exception as e:
         D.job_write(job, status="failed", step=f"Stopped: {str(e)[:160]}")
+        if route == "creator":
+            creator_queue(brand, label, "failed")
 
 
 _STUDIO = None
@@ -353,9 +377,9 @@ def state():
                         # the teardown machine's audience stage — shown here because the feeds
                         # declare its audience (v9, 2026-09-20)
                         **{p.name: p.read_text() for p in [
-                            *sorted((WS / "tools/video-writing/prompts/stage-1b-audience").glob("*-v10-*.md")),
+                            *sorted((WS / "components/video-writing/prompts/stage-1b-audience").glob("*-v10-*.md")),
                             # the hook stage's unaware entry (v15, 2026-09-20)
-                            *sorted((WS / "tools/video-writing/prompts/stage-4-loop/4b-hook").glob("*-v15-*.md"))]}}}
+                            *sorted((WS / "components/video-writing/prompts/stage-4-loop/4b-hook").glob("*-v15-*.md"))]}}}
 
 
 
@@ -398,8 +422,17 @@ class H(BaseHTTPRequestHandler):
     def send(self, body, ctype="application/json", code=200):
         if not isinstance(body, bytes):
             body = (body if isinstance(body, str) else json.dumps(body)).encode()
+        # The board's state is ~10 MB of JSON; uncompressed it stalls a phone on a relayed tailnet link.
+        gz = len(body) > 4096 and ("json" in ctype or "html" in ctype) \
+            and "gzip" in (self.headers.get("Accept-Encoding") or "")
+        if gz:
+            import gzip
+            body = gzip.compress(body, 5)
         self.send_response(code)
         self.send_header("Content-Type", ctype)
+        if gz:
+            self.send_header("Content-Encoding", "gzip")
+            self.send_header("Vary", "Accept-Encoding")
         self.send_header("Content-Length", str(len(body)))
         self.send_header("Cache-Control", "no-store" if "json" in ctype or "html" in ctype else "max-age=86400")
         self.end_headers()
@@ -514,7 +547,7 @@ class H(BaseHTTPRequestHandler):
             spawn("dig.py", ask, "--job", f"dig-{job}")
             return self.send({"job": f"dig-{job}"})
         if self.path == "/api/sounds-pull":
-            # on his button only — no schedule (the owner, 2026-09-23). Pull the chart,
+            # on his button only — no schedule (owner, 2026-09-23). Pull the chart,
             # tag it, save the audio; the page shows the cost before he presses.
             import sounds
             used, cap = D.apify_spend()
@@ -565,7 +598,8 @@ class H(BaseHTTPRequestHandler):
             if not card:
                 return self.send({"error": "that video is no longer in the feed"}, code=400)
             threading.Thread(target=tear_worker,
-                             args=(card["url"], card["author"], brand, f"tear-{job}", route),
+                             args=(card["url"], card["author"], brand, f"tear-{job}", route, feed, item,
+                                   D.hand_pick_why(card)),
                              daemon=True).start()
             return self.send({"job": f"tear-{job}"})
         self.send({"error": "not found"}, code=404)

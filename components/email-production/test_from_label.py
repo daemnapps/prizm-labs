@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""An email's own from-name (the team, 2026-10-30: brand-b nov-10 is a letter in the founder's first person, sent from
-"Brand-B Trakoonsri from Brand-B Beauty"): create_draft() uses the email's `from_label` when it has one, the brand's
+"""An email's own from-name (email_lead, 2026-10-30: brand_b nov-10 is a letter in the founder's first person, sent from
+"brand_b Trakoonsri from brand_b Beauty"): create_draft() uses the email's `from_label` when it has one, the brand's
 look `from.label` otherwise; build.py puts it on the approval card only when the email sets it; the approval page's
 Approve passes the card's to the draft. No network: Klaviyo is a stand-in.
 
-    /usr/bin/python3 tools/email-production/test_from_label.py
+    /usr/bin/python3 components/email-production/test_from_label.py
 """
 import sys
 import unittest

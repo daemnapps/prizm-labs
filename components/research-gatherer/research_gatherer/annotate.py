@@ -4,7 +4,7 @@ Two reads per row, two owners:
   1. INTAKE (this component, `prompts/annotate-row.md`): keep or drop, a
      cancel/refund exit, use tags, topics, sub-avatar, ad use, the names and
      signature to strip. What only an intake needs.
-  2. LABEL (the language layer's own labeller, `tools/language-layer/
+  2. LABEL (the language layer's own labeller, `components/language-layer/
      tools/label.py`, its newest `label-awareness-v*.md` prompt):
      awareness, sophistication, the lane the words point to. The ruled
      reading (brands/language-schema.md, "Lanes by language …", 2026-09-28) —
@@ -165,12 +165,24 @@ def vocabulary(root=None, top=90):
     return tags
 
 
+def avatar_folder(brand, avatar):
+    """The avatar's folder as the brand keeps it, from a profile id, a new name or an old name (naming/PEOPLE.md)."""
+    try:
+        f = next(d / "naming" / "people.py" for d in Path(__file__).resolve().parents if d.name == "components")
+        spec = importlib.util.spec_from_file_location("naming_people", f)
+        people = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(people)
+        return people.folders(brand, avatar)[0] or avatar
+    except Exception:                                  # noqa: BLE001  without the door the name stands as given
+        return avatar
+
+
 def lang_dir(brand, avatar):
-    return engine.WORKSPACE / "brands" / brand / "core-avatars" / avatar / "language"
+    return engine.WORKSPACE / "brands" / brand / "core-avatars" / avatar_folder(brand, avatar) / "language"
 
 
 def subs_block(brand, avatar):
-    d = engine.WORKSPACE / "brands" / brand / "core-avatars" / avatar / "sub-avatars"
+    d = engine.WORKSPACE / "brands" / brand / "core-avatars" / avatar_folder(brand, avatar) / "sub-avatars"
     files = sorted(d.glob("*.md")) if d.is_dir() else []
     lines = []
     for f in files:
@@ -226,7 +238,7 @@ def annotate(rows, brand, avatar, label, source, model, batch=30, claude=None):
 # ---------------------------------------------------------------- read 2: the language layer's labeller
 
 def _labeller():
-    p = engine.WORKSPACE / "tools" / "language-layer" / "tools" / "label.py"
+    p = engine.WORKSPACE / "components" / "language-layer" / "tools" / "label.py"
     if not p.is_file():
         return None
     try:
@@ -244,7 +256,7 @@ def label_rows(rows, brand, labeller=None, model=LABEL_MODEL):
     lane_words, why, plus origin/voice read off the row. {} when it cannot run."""
     lab = labeller or _labeller()
     if lab is None:
-        say("  labeller: MISSING (tools/language-layer/tools/label.py) — rows held")
+        say("  labeller: MISSING (components/language-layer/tools/label.py) — rows held")
         return {}
     tmp = []
     for i, r in enumerate(rows):

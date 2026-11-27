@@ -5,8 +5,8 @@ the language layer's bank tools propose.
 
 Why here: `brands/` is read-only to machines (decision-log 2026-09-17); the
 research gatherer is the one machine ruled to write into the bank, and only
-what passed its gates (the owner 2026-09-18, the O5 carve-out). The labeller,
-the id renamer and the source mapper (tools/language-layer/tools/)
+what passed its gates (owner 2026-09-18, the O5 carve-out). The labeller,
+the id renamer and the source mapper (components/language-layer/tools/)
 now write a PROPOSAL under `runs/language-layer/`; this step checks it and
 writes it, with the same file writer the gatherer files new rows with
 (`annotate._dump` — each file keeps its indent, escaping and newline).

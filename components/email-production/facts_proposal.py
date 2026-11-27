@@ -9,7 +9,7 @@
 
 K2 (brands write wall), SI-21 2026-10-07: the pullers, the offer and store
 readers, the sweep — every email-production script that used to write into
-brands/<brand>/ — writes here instead, and the team folds. Several writers share
+brands/<brand>/ — writes here instead, and email_lead folds. Several writers share
 one day's run, so run.json is merged, never replaced. The shape is MET-C39
 (ledger as proposal)'s, copied from components/metrics/domains/pnl/clean.py
 `write_note` (another component's internals: copied, not imported).
@@ -152,7 +152,7 @@ def note(run, brand, root=None):
     lines = [
         "# Email-production facts proposal — %s · %s" % (brand, record.get("label", run.name)),
         "",
-        "Made %s by tools/email-production (facts_proposal.py)." % record.get("made", "—"),
+        "Made %s by components/email-production (facts_proposal.py)." % record.get("made", "—"),
         "Nothing here is in brands/ yet: email-production never writes there (K2",
         "(brands write wall), SI-21 2026-10-07). A person checks these files, copies",
         "them with the commands below, and commits them as their own.",

@@ -1,7 +1,7 @@
 {
  "element": "format",
  "asset": "video",
- "source": "tools/video-production/formats/bank.json",
+ "source": "components/video-production/formats/bank.json",
  "enforced_by": "the AI video machine's preflight; the second door (compose.py)",
  "note": null,
  "rows": [
@@ -14,9 +14,9 @@
    "state": null,
    "signed": null,
    "examples": null,
-   "evidence": "2026-09-03 (fal) and 2026-09-04 (Higgsfield) — the calls are the provider pages; 2026-09-16 again on Higgsfield, record not in the repo; filed: runs/video-production/brand-b/resilia-song-160986941 (2026-09-16, Higgsfield)",
+   "evidence": "2026-09-03 (fal) and 2026-09-04 (Higgsfield) — the calls are the provider pages; 2026-09-16 again on Higgsfield, record not in the repo; filed: runs/video-production/Brand B/resilia-song-160986941 (2026-09-16, Higgsfield)",
    "approved": false,
-   "source": "tools/video-production/formats/bank.json",
+   "source": "components/video-production/formats/bank.json",
    "extra": {
     "profile": "song-ad.md",
     "notes": "the first format run end to end; its two runs became archive/fal.md and archive/higgsfield.md"
@@ -33,9 +33,9 @@
    "state": null,
    "signed": null,
    "examples": null,
-   "evidence": "2026-09-16 on Higgsfield with a demonstration beat inside it — runs/video-production/brand-b/smo-06-final-287-bottles",
+   "evidence": "2026-09-16 on Higgsfield with a demonstration beat inside it — runs/video-production/Brand B/smo-06-final-287-bottles",
    "approved": false,
-   "source": "tools/video-production/formats/bank.json",
+   "source": "components/video-production/formats/bank.json",
    "extra": {
     "profile": "single-presenter.md",
     "notes": "the UGC shape — the workhorse; profile written 2026-09-02, not yet run end to end on this machine"
@@ -54,10 +54,10 @@
    "examples": null,
    "evidence": "2026-09-16 on Higgsfield — record not in the repo (chat sandbox); profile drafted from the session's reports, for the owner to correct",
    "approved": false,
-   "source": "tools/video-production/formats/bank.json",
+   "source": "components/video-production/formats/bank.json",
    "extra": {
     "profile": "meme.md",
-    "notes": "the source's scroll-stopper is the whole format; a softened action is a failed piece — the 16 Sep pack holds no record of this piece; kzn03 and competitor-a-06 are not it"
+    "notes": "the source's scroll-stopper is the whole format; a softened action is a failed piece — the 16 Sep pack holds no record of this piece; kzn03 and Brand C-06 are not it"
    },
    "aliases": [],
    "note": null
@@ -71,9 +71,9 @@
    "state": null,
    "signed": null,
    "examples": null,
-   "evidence": "2026-09-16 on Higgsfield — runs/video-production/brand-b/kzn03",
+   "evidence": "2026-09-16 on Higgsfield — runs/video-production/Brand B/kzn03",
    "approved": false,
-   "source": "tools/video-production/formats/bank.json",
+   "source": "components/video-production/formats/bank.json",
    "extra": {
     "profile": "expert-consult.md",
     "notes": "the owner 2026-09-17: the storytelling piece with Keri is this format, and expert-consult is its name. Was two draft rows; now one."
@@ -92,7 +92,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "tools/video-production/formats/bank.json",
+   "source": "components/video-production/formats/bank.json",
    "extra": {
     "profile": "demonstration.md",
     "notes": "profile written 2026-09-02, not yet run end to end on this machine"
@@ -111,7 +111,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "tools/video-production/formats/bank.json",
+   "source": "components/video-production/formats/bank.json",
    "extra": {
     "profile": "micro-drama.md",
     "notes": "the method was first proven on this shape (2026-09-01 production); no piece has run this machine's route end to end"
@@ -130,7 +130,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "tools/video-production/formats/bank.json",
+   "source": "components/video-production/formats/bank.json",
    "extra": {
     "profile": "testimonial-montage.md",
     "notes": "profile written 2026-09-02, not yet run end to end on this machine"
@@ -149,7 +149,7 @@
    "examples": null,
    "evidence": "2026-10-20 — Grandma Yai remedy reels (egg white pore peel, cold tea eye bundles, cracked heels) on the reel line; swipe @mayalin_wellness",
    "approved": false,
-   "source": "tools/video-production/formats/bank.json",
+   "source": "components/video-production/formats/bank.json",
    "extra": {
     "profile": "remedy.md",
     "notes": "first organic format run end to end; organic and paid are the same video, only the ask differs (RUN-PROTOCOL.md, one machine)"
@@ -168,10 +168,67 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "tools/video-production/formats/bank.json",
+   "source": "components/video-production/formats/bank.json",
    "extra": {
     "profile": "comedy-skit.md",
     "notes": "the owner 2026-10-23: comedy skits operate similarly; first run the pastor barber body"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "text-thread",
+   "name": "Text thread",
+   "what": "one message held down on a phone, the chat blurred behind it, the reaction bar above and the menu below",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/video-production/formats/bank.json",
+   "extra": {
+    "profile": "text-thread.md",
+    "notes": "drawn in code by components/video-edit/thread/; no clip model runs"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "narrator-montage",
+   "name": "Narrator montage",
+   "what": "a hook, then one narrator's voiceover over a fast run of short shots (the product, people using it, the proof), then the offer and the ask; the hook is a slot any hook fills",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/video-production/formats/bank.json",
+   "extra": {
+    "profile": "narrator-montage/FORMAT.md",
+    "notes": "first home written under the one-home rule (formats/README.md); replaces the use of testimonial-montage for this shape"
+   },
+   "aliases": [],
+   "note": null
+  },
+  {
+   "id": "ad-series",
+   "name": "Ad series",
+   "what": "three or more ads that run as one story: each ad is a full ad in its own format, and a ledger carries the card, the product, the cast and the open promises from one ad to the next",
+   "why_it_works": null,
+   "status": "draft",
+   "state": null,
+   "signed": null,
+   "examples": null,
+   "evidence": null,
+   "approved": false,
+   "source": "components/video-production/formats/bank.json",
+   "extra": {
+    "profile": "ad-series/FORMAT.md",
+    "notes": "a layer over other formats, not a scene shape: each ad in the series names its own production format (narrator-montage, single-presenter, ...). Built from short-drama-factory (MIT): continuity ledger, first-three-episodes card, paywall cut points, web-novel adaptation."
    },
    "aliases": [],
    "note": null
@@ -184,7 +241,7 @@
    "status": "draft",
    "state": null,
    "signed": null,
-   "examples": "Brand-B: 'I burned and peeled 1,000 times, didn't listen to my parents about putting good sunscreen on' (spot-hider bank).",
+   "examples": "Brand B: 'I burned and peeled 1,000 times, didn't listen to my parents about putting good sunscreen on' (spot-hider bank).",
    "evidence": "the owner 2026-10-03: 'build nostalgic formats and classic formats that people actually remember… program for the past to bring them in a place they can relate to, and from there you give them a moment to change the timeline' · 'nothing more nothing less — real life experiences they go through and experience, and also what they watch'. · the owner 2026-10-03: 'whatever the actual research shows then we roll with it… nothing to do with my taste.'",
    "approved": false,
    "source": "components/elements/additions.json",
@@ -200,7 +257,7 @@
    "status": "draft",
    "state": null,
    "signed": null,
-   "examples": "BRAND-A: 'clearer skin like I had when I was younger'. Brand-B: 'I avoid photos where my arms show'.",
+   "examples": "Brand A: 'clearer skin like I had when I was younger'. Brand B: 'I avoid photos where my arms show'.",
    "evidence": "the owner 2026-10-03: 'build nostalgic formats and classic formats that people actually remember… program for the past to bring them in a place they can relate to, and from there you give them a moment to change the timeline' · 'nothing more nothing less — real life experiences they go through and experience, and also what they watch'. · the owner 2026-10-03: 'whatever the actual research shows then we roll with it… nothing to do with my taste.'",
    "approved": false,
    "source": "components/elements/additions.json",
@@ -216,7 +273,7 @@
    "status": "draft",
    "state": null,
    "signed": null,
-   "examples": "Brand-B visual lexicon already holds the 1980s baby-oil beach-towel picture (lab/owner/image-teardown/reference/visual-lexicon.md).",
+   "examples": "Brand B visual lexicon already holds the 1980s baby-oil beach-towel picture (lab/the owner/image-teardown/reference/visual-lexicon.md).",
    "evidence": "the owner 2026-10-03: 'build nostalgic formats and classic formats that people actually remember… program for the past to bring them in a place they can relate to, and from there you give them a moment to change the timeline' · 'nothing more nothing less — real life experiences they go through and experience, and also what they watch'. · the owner 2026-10-03: 'whatever the actual research shows then we roll with it… nothing to do with my taste.'",
    "approved": false,
    "source": "components/elements/additions.json",
@@ -248,7 +305,7 @@
    "status": "draft",
    "state": null,
    "signed": null,
-   "examples": "BRAND-A failed-solution lines fill the struggle: 'five blade, single blade, rotary, foil, OneBlade — makes no difference'.",
+   "examples": "Brand A failed-solution lines fill the struggle: 'five blade, single blade, rotary, foil, OneBlade — makes no difference'.",
    "evidence": "the owner 2026-10-03: 'build nostalgic formats and classic formats that people actually remember… program for the past to bring them in a place they can relate to, and from there you give them a moment to change the timeline' · 'nothing more nothing less — real life experiences they go through and experience, and also what they watch'. · the owner 2026-10-03: 'whatever the actual research shows then we roll with it… nothing to do with my taste.'",
    "approved": false,
    "source": "components/elements/additions.json",
@@ -264,7 +321,7 @@
    "status": "draft",
    "state": null,
    "signed": null,
-   "examples": "Era items come only from the avatar profile (Brand-B: Sun Belt, 55–70, network TV/Hallmark; BRAND-A: 30–44, hip-hop, NBA, barbershop).",
+   "examples": "Era items come only from the avatar profile (Brand B: Sun Belt, 55–70, network TV/Hallmark; Brand A: 30–44, hip-hop, NBA, barbershop).",
    "evidence": "the owner 2026-10-03: 'build nostalgic formats and classic formats that people actually remember… program for the past to bring them in a place they can relate to, and from there you give them a moment to change the timeline' · 'nothing more nothing less — real life experiences they go through and experience, and also what they watch'. · the owner 2026-10-03: 'whatever the actual research shows then we roll with it… nothing to do with my taste.'",
    "approved": false,
    "source": "components/elements/additions.json",
@@ -280,7 +337,7 @@
    "status": "draft",
    "state": null,
    "signed": null,
-   "examples": "BRAND-A: 'I thought it was over for my skin' · 'I'm pretty much desperate at this point' (fed-up-king bank).",
+   "examples": "Brand A: 'I thought it was over for my skin' · 'I'm pretty much desperate at this point' (fed-up-king bank).",
    "evidence": "the owner 2026-10-03: 'build nostalgic formats and classic formats that people actually remember… program for the past to bring them in a place they can relate to, and from there you give them a moment to change the timeline' · 'nothing more nothing less — real life experiences they go through and experience, and also what they watch'. · the owner 2026-10-03: 'whatever the actual research shows then we roll with it… nothing to do with my taste.'",
    "approved": false,
    "source": "components/elements/additions.json",
@@ -296,7 +353,7 @@
    "status": "draft",
    "state": null,
    "signed": null,
-   "examples": "BRAND-A bank: 'I use a natural face wash made by my grandma'.",
+   "examples": "Brand A bank: 'I use a natural face wash made by my grandma'.",
    "evidence": "the owner 2026-10-03: 'build nostalgic formats and classic formats that people actually remember… program for the past to bring them in a place they can relate to, and from there you give them a moment to change the timeline' · 'nothing more nothing less — real life experiences they go through and experience, and also what they watch'. · the owner 2026-10-03: 'whatever the actual research shows then we roll with it… nothing to do with my taste.'",
    "approved": false,
    "source": "components/elements/additions.json",

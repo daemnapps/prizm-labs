@@ -4,7 +4,7 @@
 Extracted 2026-09-18 (RG-1), the day it was built, on the owner's ruling: *"the
 OS pulls COMPONENTS into workflows, so the research gatherer must be a
 resident component, not code inside one machine."* Same shape as the LL-1
-precedent (`tools/language-layer/`) — an engine with no stage map, a
+precedent (`components/language-layer/`) — an engine with no stage map, a
 chain's shim binding its own definitions on top.
 
 Spoken name: "research" — runs file under `runs/research/<brand>/` (research-gatherer#11, B8 (seven B3 calls), 2026-10-08; runs/README.md).
@@ -65,7 +65,8 @@ entry for every new avatar. Now:
    them, so no answer from before a change is ever served.
 3. **Every discovery is recorded twice.** Into the run (`rooms-found.json`
    and a "Rooms" section in `research.md`: room · posts · score · a sample
-   title each), and back into the avatar's own file as
+   title each), and as a proposal for the avatar's own file — brands/ is read-only to machines, so it lands
+   under `runs/research/<brand>/rooms-proposals/` for a person to commit (2026-11-04) — as
 
    ```
    ### rooms — found <date> by the gatherer (edit freely; add "confirmed by: <your name>" to lock)
@@ -86,7 +87,7 @@ entry for every new avatar. Now:
    discovers nothing and spends nothing.
 
 **Both machines keep working, and that was the hard constraint of the
-move.** `tools/video-teardown/machine/research.py` is now a thin shim
+move.** `components/video-teardown/machine/research.py` is now a thin shim
 over this engine: same CLI (`run --run <dir>`, `deep --brand … --avatar …
 --sub …`, `--all`, `--pick-thinnest`, `--dry-run`), same output, same cache.
 Nothing was asked of the owner and nothing changed on the video-teardown side.
@@ -149,9 +150,9 @@ without re-spending on the search.
 
 | question | answer |
 |---|---|
-| **engine + owner** | this folder's `research_gatherer/engine.py` — **the owner** (built as part of the Schwartz-backbone build, 2026-09-18; corrects to the team if the engine-ownership convention from LL-1/IDT-1 applies here instead) |
+| **engine + owner** | this folder's `research_gatherer/engine.py` — **the owner** (built as part of the Schwartz-backbone build, 2026-09-18; corrects to the developer if the engine-ownership convention from LL-1/IDT-1 applies here instead) |
 | **definitions + curator** | **three kinds, none of them here.** (1) **Chain profiles** — which language STAGE_USE keys a chain wants queried (`language_stages`), the callable that runs that query (`language_for_stage`), and where a run's own output folder lives (`run_dir`) — are per-chain, curated by that chain's owner (the owner, for video-teardown) and live in the chain's shim, never here. (2) **Desire words** are avatar content, curated brand-side under `brands/<brand>/core-avatars/**/sub-avatars/*.md` — rule-9 (brand home). **Rooms are FOUND by this engine**, written back into that same file, and a person locks a block by adding `confirmed by: <name>` to it (see `brands/_TEMPLATE/core-avatars/README.md`); a person curates rooms only when they choose to. (3) **The Schwartz research questions** are the marketing-doctrine component's (`components/marketing-doctrine/frameworks.json`, `research_questions`), curated by the owner there; this engine falls back to a small built-in list, marked as a fallback, only when that file is missing or empty |
-| **the plane it emits** | **none, directly.** `inputs()` writes into the CALLING chain's own run folder (`<run>/research/{language,forums,comments,research}.md`), at the path that chain's `chain_profile["run_dir"]` names. `deep_for()` writes into the avatar's own bank (the sub-avatar's OWN folder beside its card — `brands/<brand>/core-avatars/<avatar>/sub-avatars/<card stem>/language/deep-research-<date>.json` (rows carry `sub`; the language layer reads every sub-avatar folder as part of the avatar's bank) plus the clean readable report at `…/<card stem>/research/<date>/` (research.md, rooms-found.json, rows.json — only what passed the gates) — the owner's 2026-09-18 exception, in this shape only, to "a person moves it") and a run record at the repo-root `runs/research/<brand>/<sub>-<date>/` (rows, receipts, two bands, spend) — **never inside this component**: run records don't live in a component (lab/owner/CLAUDE.md §1, `runs/README.md`), even though this engine is what writes them |
+| **the plane it emits** | **none, directly.** `inputs()` writes into the CALLING chain's own run folder (`<run>/research/{language,forums,comments,research}.md`), at the path that chain's `chain_profile["run_dir"]` names. `deep_for()` writes into the avatar's own bank (the sub-avatar's OWN folder beside its card — `brands/<brand>/core-avatars/<avatar>/sub-avatars/<card stem>/language/deep-research-<date>.json` (rows carry `sub`; the language layer reads every sub-avatar folder as part of the avatar's bank) plus the clean readable report at `…/<card stem>/research/<date>/` (research.md, rooms-found.json, rows.json — only what passed the gates) — the owner's 2026-09-18 exception, in this shape only, to "a person moves it") and a run record at the repo-root `runs/research/<brand>/<sub>-<date>/` (rows, receipts, two bands, spend) — **never inside this component**: run records don't live in a component (lab/the owner/CLAUDE.md §1, `runs/README.md`), even though this engine is what writes them |
 | **what the manifest declares per entry** | n/a — no manifest. `research.json` at the component root is config (actor ids, spend caps, cache days, and the `discovery` block's sort / window / posts-only / keep), not a definitions registry |
 
 ## Contract
@@ -191,7 +192,8 @@ engine.demographics_line(demo)     # -> the one line a run's research.md prints
 
 engine.rooms_block_state(text)     # -> ("confirmed" | "seeded" | "none", match)
 engine.tally_rooms(posts, top=5)   # -> the weighting, pure and testable
-engine.write_rooms_block(path, found)   # -> True when the file changed;
+engine.write_rooms_block(path, found)   # -> True when the file changed, or the proposal's Path for a
+#    brand file (runs/research/<brand>/rooms-proposals/…: brands/ is read-only to machines);
 #    never overwrites a block a person confirmed
 
 engine.inputs(st, chain_profile=None)
@@ -270,7 +272,7 @@ python3 components/research-gatherer/gather.py apply --proposal runs/language-la
 `brands/` is read-only to machines (decision-log 2026-09-17) and this
 component is the one machine ruled to write the bank (the owner 2026-09-18, the
 O5 carve-out: only what passed its gates). The language layer's bank tools
-(`tools/language-layer/tools/` — the labeller's backfill, the id
+(`components/language-layer/tools/` — the labeller's backfill, the id
 renamer, the source mapper, the `keyword-cta` tagger, the origin rule) no
 longer write bank files: each writes a PROPOSAL under
 `runs/language-layer/<brand>/<run>/` and hands it here.
@@ -360,13 +362,13 @@ behaviour back. Code: `research_gatherer/gates.py`; test:
 `CLAUDE.md`.
 
 The engine's workspace is now found — `AI_WORKSPACE`, else the checkout the
-file sits in, else `~/Projects/workspace` — so a worktree no longer reads
+file sits in, else `~/Projects/ai-workspace` — so a worktree no longer reads
 and writes the main checkout. A shim's `configure(workspace=...)` still wins.
 
 ## Kill-condition
 
 Fewer than 2 real chains calling `inputs()` post-adoption → fold this back
-into `tools/video-teardown/machine/` the way it started (same LL-1
+into `components/video-teardown/machine/` the way it started (same LL-1
 reasoning: a component earns its wall by being shared, not by being tidy).
 
 
@@ -392,7 +394,7 @@ top-ad scrape and Reddit deep pulls stay on request. `daily.py` runs every
 free source for every brand that has `brands/<brand>/operations/language-pulls.json`,
 files the rows through the same read as `ownvoice` (intake read + the
 language layer's labeller, `research_gatherer/voicepull.py`), then refreshes
-the source registry (`tools/language-layer/tools/map_sources.py`,
+the source registry (`components/language-layer/tools/map_sources.py`,
 proposal → `gather.py apply`) and rebuilds the bank page
 (`tools/bank_page.py` → `runs/language-layer/_system/bank.html` + `BANK.md`).
 

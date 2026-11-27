@@ -1,15 +1,15 @@
 # components/gdrive-creator — the Drive pipe, as a component
 
-**Name RULED by the team 2026-09-02** (via ◆ PLAN batch 23) — deliberately
-format-agnostic after the docs-vs-sheets answer. **Engine owner: the team** (since 2026-10-23;
-the team, relayed verbatim by ◆ PLAN [19616d], received 2026-10-23T04:03:10Z: "move owner of gdrive creator to the team"; was the owner, build folder's declaration, `new-workflow-design/builds/drive-pipe/`).
+**Name RULED by the developer 2026-09-02** (via ◆ PLAN batch 23) — deliberately
+format-agnostic after the docs-vs-sheets answer. **Engine owner: the designer** (since 2026-10-23;
+the developer, relayed verbatim by ◆ PLAN [19616d], received 2026-10-23T04:03:10Z: "move owner of gdrive creator to the designer"; was the owner, build folder's declaration, `new-workflow-design/builds/drive-pipe/`).
 the owner's callers keep working: the video-teardown shim, copywriter gdoc_out and every other importer.
-Extracted under GC-1 (gdrive creator) from `tools/video-teardown/machine/drive.py`, the
+Extracted under GC-1 (gdrive creator) from `components/video-teardown/machine/drive.py`, the
 third run of the IDT-1 (identity extraction) / LL-1 (language layer) / BH-1 (brand home locator) extraction pattern.
 
 ## Definition
 
-**gdrive-creator** — takes a local file, folder or rendered HTML plus a Drive parent folder id (or a mount path to read an id off), with the service-account key found by name through `configure()` / `GDRIVE_SA_KEY`; makes the Drive objects asked for — a folder if missing, a Google Doc, an uploaded or updated file, a mirrored tree, a link share — and returns their ids, or a file read back by id to a local path. Does not lay out documents (that is each caller's own, e.g. the video machine's `gdoc.py`), choose where anything goes, delete on Drive, or keep a plane of its own (the CALLER delivers and records). Triggered by importing `gdrive_creator.engine` (`folder`, `upload_doc`, `upload_file`, `mirror_tree`, `get_media`, `find_file`, `folder_by_path`, `list_files`, `share`, `folder_id`), or `gdrive_creator.reach` — the one Drive reach every reader and mirror uses (`route`, `get`, `put`, `put_ids`, `drive_json`, `kind`, `fetch_folder`, `readable`, `subfolders` (QB-9 (the team statics)); LD-14 (shared Drive reach), LD-64 (records Drive ids)) — or by `python3 components/gdrive-creator/make_doc.py <html> --name <name> --parent <folder id>`.
+**gdrive-creator** — takes a local file, folder or rendered HTML plus a Drive parent folder id (or a mount path to read an id off), with the service-account key found by name through `configure()` / `GDRIVE_SA_KEY`; makes the Drive objects asked for — a folder if missing, a Google Doc, an uploaded or updated file, a mirrored tree, a link share — and returns their ids, or a file read back by id to a local path. Does not lay out documents (that is each caller's own, e.g. the video machine's `gdoc.py`), choose where anything goes, delete on Drive, or keep a plane of its own (the CALLER delivers and records). Triggered by importing `gdrive_creator.engine` (`folder`, `upload_doc`, `upload_file`, `mirror_tree`, `get_media`, `find_file`, `folder_by_path`, `list_files`, `share`, `folder_id`), or `gdrive_creator.reach` — the one Drive reach every reader and mirror uses (`route`, `get`, `put`, `put_ids`, `drive_json`, `kind`, `fetch_folder`, `readable`, `subfolders` (QB-9 (the editor statics)); LD-14 (shared Drive reach), LD-64 (records Drive ids)) — or by `python3 components/gdrive-creator/make_doc.py <html> --name <name> --parent <folder id>`.
 
 What it is: the plumbing between a machine and the team Drive — authenticate,
 find, update in place, upload a Doc or any file, **mirror a whole folder**,
@@ -21,15 +21,15 @@ or anybody's document.
 machine's own layout and stays there. Only the pipe moved.
 
 **Why it exists as one home.** It lived inside
-`tools/video-teardown/machine/` — component internals nothing else may
-depend on (components rule 2) — and `lab/owner/copy/machine/gdoc_out.py` (now
-`tools/copywriter/machine/gdoc_out.py`, moved 2026-09-19) reached in through a `sys.path.insert` into that machine's folder, plus an
+`components/video-teardown/machine/` — component internals nothing else may
+depend on (components rule 2) — and `lab/the owner/copy/machine/gdoc_out.py` (now
+`components/copywriter/machine/gdoc_out.py`, moved 2026-09-19) reached in through a `sys.path.insert` into that machine's folder, plus an
 `import chain as C` behind it. Any refactor inside the video machine broke the
 copy lab silently, and the copy-machine rebuild was about to live exactly
 there. Fragility was the driver, not tidiness.
 
 **The one for its side — not the only Drive client** (D1-A, decision log
-2026-10-07 TRIAGE PAGE 8, the team). Component code reaches Drive through this
+2026-10-07 TRIAGE PAGE 8, the developer). Component code reaches Drive through this
 engine. The mini worker's own stdlib client
 (`platform/workers/mini-worker/teardown_adapter.py`, used by `review_folder.py`)
 stays for worker-internal reads. Merging the two is clean-up-phase work. For
@@ -42,7 +42,7 @@ engine's `get_media` into a cache folder (a temp dir by default)
 (SI-41 (Drive picture reach)).
 
 **Both machines keep working, and that was the hard constraint of the move.**
-`tools/video-teardown/machine/drive.py` is now a thin shim over this
+`components/video-teardown/machine/drive.py` is now a thin shim over this
 engine: same command, same flags, same public names, same key vault, same
 Drive mount. Nothing was asked of the owner and nothing changed on his side. On
 the copy-lab side `gdoc_out.py` imports this component directly and takes its
@@ -53,7 +53,7 @@ permitted, pre-flagged on I-82 (the owner copy package).
 
 | question | answer |
 |---|---|
-| **engine + owner** | this folder's `gdrive_creator/` — **the team** (since 2026-10-23; was the owner) |
+| **engine + owner** | this folder's `gdrive_creator/` — **the designer** (since 2026-10-23; was the owner) |
 | **definitions + curator** | **none.** This is the inverse of `models/`: that component is definitions with no engine, this is an **engine with no definitions**. There is no curated content to execute — a folder id, a name and an HTML file all arrive from the caller at call time |
 | **the plane it emits** | **none — the CALLER delivers.** A call returns a link (and whether it created or updated); nothing here writes a record, and `--out` would be meaningless. What lands on the plane is the calling chain's business |
 | **what the manifest declares per entry** | **n/a** — no manifest, because there are no entries |
@@ -80,7 +80,7 @@ engine.media_request(file_id)                      # -> (url, auth header) for a
 engine.find(svc, name, parent)                     # -> {id, webViewLink} or None
 engine.find_file(svc, name, parent, mime=None)     # -> {id, size, webViewLink} or None
 engine.folder_by_path(label, svc=None)             # -> the id a "Shared Assets/a/b/c" label names, or None. READ-ONLY (LD-11 (stills by Drive API))
-engine.list_files(folder_id, svc=None)             # -> [{id, name, mimeType}], non-folder, non-trashed, every page
+engine.list_files(folder_id, svc=None)             # -> [{id, name, mimeType[, modifiedTime]}], non-folder, non-trashed, every page (modifiedTime when Drive gives it, 2026-11-06)
 engine.folder(name, parent_id, svc=None)           # -> folder id, made if missing (TWO looks)
 engine.share(file_id, role="reader", svc=None)     # -> bool. BEST EFFORT, ALWAYS
 engine.creator_share(handle, svc=None, parent_id=None, brand='')    # -> {folder, briefs, deliverables, link}; under creators/<brand>/<handle>/ when brand is given (gdrive-creator#9)
@@ -95,8 +95,8 @@ engine.GOOGLE_PACKAGE # "google-api-python-client" — the name a missing-packag
 ```
 
 **`reach` — one Drive reach for every caller** (LD-14 (shared Drive reach),
-2026-10-18). Extracted from the two copies that carried it — tools/image-production/image_production/drive_reach.py
-and tools/email-production/drive_reach.py, now thin shims over it, every
+2026-10-18). Extracted from the two copies that carried it — components/image-production/image_production/drive_reach.py
+and components/email-production/drive_reach.py, now thin shims over it, every
 public name kept (O1 (third copy extracts), the LL-1 (language layer) precedent).
 Why: Full Disk Access is not applied to the mini's launchd jobs, so a mini
 reader cannot list the mount; `readable()` is its one-call fallback to the API.
@@ -105,7 +105,7 @@ reader cannot list the mount; `readable()` is its one-call fallback to the API.
 from gdrive_creator import reach
 reach.route()                                  # -> "api" (GDRIVE_SA_KEY present, even with a mount) | "mount" | NoDrive
                                                #    present = engine.has_key(): the environment, a configured key_lookup, else the
-                                               #    one key loader (a person's this repo's .env counts; LD-47 (Drive sweep) step 1.6, 2026-10-20).
+                                               #    one key loader (a person's ~/.upright-keys.env counts; LD-47 (Drive sweep) step 1.6, 2026-10-20).
                                                #    Tests that mean "no key" set KEYS_NO_FALLBACK=1 as well as clearing the variable
 reach.get(parts, name, dest_dir, svc=None)     # -> Shared Assets/<parts>/<name> as a local file (the mount file itself, or read by id), or None
 reach.put(files, parts, svc=None)              # -> (how, placed, note). Folders made if missing, same name = updated in place; "none" + a SKIP note with no route
@@ -121,7 +121,7 @@ reach.readable(path, svc=None, recursive=False, max_bytes=reach.MAX_BYTES)
 reach.mount()                                  # -> components/brandpath drive_index.mount(), or None
 reach.folder_id(parts, svc, make=False, root=None)   # -> the id of Shared Assets/<parts>; make=True makes missing steps
 reach.shared_assets_id(svc)                    # -> the Shared Assets drive id, or None
-reach.subfolders(folder_id, svc=None)         # -> [{id, name}] child folders, name order, one listing, READ-ONLY (QB-9 (the team statics))
+reach.subfolders(folder_id, svc=None)         # -> [{id, name}] child folders, name order, one listing, READ-ONLY (QB-9 (the editor statics))
 reach.NoDrive, reach.KEY_ENV, reach.NO_DRIVE, reach.SHARED_DRIVE, reach.MAX_BYTES
 ```
 
@@ -152,7 +152,7 @@ asserts it on the calls and on the source. Test:
 `python3 components/gdrive-creator/tests/test_reach.py` (offline, fake `svc`).
 
 **`move` — a tracked move, the one place a parent changes** (LD-89 (tracked Drive moves),
-2026-10-23; the team ~04:25Z: "since the move is by machine anwayys, it should be fully tracked").
+2026-10-23; the developer ~04:25Z: "since the move is by machine anwayys, it should be fully tracked").
 `from gdrive_creator.move import move, MoveRefused`; `move(file_id, to_parts, by, why, svc=None,
 find_engine=None, record_root=None)` → `{drive_id, name, from, to, record}`: one `files().update`
 (addParents/removeParents, `supportsAllDrives=True`), the Drive id kept, nothing copied; target
@@ -171,7 +171,7 @@ caller and passed in — that is how `Shared Assets/runs/` (id already known,
 created 2026-09-17) is FOUND rather than minted twice, and why no folder id
 and no brand name appears in the engine. The phase-1 destination shape is
 `Shared Assets/runs/<machine>/<brand>/<run-label>/`, mirroring
-`runs/<machine>/<brand>/<run-label>/` by name (the team, 2026-09-17); a caller
+`runs/<machine>/<brand>/<run-label>/` by name (the developer, 2026-09-17); a caller
 names its own segments:
 
 ```python
@@ -208,7 +208,7 @@ which is exactly what the copywriter now does.
 | `mount_lookup()` | `creator_share` was given no `parent_id` | `chain.runs_mirror()` — his Drive mount |
 
 The seams exist so this engine imports **nothing** from
-`tools/video-teardown/` (rule 2 both ways): `keys.py` and `chain.py` are
+`components/video-teardown/` (rule 2 both ways): `keys.py` and `chain.py` are
 that machine's internals and stay there.
 
 ### 3. The CLI
@@ -241,7 +241,7 @@ Same three arguments the pre-move file's `main()` always had; the shim's
   reasoning `sa_key` already used. The dependency is declared in
   `requirements.txt` beside this file and rowed in
   `platform/workers/README.md` under `mini-worker`.
-- **Machine reads resolve BY fileId, never through the mount** (the team ruling,
+- **Machine reads resolve BY fileId, never through the mount** (the developer ruling,
   2026-09-17). `get_media` takes an id; `folder_id` is the only thing here
   that touches Drive for Desktop and is for human-side callers that already
   hold a mount path. Evidence, not preference: a live A/B on 2026-09-16 left
@@ -345,7 +345,7 @@ point against a fake `svc`, with **no `GDRIVE_SA_KEY` and an empty `HOME`**;
 importing either module in a fresh interpreter reads no credential and pulls
 in no network module; the copywriter's `gdoc_out.py` no longer names the video
 machine's folder and requires `--folder`; and a sentinel fingerprint over
-`lab/` and `tools/video-teardown/` (minus the two files this card owns)
+`lab/` and `components/video-teardown/` (minus the two files this card owns)
 is byte-unchanged across the whole run.
 
 **WM-73 (drive mirror) added a fifth section, and its five claims each get
@@ -367,7 +367,7 @@ plane — and this component folds back into its callers: pin the import with a
 one-line fragility comment and let it die with the habit. Callers: at 6edbff9c96 (gdrive-creator#8) eight components import it
 (video-teardown through its shim, copywriter `gdoc_out.py`, image-teardown deliver/pack,
 ad-handoff, image-production static finish/drive_reconcile, ad-variations, brandpath
-`drive_index`, email-production) plus `lab/owner/clipping`; count with
-`git grep -l -E "gdrive_creator|gdrive-creator" -- 'components/*.py' 'lab/owner/*.py'`, not this line
+`drive_index`, email-production) plus `lab/the owner/clipping`; count with
+`git grep -l -E "gdrive_creator|gdrive-creator" -- 'components/*.py' 'lab/the owner/*.py'`, not this line
 (N12 (docs point, not restate)). Byte uploads and mirrors run through it too, so the
 gdoc-only trigger is the owner's to re-confirm. **Fewer than 2 callers and it folds**, the same floor LL-1 (language layer) set.

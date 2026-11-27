@@ -8,7 +8,7 @@ brand banks themselves.
 
 This read does ONLY what an intake needs. Awareness, sophistication and the
 lane the words point to are read by the language layer's own labeller
-(`tools/language-layer/tools/label.py`, its newest
+(`components/language-layer/tools/label.py`, its newest
 `label-awareness-v*.md` prompt) — the ruled reading in
 `brands/language-schema.md`, called, never restated here.
 

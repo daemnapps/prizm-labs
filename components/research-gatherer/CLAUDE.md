@@ -16,11 +16,15 @@ before changing anything here.
 
 Runs by: person
 
+## One person's profile (`person`, 2026-11-25)
+
+`gather.py person --brand B --avatar A --sub S --plan | --pull --cap N --go "the owner's words"`: searches written from what that person's profile is missing, pulled from Reddit, YouTube and TikTok, never past the cap (the platforms enforce it), every line filed with its link under `runs/research/<brand>/person-<sub>-<date>/rows.json`. `deep` uses the same searches when a plan is on file. TikTok and YouTube scrapers refuse a limit under $0.50 per run.
+
 ## Who calls it — keep these working
 
-- `tools/video-teardown/machine/research.py` — a thin shim over this
+- `components/video-teardown/machine/research.py` — a thin shim over this
   engine (same CLI, same output, same cache).
-- `tools/copywriter/machine/research.py` — the second shim.
+- `components/copywriter/machine/research.py` — the second shim.
 - The nightly pull on the owner's Mac (`gather.py deep --brand <b> --pick-thinnest`).
 
 Every existing command and flag stays as it is. New behaviour is added, never
@@ -72,7 +76,7 @@ Every row is read twice (`research_gatherer/annotate.py`): the INTAKE read
 (`prompts/annotate-row.md` — keep/drop, exit, use, topics, sub, ad use, names
 and signature to strip; a definition the owner curates, shown word for word on
 every run page) and the language layer's own LABELLER
-(`tools/language-layer/tools/label.py` — awareness, sophistication,
+(`components/language-layer/tools/label.py` — awareness, sophistication,
 lane_words), called, never restated. The lane: an order on file decides;
 otherwise the labeller's `lane_words`. A row either read cannot answer is
 HELD, never guessed, and the cursor does not move. Ids:
@@ -118,7 +122,7 @@ be looked up on, so nothing is claimed about them.
 - **Spend is capped and printed**; pulls cache 14 days under
   `runs/research-cache/_system/`.
 - **The workspace is found, not assumed:** `AI_WORKSPACE`, else the checkout
-  this file sits in, else `~/Projects/workspace`. A shim's
+  this file sits in, else `~/Projects/ai-workspace`. A shim's
   `engine.configure(workspace=...)` still wins.
 - **`sys.path` is appended to, never inserted at 0.**
 
@@ -132,4 +136,4 @@ python3 components/research-gatherer/test_gates.py               # the gates
 No network, no model, no Apify, temp folders only — a test never writes into
 the real `runs/` or `brands/`. In a worktree, export `AI_WORKSPACE=<worktree>`
 first. The video-teardown shim's tests live in
-`tools/video-teardown/machine/` (`test_rollout.py`, `test_compose.py`).
+`components/video-teardown/machine/` (`test_rollout.py`, `test_compose.py`).

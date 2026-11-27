@@ -1,0 +1,83 @@
+{
+ "_what": "resilia-song \u2014 swipes added by hand through add.py. Media in the library and on the Drive; this file is what the intake index reads.",
+ "brand": "Brand A",
+ "platform": "",
+ "pulled": "2026-10-09",
+ "group": "resilia-song",
+ "source": "paid",
+ "owner": "competitor",
+ "drive_root": "",
+ "posts_seen": 5,
+ "posts": [
+  {
+   "file": "01_swipe-resilia-song-01-17113d27.md",
+   "id": "resilia-song-01-17113d27",
+   "creator": "",
+   "views": 0,
+   "engagement": 0,
+   "url": "",
+   "caption": "",
+   "seconds": 433,
+   "source": "paid",
+   "owner": "competitor",
+   "kind": "video",
+   "drive": "Shared Assets/swipe/organic/records/swipe-videos/resilia-song-01-17113d27/video.mp4"
+  },
+  {
+   "file": "02_swipe-resilia-song-02-99c37779.md",
+   "id": "resilia-song-02-99c37779",
+   "creator": "",
+   "views": 0,
+   "engagement": 0,
+   "url": "",
+   "caption": "",
+   "seconds": 438,
+   "source": "paid",
+   "owner": "competitor",
+   "kind": "video",
+   "drive": "Shared Assets/swipe/organic/records/swipe-videos/resilia-song-02-99c37779/video.mp4"
+  },
+  {
+   "file": "03_swipe-resilia-song-03-ffc350a6.md",
+   "id": "resilia-song-03-ffc350a6",
+   "creator": "",
+   "views": 0,
+   "engagement": 0,
+   "url": "",
+   "caption": "",
+   "seconds": 420,
+   "source": "paid",
+   "owner": "competitor",
+   "kind": "video",
+   "drive": "Shared Assets/swipe/organic/records/swipe-videos/resilia-song-03-ffc350a6/video.mp4"
+  },
+  {
+   "file": "04_swipe-resilia-song-04-1e6ac46c.md",
+   "id": "resilia-song-04-1e6ac46c",
+   "creator": "",
+   "views": 0,
+   "engagement": 0,
+   "url": "",
+   "caption": "",
+   "seconds": 535,
+   "source": "paid",
+   "owner": "competitor",
+   "kind": "video",
+   "drive": "Shared Assets/swipe/organic/records/swipe-videos/resilia-song-04-1e6ac46c/video.mp4"
+  },
+  {
+   "file": "05_swipe-resilia-song-05-ae916eb6.md",
+   "id": "resilia-song-05-ae916eb6",
+   "creator": "",
+   "views": 0,
+   "engagement": 0,
+   "url": "",
+   "caption": "",
+   "seconds": 343,
+   "source": "paid",
+   "owner": "competitor",
+   "kind": "video",
+   "drive": "Shared Assets/swipe/organic/records/swipe-videos/resilia-song-05-ae916eb6/video.mp4"
+  }
+ ]
+}

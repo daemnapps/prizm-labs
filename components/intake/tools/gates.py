@@ -16,7 +16,7 @@
 WHY THE ELEMENTS GATE DEFAULTS TO WARN: today's pools carry labels the library
 has never seen (organic structure reads that were merged away, a judged paid
 format). On `hold` the index could not be built at all until those are fixed
-at their source or signed into the library — both the owner's call. On `warn` the
+at their source or signed into the library — both owner's call. On `warn` the
 index still files, every such swipe is marked `unknown-format` /
 `unknown-structure` with the real ids beside it, and `check.json` still says
 HELD for the elements gate. Nothing is passed silently, nothing is invented.

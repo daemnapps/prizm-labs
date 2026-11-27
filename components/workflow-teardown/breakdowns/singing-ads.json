@@ -1,0 +1,105 @@
+{
+ "id": "singing-ads",
+ "name": "Singing Ads",
+ "kind": "video",
+ "makes": "A 9:16 3D cartoon drama ad that tells the story of the user's own song or narration phrase by phrase, audio unchanged.",
+ "source": [
+  "commands/singing-ads.md",
+  "drama-ads/scripts/styles/feature-3d.md",
+  "drama-ads/catalog/_cards.md"
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "name": "Record + settings + price quote",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 2,
+   "name": "Transcribe the audio into phrases",
+   "model": "none",
+   "cheap": "Whisper local, free"
+  },
+  {
+   "n": 3,
+   "name": "Story map (one picture per phrase)",
+   "model": "none",
+   "cheap": "Claude, free"
+  },
+  {
+   "n": 4,
+   "name": "Master, character, location, product sheets",
+   "model": "seedream_5_5",
+   "cheap": "seedream_5_0_flash 2k (0.5)"
+  },
+  {
+   "n": 5,
+   "name": "Clips (no clip audio)",
+   "model": "seedance_2_5",
+   "cheap": "wan3_0 480p (7.5 per 10 s)"
+  },
+  {
+   "n": 6,
+   "name": "Assembly and captions with the user's audio",
+   "model": "none",
+   "cheap": "ffmpeg local, free"
+  },
+  {
+   "n": 7,
+   "name": "Check and deliver",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 8,
+   "name": "1080p finalize from drafts",
+   "model": "seedance_2_5",
+   "cheap": "local Real-ESRGAN upscale instead"
+  }
+ ],
+ "prompts": [
+  {
+   "label": "Style block feature-3d",
+   "source": "drama-ads/scripts/styles/feature-3d.md",
+   "text": "3D animated feature-film look: smooth, rounded, stylised 3D characters with slightly oversized heads, large expressive eyes with\nbig irises and bright catchlights, full expressive brows, small soft noses, soft rounded jaws, smooth skin with a gentle warm glow\nand rosy cheeks, hair sculpted in soft flowing clumps with fine strands, rounded hands with five fingers; age shows in soft\nsculpted wrinkles and grey hair. Clothes in real fabrics with soft folds: fine knit, cotton, corduroy, wool. Sets at real scale\nwith slightly simplified, rounded forms and clean, finished surfaces: painted plaster, wood, tile, enamel, fabric. Rich, warm\ncolour: one or two strong, saturated colours from the film's facts in the clothes and the set, against warm neutrals."
+  },
+  {
+   "label": "Style line",
+   "source": "drama-ads/scripts/styles/feature-3d.md",
+   "text": "3D animated feature-film look: smooth, rounded stylised characters with large expressive eyes, warm golden light, rich warm\ncolours with one or two strong accents, richly dressed real-scale sets with gently rounded forms."
+  },
+  {
+   "label": "Pace paragraph (clip line 2)",
+   "source": "commands/singing-ads.md",
+   "text": "Brisk, energetic real-time pace: every character moves with purpose, about one and a fifth times the speed of a calm everyday pace, snappy and decisive, never slow motion, never drifting or lingering. Every shot opens mid-action and contains one clear story action with a visible cause and result. Fast, punchy feature-animation acting: quick head turns, sharp reactions, big readable poses, eyes and brows snap; hair and cloth whip and settle. Energetic camera: quick push-ins, short whip pans, handheld energy in tense moments, tracking shots that keep up with fast walkers. Warm light with a gentle rim, shallow depth of field. Hard cuts between shots."
+  },
+  {
+   "label": "Closing paragraph of every clip prompt",
+   "source": "commands/singing-ads.md",
+   "text": "The characters act and react without speaking; no voice-over, no narration. No music and no score. No captions, no subtitles, no on-screen text. No slow motion. Every character keeps the exact face, hair, body and clothes of their sheet in every shot; every place matches its location sheet; the <PRODUCT> keeps its exact label."
+  },
+  {
+   "label": "Clip prompt structure",
+   "source": "commands/singing-ads.md",
+   "text": "- Prompt structure:\n  - Line 1: the style line.\n  - Line 2, word for word:\n    \"Brisk, energetic real-time pace: every character moves with purpose, about one and a fifth times the speed of a calm everyday pace, snappy and decisive, never slow motion, never drifting or lingering. Every shot opens mid-action and contains one clear story action with a visible cause and result. Fast, punchy feature-animation acting: quick head turns, sharp reactions, big readable poses, eyes and brows snap; hair and cloth whip and settle. Energetic camera: quick push-ins, short whip pans, handheld energy in tense moments, tracking shots that keep up with fast walkers. Warm light with a gentle rim, shallow depth of field. Hard cuts between shots.\"\n  - Then the @Image bindings.\n  - Then the timed shots: \"0-3 s: <framing>: <who> <posture> <action with its result>.\"\n  - End with, word for word:\n    \"The characters act and react without speaking; no voice-over, no narration. No music and no score. No captions, no subtitles, no on-screen text. No slow motion. Every character keeps the exact face, hair, body and clothes of their sheet in every shot; every place matches its location sheet; the <PRODUCT> keeps its exact label.\"\n  - Leave the product clause out of that line in a clip that does not show the product."
+  },
+  {
+   "label": "Master image instruction",
+   "source": "commands/singing-ads.md",
+   "text": "1. A style-setting master image: the feature-3d style block word for word, plus the main location with the hero and up to two other characters of the story. Write the ages explicitly (e.g. \"looks a youthful 51, mostly jet-black hair\")."
+  },
+  {
+   "label": "Character sheet",
+   "source": "commands/singing-ads.md",
+   "text": "2. A character sheet per character, with the master attached: front, three-quarter and profile full body, plus a head-and-shoulders close-up, on light grey."
+  },
+  {
+   "label": "Product sheet",
+   "source": "commands/singing-ads.md",
+   "text": "5. Only when the film has a product: the product sheet, with the master and the product photo (when there is one) attached: front and three-quarter views, \"keep the label text and layout exactly\"."
+  }
+ ],
+ "price": "Quoted from estimate calls before the first paid step; about 200 credits of draft clips for a 60 s song, about 960 more to finalize at 1080p.",
+ "cheap_price": "about 45 credits of clips for 60 s on wan3_0 480p plus about 5 for pictures; free local upscale."
+}

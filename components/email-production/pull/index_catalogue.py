@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Index a brand's type catalogue with the detail a calendar needs to be
-built deterministically. (the owner, 2026-08-31: "index the catalogue with
+built deterministically. (owner, 2026-08-31: "index the catalogue with
 detail — to deterministically create the calendar with detail.")
 
     python3 pull/index_catalogue.py --brand <brand> [--dry-run]

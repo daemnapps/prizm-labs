@@ -1,0 +1,9 @@
+{
+ "brand": "fxbrand",
+ "label": "fxbrand-nov-09",
+ "date": "2026-11-09",
+ "subjects": [{"subject": "Held for a rebuild", "preview": "p"}],
+ "status": "approved",
+ "state": "held",
+ "manual_repair": "copy repaired, rebuild the layout"
+}

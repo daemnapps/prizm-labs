@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """What the sending has taught, joined from what each email WAS and DID.
 
-    python3 calendar/learnings.py --brand brand-a
+    python3 calendar/learnings.py --brand brand_a
 
 Not a tally. Every cut here exists to answer "where is the opportunity" —
 which categories and types earn, which are under-used relative to what they

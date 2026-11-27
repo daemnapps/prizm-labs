@@ -1,5 +1,5 @@
-"""The email as the designer received it, beside the email as it goes out (the team, 2026-10-28: "el antes sería cómo
-the team recibió y el después cómo quedó el correo").
+"""The email as the designer received it, beside the email as it goes out (email_lead, 2026-10-28: "el antes sería cómo
+editor recibió y el después cómo quedó el correo").
 
     received.found(run)          -> {"rev", "by", "at"} or None: the commit just before the designer's first change
     received.picture(run, found) -> <run>/design/received-<rev>.jpg, made once (gitignored, like whole-email.jpg)
@@ -8,7 +8,7 @@ the team recibió y el después cómo quedó el correo").
                                     in background)): the emails list never waits on Chrome; a failure is noted in the
                                     system temp folder and named on the row by received.error(run, found)
 
-The designer is the card's own `eve_done.by`; an email with no Done has no "before" yet. The "before" is git's copy
+The designer is the card's own `editor_done.by`; an email with no Done has no "before" yet. The "before" is git's copy
 of design/email.json at the parent of that person's first commit touching it, rendered by the engine at 600 wide.
 A picture this Mac cannot reach is drawn grey and named in `missing`, never a crash.
 
@@ -62,8 +62,8 @@ def designers():
 def found(run):
     """The commit whose design/email.json the designer received, or None (the email was never committed).
 
-    With a Done, the designer is the card's `eve_done.by`; without one, any designer on email-production (PF-20
-    (before from arrival), the team 2026-10-29: the before shows from the moment the email reaches the team). Once the
+    With a Done, the designer is the card's `editor_done.by`; without one, any designer on email-production (PF-20
+    (before from arrival), email_lead 2026-10-29: the before shows from the moment the email reaches editor). Once the
     designer has a commit, the before is the commit just before their first; until then it is the newest commit, the
     version she receives, marked `waiting`."""
     try:
@@ -73,7 +73,7 @@ def found(run):
     log = [x.split("\t") for x in _git("log", "--format=%H\t%an\t%ae\t%aI", "--", _rel(run)).splitlines() if x]
     if not log:
         return None
-    by = (c.get("eve_done") or {}).get("by")
+    by = (c.get("editor_done") or {}).get("by")
     if not by and (c.get("klaviyo") or c.get("scheduled")):
         return None          # never on the designer's list: it went to Klaviyo without her (sync.py's own status rule)
     who = [(by, {by.lower()})] if by else designers()

@@ -23,7 +23,7 @@ nothing unresolved
   {"type": "button", "label": "Read what's actually in it", "href": "[UNFILLED: destination]"},
   {"type": "divider"},
   {"type": "ps", "text": "PS — the 8oz sells out first. It is not a tactic, it is just the one people buy twice."},
-  {"type": "signoff", "text": "— Creator-A"},
+  {"type": "signoff", "text": "— a creator"},
   {"type": "footer", "text": "You are getting this because you bought from us. Unsubscribe any time."},
   {"type": "carousel", "text": "a type that does not exist"}
 ]

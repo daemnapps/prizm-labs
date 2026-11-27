@@ -1,0 +1,118 @@
+{
+ "id": "narration",
+ "name": "Narration",
+ "kind": "other",
+ "makes": "Narration audio fitted to video windows or one long read in a locked voice, or an existing video with a consenting person from a photo narrating on screen.",
+ "source": [
+  "narration/SKILL.md",
+  "narration/references/presenter-mode.md",
+  "narration/scripts/speech_metrics.sh.md",
+  "narration/scripts/presenter_composite.sh.md"
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "name": "Lock the voice pair (voice.lock)",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 2,
+   "name": "Write lines to window (20-23 words per 10 s)",
+   "model": "none",
+   "cheap": "Claude on the plan, free"
+  },
+  {
+   "n": 3,
+   "name": "Generate takes, one per line",
+   "model": "text2speech_v2",
+   "cheap": "Kokoro tts local for drafts"
+  },
+  {
+   "n": 4,
+   "name": "Convert and gate every take (speech, pauses, rate)",
+   "model": "none",
+   "cheap": "already free (ffmpeg)"
+  },
+  {
+   "n": 5,
+   "name": "Rewrite and regenerate failing lines only",
+   "model": "text2speech_v2",
+   "cheap": "rewrite text first, free"
+  },
+  {
+   "n": 6,
+   "name": "Continuous long read (mode A2)",
+   "model": "seed_audio",
+   "cheap": "Kokoro tts local for drafts"
+  },
+  {
+   "n": 7,
+   "name": "Green-screen presenter picture (mode B)",
+   "model": "gpt_image_2_6",
+   "cheap": "seedream_5_0_flash 2k 0.5"
+  },
+  {
+   "n": 8,
+   "name": "Talking blocks (mode B)",
+   "model": "gemini_omni_flash_1_1",
+   "cheap": "gemini_omni_flash_1_2 360p or wan3_0 480p 7.5 per 10 s"
+  },
+  {
+   "n": 9,
+   "name": "Revoice blocks",
+   "model": "voice_change",
+   "cheap": null
+  },
+  {
+   "n": 10,
+   "name": "Composite, QC, upload",
+   "model": "none",
+   "cheap": "already free"
+  }
+ ],
+ "price": "Audio calls not quoted in the library (estimate_audio_cost first); gemini_omni_flash_1_2 360p 10 s is 7.5 credits for reference.",
+ "cheap_price": "Local Kokoro tts for drafts (free); mode B talking blocks at 7.5 per 10 s on gemini_omni_flash_1_2 / wan3_0.",
+ "prompts": [
+  {
+   "label": "Per-block take: timecode format sent for every line",
+   "source": "narration/SKILL.md",
+   "text": "[ {DELIVERY}, {optional line mood}, starts speaking immediately] [00:00-00:09] {line}"
+  },
+  {
+   "label": "Batch item shape (per-line takes)",
+   "source": "narration/SKILL.md",
+   "text": "Every item is\n   `{index, params:{model:\"text2speech_v2\", variant:\"elevenlabs\", prompt,\n   voice_id, voice_type, count:1}}`; `index` is the stable line number."
+  },
+  {
+   "label": "Convert each returned MP3 before measuring",
+   "source": "narration/SKILL.md",
+   "text": "ffmpeg -nostdin -hide_banner -loglevel error -i takeNN.mp3 -ac 1 -ar 24000 \\\n  -af \"areverse,atrim=start=0.030,asetpts=N/SR/TB,afade=t=in:st=0:d=0.060,areverse\" \\\n  -y voiceNN.wav"
+  },
+  {
+   "label": "Speech gate",
+   "source": "narration/SKILL.md",
+   "text": "sandbox_exec({\n  command:\"bash ${HF_WORKFLOWS}/narration/scripts/speech_metrics.sh work/voices/voice01.wav --text '<authored line>'\"\n})"
+  },
+  {
+   "label": "Mode B: green-screen identity reference prompt",
+   "source": "narration/references/presenter-mode.md",
+   "text": "Edit this photo. Keep the PERSON identical — same face, hairstyle, clothing, skin tone,\npose and framing, copied faithfully, not beautified and not a lookalike. Change one thing\nonly: replace the background with a perfectly uniform flat chroma-key green screen\n(#00B140), evenly lit, no gradient, shadow or vignette, filling everything behind the\nperson. No green spill on the person; preserve clean hair edges."
+  },
+  {
+   "label": "Mode B: talking-block prompt template",
+   "source": "narration/references/presenter-mode.md",
+   "text": "IDENTITY REFERENCE (appearance only, not a start frame): copy the attached person and\nsolid green background faithfully. The first frame already catches them mid-speech, never\nfrozen. They look into the front camera and say in <DELIVERY>, in <LANGUAGE>:\n\"<BLOCK LINE VERBATIM, 31–35 WORDS FOR A FULL BLOCK>\". Say every word exactly once at a\nbrisk steady pace, then hold a calm engaged look. For a partial final window, size the line\nto that window even though the provider clip is 10 seconds. Camera locked; small natural head and\nshoulder gestures only. Audio is only the clear voice. Keep the background uniformly vivid\ngreen. No repeated or improvised words, captions, watermark, camera motion, beautification,\nbackground change, or frozen opening."
+  },
+  {
+   "label": "Mode B: composite command (once per block)",
+   "source": "narration/references/presenter-mode.md",
+   "text": "\"$HF_WORKFLOWS/narration/scripts/presenter_composite.sh\" \\\n  blkNN.mp4 talkNN.mp4 outNN.mp4 --style cutout --pos br"
+  },
+  {
+   "label": "Mode B: revoice call",
+   "source": "narration/references/presenter-mode.md",
+   "text": "4. **Revoice every completed clip.** Call `voice_change` once per block with\n   `params:{video_id:\"<talking-job-id>\",voice_id:\"<locked-id>\",voice_type:\"<locked-type>\"}`.\n   "
+  }
+ ]
+}

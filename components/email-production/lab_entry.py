@@ -10,8 +10,8 @@ not this checkout unless AI_WORKSPACE says so, and the worktree dies after the
 run, so what the run made is copied into $OUT here; and the shebang above is
 absolute, so the mini runs 3.9.6, not whichever python3 is first on PATH.
 
-Pictures too (LD-33 (email pictures on mini), the team, 2026-10-19 — reverses
-EP-1 (email writer mini door)'s words-only rule, the team, "pictures on stephs
+Pictures too (LD-33 (email pictures on mini), developer, 2026-10-19 — reverses
+EP-1 (email writer mini door)'s words-only rule, designer, "pictures on stephs
 mac", 2026-09-29): the build no longer gets --no-images and OPENAI_API_KEY
 reaches the child when the mini hands it out, so run_month.py asks the image
 engine as on a person's Mac; the grant is the worker's LAB_RUN_DENY. The
@@ -33,7 +33,7 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-REPO = HERE.parents[1]                   # tools/email-production → repo root
+REPO = HERE.parents[1]                   # components/email-production → repo root
 YES = {"yes", "true", "1"}
 MONTH_FILES = ("slots.json", "run.json", "review.json")
 MINI_CONCURRENCY = 2                     # SI-163 (mini emails two at once): the mini's plan is shared
@@ -63,7 +63,7 @@ def month_argv(args, month_path):
 
 def child_env(env, repo):
     env = dict(env)
-    env["AI_WORKSPACE"] = str(repo)      # runs land in this checkout, not ~/Projects/workspace
+    env["AI_WORKSPACE"] = str(repo)      # runs land in this checkout, not ~/Projects/ai-workspace
     return env                           # OPENAI_API_KEY passes through: pictures on the mini (LD-33 (email pictures on mini))
 
 

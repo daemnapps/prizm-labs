@@ -1,0 +1,66 @@
+{
+  "what": "Which sends of a month also go out as an SMS. Team-wide, for every brand and every moment, beside holiday-cadence.json. A sale moment's arc gets an SMS on the beats listed here, each a twin of that beat's email: same date, same audience, same moment, same offer (the moment's named offer, checked against the bank like any other). A content moment gets none unless its key is listed under content_moments. The calendar plans SMS the same way whatever the brand's SMS platform (brands/<brand>/operations/brand.json `sms_platform`); the platform only decides where reads and, after a person's approval, the sends go. Nothing here sends or schedules anything.",
+  "why": "the owner, 2026-11-03: SMS is part of the strategy; plan it once, read by every tool, same process for every brand, offer and moment. the owner, 2026-11-04: SMS is a companion to email, for reminders, engagement and getting people to respond.",
+  "status": "draft",
+  "beats": [
+    "last-chance",
+    "early-access",
+    "open",
+    "peak"
+  ],
+  "beat_meaning": {
+    "early-access": "the arc's early-access send (VIP), when the month has one",
+    "open": "the arc's first offer-carrying send to everyone: the sale opens",
+    "peak": "the moment's own day (Black Friday on the 27th, a holiday on its date)",
+    "last-chance": "the arc's close: its last day, or the order-by date when the shipping record gives one"
+  },
+  "content_moments": [],
+  "daily_cap": 1,
+  "cap_rule": "At most daily_cap SMS a day to any one segment. When two beats land on one day, the earlier one in `beats` is kept.",
+  "hour": 12,
+  "quiet_hours": {
+    "from": 21,
+    "to": 9,
+    "rule": "no SMS at or after `from`, or before `to`, in the recipient's own time zone"
+  },
+  "audience": "SMS-consented members only: the beat's segment, sent only to the profiles in it that agreed to texts (both platforms enforce consent at send; the slot says so)",
+  "length": {
+    "max_chars": 160,
+    "link_chars": 25,
+    "counts": "the whole message, link and opt-out included",
+    "opt_out": "Reply STOP to opt out"
+  },
+  "companion": "An SMS is always the companion of an email in the plan, never a standalone campaign: it is planned only as the twin of an email send and names that email in `follows`; the email names it in `then` when it names nothing else. No new offer and no long copy: the email carries the argument, the text points at it.",
+  "jobs": {
+    "early-access": "engagement",
+    "open": "engagement",
+    "peak": "reminder",
+    "last-chance": "reminder",
+    "moment": "engagement",
+    "weekly": "engagement"
+  },
+  "job_meaning": {
+    "reminder": "the email's deadline or last day, in a line",
+    "engagement": "a heads-up that something is open now — the beat says what (early access, or the sale itself)",
+    "reply": "a two-way prompt (e.g. Reply YES for …): only where the brand's record names its reply keyword (operations/brand.json `sms_reply_keyword`) and its platform takes replies"
+  },
+  "reply_platforms": {
+    "klaviyo": "keyword replies through an SMS automation on a number that can receive texts (help.klaviyo.com, two-way SMS)",
+    "postscript": "custom keywords, US and Canada only (help.postscript.io, responding to subscribers)"
+  },
+  "reply_beats": [
+    "peak"
+  ],
+  "beat_words": {
+    "early-access": "only this beat may say early access",
+    "last-chance": "only this beat may say last day, today only or ends today",
+    "weekly": "No new urgency: use only the companion email’s actual offer or useful point."
+  },
+  "weekly": {
+    "enabled": true,
+    "start_date": "2026-11-09",
+    "preferred_weekday": 1,
+    "per_week": 1,
+    "rule": "One regular text per Monday–Sunday week, plus existing promotional reminders. Prefer Tuesday, paired with an existing email; never displace a reminder. The week belongs to the month containing Tuesday. Send at least one hour after its email, within quiet hours. Owner decision 2026-11-04."
+  }
+}

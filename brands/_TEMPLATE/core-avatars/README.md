@@ -1,10 +1,4 @@
-# core-avatars/
-
-The customer types: one folder per core avatar, its sub-avatars, their exact words, objections and research.
-
----
-
-## core-avatars — the WHO axis
+# core-avatars — the WHO axis
 
 One folder per **core avatar**, each holding `profile.md`. Sub-avatars live in
 `<core>/sub-avatars/sub-NN-<slug>.md`.
@@ -77,7 +71,7 @@ confirmed by: the owner
 
 Read by the research gatherer, which every chain reaches through its own thin
 shim (`components/video-teardown/machine/research.py`,
-`copy/machine/research.py`). Reddit's own door only hits hard when a
+`components/copywriter/machine/research.py`). Reddit's own door only hits hard when a
 room is named — a bare search wanders — so this is the field that makes a pull
 land on the right community instead of the internet in general. **The tool
 still never invents a room:** a discovery that comes back empty (no key, a
@@ -155,7 +149,7 @@ framework here):
   invents a starting belief.
 
 Sourced from the five research domains + synthesis
-(`control-room/prompts/research/`), filled in per avatar. Agnostic
+(`lab/the owner/control-room/prompts/research/`), filled in per avatar. Agnostic
 by rule: this file names no brand, product or avatar — only the slots.
 
 

@@ -8,10 +8,10 @@ the teardown machine and comes back as a brief waiting for a yes or a no.
             entertainment lane first, never torn before, a video we can download.
             Ranked by how hard it was SENT, then how far it punched past the
             creator's following, then views. The reason is written on the card.
-  TEAR      yt-dlp → tools/video-teardown/machine/run.py --brand <brand>
+  TEAR      yt-dlp → components/video-teardown/machine/run.py --brand <brand>
             --no-frames  (the full chain to the stage-5 brief, nothing generated)
   QUEUE     one record per brief in records/desk/briefs/<label>.json — the page's
-            "Briefs to review" tab reads these; the verdict (yes / no) is the owner's
+            "Briefs to review" tab reads these; the verdict (yes / no) is owner's
             and is only ever written by the page.
 
 The machine assigns its own audience at stage 1b. The record keeps BOTH: whose
@@ -24,7 +24,9 @@ import desklib as D
 WS = D.WS
 sys.path.append(str(WS / "components" / "brandpath"))
 import brandpath as BP  # noqa: E402  anything under brands/<brand>/
-MACHINE = WS / "tools/video-teardown/machine"
+sys.path.append(str(WS / "components" / "naming"))
+import people  # noqa: E402  the one door to a person (naming/PEOPLE.md)
+MACHINE = WS / "components/video-teardown/machine"
 
 
 def _vt_workdir():
@@ -33,7 +35,7 @@ def _vt_workdir():
     if m is None:
         import importlib.util
         spec = importlib.util.spec_from_file_location(
-            "vt_workdir", D.HERE.parents[1] / "tools" / "video-teardown" / "machine" / "workdir.py")
+            "vt_workdir", D.HERE.parents[1] / "components" / "video-teardown" / "machine" / "workdir.py")
         m = importlib.util.module_from_spec(spec)
         sys.modules["vt_workdir"] = m
         spec.loader.exec_module(m)
@@ -53,15 +55,16 @@ def sub_stem(feed):
     """The sub-avatar's card file stem — the key the teardown machine knows it by."""
     if not feed.get("sub"):
         return None
-    hits = list(BP.brand_path(feed["brand"], "core-avatars", feed["core"], "sub-avatars", root=WS / "brands")
-                .glob(f"*{feed['sub']}.md"))
+    core, sub, _ = people.folders(feed["brand"], feed["core"], feed["sub"])    # a profile id, a new name or an old name
+    hits = list(BP.brand_path(feed["brand"], "core-avatars", core or feed["core"], "sub-avatars", root=WS / "brands")
+                .glob(f"*{sub or feed['sub']}.md"))
     return hits[0].stem if hits else None
 
 
 # Where a post sits in the scroll is where our version enters the awareness
 # ladder: entertainment is watched before any problem is on the mind; educational
 # is watched once someone has gone looking. Level keys are the doctrine slice's.
-LANE_AWARENESS = {"entertainment": "unaware", "educational": "problem-aware"}
+LANE_AWARENESS = D.LANE_AWARENESS   # one home (desklib): the hand-pick line reads the same map
 
 
 def torn():
@@ -101,6 +104,9 @@ def tear(job):
            "product": product_for(feed["brand"], feed["core"]),
            "queued": D.now(), "status": "running", "verdict": None}
     rec_f.write_text(json.dumps(rec, indent=1))
+    # a creator-route teardown is a creator pick: it goes on the one queue first
+    # (creator_picks.py), whichever door started it — the desk click or this script
+    cp_week = _creator_pick(feed, c, why, label, rec["product"])
     media = MEDIA / label
     media.mkdir(parents=True, exist_ok=True)
     try:
@@ -113,7 +119,12 @@ def tear(job):
             r = subprocess.run([sys.executable, str(MACHINE / "run.py"), str(vids[0]),
                                 "--brand", feed["brand"], "--label", label, "--no-frames"]
                                + (["--route", ROUTE] if ROUTE else [])
-                               + (["--product", rec["product"]] if rec["product"] else [])
+                               # why this post: the run keeps it and every later stage reads it (the trail)
+                               + ["--picked-why", why, "--picked-by",
+                                  "a person on the feed page" if why.startswith(D.HAND_PICK) else "the feed's pick rule"]
+                               + (["--product", rec["product"], "--product-why",
+                                   "the feed desk's product map names it for this avatar (records/desk/products.json)"]
+                                  if rec["product"] else [])
                                # the video came from this person's own feed — declare it
                                + (["--for-avatar", feed["core"]] if feed.get("core") else [])
                                + (["--for-sub", sub_stem(feed)] if sub_stem(feed) else [])
@@ -127,8 +138,40 @@ def tear(job):
     except Exception as e:
         rec.update(status="failed", finished=D.now(), why_failed=str(e)[:300])
     rec_f.write_text(json.dumps(rec, indent=1))
+    if cp_week:
+        _creator_mark(feed["brand"], label, "torn" if rec["status"] == "ready" else "failed")
     print(f"  {label}: {rec['status']}", flush=True)
     return rec["status"]
+
+
+def _creator_pick(feed, c, why, label, product):
+    """Register a creator-route teardown on the week's creator-picks queue and
+    mark it tearing. Returns True, or None (any other route, or a failure —
+    the queue never stops a teardown)."""
+    if ROUTE != "creator":
+        return None
+    try:
+        import creator_picks as CP
+        by = "desk" if why.startswith(D.HAND_PICK) else "briefs"
+        good, bad = CP.slot(feed["brand"])
+        # a post already picked keeps its item (put never doubles a swipe)
+        CP.put(feed["brand"], CP.item_from_card(feed["brand"], CP.week_of(), feed, c, why, by,
+                                                product=product, label=label, good=good, bad=bad))
+        _creator_mark(feed["brand"], label, "tearing")
+        return True
+    except (Exception, SystemExit) as e:
+        print(f"  creator picks queue not updated: {e}", file=sys.stderr)
+        return None
+
+
+def _creator_mark(brand, label, state):
+    try:
+        import creator_picks as CP
+        run = _vt_workdir().run_dir(label, WS)
+        CP.main(["mark", "--brand", brand, "--label", label, "--state", state]
+                + (["--run", str(run)] if run.exists() else []))
+    except (Exception, SystemExit) as e:
+        print(f"  creator picks queue not updated: {e}", file=sys.stderr)
 
 
 def main():
@@ -152,7 +195,7 @@ def main():
                 or (a.only and f["id"] != a.only):
             continue
         if a.item:
-            jobs += [(f, c, "picked by hand on the page") for c in D.cards(f["id"]) if c["key"] == a.item][:1]
+            jobs += [(f, c, D.hand_pick_why(c)) for c in D.cards(f["id"]) if c["key"] == a.item][:1]
             continue
         for c, why in pick(f, a.per_feed, done):
             jobs.append((f, c, why))

@@ -1,7 +1,8 @@
 {
- "_what": "Who can approve or send back on the email approval page. the owner adds people.",
+ "_what": "Who can approve or send back on the email approval page, and whose Go schedules an email: any one of them, whoever is available (the email lead, 2026-11-05). the owner, the email lead or the designer add people.",
  "approvers": [
   "the owner",
-  "the team"
+  "the email lead",
+  "the designer"
  ]
 }

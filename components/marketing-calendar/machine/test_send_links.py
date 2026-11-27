@@ -107,7 +107,7 @@ class SendLinks(unittest.TestCase):
         for name in ("month.py", "serve.py"):
             self.assertNotIn("email/sends", (MACHINE / name).read_text(), name)
         self.assertNotIn("/email/sends/", (comp / "CONTRACT.md").read_text())
-        delivery = P.WORKSPACE / "tools" / "email-production" / "DELIVERY.md"
+        delivery = P.WORKSPACE / "components" / "email-production" / "DELIVERY.md"
         self.assertNotIn("brands/<brand>/email/sends", delivery.read_text())
 
 

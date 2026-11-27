@@ -5,7 +5,7 @@
 
 ffmpeg is found on PATH, never one Mac's Homebrew prefix; the declared
 test's video-teardown shim check reads the checkout under test, not
-~/Projects/workspace; the launchd plist is a template carrying __HOME__.
+~/Projects/ai-workspace; the launchd plist is a template carrying __HOME__.
 No key, no network, no ffmpeg needed."""
 import os
 import plistlib
@@ -36,7 +36,7 @@ class MachinePaths(unittest.TestCase):
     def test_shim_check_reads_the_checkout_under_test(self):
         src = (HERE / "test_research_gatherer.py").read_text(encoding="utf-8")
         self.assertIn("ws = R.WORKSPACE", src)
-        self.assertNotIn('Path.home() / "Projects" / "workspace"', src)
+        self.assertNotIn('Path.home() / "Projects" / "ai-workspace"', src)
 
     @unittest.skipIf(os.environ.get("AI_WORKSPACE"), "AI_WORKSPACE names the workspace")
     def test_engine_workspace_is_this_checkout(self):

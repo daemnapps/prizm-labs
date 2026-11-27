@@ -5,7 +5,7 @@ and its prompt verbatim.
 
     python3 chain_page.py            # -> email-chain.html + EMAIL-CHAIN.md
 
-the owner, 2026-09-19: "let's be very, very clear on the full email chain and
+owner, 2026-09-19: "let's be very, very clear on the full email chain and
 where we're at… what are the exact steps that we take? What prompts are we
 using? What chain reactions are being created… We need to start tweaking each
 of those knobs from there."
@@ -95,9 +95,9 @@ STEP = {  # what it does · what it makes · the knob · state
     "stage2": ("Strips the brand, the medium AND the subject out of the record, leaving only the persuasion skeleton.",
                "the skeleton the new email is built on",
                "This is the step that stops us 'rewriting the old email'. If emails still read like their source, tune this prompt. New prompt (v2): built from the message only — furniture never becomes a move, a broken line is never carried into our subject or preview. Every step after it no longer sees the furniture at all.", "new"),
-    "stage1b": ("Looks through everything BRAND-A knows and picks only what this email needs.",
+    "stage1b": ("Looks through everything brand_a knows and picks only what this email needs.",
                 "the brand files this email uses",
-                "BRAND-A hands it 1.7MB, too big for Haiku, so it moves up to Opus every time. Trimming the input would put it back on Haiku.", "tune"),
+                "brand_a hands it 1.7MB, too big for Haiku, so it moves up to Opus every time. Trimming the input would put it back on Haiku.", "tune"),
     "stage1c": ("Turns the week's research into things the email can use: what's happening, and a way to invite the reader in.",
                 "the week this email lands in",
                 "BROKEN: the research files it reads are question lists written on Sep 10 for the OLD calendar's numbering. The Sep 23 email is being handed Sep 21's questions for a different audience, and no answers.", "broken"),
@@ -109,7 +109,7 @@ STEP = {  # what it does · what it makes · the knob · state
                "It still plans for the old designed layout (3 buttons, 4 pictures) that step 8 then throws away. Tell it the simple shape.", "tune"),
     "stage5": ("Writes the subject line and preview it's tested against, plus variations — checked against the awareness levels and every subject line already used.",
                "the subject + preview set",
-               "The Brand-B test came back with no preview text on the main subject line. Require one.", "tune"),
+               "The brand_b test came back with no preview text on the main subject line. Require one.", "tune"),
     "stage6": ("Only for organic sources: adds the selling structure a post never had.",
                "a commercially built body", "Skipped when the old email was already an ad.", "ok"),
     "stage7": ("Lands it: the objection at the moment of doubt, the ending, and a PS if it earns one.",
@@ -133,24 +133,24 @@ LINE = [  # the whole line, station by station
     ("Hand-off", "Per send", "Turns each calendar send into the exact instruction the writing chain gets, and flags anything that would fail before money is spent.",
      "copy_plan.py (the check) · brief.py (the instruction)", "ok"),
     ("Writing", "Per send · ~12 min", "Twelve steps, below. Five on Opus, three on Sonnet, four on Haiku.",
-     "tools/email-production/run_month.py — not in the Control Room yet", "tune"),
-    ("Pictures & layout", "Per send · ~2 min", "GPT makes the hero and the offer picture; the email is laid out in BRAND-A's look.",
+     "components/email-production/run_month.py — not in the Control Room yet", "tune"),
+    ("Pictures & layout", "Per send · ~2 min", "GPT makes the hero and the offer picture; the email is laid out in brand_a's look.",
      "simple_email.py", "new"),
     ("Price check", "Per send", "Every price in the email must be one the offer bank sells today for that send's offer, or nothing goes to Klaviyo.",
      "simple_email.py — runs before every push", "new"),
     ("Klaviyo", "Per send", "A draft campaign, to the send's own segment, with the main subject line. Never sent by the machine — a person presses Schedule.",
      "simple_email.py --push", "new"),
-    ("Scheduling", "Per send", "Each draft is set for its calendar day at 1pm in the recipient's own time zone — BRAND-A's best-earning hour across 209 of its own sends.",
-     "brands/brand-a/email-sms/simple.json → send_time", "new"),
+    ("Scheduling", "Per send", "Each draft is set for its calendar day at 1pm in the recipient's own time zone — brand_a's best-earning hour across 209 of its own sends.",
+     "brands/brand_a/email-sms/simple.json → send_time", "new"),
     ("Learnings", "After sends", "Klaviyo results joined to what each email was; next month's calendar plans from them.",
      "pull/learnings.py", "ok"),
 ]
 
-WEEK = [  # BRAND-A, Sep 20–30 — from the rebuilt calendar; this pass writes fed-up-king only
+WEEK = [  # brand_a, Sep 20–30 — from the rebuilt calendar; this pass writes fed-up-king only
     ("Sun 20", "sep-05", "last-chance", "Lead", "Basics Set", "not this pass — gift-buyer email"),
     ("Mon 21", "sep-06", "content-request", "VIP Customer", "—", "to write"),
     ("Tue 22", "sep-07", "problem-explainer", "Lead", "—", "to write"),
-    ("Wed 23", "sep-08", "bundle", "One-Time Customer", "The Starter Set", "written · HELD in Klaviyo — sold a size the store dropped"),
+    ("Wed 23", "sep-08", "bundle", "One-Time Customer", "The Vitals Set", "written · HELD in Klaviyo — sold a size the store dropped"),
     ("Thu 24", "sep-09", "affiliate-feature", "Churned", "—", "can't write — no format on file"),
     ("Fri 25", "sep-10", "myth-correction", "Lead", "—", "not this pass — glow-up email"),
     ("Sat 26", "sep-11", "guarantee", "One-Time Customer", "none — the type needs one", "to write"),
@@ -166,7 +166,7 @@ KNOBS = [
     ("Put spice and awareness into step 3", "The tone dials from the marketing doctrine (humour, delivery, pacing, register) and the awareness guidance, bound into the main writing step, then 5 and 7.", "tune"),
     ("Require a preview line", "Step 5's main subject line can come back with no preview.", "tune"),
     ("Drop step 9", "A hand-build brief nothing reads any more. One fewer call per email.", "tune"),
-    ("Product files list sizes that aren't for sale", "The Sep 23 email sold '2 x The Starter Set, $99.99' — a size the store removed. The product file lists every size ever made; the writer took it from there. The price check now stops it reaching Klaviyo; the product file should mark what's live.", "broken"),
+    ("Product files list sizes that aren't for sale", "The Sep 23 email sold '2 x The Vitals Set, $99.99' — a size the store removed. The product file lists every size ever made; the writer took it from there. The price check now stops it reaching Klaviyo; the product file should mark what's live.", "broken"),
     ("Writing in the Control Room", "Add 'write emails' next to plan-month, so a week of emails is one trigger.", "none"),
     ("The old email's nav and footer words", "FIXED in the prompts, to be proven on the next real run: the writer had copied the old email's navigation and footer words into our body, and a typo from its preview line into ours. Step 1 (v2) now files furniture and broken lines under their own headings; step 2 (v2) builds from the message only; later steps never see the furniture.", "new"),
     ("The dry run is free", "FIXED: the dry run used to run step 0 before it stopped, so every check spent a call and left a folder behind. It now stops before any step, reports what only step 0 can know as 'decided at triage', and writes nothing.", "ok"),
@@ -193,7 +193,7 @@ def page():
         fed = ", ".join(PLAIN.get(f, f) for f in FEEDS.get(key, []) if f != "today")
         model = TIERS[tier].replace("claude-", "").split("-2025")[0]
         if key == "stage1b":
-            model += " → opus for BRAND-A"
+            model += " → opus for brand_a"
         prompt = pf.read_text() if pf else "(no prompt file)"
         stages.append(f"""
 <article class="step {st}" id="{key}">
@@ -298,19 +298,19 @@ footer{{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);font:1
 @media(max-width:560px){{.step{{grid-template-columns:40px 1fr}}.sn{{padding-left:12px}}dl{{grid-template-columns:1fr}}.model{{margin-left:0}}}}
 </style>
 <div class="wrap">
-<div class="eyebrow">BRAND-A · the email machine · 19 Sep 2026</div>
+<div class="eyebrow">brand_a · the email machine · 19 Sep 2026</div>
 <h1>The Email Chain</h1>
 <p class="lede">From the calendar to a draft sitting in Klaviyo: every station, how each one is triggered, the twelve writing steps with their prompts, and the knobs to turn — in order.</p>
 
 <section>
 <h2>The whole line</h2>
-<p class="sub">Stage one is the planning — brand record through hand-off (components/marketing-calendar). Stage two is the writing and the pictures (tools/email-production). Then the price check, Klaviyo and the send time.</p>
+<p class="sub">Stage one is the planning — brand record through hand-off (components/marketing-calendar). Stage two is the writing and the pictures (components/email-production). Then the price check, Klaviyo and the send time.</p>
 <ol class="line">{line}</ol>
 </section>
 
 <section>
-<h2>Next week, BRAND-A</h2>
-<p class="sub">Every BRAND-A send on the rebuilt calendar, Sep 20–30. This pass writes the fed-up-king ones — eight emails. Sep 23 was the test: written, pictured, drafted — and held for a wrong price.</p>
+<h2>Next week, brand_a</h2>
+<p class="sub">Every brand_a send on the rebuilt calendar, Sep 20–30. This pass writes the fed-up-king ones — eight emails. Sep 23 was the test: written, pictured, drafted — and held for a wrong price.</p>
 <div class="tbl"><table><thead><tr><th>Day</th><th>Send</th><th>Type</th><th>To (Core |)</th><th>Sells</th><th>Status</th></tr></thead>
 <tbody>{week}</tbody></table></div>
 </section>
@@ -328,8 +328,8 @@ footer{{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);font:1
 </section>
 
 <footer>
-Code: tools/email-production — email_line.py (the twelve steps) · simple_email.py (pictures, layout, Klaviyo) · run_month.py (a whole month) · prompts/<br>
-Look: brands/brand-a/email-sms/simple.json · Runs: runs/email-production/brand-a/ · Pictures: Shared Assets/runs/email-production/brand-a/<br>
+Code: components/email-production — email_line.py (the twelve steps) · simple_email.py (pictures, layout, Klaviyo) · run_month.py (a whole month) · prompts/<br>
+Look: brands/brand_a/email-sms/simple.json · Runs: runs/email-production/brand_a/ · Pictures: Shared Assets/runs/email-production/brand_a/<br>
 This page: python3 chain_page.py — steps, models, inputs and prompts are read from the code.
 </footer>
 </div>

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """One profile per product, built from the brand's own live catalogue.
 
-    python3 calendar/products.py --brand brand-a [--refresh]
+    python3 calendar/products.py --brand brand_a [--refresh]
 
-A PRODUCT and an OFFER are different things (the owner, 2026-08-27). The product is
+A PRODUCT and an OFFER are different things (owner, 2026-08-27). The product is
 what the thing IS — mechanism, ingredients, features, benefits, specs. The
 offer is the commercial construction around it. This writes the product half.
 
@@ -15,7 +15,8 @@ plausible ingredient claim is the most expensive thing this system can produce.
     --refresh   re-pull the feed. Otherwise the cached copy is used, so a
                 rebuild is reproducible and does not depend on the site.
 
-Proposes products/<handle>.md, products/README.md (and a refreshed
+Proposes products/<catalog id>.md (names.product_id of the store handle; the handle stays in the text),
+products/README.md (and a refreshed
 email-sms/catalogue.json) under runs/email-production/<brand>/facts-<YYYY-MM-DD>/
 (K2 (brands write wall)); a products/*.md this build no longer makes is listed
 as a removal. A person folds the proposal into brands/.
@@ -31,6 +32,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from paths import WORKSPACE  # noqa: E402
 import facts_proposal  # noqa: E402
+sys.path.append(str(Path(__file__).resolve().parents[2] / "naming"))   # the sibling component, beside this code
+import names as NAMES  # noqa: E402  one product name (2026-11-19): a file is named by its catalog id
 BRAND_ROOT = WORKSPACE / "brands"
 
 HERE = Path(__file__).resolve().parent
@@ -156,8 +159,9 @@ def main():
               "- The full ingredient list, and which of them may be claimed about",
               "- Who it is for, and who it is not for",
               "- What it replaces in someone's routine", ""]
-        facts_proposal.write(run, args.brand, f"products/{p['handle']}.md", "\n".join(L))
-        written.append((p["handle"], p["title"], len(found), len(bullets), len(vs)))
+        pid = NAMES.product_id(args.brand, p["handle"], root=WORKSPACE) or p["handle"]   # one product name (2026-11-19)
+        facts_proposal.write(run, args.brand, f"products/{pid}.md", "\n".join(L))
+        written.append((pid, p["title"], len(found), len(bullets), len(vs)))
 
     live = {p["handle"] for p in feed}
     gone = ["FADE™", "MEND™", "VAULT™", "The Revival Set"]

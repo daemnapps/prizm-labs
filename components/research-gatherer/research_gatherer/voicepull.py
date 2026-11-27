@@ -1,5 +1,5 @@
 """The shared back half of the free internal-source modes — `surveys`,
-`reviews`, `interviews` (built 2026-09-29 on the owner's ruling: automate the
+`reviews`, `interviews` (built 2026-09-29 on owner's ruling: automate the
 sources that cost nothing; Apify stays on request).
 
 Every mode pulls its own rows, then hands them here:
@@ -15,7 +15,7 @@ Every mode pulls its own rows, then hands them here:
 What a brand pulls is config in its own `operations/language-pulls.json`
 (`language_avatar`, `surveys`, `reviews`, `interviews`) — never here. A key is
 read by NAME through the one key loader, components/keys/loader.py (via
-rg_keys: the environment first, then this repo's .env). Never
+rg_keys: the environment first, then ~/.upright-keys.env). Never
 raises on a missing source: the mode says what is missing and moves on.
 """
 import datetime as dt
@@ -62,16 +62,16 @@ def brand_json(brand):
 def avatar_for(brand, bj, named=None):
     """--avatar, else brand.json › language_avatar, else the only avatar with a bank."""
     if named:
-        return named
+        return A.avatar_folder(brand, named)
     if bj.get("language_avatar"):
-        return bj["language_avatar"]
+        return A.avatar_folder(brand, bj["language_avatar"])
     d = engine.WORKSPACE / "brands" / brand / "core-avatars"
     avs = sorted(p.name for p in d.iterdir() if (p / "language").is_dir()) if d.is_dir() else []
     return avs[0] if len(avs) == 1 else None
 
 
 def key(name):
-    """A key by NAME: the environment, then this repo's .env (the one
+    """A key by NAME: the environment, then ~/.upright-keys.env (the one
     key file) through the loader (rg_keys,
     SI-194 (readers use loader)). None when missing; never raises, never printed."""
     if not name:

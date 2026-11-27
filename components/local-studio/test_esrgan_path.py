@@ -31,15 +31,16 @@ def fake_esrgan(folder: Path) -> Path:
 class EsrganPath(unittest.TestCase):
     def setUp(self):
         self.tmp = Path(tempfile.mkdtemp())
-        self._models, self._av = m.MODELS, m.AV_BIN
-        m.MODELS, m.AV_BIN = self.tmp / "models", self.tmp / "av" / "bin"
+        self._models, self._fallback = m.MODELS, m.FALLBACK
+        m.MODELS, m.FALLBACK = self.tmp / "models", self.tmp / "old-tools"
+        self.old = m.FALLBACK / "av" / "bin" / "realesrgan"     # LOCAL_STUDIO_FALLBACK's layout
         self.env = mock.patch.dict(os.environ, {"PATH": str(self.tmp / "empty")})
         self.env.start()
         os.environ.pop("REALESRGAN_DIR", None)
 
     def tearDown(self):
         self.env.stop()
-        m.MODELS, m.AV_BIN = self._models, self._av
+        m.MODELS, m.FALLBACK = self._models, self._fallback
 
     def test_the_named_folder_wins(self):
         fake_esrgan(m.MODELS / "realesrgan")
@@ -48,13 +49,19 @@ class EsrganPath(unittest.TestCase):
         self.assertEqual(m.esrgan_dir(), named)
 
     def test_the_components_own_models_folder(self):
-        fake_esrgan(m.AV_BIN / "realesrgan")
+        fake_esrgan(self.old)
         own = fake_esrgan(m.MODELS / "realesrgan")
         self.assertEqual(m.esrgan_dir(), own)
 
-    def test_the_old_tools_av_place_still_works(self):
-        old = fake_esrgan(m.AV_BIN / "realesrgan")
+    def test_the_fallback_folder_still_works(self):
+        old = fake_esrgan(self.old)
         self.assertEqual(m.esrgan_dir(), old)
+
+    def test_no_fallback_set_means_it_is_not_looked_in(self):
+        fake_esrgan(self.old)
+        m.FALLBACK = None
+        with self.assertRaises(SystemExit):
+            m.esrgan_dir()
 
     def test_on_path(self):
         d = fake_esrgan(self.tmp / "bin")
@@ -72,7 +79,7 @@ class EsrganPath(unittest.TestCase):
     def test_nothing_found_names_every_place_looked(self):
         with self.assertRaises(SystemExit) as e:
             m.esrgan_dir()
-        for place in (m.MODELS / "realesrgan", m.AV_BIN / "realesrgan"):
+        for place in (m.MODELS / "realesrgan", self.old):
             self.assertIn(str(place), str(e.exception))
 
     def test_the_job_runs_the_found_binary(self):

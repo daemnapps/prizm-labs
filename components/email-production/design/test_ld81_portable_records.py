@@ -3,7 +3,7 @@
 resolver) refs, and remake() reads them back through refs.local(); one that cannot be read is named, never dropped,
 and the person is offered "remake from the brief instead?" — proven offline.
 
-    python3 tools/email-production/design/test_ld81_portable_records.py     (from outside email-production:
+    python3 components/email-production/design/test_ld81_portable_records.py     (from outside email-production:
                                                                                    its email.py shadows the stdlib's)
 
 The Drive is a fake: refs.put and refs.local patched to one dict that serves bytes by id (and, for what mirror()
@@ -35,7 +35,7 @@ from pathlib import Path
 from unittest import mock
 
 HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE))      # design/ FIRST; never tools/email-production (its email.py shadows the stdlib's)
+sys.path.insert(0, str(HERE))      # design/ FIRST; never components/email-production (its email.py shadows the stdlib's)
 import look as L                   # noqa: E402
 import picture_record as PR        # noqa: E402
 
@@ -148,9 +148,9 @@ class TestKeep(Base):
         product = self.tmp / "maker-home" / "products" / "jar" / "packshot" / "front.png"
         product.parent.mkdir(parents=True)
         product.write_bytes(b"product")
-        inrepo = HERE / "brand-a.svg"                        # a tracked file under the repo, given as an absolute path
+        inrepo = HERE / "brand_a.svg"                        # a tracked file under the repo, given as an absolute path
         req = {"purpose": "email-story", "direction": "a jar on a sink",
-               "references": [str(product), str(inrepo), "tools/email-production/design/fonts.css"],
+               "references": [str(product), str(inrepo), "components/email-production/design/fonts.css"],
                "inspiration": [str(pin)]}
         rel = self.quiet(PR.keep, run, "zz-brand-nov-99-pabc12345", 0, req, made=pic)
         return run, rel, product, pin
@@ -164,9 +164,9 @@ class TestKeep(Base):
         self.assertEqual(rec["file_ref"], {"drive_id": "id-engine", "bytes": 7,
                                            "label": "Shared Assets/runs/image-production/%s/zz-label/%s" % (BRAND, PIC)})
         by = {Path(r["path"]).name: r for r in rec["references"]}
-        self.assertEqual(sorted(by), ["brand-a.svg", "fonts.css", "front.png", "pin1.jpg"])
-        self.assertEqual(by["brand-a.svg"]["ref"], "tools/email-production/design/brand-a.svg")
-        self.assertEqual(by["fonts.css"]["ref"], "tools/email-production/design/fonts.css")
+        self.assertEqual(sorted(by), ["brand_a.svg", "fonts.css", "front.png", "pin1.jpg"])
+        self.assertEqual(by["brand_a.svg"]["ref"], "components/email-production/design/brand_a.svg")
+        self.assertEqual(by["fonts.css"]["ref"], "components/email-production/design/fonts.css")
         folder = "Shared Assets/runs/email-production/%s/%s" % (BRAND, LABEL)
         self.assertEqual(by["pin1.jpg"]["ref"]["label"], folder + "/media/pins/pabc/pin1.jpg")
         self.assertTrue(by["front.png"]["ref"]["label"].startswith(folder + "/references/"))
@@ -320,7 +320,7 @@ class TestAdapter(Base):
 
     def call(self, **k):
         c = {"id": "c1", "at": "2026-10-22T00:00:00+00:00", "brand": BRAND, "label": LABEL, "action": "picture",
-             "section": 0, "picture": 0, "note": "warmer light", "by": "the team"}
+             "section": 0, "picture": 0, "note": "warmer light", "by": "editor"}
         c.update(k)
         return self.quiet(self.S.apply, [c])[0]
 
@@ -354,7 +354,7 @@ class TestAdapter(Base):
             seen.extend(json.loads(Path(cmd[-1]).read_text()))
             return types.SimpleNamespace(stdout=json.dumps([{"state": "applied", "result": "done"}]), stderr="")
         with mock.patch.object(A.subprocess, "run", run):
-            ok, _ = A.apply_one({"brand": BRAND, "label": LABEL, "action": "picture", "by": "the team", "section": 0,
+            ok, _ = A.apply_one({"brand": BRAND, "label": LABEL, "action": "picture", "by": "editor", "section": 0,
                                  "picture": 0, "note": "warmer light", "from_brief": True})
         self.assertTrue(ok)
         self.assertIs(seen[0]["from_brief"], True)

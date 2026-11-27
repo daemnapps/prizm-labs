@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """Every re-cut of a winner → a production brief that actually reads.
 
-the owner, 2026-10-08: "read through the new setups and identify if it actually reads
+owner, 2026-10-08: "read through the new setups and identify if it actually reads
 well … think through what the format is actually calling for … create new
 production briefs … pull from our asset index … be resourceful."
 
-    python3 components/distinct-six/variation_brief.py brand-a brand-a-grandma-winner --product glow-face-scrub [--only order-pas]
+    python3 components/distinct-six/variation_brief.py brand_b brand_b-grandma-winner --product brilliance-face-scrub [--only order-pas]
 
-For each cut in runs/distinct-six/<brand>/<winner>/recipes.json: Claude (the owner's
+For each cut in runs/distinct-six/<brand>/<winner>/recipes.json: Claude (owner's
 plan, `claude -p`) reads the cut like a viewer with prompts/variation-brief-v1-owner.md,
 the winner's beats (Creative Index), the doctrine framework the cut follows, the
 clip library (runs/distinct-six/<brand>/clip-library/*.json), the brand's

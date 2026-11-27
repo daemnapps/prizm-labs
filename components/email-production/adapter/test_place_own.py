@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""place_own (the team, 2026-10-23, the team Drive flow): a picture the team brings from a link (a Higgsfield result) keeps where
+"""place_own (developer, 2026-10-23, the team Drive flow): a picture editor brings from a link (a Higgsfield result) keeps where
 it came from, and every place writes one model-outcome record, the same as "use my newest".
 
-    python3 tools/email-production/adapter/test_place_own.py     (from the repo root, as test_use_my_newest.py)
+    python3 components/email-production/adapter/test_place_own.py     (from the repo root, as test_use_my_newest.py)
 
 Runs on test_use_my_newest's fixture run and fakes (no network, no key, every record under a temp root).
 
@@ -42,7 +42,7 @@ class TestPlaceOwn(Base):
 
     def place(self, src, made_with="Higgsfield", source_id=None):
         with contextlib.redirect_stdout(self.out):
-            return OP.place_own(self.run, "P1", src, "a jar on a sink in morning light", "the team", made_with, "own", None,
+            return OP.place_own(self.run, "P1", src, "a jar on a sink in morning light", "editor", made_with, "own", None,
                                 True, source_id, outcome_root=self.tmp / "plane")
 
     def test_1_a_higgsfield_link_keeps_where_it_came_from(self):

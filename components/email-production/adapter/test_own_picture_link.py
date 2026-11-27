@@ -1,4 +1,4 @@
-"""own_picture reads a picture's https link (a Higgsfield result) as well as a file or a Drive link (the team,
+"""own_picture reads a picture's https link (a Higgsfield result) as well as a file or a Drive link (email_lead,
 2026-10-22). No network: the link is answered by a fake opener.
 
     /usr/bin/python3 test_own_picture_link.py

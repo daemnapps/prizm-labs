@@ -1,6 +1,6 @@
 # marketing-chain-checks
 
-(Renamed from `quality-checks`, 2026-10-02. Not `qc-checks`, the team's engine.)
+(Renamed from `quality-checks`, 2026-10-02. Not `qc-checks`, the designer's engine.)
 
 
     import marketing_chain_checks as Q

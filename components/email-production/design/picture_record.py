@@ -1,6 +1,6 @@
 """One record per picture an email makes, so any picture can be traced and edited at the element level.
 
-the owner, 2026-10-18: "If we need to generate a new image, we should know exactly how that image was actually
+owner, 2026-10-18: "If we need to generate a new image, we should know exactly how that image was actually
 generated, its references, whatever the case may be. That way, we can make clean and clear edits at the element
 level."
 
@@ -243,7 +243,7 @@ def _name(picture):
     return picture["photo"].split("run:", 1)[1] if str(picture.get("photo", "")).startswith("run:") else None
 
 
-# The edit asks for the picture's own shape. 3:2 was missing (the team, 2026-10-22): a 3:2 picture asked for 16:9, the
+# The edit asks for the picture's own shape. 3:2 was missing (email_lead, 2026-10-22): a 3:2 picture asked for 16:9, the
 # model reframed the whole scene, and the judge rightly said everything moved. The image engine serves all six.
 ASPECTS = {"4:5": .8, "1:1": 1.0, "3:4": .75, "3:2": 1.5, "16:9": 16 / 9, "9:16": 9 / 16}
 
@@ -342,7 +342,7 @@ def keep_try(brand, run_dir, picture, made, file_ref, change, section, model, ju
            "state": "made", "file": "media/" + Path(made).name, "file_ref": file_ref,
            "purpose": old.get("purpose"), "product": old.get("product"),
            "direction": change, "edit_of": _name(picture), "parent": picture.get("record"),
-           "prompt": prompt, "prompt_skeleton": "tools/image-edit (one change, the rest kept)",
+           "prompt": prompt, "prompt_skeleton": "components/image-edit (one change, the rest kept)",
            "references": [earlier] + kept,
            "model": dict(model), "edit_record": edit_record, "judge": judge, "held": None, "error": None}
     (d / "record.json").write_text(json.dumps(rec, indent=1, ensure_ascii=False) + "\n")
@@ -350,7 +350,7 @@ def keep_try(brand, run_dir, picture, made, file_ref, change, section, model, ju
 
 
 def remake(brand, run_dir, picture, change, section, IP=None):
-    """One change to a made picture, from its record, through the picture-edit tool (tools/image-edit): the
+    """One change to a made picture, from its record, through the picture-edit tool (components/image-edit): the
     current picture goes in as the thing to edit, with the same real references (no mood pins), and the judge checks
     the change and that nothing else moved. Returns the new picture fields, or raises with the reason.
 
@@ -389,7 +389,7 @@ def remake(brand, run_dir, picture, change, section, IP=None):
            "file": ("media/" + made.name) if made else None, "file_ref": file_ref,
            "purpose": old.get("purpose"), "product": old.get("product"),
            "direction": change, "edit_of": name, "parent": picture.get("record"),
-           "prompt": r.get("instruction"), "prompt_skeleton": "tools/image-edit (one change, the rest kept)",
+           "prompt": r.get("instruction"), "prompt_skeleton": "components/image-edit (one change, the rest kept)",
            "references": [earlier] + kept,
            "model": {"id": r.get("model") or "image-edit"}, "edit_record": edit_record,
            "judge": _edit_judge(d / "edit", made, r),

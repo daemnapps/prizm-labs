@@ -268,11 +268,46 @@ def assets_missing(run_dir):
     return [n for n in names if not (k / "assets" / n).is_file()]
 
 
+def cuts_off_layout(run_dir, slack=3):
+    """The cut pictures that do not fit their section in layout.json: a picture from an older build of the email.
+
+    Every designed section that is one picture (one assets/<name> across its data-sec rows) was cut by build.py at the
+    section's own height, so the picture, scaled to 600 wide, is that section's height in layout.json. brand_b-nov-25
+    (email_lead, 2026-11-16): editor's last build had 13 cuts and never reached Drive; the Drive held 12 from an earlier build,
+    other heights and order, and a pull put them under the newest email.html. Returns one line per picture that is
+    missing or off by more than `slack` px; [] when every one fits or there is no layout to check against."""
+    from PIL import Image
+    k = Path(run_dir) / "klaviyo"
+    page, lay = k / "email.html", _load(run_dir)
+    if not page.is_file() or not lay:
+        return []
+    height = {int(s["i"]): s["bottom"] - s["top"] for s in lay.get("sections") or []}
+    per_sec = {}
+    for m in re.finditer(r'<tr data-sec="(\d+)"[^>]*>(.*?)</tr>', page.read_text(), re.S):
+        per_sec.setdefault(int(m.group(1)), []).extend(
+            re.findall(r'(?:src|background)="assets/([^"]+)"', m.group(2)))
+    out = []
+    for sec, names in sorted(per_sec.items()):
+        names = sorted(set(names))
+        if len(names) != 1 or sec not in height or not re.fullmatch(r"s\d+\.jpg", names[0]):   # build's own cuts only
+            continue
+        f = k / "assets" / names[0]
+        if not f.is_file():
+            out.append("%s (section %d) is not here" % (names[0], sec + 1))
+            continue
+        w, h = Image.open(f).size
+        got = h * 600.0 / w if w else 0
+        if abs(got - height[sec]) > slack:
+            out.append("%s (section %d) is %dpx tall, its section %dpx: a picture from an older build"
+                       % (names[0], sec + 1, round(got), round(height[sec])))
+    return out
+
+
 def pull_build(brand, run_dir, reach=None):
     """The other way round: every picture email.html names (klaviyo/assets/<name>) and the whole-email picture, from
     the run's Drive mirror onto this Mac, over the local copy. Pictures are media, never in git, so after a pull a Mac
-    holds the newest email.html with the pictures of its own last build: the team's redesign of brand-b-nov-01 showed (and
-    would have gone to Klaviyo) with this Mac's pictures from 21 October (the team, 2026-10-27). Returns
+    holds the newest email.html with the pictures of its own last build: editor's redesign of brand_b-nov-01 showed (and
+    would have gone to Klaviyo) with this Mac's pictures from 21 October (email_lead, 2026-10-27). Returns
     {"got": [...], "missing": [...], "error": note or None}; a Drive that won't answer is the note, never a crash."""
     run_dir = Path(run_dir)
     k = run_dir / "klaviyo"
@@ -324,7 +359,7 @@ if __name__ == "__main__":
     import sys
     if len(sys.argv) >= 3 and sys.argv[1] == "pull" and sys.argv[2] == "--changed":
         # .githooks post-merge / post-rewrite: the emails this update rebuilt get their pictures from the Drive, so a
-        # Mac shows the email as its designer left it (the team, 2026-10-27). Never fails the update.
+        # Mac shows the email as its designer left it (email_lead, 2026-10-27). Never fails the update.
         rng = sys.argv[3] if len(sys.argv) > 3 else "ORIG_HEAD..HEAD"
         repo = subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True, text=True).stdout.strip() or "."
         names = subprocess.run(["git", "diff", "--name-only", rng, "--", "runs/email-production"], cwd=repo,

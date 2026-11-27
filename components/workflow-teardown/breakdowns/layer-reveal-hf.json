@@ -1,0 +1,105 @@
+{
+ "id": "layer-reveal-hf",
+ "name": "Layer Reveal (/miami-hf and four sister styles)",
+ "kind": "video",
+ "makes": "Paints a user's hero into a styled game-loading-screen scene with Seedream 5.5, splits it into layers and renders a video where the layers fade in one by one under a LOADING bar.",
+ "source": [
+  "layer-reveal-hf/SKILL.md",
+  "commands/miami-hf.md",
+  "layer-reveal-hf/scripts/reveal.py.md"
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "name": "Describe the hero",
+   "model": "none",
+   "cheap": "Claude on the plan (free to us)"
+  },
+  {
+   "n": 2,
+   "name": "Cost line",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 3,
+   "name": "FULL picture",
+   "model": "seedream_5_5",
+   "cheap": "`seedream_5_0_flash` 2k: 0.5 credits a picture quoted, against 1.75-2.5 for 2k pictures"
+  },
+  {
+   "n": 4,
+   "name": "Cut-out and BACKGROUND",
+   "model": "seedream_5_5",
+   "cheap": "BiRefNet cut-out local (free); `seedream_5_0_flash` 2k: 0.5 credits a picture quoted, against 1.75-2.5 for 2k pictures"
+  },
+  {
+   "n": 5,
+   "name": "STAGES 3, 2, 1 and PLATE",
+   "model": "seedream_5_5",
+   "cheap": "`seedream_5_0_flash` 2k: 0.5 credits a picture quoted, against 1.75-2.5 for 2k pictures"
+  },
+  {
+   "n": 6,
+   "name": "Check layers",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 7,
+   "name": "Render",
+   "model": "none",
+   "cheap": "already free"
+  },
+  {
+   "n": 8,
+   "name": "Deliver",
+   "model": "none",
+   "cheap": null
+  }
+ ],
+ "prompts": [
+  {
+   "label": "SCENE (Miami; replace <HERO>)",
+   "source": "commands/miami-hf.md",
+   "text": "Vertical painted illustration in the style of a classic open-world video game loading screen set in 1980s\nMiami: bold crisp dark outlines around every shape, sharp clean edges and cel-shaded colour areas in\nhand-painted digital art, a saturated sunset palette and slightly stylised realism. HERO: <HERO>. STYLING,\nwhen the hero is a person: they pose like the star of a game poster, chin up and a confident look straight at\nthe viewer, hair blowing in the sea breeze, a low camera angle and a glowing sunset rim light. The outfit\nfollows the person's gender: a woman wears a cropped pastel jacket, high-waisted shorts, gold jewellery and\nheels, with bold lipstick and a hand on the hip; a man wears an open pastel linen suit jacket over a loose\nfloral shirt, light trousers, loafers and a gold chain, with a hand in the pocket. Glasses only if the person\nwears them in the photo; otherwise the face and eyes stay uncovered. The hero dominates the frame and holds\nall the attention: close to the camera, about two thirds of the frame height from head to feet, centred, with\nthe scene kept smaller behind, on a wide sunlit beachfront boulevard, seen at a three-quarter angle. The\nscene, back to front: a purple-pink sunset sky with streaked glowing clouds, a low golden sun near the horizon\nand a small plane; pastel art-deco hotels decorated with neon tube outlines (shapes only, no lettering) and a\ndistant city skyline along the beach; a turquoise sea on one side; street lamps, flowering hedges and a low\nseawall railing along the road; tall palm trees leaning in from the edge of the foreground, casting long\nshadows across the asphalt. The road fills the bottom third. No text, letters, signs with words, logos or UI\nanywhere."
+  },
+  {
+   "label": "BACKGROUND edit (from FULL)",
+   "source": "commands/miami-hf.md",
+   "text": "Edit the reference image. Remove ONLY the hero (the person, animal or vehicle in the middle of the frame),\ntogether with its shadow; fill the area with the ground and scenery that would be behind it. Everything else\nstays pixel-identical: same framing, painting style, every other object, buildings, sky, road, light and\ncolours. No text."
+  },
+  {
+   "label": "STAGE 3 edit (from BACKGROUND)",
+   "source": "commands/miami-hf.md",
+   "text": "Edit the reference image. Remove ONLY the palm trees in the foreground and anything flying in the sky (planes,\nbirds), with their shadows and reflections on the ground; fill those areas with what would be behind them.\nEverything else stays pixel-identical: same framing, painting style, buildings, sky, road, light and colours.\nNo text."
+  },
+  {
+   "label": "STAGE 2 edit (from BACKGROUND)",
+   "source": "commands/miami-hf.md",
+   "text": "Edit the reference image. Remove the palm trees and anything flying with their shadows and reflections, and\nALL hotels, towers and the whole city skyline; behind them show only the open sky down to the horizon. Keep\nthe road, the street lamps, hedges, railing and the sea, and the clouds and the sun exactly as they are: same\nframing, painting style, light and colours. No text."
+  },
+  {
+   "label": "STAGE 1 edit (from BACKGROUND)",
+   "source": "commands/miami-hf.md",
+   "text": "Edit the reference image. Remove the palm trees and anything flying, all hotels, towers and the whole city\nskyline, and the street lamps, hedges, railing and the sea. What remains: the road with its edges and\nmarkings, the sky with the clouds and the sun, and a flat empty horizon. Same framing, painting style, light\nand colours. No text."
+  },
+  {
+   "label": "PLATE edit (from STAGE 1)",
+   "source": "commands/miami-hf.md",
+   "text": "Edit the reference image. Remove ONLY the clouds and the sun, moon or stars from the sky, and replace the\nwhole sky with a plain smooth gradient in the picture's own sky colours, down to the same horizon. The ground\nand everything on it stay pixel-identical: same shape, position, framing, art style, light and colours. No\ntext."
+  },
+  {
+   "label": "FULL picture request",
+   "source": "layer-reveal-hf/SKILL.md",
+   "text": "{\n  \"params\": {\n    \"model\": \"seedream_5_5\",\n    \"prompt\": \"<SCENE with the hero>\",\n    \"aspect_ratio\": \"9:16\",\n    \"resolution\": \"2k\"\n  }\n}"
+  },
+  {
+   "label": "Render command",
+   "source": "layer-reveal-hf/SKILL.md",
+   "text": "mkdir -p ~/reveal && cd ~/reveal \\\n  && curl -sfL '<PLATE_URL>' -o 0.png && curl -sfL '<STAGE_1_URL>' -o 1.png \\\n  && curl -sfL '<STAGE_2_URL>' -o 2.png && curl -sfL '<STAGE_3_URL>' -o 3.png \\\n  && curl -sfL '<BACKGROUND_URL>' -o 4.png && curl -sfL '<CUTOUT_URL>' -o hero.png \\\n  && python3 \"$HF_WORKFLOWS/layer-reveal-hf/scripts/reveal.py\" 0.png 1.png 2.png 3.png 4.png --hero hero.png -o reveal.mp4 \\\n  && curl -f -X PUT -H 'Content-Type: video/mp4' -H 'If-None-Match: *' --upload-file reveal.mp4 '<VIDEO_UPLOAD_URL>'"
+  }
+ ],
+ "price": "Quotes before running: six images (1 picture + 5 edits) plus a free cut-out and a free render. `seedream_5_5` is not in `_prices.md`; its siblings quote `seedream_v5_pro` 2k at 2.5 and `seedream_5_0_flash` 2k at 0.5, so six images are roughly 15 credits at the Pro rate (estimate, re-quote).",
+ "cheap_price": "~15 -> ~3 credits per reveal"
+}

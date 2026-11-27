@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Every email this brand has actually sent, pulled down whole.
 
-    python3 calendar/index_sends.py --brand brand-a [--limit N]
+    python3 calendar/index_sends.py --brand brand_a [--limit N]
 
 The ledger gives subject lines. This gives the EMAILS — the real body of every
 campaign that went out, so past sends stop being a list of titles and become a

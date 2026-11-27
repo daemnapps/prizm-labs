@@ -52,7 +52,7 @@ footer{font-size:13px;color:var(--ink3);display:flex;flex-direction:column;gap:4
 </div>
 
 <section class="panel">
-  <h2>Against the team's decision line</h2>
+  <h2>Against the developer's decision line</h2>
   <div class="tw"><table>
     <thead><tr><th>Criterion</th><th>Needed</th><th>Result</th><th></th></tr></thead>
     <tbody>
@@ -76,7 +76,7 @@ footer{font-size:13px;color:var(--ink3);display:flex;flex-direction:column;gap:4
   <p class="sub">Bars are on a scale of 10 (the sample).</p>
   <h3>Two GLM errors that would send the triage owner the wrong way (re-checked against the code)</h3>
   <ol>
-    <li><b>meta-upload#11.</b> GLM says <brand> has no funnel list. <code>brands/<brand>/web/funnels/funnels.json</code> exists at the base with 5 funnels. The gap was <brand>'s, and aed8f7989 already fixed it, so GLM's response asks for work that is done. Opus routed it to a close.</li>
+    <li><b>meta-upload#11.</b> GLM says Brand B has no funnel list. <code>brands/Brand B/web/funnels/funnels.json</code> exists at the base with 5 funnels. The gap was Brand A's, and aed8f7989 already fixed it, so GLM's response asks for work that is done. Opus routed it to a close.</li>
     <li><b>atlas#6.</b> GLM says the id-tag lint flags the component's instructions file. The lint only scans the decision log, PLATFORM-CONTEXT and <code>team/plans/</code> (<code>.githooks/id-tag-lint.py:35-38</code>).</li>
   </ol>
   <p class="sub">The pattern matches the earlier blind test on red-test summaries (TI-24 (red-test summaries GLM)): 8 factual errors to Claude's 2. GLM passes every structural check and gets facts about the code wrong. It also cited less: 164 new evidence lines against Opus's 252.</p>
@@ -129,7 +129,7 @@ footer{font-size:13px;color:var(--ink3);display:flex;flex-direction:column;gap:4
 
 <footer>
   <p>Files: <code>components/triage/trials/glm-replay/</code>: <code>README.md</code> (spec), <code>sample-briefs.json</code>, <code>RESULT-briefs.md</code>, <code>judge/</code> (pairs, keys, verdicts). Run folders: <code>runs/triage/glm-replay/20261002T1047Z/{briefs,drafts}/</code>.</p>
-  <p>Asked by the team ("replay", 10:05Z, via ◆ PLAN [6beb2b]); dispatched by the lead; scored by ≈ STREAM · atlas [6941d8]. Nothing was carded or merged from the replay.</p>
+  <p>Asked by the developer ("replay", 10:05Z, via ◆ PLAN [6beb2b]); dispatched by the lead; scored by ≈ STREAM · atlas [6941d8]. Nothing was carded or merged from the replay.</p>
 </footer>
 
 </div>

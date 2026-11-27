@@ -1,6 +1,6 @@
 """Design or letter: the calendar decides, per send, which emails are designed and which stay letters.
 
-the owner, 2026-10-17: "when we do the marketing calendar every 2 weeks, we can also determine which
+owner, 2026-10-17: "when we do the marketing calendar every 2 weeks, we can also determine which
 emails become design and which ones stay less design. All mapping and context and runs need to
 operate on the same principles."
 

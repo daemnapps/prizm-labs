@@ -4,7 +4,7 @@ SI-194 (readers use loader), email-production dispatch: `shopify.py`,
 `loop.py`, `offer_bank_build.py`, `simple_email.py` (kl_key) and
 `run_month.py` (have_picture_key) no longer import ~/.daemn/daemn_keys
 themselves. They ask key(NAME), which asks components/keys/loader.py: the
-environment first, then this repo's .env (add NAME=value there; nothing else is read). Key NAMES are unchanged
+environment first, then ~/.upright-keys.env (the one key file — add NAME=value there; when it exists nothing else is read) — and only on a machine with no key file — the temporary old places. Key NAMES are unchanged
 (G-A1 (no renames)).
 
 key() never raises; a missing key is None. missing() is the reader's message
@@ -23,7 +23,7 @@ HERE = Path(__file__).resolve().parent
 _LOADER_PATH = next((r / "components" / "keys" / "loader.py" for r in HERE.parents
                      if (r / "components" / "keys" / "loader.py").is_file()),
                     HERE.parents[1] / "components" / "keys" / "loader.py")
-_LOADER_NAME = "company_keys_loader"
+_LOADER_NAME = "upright_keys_loader"
 
 
 def _load_loader():

@@ -5,7 +5,7 @@
     say.py "make the headline say SIXTY DAYS instead" --picture … --brand … --go
     say.py "…" --picture … --brand … --rows          what it matched, and why
 
-the owner, 2026-09-25: *"I want to literally describe changes with natural voice
+owner, 2026-09-25: *"I want to literally describe changes with natural voice
 then your system indexes what I mean and interprets it for the tool to write
 the appropriate prompt so that it understands in its language clearly so
 that we get the exact changes we want without slop."*
@@ -143,7 +143,7 @@ def main():
             if m.get("proposed"):
                 print(f"  it would need a new row: {m['proposed']}")
                 record_unmatched(a.said, m["proposed"])
-                print(f"  written to {UNMATCHED.name} — the owner signs a new row")
+                print(f"  written to {UNMATCHED.name} — owner signs a new row")
         sys.exit(1)
 
     row = next((r for r in rs if r["id"] == rid), None)

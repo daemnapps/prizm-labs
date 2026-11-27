@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""ad-handoff gate honest — SI-149 (ad-handoff gate honest), DCB-1 (the owner component bugs) part a.
+"""ad-handoff gate honest — SI-149 (ad-handoff gate honest), DCB-1 (owner component bugs) part a.
 
     /usr/bin/python3 components/ad-handoff/tests/test_dcb1a_gate_honest.py
 

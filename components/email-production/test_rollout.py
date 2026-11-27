@@ -247,7 +247,8 @@ class EmailTypes(unittest.TestCase):
     def test_the_type_travels_from_the_calendar(self):
         sys.path.insert(0, str(HERE))
         import brief
-        argv = brief.chain_argv({"id": "sep-01", "type": "house-special", "source": "old-email.md"}, BRAND)
+        argv = brief.chain_argv({"id": "sep-01", "date":"2026-09-01", "hour":13, "local":True,
+                                 "segment":"Core | Lead", "type": "house-special", "source": "old-email.md"}, BRAND)
         self.assertEqual(argv[argv.index("--type") + 1], "house-special")
 
     def test_the_layout_is_a_real_template(self):
@@ -429,7 +430,7 @@ class Inbox(unittest.TestCase):
 
 
 class Catalogue(unittest.TestCase):
-    """the owner, 2026-09-21: a draft is not a product, and every email ends somewhere
+    """owner, 2026-09-21: a draft is not a product, and every email ends somewhere
     a reader can buy."""
 
     def edit(self, label, **change):

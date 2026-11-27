@@ -168,8 +168,8 @@ def product_only(brand, workspace=None):
     return re.compile(rf"^(image of |the |a )?({alt})[\s\w™'.,-]*$", re.I)
 
 
-# WHAT MAY BE SOLD, AND WHAT IS A DRAFT (the owner, 2026-09-21).
-# A brand's files describe products that are not live — BRAND-A' own asset-bed
+# WHAT MAY BE SOLD, AND WHAT IS A DRAFT (owner, 2026-09-21).
+# A brand's files describe products that are not live — brand_a' own asset-bed
 # names FADE, MEND and BEAST as "drafts nobody had mentioned" — and an email
 # went out of the writer talking about one. The live list is a brand file, read
 # at run time, never a list in code.
@@ -241,7 +241,7 @@ def catalogue_block(brand, workspace=None):
 
 # THE FACTS OF EVERY LIVE PRODUCT, not just the one a send names (2026-09-21).
 # Once every email had to end on a product, emails began talking about products
-# their slot never named — NOVA, CRUSH — and the check, handed one product file,
+# their slot never named — FLEX, CRUSH — and the check, handed one product file,
 # called every one of those statements unsupported. The catalogue decides what
 # is read, so a draft's file is never opened.
 #

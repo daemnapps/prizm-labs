@@ -1,16 +1,24 @@
 """The full index of one email: every step that made it, in order, with what went in and what came out.
 
-the owner, 2026-10-18: "moving forward we need to keep a full index of everything going on." A run already saves each
+owner, 2026-10-18: "moving forward we need to keep a full index of everything going on." A run already saves each
 step to its own file (the plan in run.json, research/, every copy stage's prompt as sent and its output, the
 reviewer's verdict in qc-log/, the moment research, the design prompts, the layout, a record per picture in
 media/records/, the checks in klaviyo/card.json, the learnings it wrote). index() puts them in one ordered list and
 writes it beside the run as index.json, so anyone can see exactly how the email came to be and fix the step that
 caused something, never the one email.
 
-    python3 tools/email-production/design/run_index.py runs/email-production/<brand>/<label>
+    python3 components/email-production/design/run_index.py runs/email-production/<brand>/<label>
 
 Each entry: order, group, step, name, by (model or person), when, status, prompt_name, prompt (as sent where the run
 kept it), output, review ({ok, severity, problems}), section (for a picture), files.
+
+The index is the SAME on every Mac (email_lead, 2026-11-11: editor's Done stayed on her Mac because a tracked index.json,
+rewritten on every page view, left her tree dirty and ask.py's pull refused it). Three rules keep it so:
+- a step's "as sent" prompt lives in a *--sent.md that git ignores, so only the Mac that ran the step has it; a Mac
+  without that file keeps the as-sent prompt the existing index already carries, never downgrading it to the prompt
+  file (the committed index is the cross-Mac record owner asked for);
+- pictures are ordered by when they were made (record made_at), never by file time, which a checkout resets;
+- the file is written only when its content changed, so opening an email's steps leaves git clean.
 """
 import json
 import sys
@@ -103,7 +111,7 @@ def index(run):
                                "sections": [s.get("s") for s in spec.get("sections", [])]}, indent=1, ensure_ascii=False),
             files=[_rel(run / "design" / "email.json")])
 
-    for f in sorted((run / "media" / "records").glob("*/record.json"), key=lambda p: (p.stat().st_mtime, p.name)):
+    for f in sorted((run / "media" / "records").glob("*/record.json"), key=lambda p: (str((_j(p) or {}).get("made_at") or ""), p.name)):
         r = _j(f) or {}
         j = r.get("judge") or {}
         probs = [x for v in j.values() if isinstance(v, dict) for x in v.get("problems") or []]
@@ -143,9 +151,39 @@ def index(run):
     if taught:
         add("Learnings", "learnings", "Rules this email taught the chain", output="\n".join(taught))
 
-    idx = {"brand": brand, "label": label, "steps": out}
-    (run / "index.json").write_text(json.dumps(idx, indent=1, ensure_ascii=False) + "\n")
+    idx = {"brand": brand, "label": label, "steps": _keep_as_sent(_j(run / "index.json"), out)}
+    text = json.dumps(idx, indent=1, ensure_ascii=False) + "\n"
+    f = run / "index.json"
+    try:
+        same = f.read_text() == text
+    except (OSError, UnicodeDecodeError):
+        same = False
+    if not same:                                   # unchanged content is never rewritten: a view leaves git clean
+        f.write_text(text)
     return idx
+
+
+def _keep_as_sent(old, steps):
+    """A step this Mac can show only from the prompt file keeps the as-sent prompt (and its file) the existing index
+    already has for the same step and prompt name: the *--sent.md is git-ignored, so the index is the only copy
+    another Mac sees."""
+    prev = {(x.get("step"), x.get("prompt_name")): x for x in ((old or {}).get("steps") or [])
+            if isinstance(x, dict) and x.get("prompt_kind") == "as sent"}
+    out = []
+    for x in steps:
+        o = prev.get((x.get("step"), x.get("prompt_name")))
+        if o and x.get("prompt_kind") != "as sent":
+            y = {}
+            for k, v in x.items():                 # the keys keep add()'s order, whatever this Mac could fill
+                if k in ("prompt_kind", "prompt"):
+                    continue
+                y[k] = v
+                if k == "prompt_name":
+                    y["prompt_kind"], y["prompt"] = "as sent", o.get("prompt")
+            y["files"] = list(dict.fromkeys((x.get("files") or []) + [p for p in o.get("files") or [] if p.endswith("--sent.md")]))
+            x = y
+        out.append(x)
+    return out
 
 
 if __name__ == "__main__":

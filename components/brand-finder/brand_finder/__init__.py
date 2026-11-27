@@ -3,8 +3,8 @@
 
 rule-9 (brand home) says brand content comes from `brands/<brand>/` and
 nowhere else. Three implementations were answering "where is that", and
-converging by copy-paste: `lab/copy/machine/paths.py`,
-`lab/email-production/paths.py`, and `components/chain-runner/runner/
+converging by copy-paste: `lab/owner/copy/machine/paths.py`,
+`lab/owner/email-production/paths.py`, and `components/chain-runner/runner/
 brandhome.py`. This module is the UNION of their MECHANISMS and nothing else
 — no policy, no default, no brand.
 
@@ -21,11 +21,11 @@ Two questions, because the three callers genuinely ask two:
 **THIS MODULE HAS NO DEFAULT OF ITS OWN, and that is structural rather than
 an oversight**: `workspace()` takes the caller's default positionally and
 there is nowhere to put a fallback. The two lab machines name DIFFERENT
-default trees — the repo root (copy) and `lab` (email-production) — and
+default trees — the repo root (copy) and `lab/owner` (email-production) — and
 BH-1's kill says a shared locator must never flatten a real difference by
 picking a winner. So the mechanism moves here and each caller's default stays
 on its own line, where it already lived. The divergence itself is written
-down for the 09-03 the owner batch: see this folder's CLAUDE.md.
+down for the 09-03 owner batch: see this folder's CLAUDE.md.
 
 No brand name is written down here, and none can be: `HOME` is a directory
 name, not a brand (workspace rule 7).

@@ -1,5 +1,5 @@
 # Media never enters git — it lives on the team Drive at
-# the shared drive/swipe-paid/<brand>/, mirroring this tree.
+# Shared Assets/lab/the owner/swipe-paid/<brand>/, mirroring this tree.
 *.mp4
 *.mov
 *.jpg
@@ -35,11 +35,3 @@ capture/assets/
 capture/raw/
 capture/market.db
 capture/.build/
-
-# Public copy: every advertiser folder (and own/, organic/, refs/) is a record and stays local; only the code folders ship.
-/*/
-!/_TEMPLATE/
-!/capture/
-!/teardown/
-!/prompts/
-!/context/

@@ -1,4 +1,4 @@
-/* The designed email's sections. Every colour is a brand token (engine.py writes them from brands/<brand>/email-sms/design-system.json). Lifted from the BRAND-A week of 12 Oct 2026; one type scale: Display 34/26/21, body 16, label 10.5 caps. */
+/* The designed email's sections. Every colour is a brand token (engine.py writes them from brands/<brand>/email-sms/design-system.json). Lifted from the Brand A week of 12 Oct 2026; one type scale: Display 34/26/21, body 16, label 10.5 caps. */
 /* the email itself */
 .em{background:var(--canvas);color:var(--ink);font-family:var(--sans)}
 .m{padding:20px 22px}
@@ -86,7 +86,7 @@ body.clean .pk{display:none}
 .m-sf .m-pic img{border-radius:12px;aspect-ratio:3/4;object-fit:cover}.m-sf q{font:300 14.5px/1.2 var(--serif);color:var(--ink)}
 .m-selfies .m-cap{margin-top:12px}
 .m-creep{padding:4px 0 0;position:relative}.vh{position:absolute;opacity:0;pointer-events:none;width:1px;height:1px;overflow:hidden}.e-creep{height:50px;background-position:center;background-size:100% auto;background-repeat:no-repeat}
-/* the board-level pieces any brand can use: header and footer on the brand's band, alt and panel grounds, hero over photo, photo row, callout, timeline (read off Brand-B's board, 17 Oct 2026) */
+/* the board-level pieces any brand can use: header and footer on the brand's band, alt and panel grounds, hero over photo, photo row, callout, timeline (read off Brand B's board, 17 Oct 2026) */
 .em .m-head:not([style]){background:var(--band);padding:16px 0 13px}
 .em .m-foot.on-band{background:var(--band);color:var(--band-ink);border-top:0;margin-top:0;padding:28px 16px 30px;opacity:1}
 .em .m-foot.on-band .m-footlogo{margin-bottom:12px}.em .m-foot .m-logo-img{filter:none}

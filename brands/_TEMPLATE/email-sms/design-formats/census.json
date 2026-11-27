@@ -1,0 +1,30 @@
+{
+  "_note": "Empty on purpose. Fill this in for your brand \u2014 the keys below are what the tools read.",
+  "_shape_from": "the same file in a live brand",
+  "_example_keys": {
+    "generated": "",
+    "source": "",
+    "emails": [
+      {
+        "board": "\u2026",
+        "month": "\u2026",
+        "month_key": "\u2026",
+        "name": "\u2026",
+        "w": "\u2026",
+        "h": "\u2026",
+        "detail": "\u2026",
+        "serif_uses": "\u2026"
+      }
+    ],
+    "families": {
+      "light/typeled/short": 0,
+      "light/typeled/mid": 0,
+      "light/typeled/tall": 0,
+      "dark/typeled/short": 0,
+      "deep-green/typeled/short": 0,
+      "deep-green/typeled/mid": 0,
+      "deep-green/typeled/tall": 0,
+      "light/imaged/tall": 0
+    }
+  }
+}

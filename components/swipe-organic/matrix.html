@@ -1,0 +1,206 @@
+<title>{{TITLE}}</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800;900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a mixing desk. Three dials (hook, moment, body), the merged concept under them, the full hook × moment grid, and a side panel that opens on any category or video */
+:root{
+  --bg:#f2f1ee; --panel:#ffffff; --ink:#17171a; --soft:#67676f; --line:#dbd9d3; --shade:rgba(20,20,24,.35);
+  --fmt:#1d4e89; --fmt-soft:#e2ebf6; --mom:#b8321f; --mom-soft:#f6e3df; --mix:#1f6f5c; --mix-soft:#e1efe9;
+  --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111113;--panel:#1a1a1e;--ink:#ececee;--soft:#9b9ba4;--line:#2d2d33;--shade:rgba(0,0,0,.55);--fmt:#7fb0ec;--fmt-soft:#17263a;--mom:#ff7a63;--mom-soft:#3a1d18;--mix:#5cc4a6;--mix-soft:#18302a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111113;--panel:#1a1a1e;--ink:#ececee;--soft:#9b9ba4;--line:#2d2d33;--shade:rgba(0,0,0,.55);--fmt:#7fb0ec;--fmt-soft:#17263a;--mom:#ff7a63;--mom-soft:#3a1d18;--mix:#5cc4a6;--mix-soft:#18302a;color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:1160px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:28px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}
+h1{font-family:var(--display);font-weight:900;font-size:clamp(30px,5.5vw,50px);line-height:1;margin:6px 0 10px;text-wrap:balance}
+h2{font-family:var(--display);font-weight:800;font-size:21px;margin:0}
+h3{font-family:var(--display);font-weight:800;font-size:18px;margin:0;line-height:1.15}
+p{margin:0;max-width:70ch}
+a{color:inherit}
+section{display:grid;gap:14px}
+.desk{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.col{display:grid;gap:8px;align-content:start}
+.lab{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.lab.f{color:var(--fmt)}.lab.m{color:var(--mom)}.lab.b{color:var(--mix)}
+.opt{display:grid;grid-template-columns:minmax(0,1fr) auto;background:var(--panel);border:1.5px solid var(--line);border-radius:10px;overflow:hidden}
+.opt.f.on{border-color:var(--fmt);background:var(--fmt-soft)}.opt.m.on{border-color:var(--mom);background:var(--mom-soft)}.opt.b.on{border-color:var(--mix);background:var(--mix-soft)}
+.opt button.pickb{all:unset;cursor:pointer;display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:center;padding:10px 12px}
+.opt button.info{all:unset;cursor:pointer;font-family:var(--mono);font-size:11.5px;padding:0 12px;border-left:1px solid var(--line);color:var(--soft)}
+.opt button:focus-visible,button.cell:focus-visible,.vid:focus-visible,.x:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+.opt b{font-family:var(--display);font-size:15px;display:block}
+.opt small{color:var(--soft);font-size:12.5px;display:block}
+.minis{display:flex;gap:3px}
+.minis img,.minis .no{width:28px;height:45px;object-fit:cover;border-radius:3px;background:var(--line);display:block}
+.count{font-family:var(--display);font-weight:900;font-size:19px;color:var(--mom);min-width:40px;text-align:center}
+.mix{background:var(--panel);border:2px solid var(--mix);border-radius:12px;padding:18px;display:grid;gap:12px}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-family:var(--mono);font-size:11.5px;border-radius:99px;padding:3px 10px}
+.tag.f{background:var(--fmt-soft);color:var(--fmt)}.tag.m{background:var(--mom-soft);color:var(--mom)}.tag.b,.tag.a{background:var(--mix-soft);color:var(--mix)}
+.mix h3{font-size:24px}
+.beats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.beat{background:var(--bg);border-radius:8px;padding:10px;font-size:13.5px}
+.beat span{display:block;font-family:var(--mono);font-size:10.5px;color:var(--soft);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+.quote{border-left:3px solid var(--mom);padding-left:12px;font-style:italic}
+.strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.strip .sl{display:grid;gap:6px}
+.vids{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.vid{all:unset;cursor:pointer;display:grid;gap:3px;font-family:var(--mono);font-size:10.5px;color:var(--soft)}
+.vid img,.vid .no{width:100%;aspect-ratio:5/8;object-fit:cover;border-radius:6px;background:var(--line);display:grid;place-items:center}
+.gridwrap{overflow-x:auto}
+.grid{display:grid;grid-template-columns:150px repeat(var(--cols),minmax(150px,1fr));gap:6px;min-width:860px}
+.gh{font-family:var(--mono);font-size:11px;color:var(--mom);padding:6px 4px;align-self:end}
+.gr{font-family:var(--display);font-size:14px;color:var(--fmt);padding:8px 4px;align-self:center;font-weight:800}
+button.cell{all:unset;cursor:pointer;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:9px;font-size:13px;line-height:1.35;display:grid;gap:4px;align-content:start}
+button.cell b{font-family:var(--display);font-size:13.5px}
+button.cell.top{border:2px solid var(--mix);background:var(--mix-soft)}
+button.cell.on{outline:2px solid var(--ink)}
+button.cell.empty{color:var(--soft)}
+.star{font-family:var(--mono);font-size:10.5px;color:var(--mix)}
+.note{font-size:13px;color:var(--soft);max-width:84ch}
+.dials{display:flex;flex-wrap:wrap;gap:10px;align-items:end;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.dial{display:grid;gap:4px}
+.dial label{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}
+.dial select{font:inherit;font-size:13.5px;padding:6px 8px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--ink);max-width:260px}
+.types{display:flex;gap:4px;flex-wrap:wrap}
+.types button{all:unset;cursor:pointer;font-size:12.5px;border:1px solid var(--line);border-radius:99px;padding:5px 11px}
+.types button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.make{all:unset;cursor:pointer;justify-self:start;font-family:var(--display);font-weight:800;font-size:15px;background:var(--mix);color:#fff;border-radius:99px;padding:9px 18px}
+.make[disabled]{opacity:.5;pointer-events:none}
+.said{font-family:var(--mono);font-size:12.5px;color:var(--mix)}.err{font-family:var(--mono);font-size:12.5px;color:var(--mom)}
+/* the side panel */
+.shade{position:fixed;inset:0;background:var(--shade);z-index:20}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100%);background:var(--panel);z-index:21;overflow-y:auto;border-left:1px solid var(--line);
+  padding-top:calc(18px + env(safe-area-inset-top,0px));padding-bottom:calc(24px + env(safe-area-inset-bottom,0px));padding-left:20px;padding-right:max(20px,env(safe-area-inset-right,0px));display:grid;gap:14px;align-content:start}
+.x{all:unset;cursor:pointer;justify-self:end;font-family:var(--mono);font-size:12px;border:1px solid var(--line);border-radius:99px;padding:4px 12px}
+.big{display:grid;grid-template-columns:150px minmax(0,1fr);gap:14px;align-items:start}
+.big img,.big .no{width:150px;aspect-ratio:5/8;object-fit:cover;border-radius:8px;background:var(--line);display:grid;place-items:center}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.stat{background:var(--bg);border-radius:6px;padding:6px 8px}
+.stat b{font-family:var(--display);font-size:17px;display:block;font-variant-numeric:tabular-nums}
+.stat span{font-size:11.5px;color:var(--soft)}
+.cap{white-space:pre-wrap;background:var(--bg);border-radius:8px;padding:12px;font-size:14px;max-width:none}
+.open{display:inline-block;font-family:var(--mono);font-size:12.5px;border:1.5px solid var(--ink);border-radius:99px;padding:6px 14px;text-decoration:none;width:max-content}
+.lines{display:grid;gap:6px}
+.line{border-left:3px solid var(--mom);padding:2px 0 2px 10px;font-size:14px}
+.line small{display:block;font-family:var(--mono);font-size:10.5px;color:var(--soft)}
+@media (max-width:820px){.desk{grid-template-columns:1fr}.beats,.strip{grid-template-columns:1fr}}
+</style>
+
+<div class="wrap" id="app"></div>
+<div id="layer"></div>
+
+<script>
+const D={{DATA}};
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const k=n=>{n=n||0;return n>=1e6?(n/1e6).toFixed(1)+"M":n>=1e3?Math.round(n/1e3)+"K":String(n)};
+const H=D.hooks,M=D.moments,B=D.bodies,TOP=new Set(D.top||[]);
+const S={h:(H[0]||{}).id,m:(M[0]||{}).id,b:(B[0]||{}).id};
+const CT=D.controls||{products:[],offers:[],avatars:[],sources:[],types:[]};
+const KEYD="matrix-dials-"+D.brand;
+const DL=(()=>{try{return JSON.parse(localStorage.getItem(KEYD))||{}}catch(e){return {}}})();
+const DIAL={product:DL.product||(CT.products.includes((D.default_product||"").toLowerCase())?(D.default_product||"").toLowerCase():CT.products[0]||""),
+  offer:DL.offer||"",source:DL.source||"organic",type:DL.type||"video-ad"};
+const saveDial=()=>{try{localStorage.setItem(KEYD,JSON.stringify(DIAL))}catch(e){}};
+if(D.top&&D.top[0]){const [h,m]=D.top[0].split("|");if(H.some(x=>x.id===h))S.h=h;if(M.some(x=>x.id===m))S.m=m}
+const img=v=>v.img?`<img src="t/${esc(v.id)}.jpg" alt="" loading="lazy">`:`<span class="no">no preview</span>`;
+const mini=o=>`<span class="minis">${o.videos.slice(0,3).map(v=>v.img?`<img src="t/${esc(v.id)}.jpg" alt="">`:`<span class="no"></span>`).join("")}</span>`;
+const vidBtn=v=>`<button class="vid" data-v="${esc(v.id)}" aria-label="Open video by @${esc(v.author)}">${img(v)}<span>${k(v.views)} · ${esc((v.posted||"").slice(5))}</span></button>`;
+const VID={};[H,M,B].forEach(g=>g.forEach(o=>o.videos.forEach(v=>VID[v.id]=v)));
+function dial(kind,list,cls,label,sub){return `<div class="col"><span class="lab ${cls}">${label}</span>${list.map(o=>`<div class="opt ${cls}${S[kind]===o.id?" on":""}"><button class="pickb" data-pick="${kind}" data-id="${esc(o.id)}">${kind==="m"?`<span class="count">${esc(o.count??"")}</span>`:mini(o)}<span><b>${esc(o.name)}</b><small>${sub(o)}</small></span></button><button class="info" data-info="${kind}" data-id="${esc(o.id)}" aria-label="Read ${esc(o.name)}">read ›</button></div>`).join("")}</div>`}
+function render(){
+  const h=H.find(x=>x.id===S.h),m=M.find(x=>x.id===S.m),b=B.find(x=>x.id===S.b);
+  const key=S.h+"|"+S.m,c=D.concepts[key];
+  const how=D.body_how[S.b];
+  document.getElementById("app").innerHTML=`
+  <header><div class="eyebrow">${esc(D.brand)} · ${esc(D.avatar)}${D.lane?" · "+esc(D.lane):""} · creative matrix</div><h1>${esc(D.title)}</h1>
+  <p>Three dials. <b>The hook</b> is a format he watches. <b>The moment</b> is the problem he talks about most, in his own words. <b>The body</b> is the kind of problem video that already pulls views, added on after the hook. Pick one of each to merge them. Tap <b>read ›</b> on any category, or any video, to read it here.</p></header>
+  <section><div class="dials">
+   <div class="dial"><label for="d-av">Brand · avatar</label><select id="d-av">${CT.avatars.map(a=>`<option value="${esc(a.brand+"/"+a.avatar)}"${a.brand===D.brand&&a.avatar===D.avatar?" selected":""}${a.built?"":" disabled"}>${esc(a.brand)} · ${esc(a.avatar)}${a.built?"":" (research first)"}</option>`).join("")}</select></div>
+   <div class="dial"><label for="d-pr">Product</label><select id="d-pr">${CT.products.map(x=>`<option${x===DIAL.product?" selected":""}>${esc(x)}</option>`).join("")}</select></div>
+   <div class="dial"><label for="d-of">Offer</label><select id="d-of"><option value="">The brand's default</option>${CT.offers.map(o=>`<option value="${esc(o.id)}"${o.id===DIAL.offer?" selected":""}>${esc(o.name)}${o.sign?" · "+esc(o.sign):""}</option>`).join("")}</select></div>
+   <div class="dial"><label for="d-so">Swipe source</label><select id="d-so">${CT.sources.map(o=>`<option value="${esc(o.id)}"${o.id===DIAL.source?" selected":""}>${esc(o.name)}</option>`).join("")}</select></div>
+   <div class="dial"><label>Creative type</label><div class="types">${CT.types.map(t=>`<button data-type="${esc(t.id)}" aria-pressed="${t.id===DIAL.type}">${esc(t.name)}</button>`).join("")}</div></div>
+  </div></section>
+  <section><div class="desk">
+   ${dial("h",H,"f","The hook · formats he watches",o=>`${o.in_top} of his top 50 · typical ${k(o.median)} · best ${k(o.best)}`)}
+   ${dial("m",M,"m","The moment · his problem, his words",o=>o.lines[0]?"“"+esc(o.lines[0].text)+"”":`${o.lines_total} lines`)}
+   ${dial("b",B,"b","The body · problem videos that pull",o=>`${o.posts} posts · best ${k(o.best)} · ${Object.keys(o.lanes).filter(x=>x&&x!=="null").join(", ")}`)}
+  </div>
+  <div class="mix" aria-live="polite"><span class="lab b">Merged concept${TOP.has(key)?" · one of the strongest":""}</span>
+   <div class="tags"><span class="tag f">${esc(h.name)}</span><span class="tag m">${esc(m.name)}</span><span class="tag b">${esc(b.name)}</span>${c&&c.angle?`<span class="tag a">angle: ${esc(c.angle)}</span>`:""}</div>
+   ${c?`<h3>${esc(c.title)}</h3><p>${esc(c.idea)}</p><div class="beats"><div class="beat"><span>Open</span>${esc(c.open)}</div><div class="beat"><span>The turn</span>${esc(c.turn)}</div><div class="beat"><span>Cut</span>${esc(c.cut)}</div></div>`:`<p class="note">Not written yet for this hook × moment. The evidence for it is below.</p>`}
+   <div class="beat" style="border-left:3px solid var(--mix)"><span>Then the body · ${esc(b.name)}</span>${how?esc(how):"Not written yet for this body."}</div>
+   ${m.lines[0]?`<p class="quote">In his words: “${esc(m.lines[0].text)}”</p>`:""}
+   <button class="make" id="make">Make brief → Queue</button>
+   <div class="tags" style="margin-top:8px"><button class="make" data-addb="ai">＋ Add to batch · AI</button><button class="make" data-addb="creator">＋ Add to batch · real creator</button></div><div id="made"></div>
+   ${trayHtml()}
+   <div class="strip"><div class="sl"><span class="lab f">${esc(h.name)}</span><div class="vids">${h.videos.slice(0,4).map(vidBtn).join("")}</div></div><div class="sl"><span class="lab m">${esc(m.name)}</span><div class="vids">${m.videos.slice(0,4).map(vidBtn).join("")||'<span class="note">No video matched this moment yet.</span>'}</div></div><div class="sl"><span class="lab b">${esc(b.name)}</span><div class="vids">${b.videos.slice(0,4).map(vidBtn).join("")}</div></div></div>
+  </div></section>
+  <section><h2>Every hook × moment</h2><div class="gridwrap"><div class="grid" style="--cols:${M.length}"><span></span>${M.map(m=>`<span class="gh">${esc(m.name)}${m.count?" · "+m.count:""}</span>`).join("")}${H.map(h=>`<span class="gr">${esc(h.name)}</span>`+M.map(m=>{const key=h.id+"|"+m.id,c=D.concepts[key];return `<button class="cell${TOP.has(key)?" top":""}${!c?" empty":""}${key===S.h+"|"+S.m?" on":""}" data-cell="${esc(key)}">${TOP.has(key)?'<span class="star">STRONGEST</span>':""}${c?`<b>${esc(c.title)}</b>${esc((c.idea||"").split(". ")[0])}.`:"Not written yet"}</button>`}).join("")).join("")}</div></div></section>
+  <section><p class="note">Hooks come from round${D.sources.hooks.includes(",")?"s":""} ${esc(D.sources.hooks)} (${D.sources.hook_posts} posts from 2026). Moments and bodies come from round ${esc(D.sources.problem)} (${D.sources.problem_posts} posts kept by My Feeds' sorter) and his language bank. ${(D.notes||[]).map(esc).join(" ")}</p></section>`;
+}
+function openDrawer(html){document.getElementById("layer").innerHTML=`<div class="shade" data-close></div><aside class="drawer" role="dialog" aria-modal="true"><button class="x" data-close>Close ✕</button>${html}</aside>`;document.querySelector(".drawer .x").focus()}
+function videoPanel(v){return `<span class="lab b">${esc(v.search||"")}${v.lane?" · "+esc(v.lane):""}</span><div class="big">${img(v)}<div style="display:grid;gap:8px"><b style="font-family:var(--display);font-size:18px">@${esc(v.author)}</b><span class="note">Posted ${esc(v.posted)}</span><div class="stats"><div class="stat"><b>${k(v.views)}</b><span>views</span></div><div class="stat"><b>${k(v.likes)}</b><span>likes</span></div><div class="stat"><b>${k(v.comments)}</b><span>comments</span></div><div class="stat"><b>${k(v.shares)}</b><span>shares</span></div></div></div></div>${v.what&&v.what!=="unread"?`<p><b>What it is:</b> ${esc(v.what)}</p>`:""}<p class="cap">${esc(v.caption||"(no caption)")}</p><a class="open" href="${esc(v.url)}" target="_blank" rel="noopener">Watch on TikTok ↗</a>`}
+function catPanel(kind,id){
+  const o=(kind==="h"?H:kind==="m"?M:B).find(x=>x.id===id);
+  const head=`<span class="lab ${kind==="h"?"f":kind==="m"?"m":"b"}">${kind==="h"?"Hook · a format he watches":kind==="m"?"Moment · his problem":"Body · a problem video that pulls"}</span><h2>${esc(o.name)}</h2>`;
+  const stats=kind==="h"?`<p class="note">${o.in_top} of his top 50 · ${o.posts} posts from 2026 · typical ${k(o.median)} views · best ${k(o.best)} · search: “${esc(o.id)}”</p>`
+    :kind==="m"?`<p class="note">${o.count??""} lines in his language bank carry this (keywords: ${o.keywords.map(esc).join(", ")}).</p>`
+    :`<p class="note">${o.posts} of his top problem posts · sides: ${Object.entries(o.lanes).map(([a,b])=>esc(a)+" "+b).join(", ")} · best ${k(o.best)}</p>`;
+  const lines=kind==="m"&&o.lines.length?`<h3>In his words</h3><div class="lines">${o.lines.map(l=>`<div class="line">${esc(l.text)}<small>${esc(l.who)}</small></div>`).join("")}</div>`:"";
+  const vids=o.videos.length?`<h3>${kind==="m"?"Videos that carry it":"Top videos"}</h3><div class="vids">${o.videos.map(vidBtn).join("")}</div>`:"";
+  const use=kind==="b"&&D.body_how[o.id]?`<p class="quote" style="border-color:var(--mix)">${esc(D.body_how[o.id])}</p>`:"";
+  return head+stats+use+lines+vids;
+}
+document.addEventListener("click",e=>{
+  const t=e.target.closest("[data-pick],[data-info],[data-v],[data-cell],[data-close]");if(!t)return;
+  if(t.dataset.close!==undefined){document.getElementById("layer").innerHTML="";return}
+  if(t.dataset.pick){S[t.dataset.pick]=t.dataset.id;render();return}
+  if(t.dataset.info){openDrawer(catPanel(t.dataset.info,t.dataset.id));return}
+  if(t.dataset.v){openDrawer(videoPanel(VID[t.dataset.v]));return}
+  if(t.dataset.cell){[S.h,S.m]=t.dataset.cell.split("|");render();document.querySelector(".mix").scrollIntoView({behavior:"smooth",block:"center"})}
+});
+/* THE BATCH (19 Oct 2026): pick as many ideas as he wants, then one press runs them all through the video line at once.
+   Every batch keeps real creators beside AI. The tray lives in this browser until Run batch is pressed. */
+const TKEY="matrix-batch-tray";
+const tray=()=>{try{return JSON.parse(localStorage.getItem(TKEY)||"[]")}catch(e){return []}};
+const setTray=t=>{try{localStorage.setItem(TKEY,JSON.stringify(t))}catch(e){}};
+const OUT=`${location.protocol}//${location.hostname}:8880`;
+function trayHtml(){const t=tray();if(!t.length)return `<p class="note" id="tray">No ideas in the batch yet. Add as many as you like, then run them all at once.</p>`;
+  const cr=t.filter(x=>x.route==="creator").length;
+  return `<div id="tray" class="beat" style="border-left:3px solid var(--ink)"><span>The batch · ${t.length} idea${t.length>1?"s":""} · ${t.length-cr} AI · ${cr} real creator</span>
+   <ol style="margin:6px 0;padding-left:18px">${t.map((x,i)=>`<li>${esc(x.title)} <span class="note">· ${esc(x.brand)} · ${x.route==="creator"?"real creator":"AI"}</span> <button class="info" data-dropb="${i}" style="all:unset;cursor:pointer;color:var(--soft)">✕</button></li>`).join("")}</ol>
+   ${cr?"":`<p class="note">Every batch carries a real-creator lane beside AI — add at least one as a real creator.</p>`}
+   <button class="make" id="runb"${cr?"":" disabled"}>Run batch · all ${t.length} at once</button></div>`}
+document.addEventListener("click",async e=>{
+  const t=e.target.closest("[data-addb],[data-dropb],#runb");if(!t)return;
+  if(t.dataset.addb){const h=H.find(x=>x.id===S.h),m=M.find(x=>x.id===S.m),b=B.find(x=>x.id===S.b),c=D.concepts[S.h+"|"+S.m]||{};
+    const sw=[...h.videos,...(b?b.videos:[])].find(v=>v&&v.url);
+    if(!sw){document.getElementById("made").innerHTML=`<p class="err">This idea has no swipe video to work from.</p>`;return}
+    const x={title:c.title||`${h.name} × ${m.name}`,brand:D.brand,lane:D.lane==="organic"?"organic":"paid",route:t.dataset.addb,url:sw.url,from:"matrix"};
+    setTray([...tray(),x]);render();return}
+  if(t.dataset.dropb){const a=tray();a.splice(+t.dataset.dropb,1);setTray(a);render();return}
+  if(t.id==="runb"){t.disabled=true;t.textContent="Starting every idea…";
+    try{const r=await fetch(OUT+"/api/batch/run",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({title:`${D.avatar} · ${tray().length} ideas`,brand:D.brand,from:"matrix",ideas:tray()})});
+      const d=await r.json();if(d.error)throw new Error(d.error);setTray([]);render();
+      document.getElementById("made").innerHTML=`<p class="said">${esc(d.said)} <a href="${OUT}${esc(d.view)}" target="_blank" rel="noopener">Open the batch ↗</a></p>`}
+    catch(err){t.disabled=false;t.textContent="Run batch";document.getElementById("made").innerHTML=`<p class="err">${esc(err.message)}</p>`}}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")document.getElementById("layer").innerHTML=""});
+document.addEventListener("change",e=>{const id=e.target.id;
+  if(id==="d-av"){const [b,a]=e.target.value.split("/");location.href=`/matrix/${b}/${a}/`;return}
+  if(id==="d-pr")DIAL.product=e.target.value; if(id==="d-of")DIAL.offer=e.target.value; if(id==="d-so")DIAL.source=e.target.value; saveDial()});
+document.addEventListener("click",async e=>{
+  const t=e.target.closest("[data-type],#make");if(!t)return;
+  if(t.dataset.type){DIAL.type=t.dataset.type;saveDial();document.querySelectorAll("[data-type]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.type===DIAL.type));return}
+  const h=H.find(x=>x.id===S.h),m=M.find(x=>x.id===S.m),b=B.find(x=>x.id===S.b),c=D.concepts[S.h+"|"+S.m]||{};
+  t.disabled=true;const out=document.getElementById("made");
+  try{const r=await fetch("/matrix/api/make",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({brand:D.brand,avatar:D.avatar,hook:h.name,moment:m.name,body:b&&b.name,body_how:D.body_how[S.b],concept:c,
+      product:DIAL.product,offer:DIAL.offer,source:DIAL.source,type:DIAL.type,lines:m.lines.slice(0,5).map(l=>l.text),proof:[...h.videos.slice(0,2),...(b?b.videos.slice(0,2):[])].map(v=>v.url)})});
+    const d=await r.json();if(d.error)throw new Error(d.error);out.innerHTML=`<p class="said">${esc(d.said)}</p>`}
+  catch(err){out.innerHTML=`<p class="err">${esc(err.message)}</p>`}finally{t.disabled=false}});
+render();
+</script>

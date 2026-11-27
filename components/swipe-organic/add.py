@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """THE SAVE DOOR — a swipe you found by hand, filed so the system can see it.
 
-    python3 add.py --pool tiktok-shop --brand brand-b ~/Downloads/*.mp4
-    python3 add.py --pool medicube --brand brand-b --url https://www.tiktok.com/@x/video/123
+    python3 add.py --pool tiktok-shop --brand brand_b ~/Downloads/*.mp4
+    python3 add.py --pool medicube --brand brand_b --url https://www.tiktok.com/@x/video/123
     python3 add.py --check                       what is filed but not on the Drive
     python3 add.py --pool tiktok-shop --list     what that pool holds
 
-the owner, 2026-09-25, after thirteen swipes he handed over were stored but
+owner, 2026-09-25, after thirteen swipes he handed over were stored but
 invisible: "there will be multiple sources for me to pull swipes in and they
 all need to be organized and indexed through proper lanes."
 

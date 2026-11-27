@@ -1,0 +1,19 @@
+{
+ "title": "beta fixture list",
+ "schema": 1,
+ "schema_minor": 2,
+ "status": "draft",
+ "versions": {"A": "platform/views/viewers/_templates/beta.html"},
+ "state_words": {"wired": "exists", "after-card": "later", "not-built": "none"},
+ "kinds": {
+  "data": {"letter": "D", "name": "Data", "means": "a value saved in a data file"},
+  "rule": {"letter": "R", "name": "Rule", "means": "the page works it out"},
+  "media": {"letter": "M", "name": "Media", "means": "a file on Drive"},
+  "layout": {"letter": "L", "name": "Layout", "means": "arrangement only"},
+  "action": {"letter": "A", "name": "Action", "means": "a button"}
+ },
+ "features": [
+  {"n": 1, "name": "Heading", "kind": "layout", "state": "wired", "status": "draft", "source": null},
+  {"n": 2, "name": "List", "kind": "layout", "state": "wired", "status": "draft", "source": null}
+ ]
+}

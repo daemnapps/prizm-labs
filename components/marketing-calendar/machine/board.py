@@ -192,7 +192,7 @@ def card(slot):
 def chain_strip(state):
     """The nine layers that made this month, in order, with what each produced
     — and for the two that think, the prompt file that decided it and a link
-    to the prompt as actually sent. the owner's standing rule: every stage's prompt
+    to the prompt as actually sent. owner's standing rule: every stage's prompt
     and every stage's output has to be visible on a page, or the only loop that
     matters (read the output, tighten the prompt) is broken."""
     rows = []

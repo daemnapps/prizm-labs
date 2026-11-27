@@ -1,0 +1,66 @@
+{
+ "id": "ads-studio",
+ "name": "Ads Studio",
+ "kind": "picture",
+ "makes": "Static Meta ad creatives (copy plus picture) for a brand or product, researched from a website, page or photo.",
+ "source": [
+  "ads-studio/SKILL.md"
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "name": "Brand or product decision",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 2,
+   "name": "Research brand / read product",
+   "model": "none named (ads_studio_create_brand, ads_studio_add_product)",
+   "cheap": "Claude reads the page locally, free"
+  },
+  {
+   "n": 3,
+   "name": "Wait until read (status, texts_ready)",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 4,
+   "name": "Quote and wait for yes",
+   "model": "none (ads_studio_quote)",
+   "cheap": null
+  },
+  {
+   "n": 5,
+   "name": "Generate copy and pictures",
+   "model": "none named (ads_studio_generate)",
+   "cheap": "Claude copy plus seedream_5_0_flash 2k at 0.5 credit"
+  },
+  {
+   "n": 6,
+   "name": "Follow the run",
+   "model": "none (ads_studio_get_run)",
+   "cheap": null
+  }
+ ],
+ "price": "Quoted with ads_studio_quote before generating; no figure in the library (not quoted).",
+ "cheap_price": "Claude copy free plus 0.5 credit per picture (seedream_5_0_flash 2k), 0.75 with gpt_image_2_6_flare 1k low.",
+ "prompts": [
+  {
+   "label": "Generate call: what to pass",
+   "source": "ads-studio/SKILL.md",
+   "text": "Call `ads_studio_generate` once, with:\n\n- What to advertise: `product_ids` (of any brand or none; each gets its own run), and/or\n  `include_brand: true` for the brand itself, and/or a `prompt` in the user's own words. A\n  generation advertises exactly what these say. `picked_for_ads` on a product only decides what\n  the brand page shows in the web app; it does not select products for generation.\n- `brand_id`, optional: the brand whose kit (logo, palette, tone) shapes the ads. Leave it out\n  for ads with no brand kit, or send `brand_kit: false` to advertise a brand's product without\n  its look. The kit only reaches its own brand's products: a product of another brand, or of\n  none, is advertised without it, so never promise one brand's look on someone else's product.\n  `include_brand` needs `brand_id` with the kit on.\n- `images`, up to four public links the user supplied: `role: \"product\"` for a photo of the\n  thing being advertised, `role: \"style\"` (the default) for a look to follow.\n- `total`: the number the user named, or 1 for a singular request. Ads Studio splits it\n  across the subjects, so it must be at least one per subject. \"Two products, three ads each\"\n  is `total: 6` with two `product_ids`.\n- `aspect_ratio`: one of `1:1` (default, square feed), `9:16` (stories, reels), `16:9`\n  (landscape), `3:4` (portrait feed). **`4:5` is not available**: offer `3:4` as the nearest\n  portrait frame. Always send the frame.\n- `objective`, only when the user made the goal clear: `sales`, `leads` (sign-ups, demos,\n  quotes), `traffic` (visits, clicks), `awareness` (a launch, being known), `engagement`\n  (comments, shares). Otherwise leave it out and the product's own profile decides.\n- `idempotency_key`: choose it once for this generation (any unique string) and repeat it\n  unchanged if you must retry the same call. A new key on a retry buys the same batch twice.\n\n"
+  },
+  {
+   "label": "Product-or-brand question asked before anything starts (example line)",
+   "source": "ads-studio/SKILL.md",
+   "text": "\"I can\nfile just this product, also research acme.com as a brand, about a minute and a half, so the ads\ncarry its logo, colours and tone, or add it to one of your Ads Studio brands. Which one?\""
+  },
+  {
+   "label": "Where it stops: the answers it never gives",
+   "source": "ads-studio/SKILL.md",
+   "text": "## Never\n\n- Poll `ads_studio_get_brand`, `ads_studio_get_product`, `ads_studio_get_run` or `ads_studio_list_products` in a loop; the cards poll, and you read once per user turn.\n- Quote or generate while a product to advertise is still `queued` or `in_progress`, shows `texts_ready: false`, or a brand involved is still `running`.\n- Send a product photo plus a request for ads to `generate_image` or `generate_image_batch`.\n- Start research on a domain nobody named, or generate before the user agreed to the quoted price.\n- File a product page as a brand, or a homepage as a product; when the link's domain is new and the words do not settle it, ask.\n- Send `4:5`, or an objective the user did not imply.\n- Reuse the same `idempotency_key` for a different batch, or mint a new one for a retry.\n- Hand Ads Studio ids to the generic job tools, or describe `picked_for_ads` as choosing products for ads.\n- Call an Ads Studio brand kit a Marketing Studio brand kit, or the other way round."
+  }
+ ]
+}

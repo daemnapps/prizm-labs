@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """picture_chain.products_in(): a layout names a product by its short look key ("body-scrub"); that key is the kit
-whose folder name ends on it ("brilliance-body-scrub"), when exactly one does. brand-b nov-05, 2026-10-30: every
+whose folder name ends on it ("brilliance-body-scrub"), when exactly one does. brand_b nov-05, 2026-10-30: every
 product picture was held "no product casting sheet for body-scrub" though the kit and its sheet exist.
 
-    /usr/bin/python3 tools/email-production/design/test_picture_chain_short_name.py
+    /usr/bin/python3 components/email-production/design/test_picture_chain_short_name.py
 """
 import sys
 import unittest

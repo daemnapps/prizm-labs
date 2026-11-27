@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """Read a month's finished copy and say what is wrong with it.
 
-    python3 check_month.py --brand brand-a --month 2026-09
-    python3 check_month.py --brand brand-a --month 2026-09 --only moment
+    python3 check_month.py --brand brand_a --month 2026-09
+    python3 check_month.py --brand brand_a --month 2026-09 --only moment
 
 Zero cost, no model calls. Every finding names the run, the check and the line,
 so it can be fixed or ruled on. This exists because two whole classes of fault
 shipped to the board unnoticed:
 
-**THE MOMENT** (RULED 2026-09-10, the owner: "this literally has nothing to do with
+**THE MOMENT** (RULED 2026-09-10, owner: "this literally has nothing to do with
 football"). A send scheduled on a dated moment came out with no trace of that
 moment in it — the occasion reached the filing layer and never reached a stage
 that writes. A reader must be able to name the moment from the copy alone, so

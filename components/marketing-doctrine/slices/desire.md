@@ -30,6 +30,13 @@ Physical facts are allowed back in for exactly five jobs:
 
 **Dominant trait.** Every product carries one dominant trait that should summarise it in the headline; the remaining traits blend in underneath, never alongside. [L1967-1990]
 
+## The seventeen human desires — name the one underneath
+
+Strip out every product detail and ask what this person is still chasing. Name one life force and, when one rides on it, one learned desire. A want (clear skin) is not yet the desire (what clear skin buys them).
+
+- **Life forces:** `live-longer` stay alive and well; `enjoy-food` enjoy food and drink; `freedom-from-fear` freedom from fear, pain and danger; `attraction` be wanted by a partner (dating, being picked, being seen up close. A desire one piece runs on, never a sub-avatar or an angle by itself); `comfort` live comfortably, without friction; `be-superior` win, keep up, not fall behind; `protect-loved-ones` care for and protect the people they love; `social-approval` be seen well by the people whose opinion matters
+- **Learned:** `be-informed` know, not be caught out; `curiosity` find out; `cleanliness` a clean body and surroundings; `efficiency` do more with the same effort; `convenience` fewer steps; `dependability` it will not let me down; `beauty-style` look and style that say who I am; `economy` get more out than was put in; `bargains` pay less than it is worth
+
 ## Where desire comes from
 
 - **permanent-forces** — Mass instinct and long-unsolved problems — the wants that do not move. [L383-426]

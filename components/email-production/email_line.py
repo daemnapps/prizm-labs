@@ -2,8 +2,8 @@
 """One swiped email (or any lane's teardown record) in; one built email out.
 Ten stages, all Claude, all text — then `render.py` draws it.
 
-    python3 email_line.py <source> --brand brand-b \
-        --product brands/brand-b/products/brilliance-body-scrub/product.md \
+    python3 email_line.py <source> --brand brand_b \
+        --product brands/brand_b/products/brilliance-body-scrub/product.md \
         [--subjects 5] [--label sale-01] [--brand-root <tree>]
 
 Mirrors copywriter/machine/copy_writer.py stage for stage, deliberately: the two lanes are one
@@ -28,6 +28,8 @@ from pathlib import Path
 from paths import HERE, WORKSPACE, calendar_tool, lab_tool, component
 sys.path.append(str(component("brandpath")))   # appended, never ahead of this machine
 import brandpath as BP                                # noqa: E402
+sys.path.append(str(component("naming")))
+import names as NAMES                                 # noqa: E402  one product name (2026-11-19)
 import lean_call                                      # noqa: E402  LD-62 (lean model calls)
 
 # The brand index and the language query already exist in the copy lane and
@@ -46,7 +48,7 @@ except Exception as e:                                    # pragma: no cover
 PROMPTS = HERE / "prompts"
 DEFAULT_MODEL = "claude-opus-5"
 
-# A MODEL PER JOB, NOT OPUS EVERYWHERE (the owner, 2026-09-15: "can we use another
+# A MODEL PER JOB, NOT OPUS EVERYWHERE (owner, 2026-09-15: "can we use another
 # model to do some of the writing… so we can run work simultaneously").
 #
 # Ten stages ran Opus because one `--model` covered the whole chain, and a
@@ -148,7 +150,11 @@ def read(path, required=False):
         if required:
             sys.exit(f"missing required file: {path}")
         return ""
-    return p.read_text().strip()
+    lang = WORKSPACE / "components" / "language-layer"      # lived moments rotate, never ride in fixed files
+    if str(lang) not in sys.path:
+        sys.path.append(str(lang))
+    from language_layer import experience as _x
+    return _x.clean_file(p).strip()
 
 
 def doctrine(slice_name):
@@ -176,7 +182,7 @@ def claude(prompt_text, model, label=None):
     # deliverable and the output is silently wrong (hit in copy,
     # 2026-08-24). Keep this repo's tree clean of whatever a Stop hook guards
     # before running the chain.
-    # NO ACCOUNT IS WIRED IN (the owner, 2026-10-23): run_kit's claude_door picks the credential;
+    # NO ACCOUNT IS WIRED IN (owner, 2026-10-23): run_kit's claude_door picks the credential;
     # LD-62 (lean model calls): lean_call.door runs it lean, from a temp folder.
     if str(component("run-kit")) not in sys.path:
         sys.path.append(str(component("run-kit")))
@@ -185,7 +191,7 @@ def claude(prompt_text, model, label=None):
         prompt_text + "\n\nReturn only the deliverable. No tools, no preamble.",
         timeout=None,
     )
-    if r.returncode and "limit" in (r.stdout or "").lower():
+    if r.returncode and "limit" in ((r.stdout or "") + (r.stderr or "")).lower():
         # Out of usage is not a broken stage. Say it in one line so a month run
         # reads as "stopped: account limit" rather than twelve mystery failures.
         sys.exit(f"USAGE LIMIT — stage {label or '?'} on {model} was refused: "
@@ -208,7 +214,7 @@ def claude(prompt_text, model, label=None):
 
 
 def catalogue_path(brand):
-    """The type catalogue is the BRAND's knowledge (moved 2026-08-31, the owner's
+    """The type catalogue is the BRAND's knowledge (moved 2026-08-31, owner's
     brand-agnostic ruling). A brand without one starts from the tool's clean
     seed — and should copy it into its folder to own it."""
     p = WORKSPACE / "brands" / brand / "email-sms" / "email-types.json"
@@ -287,8 +293,32 @@ def fill(template, fields):
 RERUN_FROM = None
 
 
+# Who this email is for and what it must say to them (creative-strategist who.py), on every stage that writes or judges
+# the words. "" when the run names no avatar: an email to everyone speaks to no one person. main() sets it.
+WHO = ""
+
+
+def who_aim(brand, avatar, sub=None, demographic=None, what=None):
+    """(the block, the same decisions as data). A named sub-avatar that does not exist stops the run; nothing else here
+    ever does: no avatar or no profile is no block."""
+    if not avatar:
+        return "", None
+    p = str(component("creative-strategist", "machine"))
+    if p not in sys.path:
+        sys.path.append(p)
+    try:
+        import who as W
+        W.resolve(brand, avatar, sub)
+        if not (W.avatar_dir(brand, avatar) / "profile.md").is_file():
+            return "", None
+        return W.block(brand, avatar, sub, demographic, what) + "\n", W.stamp(brand, avatar, sub, demographic, what)
+    except Exception as e:                       # SystemExit (a named sub that is not there) passes through
+        print(f"  ! who it is for: not read ({type(e).__name__}: {str(e)[:120]})")
+        return "", None
+
+
 def creative_qc(tool, stage, run_dir, output, given=None, items=None):
-    """THE CREATIVE QC LOOP (the owner, 2026-10-02: "installed for each of my
+    """THE CREATIVE QC LOOP (owner, 2026-10-02: "installed for each of my
     production tools … for all stages in the creation process"): the output is
     reviewed against what it was given and the stage's bars
     (components/marketing-chain-checks/definitions/stages.json); the round is filed in
@@ -322,7 +352,9 @@ def run_stage(stage, out_dir, model, state, **fields):
         return saved.read_text().strip()
     prompt_file = latest_prompt(stage)
     filled = fill(prompt_file.read_text(), fields)
-    # THE LEARNINGS (the owner, 2026-10-17: "every time a shift is made … all needs to be stored and put into
+    if spec["group"] != "READ THE SOURCE":       # the reading stages strip somebody else's email
+        filled = WHO + filled
+    # THE LEARNINGS (owner, 2026-10-17: "every time a shift is made … all needs to be stored and put into
     # learnings back up and through the chain"): every correction and win from past reviews, for every brand and
     # this one (design/learn.py), rides on every copy step.
     try:
@@ -344,7 +376,7 @@ def run_stage(stage, out_dir, model, state, **fields):
     # the stage is handed, and that is a per-brand fact: the context scout gets
     # everything a brand knows, which is 134KB for a young brand and 1.7MB for
     # an old one. Tiering the scout as a `reads` job was right about the job
-    # and fatal in practice — every brand-a email died there while every brand-b
+    # and fatal in practice — every brand_a email died there while every brand_b
     # email passed, because one prompt fit a small window and the other did
     # not. Deciding on the measured prompt means a brand can grow past a model
     # without anyone remembering to re-tier it.
@@ -386,10 +418,23 @@ def main():
                          "note. Omitting is a declaration, not a default: the "
                          "stages are told there is no avatar and must not write "
                          "as though there were one.")
+    ap.add_argument("--sub", default=None,
+                    help="the sub-avatar this email speaks to (id or file name); omit to speak to the whole avatar")
+    ap.add_argument("--demographic", default=None, help="e.g. male/25-34/black")
     ap.add_argument("--product", default=None,
                     help="which product this is about — a key from "
                          "brands/<brand>/products/ (e.g. flex, war, "
                          "vitals-set), or a path. What the thing IS.")
+    ap.add_argument("--deadline", default=None,
+                    help="the only last day this send may state (YYYY-MM-DD): the plan's, from the moment's window")
+    ap.add_argument("--order-by", dest="order_by", default=None,
+                    help="the brand's order-by date for arrival in time (YYYY-MM-DD), from its shipping record")
+    ap.add_argument("--offer-mix", action="store_true",
+                    help="the calendar declared --offer in the brand's mix (offer_mix), for every audience: the lane "
+                         "rule yields, as brief.offer_for already lets it (a mix of one member carries no --offer-also)")
+    ap.add_argument("--offer-also", default=None,
+                    help="the rest of the brand's mix this email carries beside --offer (comma-separated bank keys; "
+                         "the calendar's offer_mix, from the bank's storefront-order note)")
     ap.add_argument("--offer", default=None,
                     help="which offer this email carries — a key from the "
                          "offer bank (e.g. flex-preorder). The commercial "
@@ -418,7 +463,7 @@ def main():
                          "the button. Omit when nobody left a note.")
     ap.add_argument("--occasion", default=None,
                     help="the moment this send was scheduled FOR — a holiday, a "
-                         "season, a cultural event. RULED 2026-09-10 (the owner: "
+                         "season, a cultural event. RULED 2026-09-10 (owner: "
                          "'this literally has nothing to do with football'): the "
                          "calendar picked the slot because of this, so the "
                          "writing stages are told it. It used to reach stage 0 "
@@ -467,8 +512,20 @@ def main():
                          "then stop. No model calls, no cost — this is how a "
                          "wiring change gets checked.")
     ap.add_argument("--brand-root", default=None,
-                    help="tree holding brands/<brand>/ — defaults to the shared workspace")
+                    help="tree holding brands/<brand>/ — defaults to the shared ai-workspace")
+    ap.add_argument('--calendar-slot', help='Calendar handoff JSON from brief.py; not inferred from a folder label')
     args = ap.parse_args()
+    import calendar_handoff as CH
+    calendar = json.loads(args.calendar_slot) if args.calendar_slot else None
+    if calendar:
+        fields = calendar['fields']
+        if calendar.get('brand') != args.brand or CH.snapshot(fields,args.brand).get('fingerprint')!=calendar.get('fingerprint'):
+            sys.exit('HELD: calendar handoff brand or fingerprint does not match')
+        issues = CH.audience_problems(fields, avatar=args.avatar)
+        if issues:
+            sys.exit('HELD at calendar handoff: ' + '; '.join(issues))
+        if args.send_date != fields.get('date') or args.segment not in CH.segments(fields):
+            sys.exit('HELD: writing arguments differ from the calendar handoff')
 
     # One knob, honoured everywhere brand files are read, so the scout and the
     # runner can never end up indexing two different trees.
@@ -480,6 +537,31 @@ def main():
         WORKSPACE = root
         if context:
             context.WORKSPACE = root
+    if calendar:
+        probe = {'assignment':{'send_date':args.send_date,'avatar':args.avatar,'angle':args.angle,
+                               'offer':args.offer,'type':getattr(args,'type',None),'segments':calendar['fields']['segments']},
+                 'calendar_handoff':calendar}
+        audit = CH.inspect(WORKSPACE,args.brand,Path('.'),state=probe,copy={'body':[args.angle or '']})
+        if audit['problems']:
+            sys.exit('HELD at calendar handoff: '+'; '.join(audit['problems']))
+        effective = calendar.get('effective_offer')
+        calendar = audit['expected']
+        calendar['effective_offer'] = effective
+    if not calendar and args.send_date and (WORKSPACE / 'runs/marketing-calendar' / args.brand / args.send_date[:7] / 'slots.json').is_file():
+        probe = {'assignment':{'send_date':args.send_date,'avatar':args.avatar,'angle':args.angle,
+                               'offer':args.offer,'type':getattr(args,'type',None)}}
+        try:
+            slot = CH.resolve(WORKSPACE, args.brand, Path('.'), probe)
+            audit = CH.inspect(WORKSPACE, args.brand, Path('.'), slot=slot, state=probe,
+                               copy={'body':[args.angle or '']})
+            if audit['problems']:
+                raise CH.Held('; '.join(audit['problems']))
+            calendar = audit['expected']
+            if args.segment and args.segment not in CH.segments(slot):
+                raise CH.Held('writing audience differs from the calendar')
+            args.segment = args.segment or CH.segments(slot)[0]
+        except (CH.Held, ValueError, OSError) as e:
+            sys.exit('HELD at calendar handoff: '+str(e))
     # The brand tree is found by SHAPE, never assumed (ported from copy_writer.py
     # 2026-09-01, after email_line.py went blind the same way copy_writer.py did on
     # 2026-08-30): --brand-root wins when given; otherwise probe the trees a
@@ -569,7 +651,7 @@ def main():
     # One map per brand PER SURFACE. Email marketing needs different variables
     # from video ad scripts, ad copy or static ads — they are different jobs
     # against the same brand, and a single shared map would have to be the
-    # union of all of them (the owner, 2026-08-27).
+    # union of all of them (owner, 2026-08-27).
     # The map is the BRAND's, one file per surface. This tool reads
     # variables/email.md; the static-ad tool will read variables/static-ads.md
     # off the same brand. A tool that keeps its own copy of a brand's map is a
@@ -618,6 +700,9 @@ def main():
         print("     NOTE: no --avatar — this email addresses everyone. No "
               "avatar profile, no language bank, no sub-avatars; the stages "
               "are told so and must not write as though targeted.")
+    if args.sub and not args.avatar:
+        sys.exit("--sub names part of an avatar: name --avatar too")
+    who_aim(args.brand, args.avatar, args.sub, None, {"product": args.product})          # a sub-avatar that does not exist stops here, before any spend
     avatar = brand_file("avatar")
     language_bank = brand_file("language_bank")
     offer_file = brand_file("offer_file")
@@ -631,13 +716,17 @@ def main():
     # --offer the whole bank is passed and stage 4 decides what the email may
     # carry, which is the right default for anything that is not selling.
     # THE OFFER MUST BE ONE THE BRAND MAY ACTUALLY RUN, on this date, for this
-    # lane (RULED 2026-09-10, the owner: "so there's an offer bank issue then…").
+    # lane (RULED 2026-09-10, owner: "so there's an offer bank issue then…").
     # A draft with no price, an expired one, or a dated one whose moment has
     # passed all used to be assignable — a Labor Day price sat under `## Live`
     # with no end date and kept getting picked for late-September sends.
+    also = [k for k in (args.offer_also or "").split(",") if k.strip()]
     if args.offer and args.offer != "none":
         import offers as OFFERS
-        why = OFFERS.refuse(args.brand, args.offer, args.avatar, args.send_date)
+        # a declared mix is the brand's own call for every audience: its members are checked without the lane
+        why = OFFERS.refuse(args.brand, args.offer, None if (also or args.offer_mix) else args.avatar, args.send_date)
+        for k in also:
+            why = why or OFFERS.refuse(args.brand, k, None, args.send_date)
         if why:
             ok = OFFERS.usable(args.brand, args.avatar, args.send_date)
             sys.exit(f"this send may not carry that offer — {why}\n"
@@ -646,13 +735,19 @@ def main():
                         "offer for this lane on this date; the send has to earn instead."))
 
     # WHAT THIS SEND MAY SELL, decided by the calendar and binding on the copy
-    # (RULED 2026-09-10, the owner: "I still see some labor day email in the figma
+    # (RULED 2026-09-10, owner: "I still see some labor day email in the figma
     # for late september… why are you not using the calendar in this chain?").
     # The calendar assigns an offer per slot, or assigns none. "None" used to
     # mean the WHOLE offer bank was handed over and the writer chose — so an
     # earns-slot with no offer shipped a Labor Day price lifted from the email
     # it was swiped from, three weeks after Labor Day.
-    if args.offer and args.offer != "none":
+    if args.offer and args.offer != "none" and also:
+        offer_rule = (
+            f"**This send carries the brand's mix, together: `{args.offer}` first, then "
+            + ", ".join(f"`{k}`" for k in also) + ", each as written in the bank above.** It leads with "
+            f"`{args.offer}` and offers the others beside it; it may not name any other price, discount, bundle, "
+            f"gift or deadline. An offer in the source email belongs to the source's week, not to ours.")
+    elif args.offer and args.offer != "none":
         offer_rule = (
             f"**This send carries exactly one offer: `{args.offer}`, as written in the "
             f"bank above.** It may not name any other price, discount, bundle, gift or "
@@ -666,7 +761,7 @@ def main():
             "to the source's week — strip it and let the argument stand on its own. Writing "
             "a price in anyway is the single worst thing this stage can do, because it puts "
             "one in front of a reader the plan deliberately did not price to.\n\n"
-            "**It still ends on a product.** RULED BY OWNER 2026-09-21: \"Every email should "
+            "**It still ends on a product.** RULED BY owner 2026-09-21: \"Every email should "
             "have some sort of refocus back into a product in some capacity… even if it's more "
             "like a value email, just make sure we have the ability to make money in each of "
             "these emails.\" No offer means no PRICE, never no destination. The button goes to "
@@ -675,7 +770,7 @@ def main():
             "button with no destination, or one pointing at a collection or the front page "
             "instead of a product, is a failed email.")
 
-    # WHAT MAY BE LINKED, AND WHAT IS A DRAFT (the owner, 2026-09-21: "make sure the
+    # WHAT MAY BE LINKED, AND WHAT IS A DRAFT (owner, 2026-09-21: "make sure the
     # product is not a draft. FADE is a draft, so we shouldn't be talking about
     # FADE."). The brand's own files describe products that were never launched;
     # the live catalogue rides with the offer rule so every stage that already
@@ -683,13 +778,17 @@ def main():
     sys.path.append(str(HERE / "machine"))
     import brand_facts as BF
     offer_rule += "\n\n" + BF.catalogue_block(args.brand, WORKSPACE)
+    # WHAT THE WRITER IS HELD TO, handed over rather than caught after (2026-11-04)
+    import offers as OFFERS
+    offer_rule += "\n\n" + OFFERS.writer_rules(args.brand, args.offer, also, getattr(args, "type", None),
+                                                args.deadline, args.order_by)
 
     # THE BANK HAS ONE SHAPE, AND ONE READER KNOWS IT (repaired 2026-09-15).
     # `offers.parse` carries the rule ruled on 2026-09-13 — an offer is a
     # `## key — Name` block, and everything below the "Ruled by a human"
     # divider is prose the writer needs but never an offer. This block was
     # written before that and still split on `###`, so the only keys it could
-    # see in brand-a' bank were two GUARANTEE sub-headings: every calendar
+    # see in brand_a' bank were two GUARANTEE sub-headings: every calendar
     # assignment died as "no offer in the bank" while sitting in the file.
     # Two readers of one file disagreeing is the bug that ate the whole bank
     # once already; the fix is the same one — narrow with the reader that owns
@@ -699,8 +798,16 @@ def main():
         MARK = "# Ruled by a human"
         catalogue, ruled = (offer_file.split(MARK, 1) + [""])[:2]
         blocks = re.split(r"^## ", catalogue, flags=re.M)
-        want = [b for b in blocks if re.match(rf"{re.escape(args.offer)}\b", b)]
-        if not want:
+        want = [b for b in blocks if any(re.match(rf"{re.escape(k)}\b", b) for k in [args.offer] + also)]
+        ruled_hit = (not want and ruled
+                     and any(r["key"] == args.offer and r.get("ruled") for r in OFFERS.parse(args.brand)))
+        if ruled_hit:
+            # a human-ruled offer (2026-11-03): it lives in the ruled half, which travels whole
+            # anyway; the writer is told which section of it this send carries
+            offer_file = (f"This send's offer is the ruled section `{args.offer}` below.\n\n"
+                          f"{MARK}{ruled}")
+            print(f"     offer: {args.offer} (a human-ruled offer; the ruled half travels whole)")
+        elif not want:
             keys = [r["key"] for r in OFFERS.parse(args.brand)]
             sys.exit(f"no offer {args.offer!r} in the bank. Known: "
                      + (", ".join(sorted(set(keys))) or "NOTHING — the bank "
@@ -708,9 +815,13 @@ def main():
         # The human-ruled half travels WHOLE. Guarantees, never-pair rules and
         # standing rules bind every send; picking among them by name is how a
         # never-pair rule goes missing from the one email that needed it.
-        offer_file = "## " + "\n## ".join(want) + (f"\n\n{MARK}{ruled}" if ruled else "")
-        print(f"     offer: {args.offer} (narrowed from the full bank; "
-              "the human-ruled rules travel whole)")
+        if want:
+            # a line the bank keeps off email (a funnel-only offer line, 2026-11-04) never reaches the writer
+            keep_off = re.compile(r"never in an email|funnel only|never (in|on) (an? )?(email|sms|text)", re.I)
+            want = ["\n".join(ln for ln in b.splitlines() if not keep_off.search(ln)) for b in want]
+            offer_file = "## " + "\n## ".join(want) + (f"\n\n{MARK}{ruled}" if ruled else "")
+            print(f"     offer: {args.offer} (narrowed from the full bank; "
+                  "the human-ruled rules travel whole)")
 
     si = brand_root / "email-sms" / "identity" / "sender.md"
     if si.is_file():
@@ -728,19 +839,25 @@ def main():
               "offer_file": bool(offer_file), "objection_bank": bool(objection_bank)}
     # a bare key resolves inside the brand's products/; a path is taken as given
     # A product is either `products/<key>.md` or a folder `products/<key>/`
-    # with its `product.md` beside its images — brand-a keeps the first shape,
-    # brand-b the second, and three brand-b emails died on "no product" while
+    # with its `product.md` beside its images — brand_a keeps the first shape,
+    # brand_b the second, and three brand_b emails died on "no product" while
     # the product sat in its folder (2026-09-16).
     if args.product and not Path(args.product).suffix:
-        product_file = (read(BP.brand_path(brand_root.name, "products", f"{args.product}.md", root=brand_root.parent))
+        product_file = (read(NAMES.product_file(brand_root.name, args.product, root=WORKSPACE))   # one product name (2026-11-19)
+                        or read(BP.brand_path(brand_root.name, "products", f"{args.product}.md", root=brand_root.parent))
                         or read(BP.brand_path(brand_root.name, "products", args.product, "product.md", root=brand_root.parent)))
+        if not product_file:
+            import offers as OFFERS
+            product_file = OFFERS.bundle_as_product(args.brand, args.product)
+            if product_file:
+                print(f"     product: {args.product} has no product file yet; its bank section and what it holds stand in")
         if not product_file:
             sys.exit(f"no product {args.product!r} in {BP.brand_path(brand_root.name, 'products', root=brand_root.parent)}")
     else:
         product_file = read(args.product, required=True) if args.product else ""
     # ONLY WHAT IS FOR SALE TODAY. A product file lists every size the store has
     # ever made; the offer bank lists what is live. Twice the writer sold
-    # "2 x The Starter Set — $99.99" off the product file, a size the store had
+    # "2 x The Vitals Set — $99.99" off the product file, a size the store had
     # removed, and twice the price check held the email. A check that keeps
     # catching the same mistake is not the fix: a line in the product file that
     # names a price the bank does not sell today is taken out before any stage
@@ -775,7 +892,7 @@ def main():
     now = datetime.date.today()
     today = f"{now:%A, %-d %B %Y}"
 
-    # THE SEND DAY AND THE MOMENT (RULED 2026-09-10, the owner: "this literally has
+    # THE SEND DAY AND THE MOMENT (RULED 2026-09-10, owner: "this literally has
     # nothing to do with football"). Both used to stop at the filing layer. The
     # writing stages get them as facts they must obey.
     if args.send_date:
@@ -814,14 +931,21 @@ def main():
         "source_path": args.source, "source_reference": source_reference,
         "assignment": {
             "angle": args.angle, "avatar": args.avatar,
-            "offer": args.offer, "product": args.product,
+            "offer": args.offer, "offer_also": also or None, "product": args.product,
+            "type": getattr(args, "type", None), "deadline": args.deadline, "order_by": args.order_by,
             "occasion": args.occasion, "send_date": args.send_date,
             "affiliate": args.affiliate,
+            "segment": args.segment,
+            "segments": CH.segments(calendar['fields']) if calendar else ([args.segment] if args.segment else []),
+            "send_hour": calendar['fields']['hour'] if calendar else None,
+            "recipient_time_zone": calendar['fields']['local'] if calendar else None,
         },
         "generated_at": datetime.datetime.now().isoformat(timespec="seconds"),
         "elements": elements_picked,
         "stages": {},
     }
+    if calendar:
+        state['calendar_handoff'] = calendar
 
     def save():
         (out_dir / "run.json").write_text(json.dumps(state, indent=2) + "\n")
@@ -886,7 +1010,7 @@ def main():
 
     def lang(stage):
         """The rows THIS stage needs — queried, never a truncated file. The avatar's rows, at the awareness
-        level triage named for this send first, never-used rows first plus a proven slice (the owner, 2026-10-27:
+        level triage named for this send first, never-used rows first plus a proven slice (owner, 2026-10-27:
         "awareness levels and verbatims and spice are the foundation of what we're doing here")."""
         if not args.avatar:
             return ("(this email addresses everyone — no avatar was declared, "
@@ -948,6 +1072,7 @@ def main():
                 print(f"  language query [{st:9}] -> none (addresses everyone)")
             else:
                 print(f"  language query [{st:9}] -> {len(q):>7,} chars, ~{n} lines")
+        print(f"  who it is for, on every writing step -> {len(who_aim(args.brand, args.avatar, args.sub, args.demographic, {'product': args.product})[0]):,} chars")
         print(f"\n  {ok}/{len(rows)} variables resolved")
         print("\n  decided at triage (step 0 is a model call, so a dry run never makes it):")
         print("    lane · format · sender"
@@ -963,12 +1088,17 @@ def main():
     triage = run_stage("stage0", out_dir, MODEL("stage0"), state,
                        today=today, source=source, formats=formats,
                        source_reference=source_reference, avatars=roster_txt,
-                       segment=args.segment or "(none declared — a list email, "
+                       segment=(', '.join(CH.segments(calendar['fields'])) if calendar else args.segment) or "(none declared — a list email, "
                        "no calendar slot named a narrower segment)",
                        awareness_levels=doctrine("awareness")); save()
     lane = _first(LANE_LINE, triage)
     aw = (_first(AWARENESS_LINE, triage) or "").lower() or None
     state["awareness"] = aw
+    global WHO
+    WHO, state["aim"] = who_aim(args.brand, args.avatar, args.sub, args.demographic, {"awareness": aw, "product": args.product})
+    if state["aim"]:
+        import who as W
+        W.attach(out_dir, args.brand, args.avatar, args.sub, args.demographic, {"awareness": aw, "product": args.product})
     fmt = _first(FORMAT_LINE, triage)
     sender = _first(SENDER_LINE, triage)
     av, funnel = args.avatar, (seg_funnel or _first(FUNNEL_LINE, triage))
@@ -1016,11 +1146,11 @@ def main():
     # RULED 2026-09-10: EVERY email gets this, not only the ones on a moment.
     # A moment is a week with things happening in it, and the reader is already
     # inside that week.
-    # TWO KINDS OF RESEARCH, and email now gets both (2026-09-19, the owner: "hook
+    # TWO KINDS OF RESEARCH, and email now gets both (2026-09-19, owner: "hook
     # up email to the actual customer… and research the chain as well").
     #
     # 1. THE AUDIENCE — the shared research gatherer, the same call the
-    #    copywriter makes (tools/copywriter/machine/research.py): the rooms
+    #    copywriter makes (components/copywriter/machine/research.py): the rooms
     #    this avatar actually talks in, what they are saying, and the language
     #    bank's own tagged rows. Email never had it; it had a hand-made file.
     # 2. THE WEEK — a file of this week's facts, when someone has written one.
@@ -1127,7 +1257,7 @@ def main():
     if (lane or "").upper().startswith("ORGANIC"):
         body = run_stage("stage6", out_dir, MODEL("stage6"), state,
                          today=today, triage=triage, spec=spec, injection=injection,
-                         live_read=live_read,
+                         live_read=live_read, offer_rule=offer_rule,
                          placement=placement, product_file=product_file,
                          offer_file=offer_file, language_bank=language_bank,
                          customer_language=lang("expansion"),
@@ -1159,12 +1289,12 @@ def main():
                        language_bank=language_bank, brand_context=brand_context,
                        spoken=doctrine("spoken")); save()
 
-    # THE CHECK — before a person sees it (2026-09-20, the owner: "add in the
+    # THE CHECK — before a person sees it (2026-09-20, owner: "add in the
     # product facts check… this is all part of copywriting"). The price check
     # and the unfilled check are exact and live in simple_email.py; these three
     # need reading: what the email says the product IS, whether a thought was
     # chopped, and typos. The first rewrite with customer language called the
-    # Starter Set "wash, scrub, moisturizer" — it is a serum — and passed every
+    # Vitals Set "wash, scrub, moisturizer" — it is a serum — and passed every
     # exact check.
     # v2 (2026-09-21) reads the catalogue too, so it can catch a DRAFT product —
     # and so it stops marking a PARTNER's own facts unsupported for being absent

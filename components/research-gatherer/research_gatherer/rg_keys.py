@@ -3,7 +3,7 @@
 SI-194 (readers use loader), research-gatherer dispatch: `voicepull.key`,
 `ownvoice._vault` and `voiceprint.key_of` no longer import ~/.daemn/daemn_keys
 themselves. They ask key(NAME), which asks components/keys/loader.py: the
-environment first, then this repo's .env (add NAME=value there; nothing else is read). `feedback.py`, `reviews.py`
+environment first, then ~/.upright-keys.env (the one key file — add NAME=value there; when it exists nothing else is read) — and only on a machine with no key file — the temporary old places. `feedback.py`, `reviews.py`
 and `surveys.py` already ask `voicepull.key`, so they read through here
 unchanged. Names are never renamed (G-A1): `SUPABASE_DB_URL` stays the name
 ownvoice asks for, and the loader's alias also finds `DATABASE_URL`.
@@ -25,7 +25,7 @@ HERE = Path(__file__).resolve().parent
 _LOADER_PATH = next((r / "components" / "keys" / "loader.py" for r in HERE.parents
                      if (r / "components" / "keys" / "loader.py").is_file()),
                     HERE.parents[2] / "components" / "keys" / "loader.py")
-_LOADER_NAME = "company_keys_loader"
+_LOADER_NAME = "upright_keys_loader"
 
 
 def _load_loader():

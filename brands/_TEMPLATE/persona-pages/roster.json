@@ -1,0 +1,25 @@
+{
+  "_note": "Empty on purpose. Fill this in for your brand \u2014 the keys below are what the tools read.",
+  "_shape_from": "the same file in a live brand",
+  "_example_keys": {
+    "_what": "",
+    "_rules": [
+      ""
+    ],
+    "brand": "",
+    "lane": "",
+    "control_page": "",
+    "pages": [
+      {
+        "page": "\u2026",
+        "slug": "\u2026",
+        "type": "\u2026",
+        "lane": "\u2026",
+        "avatar": "\u2026",
+        "awareness": "\u2026",
+        "fronts": "\u2026",
+        "domain": "\u2026"
+      }
+    ]
+  }
+}

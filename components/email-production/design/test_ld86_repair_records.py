@@ -2,7 +2,7 @@
 """LD-86 (old records repaired): repair_records.py turns an old picture record's machine paths into LD-81 (portable
 picture records)'s refs by the form of each path, and touches nothing else — proven offline.
 
-    python3 tools/email-production/design/test_ld86_repair_records.py
+    python3 components/email-production/design/test_ld86_repair_records.py
 
 A fixture workspace in a temp folder: a fake brandpath drive index row, a run with a fake media/drive.json and the
 picture it lists, and one old record holding one reference of each form, an unknown form and a pin. No key, no
@@ -24,7 +24,7 @@ import unittest
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE))      # design/ FIRST; never tools/email-production (its email.py shadows the stdlib's)
+sys.path.insert(0, str(HERE))      # design/ FIRST; never components/email-production (its email.py shadows the stdlib's)
 import repair_records as RR        # noqa: E402
 
 sys.path.append(str(HERE.parents[1] / "gdrive-creator"))
@@ -35,7 +35,7 @@ ROW = {"drive_id": "IDPACK", "name": "acme_pack.png", "bytes": 1234, "old_path":
        "drive_path": "brands/acme/products/pack/packshot/acme_pack.png"}
 CACHE = "/var/folders/ab/cd123/T/brandpath-drive-cache/acme/IDPACK/acme_pack.png"
 MOUNT = "~/Library/CloudStorage/GoogleDrive-someone@example.com/Shared drives/Shared Assets/"
-CLONE = "~/Projects/workspace/runs/email-production/acme/acme-nov-09/media/"
+CLONE = "~/Projects/ai-workspace/runs/email-production/acme/acme-nov-09/media/"
 PIN = {"path": "/private/tmp/wt/runs/email-production/acme/acme-nov-09/media/pins/p1/pin-00.jpg",
        "kind": "Pinterest pin (mood only)", "pinterest": {"pin": "https://example.com/pin/1", "title": "mood"}}
 UNKNOWN = {"path": "/Volumes/stick/odd.png", "kind": "brand asset"}

@@ -62,12 +62,12 @@ footer{font-size:13px;color:var(--ink3);display:flex;flex-direction:column;gap:6
 
 <div class="wrap">
 
-<div class="mock"><b>Example only.</b> This is what the owner would receive on Friday 9 October if Option 3 ("a triage owner may make a change the issue's brief already spells out, telling the owner rather than asking") started on Monday 5 October. It is a proposal for the team to discuss, not a ruling. <b>None of these changes have been made.</b> The issues, files and fixes are real, taken from the component-issue triage of 2026-10-02. The commits, dates and test runs are illustrations.</div>
+<div class="mock"><b>Example only.</b> This is what the owner would receive on Friday 9 October if Option 3 ("a triage owner may make a change the issue's brief already spells out, telling the owner rather than asking") started on Monday 5 October. It is a proposal for the developer to discuss, not a ruling. <b>None of these changes have been made.</b> The issues, files and fixes are real, taken from the component-issue triage of 2026-10-02. The commits, dates and test runs are illustrations.</div>
 
 <div class="letter">
   <dl class="meta">
     <dt>To</dt><dd>the owner</dd>
-    <dt>From</dt><dd>the team, triage owner for component issues</dd>
+    <dt>From</dt><dd>the email lead, triage owner for component issues</dd>
     <dt>Week</dt><dd>Mon 5 – Fri 9 October 2026</dd>
     <dt>Subject</dt><dd><b>What changed in your components this week: 5 fixes, 3 closed, 4 waiting on you</b></dd>
   </dl>
@@ -81,9 +81,9 @@ footer{font-size:13px;color:var(--ink3);display:flex;flex-direction:column;gap:6
       <div class="t vio"><b>2</b><span>need your signature</span></div>
       <div class="t"><b>3</b><span>planned next week</span></div>
     </div>
-    <div class="todo"><b>To object or undo:</b> reply to the team with a code, like <span class="reply">undo 2</span>, <span class="reply">sign 11</span> or <span class="reply">skip 13</span>. Objections are open until <b>Wednesday 14 October</b>; after that, any change can still be undone at any time (see "How to undo anything" at the end).</div>
+    <div class="todo"><b>To object or undo:</b> reply to the email lead with a code, like <span class="reply">undo 2</span>, <span class="reply">sign 11</span> or <span class="reply">skip 13</span>. Objections are open until <b>Wednesday 14 October</b>; after that, any change can still be undone at any time (see "How to undo anything" at the end).</div>
     <div class="why">
-      <p><b>Why you're getting this.</b> the team triages every component issue first. Under Option 3, a fix the brief already names can be made for you when all four hold: the brief names the change and a test proves it; no test is weakened; nothing changes how a live pipeline behaves; and you get this digest with a way to undo each change.</p>
+      <p><b>Why you're getting this.</b> the email lead triages every component issue first. Under Option 3, a fix the brief already names can be made for you when all four hold: the brief names the change and a test proves it; no test is weakened; nothing changes how a live pipeline behaves; and you get this digest with a way to undo each change.</p>
       <p><b>Why only these components.</b> The trial starts where you're not working: apify, intake and objects had 0–2 of your commits in the past week. Components you're actively changing (video-teardown, video-production, naming, copywriter and four more) get drafts for you to land instead, so nothing collides with your work.</p>
     </div>
   </div>
@@ -103,8 +103,8 @@ footer{font-size:13px;color:var(--ink3);display:flex;flex-direction:column;gap:6
     </dl>
     <details class="undo"><summary>Undo this change</summary>
       <div class="ways">
-        <div class="way"><h4>Easiest: reply to the team</h4><p>Reply <span class="reply">undo 1</span> with one line on why. the team undoes it the same day and reopens apify#5 with your note.</p></div>
-        <div class="way"><h4>With your Claude</h4><div class="box"><div class="boxh">Paste into Claude Code<button type="button" data-copy="u1">Copy</button></div><pre id="u1">In ~/Projects/workspace, undo the triage fix for apify#5. Find its commit with: git log --grep='apify#5' --oneline. Undo it with git revert (a new commit; never reset or rebase), run components/apify's tests, and push. Then tell the team it was undone and why: [your reason], so apify#5 reopens with that note.</pre></div></div>
+        <div class="way"><h4>Easiest: reply to the email lead</h4><p>Reply <span class="reply">undo 1</span> with one line on why. the email lead undoes it the same day and reopens apify#5 with your note.</p></div>
+        <div class="way"><h4>With your Claude</h4><div class="box"><div class="boxh">Paste into Claude Code<button type="button" data-copy="u1">Copy</button></div><pre id="u1">In ~/Projects/ai-workspace, undo the triage fix for apify#5. Find its commit with: git log --grep='apify#5' --oneline. Undo it with git revert (a new commit; never reset or rebase), run components/apify's tests, and push. Then tell the email lead it was undone and why: [your reason], so apify#5 reopens with that note.</pre></div></div>
         <div class="way"><h4>By hand</h4><div class="box"><div class="boxh">Terminal<button type="button" data-copy="g1">Copy</button></div><pre id="g1">git log --grep='apify#5' --oneline
 git revert &lt;commit from the line above&gt;
 git push</pre></div></div>
@@ -166,15 +166,15 @@ git push</pre></div></div>
     <p class="note"><b>Undoing a move takes one extra step.</b> The code and its reader moved in one commit, so reverting that commit puts both back. But any object you made <i>after</i> this change was written to the new place. Undoing doesn't move those back. This week that's none. If there were any, they'd be listed here so you or your Claude could move them by hand.</p>
     <details class="undo"><summary>Undo this change</summary>
       <div class="ways">
-        <div class="way"><h4>Easiest: reply to the team</h4><p>Reply <span class="reply">undo 5</span>. the team reverts the commit and moves anything made since back to the old place.</p></div>
-        <div class="way"><h4>With your Claude</h4><div class="box"><div class="boxh">Paste into Claude Code<button type="button" data-copy="u5">Copy</button></div><pre id="u5">In ~/Projects/workspace, undo the triage fix for objects#2. Find its commit with git log --grep='objects#2' --oneline and revert it with git revert (never reset). Before pushing, list anything under runs/ai-elements/*/props/ created after that commit and move it back to where the old code expects it, in the same revert commit. Run components/objects' tests and video-edit's moves tests, then push and tell the team why: [your reason].</pre></div></div>
+        <div class="way"><h4>Easiest: reply to the email lead</h4><p>Reply <span class="reply">undo 5</span>. the email lead reverts the commit and moves anything made since back to the old place.</p></div>
+        <div class="way"><h4>With your Claude</h4><div class="box"><div class="boxh">Paste into Claude Code<button type="button" data-copy="u5">Copy</button></div><pre id="u5">In ~/Projects/ai-workspace, undo the triage fix for objects#2. Find its commit with git log --grep='objects#2' --oneline and revert it with git revert (never reset). Before pushing, list anything under runs/ai-elements/*/props/ created after that commit and move it back to where the old code expects it, in the same revert commit. Run components/objects' tests and video-edit's moves tests, then push and tell the email lead why: [your reason].</pre></div></div>
       </div>
     </details>
   </article>
 </section>
 
 <section>
-  <div class="sh"><h2>2. Closed as already fixed</h2><span class="sub">Closed by the team, triage owner for component issues, each with its evidence. Reopen any by replying <span class="reply">reopen &lt;id&gt;</span>.</span></div>
+  <div class="sh"><h2>2. Closed as already fixed</h2><span class="sub">Closed by the email lead, triage owner for component issues, each with its evidence. Reopen any by replying <span class="reply">reopen &lt;id&gt;</span>.</span></div>
   <div class="tw"><table>
     <thead><tr><th>#</th><th>Issue</th><th>Evidence it's fixed</th></tr></thead>
     <tbody>
@@ -186,14 +186,14 @@ git push</pre></div></div>
 </section>
 
 <section>
-  <div class="sh"><h2>3. Drafted for you to land</h2><span class="sub">These are in components you're actively changing, or they touch a test, so the team drafted them rather than committing.</span></div>
+  <div class="sh"><h2>3. Drafted for you to land</h2><span class="sub">These are in components you're actively changing, or they touch a test, so the email lead drafted them rather than committing.</span></div>
   <article class="card">
     <div class="ch"><span class="num">9</span><span class="comp">copywriter</span><span class="iid">copywriter#20</span><span class="pill p1">P1</span><h3>gdoc_out.py --help crashes, so copy can't go to Drive as Google Docs</h3></div>
     <dl class="rows">
-      <dt>Why it's yours</dt><dd>You made 10 commits in copywriter this week; a change from the team could collide with yours. It's also the crash you were asked about on 09-27 (I-132 (gdoc_out crash ask)), in case you already have a fix.</dd>
+      <dt>Why it's yours</dt><dd>You made 10 commits in copywriter this week; a change from the email lead could collide with yours. It's also the crash you were asked about on 09-27 (I-132 (gdoc_out crash ask)), in case you already have a fix.</dd>
       <dt>The draft</dt><dd>Load <code>paths.py</code> by file, the way <code>md.py</code> is already loaded. Saved as <code>triage/drafts/copywriter/20.diff</code> (example path). It turns one red test green.</dd>
     </dl>
-    <div class="box"><div class="boxh">To land it, paste into Claude Code<button type="button" data-copy="d9">Copy</button></div><pre id="d9">In ~/Projects/workspace, apply the drafted fix new-workflow-design/builds/atlas/triage/drafts/copywriter/20.diff (git apply), run gdoc_out.py --help and new-workflow-design/builds/drive-pipe/test_gdrive_creator.py, and if both pass, commit it as "copywriter#20: load paths.py by file" and push. If I already fixed this another way, tell me and don't apply it.</pre></div>
+    <div class="box"><div class="boxh">To land it, paste into Claude Code<button type="button" data-copy="d9">Copy</button></div><pre id="d9">In ~/Projects/ai-workspace, apply the drafted fix new-workflow-design/builds/atlas/triage/drafts/copywriter/20.diff (git apply), run gdoc_out.py --help and new-workflow-design/builds/drive-pipe/test_gdrive_creator.py, and if both pass, commit it as "copywriter#20: load paths.py by file" and push. If I already fixed this another way, tell me and don't apply it.</pre></div>
   </article>
   <article class="card">
     <div class="ch"><span class="num">10</span><span class="comp">naming</span><span class="iid">naming#2</span><span class="pill p2">P2</span><h3>never_used lists three brief numbers that are live</h3></div>
@@ -232,17 +232,17 @@ git push</pre></div></div>
   <ol class="rules">
     <li><b>Every change is one commit that names its issue,</b> so <code>git log --grep='&lt;issue id&gt;'</code> finds it, and undoing it touches nothing else.</li>
     <li><b>Undo is always a new commit</b> (<code>git revert</code>), never a reset or a rebase, so your other work and everyone else's stays exactly as it is.</li>
-    <li><b>When you undo, the issue reopens with your reason on it.</b> the team won't make that change again without talking to you first.</li>
+    <li><b>When you undo, the issue reopens with your reason on it.</b> the email lead won't make that change again without talking to you first.</li>
     <li><b>A move undoes in one commit too,</b> because the code and its readers moved together. Anything written in the new place since is listed on that change's card.</li>
     <li><b>There's no deadline to undo.</b> The Wednesday date is only for objecting before anything else builds on a change.</li>
     <li><b>The trial stops itself.</b> If you undo two of the trial's changes, or a change breaks one of your live runs twice, changes in your components go back to needing your yes first.</li>
   </ol>
-  <div class="box"><div class="boxh">Ask your Claude to explain this week's changes<button type="button" data-copy="x0">Copy</button></div><pre id="x0">In ~/Projects/workspace, show me every commit in the past week whose message cites an atlas issue id in one of my components (git log --since='1 week ago' --grep='#[0-9]'), and for each one explain in plain words what was wrong, what changed, which test proves it, and how I'd undo it. Explain only: change nothing.</pre></div>
+  <div class="box"><div class="boxh">Ask your Claude to explain this week's changes<button type="button" data-copy="x0">Copy</button></div><pre id="x0">In ~/Projects/ai-workspace, show me every commit in the past week whose message cites an atlas issue id in one of my components (git log --since='1 week ago' --grep='#[0-9]'), and for each one explain in plain words what was wrong, what changed, which test proves it, and how I'd undo it. Explain only: change nothing.</pre></div>
 </div></div>
 
 <footer>
-  <p><b>How this digest would be made.</b> Every Friday, from two sources: the week's commits that cite an issue id in the owner's components, and the triage records the team files under the new <code>triage</code> record kind (close, answer, forward; ATL-28 (triage record kind)). One digest per owner: the team and the team would get their own for their components.</p>
-  <p><b>Where this stands.</b> Proposal "Option 3", for the team to discuss with the owner first. Source: <code>components/triage/proposals/triage-owner-scope.json</code>. Example page: <code>components/triage/history/owner-digest-example.html</code>.</p>
+  <p><b>How this digest would be made.</b> Every Friday, from two sources: the week's commits that cite an issue id in the owner's components, and the triage records the email lead files under the new <code>triage</code> record kind (close, answer, forward; ATL-28 (triage record kind)). One digest per owner: the developer and the designer would get their own for their components.</p>
+  <p><b>Where this stands.</b> Proposal "Option 3", for the developer to discuss with the owner first. Source: <code>components/triage/proposals/triage-owner-scope.json</code>. Example page: <code>components/triage/history/owner-digest-example.html</code>.</p>
 </footer>
 
 </div>

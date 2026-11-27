@@ -3,7 +3,7 @@
     python3 components/research-gatherer/culture_map.py --brand B --avatar A [--dry-run] [--pack-only]
     python3 components/research-gatherer/culture_map.py --brand B --all [--dry-run]
 
-the owner, 2026-10-06: "our systems need to be fully dynamic and based on the real
+owner, 2026-10-06: "our systems need to be fully dynamic and based on the real
 language only". A culture map used to be written by hand from the profile and
 a hunch. This writes it from what people actually said and watched, and every
 line has to show where it came from.
@@ -78,8 +78,20 @@ def ws_root(ws=None):
     return Path(ws) if ws else engine.WORKSPACE
 
 
+def avatar_folder(brand, avatar):
+    """The avatar's folder as the brand keeps it, from a profile id, a new name or an old name (naming/PEOPLE.md)."""
+    try:
+        f = next(d / "naming" / "people.py" for d in Path(__file__).resolve().parents if d.name == "components")
+        spec = importlib.util.spec_from_file_location("naming_people", f)
+        people = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(people)
+        return people.folders(brand, avatar)[0] or avatar
+    except Exception:                                  # noqa: BLE001  without the door the name stands as given
+        return avatar
+
+
 def avatar_home(brand, avatar, ws=None):
-    return ws_root(ws) / "brands" / brand / "core-avatars" / avatar
+    return ws_root(ws) / "brands" / brand / "core-avatars" / avatar_folder(brand, avatar)
 
 
 # ---------------------------------------------------------------- the roster and the feed rule
@@ -128,7 +140,7 @@ def feeds_for(brand, avatar, ws=None):
 # ---------------------------------------------------------------- evidence: the bank
 
 def _language_engine(ws=None):
-    p = ws_root(ws) / "tools" / "language-layer" / "language_layer" / "engine.py"
+    p = ws_root(ws) / "components" / "language-layer" / "language_layer" / "engine.py"
     spec = importlib.util.spec_from_file_location("_cm_language_engine", p)
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
@@ -629,7 +641,7 @@ def avatar_title(brand, avatar, ws=None):
     f = ws_root(ws) / "brands" / brand / "core-avatars" / "avatars.json"
     try:
         for a in json.loads(f.read_text()).get("avatars") or []:
-            if a.get("id") == avatar and a.get("label"):
+            if a.get("id") in (avatar, avatar_folder(brand, avatar)) and a.get("label"):
                 return a["label"]
     except Exception:
         pass

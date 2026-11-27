@@ -77,7 +77,7 @@ Principles:
 
 Open deployment decision: where the daily schedule lives — a cloud
 routine (needs APIFY_TOKEN provisioned there) or a designated machine.
-Parked for the owner/the team.
+Parked for the owner/the developer.
 
 ## The curation loop — how the feed learns (designed 2026-08-30, the owner's brief)
 

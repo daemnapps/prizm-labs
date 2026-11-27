@@ -8,6 +8,7 @@ research_gatherer/engine.py.
     python3 components/research-gatherer/gather.py --brand B --avatar A --sub S --dry-run
     python3 components/research-gatherer/gather.py voiceprint --brand B --creator H
     python3 components/research-gatherer/gather.py voiceprint --brand B --all
+    python3 components/research-gatherer/gather.py person --brand B --avatar A --sub S --plan | --pull --cap N --go "words"
     python3 components/research-gatherer/gather.py ownvoice --brand B [--dry-run] [--since D]
     python3 components/research-gatherer/gather.py comments --brand B [--sub S] --url <post> [--dry-run]
     python3 components/research-gatherer/gather.py surveys --brand B [--dry-run]
@@ -53,6 +54,10 @@ if __name__ == "__main__":
     if sys.argv[1:2] == ["retag"]:
         from research_gatherer.retag import main as rt_main   # noqa: E402
         sys.exit(rt_main(sys.argv[2:]))
+    # `person` (2026-11-25): one person's profile filled from Reddit, YouTube and TikTok.
+    if sys.argv[1:2] == ["person"]:
+        from research_gatherer.person import main as ps_main   # noqa: E402
+        sys.exit(ps_main(sys.argv[2:]))
     if sys.argv[1:2] == ["comments"]:
         from research_gatherer.comments import main as cm_main   # noqa: E402
         sys.exit(cm_main(sys.argv[2:]))

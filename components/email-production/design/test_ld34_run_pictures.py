@@ -3,7 +3,7 @@
 from the run's Drive mirror through the API, as `drive:` already is (LD-16
 (email design by API)) — proven offline.
 
-    /usr/bin/python3 tools/email-production/design/test_ld34_run_pictures.py
+    /usr/bin/python3 components/email-production/design/test_ld34_run_pictures.py
 
 The Drive is a fake reach patched over look.reach(); no key, no network, no
 Google package. Stdlib only, 3.9.
@@ -23,7 +23,7 @@ from pathlib import Path
 from unittest import mock
 
 HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE))      # design/ FIRST; never tools/email-production (its email.py shadows the stdlib's)
+sys.path.insert(0, str(HERE))      # design/ FIRST; never components/email-production (its email.py shadows the stdlib's)
 import look as L                   # noqa: E402
 
 BRAND = "zz-brand"

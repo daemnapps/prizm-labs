@@ -15,6 +15,8 @@
 
 Offline: the image engine (plain, product3d, words) is a fake; the workspace is a temp folder.
 """
+import os as _gate_os
+_gate_os.environ["PICTURE_GATE_OFF"] = "all"   # GATE-4 has its own tests (image-production test_set_gate.py); these test other things
 import contextlib
 import io
 import json
@@ -49,7 +51,7 @@ class Fakes:
         def plan(brand, text, products=(), sections=(), rules_lines=()):
             return {"prompt": text, "refs": [], "products": list(products)}
 
-        def make(brand, text, out, products=(), aspect="9:16", recipe=None, sections=(), rules_lines=()):
+        def make(brand, text, out, products=(), aspect="9:16", recipe=None, sections=(), rules_lines=(), people=None, lane=None):
             repo.made.append({"text": text, "products": list(products), "recipe": recipe, "rules": list(rules_lines),
                               "sections": list(sections), "aspect": aspect})
             from PIL import Image
@@ -75,6 +77,9 @@ class Chain(unittest.TestCase):
         self.fakes = Fakes(self.tmp)
         self.p = [mock.patch.object(C, "REPO", self.tmp), mock.patch.object(C, "_image_production", self.fakes.modules),
                   mock.patch.object(C, "_picture_sets", lambda: None)]
+        from image_production import set_gate as SG     # these tests pin the switches: email lane off, at-rest rule on
+        self.gate = {"on": True, "lanes": {"email": False}, "email_at_rest": True}
+        self.p.append(mock.patch.object(SG, "config", lambda t=None: self.gate))
         for p in self.p:
             p.start()
         self.run = self.tmp / "runs" / "email-production" / "testbrand" / "testbrand-nov-02"
@@ -130,7 +135,7 @@ class Chain(unittest.TestCase):
         call = self.fakes.made[0]
         self.assertEqual(call["products"], ["crush-tube"])
         self.assertEqual(call["aspect"], "9:16")
-        # the concept rides in the recipe, marked as the world and never drawn (brand-b nov-06, 2026-10-30: unmarked, a
+        # the concept rides in the recipe, marked as the world and never drawn (brand_b nov-06, 2026-10-30: unmarked, a
         # tile drew the whole email's concept: the woman, the swatches, the smear and the turmeric in one picture)
         self.assertIn("the concept", call["recipe"]["concept"])
         self.assertTrue(call["recipe"]["concept"].startswith(C.CONCEPT_MARK), call["recipe"]["concept"])
@@ -139,7 +144,7 @@ class Chain(unittest.TestCase):
         self.assertEqual(self.fakes.words, [])
 
     def test_5b_one_photograph_never_the_emails_other_parts_and_its_own_frame(self):
-        # brand-b nov-05, 2026-10-30: the hero drew the concept's three message cards and the next section's tube
+        # brand_b nov-05, 2026-10-30: the hero drew the concept's three message cards and the next section's tube
         C.make("testbrand", {"todo": "a woman at her kitchen table reading her phone"}, "lbl", self.run / "media" / "lbl.png",
                "the inbox as three message cards, then the tube in its mound", None, aspect="4:5")
         call = self.fakes.made[0]
@@ -152,7 +157,7 @@ class Chain(unittest.TestCase):
         self.assertNotIn("9:16", call["recipe"]["frame"])
 
     def test_5c_markdown_in_the_concept_or_culture_never_reaches_the_model(self):
-        # brand-a nov-05/06/07, 2026-10-30: culture quoted the culture map's "**Barbershop as debate floor.**" and
+        # brand_a nov-05/06/07, 2026-10-30: culture quoted the culture map's "**Barbershop as debate floor.**" and
         # model-inputs refused every picture of those emails ("brief notes the model would draw: markdown bold")
         C.make("testbrand", {"todo": "a barber's chair, empty"}, "lbl", self.run / "media" / "lbl.png",
                "the **barbershop** as a `debate` floor", 'Culture map: "**Barbershop as debate floor.** (1) **Formats**"')
@@ -170,6 +175,16 @@ class Chain(unittest.TestCase):
                      self.run / "media" / "lbl.png")
         self.assertIn("no product casting sheet for the-gift-set", got["held"])
         self.assertEqual(self.fakes.made, [])
+
+    def test_7b_a_named_set_is_drawn_from_its_members_sheets(self):
+        # brand_a dec-01/dec-04 (2026-11-13): "the five pieces of the King Set" held for want of a set's own sheet
+        (self.tmp / "runs" / "ai-elements" / "testbrand" / "products" / "sets.json").write_text(json.dumps(
+            {"_about": "x", "the-gift-set": {"aliases": ["gift set"], "members": ["crush-tube", "not-a-kit"]}}))
+        named = C.plan("testbrand", {"todo": "the pieces of the set on a table", "product": "the-gift-set"}, "lbl")
+        self.assertEqual(named["products"], ["crush-tube"])            # a member with no kit is never invented
+        self.assertNotIn("no product casting sheet", named.get("held") or "")
+        said = C.plan("testbrand", {"todo": "the Gift Set on a bathroom counter"}, "lbl")
+        self.assertEqual(said["products"], ["crush-tube"])
 
     def test_8_line_sends_todo_slots_through_the_chain(self):
         import line as LINE
@@ -196,6 +211,19 @@ class Chain(unittest.TestCase):
         self.assertEqual(list(made), ["hero"])
         self.assertFalse(hasattr(S, "openai_door"))
         self.assertIn("held", json.loads((self.run / "media" / "offer.chain.json").read_text()))
+
+    def test_b_at_rest_rule_off_makes_a_plain_picture(self):
+        self.gate["email_at_rest"] = False                # 2026-11-11: no kept print, so one plain picture
+        self.assertEqual(C.plan("testbrand", {"brief": BRIEF}, "lbl")["route"], "plain")
+
+    def test_c_at_rest_rule_off_still_uses_a_kept_print(self):
+        from PIL import Image
+        self.gate["email_at_rest"] = False
+        d = self.tmp / "runs" / "image-production" / "testbrand" / "sets" / "card"
+        d.mkdir(parents=True)
+        Image.new("RGB", (90, 160), "green").save(d / "print-v1.png")
+        (d / "set.json").write_text(json.dumps({"runs": ["lbl"], "prints": [{"file": "print-v1.png", "note": "kept: ok"}]}))
+        self.assertEqual(C.plan("testbrand", {"brief": BRIEF}, "lbl")["route"], "set")
 
 
 class Cast(unittest.TestCase):

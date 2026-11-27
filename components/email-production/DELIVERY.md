@@ -14,7 +14,7 @@ its framework, and our copy injected into that framework. She designs it.
 > and see how we can inject copy based on the framework of those emails."
 
 ```
-CALENDAR  →  COPY  →  BRIEF IN FIGMA (copy + reference email + teardown + injection)  →  EVE designs  →  EVE → KLAVIYO
+CALENDAR  →  COPY  →  BRIEF IN FIGMA (copy + reference email + teardown + injection)  →  the editor designs  →  the editor → KLAVIYO
 ```
 
 ## What lands in Figma, per email
@@ -40,7 +40,7 @@ for is listed at the end as the extra this email needs room for.
 **The teardown is of the source email itself**, parsed from the file the
 chain swiped (`brands/<brand>/email-sms/sends/<file>.md`), not of a Figma frame
 that merely resembles it. RULED after the owner caught the first version doing
-exactly that on 2026-09-09: the <brand> file's campaign designs stop at
+exactly that on 2026-09-09: the Brand A file's campaign designs stop at
 January 2026 while the swipe sources are mostly 2026 spring sends, so no
 design of the source exists to point at. The brief names the source by
 subject, date, campaign and file path, and no frame is cloned.
@@ -53,13 +53,13 @@ Every brief also ships as Markdown in the run folder
 - No cloning templates and typing into their layers (retired 2026-09-09).
 - No HTML render as a deliverable (retired earlier the same day; the rebuild
   sweep stays only as a design record).
-- No Figma → Klaviyo automation: the team puts the finals into Klaviyo herself.
+- No Figma → Klaviyo automation: the editor puts the finals into Klaviyo herself.
 - The machine never schedules or sends (RULED 2026-09-01). Amended 2026-10-12: the owner's Approve → Schedule on the email approval page schedules (never sends now) — EP-3 (email approval card).
 
 ## One brand at a time (RULED 2026-09-09, the owner: "let's focus on one brand at a time")
 
-**<brand> only.** The <brand> briefs were deleted from its Figma file on the
-same ruling; <brand>'s own design pages were not touched. <brand>'s calendars,
+**Brand A only.** The Brand B briefs were deleted from its Figma file on the
+same ruling; Brand B's own design pages were not touched. Brand B's calendars,
 send library and copy stay on disk, unused, until he comes back to it.
 
 ## A send is not a version (the owner, 2026-09-09: "our calendar tool shows only 2 but you have 4")
@@ -148,19 +148,19 @@ which the chain has never written copy for.
 
 Fifteen sends, twenty-nine versions, on the board.
 
-## Where <brand> stands (2026-09-10)
+## Where Brand A stands (2026-09-10)
 
 | | |
 |---|---|
 | Calendar | September from the 14th, 17 slots — one send a day · October and November standing |
 | Copy | September complete — 29 versions live, 2 parked in `results/_cut-2026-09/` |
-| Figma briefs | **all 29 in**, on the page "<brand> - reference emails + briefs" in the <brand> account's Figma file, in a section called "<brand> September 2026 - the 14th to the 30th" |
-| Reference emails | the five most recent <brand> campaign sections (Sep 2025 - Jan 2026, 113 emails) copied onto that page |
-| Klaviyo | the team, from Figma |
+| Figma briefs | **all 29 in**, on the page "Brand A - reference emails + briefs" in the Brand B account's Figma file, in a section called "Brand A September 2026 - the 14th to the 30th" |
+| Reference emails | the five most recent Brand A campaign sections (Sep 2025 - Jan 2026, 113 emails) copied onto that page |
+| Klaviyo | the editor, from Figma |
 
-The <brand> file itself (`<brand> -> the owner (Copy)`) sits in the owner's own Figma
+The Brand A file itself (`Brand A -> the owner (Copy)`) sits in the owner's own Figma
 team, on the Starter plan, whose connector budget is spent — the session
-cannot read or write it. That is why the <brand> work lives on its own page in
+cannot read or write it. That is why the Brand A work lives on its own page in
 the other account's file, which the same designer already works in.
 
 ## Parked: a brand with no Klaviyo history

@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """The calendar flow: a brand's record in, a month's slots out — built from
 the ground up, in layers, each layer dated before the next is laid on it
-(the owner, 2026-09-02: "ground up the calendar fundamentally").
+(owner, 2026-09-02: "ground up the calendar fundamentally").
 
     python3 marketing_calendar.py 2026-11 --brand <brand>
     python3 marketing_calendar.py 2026-11 --brand <brand> --dry-run         # free: spends and writes nothing (dryrun.py)
     python3 marketing_calendar.py 2026-11 --brand <brand> --stop-at-cells  # pause after stage 3
     python3 marketing_calendar.py 2026-11 --brand <brand> --continue        # resume from a hand-edited cells.json
 
-Runs start to finish on the record — no checkpoint, no sign-off (the owner,
+Runs start to finish on the record — no checkpoint, no sign-off (owner,
 2026-08-31). One numbered folder per layer under
 runs/marketing-calendar/<brand>/<month>/ (SI-22 (calendar months home)):
 
@@ -56,7 +56,7 @@ from pathlib import Path
 
 def _json_or(path, default):
     """A brand file that is not there yet reads as empty — a brand with no
-    history is a brand, not an error (Brand-B, 2026-09-09)."""
+    history is a brand, not an error (brand_b, 2026-09-09)."""
     try:
         return json.loads(path.read_text())
     except (FileNotFoundError, ValueError):
@@ -70,6 +70,7 @@ def _text_or(path, default=""):
         return default
 
 from paths import HERE, WORKSPACE, RUNS, COMPONENTS, month_dir
+import paths                                          # noqa: E402
 sys.path.append(str(COMPONENTS / "brandpath"))      # appended, never ahead of this tool
 import brandpath as BP                                # noqa: E402
 import runner as R
@@ -112,7 +113,7 @@ def jfence(text, opener="["):
 
 
 def creative_qc(tool, stage, run_dir, output, given=None, items=None):
-    """THE CREATIVE QC LOOP (the owner, 2026-10-02: "installed for each of my
+    """THE CREATIVE QC LOOP (owner, 2026-10-02: "installed for each of my
     production tools … for all stages in the creation process"): the output is
     reviewed against what it was given and the stage's bars
     (components/marketing-chain-checks/definitions/stages.json); the round is filed in
@@ -204,7 +205,11 @@ def resolve_moments(brand_root, month):
                        stream=m["stream"], evidence=m["evidence"],
                        note=m.get("note"), sent=m.get("sent") or [],
                        window_text=m.get("window", ""), kind=None,
-                       start=None, end=None, peak=None, in_month=False)
+                       start=None, end=None, peak=None, in_month=False,
+                       # the moment's own calls (2026-11-03): its offer, and
+                       # whether the best customers see it before it opens
+                       offer=(str(m.get("offer") or "").strip() or None),
+                       early_access=m.get("early-access"))
             if a.get("live"):
                 row["kind"] = "live"; row["in_month"] = True
             elif a.get("any"):
@@ -258,6 +263,26 @@ def resolve_moments(brand_root, month):
     return rows
 
 
+def moment_window(brand, key, on=None):
+    """PUBLIC — library surface 4 (2026-11-03). The window of the brand's moment `key` that a piece made on
+    `on` (a date, default today) was made for: the first window that ends on or after `on`, read from
+    brands/<brand>/strategy/moments.json through the moment's own anchor — the same reading the month is
+    planned on, so a moment's dates live in one file. -> (start, end) as ISO dates, or None when the brand
+    has no such moment or its anchor names no date (`any`, `live`)."""
+    on = on or datetime.date.today()
+    root = paths.brand_root(brand)
+    if not BP.brand_path(root.name, "strategy", "moments.json", root=root.parent).is_file():
+        return None
+    found, d = set(), on.replace(day=1)
+    for _ in range(14):                      # this month and the year after it
+        for r in resolve_moments(root, f"{d:%Y-%m}"):
+            if r["key"] == key and r.get("start") and r.get("end"):
+                found.add((r["start"], r["end"]))
+        d = (d + datetime.timedelta(days=32)).replace(day=1)
+    live = sorted(w for w in found if w[1] >= on.isoformat())
+    return live[0] if live else None
+
+
 def render_skeleton(month, hol_rows, moments, planned_keys):
     first, last = month_bounds(month)
     out = [f"# The month's skeleton — {first:%B %Y}", "",
@@ -301,7 +326,7 @@ def render_skeleton(month, hol_rows, moments, planned_keys):
 def holiday_history(brand_root, m, hol_names):
     """What this holiday has EARNED for this brand before — every past send
     whose campaign or subject names it, joined to its performance. Decides
-    how long the build-up is (the owner, 2026-09-02: "3-4 build-up emails
+    how long the build-up is (owner, 2026-09-02: "3-4 build-up emails
     depending on the history of responsiveness of the audience to that
     holiday, so we can fully liquidate a list in that window")."""
     try:
@@ -358,7 +383,19 @@ def anchor_arcs(month, moments, cells, catalogue, brand_root=None, hol_rows=()):
     full arc — warm-up, ask, close — around the day; an observance is one
     send on the day; a dated window with a peak (Christmas) is an arc that
     lands BEFORE the peak. Offers are left `[ASSIGN]` for the concepts stage
-    to fill from the bank."""
+    to fill from the bank — unless the moment names its own `offer` in
+    strategy/moments.json, which then rides on every offer-carrying send of
+    its arc (layer 7 still checks it against the bank).
+
+    Two of the moment's own calls also land here (2026-11-03):
+    - `early-access` on a sale moment places one `early-access` send to the
+      brand's VIP segment (audience-matrix.json) before the sale opens — the
+      value is how many days before (`true` is one day);
+    - a sale moment's `last-chance` sits on the brand's order-by date from
+      operations/shipping.md when one covers the moment's peak (the arrive-by
+      date falls in the three days up to it), because the last day to order in
+      time is the last day the offer stands. The shipping record decides which
+      moments that is — no moment is named here."""
     first, last = month_bounds(month)
     types = {t["key"]: t for t in catalogue["types"]}
     serve = [c for c in (cells or {}).get("serve", []) if c.get("live", True)]
@@ -389,7 +426,7 @@ def anchor_arcs(month, moments, cells, catalogue, brand_root=None, hol_rows=()):
     dated.sort(key=lambda x: (x["peak"] or x["start"], 0 if x["audience"] == "all" else 1))
     for m in dated:
         # ONE send per moment, to every live segment it fits — a holiday sale
-        # is one email with several audiences, not several emails (the owner,
+        # is one email with several audiences, not several emails (owner,
         # 2026-09-02: "that would get messy"). Variants are the union.
         segs, vs = [], []
         for seg in serve:
@@ -422,12 +459,24 @@ def anchor_arcs(month, moments, cells, catalogue, brand_root=None, hol_rows=()):
             else:
                 warm, ask, close = s - datetime.timedelta(4), s - datetime.timedelta(2), s
             gift = "gift" in m["key"] or m["key"] == "christmas"
+            moff = m.get("offer")
+            order_by = None
+            if sale and brand_root is not None:
+                order_by = _order_by_for(brand_root, m)
+                if order_by:
+                    close = order_by
+                    if ask >= close:
+                        ask = close - datetime.timedelta(4)
             base = dict(cell={"segment": segs[0], "avatar": "mixed" if len(vs) > 1 else vs[0]["avatar"]},
                         segments=list(segs), variants=vs, occasion=m["key"], product="none",
                         anchored=True, moment_evidence=m["evidence"])
             if sale:
                 n += 1
                 aid = f"A{n}"
+                # every member of the arc names it (2026-11-03), and the last day it may state: the arc's close,
+                # which is the brand's order-by date when its shipping record gives one (2026-11-04)
+                base = dict(base, arc=aid, deadline=close.isoformat(),
+                            **({"order_by": order_by.isoformat()} if order_by else {}))
                 ask_type = "gift-guide" if gift else "sale-window"
                 names = [r["name"] for r in hol_rows
                          if r["key"] in ((m.get("peak_key") or ""), m["key"])] or [m["key"].replace("-", " ")]
@@ -452,20 +501,29 @@ def anchor_arcs(month, moments, cells, catalogue, brand_root=None, hol_rows=()):
                         build_up=f"{i + 1} of {len(ups)}",
                         why=(f"build-up {i + 1} of {len(ups)} to the `{m['key']}` ask on "
                              f"{ask_d.isoformat()} — {reason} (anchored by code, layer 4)")))
+                offer_why = (f" · offer `{moff}` named by the moment (strategy/moments.json)"
+                             if moff else "")
                 if first <= ask_d <= last:
                     anchors.append(
                         dict(base, anchor_id=aid, type=ask_type, category="Promotional", role="asks",
-                             offer="[ASSIGN]", _date=ask_d.isoformat(),
+                             offer=moff or "[ASSIGN]", _date=ask_d.isoformat(),
                              why=f"the ask of the `{m['key']}` arc on its real date window "
                                  f"({m['start']}{' to ' + m['end'] if m['end'] != m['start'] else ''}) — "
-                                 f"a {hk} moment; offer assigned from the bank in layer 5",
+                                 f"a {hk} moment; "
+                                 + (offer_why[3:] if moff else "offer assigned from the bank in layer 5"),
                              history=hist))
                 if first <= close <= last:
+                    close_why = (f"close of the `{m['key']}` arc on {close.isoformat()} — the last day "
+                                 "the offer stands; the offer travels with it")
+                    if order_by:
+                        close_why = (f"close of the `{m['key']}` arc on {close.isoformat()} — the "
+                                     "brand's order-by date for arrival in time "
+                                     "(operations/shipping.md); the offer travels with it")
                     anchors.append(
                         dict(base, anchor_id=f"{aid}-close", type="last-chance", category="Promotional",
-                             role="recovers", offer="[ASSIGN]", _date=close.isoformat(),
-                             why=f"close of the `{m['key']}` arc on {close.isoformat()} — the last day "
-                                 "the offer stands; the offer travels with it"))
+                             role="recovers", offer=moff or "[ASSIGN]", _date=close.isoformat(),
+                             **({"order_by": order_by.isoformat()} if order_by else {}),
+                             why=close_why + offer_why))
             elif first <= s <= last:
                 n += 1
                 anchors.append(dict(base, anchor_id=f"A{n}", type="moment", category="Cultural",
@@ -475,13 +533,152 @@ def anchor_arcs(month, moments, cells, catalogue, brand_root=None, hol_rows=()):
     return anchors
 
 
+def place_early_access(anchors, month, moments, cells, catalogue, brand_root):
+    """`early-access` on a sale moment (strategy/moments.json): one early-access send to the brand's VIP
+    segment the day(s) before the arc's first offer-carrying send — the day the sale actually opens for
+    everyone else, holiday-period sends included. It is a member of that arc: same arc id, same offer (or
+    the same assignment), so it has the arc's warm-ups before it and its close after it, and it goes
+    when the arc loses its offer. The moment's call wins over the month's live cells for this one send;
+    it is placed only inside the month. -> (sends, notes for a person)."""
+    types = {t["key"]: t for t in catalogue["types"]}
+    if brand_root is None or "early-access" not in types:
+        return [], []
+    first, last = month_bounds(month)
+    live = {c.get("segment") for c in (cells or {}).get("serve", []) if c.get("live", True)}
+    vip = vip_segment(brand_root)
+    out, notes, done = [], [], set()
+    for m in moments:
+        ea = m.get("early_access")
+        if not ea or m["key"] in done:
+            continue
+        asks = sorted((a for a in anchors if a.get("occasion") == m["key"] and a.get("arc")
+                       and a.get("role") == "asks" and str(a.get("offer") or "none").lower() != "none"),
+                      key=lambda a: (a["_date"], a.get("_hour") or 0))
+        if not asks:
+            continue
+        done.add(m["key"])
+        days = 1 if ea is True else int(ea)
+        opens = datetime.date.fromisoformat(asks[0]["_date"])
+        ed = opens - datetime.timedelta(days)
+        if not vip:
+            notes.append(f"`{m['key']}` carries `early-access`, but the brand keeps no VIP segment "
+                         "(email-sms/audience-matrix.json) — no early-access send")
+            continue
+        if vip not in live:
+            # the moment's own call wins over the month's live cells for this one send (2026-11-04)
+            notes.append(f"`{m['key']}` carries `early-access` to {vip}, which the cells stage did not make live "
+                         "this month: the moment's call stands for this one send, no other send goes there")
+        if ed < first:
+            notes.append(f"`{m['key']}` opens on {opens.isoformat()}; {days} day(s) before it is in the "
+                         "previous month — no early-access send this month")
+            continue
+        a0, t = asks[0], types["early-access"]
+        out.append(dict(
+            cell={"segment": vip, "avatar": a0["cell"]["avatar"]}, segments=[vip], deadline=a0.get("deadline"),
+            variants=a0.get("variants") or [], occasion=m["key"], product=a0.get("product", "none"),
+            anchored=True, moment_evidence=m.get("evidence"), arc=a0["arc"], early_access_call=True,
+            anchor_id=f"{a0['arc']}-early", type="early-access",
+            category=CATS.get(t.get("well", "ask")), role=t.get("role", "asks"),
+            offer=a0.get("offer"), _date=ed.isoformat(),
+            why=(f"early access to the `{m['key']}` sale for {vip}, {days} day(s) before it opens on "
+                 f"{opens.isoformat()} — the moment carries `early-access` (anchored by code, layer 4)")))
+    return out, notes
+
+
+def sms_cadence():
+    p = Path(__file__).resolve().parent.parent / "definitions" / "sms-cadence.json"
+    return _json_or(p, {})
+
+
+def sms_beats(anchors, moments, cad=None, brand_root=None):
+    """The month's SMS (definitions/sms-cadence.json, 2026-11-03): for every sale arc, a twin of the send on
+    each beat the cadence lists — early access, the open, the moment's own day, the close — same date, same
+    audience, same moment, same offer, marked `channel: sms`; a content moment only when the cadence names it.
+    At most `daily_cap` a day to one segment (the earlier beat in the cadence's list wins), at the cadence's
+    hour, never inside quiet hours. Deterministic; nothing is sent. -> the SMS sends."""
+    cad = sms_cadence() if cad is None else cad
+    beats = cad.get("beats") or []
+    if not beats:
+        return []
+    hour = int(cad.get("hour", 12))
+    q = cad.get("quiet_hours") or {}
+    if q and not (int(q.get("to", 0)) <= hour < int(q.get("from", 24))):
+        hour = int(q.get("to", 9))                      # the cadence's hour never lands in quiet hours
+    cap = int(cad.get("daily_cap", 1))
+    by_key = {m["key"]: m for m in moments if m.get("in_month")}
+    content = set(cad.get("content_moments") or [])
+    picks = []                                           # (priority, beat, send)
+    arcs = {}
+    for a in anchors:
+        if a.get("arc"):
+            arcs.setdefault(a["arc"], []).append(a)
+    for arc, members in arcs.items():
+        members = sorted(members, key=lambda a: (a["_date"], a.get("_hour") or 0))
+        sells = [a for a in members if a.get("role") == "asks" and a.get("type") != "early-access"
+                 and str(a.get("offer") or "none").lower() != "none"]
+        m = by_key.get(members[0].get("occasion")) or {}
+        found = {
+            "early-access": next((a for a in members if a.get("type") == "early-access"), None),
+            "open": sells[0] if sells else None,
+            "peak": next((a for a in sells if a["_date"] == m.get("start")), None),
+            "last-chance": next((a for a in reversed(members) if a.get("role") == "recovers"), None),
+        }
+        for i, b in enumerate(beats):
+            if found.get(b) is not None:
+                picks.append((i, b, found[b]))
+    for a in anchors:                                     # a content moment, only when the cadence names it
+        if not a.get("arc") and a.get("occasion") in content:
+            picks.append((len(beats), "moment", a))
+    jobs = cad.get("jobs") or {}
+    reply_kw = None
+    if brand_root is not None:
+        rec = _json_or(brand_root / "operations" / "brand.json", {})
+        if rec.get("sms_reply_keyword") and rec.get("sms_platform") in (cad.get("reply_platforms") or {}):
+            reply_kw = rec["sms_reply_keyword"]
+    out, used = [], {}
+    for i, b, a in sorted(picks, key=lambda x: (x[0], x[2]["_date"])):
+        segs = list(a.get("segments") or [a["cell"]["segment"]])
+        if any(used.get((sg, a["_date"]), 0) >= cap for sg in segs):
+            continue
+        for sg in segs:
+            used[(sg, a["_date"])] = used.get((sg, a["_date"]), 0) + 1
+        job = "reply" if (reply_kw and b in (cad.get("reply_beats") or [])) else jobs.get(b, "reminder")
+        out.append(dict(a, channel="sms", anchor_id=f"{a.get('anchor_id')}-sms", _hour=hour,
+                        sms_beat=b, sms_job=job, twin_of=a.get("anchor_id"),
+                        **({"reply_keyword": reply_kw} if job == "reply" else {}),
+                        audience_rule=cad.get("audience", "SMS-consented members only"),
+                        why=(f"SMS on the `{b}` beat of the `{a.get('occasion')}` arc — the twin of its "
+                             f"{a.get('type')} send (definitions/sms-cadence.json); SMS-consented members only")))
+    return out
+
+
+def vip_segment(brand_root):
+    """The brand's VIP segment by its name in email-sms/audience-matrix.json,
+    or None when the brand keeps none."""
+    matrix = _json_or(brand_root / "email-sms" / "audience-matrix.json", {})
+    return next((s["name"] for s in matrix.get("segments") or []
+                 if "vip" in str(s.get("name", "")).lower()), None)
+
+
+def _order_by_for(brand_root, m):
+    """The brand's order-by date for a sale moment: the shipping record's
+    row whose arrive-by date falls in the three days up to the moment's peak.
+    None when the brand's shipping record names no such date."""
+    p = datetime.date.fromisoformat(m.get("peak") or m["start"])
+    rows = [r for r in C.order_by_dates(brand_root, p.year)
+            if p - datetime.timedelta(3) <= datetime.date.fromisoformat(r["arrive_by"]) <= p]
+    if not rows:
+        return None
+    return max(datetime.date.fromisoformat(r["order_by"]) for r in rows)
+
+
 def holiday_cadence():
     p = Path(__file__).resolve().parent.parent / "definitions" / "holiday-cadence.json"
     return _json_or(p, {})
 
 
 def holiday_fill(anchors, month, moments, catalogue, cad=None):
-    """Holiday periods carry 2-3 sends a day (the owner, 2026-10-09: "2-3 emails /
+    """Holiday periods carry 2-3 sends a day (owner, 2026-10-09: "2-3 emails /
     day go out on holiday periods so we milk the list"). For every day inside a
     holiday moment's sale window — opened `lead_days` early (Black Friday live a
     week ahead) and run to its close — top the day up with promotional sends
@@ -495,7 +692,8 @@ def holiday_fill(anchors, month, moments, catalogue, cad=None):
     if not keys:
         return []
     first, last = month_bounds(month)
-    types = {t["key"] for t in catalogue["types"]}
+    spec = {t["key"]: t for t in catalogue["types"]}
+    types = set(spec)
     push = [t for t in cad.get("push_types", []) if t in types] or ["sale-window"]
     hours = cad.get("hours") or [9, 13, 19]
     skip = [w.lower() for w in cad.get("skip_segments_matching", [])]
@@ -508,7 +706,9 @@ def holiday_fill(anchors, month, moments, catalogue, cad=None):
         e = datetime.date.fromisoformat(m.get("end") or m["start"])
         if m.get("peak") and m["kind"] == "window":
             e = datetime.date.fromisoformat(m["peak"]) - datetime.timedelta(1)
-        arc = [a for a in anchors if a.get("occasion") == m["key"]]
+        # the period is worked for the arc's own segments; an early-access send to the VIP list is
+        # ahead of the period, not part of it (2026-11-03)
+        arc = [a for a in anchors if a.get("occasion") == m["key"] and a.get("type") != "early-access"]
         segs = [x for a in arc for x in (a.get("segments") or []) if engaged(x)]
         segs = list(dict.fromkeys(segs))
         if not segs:
@@ -517,29 +717,43 @@ def holiday_fill(anchors, month, moments, catalogue, cad=None):
         d = s
         while d <= e:
             if first <= d <= last:
-                days.setdefault(d.isoformat(), (m["key"], segs, vs))
+                days.setdefault(d.isoformat(), (m["key"], segs, vs, m.get("offer"),
+                                                next((a["arc"] for a in arc if a.get("arc")), None)))
                 if m["key"] in (cad.get("peak_moments") or []) and datetime.date.fromisoformat(m["start"]) <= d:
                     peak.add(d.isoformat())
             d += datetime.timedelta(1)
     extra, n = [], 0
+    # an arc's close is its last ask's cool-down: on and after the close's day the period's
+    # extra sends are only ones that do not ask (2026-11-03) — an ask after the close has none
+    close_of = {}
+    for a in anchors:
+        if a.get("arc") and a.get("role") in ("recovers", "closes"):
+            close_of[a["arc"]] = max(close_of.get(a["arc"], ""), a["_date"])
     for ds in sorted(days):
-        key, segs, vs = days[ds]
+        key, segs, vs, moff, arc_id = days[ds]
         on_day = [a for a in anchors + extra if a.get("_date") == ds]
         want = int(cad.get("sends_on_peak_days" if ds in peak else "sends_per_day", 2))
         used = {a.get("type") for a in on_day}
         hrs = [h for h in hours if h not in {a.get("_hour") for a in on_day}]
+        closing = bool(close_of.get(arc_id)) and ds >= close_of[arc_id]
+        pool = [x for x in push if not closing or (spec.get(x) or {}).get("role") != "asks"]
         for i in range(max(0, want - len(on_day))):
-            t = next((x for x in push if x not in used), None)
+            t = next((x for x in pool if x not in used), None)
             if not t:
                 break
             used.add(t)
             n += 1
             extra.append(dict(cell={"segment": segs[0], "avatar": "mixed" if len(vs) > 1 else (vs[0]["avatar"] if vs else "none")},
                               segments=list(segs), variants=vs, occasion=key, product="none", anchored=True,
-                              anchor_id=f"H{n}", type=t, category="Promotional", role="asks", offer="[ASSIGN]",
+                              anchor_id=f"H{n}", type=t, arc=arc_id,
+                              **({"deadline": close_of[arc_id]} if close_of.get(arc_id) else {}),
+                              # the type's own well and role, from the brand's catalogue
+                              category=CATS.get((spec.get(t) or {}).get("well", "ask"), "Promotional"),
+                              role=(spec.get(t) or {}).get("role", "asks"),
+                              offer=moff or "[ASSIGN]",
                               _date=ds, _hour=hrs[i] if i < len(hrs) else hours[-1],
                               why=(f"holiday period: send {len(on_day) + i + 1} of {want} on {ds} inside the `{key}` "
-                                   f"sale window — 2-3 a day on holidays to work the list (the owner, 2026-10-09); "
+                                   f"sale window — 2-3 a day on holidays to work the list (owner, 2026-10-09); "
                                    f"engaged segments only (anchored by code, layer 4)")))
     return extra
 
@@ -654,9 +868,9 @@ def expand_arcs(moves, catalogue):
 
 BANK_NOTES = {"guarantee", "social-proof", "cadence", "rules", "open",
               "funnel-shape", "page-pricing", "sms-capture",
-              # note headings a bank may carry under the same style (Brand-B's):
+              # note headings a bank may carry under the same style (brand_b's):
               "two-prices", "never-pair", "subscribe-save", "promo-calendar",
-              "live-prices", "product-facts", "notes", "context"}
+              "live-prices", "product-facts", "notes", "context", "storefront-order", "popup"}
 
 
 def offer_bank(brand_root, roster=()):
@@ -670,7 +884,7 @@ def offer_bank(brand_root, roster=()):
     like the machine being careful.
 
     So it reads through the same rule now — a heading is an offer when its
-    section says what the thing costs — and a FLAT bank (brand-wide, the owner's
+    section says what the thing costs — and a FLAT bank (brand-wide, owner's
     2026-09-13 shape) gives every avatar the same set, because those offers
     belong to the brand rather than to one avatar.
     """
@@ -696,7 +910,7 @@ def offer_bank(brand_root, roster=()):
 
 def apply_offers(moves, assignments, brand_root):
     """Layer 7. Every offer on every send is checked against the brand's
-    offer bank — the ONLY place an offer can come from (the owner, 2026-09-02).
+    offer bank — the ONLY place an offer can come from (owner, 2026-09-02).
     An anchored `[ASSIGN]` takes the concepts stage's assignment; an offer no
     variant of the send can carry is a documented borrow if it exists under
     another avatar, and stripped to none if it exists nowhere. An ask left
@@ -711,7 +925,7 @@ def apply_offers(moves, assignments, brand_root):
         off = str(m.get("offer") or "none").strip()
         aid = m.get("anchor_id", "")
         if off == "[ASSIGN]":
-            base = aid.replace("-close", "")
+            base = re.sub(r"-(close|early)$", "", re.sub(r"-sms$", "", aid))   # an SMS twin shares its send's
             a = assign.get(base)
             off = str((a or {}).get("offer") or "none").strip()
             m["offer"] = off
@@ -742,8 +956,8 @@ def apply_offers(moves, assignments, brand_root):
             elif not m.get("arc_generated") and m.get("_arc"):
                 dead_arc.add(m["_arc"])
     for m in moves:
-        aid = m.get("anchor_id", "")
-        base = re.sub(r"-(warm|close|up\d+)$", "", aid)
+        aid = re.sub(r"-sms$", "", m.get("anchor_id", ""))
+        base = re.sub(r"-(warm|close|early|up\d+)$", "", aid)
         is_up = bool(re.search(r"-(warm|up\d+)$", aid))
         if m.get("anchored") and base in dead_anchor and not is_up:
             log.append(f"- {m.get('cell', {}).get('segment')} · `{m['occasion']}` arc: no offer any "
@@ -769,7 +983,7 @@ def apply_offers(moves, assignments, brand_root):
 
 def ensure_weekly_affiliate(moves, month, brand_root, cells):
     """Layer 8: one affiliate feature every week — a standing business
-    requirement (the owner's investor, 2026-09-01). Never invents a partner."""
+    requirement (owner's investor, 2026-09-01). Never invents a partner."""
     f = brand_root / "email-sms" / "affiliates.json"
     if not f.is_file():
         return moves, 0, ("this brand has no affiliate roster on file — the weekly "
@@ -780,7 +994,7 @@ def ensure_weekly_affiliate(moves, month, brand_root, cells):
     if rows is None:
         # The roster is there under a name this reader does not know. Silence
         # would be the worst answer: a partner the brand has recorded would
-        # never be scheduled and nobody would ever find out. Brand-B spent its
+        # never be scheduled and nobody would ever find out. brand_b spent its
         # whole life in exactly that state under the key `partners` (2026-09-13).
         lists = {k: v for k, v in doc.items() if isinstance(v, list)}
         if lists:
@@ -841,7 +1055,10 @@ def moment_windows(moments, run_up=11, hol_rows=()):
                 # a game, a finale) is used on the day or the day before (2026-10-13:
                 # Veterans Day landed on Nov 5, the CMA Awards 12 days early)
                 sale = m.get("holiday_kind", "retail") in ("retail", "season-open")
-                s -= datetime.timedelta(days=run_up if sale else 1)
+                # a sale that goes live `lead_days` early (holiday-cadence.json) warms up
+                # from there, so its window reaches back over the lead too (2026-11-03)
+                lead = int((holiday_cadence().get("lead_days") or {}).get(m["key"], 0)) if sale else 0
+                s -= datetime.timedelta(days=run_up + lead if sale else 1)
             out.setdefault(m["key"], []).append((s.isoformat(), m["end"]))
     # public holidays the brand never wrote down (Veterans Day) still have a day:
     # same rule — a sale warms up, an observance is the day or the day before
@@ -904,10 +1121,10 @@ def fit_month(moves, month, brand_root, catalogue, findings_txt, windows=None):
     inside that window. Rank is the order layer 5 wrote the moves in. Never a
     warm-up alone, never a close pushed past its moment. Repeated until every
     arc left stands whole; anchored (dated holiday) sends are never cut here
-    (2026-09-23, the team: "update the calendar following the rules so
+    (2026-09-23, designer: "update the calendar following the rules so
     nothing breaks").
 
-    Brand-B's October is why: 25 sends planned into after-summer-reset's
+    brand_b's October is why: 25 sends planned into after-summer-reset's
     fifteen days (Oct 1-15) at one send a day — layer 9 then dropped every
     generated warm-up and pushed eight closes past the 15th."""
     first, last = month_bounds(month)
@@ -960,7 +1177,7 @@ def order_month(moves, month, brand_root, catalogue, findings_txt, windows=None)
     kept, dropped, seen = [], [], set()
     for mv in moves:
         key = (mv.get("cell", {}).get("segment"), mv.get("type"),
-               (mv.get("occasion") or "")[:40], mv.get("anchor_id", ""))
+               (mv.get("occasion") or "")[:40], mv.get("anchor_id", ""), mv.get("channel", "email"))
         if key in seen:
             dropped.append(mv); continue
         seen.add(key); kept.append(mv)
@@ -968,7 +1185,7 @@ def order_month(moves, month, brand_root, catalogue, findings_txt, windows=None)
     # dates: anchors first (fixed), then everything else into free days
     taken = {}                                   # segment -> set(date)
     day_used = set()                             # every date already carrying a send
-    # ONE SEND A DAY (RULED 2026-09-10, the owner: "let's only do 1 send, not 2 on a
+    # ONE SEND A DAY (RULED 2026-09-10, owner: "let's only do 1 send, not 2 on a
     # day for now"). A send may still go out in several versions, one per
     # avatar — that is one send. Two different sends never share a date.
     def busy(seg, d):
@@ -1034,7 +1251,7 @@ def order_month(moves, month, brand_root, catalogue, findings_txt, windows=None)
             span = [first + datetime.timedelta(i) for i in range((last - first).days + 1)]
             # ...but NEVER outside this move's own bounds first. Those bounds are
             # what keep a cool-down after its ask, and this fallback used to
-            # ignore them: Brand-B's `guarantee` wanted the 27th, found it taken,
+            # ignore them: brand_b's `guarantee` wanted the 27th, found it taken,
             # and was moved to the 21st — four days BEFORE the sale it was
             # supposed to close (2026-09-14). A reassurance email before the
             # offer exists is not a cool-down, it is a mistake with a date on it.
@@ -1046,7 +1263,7 @@ def order_month(moves, month, brand_root, catalogue, findings_txt, windows=None)
                 # DROPPED, not relocated. A `guarantee` four days before the
                 # sale it exists to close is worse than no guarantee at all —
                 # it is a wrong email rather than a missing one, and the reader
-                # cannot tell it was a scheduling accident. Brand-B's September
+                # cannot tell it was a scheduling accident. brand_b's September
                 # is 16 days holding 17 sends; this is what full looks like.
                 mv["_dropped_arc"] = True
                 log.append(f"- {seg} · `{mv.get('type')}`: no free day left between "
@@ -1055,11 +1272,13 @@ def order_month(moves, month, brand_root, catalogue, findings_txt, windows=None)
                            f"order. The month is full; cut another send to make room "
                            f"for it, or let the arc stand short.")
                 continue
-            if placed is None and (hi - lo).days <= 2 and (lo > first or hi < last):
+            if placed is None and (lo > first or hi < last):
                 # A send on a one- or two-day culture moment (a game, a finale,
                 # Veterans Day) whose day is already taken — usually by that
                 # moment's own anchored email — is DROPPED, not moved weeks away.
                 # A CMA Awards email twelve days early is a wrong email (2026-10-13).
+                # Any length of window (2026-11-03): a Christmas-photos email whose
+                # window's days are full went to the 15th, twelve days before it.
                 mv["_dropped_arc"] = True
                 log.append(f"- {seg} · `{mv.get('type')}` on {mv.get('occasion')}: its day(s) "
                            f"{lo.isoformat()} to {hi.isoformat()} already carry a send — DROPPED "
@@ -1094,7 +1313,7 @@ def order_month(moves, month, brand_root, catalogue, findings_txt, windows=None)
     #
     # A send is written off a real email whose structure it borrows, so a brand
     # that has never sent anything has no formats of its own and every slot
-    # comes out unfilled. the owner, 2026-09-14: "some brands might not have them,
+    # comes out unfilled. owner, 2026-09-14: "some brands might not have them,
     # and you got to develop them from scratch, or you use swipe files... these
     # are things that we have to make sure that the code is also checking for."
     #
@@ -1166,6 +1385,16 @@ def order_month(moves, month, brand_root, catalogue, findings_txt, windows=None)
             "source": src_file, "source_brand": src_brand,
             "why": mv.get("why", ""),
             "anchored": bool(mv.get("anchored")),
+            "arc": mv.get("arc"),
+            "channel": mv.get("channel", "email"),
+            **({"offer_mix": mv["offer_mix"]} if mv.get("offer_mix") else {}),
+            **({"early_access_call": True} if mv.get("early_access_call") else {}),
+            **({"deadline": mv["deadline"]} if mv.get("deadline") else {}),
+            **({"order_by": mv["order_by"]} if mv.get("order_by") else {}),
+            **({"sms_beat": mv.get("sms_beat"), "sms_job": mv.get("sms_job"),
+                "audience_rule": mv.get("audience_rule"), "_twin_of": mv.get("twin_of"),
+                **({"reply_keyword": mv["reply_keyword"]} if mv.get("reply_keyword") else {})}
+               if mv.get("channel") == "sms" else {}),
             "arc_generated": bool(mv.get("arc_generated")),
             "affiliate": mv.get("affiliate"),
         })
@@ -1176,7 +1405,7 @@ def order_month(moves, month, brand_root, catalogue, findings_txt, windows=None)
         aid = mv.get("anchor_id")
         if aid:
             groups.setdefault(("A", re.sub(r"-(warm|close|up\d+)$", "", aid),
-                               mv["cell"]["segment"]), []).append(mv)
+                               mv["cell"]["segment"], mv.get("channel", "email")), []).append(mv)
         elif mv.get("arc_for"):                       # generated, or a peer linked in
             groups.setdefault(("G", mv["arc_for"]), []).append(mv)
         elif mv.get("_arc"):                          # the ask itself
@@ -1185,6 +1414,18 @@ def order_month(moves, month, brand_root, catalogue, findings_txt, windows=None)
         chain = [by_mv[id(x)] for x in sorted(g, key=lambda x: x["_date"])]
         for a, b in zip(chain, chain[1:]):
             a["then"] = b["id"]; b["follows"] = a["id"]
+    # AN SMS FOLLOWS ITS EMAIL (2026-11-04): the text names the email it is the companion of; the email
+    # names the text in `then` when it names nothing else
+    email_by_anchor = {mv.get("anchor_id"): by_mv[id(mv)] for mv in ordered
+                       if mv.get("anchor_id") and mv.get("channel", "email") == "email"}
+    for mv in ordered:
+        if mv.get("channel") == "sms":
+            s_, e_ = by_mv[id(mv)], email_by_anchor.get(mv.get("twin_of"))
+            s_.pop("_twin_of", None)
+            if e_:
+                s_["follows"] = e_["id"]
+                if not e_.get("then"):
+                    e_["then"] = s_["id"]
     slots, merged = merge_sends(slots, MONTH_ABBR[mo - 1])
     log += merged
     return slots, dropped, log
@@ -1192,11 +1433,11 @@ def order_month(moves, month, brand_root, catalogue, findings_txt, windows=None)
 
 def merge_sends(slots, abbr):
     """The same email going to several segments is ONE send with several
-    segments, not several sends (the owner, 2026-09-02: "that would get messy").
+    segments, not several sends (owner, 2026-09-02: "that would get messy").
     Same date, type, occasion, product and offer -> one slot carrying
     `segments`; variants are the union by avatar; links follow the merge."""
     key = lambda s: (s["date"], s["type"], (s.get("occasion") or "").lower(),
-                     s.get("product"), s.get("offer"), s.get("affiliate"))
+                     s.get("product"), s.get("offer"), s.get("affiliate"), s.get("channel", "email"))
     groups, order = {}, []
     for s in slots:
         k = key(s)
@@ -1228,8 +1469,9 @@ def merge_sends(slots, abbr):
             log.append(f"- {prime['date']} `{prime['type']}` on {prime.get('occasion')}: "
                        f"{len(g)} identical sends merged into one, to {', '.join(x.replace('Core | ', '') for x in segs)}")
         out.append(prime)
-    # renumber in date order, remap links through the merge
-    out.sort(key=lambda s: (s["date"], s["segment"]))
+    # renumber in date order, remap links through the merge. Texts are numbered after every email
+    # (2026-11-04): an email's id names its written run, so planning SMS never moves an email's number
+    out.sort(key=lambda s: (s.get("channel", "email") == "sms", s["date"], s["segment"]))
     renum = {}
     for i, s in enumerate(out, 1):
         renum[s["id"]] = f"{abbr}-{i:02d}"
@@ -1267,7 +1509,7 @@ def main():
                          "a change to ordering or checking rules")
     ap.add_argument("--start-day", type=int, default=None,
                     help="production starts on this day of the month: slots dated before it "
-                         "are dropped from the order and the briefs (the owner, 2026-09-09: "
+                         "are dropped from the order and the briefs (owner, 2026-09-09: "
                          "September runs from the 14th)")
     ap.add_argument("--out", default=None,
                     help="where the month lands (default: runs/marketing-calendar/ "
@@ -1417,12 +1659,19 @@ def main():
     # LAYER 4 · PINNED TO THE DATE  (code) -> 4-anchors/
     anchors = anchor_arcs(args.month, moments, cells, catalogue, brand_root, hol_rows)
     anchors += holiday_fill(anchors, args.month, moments, catalogue)
+    early, early_notes = place_early_access(anchors, args.month, moments, cells, catalogue, brand_root)
+    anchors += early
+    anchors += sms_beats(anchors, moments, brand_root=brand_root)
     (D["4-anchors"] / "anchors.json").write_text(json.dumps(anchors, indent=1) + "\n")
     (D["4-anchors"] / "anchors.md").write_text(
         "# Anchored to real dates\n\nEvery dated holiday and moment, laid onto the month "
         "per live segment. A retail or season-opening holiday is a full arc around its "
         "day; an observance is one send on the day; a window with a peak lands before "
-        "the peak.\n\n" + render_anchors(anchors) + "\n")
+        "the peak.\n\n" + render_anchors(anchors) + "\n"
+        + ("\n## Early access, not placed\n\n" + "\n".join(f"- {x}" for x in early_notes) + "\n"
+           if early_notes else ""))
+    for x in early_notes:
+        print(f"     NOTE: {x}")
     CH.done(state, "anchors", len(anchors))
     print(f"  -> layer 4  (code: {len(anchors)} send(s) anchored to real dates)")
     save(out_dir, state)
@@ -1435,7 +1684,7 @@ def main():
                            today=today, month=args.month, skeleton=skeleton,
                            anchored=render_anchors(anchors),
                            cells=json.dumps(cells, indent=1),
-                           types=C.render_types(catalogue_path(args.brand)),
+                           types=C.planner_types(catalogue_path(args.brand), brand_root),
                            products=C.render_products(brand_root),
                            offers=C.render_offers(brand_root, [a['key'] for a in L_avatars(brand_root)]),
                            coldness=C.coldness(brand_root, catalogue),
@@ -1481,7 +1730,7 @@ def main():
     bad, bad_seg = [], []
     # A SEGMENT IS LOOKED UP, NEVER COINED — the same rule the type already
     # holds to. The concepts stage proposed sends to "mixed — all 7 live
-    # segments" (Brand-B, 2026-09-14): a real intention, written as a segment
+    # segments" (brand_b, 2026-09-14): a real intention, written as a segment
     # name that no platform can target. It reached the board as two breaks
     # after surviving three layers. Dropped here instead, and named.
     live_segs = {c.get("segment") for c in (cells or {}).get("serve", [])
@@ -1543,9 +1792,144 @@ def main():
     finish(args, out_dir, D, state, moves, cells, moments, hol_rows, brand_root, catalogue, label)
 
 
+def fill_needs(moves, brand_root, catalogue):
+    """What a type declares it needs (`needs`), filled from the brand's own record where the record
+    answers it (2026-11-03) — never invented:
+    - a product: the send's offer when that offer is itself a product; else the front-end product of
+      the send's lane (the offer bank's `_hero: paid`), when every version of the send is in one lane
+      (or the brand has one hero);
+    - an offer: the send's product when that product is itself an offer in the bank.
+    A need the record cannot answer stays empty, and the month's check still names it. -> notes."""
+    types = {t["key"]: t for t in catalogue["types"]}
+    products = {k for k, _f in C.product_files(brand_root)}
+    roster = [a["key"] for a in L_avatars(brand_root)]
+    bank = set().union(*offer_bank(brand_root, roster).values()) if roster else set()
+    heroes = C.hero_products(brand_root)
+    # the arc's offer, for its members that carry none (a warm-up sells nothing, but it is about
+    # the product the arc sells)
+    arc_offer = {}
+    for mv in moves:
+        o_ = str(mv.get("offer") or "none").strip()
+        if mv.get("arc") and not o_.lower().startswith("none") and not o_.startswith("["):
+            arc_offer.setdefault(mv["arc"], o_)
+    leads = C.lead_products(brand_root)
+    mix = C.storefront_mix(brand_root)
+    notes = []
+    for mv in moves:
+        # THE BRAND'S OWN MIX (2026-11-04, storefront-order): a promo's lead email carries the lead mix together,
+        # across every audience — the one-lane-per-offer rule yields to it inside a promo; a set's email carries
+        # the set and its singles. A text keeps its one offer (an SMS points at one thing).
+        o_ = str(mv.get("offer") or "none").strip()
+        if mv.get("channel", "email") == "email" and not o_.lower().startswith("none"):
+            if mv.get("arc") and o_ in mix["lead"]:
+                mv["offer_mix"] = list(mix["lead"])
+                mv["why"] = (mv.get("why") or "") + " · carries the brand's lead mix " + " + ".join(
+                    f"`{k}`" for k in mix["lead"]) + " (storefront-order), every audience"
+            elif o_ in mix["singles"]:
+                mv["offer_mix"] = [o_] + list(mix["singles"][o_])
+                mv["why"] = (mv.get("why") or "") + f" · `{o_}` with its singles " + ", ".join(
+                    f"`{k}`" for k in mix["singles"][o_]) + " (storefront-order)"
+        # A SALE'S SENDS LEAD WITH A PRODUCT (2026-11-04): every offer-carrying member of a sale arc names the
+        # product it leads with — its offer when that is a product, else the first of the brand's own
+        # storefront-order note — whether or not its type asks for one
+        o_ = str(mv.get("offer") or "none").strip()
+        if mv.get("arc") and not o_.lower().startswith("none") and str(mv.get("product") or "none") == "none":
+            lanes = {v.get("avatar") for v in (mv.get("variants") or [])}
+            hs = {heroes[x] for x in lanes if x in heroes} or (set(heroes.values()) if len(set(heroes.values())) == 1 else set())
+            lead, why = ((o_, "the offer is the product") if o_ in products else
+                         (leads[0], "first in the brand's storefront-order note") if leads else
+                         (next(iter(hs)), "the front-end product of its lane (offer bank `_hero: paid`)")
+                         if len(hs) == 1 and hs <= products else (None, ""))
+            if lead:
+                mv["product"] = lead
+                mv["why"] = (mv.get("why") or "") + f" · leads with `{lead}`: {why}"
+        want = set((types.get(mv.get("type")) or {}).get("needs") or [])
+        off = str(mv.get("offer") or "none").strip()
+        prod = str(mv.get("product") or "none").strip()
+        if "product_file" in want and prod.lower() == "none":
+            got, why = None, ""
+            if off in products:
+                got, why = off, "the offer is the product"
+            elif arc_offer.get(mv.get("arc")) in products:
+                got, why = arc_offer[mv["arc"]], "its arc's offer is the product"
+            elif leads:
+                got, why = leads[0], "first in the brand's storefront-order note"
+            else:
+                lanes = {v.get("avatar") for v in (mv.get("variants") or [])} or {mv.get("cell", {}).get("avatar")}
+                hs = {heroes[x] for x in lanes if x in heroes}
+                if len(hs) == 1 and hs <= products:
+                    got, why = hs.pop(), "the lane's front-end product (offer bank `_hero: paid`)"
+                elif len(set(heroes.values())) == 1 and set(heroes.values()) <= products:
+                    got, why = next(iter(heroes.values())), "the brand's one front-end product (offer bank `_hero: paid`)"
+            if got:
+                mv["product"] = got
+                mv["why"] = (mv.get("why") or "") + f" · product `{got}`: {why}"
+                notes.append(f"- `{mv.get('type')}` on {mv.get('occasion')} ({mv.get('_date') or mv.get('preferred_date')}): product `{got}` — {why}")
+        if "offer_file" in want and off.lower().startswith("none"):
+            p_ = str(mv.get("product") or "none")
+            if leads and leads[0] in bank:
+                # the brand's storefront-order decides what a send outside a sale leads with (2026-11-04)
+                mv["offer"] = leads[0]
+                if mix["lead"]:
+                    mv["offer_mix"] = list(mix["lead"])
+                mv["why"] = (mv.get("why") or "") + f" · offer `{leads[0]}`: what the brand's storefront-order leads with"
+                notes.append(f"- `{mv.get('type')}` on {mv.get('occasion')}: offer `{leads[0]}` — the storefront-order's lead")
+            elif p_ in bank:
+                mv["offer"] = p_
+                mv["why"] = (mv.get("why") or "") + f" · offer `{p_}`: the product is itself an offer in the bank"
+                notes.append(f"- `{mv.get('type')}` on {mv.get('occasion')}: offer `{p_}` — its product's own offer")
+    return notes
+
+
+def today():
+    return datetime.date.today()
+
+
+def weekly_standing_offer(slots, brand_root, catalogue, on=None):
+    """EVERY WEEK SELLS SOMETHING (2026-11-04). A week from today on with no offer anywhere in it gets the brand's
+    standing offer (brandrecord.standing_offer) on one of its emails: a type that needs an offer first, else the
+    week's last earning send that is not pinned to a date. Only asks stay out, which would need an arc of their
+    own. A week already gone is left alone. -> notes."""
+    on = on or today()
+    types = {t["key"]: t for t in catalogue["types"]}
+    roster = [a["key"] for a in L_avatars(brand_root)]
+    offer, mix, lead = C.standing_offer(brand_root, roster)
+    if not offer:
+        return []
+    weeks, notes = {}, []
+    for s_ in slots:
+        try:
+            weeks.setdefault(datetime.date.fromisoformat(s_["date"]).isocalendar()[:2], []).append(s_)
+        except (KeyError, TypeError, ValueError):
+            continue
+    for wk, rows in sorted(weeks.items()):
+        if any(str(r.get("offer") or "none").lower() != "none" for r in rows):
+            continue
+        ahead = [r for r in rows if r["date"] >= on.isoformat() and r.get("channel", "email") == "email"
+                 and r.get("role") != "asks"]
+        need = [r for r in ahead if "offer_file" in ((types.get(r.get("type")) or {}).get("needs") or [])]
+        free = [r for r in ahead if not r.get("anchored") and r.get("role") == "earns"]
+        pick = (need or sorted(free, key=lambda r: r["date"], reverse=True) or [None])[0]
+        if not pick:
+            continue
+        pick["offer"] = offer
+        if mix:
+            pick["offer_mix"] = list(mix)
+        if str(pick.get("product") or "none") == "none" and lead:
+            pick["product"] = lead
+        pick["why"] = (pick.get("why") or "") + f" · carries the brand's standing offer `{offer}`: every week sells something"
+        notes.append(f"- {pick['id']} ({pick['date']}) `{pick.get('type')}`: the week had nothing to buy, so it "
+                     f"carries the standing offer `{offer}`")
+    return notes
+
+
 def finish(args, out_dir, D, state, moves, cells, moments, hol_rows, brand_root, catalogue, label):
     """Layer 9 and the board — split out so --reorder can re-run them alone."""
     types = {t["key"]: t for t in catalogue["types"]}
+    need_notes = fill_needs(moves, brand_root, catalogue)
+    if need_notes:
+        (D["9-order"] / "needs-filled.md").write_text(
+            "# What a type needs, filled from the brand's record\n\n" + "\n".join(need_notes) + "\n")
     # LAYER 9 · THE ORDER  (code) -> 9-order/
     slots, dropped, dlog = fit_month(moves, args.month, brand_root, catalogue,
                                      "\n".join(C.findings(brand_root)),
@@ -1569,8 +1953,25 @@ def finish(args, out_dir, D, state, moves, cells, moments, hol_rows, brand_root,
         slots = keep
         dlog.append(f"- production starts on the {start_day}th (RULED 2026-09-09): "
                     f"{before - len(slots)} slot(s) dated earlier left the order; ids renumbered")
+    # every holiday-period extra send gets an angle of its own (fill_angles.py, 2026-11-06):
+    # made in layer 4 before any angle exists, they otherwise all carry the first arc send's
+    import fill_angles
+    dlog += fill_angles.apply(slots, args.brand, brand_root, D["9-order"], args.month,
+                              model=getattr(args, "model", None))
+    dlog += weekly_standing_offer(slots, brand_root, catalogue)
+    import ratios                                     # the brand's offer shares, every month (2026-11-07)
+    dlog += ratios.apply_offers(slots, brand_root, singles=C.storefront_mix(brand_root)["singles"])
+    dlog += [f"- {s_.get('id')} ({s_.get('date')}): {f_} -> `{v_}` (email-sms/ratios.json)"
+             for s_, f_, v_ in ratios.balance(slots, brand_root)]
+    from weekly_sms import add_weekly_sms
+    regular = add_weekly_sms(slots, args.month, sms_cadence())
+    dlog += ["- Weekly SMS companion %s follows %s on %s" % (s["id"], s["follows"], s["date"]) for s in regular]
     import kinds                                      # design or letter, per send (2026-10-17)
     kinds.apply(slots, brand_root)
+    for s_ in slots:                                  # an SMS is a text, not an email layout (2026-11-03)
+        if s_.get("channel") == "sms":
+            s_["kind"], s_["format"] = "sms", None
+            s_["kind_why"] = "an SMS: words only, one link, the opt-out (definitions/sms-cadence.json `length`)"
     (out_dir / "slots.json").write_text(json.dumps(slots, indent=1) + "\n")
     olines = ["# The order — dates resolved around the anchors", "",
               f"{len(slots)} slot(s) written to ../slots.json. Anchored sends kept their real "
@@ -1607,7 +2008,7 @@ def finish(args, out_dir, D, state, moves, cells, moments, hol_rows, brand_root,
     windows = moment_windows(moments, hol_rows=hol_rows)
     all_keys = {m["key"] for m in moments}
 
-    # A DATED ANGLE MUST BE INSIDE ITS OWN WINDOW (RULED 2026-09-10, the owner:
+    # A DATED ANGLE MUST BE INSIDE ITS OWN WINDOW (RULED 2026-09-10, owner:
     # "I still see some labor day email in the figma for late september…
     # why are you not using the calendar in this chain?"). The cells stage
     # writes one angle per variant, and it was handing every fed-up-king
@@ -1630,12 +2031,17 @@ def finish(args, out_dir, D, state, moves, cells, moments, hol_rows, brand_root,
     # WHAT THE TYPE SAYS IT NEEDS, AND WHETHER THE SLOT HAS IT.
     # The catalogue already declares this per type (`needs`) and nothing was
     # testing it, so a `product-finder` with no product and a `subscription-
-    # invite` with no offer reached the board looking finished. the owner,
+    # invite` with no offer reached the board looking finished. owner,
     # 2026-09-14: "I'm seeing offer and product. A lot of them are missing
     # things." Most are missing correctly — a send whose role is `earns` is
     # not supposed to carry an offer. These are the ones that are not.
     missing = []
-    for s_ in slots:
+    # A DATE ALREADY GONE IS NOT A BREAK (2026-11-04): nothing can be done about it, so the checks below speak
+    # only of sends still ahead
+    now_ = today().isoformat()
+    ahead_ = [s_ for s_ in slots if str(s_.get("date") or "") >= now_]
+    past_ids = {s_.get("id") for s_ in slots} - {s_.get("id") for s_ in ahead_}
+    for s_ in ahead_:
         spec = types.get(s_.get("type")) or {}
         want = set(spec.get("needs") or [])
         for field, need in (("offer", "offer_file"), ("product", "product_file")):
@@ -1649,7 +2055,7 @@ def finish(args, out_dir, D, state, moves, cells, moments, hol_rows, brand_root,
     # THE COMMERCIAL FLOOR (CH.ASK_SHARE, CH.OFFER_EVERY_WEEK). The concepts
     # prompt aims at it; this is the wall. A month that does not sell is a
     # month nobody notices is not selling — that is exactly how both brands
-    # ran at three asks with no complaint until the owner counted them by hand.
+    # ran at three asks with no complaint until owner counted them by hand.
     ask_well = {k for k, t in types.items() if t.get("well") == "ask"}
     asks_ = [s_ for s_ in slots if s_.get("type") in ask_well]
     want = max(1, round(len(slots) * CH.ASK_SHARE))
@@ -1672,6 +2078,8 @@ def finish(args, out_dir, D, state, moves, cells, moments, hol_rows, brand_root,
         for wk, rows in sorted(weeks.items()):
             if any(str(r.get("offer") or "none").lower() != "none" for r in rows):
                 continue
+            if not any(r in ahead_ for r in rows):
+                continue                              # the week is gone
             days = sorted(r["date"] for r in rows)
             missing.append(
                 f"week of {days[0]} carries no offer at all ({len(rows)} send(s), "
@@ -1681,9 +2089,14 @@ def finish(args, out_dir, D, state, moves, cells, moments, hol_rows, brand_root,
 
     # TWO SENDS, ONE ARGUMENT. The prompt forbids it; this counts it, because
     # a month can obey every other rule and still be the same email written
-    # four times (brand-a September: 35 emails, 13 arguments).
+    # four times (brand_a September: 35 emails, 13 arguments).
+    # A sale counts as the one argument (2026-11-04): its sends carry the sale, at two to three a day; a send pinned
+    # to a date by code inherits the avatar's standing angle and argues the moment; a text is its email's companion.
+    # None of those is counted; only sends the concepts stage wrote an argument for are.
     by_angle = {}
-    for s_ in slots:
+    for s_ in ahead_:
+        if s_.get("arc") or s_.get("anchored") or s_.get("channel") == "sms":
+            continue
         for v in (s_.get("variants") or []):
             a = (v.get("angle") or "").strip()
             if a:
@@ -1770,8 +2183,10 @@ def finish(args, out_dir, D, state, moves, cells, moments, hol_rows, brand_root,
                             segments, no_offer, cells, moment_windows=windows,
                             moment_keys=all_keys,
                             retail_holidays=[r for r in hol_rows if r["kind"] in ("retail", "season-open")])
+    errors = list(errors) + C.identity_problems(slots, brand_root)
     if stale:
         errors = list(errors) + stale
+    errors = [e for e in errors if str(e).split(":")[0].split(" ")[0] not in past_ids]
     # THE ELEMENTS GATE. Every slot's type is an email format: it must be in the
     # element library (components/elements, format/email) OR the brand's own
     # catalogue. In neither is a break that names the real ids — on a finished
@@ -1789,6 +2204,14 @@ def finish(args, out_dir, D, state, moves, cells, moments, hol_rows, brand_root,
         state["elements"] = {"format/email": picked}
     except Exception as e:
         print(f"  SKIP  the elements gate could not run — {e}")
+    # THE RATIOS GATE (2026-11-07): offers off their shares break the month; email kinds and audiences warn.
+    try:
+        import ratios
+        r_breaks, r_warns = ratios.problems(slots, brand_root)
+        errors = list(errors) + r_breaks
+        warns = list(warns) + r_warns
+    except Exception as e:
+        print(f"  SKIP  the ratios gate could not run — {e}")
     # The headline is written AFTER every break is in, so the page, run.json and
     # the last line printed all say one number (the headline used to be counted
     # before the stale-angle breaks were added, and read low).

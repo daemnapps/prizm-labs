@@ -123,9 +123,9 @@ code{{font-size:12px;background:var(--soft);padding:1px 5px;border-radius:4px;ov
     from datetime import date
     md.write_text("\n".join([f"# The Language Bank — state on {date.today().isoformat()}", "",
                              "> " + (f"Mirror of {a.mirror_of} · " if a.mirror_of else "")
-                            + "Built by `tools/language-layer/tools/bank_page.py` from the bank files, "
+                            + "Built by `components/language-layer/tools/bank_page.py` from the bank files, "
                              "beside `bank.html`. Rules: `brands/language-schema.md`; the reasoning: "
-                             "`tools/language-layer/docs/STANDARD.md`.", ""]
+                             "`components/language-layer/docs/STANDARD.md`.", ""]
                             + [brand_md(b) for b in a.brand]
                             + (["## Open", ""] + [f"- {n}" for n in a.note] + [""] if a.note else [])))
     print(md)

@@ -28,7 +28,7 @@ print(json.dumps([{"i": i, "keep": True, "exit": "none", "use": ["result"], "top
                    "ad_use": "proof", "names": [], "cut": ""} for i in rows]))
 """
 
-CSV = """Timestamp,Email Address,What do you like most about the NOVA?,Leave any other comments.
+CSV = """Timestamp,Email Address,What do you like most about the FLEX?,Leave any other comments.
 4/9/2023 11:06:24,old@x.com,Old answer that is already in,none
 9/20/2026 10:00:00,a@x.com,It cleared my razor bumps in a week,N/A
 9/25/2026 10:25:58,b@x.com,Feels like a barber did it,Keep it up
@@ -74,8 +74,8 @@ class Surveys(unittest.TestCase):
         self.assertEqual(r["item"], S.rows_from_csv(CSV, self.SV, "b", "B", "x", since="2026-08-25")[0][0]["item"])
 
     def test_question_reuses_the_banks_number(self):
-        q = S.question_ids(["What do you like most about the NOVA?"], {"what-do-you-like-most-about-the-nova": "q-07_what-do-you-like-most-about-the-nova"})
-        self.assertEqual(q[0], "q-07_what-do-you-like-most-about-the-nova")
+        q = S.question_ids(["What do you like most about the FLEX?"], {"what-do-you-like-most-about-the-flex": "q-07_what-do-you-like-most-about-the-flex"})
+        self.assertEqual(q[0], "q-07_what-do-you-like-most-about-the-flex")
         self.assertEqual(S.question_ids(["Brand new?"], {"x": "q-03_x"})[0], "q-04_brand-new")
 
     def test_cursor_is_a_timestamp(self):
@@ -108,7 +108,7 @@ class Surveys(unittest.TestCase):
 
 
 JUNIP = [{"id": 11, "rating": 5, "title": "Wow", "body": "My bumps are gone", "created_at": "2026-09-01T10:00:00Z",
-          "verified_buyer": True, "target_title": "NOVA - Black"},
+          "verified_buyer": True, "target_title": "FLEX - Black"},
          {"id": 12, "rating": 2, "title": "Meh", "body": "", "created_at": "2026-09-02T10:00:00Z",
           "verified_buyer": False, "target_title": "WAR"},
          {"id": 10, "rating": 5, "title": "", "body": "Old one", "created_at": "2026-06-01T10:00:00Z", "verified_buyer": True}]
@@ -172,7 +172,7 @@ WEBVTT
 
 1
 00:00:01.000 --> 00:00:04.000
-<v the team Yang>Thanks for joining, tell me about your skin.</v>
+<v developer Yang>Thanks for joining, tell me about your skin.</v>
 
 2
 00:00:05.000 --> 00:00:09.000
@@ -187,11 +187,11 @@ WEBVTT
 
 class Interviews(unittest.TestCase):
     def test_turns_joined_and_labels(self):
-        t = I.turns("**the team:** Hi there\nLynn: I have spots\non my legs\n[00:12]\nDayu: ok")
-        self.assertEqual(t, [("the team", "Hi there"), ("Lynn", "I have spots on my legs"), ("the team", "ok")])
+        t = I.turns("**developer:** Hi there\nLynn: I have spots\non my legs\n[00:12]\nDayu: ok")
+        self.assertEqual(t, [("developer", "Hi there"), ("Lynn", "I have spots on my legs"), ("developer", "ok")])
 
     def test_customer_turns_only(self):
-        rows, meta, why = I.rows_from_transcript("x/2026-09-30-lynn.md", TRANSCRIPT, "b", "t", company=["the team"])
+        rows, meta, why = I.rows_from_transcript("x/2026-09-30-lynn.md", TRANSCRIPT, "b", "t", company=["developer"])
         self.assertIsNone(why)
         self.assertEqual(len(rows), 1)                    # Lynn's turns merge; "Yes." joins them
         self.assertIn("brown spots", rows[0]["text"])
@@ -217,10 +217,10 @@ class Interviews(unittest.TestCase):
     def test_run_reads_a_file_once(self):
         tmp = Path(tempfile.mkdtemp())
         ldir, fake = ws_with_bank(tmp, pulls={"interviews": {"inbox": "core-avatars/a/language/evidence/inbox",
-                                                             "company_speakers": ["the team"]}})
+                                                             "company_speakers": ["developer"]}})
         inbox = ldir / "evidence" / "inbox"
         inbox.mkdir(parents=True)
-        (inbox / "README.md").write_text("the team: this is not a transcript at all")
+        (inbox / "README.md").write_text("developer: this is not a transcript at all")
         (inbox / "2026-09-30-lynn.md").write_text(TRANSCRIPT)
         I.main(["--brand", "b", "--dry-run"], labeller=LAB, claude=fake)
         self.assertFalse((tmp / "runs/research/b/interviews-state.json").exists())

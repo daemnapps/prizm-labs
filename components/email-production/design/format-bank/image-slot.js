@@ -1167,7 +1167,7 @@
         this._ghost.removeAttribute('src');
         // The error tile owns the blocked-photo state; .empty stays for
         // the genuinely-empty slot.
-        this._empty.style.display = attrError ? 'none' : 'nova';
+        this._empty.style.display = attrError ? 'none' : 'flex';
         this.removeAttribute('data-filled');
       }
 

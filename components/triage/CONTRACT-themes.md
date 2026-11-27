@@ -1,33 +1,33 @@
 # Triage: the core engine and its themes (contract, draft)
 
-2026-10-02, ≈ STREAM · atlas [6941d8], on the team's word: "We want the component to work so it is theme agnostic as well. Considering the atlas first. It has its own set of owners and prioritization logic and flow. But each theme will have its own as well but routed through the same core engine" — then "Go".
+2026-10-02, ≈ STREAM · atlas [6941d8], on the developer's word: "We want the component to work so it is theme agnostic as well. Considering the atlas first. It has its own set of owners and prioritization logic and flow. But each theme will have its own as well but routed through the same core engine" — then "Go".
 
-**Status: a draft for the team (engine owner, ruled 2026-10-02) to read, not ruled.** This round's two themes (the team, 2026-10-02) are `themes/atlas.json` (components / atlas) and `themes/operations.json` (operations). `themes/red-tests.json` is paused, with its lessons kept.
+**Status: a draft for the developer (engine owner, ruled 2026-10-02) to read, not ruled.** This round's two themes (the developer, 2026-10-02) are `themes/atlas.json` (components / atlas) and `themes/operations.json` (operations). `themes/red-tests.json` is paused, with its lessons kept.
 
-## Who owns what (the team, 2026-10-02)
+## Who owns what (the developer, 2026-10-02)
 
-the team: "I will remain component owner of the triage component for now. And the team is owner of components / atlas (both triage owner and the theme itsemf), and the team for operations. FOr both of them there is a next step for each of them to evaluate their own use case and consolidate their feedback to refine the overall component / theme design over the following two weeks."
+the developer: "I will remain component owner of the triage component for now. And the email lead is owner of components / atlas (both triage owner and the theme itsemf), and the designer for operations. FOr both of them there is a next step for each of them to evaluate their own use case and consolidate their feedback to refine the overall component / theme design over the following two weeks."
 
 | Role | Holds | Decides |
 |---|---|---|
-| Engine owner | the team, "for now" | The core: passes, item shape, shared page and log, ref resolvers. Any change every theme feels. |
-| Theme owner | the team (components / atlas), the team (operations) | The pack and its adapter: item word, cause classes, priority rules, refs it carries, what the triage owner may do alone. |
-| Triage owner | the team (components / atlas), the team (operations) | Works the list first (pass 7), closes with evidence. |
+| Engine owner | the developer, "for now" | The core: passes, item shape, shared page and log, ref resolvers. Any change every theme feels. |
+| Theme owner | the email lead (components / atlas), the designer (operations) | The pack and its adapter: item word, cause classes, priority rules, refs it carries, what the triage owner may do alone. |
+| Triage owner | the email lead (components / atlas), the designer (operations) | Works the list first (pass 7), closes with evidence. |
 
 Theme owner and triage owner are one person in both themes today. They are kept as two pack fields (`theme_owner`, `triage_owner`) so a list can later be owned by one person and worked by another.
 
-**Evaluation, 2026-10-02 → 2026-10-16.** Each theme owner works their own list as the real job and hands in one consolidated set of findings. Each finding is tagged **theme** (a pack change, the theme owner's) or **engine** (a core change, the team's ruling). Proposed homes: `themes/atlas-FEEDBACK.md`, `themes/operations-FEEDBACK.md`. Both lists are re-run on fresh data for 10-09 and 10-16. The theme/engine split of the findings is itself the test of this contract: mostly theme findings means the split holds; mostly engine findings means it is redrawn before a third theme joins.
+**Evaluation, 2026-10-02 → 2026-10-16.** Each theme owner works their own list as the real job and hands in one consolidated set of findings. Each finding is tagged **theme** (a pack change, the theme owner's) or **engine** (a core change, the developer's ruling). Proposed homes: `themes/atlas-FEEDBACK.md`, `themes/operations-FEEDBACK.md`. Both lists are re-run on fresh data for 10-09 and 10-16. The theme/engine split of the findings is itself the test of this contract: mostly theme findings means the split holds; mostly engine findings means it is redrawn before a third theme joins.
 
 ## Words
 
 - **Theme**: one list that gets triaged, with its own owners, priorities and flow: the atlas's component issues, red tests, and later parked cards or the inbox.
 - **Category**: a grouping of items *inside* a theme, such as "README and how-to link" in the atlas. `tools/triage_dryrun.py` calls these `theme`; they are renamed `category` when that logic moves into the atlas pack.
 - **Theme pack**: the one file that tells the core everything about a theme. It is curated by the theme owner.
-- **Core engine**: the one program every theme runs through. It is owned by the team.
+- **Core engine**: the one program every theme runs through. It is owned by the developer.
 
 ## The rule
 
-**The core never names a person, a path, a cause class or a priority rule.** Everything theme-specific comes from the pack. This mirrors the brand-agnostic rule (root CLAUDE.md rule 7): theme context enters only from the pack, never from the engine. A change to how a theme is triaged is an edit to its pack, which is its theme owner's act. A change to how every theme is triaged is an edit to the core, which is the team's.
+**The core never names a person, a path, a cause class or a priority rule.** Everything theme-specific comes from the pack. This mirrors the brand-agnostic rule (root CLAUDE.md rule 7): theme context enters only from the pack, never from the engine. A change to how a theme is triaged is an edit to its pack, which is its theme owner's act. A change to how every theme is triaged is an edit to the core, which is the developer's.
 
 **The walls are not per theme.** They bind every theme, come from root CLAUDE.md and the decision log, and no pack may relax one.
 
@@ -51,29 +51,29 @@ Theme owner and triage owner are one person in both themes today. They are kept 
 
 `areas` are typed keys: `path:` (a component folder, a build folder, a file), `brand:`, `product:` or `sku:`. They decide which context files (path areas only) an item reaches and where its decision-log records show up, and they are how the core links items across themes. *(Amended 2026-10-02 after the metrics-insights test: a signal belongs to a brand or a product, not a folder.)*
 
-## Born with the eight parts (the team, 2026-10-02, a standing rule)
+## Born with the eight parts (the developer, 2026-10-02, a standing rule)
 
-the team, 2026-10-02, received 06:43Z by date -u: "also starting from now make it a rule that anything issues that come from this triage process should geneate with the 8 step summary from the start".
+the developer, 2026-10-02, received 06:43Z by date -u: "also starting from now make it a rule that anything issues that come from this triage process should geneate with the 8 step summary from the start".
 
 Anything the triage process creates carries the eight-part summary (SCHEMA §5: why, impacts, evidence, response (a fix, or a follow-up on a positive signal), what the response changes, if ignored, lane, severity) from the moment it exists: every signal a detector emits, every action group, every issue triage files (including the triage component's own open issues), every card it proposes. Nothing is created now and summarised later; the engine refuses to emit one without (`no-summary-at-birth`). Items a theme *reads* from elsewhere (component issues from system runs) are the source's to summarise; triage lists the gap and does not invent one. State on 2026-10-02: both themes meet it. Operations: 13 signals and 5 actions. Components: all 83 actions and all 656 open issues (the 29 that look fixed close instead), after ATL-31 (remaining issue briefs) and `tools/triage_fill.py` built the 60 missing action summaries from their issues' summaries.
 
-## Grouping is the theme's, never the engine's (the team, 2026-10-02)
+## Grouping is the theme's, never the engine's (the developer, 2026-10-02)
 
-the team: "the group by logic should be custom to each theme as well". The pack's `grouping` holds ordered rules; the engine applies them, first match wins, and counts what each action clears. Components (2026-10-02): close-out (looks fixed) → shared fix across components (by cause class, 24) → decision group (waits on one ruling, 11) → local batch per component for its owner (47). Operations: one action per detector per brand, data health first (5).
+the developer: "the group by logic should be custom to each theme as well". The pack's `grouping` holds ordered rules; the engine applies them, first match wins, and counts what each action clears. Components (2026-10-02): close-out (looks fixed) → shared fix across components (by cause class, 24) → decision group (waits on one ruling, 11) → local batch per component for its owner (47). Operations: one action per detector per brand, data health first (5).
 
-## Priority is the theme's, never the engine's (the team, 2026-10-02)
+## Priority is the theme's, never the engine's (the developer, 2026-10-02)
 
-the team: "how we actually prioritize is not hard coded in, each theme has its own priotization list". The pack's `priority` holds the ordered tier list (what makes an item P0 to P3), the proof a P0 needs, the weights, the age rule and its cap. The engine only applies it: each action ranks by the summed weight of what it clears. Components rank by risk to running work; operations by money at stake a month. The weights match today (8 · 4 · 2 · 1) by choice, not by rule.
+the developer: "how we actually prioritize is not hard coded in, each theme has its own priotization list". The pack's `priority` holds the ordered tier list (what makes an item P0 to P3), the proof a P0 needs, the weights, the age rule and its cap. The engine only applies it: each action ranks by the summed weight of what it clears. Components rank by risk to running work; operations by money at stake a month. The weights match today (8 · 4 · 2 · 1) by choice, not by rule.
 
 ## More themes later
 
-the team: "even though we are focusing on two themes, the point is that this will be gernealized for more themes in the future (so just note that but we dont need to design those yet)". Noted; not designed. "Adding a theme" below is the whole procedure.
+the developer: "even though we are focusing on two themes, the point is that this will be gernealized for more themes in the future (so just note that but we dont need to design those yet)". Noted; not designed. "Adding a theme" below is the whole procedure.
 
 ## What sharing one core buys
 
 1. **One queue format and one page renderer.** Every theme's page looks and works the same: decides first, can do it, affected, prompts, briefs, drafts, options.
 2. **One log** (the `triage` record kind, extended with the five proposed acts) with a `theme` field. Nothing about the log differs by theme.
-3. **One decision log across themes.** Every act on every theme's items is one `triage` record naming its theme. "What changed in my areas, and how do I undo it" is a question to the log; no separate digest (the team, 2026-10-02: "Remove weekly digest, lets start with the decision log").
+3. **One decision log across themes.** Every act on every theme's items is one `triage` record naming its theme. "What changed in my areas, and how do I undo it" is a question to the log; no separate digest (the developer, 2026-10-02: "Remove weekly digest, lets start with the decision log").
 4. **Cross-theme links.** Items from two themes that share an area and a cause are one problem. Example: a red test in a build folder and an atlas issue on the component it tests. The core shows the link so the fix is done once.
 5. **One context file per area.** The context hook draws every theme's acts for that area.
 
@@ -100,13 +100,13 @@ the team: "even though we are focusing on two themes, the point is that this wil
 
 Rough size: about a day in the atlas stream's own area once this contract is agreed (inferred).
 
-## Cross-references: by design, specific to each theme (the team, 2026-10-02)
+## Cross-references: by design, specific to each theme (the developer, 2026-10-02)
 
-the team: "The theme should also allow cross referencing from multiple areas by general design, but the cross reference is specific to the theme", with examples: components relate to the atlas and brand folders; operations relate metrics and the P&L systems the team will build; both relate to the general PM lists and Slack channels "(to be determined next)".
+the developer: "The theme should also allow cross referencing from multiple areas by general design, but the cross reference is specific to the theme", with examples: components relate to the atlas and brand folders; operations relate metrics and the P&L systems the designer will build; both relate to the general PM lists and Slack channels "(to be determined next)".
 
 **The core owns the mechanism; the pack owns which references a theme carries.**
 
-1. **Typed refs on every item.** An item carries `refs`: typed keys such as `component:email-production`, `brand:<brand>`, `product:war face wash`, `metric:<brand>-performance`, `pnl:pnl_brand_a_orders`, `card:HE-3`, `task:TSK-…`, `inbox:I-…`, `slack:<channel>`. The pack's `refs.emits` lists the types its adapter writes.
+1. **Typed refs on every item.** An item carries `refs`: typed keys such as `component:email-production`, `brand:Brand A`, `product:war face wash`, `metric:Brand A-performance`, `pnl:pnl_Brand A_orders`, `card:HE-3`, `task:TSK-…`, `inbox:I-…`, `slack:<channel>`. The pack's `refs.emits` lists the types its adapter writes.
 2. **One resolver per ref type, in the core.** A resolver says where a ref points and how to find what else touches it:
    - `component:` resolves to the folder and the atlas page;
    - `brand:` resolves to `brands/<brand>/`;
@@ -128,7 +128,7 @@ the team: "The theme should also allow cross referencing from multiple areas by 
 
 ## Third theme, run 2026-10-02
 
-Metrics insights (the team) ran through the core with only a new pack and adapter. Two core assumptions surfaced and are amended above (typed areas; the item word and close semantics from the pack). See `themes/metrics-insights-FINDINGS.md`. The parked cards remain the test for a decision-shaped list.
+Metrics insights (the designer) ran through the core with only a new pack and adapter. Two core assumptions surfaced and are amended above (typed areas; the item word and close semantics from the pack). See `themes/metrics-insights-FINDINGS.md`. The parked cards remain the test for a decision-shaped list.
 
 ## Kill-condition
 

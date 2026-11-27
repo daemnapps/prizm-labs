@@ -6,7 +6,7 @@ off their own audio.
     python3 components/research-gatherer/gather.py voiceprint --brand B --all
     python3 components/research-gatherer/gather.py voiceprint --brand B --all --dry-run
 
-the owner's ruling (2026-09-19): "analyze our actual content creators that we've
+owner's ruling (2026-09-19): "analyze our actual content creators that we've
 worked with to get a real profile of the avatar and how they deliver
 messaging — we have tons of good-quality creators we've done teardowns on;
 analyze the audio specifically and create voice prints. Then we fine-tune
@@ -171,7 +171,7 @@ def _rg_keys():
 
 
 def key_of() -> str | None:
-    """ELEVENLABS_API_KEY by name: the environment, then this repo's .env
+    """ELEVENLABS_API_KEY by name: the environment, then ~/.upright-keys.env
     (the one key file) through the loader
     (rg_keys, SI-194 (readers use loader)). None when it is not there; never
     raises, never prints."""
@@ -570,11 +570,11 @@ def creators_root(brand: str, root: Path | None = None) -> Path:
 
 def research_root(brand: str, root: Path | None = None) -> Path:
     """Where this machine's own output lives — transcripts, per-creator
-    voiceprints and the brand roll-up. the owner ruled 2026-09-21 "all research
+    voiceprints and the brand roll-up. owner ruled 2026-09-21 "all research
     should live in the research component moving forward"; the phase-1 rule
     (runs/README.md) keeps a machine's record under `runs/<machine>/<brand>/`
-    and out of `brands/`, which is read-only to machines. 65 brand-b files
-    moved here from `brands/brand-b/creators/` at that ruling."""
+    and out of `brands/`, which is read-only to machines. 65 brand_b files
+    moved here from `brands/brand_b/creators/` at that ruling."""
     return (root or WORKSPACE) / "runs" / "research" / brand / "creators"
 
 

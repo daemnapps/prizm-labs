@@ -2,17 +2,17 @@
 """Train a brand asset into a LoRA identity on fal — character or product.
 
     python3 components/identity-training/train_identity.py \
-        --brand brand-a --character june
+        --brand brand_b --character susan
     python3 components/identity-training/train_identity.py \
-        --brand brand-a --product glow-body-scrub
+        --brand brand_b --product brilliance-body-scrub
 
-Proven 2026-08-31/09-01 on June (25 board slices -> same woman in every
-scene, zero reference images) and the Glow Body Scrub (25 images
+Proven 2026-08-31/09-01 on Susan (25 board slices -> same woman in every
+scene, zero reference images) and the Brilliance Body Scrub (25 images
 incl. label-band close-ups, 2000 steps -> color/shape/logo locked; micro
 text still wobbles at hero size, so label-forward frames composite the
 real packshot instead — that rule lives with the frames stage).
 
-What it does, per the owner's standard:
+What it does, per owner's standard:
 - CHARACTER: slices the character's certified board set (the boards ARE
   the training curriculum) + master into individual training images.
 - PRODUCT: every image in the product's images/ folder EXCEPT any shot
@@ -34,9 +34,9 @@ learning them (`configure()`):
     key_lookup(name)   consulted only when the environment has no key
     drive_lookup(rel)  a Drive mirror of a repo-relative path, or None
 
-`tools/video-teardown/machine/train_identity.py` is a shim that sets
+`components/video-teardown/machine/train_identity.py` is a shim that sets
 both — its vault (`keys.py`) and its Drive mount (`chain.drive_root()`) —
-so the owner's invocation behaves as it did before the move.
+so owner's invocation behaves as it did before the move.
 
 Brand-agnostic (workspace rule 7): everything resolves from the brand
 folder given at run time; nothing here names a brand.
@@ -52,9 +52,10 @@ import time
 import urllib.request
 import zipfile
 from pathlib import Path
+sys.path.append(next(str(d / "components" / "run-kit") for d in Path(__file__).resolve().parents if (d / "components" / "run-kit").is_dir()))
+from run_kit import paths as _rk_paths
 
-WS = Path(os.environ.get("AI_WORKSPACE")
-          or Path(os.environ.get("AI_WORKSPACE") or ".").resolve())
+WS = _rk_paths.repo(Path(__file__))
 TRAINER = "https://queue.fal.run/fal-ai/flux-lora-fast-training"
 STORAGE = ("https://rest.alpha.fal.ai/storage/upload/initiate"
            "?storage_type=fal-cdn-v3")
@@ -103,7 +104,7 @@ def fal(url, data=None, key=None):
 
 
 def brand_dir(brand):
-    # ONE brand home (the owner, 2026-09-02) — brands is gone
+    # ONE brand home (owner, 2026-09-02) — lab/owner/brands is gone
     for root in (WS / "brands" / brand,):
         if root.is_dir():
             return root
@@ -140,6 +141,11 @@ def character_source(brand, name):
     # ai-elements/characters/<name> — the same key on the Drive mirror since
     # the 2026-09-29 folder move (was ai-cast/<name> on both sides)
     base = _brandpath().brand_path(brand, "ai-elements/characters", name)
+    # runs/ai-elements/<brand>/casting/<name>/ is the one home of every person's files (2026-10-28); the brand's
+    # older folder above is read only when the person is not there
+    home = WS / "runs" / "ai-elements" / brand / "casting" / name
+    if home.is_dir():
+        base = home
     rel = str(base.relative_to(WS))
     src = base if images_from(base) or images_from(base / "boards") \
         else drive_dir(rel)
@@ -288,7 +294,7 @@ def parser():
                     help="train again even though this subject already has a "
                          "trained identity. Without it an existing lora.json "
                          "is reported and nothing is spent — an identity is "
-                         "trained ONCE and reused forever (the owner, 2026-09-02).")
+                         "trained ONCE and reused forever (owner, 2026-09-02).")
     ap.add_argument("--dry-run", action="store_true",
                     help="resolve inputs and destination, print the plan, "
                          "call nothing and write nothing")
@@ -317,7 +323,7 @@ def main(argv=None):
                   "and spend nothing (pass --retrain to override)" % found[0])
         return 0
 
-    # AN IDENTITY IS TRAINED ONCE AND REUSED FOREVER (the owner, 2026-09-02).
+    # AN IDENTITY IS TRAINED ONCE AND REUSED FOREVER (owner, 2026-09-02).
     # The record beside the asset is the check: if it is there, this subject
     # already has an identity and training it again spends money to produce a
     # second, slightly different version of a person who is supposed to be the

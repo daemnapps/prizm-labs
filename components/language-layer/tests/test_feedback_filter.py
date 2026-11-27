@@ -2,7 +2,7 @@
 """The feedback-form filters on the query — `area` and `feedback_stage`
 (components/feedback-forms, 2026-09-29). A fixture tree, no network, no real brand.
 
-    python3 -m unittest discover -s tests          # from tools/language-layer
+    python3 -m unittest discover -s tests          # from components/language-layer
 """
 import io, json, sys, tempfile, unittest, contextlib
 from pathlib import Path

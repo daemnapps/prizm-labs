@@ -1,7 +1,7 @@
 {
  "element": "format",
  "asset": "copy",
- "source": "tools/copywriter/bank/formats.json",
+ "source": "components/copywriter/bank/formats.json",
  "enforced_by": "copy production (the copywriter's stage 8)",
  "note": null,
  "rows": [
@@ -16,7 +16,7 @@
    "examples": null,
    "evidence": null,
    "approved": true,
-   "source": "tools/copywriter/bank/formats.json",
+   "source": "components/copywriter/bank/formats.json",
    "extra": {
     "length": {
      "min": 25,
@@ -48,7 +48,7 @@
    "examples": null,
    "evidence": null,
    "approved": true,
-   "source": "tools/copywriter/bank/formats.json",
+   "source": "components/copywriter/bank/formats.json",
    "extra": {
     "length": {
      "min": 50,
@@ -79,7 +79,7 @@
    "examples": null,
    "evidence": null,
    "approved": true,
-   "source": "tools/copywriter/bank/formats.json",
+   "source": "components/copywriter/bank/formats.json",
    "extra": {
     "length": {
      "min": 150,
@@ -110,7 +110,7 @@
    "examples": null,
    "evidence": null,
    "approved": true,
-   "source": "tools/copywriter/bank/formats.json",
+   "source": "components/copywriter/bank/formats.json",
    "extra": {
     "length": {
      "min": 80,

@@ -72,7 +72,7 @@ def counts(records):
 
 
 def creative_qc(tool, stage, run_dir, output, given=None, items=None):
-    """THE CREATIVE QC LOOP (the owner, 2026-10-02: "installed for each of my
+    """THE CREATIVE QC LOOP (owner, 2026-10-02: "installed for each of my
     production tools … for all stages in the creation process"): the output is
     reviewed against what it was given and the stage's bars
     (components/marketing-chain-checks/definitions/stages.json); the round is filed in

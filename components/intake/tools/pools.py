@@ -309,11 +309,11 @@ def matches(r, brand, source=None, kind=None):
 
 
 # ------------------------------------------------------------ handed over
-# THE BATCH'S FRONT DOOR (2026-09-25). the owner: "I want to build something that
+# THE BATCH'S FRONT DOOR (2026-09-25). owner: "I want to build something that
 # can literally ingest tens of videos and images at a time." The pools above
 # are what we have SAVED; this reads what someone HANDS OVER — files, folders,
 # or an intake index — and sorts it into the same record shape, so the batch
-# (tools/video-teardown/machine/batch.py) routes every swipe off one
+# (components/video-teardown/machine/batch.py) routes every swipe off one
 # answer. Still read-only: nothing is moved, copied or renamed here.
 
 GENERIC_STEMS = {"video", "source", "clip", "reel", "post", "media", "download", "photo", "image"}

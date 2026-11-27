@@ -1,0 +1,16 @@
+{
+ "lane": "video-unresolved",
+ "status": "draft",
+ "about": "An unknown or conflicting maker route stops before any writing, production or repair.",
+ "steps": [
+  {
+   "id": "route",
+   "name": "maker route",
+   "checks": [
+    "maker_route"
+   ],
+   "fix": null,
+   "why_no_fix": "Choose/reconcile ai, creator or founder in the actual source record. No default."
+  }
+ ]
+}

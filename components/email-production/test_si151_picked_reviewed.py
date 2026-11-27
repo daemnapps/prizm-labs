@@ -3,7 +3,7 @@
 the subject pair that will be sent, and the push reads the send the reviewer
 approved, failing closed on an unreadable review (email-production#11).
 
-    /usr/bin/python3 tools/email-production/test_si151_picked_reviewed.py
+    /usr/bin/python3 components/email-production/test_si151_picked_reviewed.py
 
 Offline. A made-up brand `zz-brand` in a temp workspace; the brand's
 catalogue, the price check, the look and the Keychain are stubs.

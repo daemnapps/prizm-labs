@@ -1,6 +1,6 @@
 """Does the email keep every promise it makes? Any brand, any product, any offer.
 
-the owner, 2026-10-18 (the sleeves email said "two steps", labelled STEP ONE and never showed STEP TWO, although the copy,
+owner, 2026-10-18 (the sleeves email said "two steps", labelled STEP ONE and never showed STEP TWO, although the copy,
 the design brief and the job card all carried the second step): "this is general awareness of the email itself, and
 this must be clear and accomplished regardless of the brand / product / offer."
 
@@ -10,7 +10,7 @@ it proves, a reference, a question raised, what the button says it does) and whe
 is prompts/design3-promises-v1-owner.md; it judges wholeness, never taste.
 
     check(run_dir, spec=None, job=None, copy=None) -> {"promises": [...], "broken": [...]}   writes design/promises.json
-    python3 tools/email-production/design/promises.py runs/email-production/<brand>/<label>
+    python3 components/email-production/design/promises.py runs/email-production/<brand>/<label>
 
 The layout step (line.py) rewrites a layout that breaks a promise; the gap filler (gaps.py) reads design/promises.json
 and sends a broken promise to a redesign with its fix named, before any person sees the email.
@@ -57,6 +57,37 @@ def layout_text(spec):
     return "\n".join(out)
 
 
+FUNNEL_ONLY = re.compile(r"funnels? and (its|their) ads|funnel only|funnel-only|only on the funnel|never in an email", re.I)
+
+
+def funnel_only(block):
+    """An offer-bank block the bank keeps for the funnel and its ads (said in its opening lines): never an email's."""
+    return bool(FUNNEL_ONLY.search(block[:600]))
+
+
+FUNNEL_LINE = re.compile(r"^\s*-\s*(sold in the \S+ funnel|funnel offer\b)", re.I)
+
+
+def email_lines(block):
+    """An offer block as an email may read it: lines the bank gives to the funnel alone are taken out."""
+    return "\n".join(l for l in block.splitlines() if not FUNNEL_LINE.search(l) and not FUNNEL_ONLY.search(l))
+
+
+def send_offers(run_dir):
+    """The offers this send was written to carry: --offer and --offer-also from the run's copy-argv.json."""
+    try:
+        a = json.loads((Path(run_dir) / "copy-argv.json").read_text())
+    except (OSError, ValueError):
+        return []
+    a = a if isinstance(a, list) else a.get("argv", [])
+    out = []
+    for flag in ("--offer", "--offer-also"):
+        for i, x in enumerate(a[:-1]):
+            if x == flag:
+                out += [v.strip() for v in str(a[i + 1]).split(",") if v.strip() and v.strip().lower() != "none"]
+    return list(dict.fromkeys(out))
+
+
 def rulings(run_dir, spec):
     """The decisions that outrank the job card: this occasion's offer-bank block and the chain's learnings."""
     out = []
@@ -67,10 +98,21 @@ def rulings(run_dir, spec):
         rj = {}
     occ = ((rj.get("assignment") or {}).get("occasion") or "").split(" ")[0].lower()
     f = REPO / "brands" / brand / "products" / "offer-bank.md"
-    if occ and f.is_file():
-        for block in re.split(r"\n#{2,3} ", f.read_text())[1:]:
-            if block.split("\n", 1)[0].lower().startswith(occ):
-                out.append("THE OFFER FOR THIS OCCASION (offer bank):\n" + block.strip()[:6000])
+    own = send_offers(run_dir)
+    if f.is_file():
+        blocks = re.split(r"\n#{2,3} ", f.read_text())[1:]
+        # the send's OWN offer outranks everything (2026-11-08): the occasion's block used to stand in for it, and
+        # brand_b's `black-friday` block is the funnel's 3-pack, so single-product emails got the funnel deal back
+        for key in own:
+            for block in blocks:
+                if block.split("\n", 1)[0].lower().split(" ")[0] == key.lower():
+                    out.append("THE OFFER THIS SEND CARRIES (offer bank, `%s`):\n" % key + email_lines(block.strip())[:6000])
+        if occ:
+            for block in blocks:
+                head = block.split("\n", 1)[0].lower()
+                if head.startswith(occ) and head.split(" ")[0] not in [k.lower() for k in own] and not funnel_only(block):
+                    out.append(("THE OCCASION (offer bank; context only, the send's own offer above wins):\n" if own
+                                else "THE OFFER FOR THIS OCCASION (offer bank):\n") + block.strip()[:6000])
     try:
         sys.path.insert(0, str(REPO / "components" / "run-kit"))
         from run_kit import learnings as LN

@@ -1,4 +1,4 @@
-"""PF-20b (before in background): the emails list never waits for a "before" picture (the team, 2026-10-29: her page
+"""PF-20b (before in background): the emails list never waits for a "before" picture (email_lead, 2026-10-29: her page
 server's copy sat on "Loading your emails…" for minutes while every received-<rev>.jpg was re-made).
 
 A missing picture is `pending` on the row and made by ONE background maker; a failure is named on the row. The
@@ -20,7 +20,7 @@ import received as R  # noqa: E402
 import sync as S  # noqa: E402
 
 SPEC = {"sections": [{"s": "letter", "text": "hello"}]}
-FOUND = {"rev": "abc1234567", "by": "the team", "at": "2026-10-29T10:00:00-03:00", "waiting": True}
+FOUND = {"rev": "abc1234567", "by": "editor", "at": "2026-10-29T10:00:00-03:00", "waiting": True}
 
 
 class Base(unittest.TestCase):

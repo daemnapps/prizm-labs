@@ -48,7 +48,12 @@ def test_culture_days_are_the_day_or_the_day_before():
     w = CAL.moment_windows(rows, hol_rows=hol)
     assert w["cma-awards"] == [("2026-11-17", "2026-11-18")]
     assert w["veterans-day"] == [("2026-11-10", "2026-11-11")]
-    assert w["black-friday"] == [("2026-11-16", "2026-11-30")]      # a sale keeps its run-up
+    # a sale keeps its run-up, and a sale that goes live early (holiday-cadence.json lead_days:
+    # black-friday 7) warms up from there: 11 + 7 days before the 27th (2026-11-03)
+    assert w["black-friday"] == [("2026-11-09", "2026-11-30")]
+    w2 = CAL.moment_windows([{"key": "no-lead-sale", "kind": "holiday", "holiday_kind": "retail",
+                              "in_month": True, "start": "2026-11-27", "end": "2026-11-27"}])
+    assert w2["no-lead-sale"] == [("2026-11-16", "2026-11-27")]      # no lead: the run-up alone
 
 
 if __name__ == "__main__":

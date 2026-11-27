@@ -1,0 +1,26 @@
+{
+  "_note": "Empty on purpose. Fill this in for your brand \u2014 the shape below is what the tools read.",
+  "_shape_from": "the same file in a live brand",
+  "_example_keys": {
+    "note": "",
+    "source": "",
+    "heroes": [
+      ""
+    ],
+    "hero_rule": "",
+    "sellable": [
+      {
+        "handle": "",
+        "title": "",
+        "url": ""
+      }
+    ],
+    "never": {
+      "note": "",
+      "handles": [
+        ""
+      ],
+      "why": ""
+    }
+  }
+}

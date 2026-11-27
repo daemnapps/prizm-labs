@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The audience matrix — every planning cell, as one record. (EM-1)
 
-    python3 pull/matrix.py --brand brand-a
+    python3 pull/matrix.py --brand brand_a
 
 Joins what already exists and never invents: the platform segments (from the
 brand's segment audit), the avatar roster with its sub-avatars, and the
@@ -75,7 +75,7 @@ def main():
         generated=f"{datetime.date.today()}",
         brand=args.brand,
         note=("The planning cell is segment × avatar × sub-avatar (RULED, "
-              "the owner 2026-08-29 — the email-per-day concept is dead). Axes "
+              "owner 2026-08-29 — the email-per-day concept is dead). Axes "
               "below are measured; intersection sizes are NOT — platform "
               "segments carry no avatar membership, so a cell is a planning "
               "unit, not a counted population."),

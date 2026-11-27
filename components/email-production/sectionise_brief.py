@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Map every finished brief onto the section vocabulary the design library speaks.
 
-    python3 sectionise_brief.py --brand brand-a --month 2026-09
-    python3 sectionise_brief.py --brand brand-a --month 2026-09 --report SECTIONS.md
+    python3 sectionise_brief.py --brand brand_a --month 2026-09
+    python3 sectionise_brief.py --brand brand_a --month 2026-09 --report SECTIONS.md
 
 The copy side of the machine writes BLOCKS — a headline, a paragraph, a button,
 a picture. The design side buys SECTIONS — a hero, a routine, a pricing strip.

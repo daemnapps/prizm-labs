@@ -1,0 +1,95 @@
+{
+ "id": "genjutsu",
+ "name": "Genjutsu",
+ "kind": "effect",
+ "makes": "Restyles a video in a named Style, transfers a driving video's motion onto your subject, or replaces an object/person in a clip.",
+ "source": [
+  "commands/genjutsu.md",
+  "katana/references/genjutsu-routing.md",
+  "_models-video.md",
+  "katana/references/budget.md"
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "name": "Resolve the path (gallery, style, preset, direct)",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 2,
+   "name": "Find the Style or preset by name",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 3,
+   "name": "Collect and upload video and reference images",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 4,
+   "name": "Price through get_presets / estimate",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 5,
+   "name": "Motion transfer or object replacement (on the user's go)",
+   "model": "hf_mult_motion_control / hf_mult_replace_object",
+   "cheap": "hf_mult_*_flash or wan3_0 480p 7.5 per 10 s"
+  },
+  {
+   "n": 6,
+   "name": "Style restyle (on the user's go)",
+   "model": "preset genjutsu-style:<id>",
+   "cheap": "one styled key picture seedream_5_0_flash 0.5 plus ffmpeg moves"
+  },
+  {
+   "n": 7,
+   "name": "Wait for the job and show result",
+   "model": "none",
+   "cheap": null
+  }
+ ],
+ "price": "Quoted first. Motion transfer 11/7/3 credits per driving second at 1080p/720p/480p; style cost returned by get_presets (not in the library).",
+ "cheap_price": "480p transfer at 3 per second plus free local upscale, or hf_mult_*_flash / wan3_0 480p about 7.5 per 10 s.",
+ "prompts": [
+  {
+   "label": "Motion-transfer prompt (the only fixed prompt line; 40 words max)",
+   "source": "katana/references/genjutsu-routing.md",
+   "text": "A motion-transfer prompt can be: \"Apply the source video's motion to the character in the reference image, keeping their clothing, the framing and the timing.\" For a fully specified preset, omit the prompt or use an empty string only when its actual contract permits it. An extra phrase is justified only to resolve a concrete ambiguity, such as which of two subjects' motion transfers. This rule does not limit the image-editing prompt or Seedance shot instructions."
+  },
+  {
+   "label": "Short-prompt rule",
+   "source": "katana/references/genjutsu-routing.md",
+   "text": "For direct Genjutsu calls and preset text fields, default to one sentence and allow at most two sentences / 40 words. State the transformation and a minimal preservation rule. Appearance, clothing, source action, camera and composition already come from the media. Do not itemize visual traits, scene beats, textures, effects or garments; a short clause keeping the clothing from the reference image is enough. Preserve the full analysis and compositing plan outside the generation prompt."
+  },
+  {
+   "label": "Style catalog lookup call",
+   "source": "commands/genjutsu.md",
+   "text": "1. Find the style: `get_presets({source:\"genjutsu\",category:\"genjutsu-styles\",query:\"<style name>\"})`. Match the user's wording to a returned name; if several match, ask which one. If none match, browse `category:\"genjutsu-styles\"` without query and let the user choose. Never substitute a motion preset or invent a style ID. A bare request to browse styles stops after the gallery opens."
+  },
+  {
+   "label": "Style price call",
+   "source": "commands/genjutsu.md",
+   "text": "3. Price: call `get_presets` with `source:\"genjutsu\"`, the returned `genjutsu-style:` `preset_id` and `initial_inputs:{video:[\"<video UUID>\"],references:[...],resolution:\"720p\"}`. Report `execution.cost_credits` and readiness. If no price is returned, say the price is unavailable and that credits may still be used."
+  },
+  {
+   "label": "Style generate call",
+   "source": "commands/genjutsu.md",
+   "text": "4. Generate only when the user asks: `execute_preset({source:\"genjutsu\",preset_id:\"genjutsu-style:<id>\",inputs:{video:[...],references:[...],resolution,prompt}})`, then follow its job instructions. Do not execute twice; a refused style returns no job."
+  },
+  {
+   "label": "Model choice by intent",
+   "source": "commands/genjutsu.md",
+   "text": "- Copy, repeat, reproduce, mimic, or transfer motion, actions, gestures, dance, or camera motion from a driving video to reference-image subjects: `hf_mult_motion_control`.\n- Replace, change, or swap an object, product, garment, or character in a source video using reference images: `hf_mult_replace_object`."
+  },
+  {
+   "label": "Direct-call parameter rule",
+   "source": "commands/genjutsu.md",
+   "text": "Read `models_explore` with `action:\"get\"` with the selected `model_id` for current supported parameters. Put arguments inside `params`: `model` is the selected ID, `prompt` is the user's brief, and `medias` contains reference images with role `image` and exactly one source/driving video with role `video`. Use supplied media and context. If a custom-video request is missing intent or required media, ask for those inputs. A bare `/genjutsu` follows the preset-gallery entry path above. Do not submit until required inputs are available."
+  }
+ ]
+}

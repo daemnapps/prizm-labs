@@ -1,0 +1,73 @@
+{
+  "_note": "Empty on purpose. Fill this in for your brand \u2014 the shape below is what the tools read.",
+  "_shape_from": "the same file in a live brand",
+  "_example_keys": {
+    "note": "",
+    "products": {
+      "war": {
+        "title": "",
+        "hero": "",
+        "cutout": "",
+        "all": [
+          "\u2026"
+        ]
+      },
+      "the-vitals-set": {
+        "title": "",
+        "hero": "",
+        "cutout": "",
+        "all": [
+          "\u2026"
+        ]
+      },
+      "the-king-skin-set": {
+        "title": "",
+        "hero": "",
+        "cutout": "",
+        "all": [
+          "\u2026"
+        ]
+      },
+      "clear-skin-set": {
+        "title": "",
+        "hero": "",
+        "cutout": "",
+        "all": [
+          "\u2026"
+        ]
+      },
+      "basics-set": {
+        "title": "",
+        "hero": "",
+        "cutout": "",
+        "all": [
+          "\u2026"
+        ]
+      },
+      "prime": {
+        "title": "",
+        "hero": "",
+        "cutout": "",
+        "all": [
+          "\u2026"
+        ]
+      },
+      "miro": {
+        "title": "",
+        "hero": "",
+        "cutout": "",
+        "all": [
+          "\u2026"
+        ]
+      },
+      "gift-card": {
+        "title": "",
+        "hero": "",
+        "cutout": "",
+        "all": [
+          "\u2026"
+        ]
+      }
+    }
+  }
+}

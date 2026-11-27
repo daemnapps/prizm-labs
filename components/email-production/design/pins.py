@@ -1,6 +1,6 @@
 """Pinterest inspiration for the pictures an email makes.
 
-the owner, 2026-10-18: "the team likes to use Pinterest for inspiration on images, so outside of our regular brand assets
+owner, 2026-10-18: "editor likes to use Pinterest for inspiration on images, so outside of our regular brand assets
 and customer stuff, we should also pull in relevant images from Pinterest to create unique images from all of our
 references for image emails."
 
@@ -61,7 +61,7 @@ def query_for(todo, brief="", use="story"):
     """A short Pinterest search from what the picture shows: the scene words, never brand or product names."""
     import re
     text = (todo or "").lower()
-    text = re.sub(r"\b(the|a|an|her|his|their|our|real|brilliance|radiance|body|scrub|cream|tube|brand-b|brand-a|flex)\b", " ", text)
+    text = re.sub(r"\b(the|a|an|her|his|their|our|real|brilliance|radiance|body|scrub|cream|tube|brand_b|brand_a|flex)\b", " ", text)
     words = [w for w in re.findall(r"[a-z][a-z\-]+", text) if len(w) > 2][:4]   # long searches come back empty
     tail = {"key-visual": "editorial", "gift": "gift styling", "story": "aesthetic"}.get(use, "")
     return " ".join(words + [tail]).strip()

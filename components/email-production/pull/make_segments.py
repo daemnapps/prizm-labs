@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Create the core campaign segments.
 
-    python3 calendar/make_segments.py --brand brand-a [--dry-run]
+    python3 calendar/make_segments.py --brand brand_a [--dry-run]
 
-Campaign segments are NOT the language segments (the owner, 2026-08-28). The
+Campaign segments are NOT the language segments (owner, 2026-08-28). The
 language banks split by journey position because that is what flows need.
 Campaigns run on core commercial segments, and this writes them.
 

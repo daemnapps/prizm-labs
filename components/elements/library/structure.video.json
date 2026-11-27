@@ -1312,7 +1312,7 @@
    "state": "proposed",
    "signed": null,
    "examples": null,
-   "evidence": "[{\"clip\": \"BRAND_A8.mp4\", \"creator\": \"street crew\", \"note\": \"five approaches cut tight, question repeated\"}, {\"clip\": \"BRAND_A1.mp4\", \"creator\": \"street crew\", \"note\": \"meme inserts, awkward silence played as the payoff\"}, {\"clip\": \"C2111.MP4\", \"creator\": \"street crew\", \"note\": \"before/after photo shown to a stranger, her reaction is the proof\"}]",
+   "evidence": "[{\"clip\": \"DOUXDS8.mp4\", \"creator\": \"street crew\", \"note\": \"five approaches cut tight, question repeated\"}, {\"clip\": \"DOUXDS1.mp4\", \"creator\": \"street crew\", \"note\": \"meme inserts, awkward silence played as the payoff\"}, {\"clip\": \"C2111.MP4\", \"creator\": \"street crew\", \"note\": \"before/after photo shown to a stranger, her reaction is the proof\"}]",
    "approved": false,
    "source": "components/swipe-organic/formats.json",
    "extra": {
@@ -1337,8 +1337,8 @@
    "why_it_works": "Conscious Bar runs 100,000+ customers off 44 ads because every ad is one person's reason for switching, told in her own words; story and intent do the work volume does for everyone else.",
    "status": "approved",
    "state": null,
-   "signed": "owner 2026-09-25 (approved as recommended)",
-   "examples": "components/swipe-paid/consciousbar/teardown.md (the swipe); brands/brand-a/story.md (the story block: SPINE · BEFORE · TURN · AFTER, the tellers)",
+   "signed": "the owner 2026-09-25 (approved as recommended)",
+   "examples": "components/swipe-paid/consciousbar/teardown.md (the swipe); brands/Brand A/story.md (the story block: SPINE · BEFORE · TURN · AFTER, the tellers)",
    "evidence": "the owner 2026-09-19: 'the storytelling ad' — 'storytelling and intent over volume'. Moved from format/video 2026-09-28: it is a video structure (what the beats are), not a format. The 16 Sep 'storytelling' format draft was ruled the same piece as expert-consult on 17 Sep and retired; this row is the structure, not that draft.",
    "approved": true,
    "source": "components/elements/additions.json",
@@ -1354,13 +1354,13 @@
    "status": "draft",
    "state": null,
    "signed": null,
-   "examples": "Brand-B spot-hider bank: 'I definitely was a sun worshiper when I was a teenager, so I have hyperpigmentation on my chest' · 'I wear sunscreen… now, but I did not as a kid'. BRAND-A fed-up-king: 'To get clearer skin like I had when I was younger' · 'they used to clown him for his skin, now they ask what changed' · 'why didn't anyone tell me about this sooner'.",
+   "examples": "Brand B spot-hider bank: 'I definitely was a sun worshiper when I was a teenager, so I have hyperpigmentation on my chest' · 'I wear sunscreen… now, but I did not as a kid'. Brand A fed-up-king: 'To get clearer skin like I had when I was younger' · 'they used to clown him for his skin, now they ask what changed' · 'why didn't anyone tell me about this sooner'.",
    "evidence": "the owner 2026-10-03: 'build nostalgic formats and classic formats that people actually remember… program for the past to bring them in a place they can relate to, and from there you give them a moment to change the timeline' · 'nothing more nothing less — real life experiences they go through and experience, and also what they watch'. · the owner 2026-10-03: 'whatever the actual research shows then we roll with it… nothing to do with my taste.'",
    "approved": false,
    "source": "components/elements/additions.json",
    "extra": {},
    "aliases": [],
-   "note": "RESEARCH (2026-10-03): real past memories (hand-sorted) are 12 of 25,830 BRAND-A Fed-Up King bank lines and 8 of 4,688 Brand-B Spot-Hider lines — present but rare; BRAND-A's own 'Growing up without a dad' TikTok has 2.3M views. The one swiped structure on this idea with proof is era-stamped-upgrade-ladder (luxsteam.co, 29.96M views). named by the owner 2026-10-03; definition is the machine's, review pending. Rule: the past anchor is a real customer line from the avatar's language bank, the era references come from the avatar profile's cultural-relevance section and age band — nothing invented. Grief lines (a parent who passed) are never used as an anchor."
+   "note": "RESEARCH (2026-10-03): real past memories (hand-sorted) are 12 of 25,830 Brand A Fed-Up King bank lines and 8 of 4,688 Brand B Spot-Hider lines — present but rare; Brand A's own 'Growing up without a dad' TikTok has 2.3M views. The one swiped structure on this idea with proof is era-stamped-upgrade-ladder (luxsteam.co, 29.96M views). named by the owner 2026-10-03; definition is the machine's, review pending. Rule: the past anchor is a real customer line from the avatar's language bank, the era references come from the avatar profile's cultural-relevance section and age band — nothing invented. Grief lines (a parent who passed) are never used as an anchor."
   }
  ],
  "dropped": {},

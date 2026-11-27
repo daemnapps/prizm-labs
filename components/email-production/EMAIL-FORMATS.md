@@ -13,7 +13,7 @@ on what is already ruled — it invents no names:
 
 - the **section names** are the 17 fixed ones in `SECTIONS.md`;
 - the **formats** are the brand's own, read off its design file —
-  for <brand>, `brands/<brand>/email-sms/design-formats/formats.md` (8 formats,
+  for Brand A, `brands/Brand A/email-sms/design-formats/formats.md` (8 formats,
   2026-08-31), plus `simple` from the element library (`template.email`);
 - the **picture rule** is `IMAGERY.md` (2026-09-09) — never a product or a
   person from a text description — made concrete per slot below.
@@ -25,7 +25,7 @@ comes from and whether anything is generated at all.
 
 | kind | what it is | where it comes from | generated? |
 |---|---|---|---|
-| **SCENE** | a person or a place doing the thing the section argues | a **real-life reference first** — a frame from footage we own (`tools/asset-index/machine/search.py`), a customer photo, a before-after, the archive — then our own version made on top of it with the banked person and the real product as references | yes, from references — never from words alone |
+| **SCENE** | a person or a place doing the thing the section argues | a **real-life reference first** — a frame from footage we own (`components/asset-index/machine/search.py`), a customer photo, a before-after, the archive — then our own version made on top of it with the banked person and the real product as references | yes, from references — never from words alone |
 | **PRODUCT** | the product itself | the refined product kit render (`runs/ai-elements/<brand>/products/<slug>/model/`, once signed off) or the live-store photo | no |
 | **PROOF** | a result, a review, a before-after | the real thing, as it is (`core-avatars/before-afters.md`, reviews, customer posts) | no |
 | **DETAIL** | a texture or close-up — lather, bristles, a label, skin | a real macro reference (store photo, studio render, footage frame), then made on top of it | yes, from references |
@@ -85,7 +85,7 @@ After the copy is written (step 8) and before layout:
    `runs/email-production/<brand>/week-<date>/picture-briefs.json`.
 4. **Sign-off.** the owner approves the briefs on the weekly picture page before
    anything is spent.
-5. **Generate.** `tools/image-production` (`make.py --purpose email-hero`)
+5. **Generate.** `components/image-production` (`make.py --purpose email-hero`)
    with the real reference, the person's casting sheet and the product
    reference all attached. Never words alone.
 6. **Check.** Product against its kit (`product_check.py`), face against its

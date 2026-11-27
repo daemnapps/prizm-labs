@@ -1,0 +1,34 @@
+{
+  "_note": "Empty on purpose. Fill this in for your brand \u2014 the keys below are what the tools read.",
+  "_shape_from": "the same file in a live brand",
+  "_example_keys": {
+    "generated": "",
+    "brand": "",
+    "note": "",
+    "caveats": [
+      ""
+    ],
+    "segments": [
+      {
+        "name": "\u2026",
+        "rule": "\u2026",
+        "id": "\u2026",
+        "profiles": "\u2026",
+        "funnel": "\u2026"
+      }
+    ],
+    "avatars": [
+      {
+        "key": "\u2026",
+        "language_rows": "\u2026",
+        "funnels": "\u2026",
+        "subs": "\u2026"
+      }
+    ],
+    "cells": {
+      "planning": 0,
+      "note": ""
+    },
+    "_funnel": ""
+  }
+}

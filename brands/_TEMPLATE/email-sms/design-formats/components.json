@@ -1,0 +1,55 @@
+{
+  "_note": "Empty on purpose. Fill this in for your brand \u2014 the keys below are what the tools read.",
+  "_shape_from": "the same file in a live brand",
+  "_example_keys": {
+    "generated": "",
+    "note": "",
+    "source": "",
+    "palette": {
+      "canvas": "",
+      "deep_green": "",
+      "surface": "",
+      "surface_raised": "",
+      "ink": "",
+      "ink_muted": "",
+      "accent": "",
+      "accent_deep": ""
+    },
+    "typography": {
+      "stack": "",
+      "display_stack": "",
+      "headline_px": 0,
+      "headline_leading": 0,
+      "headline_weight": 0,
+      "headline_italic_ok": 0,
+      "subhead_px": 0,
+      "body_px": 0
+    },
+    "layout": {
+      "width": 0,
+      "pad_x": 0,
+      "block_gap": 0,
+      "cta_width": 0,
+      "cta_height": 0,
+      "cta_radius": 0,
+      "image_radius": 0,
+      "glass_card": ""
+    },
+    "identity": {
+      "logo_text": "",
+      "logo_svg": "",
+      "logo_px": 0,
+      "logo_tracking": ""
+    },
+    "formats_bedrock": {
+      "FMT-01": "",
+      "FMT-02": "",
+      "FMT-03": "",
+      "FMT-04": "",
+      "FMT-05": "",
+      "FMT-06": "",
+      "FMT-07": "",
+      "FMT-08": ""
+    }
+  }
+}

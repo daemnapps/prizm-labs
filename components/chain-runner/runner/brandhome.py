@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """rule-9 (brand home) — a COMPILE FINDING, not a note somebody makes in review.
 
-components/CLAUDE.md rule 9 (the team, 2026-09-01): an engine stays brand-agnostic
+components/CLAUDE.md rule 9 (developer, 2026-09-01): an engine stays brand-agnostic
 and takes brand CONTENT only from `brands/<brand>/` — the real brands tree, the
 one home. This module is the mechanical half of that rule and the ONLY file in
 `runner/` that knows the word: it reads the PATHS a run declares as roots and
 says which of them take brand content from somewhere else. Nothing here
 executes, resolves or substitutes anything, and `spec.py`'s data model and the
 engine never call it — they stay brand-blind, which is the other half of the
-ruling (PLAN rider (2), the team GO).
+ruling (PLAN rider (2), developer GO).
 
 DETECTION IS BY PATH SHAPE, NEVER BY CONTENT. Classifying arbitrary files as
 "brand content" is a judgement, and a judgement in a compile check is a check

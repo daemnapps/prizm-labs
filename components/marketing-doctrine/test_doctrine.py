@@ -5,7 +5,7 @@
 
 No pytest, no network, no dependency — it runs wherever python3 runs. It
 proves the things that would quietly rot: the counts are the counts, the
-section list is the owner's nine plus the six added on the 2026-09-18 ask and
+section list is owner's nine plus the six added on the 2026-09-18 ask and
 nothing coined, every line pointer is inside
 the book, the slices on disk are what the JSON renders, and the pronoun gate
 is green on everything this component ships.
@@ -26,20 +26,20 @@ import render                # noqa: E402
 
 BOOK_LINES = 6407
 
-# the owner's own nine, in the order the owner lists them. This is the spine and it
+# owner's own nine, in the order owner lists them. This is the spine and it
 # never reorders.
-OWNER_SECTION_IDS = [
+owner_SECTION_IDS = [
     "hook", "problem", "failed-solutions", "root-cause", "unique-mechanism",
     "solution", "product", "offer", "call-to-action",
 ]
 # The six a fundamental direct-response reading said the nine were missing,
-# added 2026-09-18 on the owner's ask — each carries an `added` line in the JSON so
+# added 2026-09-18 on owner's ask — each carries an `added` line in the JSON so
 # any of them can be struck without archaeology.
 ADDED_SECTION_IDS = [
     "identification", "agitation", "proof", "transformation", "objections",
     "urgency",
 ]
-SECTION_IDS = OWNER_SECTION_IDS + ADDED_SECTION_IDS
+SECTION_IDS = owner_SECTION_IDS + ADDED_SECTION_IDS
 TECHNIQUE_IDS = [
     "intensification", "identification", "gradualization", "redefinition",
     "mechanization", "concentration", "camouflage",
@@ -49,7 +49,7 @@ AWARENESS_IDS = [
 ]
 SLICE_NAMES = [name for name, _ in render.RENDERERS]
 
-# The taste and delivery dials (the owner's ruling, 2026-09-18). Declared here so
+# The taste and delivery dials (owner's ruling, 2026-09-18). Declared here so
 # a value quietly disappearing is a failing test rather than a thinner prompt.
 DIAL_IDS = ["humor", "delivery_style", "register", "pacing",
             "reference_world", "avoid"]
@@ -68,7 +68,7 @@ DIAL_VALUES = {
     "avoid": ["cringe-register", "ad-voice-tells"],
 }
 TASTE_RQ_IDS = {"RQ-17", "RQ-18", "RQ-19", "RQ-20", "RQ-21"}
-# The spoken pass (the owner's ruling, 2026-09-19: "humans don't use em dashes
+# The spoken pass (owner's ruling, 2026-09-19: "humans don't use em dashes
 # when speaking"). Declared here so a level, a rule or a mark quietly
 # disappearing is a failing test rather than a paragraph read as prose.
 SPOKEN_RQ_IDS = {"RQ-22", "RQ-23", "RQ-24"}
@@ -93,6 +93,22 @@ def check(label, ok, detail=""):
 
 def section(title):
     print("\n%s" % title)
+
+
+def check_mechanics():
+    section("mechanics.json holds together")
+    m = json.loads((HERE / "mechanics.json").read_text())
+    gates = {g["id"] for g in m["gates"]}
+    check("every mechanic has a known tier",
+          all(r["tier"] in m["tiers"] for r in m["mechanics"]))
+    check("every mechanic names evidence and the number it moves",
+          all(r["evidence"] and r["metric"] for r in m["mechanics"]))
+    check("every mechanic has a move on all four surfaces",
+          all(r.get(s) for r in m["mechanics"] for s in ("ad", "email", "page", "portal")))
+    check("every gate a mechanic cites exists",
+          all(set(r["gates"]) <= gates for r in m["mechanics"]))
+    check("mechanics.md is bound as {mechanics}",
+          "{mechanics}" in (HERE / "slices" / "mechanics.md").read_text())
 
 
 def main():
@@ -133,8 +149,8 @@ def main():
     sec_ids = [s["id"] for s in secs]
     check("%d sections" % len(SECTION_IDS), len(secs) == len(SECTION_IDS),
           "got %d" % len(secs))
-    check("the owner's nine are present, in that order",
-          [i for i in sec_ids if i in OWNER_SECTION_IDS] == OWNER_SECTION_IDS,
+    check("owner's nine are present, in that order",
+          [i for i in sec_ids if i in owner_SECTION_IDS] == owner_SECTION_IDS,
           str(sec_ids))
     check("the six added on that ask are present",
           [i for i in sec_ids if i in ADDED_SECTION_IDS] == ADDED_SECTION_IDS,
@@ -145,7 +161,7 @@ def main():
     check("every added section says when and why it was added",
           all(s.get("added") for s in secs if s["id"] in ADDED_SECTION_IDS))
     check("none of the original nine carries an added line",
-          not any(s.get("added") for s in secs if s["id"] in OWNER_SECTION_IDS))
+          not any(s.get("added") for s in secs if s["id"] in owner_SECTION_IDS))
     check("every section names real techniques",
           all(t in TECHNIQUE_IDS for s in secs for t in s["techniques"]))
     check("every section names real awareness levels",
@@ -237,7 +253,7 @@ def main():
                   for r in rows))
         check("every row ids are unique",
               len({r["id"] for r in rows}) == len(rows))
-        check("no row's source claims 'proven' work without the owner's state",
+        check("no row's source claims 'proven' work without owner's state",
               all(r["state"] == "proven" or not r["source"].startswith("proven")
                   for r in rows))
         check("ad-frameworks.md is bound as {ad_frameworks}",
@@ -453,6 +469,7 @@ def main():
               if (HERE / "slices" / "spoken.md").exists() else False)
 
     print("")
+    check_mechanics()
     if _FAILURES:
         print("FAILED: %d" % len(_FAILURES))
         for f in _FAILURES:

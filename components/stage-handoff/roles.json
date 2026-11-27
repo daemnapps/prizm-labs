@@ -1,0 +1,47 @@
+{
+ "_what": "Role-to-person assignment map for existing jobs and stage packets. Holders are person IDs in team/people. Roles select assignees; they do not add a queue or an execution-permission gate.",
+ "status": "draft",
+ "as_of": "2026-11-19",
+ "roles": {
+  "creative-strategist": {
+   "job": "Runs video-teardown and video-writing: the swipe torn down, then the brief written",
+   "holders": [
+    "the owner"
+   ]
+  },
+  "video-producer": {
+   "job": "Runs video-production from an accepted brief: voice, stills, clips, then the edit kit",
+   "holders": [
+    "a creator",
+    "the owner"
+   ],
+   "note": "The video editor also holds the production role; the owner remains a holder (2026-11-17)."
+  },
+  "video-editor": {
+   "job": "Runs video-edit on the edit kit: the finished cut, filed for approval",
+   "holders": [
+    "a creator"
+   ]
+  },
+  "graphic-designer": {
+   "job": "Makes the pictures for an image brief",
+   "holders": [
+    "the editor"
+   ]
+  },
+  "project-manager": {
+   "job": "Coordinates assigned promo, storefront and funnel work through the existing task queue and workflows",
+   "holders": [
+    "the email lead"
+   ],
+   "note": "Owner-assigned promo coordination responsibility, 2026-11-19."
+  },
+  "email": {
+   "job": "Runs email writing, final copy review, popup preparation and the authorized scheduling workflow in their own account",
+   "holders": [
+    "the email lead"
+   ],
+   "note": "Owner ruling 2026-10-18: the project manager owns Write it, final wording and scheduling; design stays with the graphic-designer role."
+  }
+ }
+}

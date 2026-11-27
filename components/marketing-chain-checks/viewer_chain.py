@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """THE VIEWER CHAIN — the viewer check and the phone checks as one run
-(the owner, 2026-10-02: "consolidate the viewer check and the ad signal tools …
+(owner, 2026-10-02: "consolidate the viewer check and the ad signal tools …
 build a chain now for this process … I think this is literally it").
 
     python3 viewer_chain.py <brief> --brand <brand> --avatar <avatar> [--sub NAME]
@@ -16,7 +16,7 @@ One brief in; one folder and one page out, at runs/viewer-check/<brand>/<label>/
   6 score      code, against the real posts — never "looks real"
   7 route      a fail goes back to the writing step, carrying 4 and 5
   7b fix       the failing part is rewritten (objection-bank answers, the customers' own words),
-               then a fresh 5 scroll it again — up to 3 rewrites, then the owner
+               then a fresh 5 scroll it again — up to 3 rewrites, then owner
   7c learn     a pass after a fail is written to records/learnings/<brand>--<avatar>.md,
                which every later fix and every writing stage reads
   8 hidden     faces, product and words under the TikTok / Reels / Shorts buttons (when frames exist)
@@ -122,7 +122,10 @@ def main(argv=None):
     ap.add_argument("--kind", default="video")
     ap.add_argument("--frames", nargs="*")
     ap.add_argument("--label")
-    a = ap.parse_args(argv)
+    import importlib.util as _u, pathlib as _pl
+    _s = _u.spec_from_file_location("profile_arg", next(q for q in _pl.Path(__file__).resolve().parents if q.name == "components") / "naming" / "profile_arg.py")
+    _PA = _u.module_from_spec(_s); _s.loader.exec_module(_PA)   # --profile <avatar>[_<sub>][_<demographic>] (naming/PEOPLE.md)
+    a = ap.parse_args(_PA.expand(argv, has=('avatar', 'sub')))
     brief = Path(a.brief).resolve()
     label = a.label or brief.parent.parent.name if brief.parent.name in ("stages", "deliverable", "out") else (a.label or brief.stem)
     run = V.WS / "runs" / "viewer-check" / a.brand / label

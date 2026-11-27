@@ -1,0 +1,43 @@
+{
+  "_note": "Empty on purpose. Fill this in for your brand \u2014 the shape below is what the tools read.",
+  "_shape_from": "the same file in a live brand",
+  "_example_keys": {
+    "_readme": "",
+    "schema": 0,
+    "brand": "",
+    "stated": "",
+    "posture": "",
+    "lanes": {
+      "organic-creator": {
+        "state": "",
+        "note": ""
+      },
+      "organic-clipping": {
+        "state": "",
+        "note": ""
+      },
+      "ad-static": {
+        "state": "",
+        "note": ""
+      },
+      "ad-video": {
+        "state": "",
+        "note": ""
+      },
+      "ad-copy": {
+        "state": ""
+      },
+      "page-offer": {
+        "state": "",
+        "note": ""
+      },
+      "page-presell": {
+        "state": "",
+        "note": ""
+      },
+      "page-advertorial": {
+        "state": ""
+      }
+    }
+  }
+}

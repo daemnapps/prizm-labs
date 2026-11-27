@@ -51,7 +51,7 @@ class OneLocator(unittest.TestCase):
     def test_a_temp_clone_elsewhere_is_the_workspace(self):
         with tempfile.TemporaryDirectory(prefix="one-locator-test-") as tmp:
             ws = Path(tmp)
-            self.assertNotEqual(ws.resolve(), (Path.home() / "Projects" / "workspace").resolve())
+            self.assertNotEqual(ws.resolve(), (Path.home() / "Projects" / "ai-workspace").resolve())
             (ws / "components").mkdir()
             (ws / "brands" / BRAND / "email-sms").mkdir(parents=True)
             with unittest.mock.patch.dict(os.environ, {"AI_WORKSPACE": str(ws)}):

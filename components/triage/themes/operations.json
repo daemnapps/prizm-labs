@@ -1,11 +1,11 @@
 {
  "theme": "operations",
- "title": "Operations (metrics dashboards now; the team's P&L systems next)",
- "status": "draft pack, 2026-10-02; triage owner named by the team; not yet ruled in the decision log",
- "triage_owner": "the team",
- "triage_owner_ruling": "the team 2026-10-02: \"Make it new theme and the team owner\" (decision log, filed by the lead); renamed 'operations' on the team's framing the same day: \"focus around two themes - components / atlas as well as operations\"",
- "theme_owner": "the team",
- "theme_owner_ruling": "the team 2026-10-02: \"and the team for operations\"",
+ "title": "Operations (metrics dashboards now; the designer's P&L systems next)",
+ "status": "draft pack, 2026-10-02; triage owner named by the developer; not yet ruled in the decision log",
+ "triage_owner": "the designer",
+ "triage_owner_ruling": "the developer 2026-10-02: \"Make it new theme and the designer owner\" (decision log, filed by the lead); renamed 'operations' on the developer's framing the same day: \"focus around two themes - components / atlas as well as operations\"",
+ "theme_owner": "the designer",
+ "theme_owner_ruling": "the developer 2026-10-02: \"and the designer for operations\"",
  "evaluation": {
   "window": "2026-10-02 to 2026-10-16",
   "midpoint_rerun": "2026-10-09",
@@ -13,8 +13,8 @@
   "feedback_file": "components/triage/themes/operations-FEEDBACK.md (proposed)",
   "finding_shape": "item id · what's wrong · change wanted · theme or engine"
  },
- "engine_owner": "the team",
- "engine_owner_ruling": "the team 2026-10-02: \"I will remain component owner of the triage component for now\"",
+ "engine_owner": "the developer",
+ "engine_owner_ruling": "the developer 2026-10-02: \"I will remain component owner of the triage component for now\"",
  "item": {
   "noun": "signal",
   "id_scheme": "<detector>:<brand>[:<product>]",
@@ -69,10 +69,10 @@
   ],
   "at_creation": {
    "rule": "every item, action group or issue this theme's triage creates carries all eight parts when it is created; never backfilled",
-   "ruled": "the team, 2026-10-02, received 06:43Z by date -u: \"also starting from now make it a rule that anything issues that come from this triage process should geneate with the 8 step summary from the start\""
+   "ruled": "the developer, 2026-10-02, received 06:43Z by date -u: \"also starting from now make it a rule that anything issues that come from this triage process should geneate with the 8 step summary from the start\""
   },
   "coverage_2026_10_02": "all 13 signals and all 5 actions",
-  "fix_means": "the response: what to do, whether a fix, a follow-up on a positive signal, or another move. Key kept as `fix` for compatibility; shown as Response (the team, 2026-10-02)"
+  "fix_means": "the response: what to do, whether a fix, a follow-up on a positive signal, or another move. Key kept as `fix` for compatibility; shown as Response (the developer, 2026-10-02)"
  },
  "categories": [
   "data health",
@@ -149,12 +149,12 @@
   }
  },
  "owners": {
-  "source": "the metrics component (the team); supply pipeline (the team, her 2026-09-15 ruling); ad spend per brand (not on record)"
+  "source": "the metrics component (the designer); supply pipeline (the designer, her 2026-09-15 ruling); ad spend per brand (not on record)"
  },
  "deciders": {
-  "spend": "the brand's ads owner (not on record; the team or the team to name)",
-  "supply": "the team",
-  "data": "the team"
+  "spend": "the brand's ads owner (not on record; the developer or the designer to name)",
+  "supply": "the designer",
+  "data": "the designer"
  },
  "walls": [
   "a secret in git",
@@ -164,7 +164,7 @@
   "brands/ read-only to machines this phase"
  ],
  "lane_conditions": {
-  "status": "the team is the triage owner and owns the data and supply",
+  "status": "the designer is the triage owner and owns the data and supply",
   "now": [
    "fix a data source or refresh in components/metrics",
    "draft a purchase or expedite (placing it is a person's act)"
@@ -181,9 +181,9 @@
   "owner": "only the owner can do it (a design call, knowledge or an act only they have)"
  },
  "people": [
-  "the team",
-  "the team",
-  "the team",
+  "the designer",
+  "the developer",
+  "the email lead",
   "the owner",
   "the lead",
   "maker"
@@ -222,16 +222,16 @@
    "card"
   ],
   "related_sources": [
-   "cards (metrics, brand-a-pnl, inventory decks)",
+   "cards (metrics, Brand A-pnl, inventory decks)",
    "PM tasks",
-   "the team's P&L systems (as they land)",
+   "the designer's P&L systems (as they land)",
    "Slack channels (to be determined)"
   ],
-  "examples": "Brand-A shipping cost unbilled → pnl:pnl_brand_a_orders, pnl:shiphero → DOUX-C7 (orders view stack), MET-C11b (freight follows who billed) (found by text match; to confirm)"
+  "examples": "Brand A shipping cost unbilled → pnl:pnl_Brand A_orders, pnl:shiphero → DOUX-C7 (orders view stack), MET-C11b (freight follows who billed) (found by text match; to confirm)"
  },
  "pages": {
-  "queue": "(private page)",
-  "approach": "(private page)",
+  "queue": "https://claude.ai/artifact/8CrU9QAiubQnjfL257BFa7",
+  "approach": "https://claude.ai/artifact/4BsAyTeRYP7Z1UWBgcpx6s",
   "home": "components/triage/"
  }
 }

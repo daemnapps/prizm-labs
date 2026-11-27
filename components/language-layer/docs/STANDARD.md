@@ -1,14 +1,14 @@
 # The language bank standard — lanes by language, awareness and sophistication on every row, sources by the Naming Standard
 
-> Brand-agnostic, product-agnostic. The rules themselves live in `brands/language-schema.md`; this is why they are what they are, with the evidence. Tools: `tools/language-layer/tools/`. Current state per brand: `runs/language-layer/_system/BANK.md`.
+> Brand-agnostic, product-agnostic. The rules themselves live in `brands/language-schema.md`; this is why they are what they are, with the evidence. Tools: `components/language-layer/tools/`. Current state per brand: `runs/language-layer/_system/BANK.md`.
 
-> What is built from this standard is in `tools/language-layer/tools/` and its history (`git log -- tools/language-layer/tools/`).
+> What is built from this standard is in `components/language-layer/tools/` and its history (`git log -- components/language-layer/tools/`).
 > Ruled 2026-09-28: "if they are clearly using language that does not speak to being a customer in some way then it should be a prospect, then if they show interest in their query then we can note them as lead language … this is going to further determine how we also apply our awareness and sophistication indexing … this is what actually helps us run a clean system."
 
 ## Why
 
 - **The lane is decided by the relationship, not the words.** The rule on file (`brands/language-schema.md`, lane logic, 2026-08-26) files by who the speaker is to us. Words that show no purchase can end up in `customers/` — 21 TikTok comment rows sit in `customers/unsegmented.json` today (`fuk-customer-9607`–`9627`), hand-typed from the brand's language-bank notes ("Register A"), with no link to the comment.
-- **No row says what its speaker knows.** 0 of <brand>'s 14,243 rows carry an awareness level or a sophistication signal. The awareness map (4m) asks for problem-aware hooks, but the bank can only answer by `use` tag — so a solution-aware joke hook was handed problem rows on its first run.
+- **No row says what its speaker knows.** 0 of Brand A's 14,243 rows carry an awareness level or a sophistication signal. The awareness map (4m) asks for problem-aware hooks, but the bank can only answer by `use` tag — so a solution-aware joke hook was handed problem rows on its first run.
 
 ## The doctrine's own definitions (verbatim, `components/marketing-doctrine/frameworks.json`)
 
@@ -113,7 +113,7 @@ The engine change is small: `query(awareness=…)` beside `used=`, and the hooks
 
 *"I have naming conventions set up for this system … see how we can apply that to this index and all our different sources since this is a richer database."*
 
-The Naming Standard (`lab/owner/naming-standard/NAMING-STANDARD.md`, v5 — lowercase; `-` joins the words inside a value, `_` joins the values; the type first; the brand spelled in full) already names the ROWS (`language_<brand>_<avatar>_<lane>_<NNNN>`, ruled 2026-09-28, <brand> renamed, <brand> in progress). The SOURCES are still free text: <brand>'s 14,243 rows come from **164 differently-written source names** ("Brand Improvement (Customers) survey — Q: What do you like most about the NOVA?", "TikTok comments, campaign post #1 @hyginmaxxing (1,800,000 views)", "29.9K podium slide", "reddit (r/wicked_edge, r/Blackskincare, …)"), and some point at a file path on one person's laptop.
+The Naming Standard (`lab/the owner/naming-standard/NAMING-STANDARD.md`, v5 — lowercase; `-` joins the words inside a value, `_` joins the values; the type first; the brand spelled in full) already names the ROWS (`language_<brand>_<avatar>_<lane>_<NNNN>`, ruled 2026-09-28, Brand B renamed, Brand A in progress). The SOURCES are still free text: Brand A's 14,243 rows come from **164 differently-written source names** ("Brand Improvement (Customers) survey — Q: What do you like most about the FLEX?", "TikTok comments, campaign post #1 @hyginmaxxing (1,800,000 views)", "29.9K podium slide", "reddit (r/wicked_edge, r/Blackskincare, …)"), and some point at a file path on one person's laptop.
 
 **Each row's `source` gains four fields, and keeps its old `name` as a label:**
 
@@ -131,21 +131,21 @@ The Naming Standard (`lab/owner/naming-standard/NAMING-STANDARD.md`, v5 — lowe
 
 **The source ids, one shape per kind — type first, brand or account in full:**
 
-| Kind | Shape | Example from <brand>'s bank |
+| Kind | Shape | Example from Brand A's bank |
 |---|---|---|
-| Survey | `survey_<brand>_<survey>` + `question` = `q-<nn>_<question-slug>` | `survey_brand_a_brand-improvement-customers` · `q-02_what-do-you-like-most-about-the-nova` |
-| Post (its comments) | `post_<platform>_<account>_<post id>` | `post_tiktok_brand_a_7167399325910289706` (#1's comments) · `post_tiktok_hyginmaxxing_<id>` (campaign post #1) |
-| Support | `ticket_<brand>_<system>` | `ticket_brand_a_gorgias` |
-| Review | `review_<site>_<whose product>` | `review_amazon_<competitor>` · `review_site_brand_a` |
+| Survey | `survey_<brand>_<survey>` + `question` = `q-<nn>_<question-slug>` | `survey_Brand A_brand-improvement-customers` · `q-02_what-do-you-like-most-about-the-flex` |
+| Post (its comments) | `post_<platform>_<account>_<post id>` | `post_tiktok_Brand A_7167399325910289706` (#1's comments) · `post_tiktok_hyginmaxxing_<id>` (campaign post #1) |
+| Support | `ticket_<brand>_<system>` | `ticket_Brand A_gorgias` |
+| Review | `review_<site>_<whose product>` | `review_amazon_<competitor>` · `review_site_Brand A` |
 | Community | `community_<site>_<room>` | `community_reddit_wicked-edge` · `community_looksmax-org_guide` |
 | Our own copy | `copy_<account>_<what>` (voice: brand) | `copy_hyginmaxxing_podium-slide` |
-| Database | `database_<brand>_<name>` | `database_brand_a_brotherhood-intelligence-hub` |
+| Database | `database_<brand>_<name>` | `database_Brand A_brotherhood-intelligence-hub` |
 
 **Post comments — the first sources, on all three platforms** (Ruled 2026-09-28: *"with post comments you're going to have to check both tiktok instagram and facebook as those are the first sources"*). The gatherer already pulls all three (`research_gatherer/comments.py`, `ownvoice.py`: TikTok, Instagram and Facebook scrapers, plus the warehouse's `meta_ad_comments`). One shape per platform, the platform's own post id last:
 
 | Platform | Source id | The post id is |
 |---|---|---|
-| TikTok | `post_tiktok_<account>_<video id>` | the number in `/video/<id>` — `post_tiktok_brand_a_7167399325910289706` |
+| TikTok | `post_tiktok_<account>_<video id>` | the number in `/video/<id>` — `post_tiktok_Brand A_7167399325910289706` |
 | Instagram | `post_instagram_<account>_<shortcode>` | the code in `/p/<code>` or `/reel/<code>` |
 | Facebook | `post_facebook_<page>_<post id>` | the post number in `/<page>/posts/<id>` (Meta's `pageid_postid` keeps only the post half; the page is the account) |
 
@@ -161,27 +161,27 @@ The Naming Standard (`lab/owner/naming-standard/NAMING-STANDARD.md`, v5 — lowe
 - **No local paths**: `ref` is a web address or a path inside the workspace, never a laptop path.
 - **One registry per brand** — `brands/<brand>/core-avatars/language-sources.json`: every source id, its kind, property, owner (ours / theirs), date range and row count — generated, never hand-edited.
 
-**Doing it:** a mapper assigns ids to the 164 existing names (rules + a short list of hand calls it prints for review), writes `source.id/kind/property/question` onto every row, and builds the registry. **It runs after <brand>'s id rename (in its own session) finishes — two tools writing the same bank files at once would overwrite each other.** The gatherer writes these fields for every new row from the start.
+**Doing it:** a mapper assigns ids to the 164 existing names (rules + a short list of hand calls it prints for review), writes `source.id/kind/property/question` onto every row, and builds the registry. **It runs after Brand A's id rename (in its own session) finishes — two tools writing the same bank files at once would overwrite each other.** The gatherer writes these fields for every new row from the start.
 
 **Decisions:** the kind list and shapes above (`post_` and `copy_` are new kinds for the Naming Standard).
 
 ## Verified — is the naming clear, clean and scalable? (2026-09-28)
 
-Checked by code against both banks (`tools/language-layer/tools/check_names.py --brand <brand> --brand <brand>`), not by reading the rules.
+Checked by code against both banks (`components/language-layer/tools/check_names.py --brand Brand A --brand Brand B`), not by reading the rules.
 
-**Row ids — clean.** <brand>: 1,118 of 1,118 on the standard (`language_brand_b_spot-hider_customer_0192`), no duplicates, every value lowercase and hyphen-joined. <brand>: not renamed yet (14,243 rows still `fuk-…`); the gatherer keeps a bank's own shape until its rename ("one bank, one shape"), so pulls before the rename don't collide.
+**Row ids — clean.** Brand B: 1,118 of 1,118 on the standard (`language_Brand B_spot-hider_customer_0192`), no duplicates, every value lowercase and hyphen-joined. Brand A: not renamed yet (14,243 rows still `fuk-…`); the gatherer keeps a bank's own shape until its rename ("one bank, one shape"), so pulls before the rename don't collide.
 
-**Source ids — mostly clean; <brand>'s gatherer rows already carry them** (167 rows: `post_facebook_brand_b_122208715850588501`, `ticket_brand_b_gorgias`). Eight things to fix so it holds at scale:
+**Source ids — mostly clean; Brand B's gatherer rows already carry them** (167 rows: `post_facebook_Brand B_122208715850588501`, `ticket_Brand B_gorgias`). Eight things to fix so it holds at scale:
 
 | # | Found | Fix |
 |---|---|---|
-| 1 | Instagram's shortcode has capitals (and can hold `_` / `-`): `post_instagram_…_Daes4KZgrgp` fails the lowercase rule — 1 <brand> row today | Use Instagram's **numeric media id** (decoded from the shortcode, one-to-one) — all digits, always clean |
+| 1 | Instagram's shortcode has capitals (and can hold `_` / `-`): `post_instagram_…_Daes4KZgrgp` fails the lowercase rule — 1 Brand B row today | Use Instagram's **numeric media id** (decoded from the shortcode, one-to-one) — all digits, always clean |
 | 2 | `source.post` means two things: Meta's raw `pageid_postid` on comments, "gorgias ticket 276283487" on tickets | One field, one meaning: `item` = the platform's own raw id of the exact post or thread (`510849328766915_122208715850588501` · `276283487`) |
-| 3 | **The 4-digit number runs out.** <brand> fed-up-king's customer lane has 9,525 rows; the next ~475 reach 9,999 | Rule: **at least 4 digits, never cut** (`…_9999` → `…_10000`); anything reading an id takes the last value as a number. The gatherer already writes it that way — the <brand> rename must too |
+| 3 | **The 4-digit number runs out.** Brand A fed-up-king's customer lane has 9,525 rows; the next ~475 reach 9,999 | Rule: **at least 4 digits, never cut** (`…_9999` → `…_10000`); anything reading an id takes the last value as a number. The gatherer already writes it that way — the Brand A rename must too |
 | 4 | Kinds the real banks have that the table missed: a customer interview, a paid creator panel, Amazon reviews, non-Reddit forums | Add `interview_<brand>_<date>`, `panel_<brand>_<date>`; reviews stay `review_<site>_<whose>`; any forum is `community_<site>_<room>` |
 | 5 | One row drawn from several rooms at once ("r/AskWomenOver60, r/Menopause, r/grayhair — secondhand via bank extract") can't take one room | `community_reddit_several` + `"rooms": [...]`, and `"hand": "firsthand" \| "secondhand"` on every source |
-| 6 | 752 <brand> rows point at a file on one laptop (`/Users/…/devel/daemn/…`) | Every `ref` is a web link or a path inside the workspace |
-| 7 | <brand>'s campaign comments name the post by its number ("campaign post #1 @hyginmaxxing"), not its id | One lookup, #1–#13 → the TikTok video ids, done once when the sources are mapped |
+| 6 | 752 Brand A rows point at a file on one laptop (`/Users/…/devel/daemn/…`) | Every `ref` is a web link or a path inside the workspace |
+| 7 | Brand A's campaign comments name the post by its number ("campaign post #1 @hyginmaxxing"), not its id | One lookup, #1–#13 → the TikTok video ids, done once when the sources are mapped |
 | 8 | Hyphenating handles can make two accounts one (`jay.x` and `jay_x` → `jay-x`) | Keep the raw handle beside it: `"property_raw": "jayy_cross0"` |
 
 **Verdict:** the shape is clear (type first, brand in full, one meaning per value) and scales across brands, platforms and sources once 1–8 are in. The checker runs on every bank and prints exactly what is off.

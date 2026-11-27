@@ -1,0 +1,98 @@
+{
+ "id": "3d-jutsu",
+ "name": "3D Jutsu",
+ "kind": "other",
+ "makes": "Hosted, revision-controlled 3D scenes built by running Blender Python (bpy) through scene_builder_3d tools: rooms, sets, props, cameras, lights, animation; renders, GLB/blend export, and AI images or video made from a render; plus new camera angles of a supplied location.",
+ "source": [
+  "commands/3d-jutsu.md",
+  "commands/3d-jutsu-references-animation-audit.md",
+  "commands/3d-jutsu-references-composition-modeling.md",
+  "commands/3d-jutsu-references-location-new-angles.md",
+  "commands/3d-jutsu-references-lookdev-lighting.md",
+  "commands/3d-jutsu-references-scene-building.md"
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "name": "Settle the route once (hosted scene / Blender Studio / local Blender)",
+   "model": "none",
+   "cheap": "hosted scene is already free to build"
+  },
+  {
+   "n": 2,
+   "name": "Choose or create the project (explicit projectId on every call)",
+   "model": "scene_builder_3d_create_project",
+   "cheap": null
+  },
+  {
+   "n": 3,
+   "name": "Loop: get_project, query_python, run_python with revision + sceneSequence guards, one mutation at a time",
+   "model": "scene_builder_3d (bpy 5.2, headless)",
+   "cheap": "free (no credits to build, edit or render)"
+  },
+  {
+   "n": 4,
+   "name": "Bring in catalog models only (search_assets then import_asset)",
+   "model": "scene_builder_3d_import_asset",
+   "cheap": "free"
+  },
+  {
+   "n": 5,
+   "name": "Blockout then coarse to fine; render from the delivery camera, view, fix largest defect",
+   "model": "bpy EEVEE / Workbench / Cycles",
+   "cheap": "free; keep resolution and samples low"
+  },
+  {
+   "n": 6,
+   "name": "Location mode: calibrate source camera, hidden layout, shot specs, clean angle references, per-view prompts",
+   "model": "none",
+   "cheap": "Claude on the plan: free"
+  },
+  {
+   "n": 7,
+   "name": "Optional paid: AI image from a render (generate_angles) or video from a render (generate_video)",
+   "model": "seedream_5_5 (angles), seedance_2_5 (video)",
+   "cheap": "wan3_0 480p 7.5 / 10 s or gemini_omni_flash_1_2 360p 7.5 / 10 s; seedream_5_0_flash 0.5"
+  },
+  {
+   "n": 8,
+   "name": "Deliver: show_scene once per review, GLB/blend only on request",
+   "model": "scene_builder_3d_get_glb / get_blend",
+   "cheap": "free"
+  }
+ ],
+ "price": "Building, editing and rendering the scene spend no credits. Paid only for an AI image or video made from a render. Seedance 2.5 video from the render: 30 credits per 10 s draft 480p, 160 per 10 s at 1080p (_prices.md); angles on Seedream 5.5 not quoted. The workflow quotes before generation and never hardcodes prices.",
+ "cheap_price": "Whole scene free; the AI video step on wan3_0 480p is 7.5 per 10 s (a quarter of Seedance draft, about a twentieth of 1080p); angle images on seedream_5_0_flash 0.5.",
+ "prompts": [
+  {
+   "label": "Route choice",
+   "source": "commands/3d-jutsu.md",
+   "text": "A 3D scene can be built in three places:\n\n- This hosted scene: free to build. Nothing to rent or install, and building, editing and rendering spend no credits; only an AI image or video made from a render does. The simple default.\n- Blender Studio: the prosumer option. A rented GPU box running full Blender that the user opens in the browser, for heavier or professional work, their own files and generated meshes. The GPU is billed in credits by the second for as long as the box runs.\n- The Blender on the user's own computer (`/scene-builder`): free, needs a one-time setup.\n  Settle the route before creating a project, renting anything or spending credits.\n\nGo without asking only when the user already chose the route:\n\n- They typed `/3d-jutsu`, asked for a hosted 3D Jutsu scene, or are continuing a 3D Jutsu project: continue here.\n- They name Blender Studio, or a Blender Studio box is already in use in this conversation: this is not the route. Load `get_preset_instructions` with `{\"preset\":\"/gpu\"}` and work in that Blender. Do not create a hosted project for it.\n- They selected `/scene-builder` or their own local Blender: that route keeps the work. Offer this one only as an alternative, never silently.\n\nIn every other case ask once which route they want, before anything else. This covers a 3D scene with no route named, new views of a supplied location, and \"in Blender\" without saying which Blender.\n\n- Ask with this client's question tool when it has one, else in one short message.\n- Offer only the routes you have tools for: this one needs `scene_builder_3d_*`, Blender Studio needs `gpu_rent` with `kind: blender_studio`. When only one route is left, say which and continue without asking.\n- Describe each option by what the user gets and what it costs, and put your recommendation first. For example: \"a hosted 3D scene: free to build, nothing to rent or install\", \"Blender Studio: full Blender in the browser for heavier, pro work, the GPU is billed by the second\", \"the Blender on your computer: free, needs a one-time setup\". Say which is free and which costs credits every time you offer them.\n- The answer holds for the rest of the conversation: do not ask again for later 3D requests.\n\nTwo more rules, whatever the route:\n\n- One standalone 3D model of an object from an image, with no scene around it, is not a scene: use image-to-3D generation.\n- One specific subject from a reference image (a character, a creature, a product) inside a scene: ask once whether to generate it from the image (costs credits, close likeness, harder to edit) or model it from simple shapes (no generation cost, simpler, editable). This version imports catalog assets only, so a generated or uploaded mesh cannot enter a hosted scene: say so, and offer a catalog asset, a build from simple shapes here, or Blender Studio. Never wrap a picture around a mesh as its texture in place of modelling and materials.\n\nIf no `scene_builder_3d_*` tools are available on this connector, say that hosted 3D Jutsu is not available here."
+  },
+  {
+   "label": "The loop",
+   "source": "commands/3d-jutsu.md",
+   "text": "1. `scene_builder_3d_get_project` for the current revision, scene sequence and any active operation.\n2. `scene_builder_3d_query_python` to inspect names, dimensions, transforms, materials, cameras, lights and RNA before editing. Queries commit nothing; use them freely. Never guess a name, unit or API.\n3. Pick a stable, descriptive `operationId` such as `add-key-light-01`. It is an idempotency key: reuse it only to retry the identical code against identical guards.\n4. `scene_builder_3d_run_python` with the query's `revisionBefore` as `revision` and `sceneSequenceAfter` as `expectedSceneSequence`.\n5. One mutation at a time per project, imports included. If an operation is still active, poll `scene_builder_3d_get_operation` with the same IDs. Only `succeeded`, `failed`, `timed_out` and `expired` are terminal.\n6. On success, `revisionAfter` is the new head.\n7. On a stale-state conflict, do not replay the code. Re-query, work out what changed, and regenerate the edit with fresh guards and a new operation ID."
+  },
+  {
+   "label": "Publish renders",
+   "source": "commands/3d-jutsu.md",
+   "text": "```python\ntarget = artifacts.file(name=\"preview.png\", media_type=\"image/png\")\nscene.render.filepath = str(target.path)\nscene.render.image_settings.media_type = \"IMAGE\"  # set before file_format\nscene.render.image_settings.file_format = \"PNG\"\nbpy.ops.render.render(write_still=True)\ntarget.publish()  # unpublished files are discarded\n```"
+  },
+  {
+   "label": "Deliver and paid generation",
+   "source": "commands/3d-jutsu.md",
+   "text": "- AI image or video from a render: `scene_builder_3d_generate_angles` (image) and `scene_builder_3d_generate_video` (Seedance 2.5 video with the render as its start frame) spend credits and leave the scene unchanged. Use them only when the user asks for an AI image or video from the scene, with an inspected PNG/JPEG render's `operationId` and `artifactId`, then poll `scene_builder_3d_get_generation`. On an uncertain response, reuse the same `requestId` and arguments; never allocate a new one just to retry."
+  },
+  {
+   "label": "Location mode: per-view prompt order",
+   "source": "commands/3d-jutsu-references-location-new-angles.md",
+   "text": "Write a concrete per-view prompt in this order: input roles/proxy mapping, verbal\ncamera lock, layout and visible sides/counts, approved revealed content, identity\nand directional patterns, lighting/palette, focus and a short reminder of risky\ninvariants. Omit inapplicable clauses, replace every placeholder, and trim duplicate\nadjectives before spatial constraints. Prompt length is not a quality guarantee."
+  },
+  {
+   "label": "Location mode: model and approval",
+   "source": "commands/3d-jutsu-references-location-new-angles.md",
+   "text": "Use Seedream 5.5 for appearance reconstruction. Verify the selected model and quote before generation. Inspect current model/tool settings, reference capacity, format\nsupport and cost. Do not hardcode historical prices or claim scene work is free.\n\nDefault mode: finish geometry, camera checks, clean previews, reference preparation,\nper-view prompts and a current cost estimate before requesting approval. Show the\nsettled scene and selected camera previews, then end the turn with a direct request\nto generate the named shots, image count, model and estimated total cost. A general\nrequest for new angles alone is not approval of that paid batch. This gate applies\nto appearance generation, not the scene preview renders needed to prepare it.\n\nAn explicit instruction to generate without further confirmation, including casual\nwording, authorizes proceeding through generation and bounded correction within\nthe user's count, settings and budget. Retain that instruction; do not stop for a\nredundant plan or generation approval. Service-required payment choices and missing\nmandatory authorization remain blockers. Silence never supplies permission."
+  }
+ ]
+}

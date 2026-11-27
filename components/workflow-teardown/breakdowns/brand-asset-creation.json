@@ -1,0 +1,104 @@
+{
+ "id": "brand-asset-creation",
+ "name": "Brand Asset Creation",
+ "kind": "picture",
+ "makes": "A consistent set of branded graphics from supplied or newly approved brand elements: logos, palettes, type systems, brandbooks, decks, social graphics, posters, banners, packaging, signage, merchandise and mockups.",
+ "source": [
+  "brand-asset-creation/SKILL.md",
+  "brand-asset-creation/_files.md",
+  "brand-asset-creation/references/ (24 files)",
+  "brand-asset-creation/scripts/brandkit.py.md",
+  "brand-asset-creation/scripts/build_brandbook.py.md",
+  "brand-asset-creation/scripts/render_brandbook_pdf.py.md"
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "name": "Classify: apply-existing, extend-partial, or create-identity (only if asked)",
+   "model": "none",
+   "cheap": "Claude on the plan: free"
+  },
+  {
+   "n": 2,
+   "name": "Restore the conversation's state, read approvals (brandkit.py state get_status)",
+   "model": "none (sandbox script)",
+   "cheap": "free"
+  },
+  {
+   "n": 3,
+   "name": "Intake: one compact question set, only genuine gaps",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 4,
+   "name": "Inventory and lock supplied assets (logo, palette, fonts); set visual axes",
+   "model": "none",
+   "cheap": "free"
+  },
+  {
+   "n": 5,
+   "name": "Determine the minimum approved slots; build only the missing ones (palette boards, then 3 logo candidates)",
+   "model": "recraft_v4_1 (vector logos)",
+   "cheap": "seedream_5_0_flash 2k (0.5) for concept boards; a supplied logo needs no generation"
+  },
+  {
+   "n": 6,
+   "name": "Render palette / type / combined review boards (HTML to PNG); user selects; persist each approval",
+   "model": "none (brandkit.py preview)",
+   "cheap": "free"
+  },
+  {
+   "n": 7,
+   "name": "Produce the requested outputs from the Brand Lock (logo export, brandbook, deck, social, poster, packaging, signage, merch)",
+   "model": "gpt_image_2_6 (text-bearing social), SVG/PPTX scripts",
+   "cheap": "deterministic scripts are free; gpt_image_2_6_flare 1k low (0.75) for social drafts"
+  },
+  {
+   "n": 8,
+   "name": "Mockups: Seedream scene, then GPT Image 2.6 pass only if readable text is present",
+   "model": "seedream_5_5 then gpt_image_2_6",
+   "cheap": "seedream_5_0_flash 2k; deterministic compositing for flat targets"
+  },
+  {
+   "n": 9,
+   "name": "QA, fix only the failing asset, save approvals; deliver manifest + Brand Lock summary",
+   "model": "none",
+   "cheap": null
+  }
+ ],
+ "price": "Quotes before paying; not quoted (recraft_v4_1, seedream_5_5, gpt_image_2_6 absent from `_prices.md`). Cost comes from: 3 logo candidates, palette concept boards, then per-output generations. Supplied-asset jobs (logo export, brandbook, deck) are deterministic scripts.",
+ "cheap_price": "Mostly free with deterministic scripts and Claude-written briefs; generated pictures on seedream_5_0_flash at 0.5 each.",
+ "prompts": [
+  {
+   "label": "Logo prompt enhancer contract",
+   "source": "brand-asset-creation/references/logo-prompt-enhancer.md",
+   "text": "## Input contract\n\nAssemble one structured candidate specification per mechanism before writing its prompt:\n\n```json\n{\n  \"brand_context\": {\n    \"name\": \"context only; never render it\",\n    \"offering\": \"...\",\n    \"industry\": \"...\",\n    \"positioning\": \"...\",\n    \"audience\": \"...\",\n    \"values\": [\"...\"]\n  },\n  \"visual_axes\": {\n    \"restrained_expressive\": 50,\n    \"geometric_organic\": 50,\n    \"familiar_experimental\": 50\n  },\n  \"candidate\": {\n    \"mark_type\": \"lettermark_monogram | pictorial | abstract | mascot | emblem\",\n    \"central_idea\": \"...\",\n    \"visual_mechanism\": \"...\",\n    \"distinctive_element\": \"specific silhouette, negative-space device, motif treatment, or unexpected locked color pairing\",\n    \"shape_logic\": \"...\",\n    \"treatment\": \"flat_vector | monoline | vector_gradient | hand_drawn_vector\",\n    \"style_register\": \"...\",\n    \"user_style_directive\": \"explicit user-requested style, or null\",\n    \"composition\": \"...\"\n  },\n  \"palette\": {\n    \"count\": \"1, 2, or 3 as required by the locked concept; greater only when user_requested_more_than_three is true\",\n    \"user_requested_more_than_three\": false,\n    \"roles\": [\"primary\", \"accent\", \"background\"]\n  },\n  \"reference_signals\": [\"formal qualities only\"],\n  \"forbidden_elements\": [\"...\"]\n}\n```\n\nTreat supplied creative decisions as authoritative. If a nonessential detail is missing, infer the smallest sensible default without changing the central idea.\n\n## Output contract\n\nThe result of this step is exactly one continuous enhanced Recraft prompt string per candidate — no bullet points inside the prompt, no explanation, no debug text.\n\nThe prompt must follow this order:\n\nmark type → central subject/mechanism → shape logic → style register → palette behavior → composition → constraint tail\n\nEvery clause must materially affect the drawing.\n\nThe central subject/mechanism portion must state exactly one visual idea in one clause. Do not add a second metaphor, alternative, “and/or” construction, or hybrid concept.\n\n## Stage boundary — symbol only\n\nThis flow creates a symbol/mark before typography selection.\n\nNever include:\n\n- brand name\n- wordmark\n- tagline\n- descriptor\n- invented letters\n- any other readable words\n\nThe only exception is a lettermark/monogram candidate: the explicitly supplied initials inside `candidate.visual_mechanism` are permitted. For lettermarks and monograms, “no text” means no additional words, taglines, descriptors, or unrelated lettering.\n\nEvery candidate constraint tail must include the exact phrase “no text.” It does not need to be the final phrase."
+  },
+  {
+   "label": "Mockup prompt contract",
+   "source": "brand-asset-creation/references/mockups.md",
+   "text": "```text\n[CREATE ONE FINISHED BRANDED MOCKUP]\n<specific object/application, credible setting, camera, material, lighting,\ncomposition, and one brand-specific art-direction idea>\n\n[AUTHORITATIVE LOGO]\n<ImageN> is the exact approved <full-color/black/white> logo. Preserve its\nspelling, silhouette, geometry, proportions, internal negative space, and exact\ncolor. Do not redraw, simplify, crop, stretch, outline, or add effects.\n\n[PLACEMENT LOCK]\nTarget surface: <exact object panel/face/material>.\nPosition: <exact alignment and location, e.g. horizontally centered, upper\nthird, optical center aligned to panel>.\nScale: logo occupies <specific proportion> of the target surface while keeping\n<specific clear-space margin>.\nOrientation: align to <panel edge/seam/baseline>; follow surface perspective\nwithout changing logo proportions.\nColor: use the supplied <full-color/black/white> variant exactly. State why it\ncontrasts correctly with the material/background.\n\n[PHYSICAL APPLICATION]\nRender the logo using <credible print/emboss/foil/engraving/ink behavior>.\nRespect folds, grain, perspective, occlusion, reflections, scale, and\nmanufacturing limits.\n\nNo extra logos, pseudo-text, invented labels, warped marks, floating print,\nunrelated props, arbitrary gradients, plastic sheen, or generic luxury staging.\n```"
+  },
+  {
+   "label": "Brand Lock shape",
+   "source": "brand-asset-creation/references/brand-lock.md",
+   "text": "```json\n{\n  \"version\": 1,\n  \"brand_context\": {\n    \"name\": \"\",\n    \"offering\": \"\",\n    \"industry\": \"\",\n    \"positioning\": \"\",\n    \"audience\": \"\",\n    \"tone\": []\n  },\n  \"concept\": {\n    \"name\": \"\",\n    \"visual_premise\": \"\",\n    \"research_principles\": [],\n    \"reference_preferences\": [],\n    \"avoid\": []\n  },\n  \"visual_axes\": {\n    \"restrained_expressive\": 50,\n    \"geometric_organic\": 50,\n    \"familiar_experimental\": 50\n  },\n  \"authoritative_assets\": {\n    \"logo\": {\n      \"origin\": \"user_supplied | brandkit_generated\",\n      \"source\": \"\",\n      \"upload_or_job_id\": \"\",\n      \"variants\": {\n        \"color\": \"\",\n        \"black\": \"\",\n        \"white\": \"\"\n      },\n      \"status\": \"fixed\"\n    },\n    \"fonts\": [],\n    \"references\": []\n  },\n  \"palette\": {\n    \"origin\": \"user_supplied | brandkit_generated\",\n    \"primary\": [],\n    \"accent\": [],\n    \"neutral\": [],\n    \"semantic_roles\": {},\n    \"forbidden\": []\n  },\n  \"typography\": {\n    \"origin\": \"user_supplied | brandkit_generated\",\n    \"display\": {},\n    \"body\": {},\n    \"fallbacks\": [],\n    \"font_links\": [],\n    \"specimen_svg\": \"\"\n  },\n  \"layout\": {\n    \"grid\": \"\",\n    \"margins\": \"\",\n    \"spacing_scale\": [],\n    \"alignment\": \"\",\n    \"density\": \"\"\n  },\n  \"shape_language\": {\n    \"corner_radii\": [],\n    \"borders\": [],\n    \"shadows\": [],\n    \"forms\": []\n  },\n  \"graphic_devices\": {\n    \"motifs\": [],\n    \"patterns\": [],\n    \"textures\": [],\n    \"rules\": []\n  },\n  \"composition\": {\n    \"hierarchy\": \"\",\n    \"logo_placement\": [],\n    \"image_behavior\": \"\",\n    \"text_behavior\": \"\"\n  },\n  \"applications\": {},\n  \"unknowns\": []\n}\n```"
+  },
+  {
+   "label": "Mockup text route",
+   "source": "brand-asset-creation/references/mockups.md",
+   "text": "## Conditional text/detail route\n\nIf the final mockup contains any readable text—wordmark, brand name, tagline, packaging label, signage, product copy, or interface text—do not ask Seedream to render it:\n\n1. Seedream creates the same-ratio scene with the target surface blank and no logo, letters, pseudo-text, or invented graphics.\n2. GPT Image 2.6 receives `Image0` as that exact Seedream/user base and `Image1` as the approved logo/artwork reference.\n3. The GPT prompt preserves Image0's camera, crop, objects, lighting, material, folds, shadows, perspective, and background exactly.\n4. State the exact literal text, logo variant, placement, scale, alignment, clear space, color, and physical print/application behavior.\n5. Keep the ratio identical to the user-approved ratio.\n\nUse GPT Image 2.6 only for this controlled second stage. If there is no readable text, keep the one-call Seedream route."
+  },
+  {
+   "label": "Social graphic must-state list",
+   "source": "brand-asset-creation/references/social-templates.md",
+   "text": "The prompt must state:\n\n- Exact literal copy\n- Display/body font family names and which text uses each\n- Logo placement, scale, clear space, and color variant\n- Text placement, hierarchy, alignment, line breaks, and contrast\n- Exact palette roles\n- Requested aspect ratio"
+  },
+  {
+   "label": "Minimum slots",
+   "source": "brand-asset-creation/SKILL.md",
+   "text": "5. **Determine the minimum approved slots for the requested output.** Never require a complete Essential Kit by default:\n   - logo-only → logo\n   - palette-only → palette\n   - typography-only → typography\n   - symbol mockup, merchandise, or copy-free packaging → logo; add palette when color/application decisions need it\n   - text-bearing social, packaging, poster, or signage → logo + palette + typography\n   - Brandbook or presentation deck → logo + palette + typography"
+  }
+ ]
+}

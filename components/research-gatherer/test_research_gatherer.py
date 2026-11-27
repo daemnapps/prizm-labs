@@ -72,7 +72,7 @@ def test_no_key_never_raises():
     section("1. no Apify key -> [UNFILLED], never raises")
 
     def _no_key(*a, **k):
-        raise SystemExit("no APIFY_TOKEN — set the env var or add one line to ~/.company-keys.env")
+        raise SystemExit("no APIFY_TOKEN — set the env var or add one line to ~/.upright-keys.env")
 
     with _Patch(R, "_run_reddit", _no_key):
         try:
@@ -302,7 +302,7 @@ def test_platform_detection_and_query_seeding():
 def test_video_teardown_shim_is_a_reexport():
     section("9. the video-teardown shim re-exports this engine (LL-1 precedent)")
     ws = R.WORKSPACE
-    machine = ws / "tools" / "video-teardown" / "machine"
+    machine = ws / "components" / "video-teardown" / "machine"
     shim_path = machine / "research.py"
     if not shim_path.is_file():
         check("video-teardown shim exists", False, str(shim_path))
@@ -396,10 +396,10 @@ def test_seeded_vs_confirmed():
     # A person locks it by adding the line — and the gatherer's own heading,
     # which literally contains the words "found ... by the gatherer", must not
     # stop that from counting.
-    locked = gatherer.replace("- r/one — a room", "confirmed by: the owner\n- r/one — a room")
+    locked = gatherer.replace("- r/one — a room", "confirmed by: owner\n- r/one — a room")
     check("adding `confirmed by:` locks a gatherer block",
          R.rooms_block_state(locked)[0] == "confirmed", R.rooms_block_state(locked)[0])
-    bulleted = SEEDED.replace("- r/one — a room", "- confirmed by: the owner\n- r/one — a room")
+    bulleted = SEEDED.replace("- r/one — a room", "- confirmed by: owner\n- r/one — a room")
     check("a bulleted `- confirmed by:` locks it too",
          R.rooms_block_state(bulleted)[0] == "confirmed")
     check("a confirmed block's rooms still parse", R.parse_rooms(locked) == ["r/one", "r/two"],
@@ -446,7 +446,7 @@ def test_write_back_replaces_only_the_seeded_block():
         check("the section above it survived", "Core desire" in after)
 
         # Locked: a confirmed block is never overwritten.
-        locked = f.read_text().replace("- r/NewRoom", "confirmed by: the owner\n- r/NewRoom")
+        locked = f.read_text().replace("- r/NewRoom", "confirmed by: owner\n- r/NewRoom")
         f.write_text(locked)
         changed2 = R.write_rooms_block(f, [dict(room="Nope", posts=1, score=1,
                                                 sample_title="", sample_url="")])
@@ -488,14 +488,17 @@ def test_resolve_rooms_confirmed_wins_else_discovers():
             rooms, words, disc = R.resolve_rooms("b", "a", "x")
         check("a seeded block triggers discovery", disc and disc.get("source") == "discovery")
         check("the found rooms are what gets used", rooms == ["r/Discovered"], str(rooms))
-        check("the discovery is written back into the avatar's own file",
-             disc.get("written_to") == str(f), str(disc.get("written_to")))
-        check("...and the file now carries the gatherer block",
-             "r/Discovered" in f.read_text())
+        # THE WALL (2026-11-04): brands/ is read-only to machines; the discovery lands as a proposal under runs/
+        proposal = tmp / "runs" / "research" / "b" / "rooms-proposals" / "core-avatars" / "a" / "sub-avatars" / "sub-01-x.md"
+        check("the discovery is proposed under runs/, never written to the brand file",
+             disc.get("written_to") == str(proposal) and disc.get("proposal") is True, str(disc.get("written_to")))
+        check("...the proposal is the file with the gatherer block in it", "r/Discovered" in proposal.read_text())
+        check("...and the brand file is untouched", "r/Discovered" not in f.read_text())
         check("the desire words came from the avatar's own file", "spots" in words, str(words))
+        f.write_text(proposal.read_text())               # a person commits the proposal
 
         # Now a person confirms it — discovery must not run at all.
-        f.write_text(f.read_text().replace("- r/Discovered", "confirmed by: the owner\n- r/Discovered"))
+        f.write_text(f.read_text().replace("- r/Discovered", "confirmed by: owner\n- r/Discovered"))
         with _Patch(R, "sub_file", _fake_sub_file), _Patch(R, "_find_rooms_detail", _boom):
             rooms2, _w2, disc2 = R.resolve_rooms("b", "a", "x")
         check("a confirmed block skips discovery entirely", disc2.get("source") == "confirmed")

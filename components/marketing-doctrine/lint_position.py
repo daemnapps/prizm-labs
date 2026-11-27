@@ -124,7 +124,7 @@ def check(path, is_template=False):
     for s, v in values.items():
         if not v:
             f.append(f"{s}: empty — write `open` if it is not settled")
-    # Colour is the design system, not the position (the owner, 2026-09-19) — a hex
+    # Colour is the design system, not the position (owner, 2026-09-19) — a hex
     # value here belongs in brands/<brand>/identity/.
     hexes = re.findall(r"#[0-9A-Fa-f]{6}\b", text)
     if hexes:

@@ -6,7 +6,7 @@
     round.py pull   --brand <b> --avatar <a> --label <l> --approved-by <name>
     round.py rank   --brand <b> --avatar <a> --label <l> [--top 50] [--since 2026-01-01]
 
-The order and the why are RESEARCH-ROUND.md (the owner, 2026-10-17). Every run lives in
+The order and the why are RESEARCH-ROUND.md (owner, 2026-10-17). Every run lives in
 runs/swipe-organic/<brand>/research-<avatar>-<label>/. Between `worlds` and `plan` the
 session writes worlds.json there — his worlds, biggest first, each with the posts
 that carry it and the keywords a search must contain to cover it:
@@ -254,7 +254,10 @@ def main():
     ap.add_argument("--drop-rule", default="", help="what gets thrown out (plan)")
     ap.add_argument("--lanes", default="entertainment,educational,selling", help="sides this round keeps (plan)")
     ap.add_argument("--since", help="earliest post date kept (default 1 Jan this year)")
-    a = ap.parse_args()
+    import importlib.util as _u, pathlib as _pl
+    _s = _u.spec_from_file_location("profile_arg", next(q for q in _pl.Path(__file__).resolve().parents if q.name == "components") / "naming" / "profile_arg.py")
+    _PA = _u.module_from_spec(_s); _s.loader.exec_module(_PA)   # --profile <avatar>[_<sub>][_<demographic>] (naming/PEOPLE.md)
+    a = ap.parse_args(_PA.expand(None, has=('avatar',)))
     {"worlds": worlds, "plan": plan, "pull": pull, "rank": rank}[a.step](a)
 
 

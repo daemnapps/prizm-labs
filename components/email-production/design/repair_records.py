@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """LD-86 (old records repaired): a one-time repair of named picture records into LD-81 (portable picture records)'s
-shape, so remake() reads their references on any Mac. Ruled for the five brand-b nov records only (the team, relayed
+shape, so remake() reads their references on any Mac. Ruled for the five brand_b nov records only (developer, relayed
 2026-10-22: "repair the old records" — it overrides the "no backfill" line for those five); every other old record
 stays as LD-80 (stored path check) lists it.
 
-    python3 tools/email-production/design/repair_records.py --dry-run <record.json> ...   every mapping, nothing written
-    python3 tools/email-production/design/repair_records.py <record.json> ...             written in place
+    python3 components/email-production/design/repair_records.py --dry-run <record.json> ...   every mapping, nothing written
+    python3 components/email-production/design/repair_records.py <record.json> ...             written in place
 
 A reference that holds only a machine "path" maps by the FORM of that path, from the path itself, brandpath's drive
 index and the run's media/drive.json — no network, no key:

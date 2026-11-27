@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The clip library — footage we already made, by section, ready to reuse.
 
-the owner, 2026-10-08: "we need to be resourceful with the assets that we have
+owner, 2026-10-08: "we need to be resourceful with the assets that we have
 generated … reuse things where it makes sense."
 
 Reads a production folder on Drive (its numbered section folders and its
@@ -10,41 +10,17 @@ record per clip: the doctrine section it serves, the line it was cut to, the
 editor's note and its Drive file id (so frames are read from the cloud). Never
 downloads a video, never calls Meta.
 
-    python3 components/distinct-six/clips.py brand-a "<Drive folder>" --name p133-neckline
+    python3 components/distinct-six/clips.py brand_b "<Drive folder>" --name p133-neckline
 
 Writes runs/distinct-six/<brand>/clip-library/<name>.json (the Creative Index loads it).
 """
 import argparse
 import json
-import os
 import re
 import subprocess
 import sys
 from pathlib import Path
 
-
-def _shared_keys():
-    """The repo's one key loader (components/keys/loader.py): the environment,
-    then the repo's .env, then — quietly — the owner's personal fallbacks."""
-    import importlib.util
-    import sys as _sys
-    from pathlib import Path as _Path
-    mod = _sys.modules.get("shared_keys_loader")
-    if mod is None:
-        path = next(p / "components" / "keys" / "loader.py"
-                    for p in _Path(__file__).resolve().parents
-                    if (p / "components" / "keys" / "loader.py").is_file())
-        spec = importlib.util.spec_from_file_location("shared_keys_loader", str(path))
-        mod = importlib.util.module_from_spec(spec)
-        _sys.modules["shared_keys_loader"] = mod
-        try:
-            spec.loader.exec_module(mod)
-        except Exception:
-            _sys.modules.pop("shared_keys_loader", None)
-            raise
-    return mod
-
-SHARED = os.environ.get("SHARED_DRIVE_NAME", "Shared Drive")  # the shared drive's folder name on the mount
 ROOT = Path(__file__).resolve().parents[2]
 
 # folder → doctrine sections (elements/library/doctrine.section.json); a clip's own
@@ -94,8 +70,9 @@ def main():
     lines = {}
     if bf:
         sys.path.insert(0, str(ROOT / "components" / "gdrive-creator"))
+        import ds_keys
         from gdrive_creator import engine as G
-        G.configure(key_lookup=_shared_keys().lookup)
+        G.configure(key_lookup=ds_keys.key)
         tmp = ROOT / "runs" / "distinct-six" / a.brand / "clip-library" / f"{a.name}-EDITING_BRIEF.md"
         tmp.parent.mkdir(parents=True, exist_ok=True)
         G.get_media(fid(bf), str(tmp))
@@ -112,9 +89,9 @@ def main():
         vo, note = lines.get(stem, ("", ""))
         clips.append({"clip": stem, "folder": f.parent.name, "kind": "voice" if f.suffix.lower() in (".wav", ".mp3") else "video",
                       "sections": sections, "vo_line": vo, "note": note, "drive_id": fid(f),
-                      "path": str(f).split(SHARED + "/")[-1]})
+                      "path": str(f).split("Shared Assets/")[-1]})
     out = ROOT / "runs" / "distinct-six" / a.brand / "clip-library" / f"{a.name}.json"
-    out.write_text(json.dumps({"brand": a.brand, "name": a.name, "source": str(base).split(SHARED + "/")[-1],
+    out.write_text(json.dumps({"brand": a.brand, "name": a.name, "source": str(base).split("Shared Assets/")[-1],
                                "editing_brief": bool(bf), "clips": clips}, indent=1, ensure_ascii=False))
     print(f"{len(clips)} clips → {out.relative_to(ROOT)}")
     for c in clips:

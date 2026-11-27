@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """What the store actually sells today — pulled live, not remembered.
 
-    python3 store.py --brand brand-a            # read the store, show it
-    python3 store.py --brand brand-a --write    # propose products/store.json under runs/
+    python3 store.py --brand brand_a            # read the store, show it
+    python3 store.py --brand brand_a --write    # propose products/store.json under runs/
 
-RULED 2026-09-10 (the owner): "there is very little dynamism here — for example a
+RULED 2026-09-10 (owner): "there is very little dynamism here — for example a
 price change on the Shopify store would not be shown here in the repo… look at
-the Shopify store for brand-a, that would show you what's actually live."
+the Shopify store for brand_a, that would show you what's actually live."
 
 The offer bank is a human's rulings. This is the shop's own truth: every
 product, every variant, its price, its compare-at, whether it is in stock, and
@@ -44,7 +44,7 @@ def plans(site, handle):
 
     A subscription IS an offer — price, cadence and discount — and it was being
     carried in prose from memory: the bank said "$49.99 today + $50 every 60
-    days" when the shop says NOVA subscribes at $20 off every 75 days. Read it,
+    days" when the shop says FLEX subscribes at $20 off every 75 days. Read it,
     do not remember it."""
     r = subprocess.run(["curl", "-fsSL", "--max-time", "20", f"{site}/products/{handle}.js"],
                        capture_output=True, text=True)
@@ -73,7 +73,7 @@ def plans(site, handle):
 def pull(brand):
     url, site = feed_url(brand)
     if not url:
-        # Not every brand is on Shopify. Brand-B runs on 29 Next, which publishes
+        # Not every brand is on Shopify. brand_b runs on 29 Next, which publishes
         # no products.json — that is a different platform, not a missing file.
         return {"brand": brand, "read": None, "source": None, "site": site,
                 "products": [], "note": "no Shopify storefront feed for this brand"}

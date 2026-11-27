@@ -3,8 +3,8 @@
 Drive path readable (LD-14 (shared Drive reach), 2026-10-18).
 
 WHY ONE HOME. Two copies of the same reach existed —
-tools/image-production/image_production/drive_reach.py (SI-37 (image
-Drive reach)) and tools/email-production/drive_reach.py (SI-38 (email
+components/image-production/image_production/drive_reach.py (SI-37 (image
+Drive reach)) and components/email-production/drive_reach.py (SI-38 (email
 Drive reach)) — and every mini reader needed a third, because Full Disk
 Access is not applied to the mini's launchd jobs: a `launchctl submit` probe
 on 2026-10-18 could not list ~/Desktop, Google's Drive folder or the rclone
@@ -104,9 +104,8 @@ def _finders(find_mount, find_engine):
 def route(find_mount=None):
     """"api" or "mount", else NoDrive(NO_DRIVE). A GDRIVE_SA_KEY means the API even where a mount
     exists — found by the same lookup the engine uses (engine.has_key: the environment, a host's
-    configured lookup, else the one key loader, so a person's this repo's .env counts; LD-47
+    configured lookup, else the one key loader, so a person's ~/.upright-keys.env counts; LD-47
     (Drive sweep) step 1.6, 2026-10-20). An empty one is no key."""
-    raise NoDrive("Prizm Labs does not reach company Drives")
     find_mount = find_mount or mount
     from . import engine as _keys          # the real lookup, not a test's stand-in engine: no network here
     if _keys.has_key(KEY_ENV):
@@ -296,7 +295,7 @@ def _subfolders(svc, folder_id):
 
 def subfolders(folder_id, svc=None, find_engine=None):
     """Every non-trashed child FOLDER of the folder with this Drive id, [{id, name}] in name order. READ-ONLY, one
-    listing: a caller walking a few known levels (QB-9 (the team statics) reads hand-off folders this way) lists only
+    listing: a caller walking a few known levels (QB-9 (editor statics) reads hand-off folders this way) lists only
     the folders it needs, where list_tree would list every file under them."""
     svc = svc or (find_engine or _engine)().service()
     return sorted(_subfolders(svc, folder_id), key=lambda s: s["name"] or "")
@@ -468,7 +467,7 @@ def readable(path, svc=None, find_mount=None, find_engine=None,
              recursive=False, max_bytes=MAX_BYTES):
     """A path that reads, for a mount path or a "Shared Assets/…" label.
 
-    0 KEY FIRST (LD-47 (Drive sweep) step 1.5; the team, 2026-10-20: "the goal is really just all of
+    0 KEY FIRST (LD-47 (Drive sweep) step 1.5; developer, 2026-10-20: "the goal is really just all of
       the components use the key"): when route() says "api" — a GDRIVE_SA_KEY in the environment —
       the mount is not read at all and step 2 runs, so the read is the key's, on every machine;
     1 the mount path itself (a label is put under mount()) when it lists or

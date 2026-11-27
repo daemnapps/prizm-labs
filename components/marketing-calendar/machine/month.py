@@ -5,7 +5,7 @@
     python3 month.py --run <brand>/2026-09
     python3 month.py --open
 
-the owner, 2026-09-14: *"I just need to see the days the emails and such — we don't
+owner, 2026-09-14: *"I just need to see the days the emails and such — we don't
 need this big page with the buttons to generate text just yet, just a
 calendar."*
 
@@ -115,7 +115,7 @@ def send_path(brand, src):
 def slot_detail(s, brand, run_dir):
     """Everything this send is, and everything the writer will be handed.
 
-    the owner, 2026-09-14: "I need to be able to click in and see the concept
+    owner, 2026-09-14: "I need to be able to click in and see the concept
     itself and the details that will go to the copy machine to actually
     write." These are the slot's own fields — the contract the copy machine
     reads — not a summary of them.
@@ -157,7 +157,7 @@ def collections_weeks(slots):
 def summary(slots, brand):
     """The month at a glance — the shape, not the days.
 
-    the owner, 2026-09-14: "at a higher level we should be able to see what's going
+    owner, 2026-09-14: "at a higher level we should be able to see what's going
     out per brand per month at a high level, that way we can properly
     strategize it too."
 
@@ -292,9 +292,9 @@ def render(runs):
         for x in sl:
             detail[f"{b}/{x['id']}"] = slot_detail(x, b, r)
     brands.sort()
-    # ONE BRAND AT A TIME. the owner, 2026-09-14: "eventually, kind of like how we
+    # ONE BRAND AT A TIME. owner, 2026-09-14: "eventually, kind of like how we
     # have with the image ads, we have this thing where we can click into
-    # brand-a or we can click into Brand-B... so it's easy to just focus in on
+    # brand_a or we can click into brand_b... so it's easy to just focus in on
     # one or the other at a time." Two brands stacked is a comparison; a person
     # planning a month wants one brand and nothing else on the page.
     tabs = ('<div class="brands">'

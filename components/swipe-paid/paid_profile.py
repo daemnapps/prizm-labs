@@ -31,14 +31,14 @@ def _vt_workdir():
     if m is None:
         import importlib.util
         spec = importlib.util.spec_from_file_location(
-            "vt_workdir", Path(__file__).resolve().parents[2] / "tools" / "video-teardown" / "machine" / "workdir.py")
+            "vt_workdir", Path(__file__).resolve().parents[2] / "components" / "video-teardown" / "machine" / "workdir.py")
         m = importlib.util.module_from_spec(spec)
         sys.modules["vt_workdir"] = m
         spec.loader.exec_module(m)
     return m
 
 
-SOURCES = WS / "tools" / "copywriter" / "library" / "sources.json"
+SOURCES = WS / "components" / "copywriter" / "library" / "sources.json"
 
 QUEUE_MIN_CREATIVES = 8      # an angle this hot with no teardown is a gap
 

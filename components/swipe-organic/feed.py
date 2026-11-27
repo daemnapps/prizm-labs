@@ -14,7 +14,7 @@ One folder per avatar feed, three layers:
       sweeps.jsonl        the run log: when each sweep ran, what it pulled,
                           what failed. The feed's own memory.
 
-    python3 feed.py --avatar brand-a--glow-up [--per 10] [--dry-run]
+    python3 feed.py --avatar brand_a--glow-up [--per 10] [--dry-run]
 
 Organic only: declared ads never enter. Host-agnostic: needs only
 APIFY_TOKEN (env var or local keys file). Scheduling is a deployment

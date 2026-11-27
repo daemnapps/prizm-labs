@@ -1,5 +1,5 @@
 """THE CREATIVE REVIEW — the reviewer half of the QC loop, for every tool and
-every stage (the owner, 2026-10-02: "i want this kind of creative QC process
+every stage (owner, 2026-10-02: "i want this kind of creative QC process
 installed for each of my production tools … not just the production folder but
 this should exist for all stages in the creation process").
 
@@ -39,7 +39,6 @@ STAGES = COMP / "definitions" / "stages.json"
 MODEL = os.environ.get("QC_REVIEW_MODEL", "gemini-3.1-pro-preview")
 BASE = "https://generativelanguage.googleapis.com/v1beta/models"
 IMG = {".png", ".jpg", ".jpeg", ".webp"}
-MAX_TEXT = 60000
 
 
 def definitions() -> dict:
@@ -82,16 +81,20 @@ def _part(p) -> dict:
                 pass
         return {"inline_data": {"mime_type": mime, "data": base64.b64encode(data).decode()}}
     t = p.read_text(errors="replace")
-    return {"text": f"--- {p.name} ---\n{t[:MAX_TEXT]}"}
+    return {"text": f"--- {p.name} ---\n{t}"}
 
 
 def _labelled(label: str, things) -> list[dict]:
     out = [{"text": f"\n=== {label} ===\n"}]
     for x in things or []:
-        if isinstance(x, (str, Path)) and Path(x).exists():
+        try:
+            is_file = isinstance(x, (str, Path)) and Path(x).is_file()
+        except (OSError, ValueError):
+            is_file = False  # Long inline source text is not a filesystem path.
+        if is_file:
             out.append(_part(x))
         elif x:
-            out.append({"text": str(x)[:MAX_TEXT]})
+            out.append({"text": str(x)})
     return out
 
 
@@ -104,7 +107,7 @@ def _door():
     of prepaid credit (HTTP 402) is still checked. None when it is not here."""
     import importlib.util
     for d in [HERE, *HERE.parents]:
-        f = d / "tools" / "video-production" / "machine" / "vision_judge.py"
+        f = d / "components" / "video-production" / "machine" / "vision_judge.py"
         if f.exists():
             sp = importlib.util.spec_from_file_location("vision_judge", f)
             m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
@@ -151,7 +154,7 @@ def review(tool: str, stage: str, items: list[dict], sources=None, caller=None) 
     for it in items:
         parts += _labelled(f"ITEM {it['id']} — its sources", it.get("compare"))
         parts += _labelled(f"ITEM {it['id']} — the output to review", it.get("output"))
-    # THE INVENTORY (the owner, 2026-10-02: "a full inventory list every single time
+    # THE INVENTORY (owner, 2026-10-02: "a full inventory list every single time
     # we make an image"): a stage with a checklist answers every line, every item
     cl = d.get("checklist") or []
     if cl:

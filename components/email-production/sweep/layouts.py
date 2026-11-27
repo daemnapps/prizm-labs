@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The layout index — every email in the bank read for its STRUCTURE and
 its THEME, then clustered into the unique layouts the brand actually uses.
-This is the expansive format bank the owner asked for (2026-09-02): "index ALL
+This is the expansive format bank owner asked for (2026-09-02): "index ALL
 of our designs and identify UNIQUE layouts … Prime Day emails are blue, the
 Fourth of July emails are red white and blue, October gets Halloween themes".
 
@@ -342,7 +342,7 @@ def write_outputs(emails, layouts, families, brand, label=None):
     facts_proposal.write(run, brand, "email-sms/design-formats/layouts.json", json.dumps(
         {"generated": "2026-09-02", "note": "The layout index — every email in the bank read for structure "
          "(from the exact JSX) and theme (from the rendered picture), clustered into the unique layouts "
-         "the brand actually uses. Built by lab/email-production/sweep/layouts.py. Signature letters: "
+         "the brand actually uses. Built by lab/owner/email-production/sweep/layouts.py. Signature letters: "
          + ", ".join(f"{k}={v}" for k, v in LEGEND.items()),
          "families": families, "emails": emails, "layouts": layouts}, indent=1) + "\n")
     md = [f"# The layout index — {len(emails)} emails, {len(layouts)} unique layouts", "",

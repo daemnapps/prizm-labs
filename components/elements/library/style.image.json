@@ -1,7 +1,7 @@
 {
  "element": "style",
  "asset": "image",
- "source": "tools/image-production/static/style-packs.json",
+ "source": "components/image-production/static/style-packs.json",
  "enforced_by": "image production; image teardown stage 6",
  "note": null,
  "rows": [
@@ -16,7 +16,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "tools/image-production/static/style-packs.json",
+   "source": "components/image-production/static/style-packs.json",
    "extra": {
     "shot": "close, at the subject's own height, level, straight on, shallow depth so the background falls away",
     "light": "soft frontal light with a slight top-down bias, raking enough to show surface texture rather than flatter it",
@@ -38,7 +38,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "tools/image-production/static/style-packs.json",
+   "source": "components/image-production/static/style-packs.json",
    "extra": {
     "shot": "medium close, chest height, level, seen through a wall-mounted mirror, moderate depth with the subject sharp",
     "light": "hard natural daylight from one side with deep shadow opposite, mixed with ambient room fill",
@@ -60,7 +60,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "tools/image-production/static/style-packs.json",
+   "source": "components/image-production/static/style-packs.json",
    "extra": {
     "shot": "straight on, level, at the height of the object, centre-weighted, deep focus edge to edge",
     "light": "soft overhead fill building a smooth gradient, one hard rim light entering from the side",
@@ -82,7 +82,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "tools/image-production/static/style-packs.json",
+   "source": "components/image-production/static/style-packs.json",
    "extra": {
     "shot": "straight on, level, chest height, subject centred and cut at the upper thigh, everything equally crisp",
     "light": "flat, soft and uniform, no modelling",
@@ -104,7 +104,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "tools/image-production/static/style-packs.json",
+   "source": "components/image-production/static/style-packs.json",
    "extra": {
     "shot": "profile or three-quarter, at eye height, level, cropped at the chest, deep focus",
     "light": "strong warm rim light from behind and to one side, soft fill from the front",
@@ -126,7 +126,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "tools/image-production/static/style-packs.json",
+   "source": "components/image-production/static/style-packs.json",
    "extra": {
     "shot": "arm's length, at her own eye height or slightly above, one arm out of frame toward the lens, close, deep enough focus that the room behind reads",
     "light": "whatever light the room has — a window, a lamp, mixed and uncorrected",
@@ -148,7 +148,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "tools/image-production/static/style-packs.json",
+   "source": "components/image-production/static/style-packs.json",
    "extra": {
     "shot": "close, eye height, level, portrait-compressed, moderate depth",
     "light": "soft directional loop light from one side, falling off into black",
@@ -170,7 +170,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "tools/image-production/static/style-packs.json",
+   "source": "components/image-production/static/style-packs.json",
    "extra": {
     "shot": "mid-shot, chest height, level, moderate depth",
     "light": "frontal, soft, like a bounced on-camera flash",

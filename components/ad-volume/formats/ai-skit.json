@@ -1,0 +1,17 @@
+{
+  "id": "ai-skit",
+  "name": "AI skit",
+  "what": "An absurd, impossible or exaggerated situation only AI can shoot cheaply (talking objects, giant product, historical figure, animal, alter ego) that dramatizes the problem and the product. One clear point, felt in seconds.",
+  "seconds": 12,
+  "beats": [
+    {"id": "hook",    "at": [0, 2.5],  "does": "the impossible image in the first frame, plus a line that says what is happening"},
+    {"id": "problem", "at": [2.5, 6],  "does": "the absurd version of the customer's problem, said in their words"},
+    {"id": "product", "at": [6, 10],   "does": "the product solves it inside the skit's logic, used on camera"},
+    {"id": "button",  "at": [10, 12],  "does": "the punchline that restates the claim"}
+  ],
+  "cast": {"min": 1, "max": 3, "roles": ["hero (the avatar)", "the absurd character (object, creature, personified problem)", "witness (optional)"]},
+  "camera": "comedic sketch framing: locked medium shot, one whip or punch-in on the punchline",
+  "sound": "spoken lines in the take's own voices; one comic sound hit on the punchline",
+  "variation_axes": ["the absurd premise", "hook line", "the personified problem", "setting", "cast from the kit"],
+  "hooks_per_concept": 5
+}

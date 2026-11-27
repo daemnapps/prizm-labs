@@ -15,17 +15,90 @@ Writes one `reddit.md` the agent reads, plus `reddit.json` for anything later.
 Posts and their comments come back together, sorted by relevance, and every row
 keeps its permalink, score and date so a claim can carry a receipt.
 """
-import argparse, json, sys, time
+import argparse, json, re, sys, time
 from datetime import datetime, timezone
+import os
 from pathlib import Path
+
+
+def _workspace(start=__file__):
+    """The workspace root, FOUND by walking up — never counted with parents[N].
+
+    The count here was right only while this file sat in lab/owner/. The move
+    to components/ on 2026-09-22 made it resolve to ~/Projects, one level too
+    high — outside the repo entirely. A marker cannot go quietly wrong the next
+    time something moves. AI_WORKSPACE still wins when it names a workspace.
+    """
+    env = os.environ.get("AI_WORKSPACE")
+    if env and (Path(env) / "brands").is_dir():
+        return Path(env)
+    here = Path(start).resolve()
+    for d in [here, *here.parents]:
+        if (d / "components").is_dir() and (d / "brands").is_dir():
+            return d
+    raise FileNotFoundError(f"no workspace found upward of {here}")
+
+
 from urllib.parse import quote_plus
 
 HERE = Path(__file__).resolve().parent
-REPO = HERE.parents[3]
+REPO = _workspace()
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import apify  # noqa: E402  the shared layer: token, spare-account fallback, 403 handling
 
-ACTOR = "trudax~reddit-scraper-lite"
+ACTOR = "harshmaur~reddit-scraper"      # 2026-11-25: trudax~reddit-scraper-lite refuses every search without a session token
+# reddit.json's ceiling. Rows are dropped from the END (least relevant) until
+# the dump fits, so the file is always valid JSON — cutting the serialized
+# text instead left a file no reader could parse.
+JSON_CAP = 8_000_000
+
+
+def _sub(x):
+    """'r/name' → 'name'. Not lstrip('r/'), which strips a CHARACTER SET and
+    turned 'running' into 'unning'."""
+    return x[2:] if x.startswith("r/") else x
+
+
+def _run(payload, dollars):
+    """One capped run: the platform stops it at `dollars`."""
+    import urllib.request
+
+    def call(tok):
+        url = f"{apify.API}/acts/{ACTOR}/run-sync-get-dataset-items?token={tok}&timeout=600&maxTotalChargeUsd={dollars}"
+        req = urllib.request.Request(url, data=json.dumps(payload).encode(), headers={"Content-Type": "application/json"})
+        with urllib.request.urlopen(req, timeout=660) as r:
+            return json.loads(r.read() or b"[]")
+    return apify.each_account(call)
+
+
+def as_row(r):
+    """The shape every reader of this door already knows, whatever the actor calls things: a comment keeps its own link,
+    its room, its score and its date."""
+    r = dict(r)
+    if r.get("dataType") == "comment":
+        r.update({"communityName": "r/%s" % (r.get("subredditName") or r.get("parsedCommunityName") or "?"), "upVotes": r.get("commentUpVotes", r.get("score")), "createdAt": r.get("commentCreatedAt") or r.get("createdAt")})
+        if r.get("id") and str(r.get("url") or "").endswith("/%s/" % r.get("parsedPostId")):
+            r["url"] = r["url"] + "comment/%s/" % str(r["id"]).replace("t1_", "")
+        r.pop("title", None)
+    else:
+        r["url"] = r.get("postUrl") or r.get("url") or r.get("contentUrl")
+    r["parsedCommunityName"] = re.sub(r"^r/", "", str(r.get("communityName") or r.get("parsedCommunityName") or ""))
+    return r
+
+
+def _fit(rows, cap):
+    """The longest prefix of rows whose dump fits under cap, and how many were dropped."""
+    text = json.dumps(rows, indent=1)
+    if len(text) <= cap:
+        return text, 0
+    lo, hi = 0, len(rows)          # lo always fits (an empty list does)
+    while hi - lo > 1:
+        mid = (lo + hi) // 2
+        if len(json.dumps(rows[:mid], indent=1)) <= cap:
+            lo = mid
+        else:
+            hi = mid
+    return json.dumps(rows[:lo], indent=1), len(rows) - lo
 
 
 def score(row):
@@ -85,48 +158,36 @@ def main():
     #    counts at all, so every row prints a dash and nothing can be ranked.
     #  · searchComments stays FALSE. True returns loose comments and NO posts.
     #    Comments come from skipComments=False, which walks each post's thread.
-    payload = {
-        "searches": a.queries,
-        "ignoreStartUrls": True,
-        "searchPosts": True,
-        "searchComments": False,
-        "searchCommunities": False,
-        "searchUsers": False,
-        "searchMedia": False,
-        "includeMediaLinks": True,
-        "sort": a.sort,
-        "time": a.time,
-        "maxItems": a.limit,
-        "maxPostCount": max(5, a.limit // max(1, len(a.queries))),
-        "maxComments": 0 if a.no_comments else 25,
-        "skipComments": a.no_comments,
-        "skipUserPosts": True,
-        "skipCommunity": True,
-        "includeNSFW": False,
-        "proxy": {"useApifyProxy": True, "apifyProxyGroups": ["RESIDENTIAL"]},
-    }
-    # A bare search wanders (measured: "brown spots on my legs" returned a
-    # Filipino beauty board and an acne-scar routine). Naming her rooms and
-    # searching inside them is what keeps a pull on target.
+    rooms = [_sub(r) for r in a.subreddits] or [""]
+    sort = {"relevance": "relevance", "new": "new", "top": "top", "comments": "comments"}[a.sort]
     if a.subreddits:
-        payload["startUrls"] = [
-            {"url": f"https://www.reddit.com/r/{sr.lstrip('r/')}/search/?q={quote_plus(q)}"
-                    f"&restrict_sr=1&sort={a.sort}&t={a.time}"}
-            for sr in a.subreddits for q in a.queries]
-        payload["ignoreStartUrls"] = False
-        print(f"  targeted at r/{', r/'.join(s.lstrip('r/') for s in a.subreddits)}", flush=True)
+        print(f"  targeted at r/{', r/'.join(x for x in rooms)}", flush=True)
+    per = max(1, a.limit // (len(rooms) * len(a.queries)))         # items one search in one room may bring
+    posts_each = per if a.no_comments else max(1, per // 4)
+    payloads = [{"searchTerms": a.queries, **({"withinCommunity": r} if r else {}), "searchPosts": True, "searchComments": not a.no_comments, "searchCommunities": False,
+                 "searchSort": sort, "searchTime": a.time, "crawlCommentsPerPost": not a.no_comments, "maxPostsCount": posts_each,
+                 "maxCommentsCount": 0 if a.no_comments else max(1, per // 2), "maxCommentsPerPost": 0 if a.no_comments else 5, "includeNSFW": False} for r in rooms]
 
     t0 = time.time()
+    # Every failure — a missing token (apify.token() raises SystemExit) included —
+    # leaves the same two files: a reddit.md carrying the reason and an empty
+    # reddit.json, so an older pull's json is never read as this one's. Exit 1.
     try:
-        rows = apify.run(ACTOR, payload, timeout=900)
-    except SystemExit:
-        raise
-    except Exception as e:
+        rows = []
+        for p_ in payloads:
+            if len(rows) >= a.limit:
+                break
+            rows += [as_row(r) for r in _run(p_, max(.25, round(a.limit * .004 / len(payloads), 2))) if isinstance(r, dict)]
+        rows = rows[:a.limit]
+    except (SystemExit, Exception) as e:
         (out / "reddit.md").write_text(f"# Reddit\n\n[UNFILLED: the Reddit read failed — {e}]\n")
-        sys.exit(f"reddit: FAILED — {e}")
+        (out / "reddit.json").write_text("[]")
+        print(f"reddit: FAILED — {e}", file=sys.stderr, flush=True)
+        sys.exit(1)
 
     rows = [r for r in rows if isinstance(r, dict)]
-    (out / "reddit.json").write_text(json.dumps(rows, indent=1)[:8_000_000])
+    text, truncated = _fit(rows, JSON_CAP)
+    (out / "reddit.json").write_text(text)
 
     posts = [r for r in rows if (r.get("dataType") or r.get("type")) == "post" or r.get("title")]
     ids = {id(r) for r in posts}
@@ -141,6 +202,9 @@ def main():
          f"**{len(posts)} posts and {len(comments)} comments in {time.time()-t0:.0f}s.** "
          "Every row below keeps its permalink, score and date — quote verbatim and cite the link.",
          ""]
+    if truncated:
+        L[5:5] = [f"truncated: {truncated} — rows dropped from the end of reddit.json to keep it "
+                  f"under {JSON_CAP:,} chars; this page reads all {len(rows)}.", ""]
     if not rows:
         L.append("[UNFILLED: the actor returned nothing. Try different phrasing, a wider window, or sort=top.]")
 

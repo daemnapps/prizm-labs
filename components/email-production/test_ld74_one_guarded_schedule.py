@@ -13,7 +13,7 @@ Every refusal asserts no campaign-send-jobs call and an unchanged card status.
   1  the off-switch "off" is refused, naming send-switch.json
   2  the off-switch file missing is refused
   3  someone not on approvers.json is refused; a blank name too (two approvers)
-  4  the team with everything right schedules: one send job, scheduled by the team
+  4  email_lead with everything right schedules: one send job, scheduled by email_lead
   5  a lab-run job and the mini are refused
   6  a send strategy that is not a fixed time is refused
   7  a fixed send 10 minutes away is refused, naming 30 minutes
@@ -21,7 +21,7 @@ Every refusal asserts no campaign-send-jobs call and an unchanged card status.
   9  a card with no fingerprint: the first press records it and refuses; the
      second press schedules
   10 approve() stores the draft's fingerprint read back from Klaviyo
-  11 trial mode: the switch on and the owner → ok, trial, no Klaviyo call at all
+  11 trial mode: the switch on and owner → ok, trial, no Klaviyo call at all
 """
 import datetime
 import importlib.util
@@ -80,7 +80,7 @@ class Base(unittest.TestCase):
         self.switch = TMP / "send-switch.json"
         write(self.switch, {"email_schedule": "on"})
         self.approvers = TMP / "approvers.json"
-        write(self.approvers, {"approvers": ["the owner", "the team"]})
+        write(self.approvers, {"approvers": ["owner", "email_lead"]})
         self.p = [mock.patch.object(A, "RUNS", RUNS),
                   mock.patch.object(A, "FAKE", False),
                   mock.patch.object(S, "kl", self.fake.kl),
@@ -112,7 +112,7 @@ class Base(unittest.TestCase):
             "brand": BRAND, "label": LABEL, "date": "01 Jan", "year": 2099, "segments": ["Core"],
             "subjects": [{"subject": "A subject", "preview": "A preview"}],
             "final_check": [{"result": "ok", "detail": "all good"}],
-            "klaviyo": k, "approval": {"by": "the owner", "at": "2099-01-01T10:00:00"}, "status": "approved"})
+            "klaviyo": k, "approval": {"by": "owner", "at": "2099-01-01T10:00:00"}, "status": "approved"})
         self.fake.calls.clear()
 
     def card(self):
@@ -121,7 +121,7 @@ class Base(unittest.TestCase):
     def sends(self):
         return [c for c in self.fake.calls if c == SEND_JOB]
 
-    def schedule(self, who="the owner", env=None, home=None, at=AT):
+    def schedule(self, who="owner", env=None, home=None, at=AT):
         return A.schedule(BRAND, LABEL, who, env={} if env is None else env,
                           home=self.home if home is None else home, at=at)
 
@@ -151,25 +151,25 @@ class Schedule(Base):
 
     def test_03_not_an_approver(self):
         self.make_card()
-        self.refused("the team is not on the approver list", who="the team")
+        self.refused("designer is not on the approver list", who="designer")
         self.refused("nobody is not on the approver list", who="")
         self.refused("nobody is not on the approver list", who=None)
         self.assertEqual(self.fake.calls, [])
 
-    def test_04_pm_schedules(self):
+    def test_04_email_lead_schedules(self):
         self.make_card()
-        r = self.schedule(who="the team")
+        r = self.schedule(who="email_lead")
         self.assertEqual(r, {"ok": True, "scheduled": True})
         self.assertEqual(self.sends(), [SEND_JOB])
         c = self.card()
-        self.assertEqual(c["scheduled"]["by"], "the team")
+        self.assertEqual(c["scheduled"]["by"], "email_lead")
         self.assertEqual(c["scheduled"]["job"], CID)
         self.assertEqual(c["status"], "scheduled")
         self.assertEqual(self.fake.campaigns[CID]["status"], "Scheduled")
         # a second press is refused as already scheduled, with no second send job
-        r = self.schedule(who="the team")
+        r = self.schedule(who="email_lead")
         self.assertFalse(r["ok"])
-        self.assertIn("already scheduled by the team", r["error"])
+        self.assertIn("already scheduled by email_lead", r["error"])
         self.assertEqual(self.sends(), [SEND_JOB])
 
     def test_05_machine_runs(self):
@@ -205,12 +205,12 @@ class Schedule(Base):
         r = self.schedule()
         self.assertEqual(r, {"ok": True, "scheduled": True})
         self.assertEqual(self.sends(), [SEND_JOB])
-        self.assertEqual(self.card()["scheduled"]["by"], "the owner")
+        self.assertEqual(self.card()["scheduled"]["by"], "owner")
 
     def test_11_trial_mode(self):
         self.make_card(fingerprint=False)
         with mock.patch.object(A, "FAKE", True):
-            r = self.schedule(who="the owner")
+            r = self.schedule(who="owner")
         self.assertEqual(r, {"ok": True, "scheduled": True, "trial": True})
         self.assertEqual(self.fake.calls, [])
         self.assertEqual(self.card()["scheduled"]["job"], "FAKE-" + CID)
@@ -244,7 +244,7 @@ class Approve(Base):
                 mock.patch.object(S, "send_strategy", lambda lk, slot: dict(LATER)), \
                 mock.patch.object(S, "audience", lambda brand, slot: (["Core"], ["SEG1"], [])), \
                 mock.patch.object(A, "link_status", lambda url: "200"):
-            r = A.approve(BRAND, LABEL, "the owner")
+            r = A.approve(BRAND, LABEL, "owner")
         self.assertEqual(r, {"ok": True, "campaign_id": CID})
         self.assertEqual(len(made), 1)
         c = self.card()
@@ -268,7 +268,7 @@ class Approve(Base):
                                                                "status": "DRAFT"}), \
                 mock.patch.object(S, "send_strategy", lambda lk, slot: dict(LATER)), \
                 mock.patch.object(S, "audience", lambda brand, slot: (["Core"], ["SEG1"], [])):
-            r = A.approve(BRAND, LABEL, "the owner")
+            r = A.approve(BRAND, LABEL, "owner")
         self.assertTrue(r["ok"], r)
         self.assertTrue(r["fingerprint"].startswith("not read: "), r)
         c = self.card()

@@ -10,7 +10,7 @@ not **write our ads**. Triggered by
 One folder per brand, identical shape every time, so any two brands read alike
 and diff against each other.
 
-**This is a component, not lab.** It moved out of `lab/owner/swipe-paid/` on
+**This is a component, not lab.** It moved out of `lab/the owner/swipe-paid/` on
 the owner's word, 2026-09-22. The header used to say "R&D under `lab/` — nothing
 here runs or gets consumed outside `lab/` until it graduates"; that was true
 until the move and is false now. `intake/` and both teardowns read this pool as
@@ -29,7 +29,7 @@ The Drive tree mirrors this one exactly, per the lab convention in
 `lab/CLAUDE.md`. Every `.md` carries a `**Drive:**` line naming its mirrored
 folder, so the words always point at their media.
 
-Media never enters git — `.gitignore` blocks the extensions outright. Competitor-A
+Media never enters git — `.gitignore` blocks the extensions outright. Brand C
 alone is 3.5GB, and every file of it re-downloads from the ad IDs recorded in
 its block file.
 
@@ -89,8 +89,9 @@ an angle; the frame can, which is what `scan_frames.py` reads.
 2. **Cluster before you resolve.** The sweep returns copy but no landing page;
    the LP only comes from `/ads/<id>` at 1 credit each. Cluster into blocks
    first, then pull detail for one representative ad per block — 18 credits
-   instead of 830.
-3. **Pages are captured once.** A page can serve several blocks (on competitor-a,
+   instead of 830. A TrendTrack sweep (`components/trendtrack`) already carries
+   its landing pages, so `resolve` spends nothing on those blocks.
+3. **Pages are captured once.** A page can serve several blocks (on Brand C,
    four pages carried eleven). It lives once under `_pages/` on both sides; the
    block file names it.
 4. **No page means no folder.** If a block has no capturable landing page
@@ -123,20 +124,20 @@ Answered 2026-09-23, when this folder owed them as a resident
   folder. Media and page captures mirror to
   `Shared Assets/swipe/paid/<brand>/`, named in a `**Drive:**`
   line on every `.md` so words always point at their media. Records written
-  before 2026-10-07 still name `Shared Assets/lab/owner/swipe-paid/…`;
+  before 2026-10-07 still name `Shared Assets/lab/the owner/swipe-paid/…`;
   `swipe_home.resolve()` reads that form, so they keep working.
-- **Records (O12 (records adapter)):** none: no runs by design — a pool whose record is its folder (the team, 2026-10-07, triage page 7).
+- **Records (O12 (records adapter)):** none: no runs by design — a pool whose record is its folder (the developer, 2026-10-07, triage page 7).
 - **Manifest per entry:** `<advertiser>/blocks.json` — every angle, the copy
   on it, how many creatives sit on it, where the traffic goes. Derived files
   (`swipe.db`, `own/*/ads.json`, `.build/`) are gitignored and rebuilt,
   never migrated.
 
-**Read surface — who may read what** (the team, 2026-10-07, triage action 6 (declare public surfaces), provisionally on the owner's behalf — he sees it in the decision log and may strike any line). Besides `<advertiser>/blocks.json`, `_pages/`, `_raw/`, `judgements.json` and `frames.json` above, other components may read these by path:
+**Read surface — who may read what** (the developer, 2026-10-07, triage action 6 (declare public surfaces), provisionally on the owner's behalf — he sees it in the decision log and may strike any line). Besides `<advertiser>/blocks.json`, `_pages/`, `_raw/`, `judgements.json` and `frames.json` above, other components may read these by path:
 1. **`<advertiser>/blocks/<block file>`** — one block, with its `**Landing page:**` line (image-teardown, naming); **`<advertiser>/pages.json`** (intake); **`<advertiser>/_BRAND.md`** (swipe-organic's export).
 2. **`<brand>/angles/*.md`** (image-teardown, copywriter's library).
 3. **`own/<account-id>/`** — the folder names are our ad-account ids (swipe-organic's public export scrubs them); **`own/<account-id>/ads.json`**, the rebuilt cache, read by intake and video-teardown. It is gitignored: a reader must treat it as possibly absent.
 4. **`README.md`** (video-production's pipeline page).
-5. **`swipe_home.py` — the contract surface for BOTH pools** (SI-47 (swipe switch), 2026-10-07). Every swipe reader and writer, paid and organic, finds the pools through it: `root(pool)`, `path(pool, …)`, `label(pool, …)`, `resolve(stored)` and `shared_assets()`. It is the one Python file other components import (swipe-organic, intake, image-teardown, copywriter, ad-variations). It builds on `components/brandpath/drive_index.py` `mount()`. `USE_LAB = True` points it back at the lab folders; since the team moved the pools on 2026-10-07 those folders no longer exist, so it is no longer a working revert. It moves to the repo-side `swipe/` home with the 2 Nov move.
+5. **`swipe_home.py` — the contract surface for BOTH pools** (SI-47 (swipe switch), 2026-10-07). Every swipe reader and writer, paid and organic, finds the pools through it: `root(pool)`, `path(pool, …)`, `label(pool, …)`, `resolve(stored)` and `shared_assets()`. It is the one Python file other components import (swipe-organic, intake, image-teardown, copywriter, ad-variations). It builds on `components/brandpath/drive_index.py` `mount()`. `USE_LAB = True` points it back at the lab folders; since the developer moved the pools on 2026-10-07 those folders no longer exist, so it is no longer a working revert. It moves to the repo-side `swipe/` home with the 2 Nov move.
 Nothing else here is imported; everything else — `build.py`, `capture/`, `swipe.db`, `.build/` — is internal and may change without notice. A reshape of any file above is a contract change: say so here, and move the readers in the same commit.
 
 **Where a second person gets the content:** the Drive path above,
@@ -150,8 +151,8 @@ nothing here reaches into another repo.
 
 ## Two things that are open, not settled
 
-- **The Drive carve-out (O9 (Drive by fileId)) — closed on Drive, 2026-10-07.** the team moved the
-  media by hand from `Shared Assets/lab/owner/swipe-paid/` to
+- **The Drive carve-out (O9 (Drive by fileId)) — closed on Drive, 2026-10-07.** the developer moved the
+  media by hand from `Shared Assets/lab/the owner/swipe-paid/` to
   `Shared Assets/swipe/paid/` (same file ids; the lab folder is gone). Every
   reader and writer reaches it through `swipe_home.py` (SI-47 (swipe switch)).
   Old stored lab paths still resolve through `swipe_home.resolve()`. Still

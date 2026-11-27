@@ -2,7 +2,7 @@
 """The daily language pull — every FREE source of our own customers' words,
 into each brand's language bank, on a schedule.
 
-Ruled 2026-09-29 (the owner): automate only what costs nothing. The 2026-09-23
+Ruled 2026-09-29 (owner): automate only what costs nothing. The 2026-09-23
 "no automatic Apify spend" stands, so nothing here may reach Apify — the run
 FAILS CLOSED if anything tries (no commit, exit 3).
 
@@ -31,7 +31,7 @@ with rebase-retry (never force). A rebase that conflicts leaves the checkout
 in place and says where; nothing is lost and the cursors did not move on
 origin, so the next run pulls the same rows again.
 
-The schedule: a launchd job on the owner's Mac (com.daemn.language-daily, 05:30
+The schedule: a launchd job on owner's Mac (com.daemn.language-daily, 05:30
 local) runs schedule/daemn-language-daily.sh, which reads THIS file from
 origin/main so the newest code always runs. Log:
 $TMPDIR/daemn/language-daily.log (the temp dir).
@@ -198,7 +198,7 @@ def inside(a):
         log(f"FAIL CLOSED — something reached for Apify: {', '.join(sorted(set(REACHED)))}")
         return 3
     if not a.dry_run:
-        ll = ws / "tools" / "language-layer" / "tools"
+        ll = ws / "components" / "language-layer" / "tools"
         for b in summary["brands"]:
             sub(ws, [str(ll / "map_sources.py"), "--brand", b], f"{b} source registry")
         mirror = None

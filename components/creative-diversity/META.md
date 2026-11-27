@@ -61,13 +61,13 @@ Research reports behind this: three researchers, 2026-10-07 (Meta engineering + 
 
 ## 7. Meta grades each piece of a flexible ad (confirmed 2026-10-08)
 
-The Insights API breaks one ad's results down by asset: `breakdowns=body_asset`, `title_asset` (and `video_asset` / `image_asset` for the media). Read live on "Brand A's Grandma – Advertorial #2", last 30 days:
+The Insights API breaks one ad's results down by asset: `breakdowns=body_asset`, `title_asset` (and `video_asset` / `image_asset` for the media). Read live on "Brand B's Grandma – Advertorial #2", last 30 days:
 
 | Piece | Spend | Purchases |
 |---|---|---|
-| Text "My grandmother pulled turmeric from the ground…" | $__ | 84 |
-| Text "Refined women are OBSESSED…" | $__ | 35 |
-| Headline "Ancient Thai Dark Spot Remedy" | $__ | 92 |
-| Headline "Fade Dark Spots" | $__ | 37 |
+| Text "My grandmother pulled turmeric from the ground…" | $6,513 | 84 |
+| Text "Refined women are OBSESSED…" | $1,868 | 35 |
+| Headline "Ancient Thai Dark Spot Remedy" | $6,375 | 92 |
+| Headline "Fade Dark Spots" | $2,938 | 37 |
 
 **What it means for the system:** a section swap run as its own asset inside a flexible ad gets its own spend and purchases from Meta. That is the score the section index is built on (the owner: "mix and match the best elements from each asset"). Read it in the daily pull, never by polling.

@@ -1,7 +1,7 @@
 {
   "_note": "Actor ids and defaults for research_gatherer/engine.py — the ONLY config it reads. No brand, avatar or room name lives here (workspace rule 7); those come from brands/<brand>/core-avatars/**/*.md at run time. No chain's stage map lives here either — that's each caller's own chain_profile.",
   "actors": {
-    "forums": "trudax~reddit-scraper-lite",
+    "forums": "harshmaur~reddit-scraper",
     "comments": {
       "instagram": "apify~instagram-comment-scraper",
       "tiktok": "clockworks~tiktok-comments-scraper",
@@ -17,7 +17,7 @@
   },
   "cache_days": 14,
   "skip_feed_prefixes": [
-    "owner--"
+    "the owner--"
   ],
   "discovery": {
     "_note": "How the ONE room-finding search is fired. `relevance` is the door's own default and the right sort here, found the hard way on 2026-09-18: two live pulls with sort `top` came back with general-interest and film-trivia communities, because sorting an unrestricted search by score ranks the loudest posts on the platform that happen to share a word, not the posts about the topic. Relevance finds the topical rooms; the score weighting then picks the loudest of THOSE, which is what the weighting was always for. No room name lives here (workspace rule 7) - only how the search is shaped.",

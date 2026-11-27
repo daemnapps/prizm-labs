@@ -1,0 +1,589 @@
+{
+ "_what": "Decision logic along the video chain as it runs: each stage's decisions, what decides each today and the reasoning the chain gives it, and, only where the chain is silent, thin or unclear, the reasoning from the owner's older procedures and recorded walkthroughs, marked with its source. Where the chain already states its logic, the chain stands and nothing is added. Read from the chain's prompts and code and from the owner's knowledge store on 2026-11-17. A reading aid for filling logic between stages: it adds no check and no gate, and changes nothing by itself. Source ids are lesson ids in the owner's own knowledge store; the texts stay there.",
+ "status": "draft",
+ "as_of": "2026-11-17",
+ "stages": [
+  {
+   "name": "1 Pick the post to borrow",
+   "pieces": "the organic feed, the paid library, intake",
+   "hands": "A saved post with its avatar, product and awareness.",
+   "decisions": [
+    {
+     "name": "Whose world to search",
+     "by": "A person approves the plan",
+     "chain": "Every one of the avatar's top five worlds gets a search. Feeds keep entertainment only: nothing selling, nothing teaching.",
+     "state": "stands",
+     "fill": "",
+     "src": "",
+     "carry": ""
+    },
+    {
+     "name": "Which organic post",
+     "by": "A rule in code",
+     "chain": "The top untouched entertainment post: 100k views or more, ranked by shares per thousand views.",
+     "state": "thin",
+     "fill": "Take what the avatar chooses to watch. Look for comments level with likes or above, one clean simple headline, a fit to the avatar. Take a format that keeps winning, not a one-off, and name it by its structure.",
+     "src": "cra-182 · vid-148 · cra-178 · vid-187 · vid-156",
+     "carry": "The reason for the pick is written and nothing reads it."
+    },
+    {
+     "name": "Which paid post",
+     "by": "A rule in code, then the owner's yes",
+     "chain": "Proven sources only, ranked by days running, then spend, then duplicates.",
+     "state": "stands",
+     "fill": "",
+     "src": "",
+     "carry": ""
+    },
+    {
+     "name": "The split between organic and competitor picks",
+     "by": "Nobody",
+     "chain": "Nothing sets it.",
+     "state": "silent",
+     "fill": "About four in five from what the market watches now, one in five from adjacent markets and competitors. Your material also has the opposite view: competitor ads are free tested research.",
+     "src": "crb-038 · Creative Research procedure · against: cra-038, cra-128",
+     "carry": ""
+    },
+    {
+     "name": "The click: which one gets torn down",
+     "by": "A person on the feed page",
+     "chain": "No reason is asked for or kept.",
+     "state": "silent",
+     "fill": "Save one line with the pick: what format it is and why it holds attention. Note its awareness level, the desire and the problem it speaks to. Look at about three of that creator's top posts, since one is not enough to see a pattern.",
+     "src": "Inspiration brief procedure · walkthrough: inspiration brief (e8e4201c 00:57, 06:39)",
+     "carry": "Nothing travels with the pick but the link."
+    },
+    {
+     "name": "Its awareness level",
+     "by": "A rule in code",
+     "chain": "Entertainment enters at unaware, educational at problem aware.",
+     "state": "thin",
+     "fill": "Read it off the post itself: how deeply it describes the problem tells you the level. Ask it on every swipe.",
+     "src": "cra-016 · cra-120",
+     "carry": ""
+    }
+   ]
+  },
+  {
+   "name": "2 Decide what to make",
+   "pieces": "the creative strategist's ask, run setup",
+   "hands": "Brand, product, avatar, route and writing lane on the run.",
+   "decisions": [
+    {
+     "name": "What to make and for whom",
+     "by": "The owner's sentence",
+     "chain": "Nothing is invented: brand, product, avatar, count and funnel come from his words.",
+     "state": "person",
+     "fill": "How many and which stage: brief the funnel stage that is under-fed in spend. A winner means go deeper into that sub-avatar before leaving it.",
+     "src": "nvc-035 · cra-183 · cra-017",
+     "carry": ""
+    },
+    {
+     "name": "Which angle",
+     "by": "Nobody: the angle is picked by hand from a list",
+     "chain": "The chain holds the brand's angle list and no way to find or choose one.",
+     "state": "silent",
+     "fill": "Start from what customers say. Find the belief they already hold, agree with it, show where it falls short, and put the new information in that gap. Order angles by how broad the entry belief is. A reworded winner is not a new angle.",
+     "src": "crb-022 · crb-026 · crb-028 · cra-119",
+     "carry": "Writing gets an angle name with no belief or gap behind it."
+    },
+    {
+     "name": "Which concept under the angle",
+     "by": "Nobody: the chain has no concept step",
+     "chain": "The chain goes from angle straight to a script.",
+     "state": "silent",
+     "fill": "Angle, then concepts, then videos, then scroll stoppers, then hooks. A concept is the voice and situation that carries the angle. It comes from one real experience or the culture the audience follows. A winner becomes a new concept under the same angle.",
+     "src": "cra-063 · cra-098 · vid-047 · nva-045 · Creative Architecture procedure",
+     "carry": "So more scripts under a winning concept cannot be asked for."
+    },
+    {
+     "name": "An idea with no swipe: format, style, arc",
+     "by": "The session, by hand",
+     "chain": "A proposed default is not proof. No rule picks between the routes.",
+     "state": "silent",
+     "fill": "Work the avatar side first: angle, language, tone. Then pick the format that avatar already watches; the format supplies the hook, the scroll stopper and the lead.",
+     "src": "vid-015 · vid-008 · crb-101",
+     "carry": ""
+    },
+    {
+     "name": "Who makes it: AI, a creator, the founder",
+     "by": "A person, no default",
+     "chain": "The audience stage recommends a route; the recommendation is printed and read by nothing.",
+     "state": "person",
+     "fill": "Founder-carried creative does not scale. Creators give volume and cheap tests. The AI line fits a swipe where only the avatar, the speaker and the product change. A proven message moves statics first, then AI voiceover, then creators.",
+     "src": "cra-020 · cra-071 · vid-197 · cra-108",
+     "carry": "The recommendation never reaches the person choosing."
+    },
+    {
+     "name": "Writing lane: winner plus swipe, or swipe only",
+     "by": "A person",
+     "chain": "The swipe gives the form; the winner gives what we say. No rule for when to use which.",
+     "state": "thin",
+     "fill": "When a winner exists for this product, pair it, and ask why it worked before any new piece is written.",
+     "src": "crb-234 · crb-149",
+     "carry": ""
+    }
+   ]
+  },
+  {
+   "name": "3 Read the post apart",
+   "pieces": "video-teardown",
+   "hands": "The record, the spec, the audience read and the format, style and structure names.",
+   "decisions": [
+    {
+     "name": "Ad or organic, video or picture",
+     "by": "The triage",
+     "chain": "A paid ad has a pitch, an offer and an ask; pictures and sequences go to the picture chain.",
+     "state": "stands",
+     "fill": "",
+     "src": "",
+     "carry": ""
+    },
+    {
+     "name": "Format, style, structure, how it is made",
+     "by": "The triage, with the owner's tags winning",
+     "chain": "Format: who carries the message and what shape the script is. Style: what every picture looks like. Each is called with a reason.",
+     "state": "stands",
+     "fill": "",
+     "src": "",
+     "carry": "Only the names travel. The reasons stay in the triage file."
+    },
+    {
+     "name": "A format the lists do not know",
+     "by": "The owner",
+     "chain": "A new name stops the run until he decides. Nothing on screen says how to decide.",
+     "state": "thin",
+     "fill": "The same structure with our language swapped in is the same format, whatever it sells. Name a format by its structure. One that keeps winning is a format; one that won once is a one-off.",
+     "src": "cra-059 · vid-156 · vid-187",
+     "carry": ""
+    },
+    {
+     "name": "What the post is, part by part",
+     "by": "The teardown",
+     "chain": "Every scene gets a section label and a line on what breaks if it is cut. Observation, not evaluation.",
+     "state": "stands",
+     "fill": "",
+     "src": "",
+     "carry": ""
+    },
+    {
+     "name": "What must carry over",
+     "by": "The spec",
+     "chain": "Each element is fixed or swappable with one line of why. Abstract, never copy.",
+     "state": "stands",
+     "fill": "",
+     "src": "",
+     "carry": ""
+    },
+    {
+     "name": "Who our version speaks to, and at what level",
+     "by": "The audience read",
+     "chain": "The swipe sets the level. A fuller bank is never a reason to move avatars. A disagreement with the brand's own read is a finding.",
+     "state": "stands",
+     "fill": "",
+     "src": "",
+     "carry": ""
+    },
+    {
+     "name": "What goes to writing",
+     "by": "Files",
+     "chain": "The record, the spec and the names.",
+     "state": "thin",
+     "fill": "Pass the format named by its structure, the hook, the core desire and the awareness level, so writing does not have to read the post again.",
+     "src": "Research and creative thinking lessons, hand-on notes",
+     "carry": "Unread by any later stage: why the product was chosen, why the post was picked, the route recommendation, the triage's reasons."
+    }
+   ]
+  },
+  {
+   "name": "4 Write our version",
+   "pieces": "video-writing",
+   "hands": "The accepted brief.",
+   "decisions": [
+    {
+     "name": "What to keep and what to replace",
+     "by": "The injection",
+     "chain": "The swipe is the backbone. Swap the thing being sold, never the thing being worn, revealed or laughed at. Each element is carried, adapted or dropped with its cost.",
+     "state": "stands",
+     "fill": "",
+     "src": "",
+     "carry": ""
+    },
+    {
+     "name": "The one idea",
+     "by": "The idea pass",
+     "chain": "Five candidates scored on true, hers, carries, repeatable and new. The highest wins; a tie goes to the more surprising.",
+     "state": "stands",
+     "fill": "",
+     "src": "",
+     "carry": "The brief never receives the idea by name, and production never reads it."
+    },
+    {
+     "name": "The openings",
+     "by": "The hook pass",
+     "chain": "Six openings on one body. Every hook traces to a real customer line or it is cut. The line and the picture name the same thing.",
+     "state": "stands",
+     "fill": "",
+     "src": "",
+     "carry": ""
+    },
+    {
+     "name": "How the openings differ from each other",
+     "by": "The hook pass",
+     "chain": "Each is its own way into the same ad. Nothing says along what line they should differ.",
+     "state": "thin",
+     "fill": "Each opening takes a different customer-language angle, so the set shows which one opens the conversation. For the widest market, open on something unexpected without naming the problem; to reach only people with the problem, name it.",
+     "src": "vid-138 · vid-020 · vid-098",
+     "carry": ""
+    },
+    {
+     "name": "The lead and the body",
+     "by": "The build pass",
+     "chain": "The prompts place and expand the argument but never say what a lead or a body is for.",
+     "state": "thin",
+     "fill": "The lead carries the conversation on once the opening lands and sets the tone. The body earns trust through story before the product appears: I see you, I went through it, here is what I learned. Skip it and you get buyers who refund.",
+     "src": "vid-011 · vid-012 · vid-013 · Creative Thinking procedure",
+     "carry": ""
+    },
+    {
+     "name": "The order of the argument and the mechanism",
+     "by": "The build pass",
+     "chain": "Every added beat names the part of the spec it serves. The mechanism says how it works, not what it does.",
+     "state": "stands",
+     "fill": "",
+     "src": "",
+     "carry": ""
+    },
+    {
+     "name": "The close: objection, proof, offer, ask",
+     "by": "The build pass",
+     "chain": "Find the flinch, nearly always in the objection bank. The offer rides the swipe's ending. The last ask belongs to the lane.",
+     "state": "stands",
+     "fill": "",
+     "src": "",
+     "carry": ""
+    },
+    {
+     "name": "How native and how sales it reads",
+     "by": "The dials, the audit, the creative pass",
+     "chain": "The dial targets are set by a preset with no reason for this brief. The audit never fails a script for being too bold.",
+     "state": "thin",
+     "fill": "The organic feel carries it and the sale sits in the back half. It should read like a favour from a friend. Reading it aloud is what catches the stiff and the machine-written lines.",
+     "src": "cra-191 · crb-110 · crb-132 · Script refinement procedure",
+     "carry": ""
+    },
+    {
+     "name": "Scenes and how each is shown",
+     "by": "The brief and the director",
+     "chain": "Every scene exists because the argument calls for it. Three pitches a scene, scored; the machine picks.",
+     "state": "stands",
+     "fill": "",
+     "src": "",
+     "carry": "Why a swipe scene was dropped is written and read by nothing."
+    },
+    {
+     "name": "A creator's or founder's brief",
+     "by": "Older prompts",
+     "chain": "They never see the format, and there is no founder brief.",
+     "state": "thin",
+     "fill": "Fix the angle and the key points. Leave the words, the slang and the delivery to the person. A brief that is too exact reads as an ad.",
+     "src": "crb-073 · cra-032 · Strategist training",
+     "carry": ""
+    },
+    {
+     "name": "What goes to production",
+     "by": "One file",
+     "chain": "The brief.",
+     "state": "thin",
+     "fill": "",
+     "src": "",
+     "carry": "Unread by production or the edit: the idea, the audit, the creative pass, the carried and dropped notes, the reasons behind each opening."
+    }
+   ]
+  },
+  {
+   "name": "5 Produce it",
+   "pieces": "video-production and the Studio",
+   "hands": "Voice, pictures, clips and what the edit needs.",
+   "decisions": [
+    {
+     "name": "How the whole ad is made: generated, mixed, our footage, a creator",
+     "by": "A person at the Produce button",
+     "chain": "No reason is asked for; it defaults to generated.",
+     "state": "silent",
+     "fill": "A review or a reaction is a phone job. Problem and solution with a set process is an editor's job. A high-intent single ad is made on its own; bulk is for tests.",
+     "src": "vid-059 · vid-222 · cra-071",
+     "carry": ""
+    },
+    {
+     "name": "Each scene: our footage, generate, borrow the swipe's motion, or film",
+     "by": "Two rules that disagree",
+     "chain": "The written rule gives a reason per scene and is used only for the budget preview. The rule that runs uses match scores with no written reason.",
+     "state": "thin",
+     "fill": "Go to what already exists first, scene by scene, and use the newest version of an asset. Proof is always real: never fake the result. Generate what the words name and no camera can show. Too much generated footage thins the ad. Never use a clip twice.",
+     "src": "cra-033 · vid-032 · cra-088 · vid-030 · nvb-009 · vid-036 · walkthrough: editing (c55d36f6 02:51, 11:19)",
+     "carry": "A scene given to our footage never reaches the edit as a file."
+    },
+    {
+     "name": "Who is on screen",
+     "by": "A person at Produce, else the brief",
+     "chain": "A role the bank covers never gets a new face. The casting rule is not called by production.",
+     "state": "thin",
+     "fill": "Cast someone who looks like the audience, paired with a figure of authority. When the words name a kind of person, show that kind. Your material also allows an aspirational person in place of the avatar.",
+     "src": "crb-258 · nvb-016 · vid-086 · against: cra-113",
+     "carry": ""
+    },
+    {
+     "name": "The voice",
+     "by": "A rule",
+     "chain": "Every voice matches the person on screen.",
+     "state": "stands",
+     "fill": "",
+     "src": "",
+     "carry": ""
+    },
+    {
+     "name": "The look",
+     "by": "A rule",
+     "chain": "The ad is made in the swipe's own style.",
+     "state": "stands",
+     "fill": "",
+     "src": "",
+     "carry": ""
+    },
+    {
+     "name": "Which model, how many takes, which take is kept",
+     "by": "Settings",
+     "chain": "One model for every clip, cost never decides. The best-scoring take is kept. Three files give three different take counts.",
+     "state": "thin",
+     "fill": "When small details are off and the test is about the angle and the avatar, accept it and ship: generation is the expensive part.",
+     "src": "vid-144",
+     "carry": ""
+    },
+    {
+     "name": "Music and sound",
+     "by": "The sound plan",
+     "chain": "Only when the swipe or the brief calls for it. The bed is picked by ear.",
+     "state": "stands",
+     "fill": "",
+     "src": "",
+     "carry": ""
+    }
+   ]
+  },
+  {
+   "name": "6 Cut it",
+   "pieces": "video-edit",
+   "hands": "The finished cut and one version per opening.",
+   "decisions": [
+    {
+     "name": "Where B-roll goes",
+     "by": "The cut prompt",
+     "chain": "B-roll goes where the words name a thing the viewer should see. Every placement says why.",
+     "state": "stands",
+     "fill": "",
+     "src": "",
+     "carry": ""
+    },
+    {
+     "name": "The pace",
+     "by": "A setting",
+     "chain": "One default for every format. The per-format list is empty.",
+     "state": "thin",
+     "fill": "Open tight, beat after beat, then loosen once the teaching starts. In a story section change the picture every three to four seconds. Cut dead air and repeated phrases. End when the speaker finishes.",
+     "src": "vid-019 · vid-035 · vid-024 · vid-043",
+     "carry": ""
+    },
+    {
+     "name": "The caption look",
+     "by": "A setting",
+     "chain": "By format, then by the app it pretends to be made in, then a default. Two formats have a pick.",
+     "state": "thin",
+     "fill": "Captions look native to the platform the footage seems to come from. Few words a line, one size and colour. Never at the very top or bottom. The ad must still make sense with the sound off.",
+     "src": "vid-079 · vid-034 · vid-038 · nvc-014",
+     "carry": ""
+    },
+    {
+     "name": "Which versions are cut",
+     "by": "A rule",
+     "chain": "One video per opening on the same body, then shorter cuts by scene priority.",
+     "state": "stands",
+     "fill": "",
+     "src": "",
+     "carry": ""
+    },
+    {
+     "name": "More openings from what exists",
+     "by": "Nobody",
+     "chain": "Nothing looks inside the body for a line that could open the ad.",
+     "state": "silent",
+     "fill": "Go back through the footage for a line that works as a hook and move it to the front. A fresh lead bolted onto a proven body is a new ad. Two existing pieces combined are a third.",
+     "src": "vid-091 · vid-183 · vid-110 · nvc-037",
+     "carry": ""
+    },
+    {
+     "name": "What the edit learned",
+     "by": "A prompt nothing runs",
+     "chain": "The lesson step is declared and never runs. The lessons file is edited by hand.",
+     "state": "silent",
+     "fill": "Note what had to be fixed, for the next shoot and the next brief. Treat each brief as a guess and send what was learned back to whoever made it.",
+     "src": "vid-021 · crb-209",
+     "carry": "Nothing from the cut reaches writing or production."
+    }
+   ]
+  },
+  {
+   "name": "7 Launch it",
+   "pieces": "ad words, naming, the approval card",
+   "hands": "A named ad on the approval card.",
+   "decisions": [
+    {
+     "name": "The ad's words and page",
+     "by": "A rule, set by the owner",
+     "chain": "The lines and the page with the lowest cost per purchase, with enough purchases behind them.",
+     "state": "stands",
+     "fill": "",
+     "src": "",
+     "carry": ""
+    },
+    {
+     "name": "The name",
+     "by": "A model for the angle, a rule for the rest",
+     "chain": "The angle is named from the brand's list with a reason. No field is invented.",
+     "state": "thin",
+     "fill": "Name by angle, concept and who is on screen, and by headline, scroll stopper and hook, so a result can be read back to the part that earned it. The top ads' names say what it is, what it does and who is in it.",
+     "src": "nvc-041 · Editing and remix procedures · walkthrough: agency brief (926cc2c1 08:13)",
+     "carry": "The name carries no concept and no opening."
+    },
+    {
+     "name": "How it is tested",
+     "by": "A rule",
+     "chain": "The control and every opening go in as one flexible ad.",
+     "state": "stands",
+     "fill": "",
+     "src": "",
+     "carry": ""
+    },
+    {
+     "name": "Approve or send back",
+     "by": "The owner",
+     "chain": "Each reason for sending back maps to the step that caused it. The hooks that would act on it are all switched off.",
+     "state": "person",
+     "fill": "",
+     "src": "",
+     "carry": "A send-back reason reaches no stage."
+    }
+   ]
+  },
+  {
+   "name": "8 Read the results",
+   "pieces": "the winners tool, the ad desk",
+   "hands": "The bank of top ads and one feed to the hook stage.",
+   "decisions": [
+    {
+     "name": "What counts as working",
+     "by": "A bar the owner has not set",
+     "chain": "The bar is empty for every brand, so no paid ad is ever marked a winner.",
+     "state": "silent",
+     "fill": "Spend first: the ads the platform gives the most budget over 14 days, the five or six taking more than half. Then cost per customer against what the campaign runs at. Likes and views do not count. Your numbers for the cut-off differ across the material.",
+     "src": "crb-058 · crb-153 · crb-059 · Media buying procedure",
+     "carry": ""
+    },
+    {
+     "name": "Turn off, hold, or feed",
+     "by": "The ad desk, then the owner with a reason",
+     "chain": "Each call is a multiple of break-even and says why with the numbers.",
+     "state": "stands",
+     "fill": "",
+     "src": "",
+     "carry": "Where he disagreed with a call is kept and nothing retunes from it."
+    },
+    {
+     "name": "Taking a winner apart",
+     "by": "Nobody",
+     "chain": "The top ads are ranked. None is broken down part by part.",
+     "state": "silent",
+     "fill": "Your own eyes first, line by line and scene by scene. In order: hook, lead, offer, mechanism, outcome, features against benefits, guarantee, ask; then the scenes with the sound off. Name its type and its angle. End with a list of what to change.",
+     "src": "crb-155 · cra-181 · crb-168 · Creative learnings procedure",
+     "carry": ""
+    },
+    {
+     "name": "What goes back to writing",
+     "by": "One file",
+     "chain": "The top ads by purchases and one loser go to the hook stage.",
+     "state": "thin",
+     "fill": "Bank the top ad per angle. Keep the customer words that were in it. Record its type and angle so the next brief starts ahead.",
+     "src": "nva-044 · cra-181 · nvc-064",
+     "carry": "Read by nothing: the score against each prompt version, the desk decisions, the send-back reasons, the edit's lessons."
+    }
+   ]
+  },
+  {
+   "name": "9 Decide what is next",
+   "pieces": "the variation planner, the queue",
+   "hands": "The next ask.",
+   "decisions": [
+    {
+     "name": "What to change in a winner",
+     "by": "The variation planner",
+     "chain": "Each variation changes one lever. What is locked is what the winners share.",
+     "state": "stands",
+     "fill": "",
+     "src": "",
+     "carry": "Nothing reads the plan, so it never becomes a brief."
+    },
+    {
+     "name": "Which layer to move first",
+     "by": "Nobody",
+     "chain": "Nothing orders the layers.",
+     "state": "silent",
+     "fill": "Understand why it worked, then: new openings on the same body first, then the same message in another format, then a new concept under the same angle, then another awareness level. Keep the structure and the customer words that work.",
+     "src": "crb-149 · vid-096 · cra-234 · cra-064 · Compounding procedure",
+     "carry": ""
+    },
+    {
+     "name": "How much is iteration and how much is new",
+     "by": "Nobody",
+     "chain": "The queue is filled from the promo calendar only. Results do not feed it.",
+     "state": "silent",
+     "fill": "Most of the week on what is working, the rest on new tests. Your material gives both seven or eight in ten on winners and, earlier, eight in ten on new concepts.",
+     "src": "crb-181 · against: nvc-036",
+     "carry": ""
+    },
+    {
+     "name": "Taking a winner into other forms",
+     "by": "Nobody",
+     "chain": "Nothing moves a winner across forms.",
+     "state": "silent",
+     "fill": "Cheapest test first: statics, then an AI voiceover video, then creators. Rework the best past videos and statics for each coming date. Then the page and the emails follow the message.",
+     "src": "cra-108 · crb-133 · cra-126 · walkthrough: prioritization (0e5542de 01:35)",
+     "carry": ""
+    },
+    {
+     "name": "What gets made this week",
+     "by": "The queue",
+     "chain": "Promo pieces by days to their date; evergreen fills the rest.",
+     "state": "thin",
+     "fill": "Finished work that is ready to launch goes first, then anything tied to a date, then evergreen, then the rest. Follow where the spend went over the last 14 days. When the top of the funnel runs dry the cost rises, so feed it more ads.",
+     "src": "walkthrough: prioritization (0e5542de 05:03, 06:35) · crb-169 · crb-237 · nvb-045",
+     "carry": ""
+    }
+   ]
+  }
+ ],
+ "states": {
+  "stands": "The chain says how",
+  "thin": "The chain is thin",
+  "silent": "The chain is silent",
+  "person": "A person decides"
+ },
+ "pattern": [
+  "**The chain reasons well inside a stage and loses the reason at the hand-over.** Why a post was picked, why a format was called, the one idea, why a scene was dropped: each is written down and the next stage never reads it.",
+  "**The silent decisions sit at the two ends.** Before writing: which angle, which concept, how the week is split. After the edit: what counts as working, how a winner is taken apart, which layer to change. The middle (teardown, writing) mostly stands.",
+  "**Results reach writing through one file.** Everything else the chain learns after launch is kept and read by nothing."
+ ],
+ "links": {
+  "format_map": "https://claude.ai/artifact/GNn1yBAtYuiwKJ4Hf5bc3h",
+  "canvas": "https://claude.ai/artifact/H1WiuMEqNKAE7n8ZNYeb1h"
+ }
+}

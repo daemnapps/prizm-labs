@@ -1,0 +1,23 @@
+{
+  "_what": "The make tiers of the ad-volume lane. A tier names a house clip route (components/generative-model-house) and the resolution it makes at. The test tier makes every concept; only a winner (by the numbers) is made again at the finish tier. Credits are read live from the Higgsfield cost command; the numbers here are only what was read on the date shown.",
+  "default_tier": "test",
+  "seconds": 12,
+  "aspect": "9:16",
+  "tiers": {
+    "test": {"job": "wan3_0", "registry": "wan-3.0", "house_job": "clips.take_backup", "resolution": "480p", "mode": null,
+             "why": "the house's Wan 3.0 route at 480p in reference mode: the kit's cast and product pictures go in as references, so no new start picture is drawn"},
+    "test-seedance": {"job": "seedance_2_5", "registry": "seedance-2.5", "house_job": "clips.take", "resolution": "480p", "mode": "omni_reference", "draft": true,
+                      "why": "the house default take model at 480p, made as a draft so a winner can be finished from it within seven days"},
+    "finish": {"job": "seedance_2_5", "registry": "seedance-2.5", "house_job": "clips.take", "resolution": "1080p", "mode": "omni_reference",
+               "why": "a winner, re-made (or its draft finished) at full size"}
+  },
+  "spend_floor_credits": 310,
+  "_spend_floor": "The make step never takes the account's balance below this line. The account refills itself with a paid top-up when it falls under 300 credits (read 15 Nov 2026), so spending past the line is a purchase and is the owner's call: raise it only on the owner's word (--floor).",
+  "read_15_nov_2026": {
+    "credits_per_usd_auto_refill": 20,
+    "credits_per_usd_4000_pack": 17.39,
+    "per_12s_take": {"wan3_0@480p": 12, "wan3_0@720p": 21, "wan3_0@1080p": 42,
+                      "seedance_2_5@480p": 36, "seedance_2_5@720p": 84, "seedance_2_5@1080p": 192,
+                      "seedance_2_0@480p": 36}
+  }
+}

@@ -7,7 +7,7 @@
 # Free sources only — Apify is fenced off inside the run.
 export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"
 unset ANTHROPIC_API_KEY ANTHROPIC_AUTH_TOKEN
-WS="${AI_WORKSPACE_MAIN:-$HOME/Projects/workspace}"
+WS="${AI_WORKSPACE_MAIN:-$HOME/Projects/ai-workspace}"
 LOG="${TMPDIR:-/tmp}/daemn/language-daily.log"
 mkdir -p "$(dirname "$LOG")"
 T=$(mktemp -d)

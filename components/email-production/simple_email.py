@@ -2,11 +2,11 @@
 """The simple email: the copy machine's words in one fixed shape, pictures
 made by GPT, and — on --push — a DRAFT campaign in the brand's Klaviyo.
 
-    python3 simple_email.py <run>  --brand brand-a            # pictures + the email
-    python3 simple_email.py <run>  --brand brand-a --push     # ...and a Klaviyo draft
-    python3 simple_email.py <run>  --brand brand-a --no-images   # layout only, no spend
+    python3 simple_email.py <run>  --brand brand_a            # pictures + the email
+    python3 simple_email.py <run>  --brand brand_a --push     # ...and a Klaviyo draft
+    python3 simple_email.py <run>  --brand brand_a --no-images   # layout only, no spend
 
-the owner, 2026-09-19: "we're just going to focus on not doing fully design-based
+owner, 2026-09-19: "we're just going to focus on not doing fully design-based
 email templates and just using what we had before as our baseline… the logo at
 the top, headline for the email, an image that describes the headline with
 relevance, the copy. If another image needs to go in there, towards the
@@ -36,10 +36,13 @@ import re
 import subprocess
 import sys
 from pathlib import Path
+import calendar_handoff as CH
 import drive_reach as DR  # noqa: E402
 
 from paths import HERE, WORKSPACE, component
+import offers as OFFERS   # the bank's saving rule, shared with the text line
 import ep_keys      # the one key loader — imported while this folder is still on the path
+import designed_email as DE   # LD-105 (check the designed email): the email as designed, one text for the checks
 
 # This folder's own email.py shadows Python's `email` package, which the
 # picture door needs (urllib -> http.client -> email.parser). Nothing below
@@ -231,7 +234,7 @@ def finished_html(email, lk, pictures, logo_src, brand, label, term=None):
     """The email exactly as it goes out: the layout, with every link to the brand's own sites
     carrying the tracking standard's email tags (components/funnel-tracking, email_url) —
     utm_campaign = the send's label, utm_content = <label>.<section>, utm_term = the send's
-    segment(s), funnel= on a CPK funnel page. the owner, 2026-10-12."""
+    segment(s), funnel= on a CPK funnel page. owner, 2026-10-12."""
     return EL.tag(render(email, lk, pictures, logo_src), brand, label, label, term, WORKSPACE)
 
 
@@ -252,6 +255,27 @@ def finished_text(email, with_link=False):
     return " ".join(parts)
 
 
+def pages_hidden(brand, keys):
+    """The offers among `keys` whose store page the bank marks hidden ("hidden until …", 2026-11-04). A send carrying one
+    is written and carded, and launches only once a person takes the mark out of the bank. -> {key: the bank's words}."""
+    f = WORKSPACE / "brands" / brand / "products" / "offer-bank.md"
+    bank = f.read_text() if f.is_file() else ""
+    out = {}
+    for k in dict.fromkeys(x for x in keys if x and x != "none"):
+        m = re.search(r"hidden until[^*|\n]*", Q.offer_block(bank, k), re.I)
+        if m:
+            out[k] = m.group(0).strip()
+    return out
+
+
+NOT_HERE = re.compile(r"never in an email|funnel only|never (in|on) (an? )?(email|sms|text)", re.I)
+
+
+def email_lines_only(block):
+    """An offer's bank entry without the lines the bank keeps off email and SMS (a funnel-only line, 2026-11-04)."""
+    return "\n".join(ln for ln in (block or "").splitlines() if not NOT_HERE.search(ln))
+
+
 def price_check(email, brand, run_dir):
     """EVERY PRICE IN THE EMAIL IS ONE THE BANK SELLS TODAY (2026-09-19).
 
@@ -266,21 +290,99 @@ def price_check(email, brand, run_dir):
     The check itself is the shared one (components/marketing-chain-checks, 2026-09-20,
     which was lifted from here); this finds the send's offer and its bank entry.
     """
-    try:
-        offer = json.loads((run_dir / "run.json").read_text()).get("assignment", {}).get("offer")
-    except (OSError, ValueError):
-        offer = None
     text = finished_text(email)
     if not Q.prices_in(text):
         return []
+    block, offer = send_price_block(brand, run_dir, text)
+    return Q.price_check(text, block, offer if block else None)
+
+
+def send_price_block(brand, run_dir, text):
+    """The prices this send may state: its offer's own bank entry (and each `offer_also` member's), a free gift at its
+    own bank price and a bank guarantee quoted whole. Shared by the delivery gate and design/build.py's product check
+    (2026-11-11), so the two never disagree on a price. -> (block, offer); block is "" when the send names no offer."""
+    try:
+        a = json.loads((Path(run_dir) / "run.json").read_text()).get("assignment", {})
+        offer, also = a.get("offer"), list(a.get("offer_also") or [])
+    except (OSError, ValueError, TypeError):
+        offer, also = None, []
     if not offer or offer == "none":
-        return Q.price_check(text, "", None)
+        return "", offer
     bank = (WORKSPACE / "brands" / brand / "products" / "offer-bank.md").read_text()
-    block = Q.offer_block(bank, offer)
+    block = email_lines_only(Q.offer_block(bank, offer))
+    for k in also:                                    # the brand's mix: each member's own bank entry sells its price
+        more = email_lines_only(Q.offer_block(bank, k))
+        if more and block:
+            block += "\n\n" + more
     if not block:
         # an offer the bank does not hold sells no price at all — every price fails
         block = f"## {offer} — (not in the offer bank)"
-    return Q.price_check(text, block, offer)
+    block += free_item_prices(text, bank) + guarantee_amounts(text, bank)
+    return block, offer
+
+
+def free_item_prices(text, bank):
+    """A gift named with its own value ("a free $19 travel pouch", owner's Black Friday wording, 2026-11-10) states
+    that item's bank price, not a price this offer sells: the value is allowed when an offer-bank entry whose name
+    holds the gift's noun is priced at exactly that figure. -> extra block text for the price check ('' when none)."""
+    out = []
+    for amount, words in re.findall(r"(?i)\bfree\s+\$(\d+(?:\.\d\d)?)\s+([a-z][a-z \-]{2,40})", text or ""):
+        nouns = [w.lower() for w in words.split()[:2] if len(w) > 3]      # "travel pouch with every order" -> travel, pouch
+        for m in re.finditer(r"^## (\S+) — (.+)$", bank or "", re.M):
+            if nouns and all(n in m.group(2).lower() for n in nouns):
+                blk = Q.offer_block(bank, m.group(1))
+                if amount in Q.prices_in(blk) or (amount + ".00") in Q.prices_in(blk):
+                    out.append("\n\n(free item, its own bank price) $%s" % amount)
+    return "".join(out)
+
+
+def guarantee_amounts(text, bank):
+    """A guarantee quoted word for word from the bank keeps its own figure ("we put $100 STORE CREDIT back in your
+    account", brand_a's New Man guarantee, signed 2026-11-06): that amount is a promise, not a price this offer sells.
+    Allowed only when the bank's quoted line (a `> ` line) stands whole in the email. -> extra block text ('' when none)."""
+    flat = " ".join((text or "").split()).lower()
+    out = []
+    for line in re.findall(r"^> (.+)$", bank or "", re.M):
+        quote = " ".join(line.strip().strip("*").split())
+        if Q.prices_in(quote) and quote.lower() in flat:
+            out.append("\n\n(guarantee, quoted word for word) " + quote)
+    return "".join(out)
+
+
+def saving_check(email, brand, run_dir):
+    """A saving the bank conditions is never stated without its condition, in the words or in any subject line (2026-11-04)."""
+    try:
+        a = json.loads((run_dir / "run.json").read_text()).get("assignment", {})
+    except (OSError, ValueError):
+        return []
+    keys = [k for k in [a.get("offer"), *(a.get("offer_also") or [])] if k and k != "none"]
+    f = WORKSPACE / "brands" / brand / "products" / "offer-bank.md"
+    if not keys or not f.is_file():
+        return []
+    bank = f.read_text()
+    lines = [x for s in email.get("subjects") or [] if isinstance(s, dict) for x in (s.get("subject"), s.get("preview")) if x]
+    text = "\n".join([finished_text(email)] + lines)
+    return [p for k in keys for p in OFFERS.saving_problems(text, OFFERS._section(bank, k), alone=len(keys) == 1)]
+
+
+def as_designed(email, design):
+    """The copy, its words replaced by the designed email's (LD-105 (check the designed email)): one text. The
+    button, the subjects and every other field stay the copy's; the design's own link wins when it names one."""
+    if not design:
+        return email
+    btn = dict(email.get("button") or {})
+    if design.get("link"):
+        btn["link"] = design["link"]
+    return dict(email, headline="", body=DE.words(design), offer=None, button=btn)
+
+
+def check_step(run_dir, design):
+    """(live, gone): step 8c's findings, read against the designed email's words when there is one — a line fixed
+    on the page clears its finding (LD-105 (check the designed email)). No step 8c: (None, [])."""
+    chk = Path(run_dir) / "stage8c--check.md"
+    if not chk.is_file():
+        return None, []
+    return Q.check_split(chk.read_text(), "delivery", " ".join(DE.words(design)) if design else None)
 
 
 def delivery_items(email, brand, run_dir, pick=0):
@@ -290,17 +392,24 @@ def delivery_items(email, brand, run_dir, pick=0):
     problem is an item with an id a person can rule on (HE-1 (fact rulings),
     2026-10-01); its `text` is the problem string, unchanged. `pick` is the
     subject pair that will be SENT — the one gated (SI-151 (picked subject
-    gated))."""
+    gated)). Where the run has a design (design/email.json), the words checked
+    are the designed email's, and every credited quote is checked against
+    where the language bank says it was said (LD-105 (check the designed email))."""
     def it(kind, text, quote=None):
         return Q.item("delivery", kind, text, quote)
-    problems = [it("price", p) for p in price_check(email, brand, run_dir)]
-    chk = run_dir / "stage8c--check.md"
-    if chk.is_file():
+    copy, design = email, DE.load(run_dir)
+    email = as_designed(copy, design)
+    problems = [it('calendar-handoff', p) for p in CH.inspect(WORKSPACE, brand, run_dir, copy=copy)['problems']]
+    problems += [it("price", p) for p in price_check(email, brand, run_dir) + saving_check(email, brand, run_dir)]
+    live, _gone = check_step(run_dir, design)
+    if live is not None:
         problems += [dict(i, text=i["text"] + " — look at stage8c--check.md")
                      if i["kind"] == "check-unreadable" else i
-                     for i in Q.check_items(chk.read_text(), "delivery")]
+                     for i in live]
     else:
         problems.append(it("unchecked", "this email was never checked (no step 8c) — rerun it from stage8"))
+    if design:
+        problems += [it("quote-credit", p) for p in DE.credit_problems(design, brand, WORKSPACE)]
     # A hole the writer marked is honest in the working copy and a defect in
     # the finished email: the first rewrite with customer language shipped a
     # "[UNFILLED: the handoff…]" note inside the body (2026-09-19).
@@ -320,7 +429,7 @@ def delivery_items(email, brand, run_dir, pick=0):
     # roster, and no earnings claim on a traffic-only arrangement. The run
     # names the partner; the roster is the only thing that describes them.
     # A DRAFT IS NOT A PRODUCT, AND EVERY EMAIL ENDS SOMEWHERE A READER CAN BUY
-    # (the owner, 2026-09-21). Both read the brand's own catalogue; neither names a
+    # (owner, 2026-09-21). Both read the brand's own catalogue; neither names a
     # product here.
     sys.path.append(str(HERE / "machine"))
     import brand_facts as BF
@@ -345,7 +454,7 @@ def delivery_items(email, brand, run_dir, pick=0):
                                      if (k == "url" or k.startswith("url_")) and v],
                                     label=btn.get("label", ""),
                                     extra_ok=[partner["link"]] if partner else [])]
-    # EVERY OWN LINK CARRIES THE EMAIL TAGS (the owner, 2026-10-12): the HTML as it will go out,
+    # EVERY OWN LINK CARRIES THE EMAIL TAGS (owner, 2026-10-12): the HTML as it will go out,
     # read back — a link the tagger missed holds the email instead of leaving untracked
     lf = WORKSPACE / "brands" / brand / "email-sms" / "simple.json"
     if lf.is_file():
@@ -357,8 +466,15 @@ def delivery_items(email, brand, run_dir, pick=0):
 
 def delivery_split(email, brand, run_dir, pick=0):
     """(kept, cleared): the delivery items, less the ones a person's standing
-    ruling clears (marketing_chain_checks.rulings, read from this WORKSPACE)."""
-    return R.split(delivery_items(email, brand, run_dir, pick), brand, Path(run_dir).name, WORKSPACE)
+    ruling clears (marketing_chain_checks.rulings, read from this WORKSPACE).
+    A step-8c finding whose line is gone from the designed email is listed as
+    cleared by the designed email, never dropped silently (LD-105 (check the
+    designed email))."""
+    kept, cleared = R.split(delivery_items(email, brand, run_dir, pick), brand, Path(run_dir).name, WORKSPACE)
+    _live, gone = check_step(run_dir, DE.load(run_dir))
+    cleared += [{"id": i["id"], "kind": i["kind"], "ruling": "gone from the page", "by": "the designed email",
+                 "at": None} for i in gone]
+    return kept, cleared
 
 
 def delivery_problems(email, brand, run_dir, pick=0):
@@ -403,8 +519,8 @@ def _host(s):
 
 
 def right_account(key, lk):
-    """Refuse a key that opens another brand's Klaviyo account (the team, 2026-10-22: a Brand-B email must
-    never land in BRAND-A's account, or the reverse). The brand's own From address (simple.json `from.email`)
+    """Refuse a key that opens another brand's Klaviyo account (email_lead, 2026-10-22: a brand_b email must
+    never land in brand_a's account, or the reverse). The brand's own From address (simple.json `from.email`)
     must share its domain with the account's website or default sender. Read-only: GET accounts."""
     if key in _ACCOUNTS_OK:
         return
@@ -418,7 +534,7 @@ def right_account(key, lk):
     if want not in have:
         sys.exit(f"REFUSED — {lk.get('klaviyo_key')} opens the Klaviyo account of "
                  f"{c.get('organization_name') or 'an unnamed account'} ({', '.join(sorted(have)) or 'no website'}), "
-                 f"not this brand's ({want}). Nothing went to Klaviyo. Check that line in this repo's .env")
+                 f"not this brand's ({want}). Nothing went to Klaviyo. Check that line in ~/.upright-keys.env")
     _ACCOUNTS_OK.add(key)
 
 
@@ -452,6 +568,14 @@ def the_slot(brand, label):
     (SI-151 (picked subject gated), machine/reviewed_plan.py): the reviewer's
     date and segment edits are the send, a cut send is None, and a review.json
     that cannot be read is None too — never the plan as first written."""
+    rd = WORKSPACE / 'runs/email-production' / brand / label
+    state = CH.read(rd / 'run.json', {})
+    if (state.get('assignment') or {}).get('send_date') or state.get('calendar_handoff'):
+        try:
+            return CH.resolve(WORKSPACE, brand, rd, state)
+        except (CH.Held, ValueError, OSError) as e:
+            print('%s: calendar handoff held: %s' % (label, e), file=sys.stderr)
+            return None
     sid = re.sub(r"--.*$", "", label)
     sid = sid[len(brand) + 1:] if sid.startswith(brand + "-") else sid
     # the month's one home: runs/marketing-calendar/<brand>/<YYYY-MM>/, newest
@@ -470,6 +594,7 @@ def the_slot(brand, label):
         seen.add(home.resolve())
         dirs += sorted((d for d in home.glob("*") if d.is_dir()), reverse=True)
     import reviewed_plan as RP
+    own = _own_send(brand, label)
     for d in dirs:
         try:
             if json.loads((d / "run.json").read_text()).get("brand") != brand:
@@ -477,6 +602,14 @@ def the_slot(brand, label):
             slots = json.loads((d / "slots.json").read_text())
         except (OSError, ValueError):
             continue
+        if own and any(own["angle"] in _angles(s) for s in slots):
+            return _send_by_angle(d, slots, own, label, RP)
+        if own and any(s.get("id") == sid and s.get("date") != own["date"] for s in slots):
+            # a re-plan moved the slot numbers: this number is another send now (2026-11-03)
+            print(f"{label}: slot {sid} is a different send now (dated "
+                  f"{next(s.get('date') for s in slots if s.get('id') == sid)}, the email is for "
+                  f"{own['date']}) and no send in {d.name} carries its angle — never guessed", file=sys.stderr)
+            return None
         if not any(s.get("id") == sid for s in slots):
             continue
         # this month planned the send: what the reviewer made of it decides,
@@ -492,13 +625,58 @@ def the_slot(brand, label):
     return None
 
 
+def _own_send(brand, label):
+    """What this email was written for, from its own run.json: {"date", "angle"}, or None.
+    A re-plan can renumber a month's slots after its emails are built (email_lead, 2026-11-03), so
+    the slot number in the label stops naming the email's send; its own record still does."""
+    try:
+        a = json.loads((WORKSPACE / "runs" / "email-production" / brand / label / "run.json")
+                       .read_text()).get("assignment") or {}
+    except (OSError, ValueError):
+        return None
+    return {"date": a["send_date"], "angle": a["angle"]} if a.get("send_date") and a.get("angle") else None
+
+
+def _angles(slot):
+    return [v.get("angle") for v in slot.get("variants") or []] + [slot.get("angle")]
+
+
+def _send_by_angle(d, slots, own, label, RP):
+    """The send whose angle this email argues, as reviewed. Several sends sharing the angle: the
+    one on the email's own date, else None. The email keeps its own date: it was built and
+    scheduled for that day, and a re-plan that moved the send does not move the email."""
+    try:
+        reviewed = RP.reviewed(d, slots)
+    except (RP.ReviewUnreadable, ImportError) as e:
+        print(f"{label}: the review layer is unreadable — {e}", file=sys.stderr)
+        return None
+    # an email is only ever one of the month's emails, never a text (marketing-calendar sms-cadence.json)
+    hits = [s for s in reviewed if own["angle"] in _angles(s) and s.get("channel", "email") == "email"]
+    if len(hits) > 1:
+        hits = [s for s in hits if s.get("date") == own["date"]]
+    if len(hits) > 1:
+        # several sends that day argue the same angle (a holiday period): the email's own slot number
+        # decides, when it still names one of them (2026-11-04)
+        brand, sid = Path(d).parent.name, re.sub(r"--.*$", "", label)
+        sid = sid[len(brand) + 1:] if sid.startswith(brand + "-") else sid
+        mine = [s for s in hits if s.get("id") == sid]
+        hits = mine or hits
+    if len(hits) != 1:
+        print(f"{label}: {'no' if not hits else len(hits)} reviewed send(s) in {d.name} carry this "
+              f"email's angle on {own['date']} — never guessed", file=sys.stderr)
+        return None
+    s = dict(hits[0])
+    if s.get("date") != own["date"]:
+        print(f"{label}: the calendar now dates this send {s.get('date')}; the email keeps its own "
+              f"date {own['date']}", file=sys.stderr)
+        s["date"] = own["date"]
+    return s
+
+
 def send_strategy(lk, slot):
-    """The calendar's day, at the brand's send hour, in EACH RECIPIENT'S OWN
-    time zone (the owner, 2026-09-19: "scheduling the emails for recipient time
-    zone based off of our data"). The hour is the brand's, read from its
-    simple.json with the evidence beside it. Setting the time is not
-    scheduling: the draft carries it, and a person still presses Schedule."""
-    st = lk.get("send_time") or {}
+    """The reviewed calendar's day, hour and local rule. Brand defaults apply only
+    to unbound ad-hoc work. Setting a draft's time is not scheduling it."""
+    st = CH.schedule(slot, lk.get('send_time') or {})
     if not st.get("local") or not slot.get("date"):
         sys.exit("no send time — add send_time.local to the brand's simple.json")
     # the API revision in use (2025-07-15) takes `datetime` + `options` on the
@@ -560,7 +738,7 @@ def push(email, lk, brand, label, pictures, pick, out_dir):
 
 
 def campaign_name(slot, subject, names):
-    """What a person reads in Klaviyo's campaign list (the team, 2026-10-01):
+    """What a person reads in Klaviyo's campaign list (email_lead, 2026-10-01):
     send date | product | subject | audience — sortable by date and readable
     at a glance, in the same order as the brand's earlier hand-made names."""
     y, m, d = (slot.get("date") or "").split("-") if slot.get("date") else ("", "", "")
@@ -571,6 +749,39 @@ def campaign_name(slot, subject, names):
     product = product.replace("-", " ").title()
     who = ", ".join(re.sub(r"^Core \| ", "", n) for n in (names or [])) or "no audience"
     return f"{when} | {product} | {subject} | {who}"
+
+
+MOMENT_KEY = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+
+
+def event_tag(slot):
+    """The Klaviyo tag for the event a send belongs to (email_lead, 2026-11-26: "solo la etiqueta"): the calendar slot's
+    `occasion` when it is a moment or holiday key ("christmas", "gifting-season"), title-cased, plus the send's year:
+    "Christmas 2026". None for a send with no occasion, or one whose occasion is a written reason rather than a key.
+    Black Friday 2026 was tagged by hand the same way ("Black Friday 2026"), so the names line up."""
+    occ = str((slot or {}).get("occasion") or "").strip()
+    year = str((slot or {}).get("date") or "")[:4]
+    if not MOMENT_KEY.match(occ) or not year.isdigit():
+        return None
+    return "%s %s" % (occ.replace("-", " ").title(), year)
+
+
+def tag_campaign(key, campaign_id, name):
+    """Put the tag `name` on the campaign, making the tag the first time. -> None when done, else why not.
+    Never stops the draft: the campaign already exists when this runs, and a missing tag is only a filter lost."""
+    try:
+        tid, path = None, "tags/"
+        while path and not tid:
+            got = kl("GET", path, key)
+            tid = next((t["id"] for t in got.get("data", []) if (t.get("attributes") or {}).get("name") == name), None)
+            nxt = (got.get("links") or {}).get("next")
+            path = nxt[len(KLAVIYO) + 1:] if nxt and nxt.startswith(KLAVIYO + "/") else None
+        if not tid:
+            tid = kl("POST", "tags/", key, {"data": {"type": "tag", "attributes": {"name": name}}})["data"]["id"]
+        kl("POST", "tags/%s/relationships/campaigns/" % tid, key, {"data": [{"type": "campaign", "id": campaign_id}]})
+        return None
+    except (SystemExit, KeyError, TypeError, ValueError) as e:
+        return "tag %r not set: %s" % (name, e)
 
 
 def create_draft(key, doc, email, lk, brand, label, slot, names, seg, pick, strategy):
@@ -592,7 +803,7 @@ def create_draft(key, doc, email, lk, brand, label, slot, names, seg, pick, stra
             "definition": {"channel": "email", "label": label, "content": {
                 "subject": subject, "preview_text": preview,
                 "from_email": frm["email"],
-                # an email's own from-name wins (a founder's letter, the team 2026-10-30); the address never changes
+                # an email's own from-name wins (a founder's letter, email_lead 2026-10-30); the address never changes
                 "from_label": email.get("from_label") or frm.get("label") or brand}}}}]}}
     if strategy:
         attrs["send_strategy"] = strategy
@@ -606,7 +817,10 @@ def create_draft(key, doc, email, lk, brand, label, slot, names, seg, pick, stra
     kl("POST", "campaign-message-assign-template", key, {"data": {
         "type": "campaign-message", "id": msg_id,
         "relationships": {"template": {"data": {"type": "template", "id": tpl["data"]["id"]}}}}})
+    tag = event_tag(slot)
+    tag_error = tag_campaign(key, camp_id, tag) if tag else None
     return {"campaign_id": camp_id, "template_id": tpl["data"]["id"], "message_id": msg_id,
+            "tag": None if tag_error else tag, "tag_error": tag_error,
             "campaign_name": attrs["name"], "subject": subject,
             "preview": preview, "segments": names, "segment_ids": seg, "send_date": slot.get("date"),
             "send_time": (lk.get("send_time") or {}).get("local") if strategy else None,

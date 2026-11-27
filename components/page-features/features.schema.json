@@ -1,0 +1,194 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "title": "Page features — <page>.features.json, kept beside the page it numbers",
+ "status": "draft",
+ "contract": "PF-1 (page-features skeleton), v1. One file per page: each number on the page names a FEATURE, never a DOM position, with its kind, where its data lives and how far it is built. A manifest (builder card rule 5): the file and every entry carry `status` (draft | approved | deprecated); how built a feature is goes in `state`, never in `status`. The number is the identity; `where` only LOCATES an element on a page that carries no data-feature=\"n\" tag, and a tag always wins. Checked by components/page-features/features.py (stdlib, exit 0 valid / 2 invalid / 3 missing). The kinds, their letters and the state words are fixed here; a change to any of them is a contract change, announced before it ships. Unknown keys are findings. v1.1 (PF-1b (feature anchors)), backward compatible: `schema` stays 1 and a file opts in with `schema_minor` 1; a feature may carry `anchor`, the page's data-feature value, and the file may keep `changes`, a log of the requests people made to the page, each addressed by a feature number.",
+ "v1_1": "when schema_minor is 1, every feature whose state is wired requires anchor, and anchor equals the feature's n as a string; changes[].n must be a feature number. Chrome (banners, headers, footers, skip links, help text, the overlay's own panel) is listed as kind layout like any other feature.",
+ "v1_2": "PF-1c (plain-words changes), backward compatible: when schema_minor is 2, every v1.1 rule still applies and these are also allowed. File: `retired`, numbers taken out of use and reserved forever ({n, name, retired YYYY-MM-DD, why, optional by}); a retired n is never also in features. Feature: `added_by` (the person who asked for the number), `added` (YYYY-MM-DD), `frame` (the iframe name the element sits in, or null), `owns` and `locked` (page-setting names), `needs` (the data a not-built number waits for). A not-built feature with added_by requires needs; needs on any other state is a finding. Change (the file's changes and a person's <family>--<name>.changes.jsonl): `resolved` \"claude\" (the person named no number; their Claude chose it) requires `match`, one sentence on why this number; `kind` \"missing\" (the request names data no source holds) requires `needs`. Routes stay claude-code | note; changes[].n must not be a retired number. PF-7 (working versions): a feature may carry `critical`, exactly true, set only by the family's owner — the going-live check must find its field on the real data files of every outcome; only a wired feature, never a layout one, may be critical.",
+ "run_table": "PF-15 (direct by default): every wired action (kind action, state wired) runs through the page server, declared in its family's run table, platform/views/viewers/_templates/<family>.actions.json — the authority; a features.json entry carries no run key, so features.py's unknown-key rule still holds. Two tables, by feature number as a string: `direct` (the entries kit/serve.py's POST /act runs, each a #/$defs/run_entry with a kind) and `via_claude` (a wired button the server does not run, each a #/$defs/run_entry with via \"claude\" and a written why). A wired action in neither table, in both, with no kind, or via claude with no why is a failure by number in live.check_live and a hard blocker in share (for a family that keeps an actions file). Kinds: quick (a small record write, at once), job (a rebuild, in the background with progress), confirm-job (costs money: a confirm naming it, then a job), external (follows the wall's go rule; never run by the server). Buttons call kit/act.js's pfAct; copying a request for Claude is only the fallback when no page server serves the page, or a via_claude entry.",
+ "owner": "the developer",
+ "status_words": ["draft", "approved", "deprecated"],
+ "state_words": ["wired", "after-card", "not-built"],
+ "kinds": {"data": "D", "rule": "R", "media": "M", "layout": "L", "action": "A"},
+ "source_null": "allowed when kind is layout, action or rule (a rule may compute only from other features), or when state is not-built. A data or media entry that is wired or after-card must carry a source.",
+ "source_file": "split on \" · \" (parallel files) and \" → \" (produced into); every stripped part is repo-relative: no leading / or ~, no ..; <name> placeholders allowed. source.field is free text in v1; PF-3 (feature check) parses it.",
+ "type": "object",
+ "required": ["schema", "title", "status", "kinds", "state_words", "features"],
+ "anyOf": [{"required": ["page"]}, {"required": ["versions"]}],
+ "additionalProperties": false,
+ "properties": {
+  "title": {"type": "string", "minLength": 1},
+  "schema": {"const": 1, "description": "This contract's version."},
+  "schema_minor": {"enum": [0, 1, 2], "description": "Absent or 0: the v1 rules. 1: v1.1 (see v1_1 at the top). 2: v1.2 (see v1_2 at the top)."},
+  "changes": {"type": "array", "items": {"$ref": "#/$defs/change"}, "description": "The requests people made to this page, oldest first, each addressed by a feature number."},
+  "retired": {"type": "array", "items": {"$ref": "#/$defs/retired"}, "description": "v1.2: numbers taken out of use, reserved forever and never reused."},
+  "status": {"enum": ["draft", "approved", "deprecated"]},
+  "checked_against": {"type": "string", "description": "What the catalog was checked against, e.g. a commit and a date."},
+  "owner": {"type": "string"},
+  "page": {"$ref": "#/$defs/repo_path", "description": "The one page this file numbers."},
+  "versions": {
+   "type": "object",
+   "minProperties": 1,
+   "additionalProperties": {"$ref": "#/$defs/repo_path"},
+   "description": "Version label → the page path, when the same features sit on more than one page."
+  },
+  "state_words": {
+   "type": "object",
+   "required": ["wired", "after-card", "not-built"],
+   "additionalProperties": false,
+   "properties": {
+    "wired": {"type": "string", "minLength": 1},
+    "after-card": {"type": "string", "minLength": 1},
+    "not-built": {"type": "string", "minLength": 1}
+   },
+   "description": "Each state word → what it means on this page."
+  },
+  "kinds": {
+   "type": "object",
+   "required": ["data", "rule", "media", "layout", "action"],
+   "additionalProperties": false,
+   "properties": {
+    "data": {"$ref": "#/$defs/kind", "properties": {"letter": {"const": "D"}}},
+    "rule": {"$ref": "#/$defs/kind", "properties": {"letter": {"const": "R"}}},
+    "media": {"$ref": "#/$defs/kind", "properties": {"letter": {"const": "M"}}},
+    "layout": {"$ref": "#/$defs/kind", "properties": {"letter": {"const": "L"}}},
+    "action": {"$ref": "#/$defs/kind", "properties": {"letter": {"const": "A"}}}
+   },
+   "description": "Exactly the five kinds, in this order, with these letters."
+  },
+  "features": {"type": "array", "items": {"$ref": "#/$defs/feature"}, "description": "`n` is unique across the list."}
+ },
+ "$defs": {
+  "run_entry": {
+   "type": "object",
+   "description": "PF-15 (direct by default): one entry of a family's run table (see run_table at the top). The keys the server reads to run it (run, verb, fields, values, word, part, note, confirm, cost, …) are kit/serve.py's; this fixes only how it runs.",
+   "oneOf": [
+    {"required": ["kind"], "not": {"required": ["via"]},
+     "properties": {"kind": {"enum": ["quick", "job", "confirm-job", "external"]}}},
+    {"required": ["via", "why"],
+     "properties": {"via": {"const": "claude"}, "why": {"type": "string", "minLength": 1, "pattern": "\\S"}}}
+   ]
+  },
+  "repo_path":{"type": "string", "minLength": 1, "not": {"anyOf": [{"pattern": "^[/~]"}, {"pattern": "\\.\\."}]}},
+  "change": {
+   "type": "object",
+   "required": ["n", "said", "at", "by", "route"],
+   "additionalProperties": false,
+   "dependentRequired": {"resolved": ["match"]},
+   "allOf": [
+    {"if": {"required": ["kind"], "properties": {"kind": {"const": "missing"}}}, "then": {"required": ["needs"]}},
+    {"if": {"required": ["kind"], "properties": {"kind": {"const": "unnumbered"}}}, "then": {"required": ["commit"], "properties": {"n": {"const": null}}}},
+    {"if": {"required": ["logged"]}, "then": {"required": ["commit"]}}
+   ],
+   "properties": {
+    "n": {"type": ["integer", "null"], "description": "The feature number the request addressed; must be a feature in this file, never a retired number. null only with kind \"unnumbered\" (PF-1d (auto-log page changes))."},
+    "said": {"type": "string", "minLength": 1, "maxLength": 2000, "description": "The person's words."},
+    "at": {"type": "string", "pattern": "^\\d{4}-\\d\\d-\\d\\dT\\d\\d:\\d\\d(:\\d\\d(\\.\\d+)?)?Z$", "description": "When, in UTC."},
+    "by": {"type": "string", "minLength": 1, "description": "The viewer id, never a name."},
+    "route": {"enum": ["claude-code", "note"], "description": "claude-code: the person's own Claude Code edited and republished; note: a mark applied by the person's Claude."},
+    "resolved": {"const": "claude", "description": "v1.2: the person named no number; their Claude resolved the words to n. Requires match."},
+    "match": {"type": "string", "minLength": 1, "description": "v1.2: one sentence, why this number."},
+    "kind": {"enum": ["missing", "unnumbered"], "description": "v1.2: \"missing\" — the request names data no source holds; n is the not-built number that waits for it. Requires needs. \"unnumbered\" (PF-1d (auto-log page changes)) — a logged commit changed no numbered element; n is null and commit is required."},
+    "needs": {"$ref": "#/$defs/needs"},
+    "commit": {"type": "string", "pattern": "^[0-9a-f]{7,40}$", "description": "PF-1d (auto-log page changes): the commit that changed the page, 7-40 hex characters."},
+    "logged": {"enum": ["auto", "backfill"], "description": "PF-1d (auto-log page changes): who wrote the line from the commit — autosave (auto) or a person afterwards (backfill). Requires commit."},
+    "note": {"type": "string", "minLength": 1, "description": "PF-1d (auto-log page changes): one line on why the line was written this way."}
+   }
+  },
+  "needs": {
+   "type": "object",
+   "required": ["data", "where"],
+   "additionalProperties": false,
+   "description": "v1.2: the data a not-built number waits for, where it would live, and who would write it. Never fake data.",
+   "properties": {
+    "data": {"type": "string", "minLength": 1},
+    "where": {"type": "string", "minLength": 1},
+    "written_by": {"type": "string", "minLength": 1},
+    "component": {"type": "string", "minLength": 1}
+   }
+  },
+  "retired": {
+   "type": "object",
+   "required": ["n", "name", "retired", "why"],
+   "additionalProperties": false,
+   "properties": {
+    "n": {"type": "integer", "minimum": 1},
+    "name": {"type": "string", "minLength": 1, "description": "What the number named."},
+    "retired": {"type": "string", "pattern": "^\\d{4}-\\d\\d-\\d\\d$"},
+    "why": {"type": "string", "minLength": 1},
+    "by": {"type": "string", "minLength": 1}
+   }
+  },
+  "kind": {
+   "type": "object",
+   "required": ["letter", "name", "means"],
+   "additionalProperties": false,
+   "properties": {
+    "letter": {"type": "string"},
+    "name": {"type": "string", "minLength": 1},
+    "means": {"type": "string", "minLength": 1}
+   }
+  },
+  "feature": {
+   "type": "object",
+   "required": ["n", "name", "kind", "state", "status", "source"],
+   "additionalProperties": false,
+   "allOf": [
+    {"if": {"required": ["needs"]}, "then": {"properties": {"state": {"const": "not-built"}}}},
+    {"if": {"required": ["added_by", "state"], "properties": {"state": {"const": "not-built"}}}, "then": {"required": ["needs"]}},
+    {"if": {"required": ["critical"]}, "then": {"properties": {"state": {"const": "wired"}, "kind": {"not": {"const": "layout"}}}}}
+   ],
+   "properties": {
+    "n": {"type": "integer", "minimum": 1, "description": "The feature's number and its identity."},
+    "name": {"type": "string", "minLength": 1, "maxLength": 60},
+    "kind": {"enum": ["data", "rule", "media", "layout", "action"]},
+    "state": {"enum": ["wired", "after-card", "not-built"]},
+    "status": {"enum": ["draft", "approved", "deprecated"]},
+    "place": {"type": "string", "description": "Where the data lives, in plain words."},
+    "source": {
+     "oneOf": [
+      {"type": "null"},
+      {
+       "type": "object",
+       "required": ["component", "file", "field"],
+       "additionalProperties": false,
+       "properties": {
+        "component": {"type": "string", "minLength": 1},
+        "file": {"type": "string", "minLength": 1, "description": "See source_file at the top."},
+        "field": {"type": "string", "minLength": 1, "description": "Free text in v1."}
+       }
+      }
+     ]
+    },
+    "note": {"type": "string", "description": "May be empty."},
+    "card": {"type": "string", "pattern": "^[A-Z]{1,6}-\\d+[a-z]?$", "description": "The card that builds or changes this feature."},
+    "anchor": {"type": "string", "description": "The data-feature value the page puts on this feature's element; equals n as a string. Required for a wired feature when schema_minor is 1 or 2."},
+    "added_by": {"type": "string", "minLength": 1, "description": "v1.2: the person who asked for this number."},
+    "added": {"type": "string", "pattern": "^\\d{4}-\\d\\d-\\d\\d$", "description": "v1.2: the day the number was added."},
+    "frame": {"type": ["string", "null"], "description": "v1.2: the iframe name the element sits in."},
+    "owns": {"type": "array", "items": {"type": "string", "minLength": 1}, "description": "v1.2: the page-setting names this number owns."},
+    "locked": {"type": "array", "items": {"type": "string", "minLength": 1}, "description": "v1.2: the page-setting names locked on this number."},
+    "needs": {"$ref": "#/$defs/needs", "description": "v1.2: only on a not-built feature; required when it carries added_by."},
+    "critical": {"const": true, "description": "v1.2, PF-7 (working versions): set only by the family's owner; only on a wired feature, never a layout one. The going-live check must find this number's field on the real data files of every outcome."},
+    "where": {
+     "type": "object",
+     "description": "Version label (a key of `versions`) → a CSS locator, or null where the version does not show it.",
+     "additionalProperties": {
+      "oneOf": [
+       {"type": "null"},
+       {
+        "type": "object",
+        "required": ["sel", "text"],
+        "additionalProperties": false,
+        "properties": {
+         "sel": {"type": "string", "minLength": 1},
+         "text": {"type": ["string", "null"], "description": "Text the element must contain, when the selector alone matches more than one."}
+        }
+       }
+      ]
+     }
+    }
+   }
+  }
+ }
+}

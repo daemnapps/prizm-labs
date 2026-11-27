@@ -1,0 +1,77 @@
+{
+ "id": "grade-hf",
+ "name": "Colour Grades (/<grade>-grade-hf)",
+ "kind": "edit",
+ "makes": "Regrades a user's clip with one of 34 ShotDeck-board colour grades, each a Seedance 2.5 video edit with a colour-only prompt; location, people, motion and audio stay.",
+ "source": [
+  "grade-hf/SKILL.md",
+  "commands/teal-orange-grade-hf.md"
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "name": "Source",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 2,
+   "name": "Probe",
+   "model": "none",
+   "cheap": "local ffprobe (free)"
+  },
+  {
+   "n": 3,
+   "name": "Cost line",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 4,
+   "name": "Generate",
+   "model": "seedance_2_5",
+   "cheap": "free local grade (color-grade engine or ffmpeg LUT/curves) for simple grades; `gemini_omni_flash_1_2` mode `edit`, 360p (source 3-15 s, up to 7 image refs): the same 7.5 credits per 10 s tier as its quoted reference-to-video; the edit price itself is not quoted, re-quote first"
+  },
+  {
+   "n": 5,
+   "name": "Restore audio",
+   "model": "none",
+   "cheap": "local ffmpeg remux (free)"
+  },
+  {
+   "n": 6,
+   "name": "Deliver",
+   "model": "none",
+   "cheap": null
+  }
+ ],
+ "prompts": [
+  {
+   "label": "The grade prompt (Teal & Orange, verbatim)",
+   "source": "commands/teal-orange-grade-hf.md",
+   "text": "COLOUR GRADE ONLY - TEAL & ORANGE.\n\nKEEP MY SHOT: @Video1 is my original video. Keep it exactly as it is: the same location, architecture, walls,\nwindows, floor, background, every object, every person, their faces, hair and clothes, their positions,\nmovements, gestures, expressions and lip movement, the light sources and shadows, and the camera movement,\nframing and timing. Never add, remove, replace or redecorate anything. Only the colours of the existing frame\nchange.\n\nNEW GRADE:\nRegrade as the blockbuster teal and orange look: skin and warm highlights pushed to a rich golden orange,\nwhile shadows, walls and background shift to a deep cool teal-cyan. Strong separation between the warm people\nand the teal surroundings, punchy contrast.\n\nThe location of @Video1 stays fully recognisable in every frame and every edge and texture stays sharp.\nPhotorealistic, natural skin texture, original lens perspective. No added text, no music."
+  },
+  {
+   "label": "'Softer' note wording",
+   "source": "grade-hf/SKILL.md",
+   "text": "Apply this grade at about half strength; keep more\nof the original colour."
+  },
+  {
+   "label": "Sentence added when the clip has on-screen text",
+   "source": "grade-hf/SKILL.md",
+   "text": "Keep every caption, subtitle, title, logo and other on-screen text exactly as in\n@Video1: same words, styling, position and timing; only the colours of the scene change."
+  },
+  {
+   "label": "Generation request",
+   "source": "grade-hf/SKILL.md",
+   "text": "{\"params\":{\"model\":\"seedance_2_5\",\"mode\":\"video_edit\",\"prompt\":\"<the grade's prompt>\",\"count\":1,\"duration\":<ceil(D)>,\"resolution\":\"720p\",\"aspect_ratio\":\"auto\",\"generate_audio\":false,\"medias\":[{\"value\":\"<clip media id>\",\"role\":\"video\"}]}}"
+  },
+  {
+   "label": "Grade list (commands)",
+   "source": "grade-hf/SKILL.md",
+   "text": "| Command                           | Grade                 |\n| --------------------------------- | --------------------- |\n| `/high-key-airy-grade-hf`         | High-Key Airy         |\n| `/teal-orange-grade-hf`           | Teal & Orange         |\n| `/bleach-bypass-grade-hf`         | Bleach Bypass         |\n| `/cross-processed-grade-hf`       | Cross-Processed       |\n| `/desaturated-grade-hf`           | Desaturated           |\n| `/technicolor-grade-hf`           | Technicolor           |\n| `/duotone-grade-hf`               | Duotone               |\n| `/red-wash-grade-hf`              | Red Wash              |\n| `/hyper-saturated-grade-hf`       | Hyper-Saturated       |\n| `/colour-negative-grade-hf`       | Colour Negative       |\n| `/pastel-grade-hf`                | Pastel                |\n| `/warm-amber-grade-hf`            | Warm Amber            |\n| `/cool-blue-grade-hf`             | Cool Blue             |\n| `/matrix-green-grade-hf`          | Matrix Green          |\n| `/yellow-tint-grade-hf`           | Yellow Tint           |\n| `/magenta-wash-grade-hf`          | Magenta Wash          |\n| `/complementary-palette-grade-hf` | Complementary Palette |\n| `/analogous-palette-grade-hf`     | Analogous Palette     |\n| `/monochromatic-grade-hf`         | Monochromatic Palette |\n| `/split-toning-grade-hf`          | Split Toning          |\n| `/crushed-blacks-grade-hf`        | Crushed Blacks        |\n| `/lifted-blacks-grade-hf`         | Lifted Blacks         |\n| `/print-film-grade-hf`            | Print Film Emulation  |\n| `/kodachrome-grade-hf`            | Kodachrome            |\n| `/fuji-greens-grade-hf`           | Fuji Greens           |\n| `/day-for-night-grade-hf`         | Day-for-Night         |\n| `/infrared-grade-hf`              | Infrared              |\n| `/neon-noir-grade-hf`             | Neon Noir             |\n| `/1970s-vintage-grade-hf`         | 1970s Vintage         |\n| `/night-vision-grade-hf`          | Night Vision          |\n| `/sickly-green-yellow-grade-hf`   | Sickly Green-Yellow   |\n| `/thermal-grade-hf`               | Thermal               |\n| `/earth-tones-grade-hf`           | Earth Tones           |\n| `/blown-out-grade-hf`             | Blown-Out Highlights  |"
+  }
+ ],
+ "price": "Quotes by length at the resolution; one paid generation per clip per grade. `seedance_2_5` video_edit is not quoted in `_prices.md`: not quoted, re-quote first.",
+ "cheap_price": "not quoted; free (0) with the local colour engine"
+}

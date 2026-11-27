@@ -1,0 +1,37 @@
+{
+  "_note": "Empty on purpose. Fill this in for your brand \u2014 the shape below is what the tools read.",
+  "_shape_from": "the same file in a live brand",
+  "_example_keys": {
+    "schema": 0,
+    "kind": "",
+    "brand": "",
+    "status": "",
+    "_provenance": "",
+    "_gaps": [
+      ""
+    ],
+    "names": [
+      {
+        "canonical": "",
+        "wrong": [],
+        "prices": [],
+        "comment": ""
+      }
+    ],
+    "banned": [
+      {
+        "phrase": "",
+        "comment": "",
+        "class": ""
+      }
+    ],
+    "_not_banned_and_why": [
+      ""
+    ],
+    "required": [],
+    "cta": [],
+    "never_prices": [
+      ""
+    ]
+  }
+}

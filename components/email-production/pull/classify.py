@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Tag every sent email with what it actually was.
 
-    python3 calendar/classify.py --brand brand-a [--batch 8] [--limit N]
+    python3 calendar/classify.py --brand brand_a [--batch 8] [--limit N]
 
 The system says an email belongs to exactly one of five categories, decided by
 one test — whose material is it made of — and to one of 38 types beneath that.
@@ -30,7 +30,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
 from paths import WORKSPACE  # noqa: E402
 import facts_proposal  # noqa: E402
-import lean_call  # noqa: E402  LD-62 (lean model calls), tools/email-production
+import lean_call  # noqa: E402  LD-62 (lean model calls), components/email-production
 BRAND_ROOT = WORKSPACE / "brands"
 
 
@@ -101,7 +101,7 @@ THE EMAILS
 
 
 def claude(text, model="claude-opus-5"):
-    # NO ACCOUNT IS WIRED IN (the owner, 2026-10-23): run_kit's claude_door picks the credential;
+    # NO ACCOUNT IS WIRED IN (owner, 2026-10-23): run_kit's claude_door picks the credential;
     # LD-62 (lean model calls): lean_call.door runs it lean, from a temp folder.
     from paths import component
     if str(component("run-kit")) not in sys.path:

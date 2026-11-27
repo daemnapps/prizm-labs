@@ -1,0 +1,49 @@
+{
+ "title": "Share check fixture family",
+ "owner": "fixp",
+ "schema": 1,
+ "schema_minor": 2,
+ "status": "draft",
+ "state_words": {
+  "wired": "the data exists on main today",
+  "after-card": "needs a card first",
+  "not-built": "no data anywhere yet"
+ },
+ "kinds": {
+  "data": {"letter": "D", "name": "Data", "means": "a value saved in a data file"},
+  "rule": {"letter": "R", "name": "Rule", "means": "the page works it out by its own rule"},
+  "media": {"letter": "M", "name": "Pictures and video", "means": "a picture, clip or voice file"},
+  "layout": {"letter": "L", "name": "Layout", "means": "arrangement, no data of its own"},
+  "action": {"letter": "A", "name": "Action", "means": "a button that runs a component's own command"}
+ },
+ "versions": {"A": "platform/views/viewers/_templates/sharefam.html"},
+ "retired": [],
+ "features": [
+  {"n": 1, "name": "Setting from a lab server", "kind": "data", "state": "wired", "status": "draft",
+   "source": {"component": "fixq serve", "file": "lab/fixq/serve.py → /api/x", "field": "x"},
+   "anchor": "1"},
+  {"n": 2, "name": "Rule kept in a lab page", "kind": "rule", "state": "wired", "status": "draft",
+   "source": {"component": "fixq page", "file": "lab/fixq/page.html (rule)", "field": "rule"},
+   "anchor": "2"},
+  {"n": 3, "name": "Picture after its card", "kind": "media", "state": "after-card", "status": "draft",
+   "source": {"component": "fix pictures", "file": "runs/fix/<run>.json", "field": "picture"},
+   "note": "Drive ids recorded by LD-64 (records Drive ids) make it showable anywhere."},
+  {"n": 4, "name": "Value from a run file", "kind": "data", "state": "wired", "status": "draft",
+   "source": {"component": "fix runs", "file": "runs/fix/<run>.json", "field": "value"},
+   "anchor": "4"},
+  {"n": 5, "name": "Button on a lab server", "kind": "action", "state": "wired", "status": "draft",
+   "source": {"component": "fixq serve", "file": "lab/fixq/serve.py → POST /api/go", "field": "go"},
+   "anchor": "5"},
+  {"n": 6, "name": "Button through a component door", "kind": "action", "state": "wired",
+   "status": "draft",
+   "source": {"component": "fixcomp", "file": "components/fixcomp/door.py run()", "field": "run"},
+   "anchor": "6"},
+  {"n": 7, "name": "Not built yet", "kind": "data", "state": "not-built", "status": "draft",
+   "source": null},
+  {"n": 8, "name": "Not on the page", "kind": "data", "state": "wired", "status": "draft",
+   "source": {"component": "fix runs", "file": "runs/fix/other.json", "field": "other"},
+   "anchor": "8"},
+  {"n": 9, "name": "Navigation", "kind": "layout", "state": "wired", "status": "draft",
+   "source": null, "anchor": "9"}
+ ]
+}

@@ -1,8 +1,8 @@
-# the team's emails: what her Claude does
+# the editor's emails: what her Claude does
 
-Moved here from lab/pm/designer-email-page/ on 2026-10-22 (the team: "go lab-flow move"), with team-outlier/ renamed to adapter/. Built in the team's lab 2026-10-21. Owner line: tools/email-production/CLAUDE.md. Kept short: the team's Claude reads it once per session. Background and history: HISTORY.md.
+Moved here from lab/the email lead/the editor-email-page/ on 2026-10-22 (the developer: "go lab-flow move"), with team-outlier/ renamed to adapter/. Built in the email lead's lab 2026-10-21. Owner line: components/email-production/CLAUDE.md. Kept short: the editor's Claude reads it once per session. Background and history: HISTORY.md.
 
-the team is a designer and does not use the terminal. Do every step yourself, say in one plain sentence what you did, and
+the editor is a designer and does not use the terminal. Do every step yourself, say in one plain sentence what you did, and
 stop only for what only she can do (a file to drag in, what a picture shows, a yes). Never print a key value.
 
 Every command runs with `/usr/bin/python3`: the page's email list needs Pillow, which is installed there (plain `python3` on a Homebrew Mac lacks it).
@@ -10,27 +10,31 @@ Every command runs with `/usr/bin/python3`: the page's email list needs Pillow, 
 ## "Start my email session"
 
 1. `git pull`, then make the emails whole on this Mac (built pictures are media, so git doesn't bring them):
-   `/usr/bin/python3 tools/email-production/adapter/prepare.py`. It rebuilds only the emails that need it, from
+   `/usr/bin/python3 components/email-production/adapter/prepare.py`. It rebuilds only the emails that need it, from
    the Drive with her key: about a minute per email the first time, nothing after. Tell her it's getting her emails
    ready.
-   **Then, when the person has her own live page, bring the shared page's changes into it** (the team, 2026-10-22: apply
+   **Then, when the person has her own live page, bring the shared page's changes into it** (the email lead, 2026-10-22: apply
    them, don't ask). prepare.py ends with a `PAGE ·` block listing them (from `page_sync.py status --person <person>`,
-   which reads her sync record `platform/views/viewers/<person>/emails.sync.json`). Do the same after any later pull
-   in the session, and whenever she says "check the team's page changes". For each listed change, bring it in with
+   which reads her sync record `platform/views/viewers/<person>/emails.sync.json`).
+   **After every pull, do it again, unasked** (the email lead, 2026-11-12: the editor pulled through her Done and the shared page's
+   changes never reached her page). That means any pull: one you run, one `ask.py` runs when it shares a Done (it ends
+   with a `PAGE ·` block when her page is behind), one she asks for. A plain `git pull` prints no block: run
+   `page_sync.py status --person <person>` yourself after it. Also whenever she says "check the email lead's page changes".
+   Finish the request she asked for first, then bring the changes in before the next one. For each listed change, bring it in with
    `/page-change` on a draft of her page, then `/page-live`. A change that came FROM her page (its message says
-   "the team's …") is already hers: skip it. Leave out a change that would undo something she changed on purpose (her
+   "the editor's …") is already hers: skip it. Leave out a change that would undo something she changed on purpose (her
    page's `emails.changes.jsonl` or her commits say what) and say which. When all are in, run
-   `/usr/bin/python3 tools/email-production/adapter/page_sync.py mark --person <person> --into own` and commit
+   `/usr/bin/python3 components/email-production/adapter/page_sync.py mark --person <person> --into own` and commit
    the sync record with the page. Tell her in one line per change what she now has. If the going-live check fails,
-   leave her live page as it is, don't mark, and tell the team.
+   leave her live page as it is, don't mark, and tell the email lead.
 2. Open the page, in the background, and leave it running. Open the person's OWN live page when one exists
-   (`platform/views/viewers/<person>/emails.html`, e.g. the team's), else the family template:
+   (`platform/views/viewers/<person>/emails.html`, e.g. the editor's), else the family template:
    `/usr/bin/python3 components/page-features/kit/serve.py platform/views/viewers/<person>/emails.html --open`
    (or `.../_templates/emails.html --open`). Both read the same data. The template is the page everyone shares (the family template, like the PM tool: an improvement there reaches
    everyone). PF-4 (page starter kit) fills it with today's emails from this clone at http://127.0.0.1:8765/. The
    numbers can be hidden with the eye on the "Numbers" button. If it can't read the emails, run
-   `/usr/bin/python3 tools/email-production/adapter/sync.py list --brand <brand>` and tell the team its last line.
-3. Tell the team: "Your emails are open. Add your changes on the page, then paste them here."
+   `/usr/bin/python3 components/email-production/adapter/sync.py list --brand Brand B` and tell the email lead its last line.
+3. Tell the editor: "Your emails are open. Add your changes on the page, then paste them here."
 
 ## When she pastes requests
 
@@ -41,21 +45,23 @@ in your scratchpad, then run once for the whole batch:
 
 It reads the shared line (QB-5 (production contract): `Request (<email id>, part <n|->): <word> …`) and, for one
 release, the old `Email request (` change lines; carries out each change through this folder's `adapter.py apply`
-(which wraps `sync.py apply`); tells the team about any word change (a review request); commits only the changed paths and
-pushes. The lines it lists as still to do with ask.py (use my own picture, Done: send to the team, the Go, I scheduled it
+(which wraps `sync.py apply`); tells the email lead about any word change (a review request); commits only the changed paths and
+pushes. The lines it lists as still to do with ask.py (use my own picture, Done: send to the email lead, the Go, I scheduled it
 in Klaviyo) are not change words: save just those lines to a second file and run
 
-    /usr/bin/python3 tools/email-production/adapter/ask.py <second file>
+    /usr/bin/python3 components/email-production/adapter/ask.py <second file>
 
-which tells the team about the team's Done (a review request) and commits and pushes. Never give ask.py a line requests.py
+which tells the email lead about the editor's Done (a review request) and commits and pushes. Never give ask.py a line requests.py
 already ran.
 
-Tell the team in one line per request what happened (✓ / ✗ and why), and to reload the page to see it. If the git line says
-"not pushed" or "not shared", tell the team. Never force.
+Tell the editor in one line per request what happened (✓ / ✗ and why), and to reload the page to see it. Say it reached the
+team ONLY when the git line says `shared`. When it says "NOT on the team page yet", give her that line word for word
+and tell the email lead: her change is saved on her Mac only, and her page, served from the team's copy, still shows it open
+(2026-11-11). Never say "committed and pushed" from memory, never force.
 
 If she says it in her own words instead ("nov-02 S1: …" is a part, "oct-20 P2: warmer light" a picture: S is a
 part, P is a picture), write the request line yourself in the same form
-(`/usr/bin/python3 tools/email-production/adapter/own_picture.py list <email>` shows each picture's P code and its S
+(`/usr/bin/python3 components/email-production/adapter/own_picture.py list <email>` shows each picture's P code and its S
 address, S<part>.<picture>, both counted from 1 as the page shows them) and run ask.py the same way. If her words
 could mean two pictures, show her the two codes and ask.
 
@@ -63,7 +69,7 @@ could mean two pictures, show her the two codes and ask.
 makes try 1 into the run's `tries/<P>/` (gitignored), opens it on her screen the moment it exists, and changes nothing
 in the email: no rebuild, no learning, no commit. The judge's verdict prints beside it and is advice only. Every try
 first prints `N paid generation(s) on <model> — <price, or "price not on record">`. For what she says next, run
-`/usr/bin/python3 tools/email-production/adapter/try_picture.py` yourself:
+`/usr/bin/python3 components/email-production/adapter/try_picture.py` yourself:
 - "again" → `try <email> <P> "<the same change>"` (the next try number);
 - "give me 3 options" → `--count 3`; "more like try 2 but softer" → `--from-try 2 "softer"` (try 2 is the picture edited);
 - "with gemini", "one from each model" → `--model <registry id>[@<door>]`; `try_picture.py models` lists what she may
@@ -73,11 +79,11 @@ first prints `N paid generation(s) on <model> — <price, or "price not on recor
   kept in its history), its record and one picture learning are written, and it is committed and pushed;
 - "throw those away" → `try_picture.py clear <email> <P>` (her tries of that picture only).
 
-**"nov-02 P1: use my newest"** (LD-90 (the team takes newest); the words are the team's): ask her what made it (Higgsfield,
+**"nov-02 P1: use my newest"** (LD-90 (the editor takes newest); the words are the email lead's): ask her what made it (Higgsfield,
 Photoshop, a real photo…) and what the new picture shows, then write `… · use my newest (made with <tool>): <what it
 shows>` for ask.py. The newest picture in that email's returned folder for her role,
 `Shared Assets/runs/handoffs/graphic-designer/<brand>/<email label>/returned/` (or one folder down; the role is read from
-tools/image-edit/delivery.json `roles`, never a person's folder: the owner, 2026-10-27, "make this name agnostic ...
+components/image-edit/delivery.json `roles`, never a person's folder: the owner, 2026-10-27, "make this name agnostic ...
 the name of the folders need to be the same for both repo and drive"), is MOVED to the email's
 `Shared Assets/runs/email-production/<brand>/<label>/media/` and goes into the email as an own picture does; the reply
 names the file, where it went and the drive-move record. If it is still in returned/, it did not move (Drive on the web
@@ -88,24 +94,24 @@ nothing. Dragging a file in or pasting a link (`own_picture.py place`) still wor
 question when its record names a file this Mac can't read, here or on the Drive (each one is named). Show her the
 reason and the question, word for word, and do nothing until she answers. A yes re-sends the same change with
 `"from_brief": true`: write that one call as a JSON list (`brand`, `label`, `action: "picture"`, `section`,
-`picture`, `note`, `by`, `from_brief`) and run `/usr/bin/python3 tools/email-production/adapter/sync.py apply <file>`.
+`picture`, `note`, `by`, `from_brief`) and run `/usr/bin/python3 components/email-production/adapter/sync.py apply <file>`.
 The picture is then made fresh from its brief with her change, not edited from the old one. A no leaves it as it is.
 
 ## When she wants the page itself to look or work differently
 
 Bigger text, other colours, a different order: improvements are welcome and go to everyone.
-1. First time only: `/page-draft emails --name designer-ideas` (a copy of the shared page, in her folder).
-2. Make each change with `/page-change` on `platform/views/viewers/designer/drafts/emails--designer-ideas.html`, by number
+1. First time only: `/page-draft emails --name the editor-ideas` (a copy of the shared page, in her folder).
+2. Make each change with `/page-change` on `platform/views/viewers/the editor/drafts/emails--the editor-ideas.html`, by number
    or in her words, and show it to her: `serve.py` on that draft with `--port 8766`.
-3. When she likes it, run `/review-request` asking the team to put it on the shared page, naming the draft and what
-   changed. the team's Claude runs `/usr/bin/python3 components/page-features/features.py promote <her draft> --check`, then
+3. When she likes it, run `/review-request` asking the email lead to put it on the shared page, naming the draft and what
+   changed. the email lead's Claude runs `/usr/bin/python3 components/page-features/features.py promote <her draft> --check`, then
    without `--check`: her draft becomes the shared page, with its change log; from then on everyone sees it.
    If the shared page changed after her draft was made, promote refuses: she makes a new draft and redoes it.
 Gather her page changes and do them together: the page is a big file, so each round costs more than an email request.
 
 ## A picture she made in Higgsfield ("use my last Higgsfield picture for nov-02 P1")
 
-the team, 2026-10-22: pictures go between Claude and Higgsfield with no download, drag or copy-paste. She says which
+the developer, 2026-10-22: pictures go between Claude and Higgsfield with no download, drag or copy-paste. She says which
 picture and which slot; do everything else.
 1. Find it through the Higgsfield connector (tools named `higgsfield`, or `mcp.higgsfield.ai`): list her recent
    generations, newest first. "my last" = the newest picture; "the last 3" = show three and let her pick by number;
@@ -113,9 +119,9 @@ picture and which slot; do everything else.
 2. Take that generation's file link and run step 3 below with the link in place of a file (own_picture.py reads an
    https picture link; `--made-with Higgsfield --source-id <the generation's id>`). The email keeps the link and the
    id under `made_from`, and one model-outcome record is written, so the picture traces back to its generation the
-   way "use my newest" traces back to its Drive file (the team, 2026-10-23, the team Drive flow). Nothing moves out of
+   way "use my newest" traces back to its Drive file (the developer, 2026-10-23, the team Drive flow). Nothing moves out of
    her team folder on this path, so tell her the proof is different: the picture shows in the email when she reloads
-   the page (the team, 2026-10-23).
+   the page (the email lead, 2026-10-23).
 3. No Higgsfield tools in this session: tell her, in one message, "Settings → Connectors → Add custom connector →
    name Higgsfield, URL https://mcp.higgsfield.ai/mcp → sign in with your Higgsfield account, then open a new chat".
    Until then she can paste the picture's link from Higgsfield, or drag the file in. Never ask for a password or key.
@@ -127,38 +133,40 @@ picture and which slot; do everything else.
 1. She drags the file into this window, pastes a Google Drive link, or pastes a picture's link (a Higgsfield result).
 2. Look at it and write the alt text: one plain sentence saying what it shows. Show it to her; use her correction.
 3. Run (the address is the one ask.py printed, e.g. `s1.0`):
-   `/usr/bin/python3 tools/email-production/adapter/own_picture.py place <label> <address> "<file or Drive link>" --alt "<alt>" --made-with Higgsfield --commit`
+   `/usr/bin/python3 components/email-production/adapter/own_picture.py place <label> <address> "<file or Drive link>" --alt "<alt>" --made-with Higgsfield --commit`
    (leave out `--made-with` for a real photo; add `--ratio slot` to crop to the old photo's shape).
 4. Tell her to reload the page.
 
 ## Limits
 
-the team's Done marks the email ready for the team and sends her a review request; nothing goes to Klaviyo. the team makes the
-Klaviyo DRAFT and schedules it with one Go after her words (the team, 2026-10-22, replacing 2026-10-21's "schedules it in
+the editor's Done marks the email ready for the email lead and sends her a review request; nothing goes to Klaviyo. the email lead makes the
+Klaviyo DRAFT and schedules it with one Go after her words (the email lead, 2026-10-22, replacing 2026-10-21's "schedules it in
 Klaviyo herself": her Go comes after she has seen the email, so it means approved to go out). The schedule is
 approve_klaviyo's guarded step: approver, off-switch, not on a machine, final check, Klaviyo's draft unchanged since it
 was made, at least 30 minutes ahead. A refusal leaves the draft and says why; the same Go again only schedules. ask.py
-refuses a Go or a "scheduled" from anyone but the team. Nothing is scheduled without her Go, and nothing is ever sent now.
-Pictures stay out of git (they live on the Drive). the team's deadlines: `runs/email-production/<brand>/deadlines.json`,
-set by the team.
+refuses a Go or a "scheduled" from anyone not on approvers.json. Since 2026-11-05 any approver's Go counts (the owner,
+the email lead, the designer: whoever is available, the email lead's word), and it means the same: that person has read the email. Nothing
+is scheduled without an approver's Go, and nothing is ever sent now.
+Pictures stay out of git (they live on the Drive). the editor's deadlines: `runs/email-production/<brand>/deadlines.json`,
+set by the email lead.
 
 ## The Outlier Emails artifact page (the owner's team page, formerly team-outlier/)
 
-the owner's Outlier is a local page on his Mac. the team's and the team's is an **artifact**: `outlier-emails.html` in this
-folder, published once from the team's Claude and shared with the team. It shows every designed email and records each
-call as a row in the page's shared store. the team's Claude moves things between the page and the email line with
+the owner's Outlier is a local page on his Mac. the email lead's and the editor's is an **artifact**: `outlier-emails.html` in this
+folder, published once from the email lead's Claude and shared with the editor. It shows every designed email and records each
+call as a row in the page's shared store. the email lead's Claude moves things between the page and the email line with
 `sync.py`. The page never reaches Klaviyo and never sends anything.
 
 ### Who does what on the page
 
 The email shows whole, cut into its sections. Click any section to adjust just that section.
 
-- **the team** (pick "I'm the team"), per section: remake a picture with one change, redesign the section, move it up or down,
+- **the editor** (pick "I'm the editor"), per section: remake a picture with one change, redesign the section, move it up or down,
   remove it, or mark it right. For the whole email: **Go · make the Klaviyo draft**, or **Send it back** with a note.
-- **the team** ("I'm the team"), per section: edit every line of its words in place and save, or mark it right. For the
+- **the email lead** ("I'm the email lead"), per section: edit every line of its words in place and save, or mark it right. For the
   whole email: **I scheduled it in Klaviyo**, or Send it back.
 
-### Publish it (once, from the team's Claude)
+### Publish it (once, from the email lead's Claude)
 
 Publish `outlier-emails.html` with the Artifact tool, title **Outlier Emails**, with these capabilities:
 
@@ -166,12 +174,12 @@ Publish `outlier-emails.html` with the Artifact tool, title **Outlier Emails**, 
 {"db": {"rules": [{"path": "emails", "read": "view", "write": "admin"}, {"path": "steps", "read": "view", "write": "admin"}]}, "user": {}, "assets": {}}
 ```
 
-Share it with the team as a Contributor, so she can add calls. Only the team's side (Editors) can change the email rows.
-Record the link in `tools/email-production/context/artifacts.md`.
+Share it with the editor as a Contributor, so she can add calls. Only the email lead's side (Editors) can change the email rows.
+Record the link in `components/email-production/context/artifacts.md`.
 
 ### Fill it (after every calendar run)
 
-1. `/usr/bin/python3 tools/email-production/adapter/sync.py list --brand <brand>` prints one row per designed email:
+1. `/usr/bin/python3 components/email-production/adapter/sync.py list --brand Brand B` prints one row per designed email:
    its sections (where each sits on the picture, its words, its pictures) and `_picture`, the whole email. Built emails
    tag every row with its section (`data-sec`, design/build.py), which is how the sections are found.
 2. Upload each `_picture` to the page's asset store (Artifact tool, `asset: true`) and put the returned url in the
@@ -192,11 +200,11 @@ Section places come from `<run>/klaviyo/layout.json`, written by `design/build.p
 `list` launches no Chrome for an email built since; an older email is measured and named on stderr. A row's
 `layout_stale` is true when the layout changed after that build.
 
-### Apply the calls (whenever the team says "apply the email calls")
+### Apply the calls (whenever the email lead says "apply the email calls")
 
 1. ArtifactData `list` the `calls` collection; keep rows whose `state` is `waiting`. Save them as a JSON list, with
    each doc's id as `id`.
-2. `/usr/bin/python3 tools/email-production/adapter/sync.py apply calls.json` carries them out:
+2. `/usr/bin/python3 components/email-production/adapter/sync.py apply calls.json` carries them out:
    - section `words`: the new words go into the layout, the email is rebuilt and checked; a copy learning per line.
    - section `picture`: that picture is remade from its old brief plus the change; a picture learning.
    - section `look`: a design learning, then the email is redesigned with it.
@@ -204,7 +212,7 @@ Section places come from `<run>/klaviyo/layout.json`, written by `design/build.p
    - section `ok`: kept on the card as right; nothing rebuilt.
    - `fill`: the system fills every gap the brand's files answer (design/gaps.py), rebuilds, and says what still
      needs a person. The page offers this first on any email with gaps; manual changes come after.
-   - `go`: makes the Klaviyo draft, then schedules it through the guarded step when the caller is an approver (the team, 2026-10-22). Never sends now.
+   - `go`: makes the Klaviyo draft, then schedules it through the guarded step when the caller is an approver (the email lead, 2026-10-22). Never sends now.
    - `send_back`: the note becomes a learning, then the email is redesigned, rebuilt and checked.
    - `scheduled`: the email is marked scheduled.
 3. Write each result back to its call (`update` with `state` and `result`), then run **Fill it** again so the

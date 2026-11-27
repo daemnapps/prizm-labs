@@ -2,10 +2,10 @@
  "theme": "atlas",
  "title": "Component issues (the atlas)",
  "status": "draft pack, extracted from 2026-10-02's rulings and scripts; not ruled",
- "triage_owner": "the team",
- "triage_owner_ruling": "the team, typed to the dev-engineer lead 2026-10-12 ~02:30Z: \"Run triage skill and include all pending component triage list. Make me owner for now\" (temporary; supersedes the team as triage owner until he rules it back; the-org/decision-log.md 2026-10-12). Before: decision-log 2026-10-02 TRIAGE, amended: the team for component issues",
- "theme_owner": "the team",
- "theme_owner_ruling": "the team 2026-10-02: \"the team is owner of components / atlas (both triage owner and the theme itsemf)\"",
+ "triage_owner": "the developer",
+ "triage_owner_ruling": "the developer, typed to the dev-the developer lead 2026-10-12 ~02:30Z: \"Run triage skill and include all pending component triage list. Make me owner for now\" (temporary; supersedes the email lead as triage owner until he rules it back; the-org/decision-log.md 2026-10-12). Before: decision-log 2026-10-02 TRIAGE, amended: the email lead for component issues",
+ "theme_owner": "the email lead",
+ "theme_owner_ruling": "the developer 2026-10-02: \"the email lead is owner of components / atlas (both triage owner and the theme itsemf)\"",
  "evaluation": {
   "window": "2026-10-02 to 2026-10-16",
   "midpoint_rerun": "2026-10-09",
@@ -13,8 +13,8 @@
   "feedback_file": "components/triage/themes/atlas-FEEDBACK.md (proposed)",
   "finding_shape": "item id · what's wrong · change wanted · theme or engine"
  },
- "engine_owner": "the team",
- "engine_owner_ruling": "the team 2026-10-02: \"I will remain component owner of the triage component for now\"",
+ "engine_owner": "the developer",
+ "engine_owner_ruling": "the developer 2026-10-02: \"I will remain component owner of the triage component for now\"",
  "item": {
   "noun": "issue",
   "id_scheme": "<component>#<n>",
@@ -59,12 +59,12 @@
    "triage/issue-briefs/<component>.json (ATL-27 (P0 P1 issue briefs), until each component's next run)"
   ],
   "coverage_2026_10_02": "met: all 656 open issues (ATL-31 (remaining issue briefs)) and all 83 actions (60 built by tools/triage_fill.py); the 29 that look fixed close instead",
-  "fill_policy": "targeted: each component's issues gain the parts on its next system run (the team 01:08Z 'Targeted'); a bulk fill of the 302 that need someone else is held for the team",
+  "fill_policy": "targeted: each component's issues gain the parts on its next system run (the developer 01:08Z 'Targeted'); a bulk fill of the 302 that need someone else is held for the developer",
   "at_creation": {
    "rule": "every item, action group or issue this theme's triage creates carries all eight parts when it is created; never backfilled",
-   "ruled": "the team, 2026-10-02, received 06:43Z by date -u: \"also starting from now make it a rule that anything issues that come from this triage process should geneate with the 8 step summary from the start\""
+   "ruled": "the developer, 2026-10-02, received 06:43Z by date -u: \"also starting from now make it a rule that anything issues that come from this triage process should geneate with the 8 step summary from the start\""
   },
-  "fix_means": "the response: what to do, whether a fix, a follow-up on a positive signal, or another move. Key kept as `fix` for compatibility; shown as Response (the team, 2026-10-02)"
+  "fix_means": "the response: what to do, whether a fix, a follow-up on a positive signal, or another move. Key kept as `fix` for compatibility; shown as Response (the developer, 2026-10-02)"
  },
  "categories": [
   "README and how-to link",
@@ -176,15 +176,15 @@
  "owners": {
   "source": "components/CLAUDE.md Residents table, then each component's CLAUDE.md",
   "disputed_2026_10_02": [
-   "email-production#5: data says the team, the register row says the owner",
-   "qc-checks#9 and #12: data says the team; the team owns the qc-checks engine since 2026-10-01",
+   "email-production#5: data says the designer, the register row says the owner",
+   "qc-checks#9 and #12: data says the developer; the designer owns the qc-checks engine since 2026-10-01",
    "local-studio and 3d: no owner on record",
    "brandpath: the owner inferred from commit authorship"
   ]
  },
  "deciders": {
-  "walls": "the team or the team",
-  "conventions": "the team, curator of components/system-integration/conventions.md",
+  "walls": "the developer or the designer",
+  "conventions": "the email lead, curator of components/system-integration/conventions.md",
   "owner_calls": "the component's owner",
   "registry": "the lead (Residents table)"
  },
@@ -222,10 +222,10 @@
   "owner": "only the owner can do it (a design call, knowledge or an act only they have)"
  },
  "people": [
-  "the team",
+  "the email lead",
   "the owner",
-  "the team",
-  "the team",
+  "the developer",
+  "the designer",
   "the lead",
   "maker"
  ],
@@ -250,7 +250,7 @@
  },
  "outputs": {
   "queue_model": "new-workflow-design/builds/atlas/triage/queue/model-components-<date>.json",
-  "page": "(private page)",
+  "page": "https://claude.ai/artifact/1Zac5idyUk2e5THqbzpGiQ",
   "runs_home": "runs/triage/atlas/<date>/ (ruled #5; not used yet)"
  },
  "cadence": "weekly (proposed); by hand today",
@@ -262,7 +262,7 @@
   "the context hook not ruled; 44 component instructions files to sign",
   "owner disputes above"
  ],
- "blocked_by": "a card awaiting approval, a pending decision, or nothing (the team 'ok' on #3, 4b36a7a90); filled by the core's cause pass",
+ "blocked_by": "a card awaiting approval, a pending decision, or nothing (the developer 'ok' on #3, 4b36a7a90); filled by the core's cause pass",
  "refs": {
   "emits": [
    "component",
@@ -278,11 +278,11 @@
    "brand folders",
    "Slack channels (to be determined)"
   ],
-  "examples": "email-production#1 → component:email-production, brand:brand-b, brand:brand-a → HE-3 (shared brand facts), EP-1 (email writer mini door), SI-3 (offer-bank move)"
+  "examples": "email-production#1 → component:email-production, brand:Brand B, brand:Brand A → HE-3 (shared brand facts), EP-1 (email writer mini door), SI-3 (offer-bank move)"
  },
  "pages": {
-  "queue": "(private page)",
-  "approach": "(private page)",
+  "queue": "https://claude.ai/artifact/1Zac5idyUk2e5THqbzpGiQ",
+  "approach": "https://claude.ai/artifact/4BsAyTeRYP7Z1UWBgcpx6s",
   "home": "components/triage/"
  }
 }

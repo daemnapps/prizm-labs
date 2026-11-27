@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The email line's language pull (the owner, 2026-10-27: "awareness levels and verbatims and spice are the foundation of
+"""The email line's language pull (owner, 2026-10-27: "awareness levels and verbatims and spice are the foundation of
 what we're doing here"): every stage asks for the declared avatar's rows at the awareness level triage names, the
 subject lines get the spice, the expansion gets the week's live read, and an empty pull is said out loud.
 No model, no network.

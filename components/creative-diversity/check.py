@@ -2,9 +2,12 @@
 """Score a new creative against the live library — before it's made, or before it goes in.
 
 Brief mode (before anything is made) — give its moves:
-    python3 components/creative-diversity/check.py brand-a \
+    python3 components/creative-diversity/check.py brand_b \
         who=face-dark-marks awareness=unaware argument=grandmas-recipe \
         format=micro-drama face=female/45-54/southeast-asian setting=kitchen look=phone-ugc
+
+Batch mode (several ads being planned together): are they different from each other?
+    python3 components/creative-diversity/check.py --batch <brand> <file of ids and moves>
 
 Card mode (a finished ad on the approval page) — reads the ad itself:
     python3 components/creative-diversity/check.py --card "<card folder>"
@@ -23,28 +26,6 @@ ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import matrix as M  # noqa: E402
-
-
-def _shared_keys():
-    """The repo's one key loader (components/keys/loader.py): the environment,
-    then the repo's .env, then — quietly — the owner's personal fallbacks."""
-    import importlib.util
-    import sys as _sys
-    from pathlib import Path as _Path
-    mod = _sys.modules.get("shared_keys_loader")
-    if mod is None:
-        path = next(p / "components" / "keys" / "loader.py"
-                    for p in _Path(__file__).resolve().parents
-                    if (p / "components" / "keys" / "loader.py").is_file())
-        spec = importlib.util.spec_from_file_location("shared_keys_loader", str(path))
-        mod = importlib.util.module_from_spec(spec)
-        _sys.modules["shared_keys_loader"] = mod
-        try:
-            spec.loader.exec_module(mod)
-        except Exception:
-            _sys.modules.pop("shared_keys_loader", None)
-            raise
-    return mod
 
 DIMS = json.loads((HERE / "dimensions.json").read_text())
 
@@ -87,6 +68,29 @@ def score(brand, moves):
             "fills": fills, "library": day, "moves": moves}
 
 
+def batch(brand, ads):
+    """A batch against itself and the live library, before anything is made: [{"id", "moves"}] -> per ad, its nearest
+    neighbour in the batch, the moves between them, and the live verdict. `same` lists every pair under the rule."""
+    need, out, same = DIMS["rule"]["min_moves"], [], []
+    for i, a in enumerate(ads):
+        miss = [k for k in M.BIG if not a["moves"].get(k)]
+        if miss:
+            sys.exit(f"{a['id']} declares all 7 moves — missing: {', '.join(miss)}")
+        near = None
+        for j, b in enumerate(ads):
+            if i == j:
+                continue
+            n, diff = M.distance(a["moves"], b["moves"])
+            if near is None or n < near[0]:
+                near = (n, b["id"])
+            if j > i and n < need:
+                same.append({"ads": [a["id"], b["id"]], "moves_apart": n, "same_on": [k for k in M.BIG if k not in diff]})
+        s = score(brand, a["moves"])
+        out.append({"id": a["id"], "nearest_in_batch": near[1] if near else None, "moves_apart": near[0] if near else None,
+                    "live": s.get("verdict"), "live_moves_apart": s.get("moves_apart"), "live_nearest": s.get("nearest")})
+    return {"brand": brand, "min_moves": need, "ads": out, "same": same, "passes": not same}
+
+
 def media_key(files):
     h = hashlib.sha1()
     for f in sorted(files):
@@ -116,7 +120,8 @@ def score_card(folder):
              "links": [p.get("url") if isinstance(p, dict) else str(p) for p in card.get("pages") or []]}
     if lead.suffix.lower() == ".mov":
         asset["file"] = str(lead)  # Gemini takes .mov as video/mp4 in practice
-    t = T.check(brand, T.tag_one(_shared_keys().lookup("GEMINI_API_KEY"), T.fill(brand), asset))
+    import cd_keys
+    t = T.check(brand, T.tag_one(cd_keys.key("GEMINI_API_KEY"), T.fill(brand), asset))
     s = score(brand, M.moves(t))
     s.update({"media_key": key, "scored_at": datetime.now().isoformat(timespec="seconds"),
               "read_from": lead.name, "tag": t})
@@ -160,6 +165,11 @@ if __name__ == "__main__":
         s = record_brief(brand, brief, {k: pairs[k] for k in M.BIG}, force="--force" in a)
         print(f"{brief}: {s['verdict']} — {s['moves_apart']} moves from the nearest running creative; "
               f"fills: {'; '.join(s['fills']) or 'no open gap'}")
+    elif a and a[0] == "--batch":
+        # check.py --batch <brand> <file>   the file: [{"id": "...", "moves": {who, awareness, argument, format, face, setting, look}}]
+        r = batch(a[1], json.loads(Path(a[2]).read_text()))
+        print(json.dumps(r, indent=1))
+        sys.exit(0 if r["passes"] else 1)
     elif a and a[0] == "--card":
         print(json.dumps({k: v for k, v in (score_card(a[1]) or {}).items() if k != "tag"}, indent=1))
     else:

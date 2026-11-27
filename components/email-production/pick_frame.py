@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-"""PICK THE FRAME — the brief chooses it, not taste (the owner, 2026-09-09:
+"""PICK THE FRAME — the brief chooses it, not taste (owner, 2026-09-09:
 "it's about what the actual image calls for based on the brief that we have.
 From that point forward, we need to select the best frame possible to carry
 out the idea that we have").
 
-    python3 pick_frame.py --brand brand-a --month 2026-09
+    python3 pick_frame.py --brand brand_a --month 2026-09
     python3 pick_frame.py --direction "close on his neck and jaw"
 
 Every picture slot in a month's briefs carries a direction. This reads the
-creator library's own records — `tools/video-teardown/records/creators/
+creator library's own records — `components/video-teardown/records/creators/
 <creator>/delivered/index.jsonl`, one row per clip with its recorded setting,
 action and shot — and scores each clip against that direction. It never
 invents a scene: it names the clip that already shows it, or says the library
@@ -36,7 +36,7 @@ from paths import HERE, WORKSPACE
 sys.path.insert(0, str(HERE / "machine"))
 import brand_facts as BF             # brand words and a run's own brand, read at run time   # noqa: E402
 
-RECORDS = WORKSPACE / "tools" / "video-teardown" / "records" / "creators"
+RECORDS = WORKSPACE / "components" / "video-teardown" / "records" / "creators"
 
 FRAMING = [
     (r"\bextreme close|fills the frame|macro\b", "extreme close-up", 1),

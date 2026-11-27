@@ -1,5 +1,5 @@
 {
- "_readme": "The format library — organic structures reverse-engineered from the owner's own swipes, each one carrying the post that proved it and its view count. A format is the STRUCTURE (camera, text behaviour, beat order, what carries the value), never the topic. Brand-agnostic by design: the brand enters at injection, per workspace rule 7. Seeded 2026-08-31 from the top swipes read frame-by-frame; the classifier assigns these and may propose a new one, which enters here only after a human read. Settled again 2026-09-04 by the second consolidation pass: 116 proposed ids were reduced onto 48 canonical structures — the 34 the library already carried, kept as they were, plus 14 promoted here — merging only on the four axes (camera behaviour, text behaviour, beat order, and what carries the persuasion) and never on topic. Genuine one-offs stayed out and are still tagged as proposed; the merge map is records/format-merges.json. Extended 2026-09-11 with the first entries that did not come from swipes: the asset index read 1,342 clips of our OWN delivered footage against this library and 82 came back unlisted. Two structures cleared a read and are filed here as state 'proposed', source 'owned-footage' — operator-service-montage and stranger-answer-montage. They carry that provenance because a structure seen in a stranger's post and one seen in footage we commissioned are different claims, even when they look identical. The rest of the 82 stay as candidates in tools/asset-index/findings/format-candidates.md.\n\nSTATUS, added 2026-09-11 (the owner: \"before you go to the format library, that needs to be organized and audited too\"). Every entry now carries `status` and `signed`, the same discipline the angle bank uses, and a `proof` block naming how many posts are actually behind it. 48 of the 50 rest on ONE post — a shape seen once, however large its view count, is a shape seen once. Nothing here is `active` until the owner signs it; `unreviewed` is the honest default and is not a demotion. Since 2026-10-07 (components rule 6, triage page 15) `status` is draft / approved / deprecated only; `unreviewed` and `proposed` are an entry's `state`, beside status `draft`.\n\nFAMILIES, added 2026-09-11, and RULED the same day. I read three sets as near-duplicates of one mechanic and proposed collapsing them. the owner, having seen the library render for the first time: \"Technically, all of these are unique formats.\" They are. A `family` groups entries that share a TEXT MECHANIC — it is a way to browse fifty entries, never a merge list, and no entry is a candidate for deletion because of it. What the grouping is genuinely good for is spotting that seven different formats all rest on the same text behaviour, which is a fact about the lane, not a fault in the bank. Separately, every entry carries `text_mechanic` — across the whole library there are only six.",
+ "_readme": "The format library — organic structures reverse-engineered from the owner's own swipes, each one carrying the post that proved it and its view count. A format is the STRUCTURE (camera, text behaviour, beat order, what carries the value), never the topic. Brand-agnostic by design: the brand enters at injection, per workspace rule 7. Seeded 2026-08-31 from the top swipes read frame-by-frame; the classifier assigns these and may propose a new one, which enters here only after a human read. Settled again 2026-09-04 by the second consolidation pass: 116 proposed ids were reduced onto 48 canonical structures — the 34 the library already carried, kept as they were, plus 14 promoted here — merging only on the four axes (camera behaviour, text behaviour, beat order, and what carries the persuasion) and never on topic. Genuine one-offs stayed out and are still tagged as proposed; the merge map is records/format-merges.json. Extended 2026-09-11 with the first entries that did not come from swipes: the asset index read 1,342 clips of our OWN delivered footage against this library and 82 came back unlisted. Two structures cleared a read and are filed here as state 'proposed', source 'owned-footage' — operator-service-montage and stranger-answer-montage. They carry that provenance because a structure seen in a stranger's post and one seen in footage we commissioned are different claims, even when they look identical. The rest of the 82 stay as candidates in components/asset-index/findings/format-candidates.md.\n\nSTATUS, added 2026-09-11 (the owner: \"before you go to the format library, that needs to be organized and audited too\"). Every entry now carries `status` and `signed`, the same discipline the angle bank uses, and a `proof` block naming how many posts are actually behind it. 48 of the 50 rest on ONE post — a shape seen once, however large its view count, is a shape seen once. Nothing here is `active` until the owner signs it; `unreviewed` is the honest default and is not a demotion. Since 2026-10-07 (components rule 6, triage page 15) `status` is draft / approved / deprecated only; `unreviewed` and `proposed` are an entry's `state`, beside status `draft`.\n\nFAMILIES, added 2026-09-11, and RULED the same day. I read three sets as near-duplicates of one mechanic and proposed collapsing them. the owner, having seen the library render for the first time: \"Technically, all of these are unique formats.\" They are. A `family` groups entries that share a TEXT MECHANIC — it is a way to browse fifty entries, never a merge list, and no entry is a candidate for deletion because of it. What the grouping is genuinely good for is spotting that seven different formats all rest on the same text behaviour, which is a fact about the lane, not a fault in the bank. Separately, every entry carries `text_mechanic` — across the whole library there are only six.",
  "formats": [
   {
    "id": "sticky-line-maker-demo",
@@ -682,7 +682,7 @@
      "code": "DS_OFE1Ad57",
      "author": "lifeaszeph",
      "views": 14070296,
-     "line": "Reply to a commenter's comment — Just embrace it bro"
+     "line": "Reply to James Carlo Duruin's comment — Just embrace it bro"
     }
    ],
    "proof": {
@@ -936,7 +936,7 @@
    "evidence": [
     {
      "code": "Db5lgk5BjRF",
-     "author": "creator_a123",
+     "author": "hua_jin123",
      "views": 8782287,
      "line": "…and it will not clear / 1 teaspoon of turmeric — running speech subtitles"
     }
@@ -1804,7 +1804,7 @@
      "note": "wordless variant — sequence alone carries it"
     }
    ],
-   "_proposed_note": "12 clips in our own delivered footage, sub-one on all 12. Nothing in the swiped library has the operator working on a third party. Named 'operator' rather than 'barbershop' because the spine is the professional-on-client relationship, not the trade — an esthetician's facial runs the same structure.",
+   "_proposed_note": "12 clips in our own delivered footage, barbershop-regular on all 12. Nothing in the swiped library has the operator working on a third party. Named 'operator' rather than 'barbershop' because the spine is the professional-on-client relationship, not the trade — an esthetician's facial runs the same structure.",
    "proof": {
     "posts": 3,
     "best_views": 0,
@@ -1837,12 +1837,12 @@
    },
    "evidence": [
     {
-     "clip": "brand-b-8.mp4",
+     "clip": "DOUXDS8.mp4",
      "creator": "street crew",
      "note": "five approaches cut tight, question repeated"
     },
     {
-     "clip": "brand-b-1.mp4",
+     "clip": "DOUXDS1.mp4",
      "creator": "street crew",
      "note": "meme inserts, awkward silence played as the payoff"
     },

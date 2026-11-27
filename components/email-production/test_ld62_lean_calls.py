@@ -98,8 +98,14 @@ class Lean(unittest.TestCase):
         self.env = {k: os.environ.get(k) for k in ("CHAIN_EFFORT", "DAEMN_HAND_DIR")}
         os.environ.pop("CHAIN_EFFORT", None)
         os.environ.pop("DAEMN_HAND_DIR", None)
+        # one account and no Codex: the door tries every login on the machine (claude_door, 2026-10-23), and this
+        # test counts calls to the stand-in binary, so the real logins on this machine must not change the count
+        from run_kit import claude_door as door
+        self._door = (door, door.credentials, door.codex_binary)
+        door.credentials, door.codex_binary = (lambda: [("one account", {})]), (lambda: None)
 
     def tearDown(self):
+        self._door[0].credentials, self._door[0].codex_binary = self._door[1], self._door[2]
         for k, v in self.env.items():
             if v is None:
                 os.environ.pop(k, None)
@@ -239,7 +245,7 @@ class Lean(unittest.TestCase):
         self.assertEqual(argv, ["-p", "--effort", "low"] + LEAN)
 
     def test_effort_is_runkit_medium(self):
-        # the team 2026-10-21: email runs at the chains' one level, medium, with no knob
+        # developer 2026-10-21: email runs at the chains' one level, medium, with no knob
         for value in ("low", "xhigh", "Max", "", "hi gh"):
             os.environ["CHAIN_EFFORT"] = value
             self.assertEqual(lean_call.effort(), "medium", value)

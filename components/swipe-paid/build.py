@@ -39,7 +39,7 @@ def norm_body(d):
     """Strip the Meta ad id AdPlexity appends to every primary text.
 
     Without this every ad looks like its own copy block. Validated against
-    the Competitor-A sweep: 830 ads collapse to exactly 18 blocks, matching the
+    the brand_c sweep: 830 ads collapse to exactly 18 blocks, matching the
     hand-built teardown.
     """
     return re.sub(r"\d{9,}$", "", (d or "").strip()).strip()
@@ -88,7 +88,7 @@ STAGE_RULES = [
     ]),
 ]
 
-# Non-English patterns, checked after the English pass. Competitor-B runs most of
+# Non-English patterns, checked after the English pass. brand_e runs most of
 # its library in Italian; without these, 78% of the brand reads unclassified.
 STAGE_RULES_INTL = [
     ("bottom", [r"sconto", r"offerta", r"garanzia", r"rimborsat", r"scorte",
@@ -144,7 +144,7 @@ def slugify(s, n=52):
 
 def load_sweep(path):
     """Accept either a client ALL/offset file ({"items": [...]}) or a bare
-    deduped list, as competitor_a_uniq.json is. A single --pages run writes a
+    deduped list, as brand_c_uniq.json is. A single --pages run writes a
     complete ALL file; a library swept across several invocations only has
     its full set in the deduped list."""
     d = json.load(open(path))
@@ -189,7 +189,8 @@ def cmd_cluster(all_json, brand):
                                      "image": a.get("image_url") or "",
                                      "variants": a.get("meta_group_ads_count") or 1}
                       for a in ads},
-            "landing_page": None,
+            # A TrendTrack sweep already carries it; AdPlexity's does not (resolve pays for it).
+            "landing_page": next((a["landing_page"] for a in ads if a.get("landing_page")), None),
         })
 
     out_dir = os.path.join(HERE, brand)
@@ -324,7 +325,7 @@ def cmd_harvest(brand, workers=8):
 def page_slug(url):
     """Stable folder name for a landing page, ignoring query strings.
 
-    Query strings on these links are attribution tokens (competitor-a's ?trybe=,
+    Query strings on these links are attribution tokens (brand_c's ?trybe=,
     Meta's ?fbclid=), not page variants — captures under different tokens
     came back byte-identical, so they must not fork the slug.
     """
@@ -466,7 +467,7 @@ def _dismiss_overlay(pg, out_dir):
             return seen.sort((a,b) => a.innerText.length - b.innerText.length)[0];
         }""", DECLINE)
 
-    # These modals are on a timer, not on load. Measured on competitor-c:
+    # These modals are on a timer, not on load. Measured on brand_d:
     # absent at 2.5s and 5s, present at 9s. Probing once on arrival finds
     # nothing and reports a clean capture that is in fact half covered, so
     # poll instead of guessing a single wait.
@@ -710,10 +711,10 @@ def cmd_brief(brand, domain="", swept="", credits="", replace=False):
 DB = os.path.join(HERE, "swipe.db")
 
 BRAND_META = {   # domain + sweep date per brand, as pulled
-    "competitor-a":       ("competitor-a.com", "2026-08-19"),
+    "brand_c":       ("brand_c.com", "2026-08-19"),
     "resilia":       ("resilia.shop", "2026-09-01"),
-    "competitor_blab":    ("quiz.competitor_blab.com", "2026-08-20"),
-    "competitor-c": ("competitor-c.co", "2026-08-20"),
+    "serlinolab":    ("quiz.serlinolab.com", "2026-08-20"),
+    "brand_d": ("brand_d.co", "2026-08-20"),
     "consciousbar":  ("theconsciousbar.co", "2026-09-19"),
     "nuora":         ("mynuora.com", "2026-09-19"),
     "sprtn":         ("shop.try-sprtn.com", "2026-09-20"),

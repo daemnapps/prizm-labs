@@ -6,4 +6,3 @@ an engine over Meta's diversity rule · scores an ad or a brief against the save
 
 Owner: not stated
 
-## How to use it → (team dashboard)

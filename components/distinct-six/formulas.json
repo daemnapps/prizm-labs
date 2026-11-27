@@ -1,7 +1,7 @@
 {
   "_what": "The variation formulas — every way a winner becomes new ads, ordered from closest to the winner to furthest (the owner, 2026-10-08: 'you're supposed to just do it on the actual winner itself. It's literally just rearranging the existing content first, and then we can make other types of adjustments … create formulas for them'). Tier 1 needs nothing but the winner's own footage. Every formula names what Meta will see it as (Meta, Demystifying Creative Diversification: iteration = same visuals; diversification = different look, feel, storyline, message) and where it lives in Meta.",
   "sources": {
-    "beats": "the winner's beats in the Creative Index ($CREATIVE_INDEX_DB: beat) — section, in/out, words, frame",
+    "beats": "the winner's beats in the Creative Index (lab/the owner/asset-ledger/db: beat) — section, in/out, words, frame",
     "frameworks": "components/marketing-doctrine/ad-frameworks.json — each framework's section order and awareness entry",
     "swipes": "the swipe library (Creative Index swipe_card) — tier 4 only"
   },

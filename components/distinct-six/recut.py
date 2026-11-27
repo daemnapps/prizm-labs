@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Tier 1 — re-cut the winner's own footage by formula (formulas.json).
 
-the owner, 2026-10-08: "you're supposed to just do it on the actual winner itself.
+owner, 2026-10-08: "you're supposed to just do it on the actual winner itself.
 It's literally just rearranging the existing content first."
 
-    python3 components/distinct-six/recut.py brand-a brand-a-grandma-winner [--page <file.html>]
+    python3 components/distinct-six/recut.py brand_b brand_b-grandma-winner [--page <file.html>]
 
 Reads the winner's beats from the Creative Index (section, in/out, words) and the
 doctrine frameworks, applies hook-from-inside · framework-order · cut-down, and
@@ -16,7 +16,6 @@ Never calls Meta or a model.
 import argparse
 import html
 import json
-import os
 import sqlite3
 import sys
 import tempfile
@@ -24,7 +23,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
-LEDGER = Path(os.environ.get("CREATIVE_INDEX_DB") or ROOT / "records" / "asset-ledger" / "ledger.db")
+LEDGER = ROOT / "lab" / "owner" / "asset-ledger" / "db" / "ledger.db"
 F = json.loads((HERE / "formulas.json").read_text())
 FW = json.loads((ROOT / "components" / "marketing-doctrine" / "ad-frameworks.json").read_text())
 FW = FW.get("frameworks") or [v for v in FW.values() if isinstance(v, list)][0]

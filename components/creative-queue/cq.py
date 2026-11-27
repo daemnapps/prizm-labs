@@ -7,7 +7,7 @@
   cq.py remove <id> | restore <id> | approve <id>
   cq.py rebuild [--now <UTC …Z>]                  observations + decisions -> index.json
   cq.py show <id>                                 the reduced entry, as JSON
-  cq.py import-legacy --from <queue dir>          today's per-entry files -> observations/localhost.json
+  cq.py import-legacy --from <queue dir>          today's per-entry files -> observations/owner-mac.json
                                                   + decisions/owner/legacy.jsonl
 
 Every subcommand takes --root (default <repo>/runs/queue-shadow) and --no-commit; the decision ones take
@@ -27,7 +27,7 @@ import qcore  # noqa: E402
 from qcore import paths  # noqa: E402
 
 RUN = subprocess.run          # the git seam: tests replace it, nothing else does
-LEGACY_SOURCE = "localhost"   # the one machine that writes today's store
+LEGACY_SOURCE = "owner-mac"   # the one machine that writes today's store
 LEGACY_PERSON = "owner"
 LEGACY_HUMAN = ("who", "priority", "title_set", "note", "removed", "removed_at", "decided")   # today's person fields
 APPROVE_ACTIONS = ("go", "approve")
@@ -117,12 +117,24 @@ def _legacy(eid, op, field, value, made):
             "made": made, "legacy": True}
 
 
+# The writer files each entry as <brand>/<lane>/<stage folder>/<id>.json (since 2026-10-28; before that
+# <brand>/<id>.json, which the fixtures keep). Stage folders are the writer's filing, not the entry's stage;
+# "not-on-queue" is its filing for an entry that is not on the queue, so those are not imported.
+NOT_ON_QUEUE = "not-on-queue"
+
+
+def _legacy_files(src):
+    flat = sorted(src.glob("*/*.json"))
+    deep = sorted(f for f in src.glob("*/*/*/*.json") if f.parent.name != NOT_ON_QUEUE)
+    return flat + deep
+
+
 def cmd_import_legacy(a, root):
     src = Path(a.source).expanduser()
     if not src.is_dir():
         raise ValueError("--from %s is not a folder" % src)
     entries, lines = {}, []
-    for f in sorted(src.glob("*/*.json")):
+    for f in _legacy_files(src):
         try:
             e = json.loads(f.read_text())
         except ValueError:
@@ -131,6 +143,8 @@ def cmd_import_legacy(a, root):
         if not isinstance(e, dict) or e.get("id") != f.stem or e.get("moved_to"):
             continue
         eid = e["id"]
+        if not eid.strip() or eid.endswith("_"):      # a blank key (e.g. "unknown_idea_") names nothing
+            continue
         o = {k: v for k, v in e.items() if k not in LEGACY_HUMAN and k not in ("id", "stage")}
         if e.get("stage") not in (None, ""):
             o["observed_stage"] = e["stage"]

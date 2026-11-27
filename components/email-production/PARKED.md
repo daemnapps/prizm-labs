@@ -28,7 +28,7 @@ Two constraints already known and worth keeping:
 - **Flows cannot be built by API at all** — a human assembles them in the
   platform. A machine can produce the spec, the copy and the template; it
   cannot install the flow.
-- <brand> currently runs **three live Browse Abandonment flows and three live
+- Brand A currently runs **three live Browse Abandonment flows and three live
   Abandoned Checkout flows.** Before flows are designed, that has to be
   resolved — nobody can currently say how many emails one abandoning customer
   receives.

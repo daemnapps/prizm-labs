@@ -62,6 +62,7 @@ def make_brand(day):
     cal = WS / "runs/marketing-calendar" / BRAND / "2099-01"     # one month, rewritten per test
     write(cal / "run.json", {"brand": BRAND})
     write(cal / "slots.json", [{"id": LABEL, "date": day, "segment": "Core | Churned",
+                                "hour":13, "local":True,
                                 "segments": ["Core | Churned"], "type": "what-went-wrong"}])
 
 
@@ -183,10 +184,10 @@ class Uploader(unittest.TestCase):
         self.assertEqual(self.send(), 1)                                            # no card
         self.assertEqual(K.main(["--handoff", str(self.root)]), 0)
         self.assertEqual(self.send(), 1)                                            # a waiting card
-        write(self.root / "approvals.json", [{"campaign_id": "CAMP1", "go_by": "the owner"}])
+        write(self.root / "approvals.json", [{"campaign_id": "CAMP1", "go_by": "owner"}])
         self.assertEqual(self.send(), 1)                                            # approvals.json on file
         card = json.loads((self.root / K.CARD).read_text())
-        card["approval"] = {"by": "the owner", "at": "2098-12-31T00:00:00+00:00", "decision": "approve"}
+        card["approval"] = {"by": "owner", "at": "2098-12-31T00:00:00+00:00", "decision": "approve"}
         write(self.root / K.CARD, card)
         switch = TMP / "switch-on.json"
         write(switch, {"email_schedule": "on"})
@@ -198,7 +199,7 @@ class Uploader(unittest.TestCase):
         make_brand("2000-01-01")
         self.assertEqual(K.main(["--handoff", str(self.root)]), 0)
         self.assertFalse((self.root / K.CARD).exists())
-        write(self.root / "approvals.json", [{"campaign_id": "CAMP1", "go_by": "the owner"}])
+        write(self.root / "approvals.json", [{"campaign_id": "CAMP1", "go_by": "owner"}])
         self.assertEqual(self.send(), 1)
         self.assertNotIn("campaign-send-jobs", [c[1] for c in self.rec.calls])
 

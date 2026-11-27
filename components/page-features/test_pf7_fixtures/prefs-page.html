@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<!-- Page family prefs-fixture: the PF-7 (working versions) transform fixture. -->
+<html lang="en">
+<head>
+<title>prefs fixture</title>
+</head>
+<body>
+<div data-personal-view="prefs-fixture" data-template-sha="0123456789abcdef0123456789abcdef01234567">your personal page · <a href="?view=shared">see shared</a></div>
+<main>
+<section data-feature="1">one</section>
+<section data-feature="2">two</section>
+<section data-feature="3">three</section>
+<!-- demo stand-in -->
+<p id="demo-banner">Demo: sample numbers</p>
+<!-- end demo stand-in -->
+</main>
+<script>const DATA = {"n": 1};</script>
+<script type="application/json" id="fo-features">{"features": [{"n": 1, "name": "One"}, {"n": 2, "name": "Two", "locked": ["hidden"]}, {"n": 3, "name": "Three", "owns": ["accent"]}]}</script>
+<script type="application/json" id="fo-prefs">{"features": {"1": {"hidden": true}, "2": {"hidden": true}, "3": {"accent": "plum", "order": "first", "text_size": "large", "label": "Third", "pinned": true}}, "changes": []}</script>
+<!-- page-features overlay: component-owned, do not edit -->
+<style id="ov-style">#fo-panel{display:block}</style>
+<script id="ov-main">var badge = '<span data-feature="1">';</script>
+<!-- end page-features overlay -->
+</body>
+</html>

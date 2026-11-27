@@ -155,6 +155,23 @@ class ListFiles(unittest.TestCase):
             self.assertTrue(kw["supportsAllDrives"])
             self.assertTrue(kw["includeItemsFromAllDrives"])
 
+    def test_modified_time_rides_along_when_drive_gives_it(self):
+        # 2026-11-06: the content queue tells a redo's new work in returned/ from the old by it
+        class One(object):
+            def files(self):
+                return self
+            def list(self, **kw):
+                self.kw = kw
+                return self
+            def execute(self):
+                return {"files": [{"id": "a", "name": "a.png", "mimeType": "image/png", "modifiedTime": "2026-11-07T01:00:00.000Z"},
+                                  {"id": "b", "name": "b.png", "mimeType": "image/png"}]}
+        svc = One()
+        self.assertEqual(E.list_files("x", svc=svc), [
+            {"id": "a", "name": "a.png", "mimeType": "image/png", "modifiedTime": "2026-11-07T01:00:00.000Z"},
+            {"id": "b", "name": "b.png", "mimeType": "image/png"}])
+        self.assertIn("modifiedTime", svc.kw["fields"])
+
     def test_an_empty_folder_is_an_empty_list(self):
         self.assertEqual(E.list_files("nothing-here", svc=tree()), [])
 

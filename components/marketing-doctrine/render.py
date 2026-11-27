@@ -53,6 +53,32 @@ def _open(title, var, blurb):
     )
 
 
+def people(d):
+    b = d["people"]
+    out = [_open("Who it is for \u2014 avatar, sub-avatar, demographic", "people_layers", b["what"])]
+    out.append("| Layer | What it is | When it is a new one | The test |")
+    out.append("|---|---|---|---|")
+    for x in b["layers"]:
+        out.append("| **%s** | %s | %s | %s |" % (x["name"], x["is"], x["new_when"], x["test"]))
+    out.append("")
+    return "\n".join(out)
+
+
+def words(d):
+    b = d["words"]
+    out = [_open("What each word means", "words", b["what"])]
+    for g, title in b["order"]:
+        out.append("## %s\n" % title)
+        out.append("| Word | What it is | The test | Kept in |")
+        out.append("|---|---|---|---|")
+        for x in b["rows"]:
+            if x["group"] == g:
+                out.append("| **%s** | %s | %s | %s%s |" % (x["word"], x["is"], x["test"], x["kept_in"], (" (full: `%s`)" % x["full"]) if x["full"] else ""))
+        out.append("")
+    out.append("**Two of a kind?** " + b["two_people_or_two_angles"] + "\n")
+    return "\n".join(out)
+
+
 def desire(d):
     b = d["desire"]
     out = [_open("Desire — the one the ad runs on", "desire_dimensions", b["rule"] + " " + _ref(b["ref"]))]
@@ -70,10 +96,32 @@ def desire(d):
         out.append("- %s" % job)
     out.append("")
     out.append("**Dominant trait.** %s %s\n" % (b["dominant_trait"]["rule"], _ref(b["dominant_trait"]["ref"])))
+    if b.get("human_desires"):
+        h = b["human_desires"]
+        out.append("## The seventeen human desires \u2014 name the one underneath\n")
+        out.append("%s\n" % h["rule"])
+        out.append("- **Life forces:** %s" % "; ".join("`%s` %s%s" % (x["id"], x["name"], (" (%s)" % x["covers"]) if x.get("covers") else "") for x in h["life_forces"]))
+        out.append("- **Learned:** %s\n" % "; ".join("`%s` %s" % (x["id"], x["name"]) for x in h["learned"]))
     out.append("## Where desire comes from\n")
     for src in b["sources_of_desire"]:
         out.append("- **%s** — %s %s" % (src["id"], src["what"], _ref(src["ref"])))
     out.append("")
+    out.append("Owning stages: %s\n" % ", ".join(b["owning_stage"]))
+    return "\n".join(out)
+
+
+def belief(d):
+    b, c, g = d["belief"], d["claim"], d["segments"]
+    out = [_open("Belief \u2014 the one doubt this ad closes", "belief_doubts", b["what"] + " " + b["rule"])]
+    out.append("| Doubt | What they say | The proof that closes it |")
+    out.append("|---|---|---|")
+    for x in b["doubts"]:
+        out.append("| `%s` | %s | %s |" % (x["id"], x["says"], x["closes_with"]))
+    out.append("")
+    out.append("## The claim\n")
+    out.append("%s %s %s\n" % (c["what"], "It is " + c["formula"] + ".", c["rule"]))
+    out.append("## A chosen group\n")
+    out.append("%s %s\n" % (g["rule"], _ref(g["ref"])))
     out.append("Owning stages: %s\n" % ", ".join(b["owning_stage"]))
     return "\n".join(out)
 
@@ -389,7 +437,7 @@ def spoken(d):
         out.append("**The test.** %s\n" % t.get("test", ""))
         vs = b.get("voice_settings_ruled") or {}
         if vs:
-            out.append("**The read the owner chose (%s).** stability %s · similarity %s · style %s · speed %s · speaker boost %s. %s\n" % (
+            out.append("**The read owner chose (%s).** stability %s · similarity %s · style %s · speed %s · speaker boost %s. %s\n" % (
                 vs.get("ruled", ""), vs.get("stability"), vs.get("similarity_boost"), vs.get("style"),
                 vs.get("speed"), "off" if not vs.get("use_speaker_boost") else "on", vs.get("note", "")))
     out.append("## 1. Written vs spoken \u2014 the rules of spoken copy\n")
@@ -481,8 +529,40 @@ def spoken(d):
     return "\n".join(out)
 
 
+def mechanics(_d):
+    """The conversion layer, from its own file: mechanics.json."""
+    m = json.loads((HERE / "mechanics.json").read_text())
+    tier_order = ("measured", "lab", "unproven")
+    out = [HEAD.replace("frameworks.json", "mechanics.json"), "", "# Mechanics \u2014 how the asset converts", "",
+           "Bound as `{mechanics}`. Source: %s" % m["source"], "", "**%s**" % m["rule"], ""]
+    out.append("## How to use these\n")
+    out.extend("- %s" % u for u in m["use"])
+    out.append("")
+    for tier in tier_order:
+        out.append("## %s \u2014 %s\n" % (tier.capitalize(), m["tiers"][tier]))
+        out.append("| Mechanic | What it does | Evidence | Ad | Email | Page | Portal | Moves | Gates |")
+        out.append("|---|---|---|---|---|---|---|---|---|")
+        for r in m["mechanics"]:
+            if r["tier"] == tier:
+                out.append("| `%s` %s | %s | %s | %s | %s | %s | %s | %s | %s |" % (
+                    r["id"], r["name"], r["does"], r["evidence"], r["ad"], r["email"],
+                    r["page"], r["portal"], r["metric"], " ".join(r["gates"])))
+        out.append("")
+    out.append("## Gates \u2014 yes or no, every asset\n")
+    out.append("`subscription` and `chance` apply to every asset that sells or awards anything, whatever the mechanic.\n")
+    out.append("| Gate | Ask | Pass | Basis |")
+    out.append("|---|---|---|---|")
+    for g in m["gates"]:
+        out.append("| `%s` | %s | %s | %s |" % (g["id"], g["ask"], g["pass"], g["basis"]))
+    out.append("")
+    return "\n".join(out)
+
+
 RENDERERS = [
+    ("words.md", words),
+    ("people.md", people),
     ("desire.md", desire),
+    ("belief.md", belief),
     ("awareness.md", awareness),
     ("sophistication.md", sophistication),
     ("techniques.md", techniques),
@@ -494,6 +574,7 @@ RENDERERS = [
     ("ad-frameworks.md", ad_frameworks),
     ("delivery.md", delivery),
     ("spoken.md", spoken),
+    ("mechanics.md", mechanics),
 ]
 
 

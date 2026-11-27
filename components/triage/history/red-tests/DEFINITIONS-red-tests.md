@@ -5,7 +5,7 @@ The item: one declared test suite that is red (or timed out) on main, from the r
 ## Pass 1 — still true?
 The source's own check: does the suite still fail at the commit under review? You may run it once (python3 <suite>, timeout 300 s) in the read-only worktree.
 
-## Pass 2 — cause class and blocked_by (two fields; the team "ok" on triage design issue #3, 2026-10-02, 4b36a7a90)
+## Pass 2 — cause class and blocked_by (two fields; the developer "ok" on triage design issue #3, 2026-10-02, 4b36a7a90)
 `cause` — what is wrong, exactly one (split a suite into a/b rows only if it truly fails for two independent reasons):
 - REAL: the code under test is wrong and the test is right.
 - STALE: the test pins something that was deliberately changed (a later commit changed the behaviour or text on purpose).
@@ -16,7 +16,7 @@ The source's own check: does the suite still fail at the commit under review? Yo
 ## Pass 3 — group by the one action that clears it (fix_group)
 A short kebab slug naming the ACTION. Reuse it for every item that action clears. Prefer naming the causing commit or shared mechanism, e.g. `fix-after-fc403711c`, `repin-after-d20151bec`, `approve-TI-21`, `relative-dates-in-tests`. One-offs: `unique`.
 
-## Pass 4 — priority (the team "ok" on design issue #6, 2026-10-02, 4b36a7a90)
+## Pass 4 — priority (the developer "ok" on design issue #6, 2026-10-02, 4b36a7a90)
 - P0: REAL and on a live path, with the evidence named (a run on record in the last 30 days, a grant on the mini, or a person's live use). Without that evidence it is P1, whatever the words say.
 - P1: REAL but not live, or it blocks merges (a gate suite).
 - P2: STALE (a re-pin).
@@ -24,10 +24,10 @@ A short kebab slug naming the ACTION. Reuse it for every item that action clears
 - Age: a suite red more than 7 days with no card goes up one level, never past P1.
 - Actions are ranked, not items: an action's score is the items it clears, weighted P0 8 · P1 4 · P2 2 · P3 1.
 
-## Pass 5 — the three whos, in this order (the team, 2026-10-02: "Who can address directly (including in one batch); Who needs to make decision (if its different than #1); Who it impacts"; then "Put decides first before can do it")
+## Pass 5 — the three whos, in this order (the developer, 2026-10-02: "Who can address directly (including in one batch); Who needs to make decision (if its different than #1); Who it impacts"; then "Put decides first before can do it")
 1. decides: whoever `blocked_by` names, whose yes is needed before work starts; null if nobody's.
-2. can_do: consider the list's TRIAGE OWNER first (the team: "even if the owners can do it, we should first consider if pm (the triage lead) can do it for them"; generalised the same day: "pm is replaced generally by the triage owner. Who might differ depending on who runs it generally"). For red tests the triage owner is ENGINEER, who sits in the lead seat and can card and dispatch. Tag each item with one of:
-   - now: the triage owner can do it alone, today: for a red test, a re-pin or test fix the team cards and dispatches, or an approval the team types.
+2. can_do: consider the list's TRIAGE OWNER first (the developer: "even if the owners can do it, we should first consider if the email lead (the triage lead) can do it for them"; generalised the same day: "the email lead is replaced generally by the triage owner. Who might differ depending on who runs it generally"). For red tests the triage owner is the developer, who sits in the lead seat and can card and dispatch. Tag each item with one of:
+   - now: the triage owner can do it alone, today: for a red test, a re-pin or test fix the developer cards and dispatches, or an approval the developer types.
    - after: the triage owner can do it once someone else's ruling lands, because the work just applies it.
    - draft: the triage owner cards or prepares it, and the code's owner lands it or must say yes (their live code, their work in flight).
    - owner: only the code's owner can do it (a personal copy only they can rebuild, their account, a design call).

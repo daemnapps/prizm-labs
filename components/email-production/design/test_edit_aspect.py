@@ -1,4 +1,4 @@
-"""An edit asks for the picture's own shape (the team, 2026-10-22): a 3:2 picture asked for 16:9, the model reframed the
+"""An edit asks for the picture's own shape (email_lead, 2026-10-22): a 3:2 picture asked for 16:9, the model reframed the
 scene and the judge held every try. No network.
 
     /usr/bin/python3 test_edit_aspect.py

@@ -1,15 +1,15 @@
-"""Make a brand's designed emails whole on this Mac before the emails page shows them (the team's lab, 2026-10-21).
+"""Make a brand's designed emails whole on this Mac before the emails page shows them (email_lead's lab, 2026-10-21).
 
     prepare.py [--brand <brand>]          rebuild every email whose built pictures are missing or older than its layout
     prepare.py --brand <brand> --dry-run  only say which ones
 
 Why: an email's built pictures (`klaviyo/assets/*.jpg`) are media, so git never carries them. On a Mac that did not
-build the email (the team's, or the team's after the team changed one), the email shows only its alt text and its Go cannot
+build the email (editor's, or email_lead's after editor changed one), the email shows only its alt text and its Go cannot
 upload the pictures. Rebuilding with email-production's own `design/build.py` makes them again, reading the source
 pictures from the Drive with this person's GDRIVE_SA_KEY (about a minute per email).
 
 The rebuild keeps the card as it was: build.py rewrites `klaviyo/card.json` and does not carry `sections_ok` (the
-parts marked right), so this puts those fields back afterwards (keep_card). Proposed to the owner as a one-line change
+parts marked right), so this puts those fields back afterwards (keep_card). Proposed to owner as a one-line change
 in build.py's kept keys; until then the guard lives here and in ask.py.
 """
 import argparse
@@ -24,9 +24,9 @@ sys.path.insert(0, str(next(d for d in HERE.parents if (d / "components" / "run-
 from run_kit import paths  # noqa: E402
 
 REPO = paths.repo(HERE)
-EM = REPO / "tools" / "email-production"
+EM = REPO / "components" / "email-production"
 RUNS = REPO / "runs" / "email-production"
-KEEP = ("sections_ok", "eve_done")   # card fields build.py drops on a rebuild (sections_ok is kept by build.py since b7a55cac52)
+KEEP = ("sections_ok", "editor_done")   # card fields build.py drops on a rebuild (sections_ok is kept by build.py since b7a55cac52)
 STAMPS = Path.home() / ".upright" / "cache" / "emails-built.json"   # this Mac's record: which layout each email's pictures were built from
 
 
@@ -53,7 +53,7 @@ def stale(run):
     k = run / "klaviyo"
     if not (k / "email.html").is_file():
         return None
-    want = set(__import__("re").findall(r'src="assets/([^"]+)"', (k / "email.html").read_text()))
+    want = set(__import__("re").findall(r'(?:src="|background="|url\()assets/([^")]+)', (k / "email.html").read_text()))
     have = {p.name for p in (k / "assets").glob("*")} if (k / "assets").is_dir() else set()
     if want - have:
         return "%d of %d built pictures missing" % (len(want - have), len(want))
@@ -86,7 +86,12 @@ def keep_card(run, fn):
 
 
 def rebuild(run):
-    p = subprocess.run([sys.executable, "design/build.py", str(run)], cwd=str(EM), capture_output=True, text=True)
+    """Build, then the final check on that build (the pair sync.py's and own_picture.py's rebuilds run): a build with
+    no check after it left brand_b-nov-23 holding an older build's finding (email_lead, 2026-11-16)."""
+    for step in ("design/build.py", "design/check.py"):
+        p = subprocess.run([sys.executable, step, str(run)], cwd=str(EM), capture_output=True, text=True)
+        if p.returncode:
+            break
     return p.returncode == 0, (p.stdout + p.stderr).strip().splitlines()[-1:] or [""]
 
 

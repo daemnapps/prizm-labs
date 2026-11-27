@@ -31,16 +31,16 @@ Ads are grouped into **copy blocks** by exact match on
 `(headline, normalized primary text)`.
 
 **Normalisation:** AdPlexity appends the Meta ad id to the end of every primary
-text. Without stripping it every ad is unique — Competitor-B's 407 ads came back as
+text. Without stripping it every ad is unique — Brand E's 407 ads came back as
 407 blocks before the fix and 34 after. The strip is `\d{9,}$`.
 
-**Validation:** run against the Competitor-A sweep, which had a hand-built answer
+**Validation:** run against the Brand C sweep, which had a hand-built answer
 already: 830 creatives collapse to exactly 18 blocks, 614 video / 216 image,
 in the same rank order the human teardown produced. That is the only
 ground-truth check in the system.
 
 **Known limit — exact match is brittle.** A block re-run with one word changed
-becomes a second block. Competitor-B shows this directly: `01`, `03` and `04` are
+becomes a second block. Brand E shows this directly: `01`, `03` and `04` are
 all "Stress showing on your face?" with different bodies. Treat near-identical
 headlines as one family when briefing.
 
@@ -88,7 +88,7 @@ whole sweep for free.
    headline + body filed almost everything as bottom, because nearly every
    direct-response body mentions a guarantee somewhere — "Understand your acne
    type" read as a scarcity ad. The hook carries the awareness level.
-2. **Non-English rules are a separate pass.** Competitor-B came back 78%
+2. **Non-English rules are a separate pass.** Brand E came back 78%
    unclassified because its library is largely Italian, and the question-mark
    rule was anchored to end-of-string so "Sagging Neck? Not anymore..." missed.
 
@@ -122,7 +122,7 @@ no landing page. Clustering first and pulling detail for one representative ad
 per block cost 196 credits across two brands instead of 1,244.
 
 **Known limit:** we take the *first* landing page from *one* ad in the block.
-If a block routes to several pages, we see one of them. Competitor-A's hand-built
+If a block routes to several pages, we see one of them. Brand C's hand-built
 teardown lists two LPs for some angles; the machine records one.
 
 **Type is decided structurally**, not by appearance, in this order:

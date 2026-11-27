@@ -1,3 +1,0 @@
-# web/hooks/
-
-Page headlines.

@@ -9,7 +9,7 @@
  {
   "id": "R2",
   "suite": "new-workflow-design/builds/brand-home/test_brand_home.py",
-  "first_failing_line": "ValueError: '~/Projects/workspace' is not in the subpath of '/var/folders/g9/mr1j38hj77bg9nhrb3zfh8xm0000gn/T/bh1-8uj6o7qo/home/pinned' OR one path is relative and the other is absolute.",
+  "first_failing_line": "ValueError: '~/Projects/ai-workspace' is not in the subpath of '/var/folders/g9/mr1j38hj77bg9nhrb3zfh8xm0000gn/T/bh1-8uj6o7qo/home/pinned' OR one path is relative and the other is absolute.",
   "exit_code": 1,
   "kind": "red"
  },
@@ -44,7 +44,7 @@
  {
   "id": "R7",
   "suite": "new-workflow-design/builds/cs-loop/test_cs_tick.py",
-  "first_failing_line": "FAIL no new LaunchAgent plist was added \u2014 ['com.company.workflow-worker-system.plist', 'com.company.workflow-worker-atlas.plist', 'com.company.workflow-worker-s2.plist', 'com.company.workflow-worker.plist', 'com.company.workflow-worke\u2026",
+  "first_failing_line": "FAIL no new LaunchAgent plist was added \u2014 ['com.the company.workflow-worker-system.plist', 'com.the company.workflow-worker-atlas.plist', 'com.the company.workflow-worker-s2.plist', 'com.the company.workflow-worker.plist', 'com.the company.workflow-worke\u2026",
   "exit_code": 1,
   "kind": "red"
  },

@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 """The Distinct Six — one concept written as N genuinely different ads.
 
-Off to the side of the video chain (the owner, 2026-10-08: the developer is working in it).
+Off to the side of the video chain (owner, 2026-10-08: developer is working in it).
 Reads a finished chain run and writes N versions, each a full ad built from the
 doctrine's own sections, each declaring its moves. Every
 pair must be 3+ moves apart and each one clear of what's running (scored with
 creative-diversity/check.py); failures go back once for a rewrite.
 
-    python3 components/distinct-six/run.py runs/video-teardown/<brand>/<run> --angle pigment-memory [--n 6]
+    python3 components/distinct-six/run.py runs/video-teardown/brand_b/<run> --angle pigment-memory [--n 6]
 
 Writes runs/distinct-six/<brand>/<run>/versions.json + page.html. Claude runs on
-the owner's own plan (`claude -p`, the Viewer Check's way); Meta is never called.
+owner's own plan (`claude -p`, the Viewer Check's way); Meta is never called.
 """
 import argparse
 import html
@@ -80,7 +80,7 @@ def library_hints(brand, avatar):
     return "; ".join(crowded) or "none", "; ".join(open_) or "anything"
 
 
-LEDGER = Path(os.environ.get("CREATIVE_INDEX_DB") or ROOT / "records" / "asset-ledger" / "ledger.db")
+LEDGER = ROOT / "lab" / "owner" / "asset-ledger" / "db" / "ledger.db"
 
 
 def index_table(brand, per_move=6):
@@ -88,7 +88,7 @@ def index_table(brand, per_move=6):
     (asset-ledger/db/creative.py, view element_score)."""
     import sqlite3
     if not LEDGER.exists():
-        return "(no index yet — build the Creative Index into $CREATIVE_INDEX_DB)"
+        return "(no index yet — run lab/owner/asset-ledger/db/creative.py)"
     db = sqlite3.connect(LEDGER)
     out = []
     for move in ("format", "style", "setting", "face", "awareness", "angle", "sub_avatar"):
@@ -135,12 +135,22 @@ def fill(run, brand, avatar, angle, n, sub=None):
     return text, smap
 
 
+def who_block(brand, avatar, sub=None, product=None):
+    """Who the versions are for, from the one shared read; each version still names its own awareness level and doubt."""
+    sys.path.append(str(ROOT / "components" / "creative-strategist" / "machine"))
+    import who
+    return "" if avatar not in who.avatars(brand) else who.block(brand, avatar, sub, what={
+        "awareness": "each version names its own level", "doubt": "each version names its own", "product": product, "creative": True}) + "\n"
+
+
 def claude(text):
-    env = {k: v for k, v in os.environ.items()
-           if not k.startswith(("CLAUDE", "ANTHROPIC")) and k not in ("ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN")}
-    r = subprocess.run(["claude", "-p", "--model", "opus", "--allowed-tools", "", "--output-format", "json"],
-                       input=text + "\n\n(Answer with the JSON only.)", capture_output=True, text=True,
-                       env=env, timeout=1800, cwd="/tmp")
+    # NO ACCOUNT IS WIRED IN (owner, 2026-10-23): run_kit's claude_door picks the
+    # credential and hands the CLI its own plain environment.
+    if str(ROOT / "components" / "run-kit") not in sys.path:
+        sys.path.append(str(ROOT / "components" / "run-kit"))
+    from run_kit import claude_door
+    r = claude_door.run(["--model", "opus", "--allowed-tools", "", "--output-format", "json"],
+                        text + "\n\n(Answer with the JSON only.)", timeout=1800, cwd="/tmp")
     d = json.loads(r.stdout or "{}")
     if d.get("is_error") or not d.get("result"):
         raise SystemExit(f"Claude didn't answer: {str(d.get('result') or r.stderr)[:400]}")
@@ -247,12 +257,16 @@ def main():
     ap.add_argument("--avatar")
     ap.add_argument("--n", type=int, default=6)
     ap.add_argument("--sub")
-    a = ap.parse_args()
+    import importlib.util as _u, pathlib as _pl
+    _s = _u.spec_from_file_location("profile_arg", next(q for q in _pl.Path(__file__).resolve().parents if q.name == "components") / "naming" / "profile_arg.py")
+    _PA = _u.module_from_spec(_s); _s.loader.exec_module(_PA)                                   # --profile <avatar>[_<sub>][_<demographic>] (naming/PEOPLE.md)
+    a = ap.parse_args(_PA.expand(None, has=("avatar", "sub")))
     run = (ROOT / a.run) if not Path(a.run).is_absolute() else Path(a.run)
     meta = json.loads((run / "run.json").read_text())
     brand = meta["brand"]
     avatar = a.avatar or (re.search(r"Avatar:\s*([a-z-]+)", stage(run, "4e-close.md")) or [None, None])[1] or "unclear"
     text, smap = fill(run, brand, avatar, a.angle, a.n, a.sub)
+    text = who_block(brand, avatar, a.sub, meta.get("product")) + text
     out = ROOT / "runs" / "distinct-six" / brand / run.name
     out.mkdir(parents=True, exist_ok=True)
     (out / "sent.md").write_text(text)

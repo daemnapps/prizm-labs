@@ -1,0 +1,102 @@
+{
+ "id": "content-factory",
+ "name": "Content Factory (what-if shorts)",
+ "kind": "video",
+ "makes": "A 9:16 'what if' short of about 60 s drawn entirely by code with one ElevenLabs v4 voiceover.",
+ "source": [
+  "commands/content-factory.md",
+  "commands/content-factory-references-what-if-reference.md",
+  "commands/content-factory-references-what-if-voiceover.md",
+  "commands/content-factory-references-higgsedit.md",
+  "commands/content-factory-references-glsl-3d.md"
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "name": "Choose reference (attached, style, or none)",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 2,
+   "name": "Study reference and write style notes",
+   "model": "none",
+   "cheap": "already free, Claude reads the frames"
+  },
+  {
+   "n": 3,
+   "name": "Write the story",
+   "model": "none",
+   "cheap": "Claude, free"
+  },
+  {
+   "n": 4,
+   "name": "Voice one directed take",
+   "model": "elevenlabs_v4",
+   "cheap": "Kokoro tts local, free (drafts)"
+  },
+  {
+   "n": 5,
+   "name": "Check take with whisper",
+   "model": "none",
+   "cheap": "local Whisper stt"
+  },
+  {
+   "n": 6,
+   "name": "Build Higgsedit project (shapes, GLSL, captions)",
+   "model": "none",
+   "cheap": "already free"
+  },
+  {
+   "n": 7,
+   "name": "Preview frames and render",
+   "model": "none",
+   "cheap": "already free"
+  },
+  {
+   "n": 8,
+   "name": "Loudness, upload, register and show",
+   "model": "none",
+   "cheap": null
+  }
+ ],
+ "price": "Only the elevenlabs_v4 voiceover is paid; not quoted here, about 7 credits for a 60 s take (inferred).",
+ "cheap_price": "Kokoro tts locally: free.",
+ "prompts": [
+  {
+   "label": "Style notes the reference study must produce (`refs/style.md`)",
+   "source": "commands/content-factory-references-what-if-reference.md",
+   "text": "3. Before any story, write `refs/style.md`:\n   - palette as hex, sampled with ffmpeg from a few frames:\n     `ffmpeg -i <frame> -vf \"palettegen=max_colors=8:reserve_transparent=0:stats_mode=full\" pal.png`,\n     then `ffmpeg -v error -i pal.png -f rawvideo -pix_fmt rgb24 - | od -An -v -tu1 -w3 | awk '{printf \"#%02X%02X%02X\\n\",$1,$2,$3}' | sort -u`;\n   - type: the look, weight and case of each text role, and the closest\n     Higgsedit font;\n   - captions: position, size, case, and how words appear (one by one, greyed\n     until spoken, highlighted);\n   - recurring UI (HUD panels, tags, cards, counters) and where it sits;\n   - how characters, sets and props are built: 2D or 3D, outline, shading,\n     proportions, level of detail, and the hero's face (eyes, brows, mouth,\n     nose), hair, costume details and hands;\n   - for a 3D render: the material (matte clay, satin or glossy toy, faceted\n     low-poly, voxel or brick, knit, polished metal), the key light's direction\n     and softness, the fill colour, the lens, the camera height and how blurred\n     the background is;\n   - shot sizes, camera moves, cut rhythm and the end card.\n"
+  },
+  {
+   "label": "Voice and take rules (ElevenLabs v4)",
+   "source": "commands/content-factory-references-what-if-voiceover.md",
+   "text": "Set `stability` from the table and leave `similarity_boost` unset.\n\n| Name     | `voice_id`                             | `stability` |\n| -------- | -------------------------------------- | ----------- |\n| Kevin    | `f1373f24-3b96-433f-9a68-e595810ef608` | 0.45        |\n| Kiki     | `2d51d9d0-b2a4-5e8b-9c63-f310adafd5f7` | 0.45        |\n| Desmond  | `563f728c-e249-5a85-97ab-8461e8c09da6` | 0.45        |\n| Alexey   | `7c2133e5-68ab-511f-9aed-9a67664382b1` | 0.40        |\n| Grady    | `e2a2d2e6-9ed2-59cd-82af-feaa27f8a678` | 0.45        |\n| Barrett  | `d603a8cd-3fe1-55e0-9245-617a2589131e` | 0.45        |\n| Andre    | `f1e8226e-2248-4d5f-b43c-0a79e9949dbf` | 0.45        |\n| Miles    | `e18664a7-ee4f-5273-acf8-533eb24cd366` | 0.45        |\n| Jasper   | `a7b8abe9-47f1-553e-a9df-87945a7e5bc8` | 0.45        |\n| Ainsley  | `731b4ffe-e95e-59f4-8c00-81608936091f` | 0.45        |\n| Holden   | `3c9d6053-6334-592c-8997-4e325286af3f` | 0.45        |\n| Alistair | `d9d5c263-f84e-4752-97b5-3750fcc6fd2f` | 0.45        |\n| Caspian  | `ef70cc83-3015-4bad-9359-0ea968c43ec0` | 0.45        |\n| Gideon   | `1ad38ba4-9cc4-4f2f-9fde-b0fefdf67ae5` | 0.40        |\n| Zoe      | `d0374db1-44b9-4f05-939e-0a9ae9dbbe6a` | 0.40        |\n\n## Text of the take\n\nThe whole script is ONE take: every spoken line, in order, joined with single\nspaces into one text.\n\n- Open the text with one bracketed direction naming voice quality, energy and\n  pace, such as `[dry, punchy storyteller, brisk pace]`.\n- Add a new bracketed tag only where the delivery turns: `[leaning in]`,\n  `[deadpan]`, `[building tension]`. Use `...` for a held beat and `[pause]`\n  before a punchline.\n- CAPS on at most one word per sentence, for stress.\n- Never ask for \"slow\" or \"unhurried\": the take runs about 20% longer.\n- Tags are never spoken. Leave them out of captions and on-screen text. Use no\n  other square brackets.\n- Spell numbers out and write symbols as words (\"percent\", \"dollars\").\n- Length: about 160 words for 60 s in English (about 2.7 words per second) and\n  about 2.5 words per second in Russian and other languages. It is a soft\n  target: never pad or cut to hit it.\n- At most 10,000 characters in total.\n\n"
+  },
+  {
+   "label": "Take text rules",
+   "source": "commands/content-factory-references-what-if-voiceover.md",
+   "text": "## Text of the take\n\nThe whole script is ONE take: every spoken line, in order, joined with single\nspaces into one text.\n\n- Open the text with one bracketed direction naming voice quality, energy and\n  pace, such as `[dry, punchy storyteller, brisk pace]`.\n- Add a new bracketed tag only where the delivery turns: `[leaning in]`,\n  `[deadpan]`, `[building tension]`. Use `...` for a held beat and `[pause]`\n  before a punchline.\n- CAPS on at most one word per sentence, for stress.\n- Never ask for \"slow\" or \"unhurried\": the take runs about 20% longer.\n- Tags are never spoken. Leave them out of captions and on-screen text. Use no\n  other square brackets.\n- Spell numbers out and write symbols as words (\"percent\", \"dollars\").\n- Length: about 160 words for 60 s in English (about 2.7 words per second) and\n  about 2.5 words per second in Russian and other languages. It is a soft\n  target: never pad or cut to hit it.\n- At most 10,000 characters in total.\n\n"
+  },
+  {
+   "label": "Voiceover request",
+   "source": "commands/content-factory-references-what-if-voiceover.md",
+   "text": "{\"params\": {\"model\": \"elevenlabs_v4\", \"prompt\": \"<the whole take>\", \"stability\": <stability>, \"batch_size\": 1,\n  \"dialogue\": [{\"text\": \"<the whole take>\", \"voice_id\": \"<voice_id>\", \"voice_type\": \"preset\"}]}}"
+  },
+  {
+   "label": "Higgsedit project skeleton",
+   "source": "commands/content-factory-references-higgsedit.md",
+   "text": "export default async ({ project }) => {\n  const p = await project({ dir: \".\", size: \"1080x1920\", fps: 30, background: \"<hex>\" });\n  const voice = await p.add(\"../voice.mp3\");\n  p.compose(\n    <frame width={1080} height={1920} layout=\"none\">\n      {/* one full-canvas child per scene: <frame at={t0} duration={t1 - t0} width={1080} height={1920} layout=\"none\">…</frame> */}\n    </frame>,\n    { at: 0, dur: <video seconds> }\n  );\n  p.cut(voice, { at: 0 }); // the take on the audio spine; its length is the default dur\n};"
+  },
+  {
+   "label": "Render and upload command lines",
+   "source": "commands/content-factory-references-higgsedit.md",
+   "text": "Start\n  the final render with `sandbox_exec` `size: \"xl\"` and `background: true`:\n  `cd ~/what-if/<slug>/edit && higgsedit render . --bitrate 8M --out ~/what-if/<slug>/edit/renders/final.mp4`"
+  },
+  {
+   "label": "Loudness and upload rule",
+   "source": "commands/content-factory-references-higgsedit.md",
+   "text": "- **Loudness and upload.** The render plays a mono take about 3 dB quieter.\n  Call `media_upload` with `filename: \"<slug>.mp4\"` first. Then, in one\n  foreground command: measure the final's integrated loudness\n  (`ffmpeg -i final.mp4 -af ebur128 -f null -`), bring it to about -14 LUFS\n  with a plain gain\n  (`ffmpeg -i final.mp4 -c:v copy -af volume=<-14 minus measured>dB out.mp4`),\n  keeping the true peak under -1 dB, and append\n  `&& curl -f -X PUT --upload-file out.mp4 '<upload_url>'`. Never compress or\n  limit the voice harder: it flattens the intonation."
+  }
+ ]
+}

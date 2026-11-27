@@ -134,7 +134,7 @@ class Teardown(unittest.TestCase):
         self.assertTrue(os.path.isdir(os.path.join(T.WS, "components")))
         self.assertTrue(os.path.isdir(os.path.join(T.WS, "brands")))
         self.assertTrue(T.MACHINE.endswith(os.path.join(
-            "tools", "video-teardown", "machine", "run.py")))
+            "components", "video-teardown", "machine", "run.py")))
         self.assertTrue(os.path.isfile(T.MACHINE))
         db = os.path.join(tempfile.mkdtemp(), "swipe.db")
         con = sqlite3.connect(db)

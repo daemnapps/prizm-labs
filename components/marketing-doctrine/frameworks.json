@@ -10,6 +10,33 @@
   "copy": "a private copy on the operator's own machine; NOT committed to this repo",
   "rule": "refs are pointers for verification only — never copy a passage; quotes stay under 12 words"
  },
+ "people": {
+  "what": "The one home of who an ad speaks to. Every chain reads these through the strategist's who reader; no prompt restates them.",
+  "source": "owner's avatar method (2026-07-10), rulings 2026-11-08 and 2026-11-25",
+  "layers": [
+   {
+    "id": "avatar",
+    "name": "Avatar",
+    "is": "a whole person: one group of people most likely to buy, described so exactly that they think \"that's literally me\". Built from one desire, then filled in order: desire, experiences, emotions, behaviors, culture. Demographics come last and sit in their own layer.",
+    "new_when": "the desire or the problem changes. A new problem on the same person is a new avatar, because it has its own experiences, emotions and behaviors (dark marks need not come from acne; ingrown hairs do not mean acne; someone with acne may be a teen or grown). The problem is the avatar's label, never the whole of it.",
+    "test": "Would a person with this problem, and none of the other problems, still be who this speaks to?"
+   },
+   {
+    "id": "sub-avatar",
+    "name": "Sub-avatar",
+    "is": "that same whole person plus ONE narrowing element: an experience, a situation, a product they tried, a feeling, or where on the body it is. It sharpens the same five parts; it never starts a new person.",
+    "new_when": "that one factor changes the argument (bumps on the back of a shaved head, or on the neck of someone with hair)",
+    "test": "Swap what they have been through. If the ad breaks, it is a sub-avatar."
+   },
+   {
+    "id": "demographic",
+    "name": "Demographic",
+    "is": "age, gender, race, language, culture: the face, the words and the place",
+    "new_when": "never a new problem or argument. It fits any avatar and any sub-avatar, one demographic per piece.",
+    "test": "Swap race, age or language. If the ad still works, it is a demographic. Hair or skin that causes the problem belongs to the avatar or sub-avatar, not to race."
+   }
+  ]
+ },
  "desire": {
   "ref": [
    "L312-320",
@@ -79,7 +106,127 @@
   "owning_stage": [
    "1b-audience",
    "3-injection"
+  ],
+  "human_desires": {
+   "rule": "Strip out every product detail and ask what this person is still chasing. Name one life force and, when one rides on it, one learned desire. A want (clear skin) is not yet the desire (what clear skin buys them).",
+   "source": "owner's desire model, 2026-09-14",
+   "life_forces": [
+    {
+     "id": "live-longer",
+     "name": "stay alive and well"
+    },
+    {
+     "id": "enjoy-food",
+     "name": "enjoy food and drink"
+    },
+    {
+     "id": "freedom-from-fear",
+     "name": "freedom from fear, pain and danger"
+    },
+    {
+     "id": "attraction",
+     "name": "be wanted by a partner",
+     "covers": "dating, being picked, being seen up close. A desire one piece runs on, never a sub-avatar or an angle by itself"
+    },
+    {
+     "id": "comfort",
+     "name": "live comfortably, without friction"
+    },
+    {
+     "id": "be-superior",
+     "name": "win, keep up, not fall behind"
+    },
+    {
+     "id": "protect-loved-ones",
+     "name": "care for and protect the people they love"
+    },
+    {
+     "id": "social-approval",
+     "name": "be seen well by the people whose opinion matters"
+    }
+   ],
+   "learned": [
+    {
+     "id": "be-informed",
+     "name": "know, not be caught out"
+    },
+    {
+     "id": "curiosity",
+     "name": "find out"
+    },
+    {
+     "id": "cleanliness",
+     "name": "a clean body and surroundings"
+    },
+    {
+     "id": "efficiency",
+     "name": "do more with the same effort"
+    },
+    {
+     "id": "convenience",
+     "name": "fewer steps"
+    },
+    {
+     "id": "dependability",
+     "name": "it will not let me down"
+    },
+    {
+     "id": "beauty-style",
+     "name": "look and style that say who I am"
+    },
+    {
+     "id": "economy",
+     "name": "get more out than was put in"
+    },
+    {
+     "id": "bargains",
+     "name": "pay less than it is worth"
+    }
+   ]
+  }
+ },
+ "belief": {
+  "what": "The doubt that stops this person believing this solves their version of the problem. Desire, awareness and market stage can all be right and the message still fails here.",
+  "rule": "An ad closes ONE doubt, with the proof built for that doubt. Proof aimed at no doubt closes none.",
+  "source": "owner's belief model, 2026-09-14",
+  "doubts": [
+   {
+    "id": "does-it-work",
+    "says": "I don't believe this works; nothing does.",
+    "closes_with": "demonstration, the cause explained, a before and after of the mechanism itself"
+   },
+   {
+    "id": "for-me",
+    "says": "It might work for someone, not for someone like me.",
+    "closes_with": "proof from a person who matches: same skin or hair, same age, same failed history, same starting point"
+   },
+   {
+    "id": "worth-it",
+    "says": "Even if it works, it's not worth the money, time or hassle.",
+    "closes_with": "what the old way costs, how easy it is, the guarantee"
+   },
+   {
+    "id": "trust-you",
+    "says": "I don't trust who is telling me.",
+    "closes_with": "a third party, a trusted voice from their own group, the founder's story, real customers"
+   }
+  ],
+  "owning_stage": [
+   "1b-audience",
+   "3-injection",
+   "4d-expansion",
+   "4e-close"
   ]
+ },
+ "claim": {
+  "what": "The claim (also called the angle) is one sentence a customer could agree or disagree with. It is the read-out of the layers above it, never a separate brainstorm.",
+  "formula": "one desire, spoken at one awareness level, pitched for one market stage, closing one doubt, through one mechanism",
+  "rule": "The claim belongs to the brand and can be aimed at any avatar; the avatar, sub-avatar and demographic decide how it is said. Only the owner signs a claim.",
+  "source": "owner's angle model, 2026-09-14, and the 2026-10-28 ruling that claims belong to the brand"
+ },
+ "segments": {
+  "ref": "[L2015-2040]",
+  "rule": "A market is not all of one piece. Two groups can share one wide appeal and need different mechanisms and different proof; a chosen group changes the headline, the identification, the mechanism and the proof."
  },
  "awareness": {
   "ref": [
@@ -1552,5 +1699,186 @@
     "status": "draft"
    }
   ]
+ },
+ "words": {
+  "what": "The one home of what these words mean. Every other file points here and never restates one. A word's list (which avatars, which angles) lives where `kept in` says.",
+  "source": "owner's definitions, 2026-11-25",
+  "order": [
+   [
+    "who",
+    "Who it is for"
+   ],
+   [
+    "why",
+    "Why they would care"
+   ],
+   [
+    "when",
+    "When"
+   ],
+   [
+    "idea",
+    "What the ad says"
+   ],
+   [
+    "how",
+    "How it is built"
+   ]
+  ],
+  "rows": [
+   {
+    "group": "who",
+    "word": "Avatar",
+    "is": "who it is for: a whole person led by one desire; the problem is the label",
+    "test": "Would a person with this problem, and none of the other problems, still be who this speaks to?",
+    "kept_in": "brands/<brand>/core-avatars/",
+    "full": "components/marketing-doctrine/slices/people.md"
+   },
+   {
+    "group": "who",
+    "word": "Sub-avatar",
+    "is": "that person plus ONE thing: what they tried, the situation, the body part, how long, the feeling, or their skin",
+    "test": "Swap what they have been through. If the ad breaks, it is a sub-avatar.",
+    "kept_in": "brands/<brand>/core-avatars/<avatar>/sub-avatars/",
+    "full": "components/marketing-doctrine/slices/people.md"
+   },
+   {
+    "group": "who",
+    "word": "Demographic",
+    "is": "the face, the language and the place: age, gender, race",
+    "test": "Swap race, age or language. If the ad still works, it is a demographic. Hair or skin that causes the problem belongs to the avatar or sub-avatar, not to race.",
+    "kept_in": "components/naming/people.py",
+    "full": "components/marketing-doctrine/slices/people.md"
+   },
+   {
+    "group": "who",
+    "word": "Body part",
+    "is": "where on the body; the `where` kind of sub-avatar",
+    "test": "Point to it. The product has to be allowed there.",
+    "kept_in": "components/naming/anatomy.json and brands/<brand>/products/body-parts.json",
+    "full": null
+   },
+   {
+    "group": "why",
+    "word": "Desire",
+    "is": "what they want underneath, one per piece",
+    "test": "Same person, same problem: why do they want it fixed? (for a date, for work, to stop being stared at). Change it and the problem is still there, but the ad is about something else.",
+    "kept_in": "frameworks.json desire",
+    "full": "components/marketing-doctrine/slices/desire.md"
+   },
+   {
+    "group": "why",
+    "word": "Awareness",
+    "is": "how much they already know, so where the ad may start",
+    "test": "Name the first line they would not understand.",
+    "kept_in": "frameworks.json awareness",
+    "full": "components/marketing-doctrine/slices/awareness.md"
+   },
+   {
+    "group": "why",
+    "word": "Market stage",
+    "is": "how many times they have heard this promise",
+    "test": "Would they roll their eyes at it?",
+    "kept_in": "frameworks.json sophistication",
+    "full": "components/marketing-doctrine/slices/sophistication.md"
+   },
+   {
+    "group": "why",
+    "word": "Doubt",
+    "is": "the one thing stopping them, closed by the piece",
+    "test": "Close it and nothing else stands in the way.",
+    "kept_in": "frameworks.json belief",
+    "full": "components/marketing-doctrine/slices/belief.md"
+   },
+   {
+    "group": "why",
+    "word": "Angle",
+    "is": "the argument: one sentence a customer could agree or disagree with. Also called the claim. It belongs to the brand and runs on any avatar",
+    "test": "Say it as one sentence. Could a customer agree or disagree with it? A single word (dating, confidence) is not an angle yet.",
+    "kept_in": "brands/<brand>/strategy/angles.json (only the owner signs one)",
+    "full": "components/marketing-doctrine/frameworks.json claim"
+   },
+   {
+    "group": "when",
+    "word": "Moment",
+    "is": "when it runs or when it hits: a date on the calendar, or the hour of their life it comes up",
+    "test": "It has a when, and no argument.",
+    "kept_in": "brands/<brand>/strategy/moments.json",
+    "full": null
+   },
+   {
+    "group": "idea",
+    "word": "Insight",
+    "is": "a true thing about this person that nobody has said to them",
+    "test": "They say: how did you know that.",
+    "kept_in": "the strategist run's idea.json",
+    "full": null
+   },
+   {
+    "group": "idea",
+    "word": "Idea",
+    "is": "the one way of seeing that insight that makes them look at themselves differently",
+    "test": "One sentence a friend would repeat. No layout in it.",
+    "kept_in": "the strategist run's idea.json",
+    "full": null
+   },
+   {
+    "group": "idea",
+    "word": "Hook",
+    "is": "the first line or first seconds, for this idea",
+    "test": "Cover the rest. Do they stop?",
+    "kept_in": "the piece's own hooks or headlines stage",
+    "full": null
+   },
+   {
+    "group": "idea",
+    "word": "Offer",
+    "is": "the price and the deal",
+    "test": "It has a number or a guarantee in it.",
+    "kept_in": "brands/<brand>/products/offer-bank.md",
+    "full": null
+   },
+   {
+    "group": "how",
+    "word": "Script format",
+    "is": "how the argument runs: what is said, in what order",
+    "test": "Read it aloud with no picture. The shape is still there.",
+    "kept_in": "components/naming/FORMATS.md lists every format list",
+    "full": null
+   },
+   {
+    "group": "how",
+    "word": "Production format",
+    "is": "how it gets made: talking head, song, static, carousel",
+    "test": "Say who or what makes it.",
+    "kept_in": "components/naming/FORMATS.md lists every format list",
+    "full": null
+   },
+   {
+    "group": "how",
+    "word": "Picture source",
+    "is": "where the picture comes from: a real customer photo, creator footage, our own footage, AI-made, 3D, or screen-native. None is the default; AI-made goes through the image process",
+    "test": "Which one is this person likeliest to stop for? Pick that, not the one on hand.",
+    "kept_in": "the piece's own swaps record; AI-made through components/image-production",
+    "full": null
+   },
+   {
+    "group": "how",
+    "word": "New creative",
+    "is": "an ad that is 3 or more of the 7 moves away from every other one: who, awareness, angle, format, face, setting, look. Meta groups anything closer as the same ad",
+    "test": "Put the two side by side with the words covered. If they look alike, it is one creative.",
+    "kept_in": "components/creative-diversity/dimensions.json",
+    "full": null
+   },
+   {
+    "group": "how",
+    "word": "Version",
+    "is": "the same picture with one line changed. Worth testing inside one ad; it never counts as a new creative",
+    "test": "Only the words moved.",
+    "kept_in": "components/creative-diversity/dimensions.json iteration",
+    "full": null
+   }
+  ],
+  "two_people_or_two_angles": "The same person with a different argument is a new angle. A different problem is a new avatar. The same argument on a narrower person is a sub-avatar. The same argument in a different container is a format."
  }
 }

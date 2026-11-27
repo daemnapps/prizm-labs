@@ -104,7 +104,7 @@ PICK_KEYS = frozenset({"stage", "engine", "version", "source",
                        "source_filename", "sha256", "copied_to"})
 
 # The placeholder spellings a prompt body may use, DECLARED PER CHAIN and never
-# guessed (CR-2 ruling 3, the team 2026-08-31). `at-brace` is the house form and the
+# guessed (CR-2 ruling 3, developer 2026-08-31). `at-brace` is the house form and the
 # default; the others exist because CR-2 imports prompts COPIED AT A PINNED SHA
 # from another component, and a copy whose tokens had to be rewritten is not the
 # copy whose sha was pinned. Declaring the dialect is cheaper than a permanent
@@ -341,7 +341,7 @@ def _provenance(block, problems):
     fork nobody can date, so the field exists from CR-1 and the contract names
     it.
 
-    CR-2 (the team's ruling 2, 2026-08-31) widened it past the pin itself. Importing
+    CR-2 (developer's ruling 2, 2026-08-31) widened it past the pin itself. Importing
     a chain whose shape is decided at RUN TIME by the source's own version scan
     and route resolution means the pin alone does not say what ran: the same sha
     resolves differently under a different route. So the block also carries the

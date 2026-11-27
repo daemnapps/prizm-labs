@@ -43,12 +43,26 @@ def months_of(a, b):
     return out
 
 
+def _avatar_folder(brand, avatar):
+    """The avatar's folder as the brand keeps it, from a profile id, a new name or an old name (naming/PEOPLE.md)."""
+    try:
+        import importlib.util
+        from pathlib import Path
+        f = next(d / "naming" / "people.py" for d in Path(__file__).resolve().parents if d.name == "components")
+        spec = importlib.util.spec_from_file_location("naming_people", f)
+        people = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(people)
+        return people.folders(brand, avatar)[0] or avatar
+    except Exception:                                  # noqa: BLE001  without the door the name stands as given
+        return avatar
+
+
 def avatars(root, brand):
     mj = json.loads((root / "brands" / brand / "strategy" / "moments.json").read_text())
     out = []
     for av, block in mj["avatars"].items():
         lines = [f"### {av}", block.get("territory", "")]
-        cm = root / "brands" / brand / "core-avatars" / av / "culture-map.md"
+        cm = root / "brands" / brand / "core-avatars" / _avatar_folder(brand, av) / "culture-map.md"
         if cm.is_file():
             body = [x for x in cm.read_text().splitlines() if x.strip() and not x.startswith("---")][:30]
             lines += ["Culture map (first lines):", *body]

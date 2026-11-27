@@ -1,0 +1,17 @@
+{
+  "id": "song-ad",
+  "name": "Song ad",
+  "what": "A person sings (or lip-syncs) a short, catchy jingle about the problem and the product, to camera, with the product in hand. Earworm first; the claim is in the lyric.",
+  "seconds": 12,
+  "beats": [
+    {"id": "hook",   "at": [0, 3],    "does": "the first sung line names the problem in the customer's words, on a beat drop"},
+    {"id": "verse",  "at": [3, 8],    "does": "two sung lines: what the product does, shown in use"},
+    {"id": "chorus", "at": [8, 12],   "does": "the catch line, sung twice, holding the product to camera"}
+  ],
+  "lyric_rules": "4-6 short lines, end-rhymes, each line 4-8 words, built only from the language bank's phrases and the banked claims; the product name sung once",
+  "cast": {"min": 1, "max": 2, "roles": ["singer (the avatar)", "backup (optional, dances or reacts)"]},
+  "camera": "phone selfie or locked tripod, performer centred, cut to the product on the chorus",
+  "sound": "the take sings with its own audio at the test tier; a winner is re-made with the song route in the model house before upscale",
+  "variation_axes": ["genre (trap, R&B, pop-punk, country, gospel, k-pop, sea shanty)", "hook lyric", "singer from the kit", "setting"],
+  "hooks_per_concept": 5
+}

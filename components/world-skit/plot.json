@@ -1,0 +1,14 @@
+{
+ "_readme": "The fill-in slots of a world skit. A mission file fills these; every slot maps to line ids of the source sequence, so a variation changes words, not the build. World-agnostic and brand-agnostic.",
+ "status": "draft",
+ "slots": [
+  {"id": "world", "what": "Which saved world and sequence the variation runs in", "fills": "from"},
+  {"id": "mission", "what": "What he is trying to do today, and the comment-style top text", "fills": "headline, opening lines"},
+  {"id": "problem", "what": "The problem and where it lives, said out loud in the market's words", "fills": "the reveal lines"},
+  {"id": "turn", "what": "Why every fix failed and what is really going on", "fills": "failed-fix and root-cause lines"},
+  {"id": "product_moment", "what": "What it is, how it works, the demonstration, the proof", "fills": "product and mechanism lines"},
+  {"id": "close", "what": "The after, the objection, the offer and the ask", "fills": "next-time and offer lines"}
+ ],
+ "order": ["hook", "problem", "failed-solutions", "root-cause", "product", "unique-mechanism", "solution", "proof", "transformation", "objections", "offer", "call-to-action"],
+ "rules": "components/world-skit/context/script-lessons.md"
+}

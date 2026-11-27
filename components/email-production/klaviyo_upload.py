@@ -33,11 +33,11 @@ DEFAULT = THE DRAFT AND ITS CARD, NOTHING SCHEDULED. In order:
 
 SCHEDULING (EP-3 (email approval card), decision log 2026-10-12): a Klaviyo
 email is scheduled — never sent now — only by schedule_card(), reached from
-the owner's Approve → Schedule on the email approval page (email_approve.py,
+owner's Approve → Schedule on the email approval page (email_approve.py,
 http://localhost:8797), or his own Claude acting on that page. It re-runs
 every check, refuses any change since the card was made, a send time that is
 not fixed or is under 30 minutes away, a run on the mini or in a worker job,
-the team's off-switch (send-switch.json) off or missing, and anyone not on
+designer's off-switch (send-switch.json) off or missing, and anyone not on
 approvers.json. Send back records the reasons and leaves the draft in Klaviyo.
 
 THE SEND STEP (--send) always refuses: a card file is never a go, and
@@ -57,6 +57,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+import picture_refs                 # every picture in an email, and whether it loads (2026-11-13)
 import simple_email as S          # the engine; puts the shared checks on the path
 from paths import HERE, WORKSPACE
 import drive_reach as DR
@@ -190,6 +191,9 @@ def check(job, pick, online):
     if not ej.is_file():
         raise Held([f"no finished email at {ej} — run simple_email.py first"])
     email = json.loads(ej.read_text())
+    handoff = S.CH.inspect(WORKSPACE, brand, job.get('run_dir') or job['root'], copy=email)
+    if handoff['problems']:
+        raise Held(['calendar handoff: '+p for p in handoff['problems']])
     lk = S.look(brand)
 
     # the words
@@ -238,7 +242,10 @@ def check(job, pick, online):
         lk.get("klaviyo_key") or "simple.json names no klaviyo_key — this brand's Klaviyo is not connected")
 
     strategy, when, passed = None, None, False
-    st = lk.get("send_time") or {}
+    try:
+        st = S.CH.schedule(slot, lk.get('send_time') or {}) if slot else {}
+    except S.CH.Held as e:
+        raise Held(['calendar schedule: '+str(e)])
     if slot and slot.get("date") and st.get("local"):
         when = f"{slot['date']} {st['local']}"
         passed = datetime.datetime.fromisoformat(f"{slot['date']}T{st['local']}") <= datetime.datetime.now()
@@ -370,7 +377,7 @@ def status(job, state, rows, problems, plan=None, rec=None, ledger=None, extra=N
                      zip((plan or {}).get("names") or [], (plan or {}).get("ids") or [])],
         "send_day": (plan or {}).get("when"), "send_day_passed": (plan or {}).get("date_passed"),
         "checks": rows, "problems": problems, "ledger": ledger,
-        "send_go": "waiting for the owner on the email approval page (EP-3 (email approval card))",
+        "send_go": "waiting for owner on the email approval page (EP-3 (email approval card))",
     }
     st.update(extra or {})
     return st
@@ -383,7 +390,7 @@ def save_status(job, st):
 
 
 # ---------------------------------------------------------------- the card
-# EP-3 (email approval card): every checked draft gets a card, and the owner's
+# EP-3 (email approval card): every checked draft gets a card, and owner's
 # Approve → Schedule on the email approval page is the only road to a send.
 
 def utc_now():
@@ -549,7 +556,7 @@ def checks_now(job, pick, online):
 
 
 def card_for_existing(job, pick):
-    """--card: the card for a draft already in Klaviyo (the owner's own, or a
+    """--card: the card for a draft already in Klaviyo (owner's own, or a
     simple_email --push draft)."""
     cid = existing_draft(job)
     if not cid:
@@ -568,7 +575,7 @@ def card_for_existing(job, pick):
 # --------------------------------------------------------------- the guards
 
 def switch_state():
-    """the team's off-switch: "on" only when send-switch.json says exactly that."""
+    """designer's off-switch: "on" only when send-switch.json says exactly that."""
     try:
         v = json.loads(SWITCH_F.read_text()).get("email_schedule")
     except (OSError, ValueError, AttributeError):
@@ -598,7 +605,7 @@ def who(by):
 
 
 def reasons():
-    """The send-back reasons manifest (send-back-reasons.json), the owner's."""
+    """The send-back reasons manifest (send-back-reasons.json), owner's."""
     try:
         rs = json.loads(REASONS_F.read_text())["reasons"]
     except (OSError, ValueError, KeyError, TypeError):
@@ -641,11 +648,18 @@ def schedule_card(job, by, env=None, home=None, at=None, online=True):
         raise Held([f"REFUSED: this card is {card.get('state')} — only a waiting card is scheduled "
                     "(or an approved one, retried)"])
     if switch_state() != "on":
-        raise Held(["REFUSED: the email off-switch is off (tools/email-production/send-switch.json)"])
+        raise Held(["REFUSED: the email off-switch is off (components/email-production/send-switch.json)"])
     by = who(by)
     why = machine_run(env, home)
     if why:
         raise Held([f"REFUSED: {why} — a machine never schedules an email"])
+    try:
+        a = json.loads((Path(job["root"]) / "run.json").read_text()).get("assignment") or {}
+    except (OSError, ValueError, KeyError):
+        a = {}
+    shut = S.pages_hidden(job["brand"], [a.get("offer"), a.get("product")] + list(a.get("offer_also") or []))
+    if shut:
+        raise Held(["REFUSED: its store page is not open yet — " + "; ".join(f"{k}: {v}" for k, v in shut.items())])
     rows, problems, plan = checks_now(job, card.get("pick") or 0, online)
     if problems:
         raise Held(["REFUSED: a check is failing — " + p for p in problems])
@@ -664,6 +678,9 @@ def schedule_card(job, by, env=None, home=None, at=None, online=True):
     if st.get("method") != "static" or earliest is None:
         raise Held([f"REFUSED: the draft's send strategy is {st.get('method') or 'not set'} — it could send "
                     "now; set a fixed time in Klaviyo and re-card"])
+    pic = picture_refs.problems(d["html"])
+    if pic:   # the email as Klaviyo holds it: every picture hosted and loading (email_lead, 2026-11-13)
+        raise Held(["REFUSED: a picture would not show in the email Klaviyo holds: " + x for x in pic])
     fp = fingerprint(d["subject"], d["preview"], d["html"], d["audience_ids"], st)
     was = card.get("fingerprint") or {}
     if fp["sha256"] != was.get("sha256"):
@@ -736,7 +753,7 @@ def send_back(job, by, reason_ids, note):
 def send_cli(job):
     """--send never schedules (lead ruling, EP-3 (email approval card)): it
     reads no card and no approvals.json and makes no Klaviyo call."""
-    raise Held([f"REFUSED: --send does not schedule. A Klaviyo email is scheduled only by the owner's "
+    raise Held([f"REFUSED: --send does not schedule. A Klaviyo email is scheduled only by owner's "
                 f"Approve on the email approval page ({PAGE_URL}), or his own Claude acting on that "
                 "page — a card file or approvals.json is never a go (O5c; EP-3 (email approval card))"])
 
@@ -755,7 +772,7 @@ def main(argv=None):
     ap.add_argument("--card", action="store_true",
                     help="make the approval card for a draft already in Klaviyo (re-checked first)")
     ap.add_argument("--send", action="store_true",
-                    help="always refused — scheduling is the owner's Approve on the email approval page")
+                    help="always refused — scheduling is owner's Approve on the email approval page")
     a = ap.parse_args(argv)
     if a.card and a.dry_run:
         ap.error("--card reads Klaviyo; it has no dry run")
@@ -768,7 +785,7 @@ def main(argv=None):
                 out = card_for_existing(job, a.pick)
             except SystemExit as e:      # no key, or Klaviyo refused a read
                 raise Held([f"no card: {e.code}"])
-            print(f"CARD written: {out}\n  waiting for the owner on the email approval page ({PAGE_URL})")
+            print(f"CARD written: {out}\n  waiting for owner on the email approval page ({PAGE_URL})")
             return 0
         rows, problems, plan = check(job, a.pick, online=not a.dry_run)
         if a.again:
@@ -802,7 +819,7 @@ def main(argv=None):
         out = save_status(job, status(job, "DRAFT IN KLAVIYO", rows, problems, plan, rec, ledger))
         print(f"DRAFT in Klaviyo: campaign {rec['campaign_id']} · “{rec['subject']}” · "
               f"{', '.join(rec['segments'])}" + (f" · ledger {', '.join(ledger)}" if ledger else "")
-              + f"\n  status {out}\n  {card}\n  Not scheduled, not sent — that waits for the owner on the "
+              + f"\n  status {out}\n  {card}\n  Not scheduled, not sent — that waits for owner on the "
               f"email approval page ({PAGE_URL}).")
         return 0
     except Held as h:

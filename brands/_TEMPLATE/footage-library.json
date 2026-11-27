@@ -1,0 +1,33 @@
+{
+ "schema": "footage-library/v1",
+ "what": "The brand's settings for the footage library (components/asset-index/library): what the people and action pass asks, which folders count as footage, where creators are filed, which beats its ads tell, and whether it runs daily. Read by library.brand_config; a new brand works by copying this file.",
+ "category": "<what the brand sells, as a shopper says it; the competitor question names it>",
+ "competitors": [],
+ "creator_root": "content-creators",
+ "footage_roots": [
+  {
+   "prefix": "Shared Assets/",
+   "reader": "gdrive"
+  }
+ ],
+ "footage_folders": [
+  "content-creators",
+  "intake/organic",
+  "intake/references",
+  "intake/before-after",
+  "archive/creators-curated",
+  "ai-elements",
+  "brand-assets"
+ ],
+ "actions": [],
+ "rooms": [],
+ "story_beats": {},
+ "person_aliases": {},
+ "daily": {
+  "on": false,
+  "usd": 2.0
+ },
+ "own_products": [
+  "<every product name printed on the brand's packaging>"
+ ]
+}

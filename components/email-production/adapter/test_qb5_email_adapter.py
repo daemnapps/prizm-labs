@@ -5,7 +5,7 @@ and refuses runs/queue while the live switch is off; detail reads layout.json wi
 if called; apply round-trips every shared word (and fill) with sync.py's calls stubbed at the seam, `go` refused exit 2.
 Stdlib only: no network, no Chrome, no Klaviyo. Run from the repo root (only this folder goes on sys.path — the folder
 above has an email.py that would shadow the standard library):
-    python3 tools/email-production/adapter/test_qb5_email_adapter.py
+    python3 components/email-production/adapter/test_qb5_email_adapter.py
 """
 import contextlib
 import hashlib
@@ -91,7 +91,7 @@ class Report(Base):
         self.assertEqual(ents[self.eid("fx-held")]["held"], ["a price the offer bank does not sell"])
         self.assertEqual([k for k, e in ents.items() if e["held"]], [self.eid("fx-held")])
         self.assertEqual({k: e.get("approved_by") for k, e in ents.items() if e.get("approved_by")},
-                         {self.eid("fx-designer"): "designer"})
+                         {self.eid("fx-editor"): "editor"})
         # live is unreachable, and the report says so
         self.assertNotIn("live", {e["observed_stage"] for e in ents.values()})
         self.assertIn("unreachable", out["live"])
@@ -135,10 +135,10 @@ class Detail(Base):
             "sections": [{"i": 0, "top": 0.0, "bottom": 100.0}, {"i": 1, "top": 100.0, "bottom": 600.0},
                          {"i": 2, "top": 600.0, "bottom": 700.0}],
             "from": sha(run / "design" / "email.json"), "html": sha(run / "klaviyo" / "email.html")}))
-        designer = self.run_dir("fx-designer")
-        (designer / "klaviyo" / "layout.json").write_text(json.dumps({
+        editor = self.run_dir("fx-editor")
+        (editor / "klaviyo" / "layout.json").write_text(json.dumps({
             "schema": 1, "height": 1000.0, "sections": [{"i": 0, "top": 0.0, "bottom": 100.0}],
-            "from": "an-older-layout", "html": sha(designer / "klaviyo" / "email.html")}))
+            "from": "an-older-layout", "html": sha(editor / "klaviyo" / "email.html")}))
 
         def boom(*a, **k):
             raise AssertionError("detail called a process or Chrome: %r" % (a[:1],))
@@ -172,7 +172,7 @@ class Detail(Base):
         self.assertEqual(adapter.detail("%s__fx-ready" % BRAND)["id"], self.eid("fx-ready"))
 
     def test_missing_or_stale_layout_gives_null_positions(self):
-        for label in ("fx-checks", "fx-designer"):                      # none, and one from an older layout
+        for label in ("fx-checks", "fx-editor"):                      # none, and one from an older layout
             d = adapter.detail(self.eid(label))
             self.assertIs(d["layout_stale"], True, label)
             self.assertEqual({x["position"] for x in d["parts"]}, {None}, label)
@@ -234,7 +234,7 @@ class Apply(Base):
         for word, part, payload, want in TABLE:
             rev = adapter.revision(run)
             n = len(self.calls)
-            code, out = adapter.apply(self.eid("fx-ready"), part, word, payload or None, by="the team")
+            code, out = adapter.apply(self.eid("fx-ready"), part, word, payload or None, by="editor")
             self.assertEqual(code, 0, (word, out))
             self.assertIs(out["ok"], True)
             self.assertEqual(len(self.calls), n + 1, word)
@@ -243,7 +243,7 @@ class Apply(Base):
                 self.assertEqual(k.get(key), v, (word, part, key))
             if "section" not in want:
                 self.assertNotIn("section", k, word)
-            self.assertEqual((k["brand"], k["label"], k["email"], k["by"]), (BRAND, "fx-ready", "%s__fx-ready" % BRAND, "the team"))
+            self.assertEqual((k["brand"], k["label"], k["email"], k["by"]), (BRAND, "fx-ready", "%s__fx-ready" % BRAND, "editor"))
             self.assertNotEqual(out["revision"], rev, word)
             self.assertEqual(out["revision"], adapter.revision(run))
             self.assertEqual(out["ref"], rel + "/design/email.json")
@@ -259,37 +259,37 @@ class Apply(Base):
     def test_go_and_scheduled_refused_exit_2(self):
         for word, names in (("go", "approval page"), ("scheduled", "Klaviyo"), ("send", "approval"),
                             ("approve", "approval"), ("schedule", "approval")):
-            code, out = adapter.apply(self.eid("fx-ready"), "-", word, None, by="the team")
+            code, out = adapter.apply(self.eid("fx-ready"), "-", word, None, by="email_lead")
             self.assertEqual(code, 2, word)
             self.assertIs(out["ok"], False)
             self.assertIn(names, out["message"])
-        code, out, _ = self.main("apply", self.eid("fx-ready"), "-", "go", "--by", "the team")
+        code, out, _ = self.main("apply", self.eid("fx-ready"), "-", "go", "--by", "email_lead")
         self.assertEqual(code, 2)
         self.assertIn("refused", json.loads(out)["message"])
         self.assertEqual(self.calls, [])                            # nothing reached sync.py
 
     def test_unknown_word_refused_bad_payload_failed(self):
-        code, _ = adapter.apply(self.eid("fx-ready"), "1", "sparkle", None, by="the team")
+        code, _ = adapter.apply(self.eid("fx-ready"), "1", "sparkle", None, by="editor")
         self.assertEqual(code, 2)
         for part, word, payload in (("1", "move", "sideways"), ("-", "words", "[]"), ("-", "picture", "0: x"),
                                     ("1", "fill", None), ("1", "redo", None), ("x", "ok", None)):
-            code, out = adapter.apply(self.eid("fx-ready"), part, word, payload, by="the team")
+            code, out = adapter.apply(self.eid("fx-ready"), part, word, payload, by="editor")
             self.assertEqual(code, 1, (part, word, out))
         code, out = adapter.apply(self.eid("fx-ready"), "1", "ok", None, by=None)
         self.assertEqual(code, 1)
         self.assertIn("--by", out["message"])
-        code, out = adapter.apply("nobody_email_nothing", "1", "ok", None, by="the team")
+        code, out = adapter.apply("nobody_email_nothing", "1", "ok", None, by="editor")
         self.assertEqual(code, 1)
         self.assertEqual(self.calls, [])
 
     def test_a_klaviyo_draft_is_warned_about(self):
-        code, out = adapter.apply(self.eid("fx-draft"), "2", "redo", "warmer", by="the team")
+        code, out = adapter.apply(self.eid("fx-draft"), "2", "redo", "warmer", by="editor")
         self.assertEqual(code, 0)
         self.assertIn("already a Klaviyo draft (fixture-campaign)", out["message"])
 
     def test_a_failed_sync_call_is_failed(self):
         adapter.run_sync = lambda calls: [{"id": calls[0]["id"], "state": "failed", "result": "it can't move further that way"}]
-        code, out = adapter.apply(self.eid("fx-ready"), "0", "move", "up", by="the team")
+        code, out = adapter.apply(self.eid("fx-ready"), "0", "move", "up", by="editor")
         self.assertEqual(code, 1)
         self.assertIs(out["ok"], False)
         self.assertIn("further", out["message"])

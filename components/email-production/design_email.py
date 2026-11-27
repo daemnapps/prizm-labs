@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""DESIGN — the step between the copy and the designer (the owner, 2026-09-09:
+"""DESIGN — the step between the copy and the designer (owner, 2026-09-09:
 Calendar → Copy → Design from the bank, generating the pictures it needs →
 Figma for the designer's tweaks → Klaviyo).
 
@@ -178,7 +178,7 @@ def design(run_dir, brand, generate=False):
     if generate and any(p["kind"] == "to generate" for p in pictures):
         subprocess.run([sys.executable, "fal_generate.py", str(run_dir), "--brand", brand], cwd=HERE)
     import render_email
-    try:                      # the HTML render is a record, not the deliverable (the owner, 2026-09-09: drafts are built in Figma)
+    try:                      # the HTML render is a record, not the deliverable (owner, 2026-09-09: drafts are built in Figma)
         render_email.build(run_dir, brand, blocks_file=run_dir / "stage8--blocks.design.md")
     except Exception as ex:   # noqa: BLE001
         print(f"note: HTML render skipped for {run_dir.name}: {type(ex).__name__}: {str(ex)[:160]}")

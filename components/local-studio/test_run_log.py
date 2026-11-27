@@ -65,7 +65,6 @@ class RunLogTest(unittest.TestCase):
             m.job_runs(None)
         self.assertEqual(out.getvalue().strip(), "no runs yet")
 
-    @unittest.skipUnless(m.RUNS.exists(), "the run log is run output and does not ship in the public copy")
     def test_the_log_moved_whole(self):
         self.assertTrue(m.RUNS.exists())
         lines = m.RUNS.read_text().splitlines()

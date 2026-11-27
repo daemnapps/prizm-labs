@@ -7,7 +7,7 @@ its starter pack from data we already own — no invention:
 
   - the avatar feed's sources (permanent + probation, receipts intact)
   - creators behind the feed's current winners
-  - creators from the owner's saves catalog, in the categories this
+  - creators from owner's saves catalog, in the categories this
     avatar's config names
   - the sounds those saves ran on (TikTok trains hard on audio)
 
@@ -15,7 +15,7 @@ Config per kit (data, not code — the script stays brand-agnostic):
     records/persona-kits/<brand>--<avatar>/config.json
       {"avatar": "...", "saves_categories": ["...", ...]}
 
-    python3 personakit.py --avatar brand-a--glow-up
+    python3 personakit.py --avatar brand_a--glow-up
 
 Output: kit.json (machine) + kit.md (readable) in the kit folder.
 Account creation is a human step; the kit is everything after that.
@@ -55,14 +55,14 @@ def main():
             add(it["platform"], it["author"],
                 f'feed winner: {w["views"]:,} views — {it["url"]}')
 
-    # 3) the owner's saves, in this kit's categories; and their sounds
+    # 3) owner's saves, in this kit's categories; and their sounds
     rows = json.loads((HERE / "records/owner-saves/catalog.json").read_text())["rows"]
     cats = set(cfg["saves_categories"])
     sounds = Counter()
     for r in rows:
         if r.get("category") in cats or r.get("category2") in cats:
             add("instagram", r.get("author"),
-                f'the owner save, category {r.get("category")} — {r["url"]}')
+                f'owner save, category {r.get("category")} — {r["url"]}')
             if r.get("sound"):
                 sounds[r["sound"]] += 1
 

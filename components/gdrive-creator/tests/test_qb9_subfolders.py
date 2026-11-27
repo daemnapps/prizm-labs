@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""QB-9 (the team statics): reach.subfolders lists one folder's child folders, in name order, read-only, one listing per
+"""QB-9 (editor statics): reach.subfolders lists one folder's child folders, in name order, read-only, one listing per
 page; files and trashed folders are not among them. Offline: a fake Drive service, no key, no network.
 
     /usr/bin/python3 components/gdrive-creator/tests/test_qb9_subfolders.py
@@ -35,8 +35,8 @@ class Svc(object):
 
 class Subfolders(unittest.TestCase):
     def test_every_page_in_name_order(self):
-        svc = Svc([[{"id": "2", "name": "brand-b"}], [{"id": "1", "name": "brand-a"}]])
-        self.assertEqual(reach.subfolders("root", svc=svc), [{"id": "1", "name": "brand-a"}, {"id": "2", "name": "brand-b"}])
+        svc = Svc([[{"id": "2", "name": "brand_b"}], [{"id": "1", "name": "brand_a"}]])
+        self.assertEqual(reach.subfolders("root", svc=svc), [{"id": "1", "name": "brand_a"}, {"id": "2", "name": "brand_b"}])
         self.assertEqual(len(svc.calls), 2)
 
     def test_the_query_asks_for_live_folders_of_that_parent_only(self):

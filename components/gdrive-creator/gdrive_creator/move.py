@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """A tracked Drive move: one file goes to another Shared Assets folder by changing its parent — the
 Drive id kept, nothing copied — and every move leaves ONE drive-move record, so anyone can ask
-"where did my X go" (LD-89 (tracked Drive moves), 2026-10-23; the team, ~04:25Z: "since the move is by
+"where did my X go" (LD-89 (tracked Drive moves), 2026-10-23; developer, ~04:25Z: "since the move is by
 machine anwayys, it should be fully tracked").
 
     from gdrive_creator.move import move, MoveRefused

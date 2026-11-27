@@ -1,0 +1,101 @@
+{
+ "_what": "chivstyle's slideshow posts \u2014 organic swipe library entry. Built 2026-09-22 by slideshows.py from the Apify TikTok pull; every number is the post's own.",
+ "creator": "chivstyle",
+ "platform": "tiktok",
+ "pulled": "2026-09-22",
+ "group": "tye-clipping-examples",
+ "followers": 18500,
+ "profile": "https://www.tiktok.com/@chivstyle",
+ "slideshows_seen": 40,
+ "posts_seen": 40,
+ "posts": [
+  {
+   "file": "01_chivstyle-7677029146320489736.md",
+   "id": "7677029146320489736",
+   "views": 19200,
+   "engagement": 908,
+   "slides": 6,
+   "url": "https://www.tiktok.com/@chivstyle/video/7677029146320489736",
+   "posted": "2026-08-23",
+   "hashtags": "#selfcare #lookism #selfcare #glowuptips #selfimprovement",
+   "sound": "original sound - Aaron"
+  },
+  {
+   "file": "02_chivstyle-7677773674501393682.md",
+   "id": "7677773674501393682",
+   "views": 10700,
+   "engagement": 553,
+   "slides": 5,
+   "url": "https://www.tiktok.com/@chivstyle/video/7677773674501393682",
+   "posted": "2026-08-25",
+   "hashtags": "#selfcare #lookism #selfcare #glowuptips #selfimprovement",
+   "sound": "sonido original"
+  },
+  {
+   "file": "03_chivstyle-7677437249289604359.md",
+   "id": "7677437249289604359",
+   "views": 9327,
+   "engagement": 491,
+   "slides": 6,
+   "url": "https://www.tiktok.com/@chivstyle/video/7677437249289604359",
+   "posted": "2026-08-24",
+   "hashtags": "#selfimprovement #glowuptips #selfcare #lookism #selfcare",
+   "sound": "Black - orijinal ses"
+  },
+  {
+   "file": "04_chivstyle-7673053148688272648.md",
+   "id": "7673053148688272648",
+   "views": 8381,
+   "engagement": 865,
+   "slides": 9,
+   "url": "https://www.tiktok.com/@chivstyle/video/7673053148688272648",
+   "posted": "2026-08-12",
+   "hashtags": "#lookism #selfcare #clearman",
+   "sound": "suara asli - \ud835\udc0c\ud835\udc22\ud835\udc27\ud835\udc1e."
+  },
+  {
+   "file": "05_chivstyle-7681115622360583442.md",
+   "id": "7681115622360583442",
+   "views": 7439,
+   "engagement": 565,
+   "slides": 6,
+   "url": "https://www.tiktok.com/@chivstyle/video/7681115622360583442",
+   "posted": "2026-09-03",
+   "hashtags": "#selfimprovement #lookism",
+   "sound": "Velvet Regret"
+  },
+  {
+   "file": "06_chivstyle-7682583782024547592.md",
+   "id": "7682583782024547592",
+   "views": 7089,
+   "engagement": 356,
+   "slides": 6,
+   "url": "https://www.tiktok.com/@chivstyle/video/7682583782024547592",
+   "posted": "2026-09-07",
+   "hashtags": "#selfimprovement #lookism",
+   "sound": "Wolf in the Dark"
+  },
+  {
+   "file": "07_chivstyle-7684898556624325895.md",
+   "id": "7684898556624325895",
+   "views": 7032,
+   "engagement": 311,
+   "slides": 6,
+   "url": "https://www.tiktok.com/@chivstyle/video/7684898556624325895",
+   "posted": "2026-09-13",
+   "hashtags": "#lookism #glowup #selfimprovement",
+   "sound": "\u0627\u0644\u0635\u0648\u062a \u0627\u0644\u0623\u0635\u0644\u064a - NARUGOT"
+  },
+  {
+   "file": "08_chivstyle-7674936671485447432.md",
+   "id": "7674936671485447432",
+   "views": 5931,
+   "engagement": 366,
+   "slides": 7,
+   "url": "https://www.tiktok.com/@chivstyle/video/7674936671485447432",
+   "posted": "2026-08-17",
+   "hashtags": "#glowuptips #selfimprovement #selfcare #lookism #man",
+   "sound": "som original"
+  }
+ ]
+}

@@ -2,7 +2,7 @@
 
     python3 components/research-gatherer/gather.py retag --culture --brand B [--avatar A] [--limit N] [--apply] [--dry-run]
 
-the owner, 2026-10-06 (the bottom-up culture build): the culture map is built
+owner, 2026-10-06 (the bottom-up culture build): the culture map is built
 from the bank's own rows, so the rows people wrote in comment sections and
 communities are re-read for the seven culture tags (`annotate.CULTURE_TAGS`:
 taste, cringe, subculture, in-word, community-voice, role-claimed, and the
@@ -115,7 +115,7 @@ def read(rows, base, model, batch=40, jobs=4, claude=None):
     def ask(prompt):
         if claude:
             return claude(prompt)
-        # NO ACCOUNT IS WIRED IN (the owner, 2026-10-23): run_kit's claude_door picks the credential.
+        # NO ACCOUNT IS WIRED IN (owner, 2026-10-23): run_kit's claude_door picks the credential.
         import sys
         kit = str(engine.ROOT.parent / "run-kit")      # the sibling component, appended
         if kit not in sys.path:
@@ -182,7 +182,10 @@ def main(argv=None):
     ap.add_argument("--model")
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--dry-run", action="store_true")
-    a = ap.parse_args(argv)
+    import importlib.util as _u, pathlib as _pl
+    _s = _u.spec_from_file_location("profile_arg", next(q for q in _pl.Path(__file__).resolve().parents if q.name == "components") / "naming" / "profile_arg.py")
+    _PA = _u.module_from_spec(_s); _s.loader.exec_module(_PA)   # --profile <avatar>[_<sub>][_<demographic>] (naming/PEOPLE.md)
+    a = ap.parse_args(_PA.expand(argv, has=('avatar',)))
     cfg = engine._config().get("ownvoice", {})
     model = a.model or cfg.get("model") or "claude-sonnet-5"
     state_f = engine._deep_runs_root() / a.brand / "retag-culture-state.json"

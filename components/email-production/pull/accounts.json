@@ -1,13 +1,13 @@
 {
   "note": "Where each brand's sending account lives. DATA, not code — lab rule 7: no build hard-codes a brand. Adding a brand is adding a row here.",
   "brands": {
-    "brand-a": {
+    "Brand A": {
       "account": "VLX6CK",
       "timezone": "US/Eastern",
       "placed_order": "Tyyrjv",
       "placed_order_note": "Shopify integration, confirmed live 2026-08-26. A second Placed Order metric exists on Next Commerce (R4k4Y4); the two must never be summed without first establishing whether they are separate checkouts or the same order twice. Unresolved."
     },
-    "brand-b": {
+    "Brand B": {
       "account": "QScpte",
       "timezone": "US/Eastern",
       "placed_order": "R9J5Zi",

@@ -1,4 +1,4 @@
-# The send plan — <brand>, rest of September 2026
+# The send plan — Brand A, rest of September 2026
 
 - **Tue 22 Sep · A note from you** (`founder-note`) → Core | VIP Customer, Core | Loyal Customer, Core | Subscriber, Core | Returning Customer, Core | One-Time Customer — eleven weeks with nothing from us, and the reason is not one he would have guessed — the whole operation moved to a warehouse in Ohio, which is why hi
 - **Wed 23 Sep · Asking them for their story** (`content-request`) → Core | VIP Customer — five orders in and he has never been asked what any of them did — the answer goes back out to the room, not into a folder

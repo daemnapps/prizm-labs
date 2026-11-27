@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The month's board, as one Figma payload.
 
-    python3 figma_board.py --brand brand-a --month 2026-09 > board.js
+    python3 figma_board.py --brand brand_a --month 2026-09 > board.js
 
 The board used to be drawn by whatever connector script a session happened to
 write that day, which meant a rebuild was a rewrite and no two months looked
@@ -9,7 +9,7 @@ alike. This emits the whole section from the run folders: one heading per SEND,
 its versions side by side beneath it, each version a wireframe in the brand's
 own palette with a caption above it.
 
-What the board is (RULED 2026-09-09, the owner: "the machine does not design"):
+What the board is (RULED 2026-09-09, owner: "the machine does not design"):
 shape and order, not design. A wireframe the designer reads and then designs
 from — headline / subhead / body / button / picture, in the order the chain
 proposed, with the picture directions written on their grey boxes.

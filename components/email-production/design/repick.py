@@ -10,7 +10,7 @@ words around it, else pick one we own by what is IN it (asset-index tags), else 
 Made pictures (run:), product cut-outs and slots still to make are never touched; nor is a customer picture whose
 section carries that customer's own words. Every real picture's alt becomes what was seen in it (line.true_alts).
 
-Prompt: prompts/design2b-repick-v1-pm.md, written beside the output as sent (design/repick--prompt.md); what
+Prompt: prompts/design2b-repick-v1-email_lead.md, written beside the output as sent (design/repick--prompt.md); what
 changed and why is kept in email.json under `repick`. Then the email is rebuilt and re-checked as a picture change
 on the emails page is (design/build.py, design/check.py, the card's marks kept) unless --no-build.
 A picture another email of the brand already uses is not offered; the batch goes in the order given.
@@ -26,7 +26,7 @@ sys.path.insert(0, str(HERE))
 import line as LI  # noqa: E402
 
 L, EN, REPO = LI.L, LI.EN, LI.REPO
-PROMPT = LI.PROMPTS / "design2b-repick-v1-pm.md"
+PROMPT = LI.PROMPTS / "design2b-repick-v1-email_lead.md"
 PICTURE_KEYS = ("photo", "proof", "todo", "stage", "glow", "band")
 OWN_WORDS = ("example", "selfies")             # a customer's picture here sits with that customer's words
 
@@ -249,7 +249,9 @@ def repick(brand, run_dir, lk, used, dry=False):
         probs.append("no visual DNA on file for %s: a designed email is held until the brand's DNA is written" % brand)
     th = spec.get("theme")
     if th and th not in (lk.get("themes") or {}):
-        probs.append("no %s look for the moment `%s` yet: make it (the brand's moment looks) before this email builds" % (brand, th))
+        # a missing moment look is a note for editor, never a hold: line.py's rule (email_lead, 2026-11-03)
+        note = "for editor: no %s look for the moment `%s` yet; this email uses the brand's own look: adjust it to the moment" % (brand, th)
+        spec["for_editor"] = list(spec.get("for_editor") or []) + ([note] if note not in (spec.get("for_editor") or []) else [])
     spec["held"] = probs + ["slot %s kept as it was: %s" % (n, why) for n, why in sorted(bad.items())]
     spec["repick"] = changed
     (d / "email.json").write_text(json.dumps(spec, indent=1, ensure_ascii=False) + "\n")
@@ -268,7 +270,7 @@ def repick(brand, run_dir, lk, used, dry=False):
 
 def rebuild(runs):
     """As a picture change on the emails page (adapter/sync.py _rebuild): build.py then check.py, per email, the card's
-    marks kept (prepare.keep_card), so an email the team marked Done stays Done."""
+    marks kept (prepare.keep_card), so an email editor marked Done stays Done."""
     sys.path.insert(0, str(LI.COMP / "adapter"))
     from prepare import keep_card
 

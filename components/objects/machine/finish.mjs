@@ -3,7 +3,7 @@
 // Writes <out-dir>/<id>.glb (finished, full quality) and <out-dir>/<id>.web.json (small copy the
 // artifact page can load: quantized geometry, webp textures, packed as base64 in JSON because the
 // page host does not serve .glb files).
-// The house finish ("satin", the owner 2026-09-26): the light rolls off it like satin — the look of his
+// The house finish ("satin", owner 2026-09-26): the light rolls off it like satin — the look of his
 // 3D head. A clear lacquer coat over the object's own colours, roughness pulled down a little.
 import { NodeIO } from "@gltf-transform/core";
 import { ALL_EXTENSIONS, KHRMaterialsClearcoat } from "@gltf-transform/extensions";

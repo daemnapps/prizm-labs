@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The right-account check: a brand's Klaviyo key must open that brand's own account (the team, 2026-10-22).
+"""The right-account check: a brand's Klaviyo key must open that brand's own account (email_lead, 2026-10-22).
 
     python3 test_right_account.py
 

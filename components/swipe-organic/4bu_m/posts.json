@@ -1,0 +1,48 @@
+{
+ "_what": "4bu_m's slideshow posts \u2014 the organic swipe library entry for Brand A's signed creator. Built 2026-09-14 from the Apify TikTok pull; every number is his own post's.",
+ "creator": "4bu_m",
+ "platform": "tiktok",
+ "pulled": "2026-09-14",
+ "posts": [
+  {
+   "file": "01_4bu_m-7622001229694192899.md",
+   "id": "7622001229694192899",
+   "views": 1600000,
+   "engagement": 132083,
+   "slides": 9,
+   "url": "https://www.tiktok.com/@4bu_m/video/7622001229694192899",
+   "posted": "2026-03-27",
+   "hashtags": "#jawline #fyp #viral #debloat #glowup"
+  },
+  {
+   "file": "02_4bu_m-7609392401215524118.md",
+   "id": "7609392401215524118",
+   "views": 721400,
+   "engagement": 68175,
+   "slides": 10,
+   "url": "https://www.tiktok.com/@4bu_m/video/7609392401215524118",
+   "posted": "2026-02-21",
+   "hashtags": "#glowyskin #skincare #acnetips #fyp #selfcare"
+  },
+  {
+   "file": "03_4bu_m-7660554650654985494.md",
+   "id": "7660554650654985494",
+   "views": 474900,
+   "engagement": 72007,
+   "slides": 4,
+   "url": "https://www.tiktok.com/@4bu_m/video/7660554650654985494",
+   "posted": "2026-07-09",
+   "hashtags": "#glowup #fyp #ascend #viral"
+  },
+  {
+   "file": "04_4bu_m-7676153874381688086.md",
+   "id": "7676153874381688086",
+   "views": 36300,
+   "engagement": 2912,
+   "slides": 8,
+   "url": "https://www.tiktok.com/@4bu_m/video/7676153874381688086",
+   "posted": "2026-08-20",
+   "hashtags": "#fyp"
+  }
+ ]
+}

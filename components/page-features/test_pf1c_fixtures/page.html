@@ -1,0 +1,10 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>sync fixture</title>
+<script type="application/json" id="fo-other">{"keep": "this block is not the catalog"}</script>
+</head><body>
+<h1 data-feature="1">Run title</h1>
+<script type="application/json" id="fo-features">{"title": "old embedded copy", "features": []}</script>
+<script>
+  var CAT = JSON.parse(document.getElementById("fo-features").textContent);
+</script>
+</body></html>

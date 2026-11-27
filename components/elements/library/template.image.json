@@ -1,7 +1,7 @@
 {
  "element": "template",
  "asset": "image",
- "source": "tools/image-production/static/templates/*.json",
+ "source": "components/image-production/static/templates/*.json",
  "enforced_by": "image production's renderer",
  "note": null,
  "rows": [
@@ -16,7 +16,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "tools/image-production/static/templates/*.json",
+   "source": "components/image-production/static/templates/*.json",
    "extra": {
     "canvas": {
      "w": 768,
@@ -52,7 +52,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "tools/image-production/static/templates/*.json",
+   "source": "components/image-production/static/templates/*.json",
    "extra": {
     "canvas": {
      "w": 768,
@@ -95,7 +95,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "tools/image-production/static/templates/*.json",
+   "source": "components/image-production/static/templates/*.json",
    "extra": {
     "canvas": {
      "w": 768,
@@ -136,7 +136,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "tools/image-production/static/templates/*.json",
+   "source": "components/image-production/static/templates/*.json",
    "extra": {
     "canvas": {
      "w": 768,
@@ -185,7 +185,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "tools/image-production/static/templates/*.json",
+   "source": "components/image-production/static/templates/*.json",
    "extra": {
     "canvas": {
      "w": 768,

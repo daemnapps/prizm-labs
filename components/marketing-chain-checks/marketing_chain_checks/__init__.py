@@ -1,7 +1,7 @@
 """marketing-chain-checks — the checks every chain runs before it hands work on, and
 the one hold() that stops failing work (rollout Step 0c, 2026-09-20).
 
-Lifted from tools/email-production/simple_email.py, where each one was
+Lifted from components/email-production/simple_email.py, where each one was
 added after a real failure: a price for a size the store had dropped, an
 [UNFILLED] note shipped inside an email, a serum called a scrub.
 
@@ -9,7 +9,7 @@ added after a real failure: a price for a size the store had dropped, an
     GATE    a fixed point in a chain where checks run; any failure holds the work
     REVIEW  a person's verdict
 
-Not the team's components/qc-checks — a separate component this code does not call
+Not developer's components/qc-checks — a separate component this code does not call
 (kept separate by SD-2 (qc shared truth), 2026-09-30). Renamed from
 components/quality-checks on 2026-10-02; a tombstone there forwards old imports.
 """
@@ -112,9 +112,134 @@ def _check_rows(check_text):
     return out
 
 
-def read_check_block(check_text):
-    """The copy-check step's answer (a fenced ```CHECK JSON block) as problems."""
-    return [text for _kind, text, _quote, _files in _check_rows(check_text)]
+def read_check_block(check_text, still_in=None):
+    """The copy-check step's answer (a fenced ```CHECK JSON block) as problems. With `still_in` (the words a reader
+    will get, LD-105 (check the designed email)), a finding whose quoted line is no longer there is not a problem."""
+    return [i["text"] for i in check_split(check_text, "delivery", still_in)[0]]
+
+
+def _plain(text):
+    """Words only: markup, case, punctuation and spacing do not make two lines different (LD-105 (check the designed
+    email); engine._same's reading in the language layer, plus tags dropped)."""
+    text = re.sub(r"<[^>]+>", " ", str(text or "")).replace("’", "'").replace("‘", "'")
+    return re.sub(r"\s+", " ", re.sub(r"[^\w\s']", " ", text.lower())).strip()
+
+
+def on_page(quote, text):
+    """Is this quoted line, word for word (markup, case and punctuation aside), in the text?"""
+    q = _plain(quote)
+    return bool(q) and q in _plain(text)
+
+
+def check_split(check_text, gate, still_in=None):
+    """(live, gone): the check step's findings as items, split by whether the line each one quotes is still in
+    `still_in`. One text, LD-105 (check the designed email): a line fixed on the page clears its finding. With no
+    `still_in`, or a finding that quotes nothing (an unreadable check), it stays live: today's reading."""
+    live, gone = [], []
+    for i in check_items(check_text, gate):
+        stale = still_in is not None and i["kind"] != "check-unreadable" and i.get("quote") and not on_page(i["quote"], still_in)
+        (gone if stale else live).append(i)
+    return live, gone
+
+
+# WHO SAID IT (LD-105 (check the designed email), 2026-11-04): a YouTube comment and two Reddit posts went out
+# credited "A <brand> customer · verified buyer". A credit claims a kind of source; the language bank says where each
+# line was really said. Both readings are by words in the record, never by a brand's name.
+PLATFORMS = ("reddit", "youtube", "tiktok", "instagram", "facebook")
+_BUYER_TYPES = {"survey", "ticket", "interview", "database", "review"}
+
+
+def credit_claim(who, verified=False):
+    """The kind of source a printed credit claims, or None when it names none (a first name, an empty credit).
+    `verified` = the section prints "· verified buyer" after the credit, which claims a customer whatever it says."""
+    w = (who or "").lower()
+    if verified:
+        return "customer"
+    for p in PLATFORMS:
+        if p in w:
+            return p
+    if "panel" in w or "tester" in w:
+        return "panel"
+    if "follower" in w:
+        return "follower"
+    if re.search(r"\b(customer|buyer|client)s?\b", w):
+        return "customer"
+    return None
+
+
+def source_kind(row):
+    """Where a language row was said: a platform, `panel`, `customer` (a buyer's own words on our own record),
+    `follower` (a non-buyer survey), `comment` or `community` — read off the row's own source fields."""
+    s = row.get("source") if isinstance(row.get("source"), dict) else {}
+    typ = str(s.get("type") or "").lower()
+    where = " ".join(str(s.get(k) or "") for k in ("name", "ref", "url", "type")).lower()
+    for p in PLATFORMS:
+        if p in where:
+            return p
+    if typ == "panel":
+        return "panel"
+    speaker = str(row.get("speaker") or "").lower()
+    if typ == "review" and "competitor" in where:      # another brand's buyer reviewing another brand's product
+        return "review"
+    if typ in _BUYER_TYPES and speaker in ("customer", "churned") and row.get("attribution") != "assumed":
+        return "customer"
+    if typ == "survey" and speaker == "lead":
+        return "follower"
+    return typ or "unknown"
+
+
+FITS = {"follower": {"follower", "tiktok", "instagram", "facebook", "comment"}}
+
+
+def _row_words(row):
+    return row.get("text") or row.get("quote") or ""
+
+
+def _same_line(quote, rows):
+    """The rows that hold this quoted line: word for word inside the row, or — a quote of six words or more — nearly
+    so (a typo fixed, a word dropped: 85% of its words in one row)."""
+    q = _plain(quote)
+    if not q:
+        return []
+    exact = [r for r in rows if q in _plain(_row_words(r))]
+    if exact or len(q.split()) < 6:
+        return exact
+    qw = q.split()
+    out = []
+    for r in rows:
+        rw = set(_plain(_row_words(r)).split())
+        if rw and sum(w in rw for w in qw) >= 0.85 * len(qw) and len(rw) <= 2 * len(qw):
+            out.append(r)
+    return out
+
+
+def _source_name(row):
+    s = row.get("source") if isinstance(row.get("source"), dict) else {}
+    name = s.get("name") or s.get("type") or "an unnamed source"
+    ref = s.get("ref") or s.get("url")
+    return "%s (%s)" % (name, ref) if ref else name
+
+
+def quote_credit_check(quotes, rows):
+    """Every quote's credit against where the bank says it was said. `quotes` = [{quote, who, verified}]; `rows` =
+    language rows (`text`, or the experience index's `quote`, with `source`). A credit naming no kind of source, or a
+    quote the bank does not hold, is not judged here (an invented quote is LD-104 (no invented facts)'s)."""
+    out = []
+    for x in quotes:
+        claim = credit_claim(x.get("who"), x.get("verified"))
+        if not claim:
+            continue
+        found = _same_line(x.get("quote"), rows)
+        if not found:
+            continue
+        kinds = {source_kind(r) for r in found}
+        if kinds & FITS.get(claim, {claim}):
+            continue
+        credit = (x.get("who") or "") + (" · verified buyer" if x.get("verified") else "")
+        names = list(dict.fromkeys(_source_name(r) for r in found))
+        out.append("quote “%s” is credited “%s”, but the language bank has it from %s — credit it to where it was "
+                   "said, or use a %s's own words" % (x.get("quote"), credit.strip(" ·"), "; ".join(names[:3]), claim))
+    return out
 
 
 # EVERY PROBLEM HAS AN ID (HE-1 (fact rulings), 2026-10-01): a person rules on
@@ -132,8 +257,11 @@ def item(gate, kind, text, quote=None, files_say=None):
             "files_say": files_say, "text": text}
 
 
-def check_items(check_text, gate):
-    """read_check_block's problems as items — same order, same texts."""
+def check_items(check_text, gate, still_in=None):
+    """read_check_block's problems as items — same order, same texts. With `still_in`, only the live ones
+    (check_split)."""
+    if still_in is not None:
+        return check_split(check_text, gate, still_in)[0]
     return [item(gate, kind, text, quote, files)
             for kind, text, quote, files in _check_rows(check_text)]
 
@@ -247,7 +375,7 @@ def partner_on_file(brand_dir, key):
     return None
 
 
-# A PRODUCT THAT IS NOT LIVE IS NOT A PRODUCT. the owner, 2026-09-21: "you have to
+# A PRODUCT THAT IS NOT LIVE IS NOT A PRODUCT. owner, 2026-09-21: "you have to
 # also make sure that the product is not a draft. FADE is a draft, so we
 # shouldn't be talking about FADE." A brand's own files describe things that
 # were never launched — one brand's asset-bed names three of them as drafts — and a
@@ -268,7 +396,7 @@ def draft_product_check(text, never):
     return out
 
 
-# EVERY PIECE ENDS SOMEWHERE A READER CAN BUY. the owner, same day: "Every email
+# EVERY PIECE ENDS SOMEWHERE A READER CAN BUY. owner, same day: "Every email
 # should have some sort of refocus back into a product in some capacity, and
 # then the offer that goes with it. Even if it's more like a value email, just
 # make sure we have the ability to make money." Three of nine September drafts
@@ -283,7 +411,7 @@ def money_path_check(link, sellable, label="", extra_ok=()):
     if link.rstrip("/") in urls:
         return []
     # A code link (`<site>/discount/<CODE>/?next=<path>`) applies the code and
-    # lands on `next` (the team, 2026-10-01, on a brand's code link). The destination is
+    # lands on `next` (email_lead, 2026-10-01, on a brand's code link). The destination is
     # the page it lands on, so that is what is checked.
     from urllib.parse import urlsplit, parse_qs
     parts = urlsplit(link)

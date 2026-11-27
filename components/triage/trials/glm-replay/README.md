@@ -1,6 +1,6 @@
 # GLM replay of recent atlas triage runs, blind against the Opus originals
 
-the team, 2026-10-02 at 10:05Z, "replay", answering ◆ PLAN [6beb2b]: "Say "replay" and I'll ask the atlas stream for the sample and the lead for the dispatch." The ask was "test if glm can be tested against some of recent runs". Why it matters: ATL jobs were the largest worker spend today (~204M input tokens, mostly ATL-31 (remaining issue briefs), ATL-29 (drafted changes), ATL-26 (action briefs) and ATL-30 (decision option cards)).
+the developer, 2026-10-02 at 10:05Z, "replay", answering ◆ PLAN [6beb2b]: "Say "replay" and I'll ask the atlas stream for the sample and the lead for the dispatch." The ask was "test if glm can be tested against some of recent runs". Why it matters: ATL jobs were the largest worker spend today (~204M input tokens, mostly ATL-31 (remaining issue briefs), ATL-29 (drafted changes), ATL-26 (action briefs) and ATL-30 (decision option cards)).
 
 **Only the model changes.** Each replay reruns one original worker job exactly: the same request instruction, at the same base commit, on route glm with glm-5.3. Its output lands on a replay branch that is NEVER merged. Nothing gets carded or merged from it.
 
@@ -9,7 +9,7 @@ the team, 2026-10-02 at 10:05Z, "replay", answering ◆ PLAN [6beb2b]: "Say "rep
 | | Briefs | Drafts |
 |---|---|---|
 | Original | ATL-31 (remaining issue briefs) part F | ATL-29 (drafted changes) round 2 part A |
-| Request (instruction verbatim) | `platform/data/records/workflow-requests/20261002T061737Z--engineer--impl-atl31f-issue-briefs.json` | `platform/data/records/workflow-requests/20261002T091838Z--engineer--impl-atl29-r2a-remaining-now.json` |
+| Request (instruction verbatim) | `platform/data/records/workflow-requests/20261002T061737Z--developer--impl-atl31f-issue-briefs.json` | `platform/data/records/workflow-requests/20261002T091838Z--developer--impl-atl29-r2a-remaining-now.json` |
 | Base | 0fabb40eb | e6d8103826 |
 | Opus output | branch tip b1be1d4d4 (merged 2c8de3b27) | merged b49d2dfa7 |
 | Scope | 58 issue briefs, 6 components (copywriter, image-teardown, intake, meta-upload, media-render, atlas), 50 P2 and 8 P3 | 10 new rows: 6 diffs (apify#11, elements#1, image-production#22, image-teardown#2, marketing-doctrine#6, run-kit#15) and 4 not-drafted reasons |
@@ -27,14 +27,14 @@ the team, 2026-10-02 at 10:05Z, "replay", answering ◆ PLAN [6beb2b]: "Say "rep
    - Diff-or-not agreement with Opus on the 10 rows.
    - For the diffs both models made, the same blind judge asks whether the diff carries out the issue's stated response with no unrelated change.
 
-## Decision line (◆ PLAN's, sharpened with the objective gate; the team applies it)
+## Decision line (◆ PLAN's, sharpened with the objective gate; the developer applies it)
 
 - **PASS:** GLM passes both of Opus's tests, its briefs are judged equal or better on 8 or more of 10, it makes no more factual errors than Opus across the 10, and every GLM diff applies. Then the triage write-ups (briefs, drafts, and by extension action briefs and option cards) move to route glm.
 - **FAIL:** more factual errors than Opus, a failed test, or a diff that does not apply. They stay on Opus.
 
 ## Not available, said plainly
 
-There are no triage-owner acts to score against. `platform/data/records/triage/` holds no records yet: the team has not acted on any brief through the decision log. So the "score against the team's own acts" leg of the proposal can't run today. It can be added after the first real records.
+There are no triage-owner acts to score against. `platform/data/records/triage/` holds no records yet: the email lead has not acted on any brief through the decision log. So the "score against the email lead's own acts" leg of the proposal can't run today. It can be added after the first real records.
 
 ## Prior evidence
 
@@ -42,4 +42,4 @@ TI-24 (red-test summaries GLM) compared summaries blind: GLM 235 against Claude 
 
 ## The run records
 
-`runs/triage/glm-replay/<stamp>/{briefs,drafts}/`, holding the replay branch name, the gate test output, and `run.json` (CLI modelUsage per job, wall time, the tool flags each CLI ran with, and cost as "plan window", never the dollar figure, per the 09-17 ruling). The judge's pairs, key and verdicts go in `judge/`. The comparison page is the atlas stream's, and it goes to the team.
+`runs/triage/glm-replay/<stamp>/{briefs,drafts}/`, holding the replay branch name, the gate test output, and `run.json` (CLI modelUsage per job, wall time, the tool flags each CLI ran with, and cost as "plan window", never the dollar figure, per the 09-17 ruling). The judge's pairs, key and verdicts go in `judge/`. The comparison page is the atlas stream's, and it goes to the developer.

@@ -8,7 +8,7 @@ and they all need to be organized and indexed through proper lanes."*
 | | | |
 |---|---|---|
 | 1 | the media | `records/swipe-videos/<id>/` |
-| 2 | the Drive | `Shared Assets/lab/owner/swipe-organic/records/swipe-videos/<id>/` |
+| 2 | the Drive | `Shared Assets/lab/the owner/swipe-organic/records/swipe-videos/<id>/` |
 | 3 | **the row** | a line in `<pool>/posts.json` |
 
 **`components/intake` builds the index from the ROWS. It never walks the
@@ -25,8 +25,8 @@ said so, because nothing asked.
 ## The door
 
 ```
-python3 add.py --pool tiktok-shop --brand <brand> ~/Downloads/*.mp4
-python3 add.py --pool medicube --brand <brand> --url <post link>
+python3 add.py --pool tiktok-shop --brand Brand B ~/Downloads/*.mp4
+python3 add.py --pool medicube --brand Brand B --url <post link>
 python3 add.py --check                    what is filed but not on the Drive
 python3 add.py --pool tiktok-shop --list  what a pool holds
 ```

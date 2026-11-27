@@ -81,7 +81,7 @@ a{{color:#c7cfad}} .bar{{width:120px;height:6px;background:#2b2f2a;border-radius
               "source: every line of copy present, every recovered picture placed, every button labelled, the reading order kept.", "",
               f"**{len(clean)}/{n} clean on every check** · copy complete {sum(1 for r in recs if not r['n_missing'])}/{n} · "
               f"pictures placed {sum(1 for r in recs if r['placed'] == r['assets'])}/{n} · buttons labelled {sum(1 for r in recs if not r['ctas_missing'])}/{n}", "",
-              "Where it lives (local, `lab/email-production/results/format-bank/`, not committed — media): "
+              "Where it lives (local, `lab/owner/email-production/results/format-bank/`, not committed — media): "
               "`<board>/NN-clean.html` the email, `NN-spec.md` its replication spec, `NN-clean.png` its picture, "
               "`<board>/qa.html` export beside rebuild, `sheet-NN.png` contact sheets, `qa-index.html` the one page over all boards. "
               "Engine: `sweep/rebuild.py` (extract → spec → render), `sweep/qc.py` (the checks), `sweep/capture_clean.py`, `sweep/sheets.py`.", "",

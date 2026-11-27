@@ -3,7 +3,7 @@
 ten-stage chain. The chain reverse-engineers a competitor's argument and
 injects our brand into it; an affiliate feature is not that kind of email.
 It is one partner product, our honest reason for pointing at it, and one
-tracked link (the owner, 2026-09-01: "specific emails directly for him, push
+tracked link (owner, 2026-09-01: "specific emails directly for him, push
 traffic to his website, that's it").
 
     python3 affiliate_email.py results/calendar-2026-09            # every affiliate slot

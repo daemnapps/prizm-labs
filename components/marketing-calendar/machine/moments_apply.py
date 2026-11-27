@@ -4,7 +4,7 @@
     python3 moments_apply.py --brand <brand>            # show what would change
     python3 moments_apply.py --brand <brand> --write    # a proposal under runs/marketing-calendar/<brand>/
 
-the owner, 2026-09-13: *"That is not a decision for me."* He is right, and the
+owner, 2026-09-13: *"That is not a decision for me."* He is right, and the
 distinction is worth stating because it governs what this file may touch:
 
   **Research is a judgement and needs him. The record is arithmetic and does

@@ -25,10 +25,10 @@ for _r in Path(HERE).parents:          # the swipe home, one definition for both
 import swipe_home  # noqa: E402
 OLD_RAW = os.path.join(HERE, "capture", "raw")   # the sweep cache, in-component since 2026-09-23
 BRANDS = {  # domain, swept, credits — as pulled
-    "competitor-a": ("competitor-a.com", "2026-08-19, refreshed 2026-09-21", "545 + 1,032"),
+    "brand_c": ("brand_c.com", "2026-08-19, refreshed 2026-09-21", "545 + 1,032"),
     "resilia": ("resilia.shop", "2026-08-31", ""),
-    "competitor_blab": ("quiz.competitor_blab.com", "2026-08-20", ""),
-    "competitor-c": ("competitor-c.co", "2026-08-20", "~1016"),
+    "serlinolab": ("quiz.serlinolab.com", "2026-08-20", ""),
+    "brand_d": ("brand_d.co", "2026-08-20", "~1016"),
     "marsmen": ("mengotomars.com", "2026-09-11", ""),
     "froya": ("froyaorganics.com", "", ""),
     "consciousbar": ("theconsciousbar.co", "2026-09-19", ""),

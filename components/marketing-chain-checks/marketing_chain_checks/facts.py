@@ -5,7 +5,7 @@ checker (HE-3 (shared brand facts), 2026-10-02).
     brand_facts(brand, root=None) -> {"product_facts": str, "products": [title, ...],
                                       "verified_facts": [...], "not_ours": [...]}
 
-A fact the team cleared once (HE-1 (fact rulings)) was known to the email
+A fact email_lead cleared once (HE-1 (fact rulings)) was known to the email
 writer's gate and to no other check, so the next checker flagged it again at
 the source. Every checker now reads the same four things from here:
 
@@ -16,7 +16,7 @@ the source. Every checker now reads the same four things from here:
     verified_facts  rulings.verified_facts — standing true + fill, never a price
     not_ours        rulings.not_ours — what the brand does not have
 
-PRICES ARE OFFER-BANK-ONLY (the team, 2026-10-01, "1 for prices"): nothing
+PRICES ARE OFFER-BANK-ONLY (designer, 2026-10-01, "1 for prices"): nothing
 here adds, clears or changes a price. A ruling whose fact carries one is
 dropped by `rulings.verified_facts`, and a wrong price is fixed in the offer
 bank.
@@ -46,6 +46,15 @@ if "brandpath" not in sys.modules:
     if _BP_HOME not in sys.path:
         sys.path.append(_BP_HOME)            # appended, never ahead of the caller's own modules
 import brandpath as BP                       # noqa: E402
+
+
+def _names():
+    """components/naming/names.py — one product name (2026-11-19)."""
+    home = str(_component("naming"))
+    if home not in sys.path:
+        sys.path.append(home)
+    import names
+    return names
 
 # The brand's own files that state what is true beyond one product's file, in
 # the order stage 8c is handed them: (folder key, file, the label it carries).
@@ -77,7 +86,8 @@ def product_facts(brand, root=None):
     out = []
     for s in _sellable(brand, brands):
         # both product shapes: products/<slug>.md and products/<slug>/product.md
-        f = BP.brand_path(brand, "products", f"{s['handle']}.md", root=brands)
+        f = (_names().product_file(brand, s["handle"], root=brands.parent)   # one product name (2026-11-19)
+             or BP.brand_path(brand, "products", f"{s['handle']}.md", root=brands))
         if not f.is_file():
             f = BP.brand_path(brand, "products", s["handle"], "product.md", root=brands)
         if f.is_file():

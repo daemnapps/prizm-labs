@@ -34,7 +34,7 @@ ref → mesh → finish → check → web → record
 ## Rules
 
 - **Cheapest route that does the job**, then finish locally (the owner, 2026-09-26).
-  Reference images cost 2.75 credits; every mesh is Higgsfield credits by default (the team, 2026-10-08), `--local` 3D is free for background props.
+  Reference images cost 2.75 credits; every mesh is Higgsfield credits by default (the developer, 2026-10-08), `--local` 3D is free for background props.
 - **Generation goes through the Higgsfield connector**, not scripts calling
   APIs (the owner, 2026-09-26: "we've been using higgsfield MCP"). The machine
   never generates. It only builds, finishes, checks, packs and records.

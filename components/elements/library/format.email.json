@@ -3,7 +3,7 @@
  "asset": "email",
  "source": "components/marketing-calendar/definitions/send-types.seed.json",
  "enforced_by": "email production; the marketing calendar",
- "note": "The seed every brand copies; a brand's own email/email-types.json may add types.",
+ "note": "The seed every brand copies; a brand's own email-sms/email-types.json may add types.",
  "rows": [
   {
    "id": "sale-window",

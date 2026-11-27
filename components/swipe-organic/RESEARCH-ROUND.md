@@ -2,7 +2,7 @@
 
 *the owner, 2026-10-17, after a fight-format pull searched only fights for Fed-Up King and
 missed NBA/NFL, his biggest world: "how can we ensure this actually is triggered on
-the next research round?"* Page: **The Research Round**, (private page)
+the next research round?"* Page: **The Research Round**, https://claude.ai/artifact/9G1Ze8NFBZkGHbW85FQbUQ
 
 **Trigger:** say "research <avatar>" (any brand, any avatar). The team skill
 `.claude/skills/research-round/` runs these steps with `round.py`

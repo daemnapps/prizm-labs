@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """The brief reader behind the Viewer Check's "new to Meta" line — before anything is produced.
 
-the owner, 2026-10-08: "add in to the viewer … identifying diversity against the
+owner, 2026-10-08: "add in to the viewer … identifying diversity against the
 scripts / briefs it reads. this would make the process more bullet proof."
 
 Reads written briefs (chain stage 5 outputs, Distinct Six versions, any .md),
 reads the seven moves off each (Gemini, prompts/read-brief-moves-v1-owner.md),
 then says which pairs Meta would group as one creative and which copy what is
-already running. Off to the side of the Viewer Check; wired in after the developer's
+already running. Off to the side of the Viewer Check; wired in after developer's
 merge. Never calls Meta.
 
-    python3 components/creative-diversity/brief_view.py brand-a <brief.md> <brief.md> ...
-    python3 components/creative-diversity/brief_view.py brand-a --runs runs/video-teardown/<brand>/<run>
+    python3 components/creative-diversity/brief_view.py brand_b <brief.md> <brief.md> ...
+    python3 components/creative-diversity/brief_view.py brand_b --runs runs/video-teardown/brand_b/sq-01-*
 
 Writes runs/creative-diversity/<brand>/brief-view/<stamp>.json and prints the verdict.
 """
@@ -45,31 +45,9 @@ def filled(brand, brief_text):
     return text
 
 
-
-def _shared_keys():
-    """The repo's one key loader (components/keys/loader.py): the environment,
-    then the repo's .env, then — quietly — the owner's personal fallbacks."""
-    import importlib.util
-    import sys as _sys
-    from pathlib import Path as _Path
-    mod = _sys.modules.get("shared_keys_loader")
-    if mod is None:
-        path = next(p / "components" / "keys" / "loader.py"
-                    for p in _Path(__file__).resolve().parents
-                    if (p / "components" / "keys" / "loader.py").is_file())
-        spec = importlib.util.spec_from_file_location("shared_keys_loader", str(path))
-        mod = importlib.util.module_from_spec(spec)
-        _sys.modules["shared_keys_loader"] = mod
-        try:
-            spec.loader.exec_module(mod)
-        except Exception:
-            _sys.modules.pop("shared_keys_loader", None)
-            raise
-    return mod
-
-
 def gemini_text(prompt):
-    k = _shared_keys().lookup("GEMINI_API_KEY")
+    import cd_keys
+    k = cd_keys.key("GEMINI_API_KEY")
     body = {"contents": [{"role": "user", "parts": [{"text": prompt}]}],
             "generationConfig": {"responseMimeType": "application/json", "temperature": 0.1}}
     r = T.call(f"{T.API}/v1beta/models/{T.MODEL}:generateContent?key={k}",

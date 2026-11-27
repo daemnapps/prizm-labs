@@ -2,9 +2,9 @@
 """PF-24 (full-height shots): the measure lays the email out at the width the picture is taken at, so the
 whole-email picture is never cut short and the footer is always in it.
 
-    /usr/bin/python3 tools/email-production/design/test_pf24_full_height.py
+    /usr/bin/python3 components/email-production/design/test_pf24_full_height.py
 
-The cause, proven on brand-b oct-20 (2026-10-30): measure() ran Chrome WITH its scrollbar on a window shorter than
+The cause, proven on brand_b oct-20 (2026-10-30): measure() ran Chrome WITH its scrollbar on a window shorter than
 the email, so the page was 585 px wide; the email's own phone rule (@media (max-width:620px){.wrap{width:100%}})
 then shrank every full-width picture by 15/600, and the email measured 3325 px where it draws 3398 at 600 wide.
 shot() takes the picture with --hide-scrollbars at 600 wide and crops to the measured height, so the last ~74 px
@@ -24,7 +24,7 @@ from pathlib import Path
 from unittest import mock
 
 HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE))      # design/ FIRST; never tools/email-production (its email.py shadows the stdlib's)
+sys.path.insert(0, str(HERE))      # design/ FIRST; never components/email-production (its email.py shadows the stdlib's)
 import layout_file as LF           # noqa: E402
 
 try:

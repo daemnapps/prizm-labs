@@ -1,0 +1,53 @@
+{
+  "_note": "Empty on purpose. Fill this in for your brand \u2014 the keys below are what the tools read.",
+  "_shape_from": "the same file in a live brand",
+  "_example_keys": {
+    "schema": 0,
+    "note": "",
+    "usage_evidence": "",
+    "types": [
+      {
+        "key": "\u2026",
+        "well": "\u2026",
+        "name": "\u2026",
+        "use": "\u2026",
+        "n": "\u2026",
+        "what": "\u2026",
+        "needs": "\u2026",
+        "note": "\u2026"
+      }
+    ],
+    "forms": [
+      {
+        "key": "\u2026",
+        "name": "\u2026",
+        "what": "\u2026",
+        "sender": "\u2026",
+        "id": "\u2026",
+        "status": "\u2026",
+        "signed": "\u2026"
+      }
+    ],
+    "modifiers": [
+      {
+        "key": "\u2026",
+        "name": "\u2026",
+        "what": "\u2026",
+        "id": "\u2026",
+        "status": "\u2026",
+        "signed": "\u2026"
+      }
+    ],
+    "treatments": [
+      {
+        "key": "\u2026",
+        "name": "\u2026",
+        "what": "\u2026",
+        "id": "\u2026",
+        "status": "\u2026",
+        "signed": "\u2026"
+      }
+    ],
+    "rule": ""
+  }
+}

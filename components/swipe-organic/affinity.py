@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Follow the commenters out — what else is this room into.
 
-    python3 affinity.py --sub brand-a/fed-up-king/barbershop-regular \
+    python3 affinity.py --sub brand_a/fed-up-king/barbershop-regular \
         [--people 40] [--depth 20] [--floor 3] [--dry-run]
 
 The harvest reads what a room watches. This reads **who showed up and what
@@ -164,7 +164,7 @@ def main():
                   + ", ".join(f"`{k}`" for k, _ in thin), ""]
     (root / "affinity.md").write_text("\n".join(L) + "\n")
 
-    # THE OPPORTUNITY LANE (the owner's ruling, 2026-08-29): nothing the net
+    # THE OPPORTUNITY LANE (owner's ruling, 2026-08-29): nothing the net
     # catches is thrown away. The full unfiltered distribution — including
     # everything that is NOT this avatar — is first-class output, because
     # deviation is where novel concepts come from (a viral Minecraft world
@@ -174,7 +174,7 @@ def main():
          "Everything the wide net returned, unfiltered and receipted.",
          "**These are NOT claims about the avatar** — they are worlds, sounds",
          "and names that real engaged people carry, kept as transfer material.",
-         "A world with reach can host our story; taste (the owner) picks.", ""]
+         "A world with reach can host our story; taste (owner) picks.", ""]
     for title, d in (("Worlds & interests", tags), ("Sounds", sounds),
                      ("Names carried", mentions)):
         rows = rank(d)

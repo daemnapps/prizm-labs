@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The production briefs for a winner's re-cuts, as one page.
 
-    python3 components/distinct-six/brief_page.py brand-a brand-a-grandma-winner --out <file.html>
+    python3 components/distinct-six/brief_page.py brand_b brand_b-grandma-winner --out <file.html>
 
 Each brief drawn as a strip: winner footage (its real frame), a library clip (its
 real frame, read from Drive), or a NEW piece (a dashed card saying what to make).
@@ -10,7 +10,6 @@ Frames are read from Drive in the cloud; nothing is downloaded; never Meta.
 import argparse
 import html
 import json
-import os
 import sqlite3
 import sys
 import tempfile
@@ -25,35 +24,13 @@ sys.argv = sys.argv_saved
 e = html.escape
 
 
-
-def _shared_keys():
-    """The repo's one key loader (components/keys/loader.py): the environment,
-    then the repo's .env, then — quietly — the owner's personal fallbacks."""
-    import importlib.util
-    import sys as _sys
-    from pathlib import Path as _Path
-    mod = _sys.modules.get("shared_keys_loader")
-    if mod is None:
-        path = next(p / "components" / "keys" / "loader.py"
-                    for p in _Path(__file__).resolve().parents
-                    if (p / "components" / "keys" / "loader.py").is_file())
-        spec = importlib.util.spec_from_file_location("shared_keys_loader", str(path))
-        mod = importlib.util.module_from_spec(spec)
-        _sys.modules["shared_keys_loader"] = mod
-        try:
-            spec.loader.exec_module(mod)
-        except Exception:
-            _sys.modules.pop("shared_keys_loader", None)
-            raise
-    return mod
-
-
 def drive_url(fid):
     if B._TOKEN[0] is None:
         sys.path.insert(0, str(ROOT / "components" / "gdrive-creator"))
+        import ds_keys
         from gdrive_creator import engine as G
         import google.auth.transport.requests as TR
-        G.configure(key_lookup=_shared_keys().lookup)
+        G.configure(key_lookup=ds_keys.key)
         c = G._creds()
         c.refresh(TR.Request())
         B._TOKEN[0] = c.token
@@ -74,7 +51,7 @@ def main():
     clips = {}
     for f in (ROOT / "runs" / "distinct-six" / a.brand / "clip-library").glob("*.json"):
         clips.update({c["clip"]: c for c in json.loads(f.read_text())["clips"]})
-    db = sqlite3.connect(os.environ.get("CREATIVE_INDEX_DB") or ROOT / "records" / "asset-ledger" / "ledger.db")
+    db = sqlite3.connect(ROOT / "lab" / "owner" / "asset-ledger" / "db" / "ledger.db")
     beats = {n: (s, st, d) for n, s, st, d in db.execute(
         "SELECT n, section, start_s, seconds FROM beat WHERE creative_id=?", (f"creative_winner_{a.brand}_{a.winner}",))}
     wrun = ROOT / "runs" / "video-teardown" / a.brand / a.winner

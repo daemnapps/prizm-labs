@@ -103,7 +103,7 @@ being added; none of these are removed without a version bump here.
   "type": "spotlight",              // from the brand's type catalogue
   "role": "earns",                  // earns · sets-up · recovers · closes
   "occasion": "…",                  // what the send is about
-  "product": "the-bundle-set",
+  "product": "the-king-skin-set",
   "offer": "none",                  // a key in the brand's offer bank, or "none"
   "follows": null, "then": null,    // the arc, by slot id
   "source": "…",                    // the FORMAT this send is written off —
@@ -165,12 +165,14 @@ sends = R.applied(slots, R.load(run_dir))     # edits laid over the plan
 A consumer that reads `slots.json` alone will write the send the planner
 first proposed rather than the one the human approved.
 
-## The library surface (the team, 2026-10-07, triage action 6 (declare public surfaces), provisionally on the owner's behalf — he sees it in the decision log and may strike any line)
+## The library surface (the developer, 2026-10-07, triage action 6 (declare public surfaces), provisionally on the owner's behalf — he sees it in the decision log and may strike any line)
 
 Besides the run and its folder, a caller may append `machine/` to `sys.path` and use exactly these:
 1. **`review`** — `load(run_dir)` → the human layer (`review.json`, or empty); `applied(slots, data)` → the sends with the human's edits laid over the plan (the recipe above).
 2. **`brandrecord`** — the brand-record readers, each a pure read of `brands/<brand>/`: `brand_segments`, `offerless_avatars`, `render_types`, `render_offers`, `render_products`, `findings`, `responsiveness`, `cadence_history`, `coldness`, `per_person`; plus `parse_slots(output)` → the slots in a model reply, and `check(slots, month, …)` → the month checker's problems.
 3. **`brandrecord.L`** — the language-layer engine handle, re-exported for convenience; new code imports `language_layer` itself.
+4. **`marketing_calendar.moment_window(brand, key, on=None)`** (2026-11-03) → `(start, end)` ISO dates of the moment's window a piece made on `on` was made for (the first that ends on or after it), read from the brand's `strategy/moments.json` through the moment's anchor; `None` when the moment is not the brand's or names no date. `components/meta-upload` stops a promo ad at that end instead of keeping a second list of dates.
+5. **`brandrecord.order_by_dates(brand_root, year)`** (2026-11-03) → `[{arrive_by, order_by, label}]` from the order-by table in the brand's `operations/shipping.md`; `[]` when it keeps none.
 Everything else in `machine/` is internal and may change without notice.
 
 ## The hand-off
@@ -191,3 +193,7 @@ no angle, no copy. The kind's manifest is
 
 It writes no copy, no subject line, no layout, and no image. It plans what
 exists and when, and says why.
+
+## Regular SMS companions
+
+`python3 machine/weekly_sms.py <month-folder> [--write]` adds the regular weekly SMS companions configured in definitions/sms-cadence.json. Without --write it reports proposed additions; with --write it updates only that month’s slots.json and weekly-sms.json receipt. No model or platform calls. Existing email and promotional reminder IDs remain stable; applying twice adds nothing twice. The normal month finisher uses the same function.

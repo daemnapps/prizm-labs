@@ -1,5 +1,5 @@
-"""The before-and-after's change list (design/received.py): what the team reads above the two pictures must say what the
-designer really changed, part by part, and nothing she didn't (the team, 2026-10-28).
+"""The before-and-after's change list (design/received.py): what email_lead reads above the two pictures must say what the
+designer really changed, part by part, and nothing she didn't (email_lead, 2026-10-28).
 
     /usr/bin/python3 test_received.py
 """
@@ -53,13 +53,13 @@ class Changes(unittest.TestCase):
                          ["Part 1 (letter): words changed"])
 
     def test_a_style_value_is_not_a_word(self):
-        """the team's glow colours and positions sit among the fields the page lists as words."""
+        """editor's glow colours and positions sit among the fields the page lists as words."""
         old = [sec("specs", "Three facts")]
         new = [sec("specs", "Three facts", glow_bg="#062B14", glow_c="rgba(214,222,196,0.20)", glow_x="12%")]
         self.assertEqual(self.said(old, new), [])
 
     def test_a_background_picture_path_is_not_a_word(self):
-        """brand-a nov-02 gift-buyer's quote gained a stone background: its path is not a change of words."""
+        """brand_a nov-02 gift-buyer's quote gained a stone background: its path is not a change of words."""
         self.assertEqual(self.said([sec("bigquote", "Did not want to spend more")],
                                    [sec("bigquote", "Did not want to spend more", bg="run:media/x-stone.jpg")]), [])
 
@@ -73,7 +73,7 @@ class Changes(unittest.TestCase):
 
 
 class Found(unittest.TestCase):
-    """Which version counts as "as the team received it" (PF-20 (before from arrival), the team 2026-10-29): from the moment
+    """Which version counts as "as editor received it" (PF-20 (before from arrival), email_lead 2026-10-29): from the moment
     the email reaches her, not only after her Done. A throwaway git repo stands in for the workspace."""
 
     def setUp(self):
@@ -83,18 +83,18 @@ class Found(unittest.TestCase):
         R.REPO = self.tmp
         self.git("init", "-q")
         people = self.tmp / "team" / "people"
-        (people / "designer").mkdir(parents=True)
-        (people / "designer" / "identity.json").write_text(json.dumps({
-            "person": "designer", "key_audience": "designer", "stations": ["email-production", "image-production"],
-            "emails": [{"address": "the team@company.com"}]}))
-        (people / "pm").mkdir()
-        (people / "pm" / "identity.json").write_text(json.dumps({"person": "pm", "emails": []}))
+        (people / "editor").mkdir(parents=True)
+        (people / "editor" / "identity.json").write_text(json.dumps({
+            "person": "editor", "key_audience": "designer", "stations": ["email-production", "image-production"],
+            "emails": [{"address": "editor@company.com"}]}))
+        (people / "email_lead").mkdir()
+        (people / "email_lead" / "identity.json").write_text(json.dumps({"person": "email_lead", "emails": []}))
         self.run_dir = self.tmp / "runs" / "email-production" / "fx" / "fx-nov-01"
         (self.run_dir / "design").mkdir(parents=True)
         (self.run_dir / "klaviyo").mkdir()
         self.card({})
 
-    def git(self, *a, who=("the team", "pm-primary@company.com")):
+    def git(self, *a, who=("email_lead", "email_lead@company.com")):
         env = dict(os.environ, GIT_AUTHOR_NAME=who[0], GIT_AUTHOR_EMAIL=who[1],
                    GIT_COMMITTER_NAME=who[0], GIT_COMMITTER_EMAIL=who[1])
         return subprocess.run(["git", *a], cwd=str(self.tmp), env=env, capture_output=True, text=True,
@@ -103,7 +103,7 @@ class Found(unittest.TestCase):
     def card(self, c):
         (self.run_dir / "klaviyo" / "card.json").write_text(json.dumps(c))
 
-    def commit(self, text, who=("the team", "pm-primary@company.com")):
+    def commit(self, text, who=("email_lead", "email_lead@company.com")):
         (self.run_dir / "design" / "email.json").write_text(json.dumps({"sections": [{"s": "letter", "text": text}]}))
         self.git("add", "-A", who=who)
         self.git("commit", "-q", "-m", text, who=who)
@@ -116,32 +116,32 @@ class Found(unittest.TestCase):
         self.commit("first")
         newest = self.commit("words fixed")
         f = R.found(self.run_dir)
-        self.assertEqual((f["rev"], f["by"], f.get("waiting")), (newest, "the team", True))
+        self.assertEqual((f["rev"], f["by"], f.get("waiting")), (newest, "editor", True))
 
     def test_no_done_but_the_designer_committed_is_the_version_before_her_first(self):
-        got = self.commit("as sent to the team")
-        self.commit("the team's pictures", who=("the team", "the team@company.com"))
+        got = self.commit("as sent to editor")
+        self.commit("editor's pictures", who=("editor", "editor@company.com"))
         f = R.found(self.run_dir)
-        self.assertEqual((f["rev"], f["by"]), (got, "the team"))
+        self.assertEqual((f["rev"], f["by"]), (got, "editor"))
         self.assertNotIn("waiting", f)
 
     def test_the_designer_is_found_by_her_email_too(self):
         got = self.commit("as sent")
-        self.commit("by her other git name", who=("designer-laptop", "designer@company.com"))
+        self.commit("by her other git name", who=("editor-laptop", "editor@company.com"))
         self.assertEqual(R.found(self.run_dir)["rev"], got)
 
     def test_a_done_finds_the_named_designer_as_before(self):
         got = self.commit("as sent")
-        self.commit("the team's pictures", who=("the team", "the team@company.com"))
-        self.card({"eve_done": {"by": "the team", "at": "2026-10-29T10:00:00+00:00"}})
+        self.commit("editor's pictures", who=("editor", "editor@company.com"))
+        self.card({"editor_done": {"by": "editor", "at": "2026-10-29T10:00:00+00:00"}})
         f = R.found(self.run_dir)
-        self.assertEqual((f["rev"], f["by"]), (got, "the team"))
+        self.assertEqual((f["rev"], f["by"]), (got, "editor"))
         self.assertNotIn("waiting", f)
 
     def test_once_she_commits_a_later_commit_by_someone_else_does_not_move_the_before(self):
         got = self.commit("as sent")
-        self.commit("the team's pictures", who=("the team", "the team@company.com"))
-        self.commit("the team's final words")
+        self.commit("editor's pictures", who=("editor", "editor@company.com"))
+        self.commit("email_lead's final words")
         self.assertEqual(R.found(self.run_dir)["rev"], got)
 
     def test_an_email_that_went_to_klaviyo_without_her_has_no_before(self):
@@ -155,7 +155,7 @@ class Found(unittest.TestCase):
         """What she received stays what she received: the rev shown while waiting is the rev once she commits."""
         self.commit("first")
         waiting = R.found(self.run_dir)["rev"]
-        self.commit("the team's pictures", who=("the team", "the team@company.com"))
+        self.commit("editor's pictures", who=("editor", "editor@company.com"))
         self.assertEqual(R.found(self.run_dir)["rev"], waiting)
 
 

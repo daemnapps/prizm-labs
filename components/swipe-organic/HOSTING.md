@@ -1,12 +1,12 @@
 # My Feeds, hosted — the plan (2026-09-22)
 
-Artifact: (private page)
+Artifact: https://claude.ai/artifact/PKaut19cecAsrq3LnKtK3w
 
 the owner, 2026-09-22: *"how can I make my feeds a hosted tool? so that my editors
 and content creators have infinite inspiration and I focus more on researching
 and prompt engineering to get these outputs / briefs more on point?"*
 
-## LIVE: route A, a static export (the owner, 1 Oct 2026; confirmed by the team, 7 Oct 2026, triage page 10)
+## LIVE: route A, a static export (the owner, 1 Oct 2026; confirmed by the developer, 7 Oct 2026, triage page 10)
 
 `feedsexport.py` writes the static, read-only export behind daemn.co/feeds/ —
 no keys, so nothing on it can spend; a no-secrets scan and a size check

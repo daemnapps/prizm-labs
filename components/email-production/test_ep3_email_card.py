@@ -10,7 +10,7 @@ the machine-run guard reads env={} and a temp home; the clock is passed in.
 Every refusal asserts no campaign-send-jobs call and an unchanged card state.
 
   1  the upload writes the card: fields, fingerprint parts, checks, link, send
-  2  Approve schedules: state scheduled, approval by the owner, two log lines,
+  2  Approve schedules: state scheduled, approval by owner, two log lines,
      the campaign "Scheduled", never sent
   3  a changed subject is refused naming subject; changed HTML naming html
   4  a first send less than 30 minutes away is refused
@@ -136,7 +136,7 @@ class Card(unittest.TestCase):
         self.switch = TMP / "send-switch.json"
         write(self.switch, {"email_schedule": "on"})
         self.approvers = TMP / "approvers.json"
-        write(self.approvers, {"approvers": ["the owner"]})
+        write(self.approvers, {"approvers": ["owner"]})
         self.p = [mock.patch.object(K.S, "kl", self.fake.kl),
                   mock.patch.object(K.S, "kl_key", lambda lk: "test-key"),
                   mock.patch.object(K.S, "upload", lambda key, p, name: f"https://cdn.test/{name}"),
@@ -164,7 +164,7 @@ class Card(unittest.TestCase):
     def sends(self):
         return [c for c in self.fake.calls if c[1] == "campaign-send-jobs"]
 
-    def schedule(self, by="the owner", env=None, at=AT):
+    def schedule(self, by="owner", env=None, at=AT):
         return K.schedule_card(self.job, by, env={} if env is None else env, home=self.home, at=at)
 
     def refused(self, words, **kw):
@@ -206,17 +206,17 @@ class Card(unittest.TestCase):
         self.assertEqual(cid, self.cid)
         self.assertEqual(c["state"], "scheduled")
         self.assertEqual(self.card()["state"], "scheduled")
-        self.assertEqual((c["approval"]["by"], c["approval"]["decision"]), ("the owner", "approve"))
+        self.assertEqual((c["approval"]["by"], c["approval"]["decision"]), ("owner", "approve"))
         self.assertEqual(c["approval"]["fingerprint"], c["fingerprint"]["sha256"])
         self.assertEqual(c["scheduled"]["klaviyo_status"], "Scheduled")
         self.assertEqual(self.sends(), [("POST", "campaign-send-jobs")])
         self.assertEqual(self.fake.campaigns[self.cid]["status"], "Scheduled")
         log = [json.loads(l) for l in (self.root / K.LOG).read_text().splitlines()]
         self.assertEqual([l["decision"] for l in log], ["approve", "scheduled"])
-        self.assertTrue(all(l["by"] == "the owner" and l["campaign_id"] == self.cid for l in log))
+        self.assertTrue(all(l["by"] == "owner" and l["campaign_id"] == self.cid for l in log))
         st = json.loads((self.root / K.STATUS).read_text())
         self.assertEqual(st["state"], "SCHEDULED IN KLAVIYO")
-        self.assertIn("approved by the owner on the email approval page", st["send_go"])
+        self.assertIn("approved by owner on the email approval page", st["send_go"])
         with self.assertRaises(K.Held):            # once scheduled, never again
             self.schedule()
         self.assertEqual(len(self.sends()), 1)
@@ -269,14 +269,14 @@ class Card(unittest.TestCase):
     def test_10_send_back(self):
         self.upload()
         with self.assertRaises(K.Held):
-            K.send_back(self.job, "the owner", [], "a note")
+            K.send_back(self.job, "owner", [], "a note")
         with self.assertRaises(K.Held):
-            K.send_back(self.job, "the owner", ["words"], "  ")
+            K.send_back(self.job, "owner", ["words"], "  ")
         with self.assertRaises(K.Held):
-            K.send_back(self.job, "the owner", ["no-such-reason"], "a note")
+            K.send_back(self.job, "owner", ["no-such-reason"], "a note")
         self.assertEqual(self.card()["state"], "waiting")
         n = len(self.fake.calls)
-        c = K.send_back(self.job, "the owner", ["words", "subject"], "the second line is wrong")
+        c = K.send_back(self.job, "owner", ["words", "subject"], "the second line is wrong")
         self.assertEqual(len(self.fake.calls), n)      # no Klaviyo call; the draft stays
         self.assertEqual(c["state"], "sent-back")
         self.assertEqual(c["approval"]["decision"], "send-back")
@@ -287,7 +287,7 @@ class Card(unittest.TestCase):
 
     def test_11_card_for_an_existing_draft(self):
         self.upload()
-        (self.root / K.CARD).unlink()                 # a draft with no card yet (the owner's own, or --push)
+        (self.root / K.CARD).unlink()                 # a draft with no card yet (owner's own, or --push)
         (self.root / K.CARD_HTML).unlink()
         self.assertEqual(K.main(["--handoff", str(self.root), "--card"]), 0)
         c = self.card()
@@ -325,12 +325,12 @@ class Card(unittest.TestCase):
             self.assertTrue(got["fake"])
             self.assertEqual(got["switch"], "on")
             self.assertTrue(got["waiting"][0]["checks_ok"])
-            body = {"id": f"{BRAND}/{LABEL}", "by": "the owner"}
+            body = {"id": f"{BRAND}/{LABEL}", "by": "owner"}
             self.assertEqual(call("POST", "/api/approve", body, {"Content-Type": "text/plain"})[0], 415)
             self.assertEqual(call("GET", "/api/waiting", headers={"Host": f"evil.test:{port}"})[0], 403)
             self.assertEqual(call("POST", "/api/approve", body,
                                   {"Content-Type": "application/json", "Host": f"evil.test:{port}"})[0], 403)
-            self.assertEqual(call("POST", "/api/approve", {"id": "nobody/none", "by": "the owner"},
+            self.assertEqual(call("POST", "/api/approve", {"id": "nobody/none", "by": "owner"},
                                   {"Content-Type": "application/json"})[0], 404)
             self.assertEqual(json.loads((rd / "deliverable" / K.CARD).read_text())["state"], "waiting")
             code, got = call("POST", "/api/approve", body, {"Content-Type": "application/json"})

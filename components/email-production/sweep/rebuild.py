@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The sweep — every email in the bank rebuilt as clean HTML on the bedrock,
 from its own exact transcription: its text, its type, its grounds, its
-images. This is the polish pass the owner asked for (2026-09-02: "run through
+images. This is the polish pass owner asked for (2026-09-02: "run through
 EVERY SINGLE FILE and polish each … pixel perfect like a true email designer
 would establish").
 
@@ -29,6 +29,8 @@ import re
 import sys
 from collections import defaultdict
 from pathlib import Path
+sys.path.append(next(str(d / "components" / "run-kit") for d in Path(__file__).resolve().parents if (d / "components" / "run-kit").is_dir()))
+from run_kit import paths as _rk_paths
 
 HERE = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(HERE / "sweep"))
@@ -53,9 +55,9 @@ def _hex_rgb(v):
 def set_bedrock(brand):
     """The faces and inks the rebuild renders with come from the brand's
     design bedrock (email-sms/design-formats/components.json); the defaults
-    above are Brand B's and stand when a brand has not written its own."""
+    above are brand_a's and stand when a brand has not written its own."""
     global SERIF, SANS, INK_DARK, INK_LIGHT, SAGE
-    f = WORKSPACE / "brands" / brand / "email-sms" / "design-formats" / "components.json"
+    f = _rk_paths.repo() / "brands" / brand / "email-sms" / "design-formats" / "components.json"
     if not f.is_file():
         return
     try:
@@ -76,19 +78,7 @@ def set_bedrock(brand):
         else:
             INK_LIGHT, INK_DARK = light_ink, _hex_rgb(p.get("ink_on_dark") or "#ffffff")
     SAGE = _hex_rgb(fb.get("fill") or p.get("cta_bg") or p.get("accent") or SAGE)
-def product_words(brand):
-    """The product names a brief may use for this brand, and the store handle each maps to —
-    brand data, read from brands/<brand>/email-sms/product-words.json
-    (shape: brands/_TEMPLATE/email-sms/product-words.json). Returns (regex or None, {key: handle})."""
-    f = WORKSPACE / "brands" / brand / "email-sms" / "product-words.json"
-    try:
-        d = json.loads(f.read_text())
-    except (OSError, ValueError):
-        return None, {}
-    words = [w for w in d.get("words", []) if w]
-    rx = re.compile(r"\b(" + "|".join(re.escape(w) for w in words) + r")\b", re.I) if words else None
-    return rx, d.get("handles", {})
-
+PRODUCTS = re.compile(r"\b(FLEX|PRIME|CRUSH|WAR|MIRO|CORE|King Set|Vitals Set|Basics Set|Clear Skin Set)\b", re.I)
 
 
 def e(s):
@@ -114,19 +104,18 @@ ANNOTATION_FACES = ("Instrument Sans", "Spline Sans", "Fraunces", "Roboto Mono",
 class Bank:
     def __init__(self, bank, brand):
         self.bank = bank
-        ws = WORKSPACE
+        ws = _rk_paths.repo()
         sys.path.append(str(ws / "components" / "brandpath"))
         import brandpath as BP  # noqa: E402  brand-identity (was identity/) by plan name
-        cands = [bank / "assets" / f"{brand}.svg", bank / "assets" / "brand-b.svg"] + sorted(BP.brand_path(brand, "brand-identity", root=ws / "brands").glob("*.svg"))
+        cands = [bank / "assets" / f"{brand}.svg", bank / "assets" / "brand_a.svg"] + sorted(BP.brand_path(brand, "brand-identity", root=ws / "brands").glob("*.svg"))
         self.logo_svg = next((c.read_text() for c in cands if c.is_file()), "")
         pi = WORKSPACE / "brands" / brand / "products" / "images.json"
         self.products = json.loads(pi.read_text())["products"] if pi.is_file() else {}
-        self.product_rx, self.product_handles = product_words(brand)
         self.css = {}
         # the brand's own faces (from its design bedrock) — copy set in them is the email's
         self.brand_faces = ["GT Super", "Gt Super", "Untitled", "Test Untitled", "Inter", "Helvetica", "Arial"]
         try:
-            comp = json.loads((WORKSPACE / "brands" / brand / "email-sms" / "design-formats" / "components.json").read_text())
+            comp = json.loads((_rk_paths.repo() / "brands" / brand / "email-sms" / "design-formats" / "components.json").read_text())
             for v in (comp.get("typography") or {}).values():
                 if isinstance(v, str):
                     self.brand_faces += [f.strip().strip('"') for f in v.split(",") if f.strip().strip('"') and len(f.strip()) < 40]
@@ -153,11 +142,11 @@ class Bank:
         return "data:image/svg+xml;base64," + base64.b64encode(svg.encode()).decode()
 
     def product_image(self, text):
-        m = self.product_rx.search(text or "") if self.product_rx else None
+        m = PRODUCTS.search(text or "")
         if not m:
             return None
         key = m.group(1).lower().replace(" ", "-")
-        key = self.product_handles.get(key, key)
+        key = {"king-set": "the-king-skin-set", "vitals-set": "the-vitals-set"}.get(key, key)
         rec = self.products.get(key)
         return (rec or {}).get("hero")
 

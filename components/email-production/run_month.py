@@ -23,6 +23,8 @@ from pathlib import Path
 from paths import HERE, WORKSPACE, calendar_tool
 import brief
 import ep_keys
+import readiness as RD          # LD-106 (readiness check): the free check before any writing is spent
+import coverage as COV          # the sends ahead with nothing written, by the slot each run records (2026-11-10)
 
 sys.path.insert(0, str(HERE / "machine"))
 import email_elements as EE          # asks components/elements: is this type a real one?   # noqa: E402
@@ -43,12 +45,12 @@ NO_IMAGES = False
 
 def have_picture_key():
     """The pictures need OPENAI_API_KEY, asked of the one key loader through
-    ep_keys: the environment first, then this repo's .env (the one key
+    ep_keys: the environment first, then ~/.upright-keys.env (the one key
     file); the
     picture door, direct_openai.key_of(), reads through the same loader.
     Without it the email is laid out with no pictures and the log SAYS so,
     instead of the whole build dying at its first picture (2026-09-23,
-    the team: "do sat 3 w/o images"). The moment a key is on the machine,
+    designer: "do sat 3 w/o images"). The moment a key is on the machine,
     pictures come back — no switch to flip. Never raises."""
     return ep_keys.key("OPENAI_API_KEY") is not None
 
@@ -64,7 +66,7 @@ def one_run(label, argv, brand, logf):
     if r.returncode:
         # stdout too: `email.py` reports a usage limit or a refused offer there
         return label, "chain-fail", (r.stderr + r.stdout)[-800:], round(time.time() - t0, 1)
-    # THE SIMPLE EMAIL (the owner, 2026-09-19): logo, headline, one picture, the
+    # THE SIMPLE EMAIL (owner, 2026-09-19): logo, headline, one picture, the
     # copy, an optional offer picture, one button — pictures by GPT, and with
     # --push a Klaviyo DRAFT. Replaces the designed-template step.
     build = [sys.executable, "simple_email.py",
@@ -87,9 +89,9 @@ def one_run(label, argv, brand, logf):
         if not held_now(out, brand, label, t_build):
             return label, "build-fail", out[-800:], round(time.time() - t0, 1)
         status, detail = "held", out[out.index(HELD):][-800:]
-    # THE DESIGN (the owner, 2026-10-17: "the team can go ahead and trigger the emails … even then, the design should
+    # THE DESIGN (owner, 2026-10-17: "email_lead can go ahead and trigger the emails … even then, the design should
     # already be there"): a brand with a look file gets its email designed, pictured, built for Klaviyo and put on
-    # the approval page in the same run. the team refines from there. A held copy is still designed, its card says why.
+    # the approval page in the same run. editor refines from there. A held copy is still designed, its card says why.
     if DESIGN and (WORKSPACE / "brands" / brand / "email-sms" / "design-system.json").exists():
         run = WORKSPACE / "runs" / "email-production" / brand / label
         # the design step MAKES pictures only when the build may (LD-21 (no mini picture-making)): the same `pics`
@@ -98,9 +100,9 @@ def one_run(label, argv, brand, logf):
         if pics:
             design.append("--pictures")
         d = subprocess.run(design, cwd=HERE, capture_output=True, text=True)
-        # the system fills its own gaps before any person sees the email (the owner, 2026-10-18): prices from the offer
+        # the system fills its own gaps before any person sees the email (owner, 2026-10-18): prices from the offer
         # bank, unmade pictures, missing words by a redesign naming them; what it can't fill stays a plain question
-        g = subprocess.run([sys.executable, "design/gaps.py", str(run), "--fill"], cwd=HERE, capture_output=True, text=True) \
+        g = subprocess.run([sys.executable, "design/gaps.py", str(run), "--fill"] + ([] if pics else ["--no-images"]), cwd=HERE, capture_output=True, text=True) \
             if (run / "design" / "email.json").exists() else None
         if g is not None:
             log(logf, "      %s  gaps: %s" % (label, ((g.stdout or "").strip().splitlines() or ["none"])[0]))
@@ -173,7 +175,7 @@ def main():
                     help="produce only the first N runs — a pilot batch")
     ap.add_argument("--only", default=None,
                     help="comma-separated slot ids — produce only these")
-    # ONE AVATAR PER BRAND (the owner, 2026-09-15: "don't worry about different
+    # ONE AVATAR PER BRAND (owner, 2026-09-15: "don't worry about different
     # avatars at this stage"). A slot targeting three avatars produces three
     # emails, which is right when the month ships and wrong while the writing
     # itself is being judged — three versions of one send tell you nothing
@@ -184,6 +186,11 @@ def main():
     ap.add_argument("--avatar", default=None,
                     help="produce only this avatar's version of each send "
                          "(plus sends that carry no avatar at all)")
+    ap.add_argument("--one-version", action="store_true",
+                    help="write one version of each send, its first audience's, for the send's whole audience "
+                         "(the default writes one per audience the send names)")
+    ap.add_argument("--only-labels", default=None, metavar="LABELS",
+                    help="comma-separated run labels: write just these versions, leaving a send's other versions as written")
     ap.add_argument("--rerun-from", default=None, metavar="STAGE",
                     help="rewrite every send from this stage on, keeping the steps "
                          "before it. What a step was HANDED can change without its "
@@ -197,13 +204,22 @@ def main():
                     help="skip sends dated before this day — a send whose day "
                          "has passed is not written")
     # words and layout only, whatever key is on the machine — the mini's door
-    # (lab_entry.py) always passes it: pictures are made on the team's Mac
-    # (EP-1 (email writer mini door), the team "pictures on stephs mac", 2026-09-29)
+    # (lab_entry.py) always passes it: pictures are made on email_lead's Mac
+    # (EP-1 (email writer mini door), designer "pictures on stephs mac", 2026-09-29)
     ap.add_argument("--no-design", action="store_true",
                     help="stop at the copy: do not design, picture or build the email (the default designs it)")
     ap.add_argument("--no-images", action="store_true",
                     help="lay out each email with no pictures, even when a picture key is present")
-    args = ap.parse_args()
+    ap.add_argument("--retry-failed", action="store_true",
+                    help="re-run only the emails the last run of this month recorded as failed (its last-run.json); "
+                         "built and held emails are left as they are")
+    ap.add_argument("--readiness", action="store_true",
+                    help="list ready / not ready, because ... for every send and stop: nothing is written or spent "
+                         "(the same check runs before every batch; a send that is not ready is not written)")
+    import importlib.util as _u, pathlib as _pl
+    _s = _u.spec_from_file_location("profile_arg", next(q for q in _pl.Path(__file__).resolve().parents if q.name == "components") / "naming" / "profile_arg.py")
+    _PA = _u.module_from_spec(_s); _s.loader.exec_module(_PA)   # --profile <avatar>[_<sub>][_<demographic>] (naming/PEOPLE.md)
+    args = ap.parse_args(_PA.expand(None, has=('avatar',)))
     global PUSH, NO_IMAGES, DESIGN
     PUSH = args.push
     DESIGN = not args.no_design
@@ -239,14 +255,39 @@ def main():
         print(f"review: {edited} slot(s) rewritten, {len(notes)} note(s), "
               f"{len(cut)} cut" + (f" ({', '.join(cut)})" if cut else ""))
 
+    # before anything is chosen: every send ahead with nothing written, so a batch is built from what is missing
+    # (email_lead, 2026-11-10: four sends looked unwritten because runs were matched by folder name)
+    cov_start = args.from_date or time.strftime("%Y-%m-%d")
+    print("\n".join(COV.lines(brand, COV.for_brand(brand, cov_start), cov_start, 14)))
+    # and every text ahead that is written with no go (email_lead, 2026-11-24: three texts caught by hand three days out)
+    print("\n".join(COV.text_lines(brand, COV.texts_for_brand(brand, cov_start), cov_start, 14)))
     only = set(args.only.split(",")) if args.only else None
+    # LD-107 (retry failed only): a retry takes the failed labels the last run recorded, never the whole batch
+    retry = None
+    if args.retry_failed:
+        rec = json.loads((run_dir / LAST_RUN).read_text()) if (run_dir / LAST_RUN).is_file() else None
+        if not isinstance(rec, dict) or not isinstance(rec.get("failed"), list):
+            sys.exit(f"--retry-failed: no last run recorded at {run_dir / LAST_RUN} — nothing retried, nothing guessed")
+        if not rec["failed"]:
+            print(f"--retry-failed: nothing failed in the last run ({rec.get('at')}) — nothing to retry")
+            sys.exit(0)
+        retry = {"of": rec.get("at"), "labels": list(rec["failed"])}
     jobs = []
     skipped = []
     blocked = []
+    checks = []          # one readiness answer per version (LD-106 (readiness check))
+    versions = {}        # label -> (slot, avatar)
     # a month at runs/marketing-calendar/<brand>/<YYYY-MM>/ (or a legacy
     # calendar-YYYY-MM-<brand> folder): its runs get a <brand>- prefix
     prefix = brief.label_prefix(run_dir, brand)
+    texts = [s["id"] for s in slots if s.get("channel", "email") != "email"]
+    if texts:
+        # an SMS slot is a text, not an email (marketing-calendar sms-cadence.json, 2026-11-03): its words
+        # come from sms.py, never from this line
+        print(f"not emails ({len(texts)} SMS): {', '.join(texts)} — written by sms.py")
     for slot in slots:
+        if slot.get("channel", "email") != "email":
+            continue
         if only and slot["id"] not in only:
             continue
         if args.from_date and (slot.get("date") or "") < args.from_date:
@@ -256,31 +297,69 @@ def main():
         if why:
             blocked.append((slot["id"], why))
             continue
-        for av, angle, label in brief.variant_runs(slot, brand):
+        runs_ = brief.variant_runs(slot, brand)
+        for av, angle, label in (runs_[:1] if args.one_version else runs_):
             if args.avatar and av not in (args.avatar, None, "none", "mixed"):
                 continue
             if prefix and not label.startswith(prefix):
                 label = prefix + label           # results/<brand>-sep-01… when the month folder carries a brand suffix
-            argv = brief.chain_argv(slot, brand, av, angle, label,
-                                    note=notes.get(slot["id"]))
+            if args.only_labels and label not in args.only_labels.split(","):
+                continue
+            if retry and label not in retry["labels"]:
+                continue
+            try:
+                argv = brief.chain_argv(slot, brand, av, angle, label,
+                                        note=notes.get(slot["id"]))
+            except brief.CH.Held as e:
+                blocked.append((label, str(e)))
+                checks.append({"label": label, "slot": slot["id"], "ready": False, "notes": [],
+                               "missing": ["calendar handoff: " + str(e)]})
+                continue
             if argv is None:
                 skipped.append(label)
                 continue
             if args.rerun_from:
                 argv = argv + ["--rerun-from", args.rerun_from]
             jobs.append((label, argv))
+            versions[label] = (slot, av)
+    # LD-106 (readiness check): before any spend, every version is asked what it needs — stock as a US shopper sees
+    # it, its price in the offer bank, its moment's research and look, its calendar identity (chain_argv above has
+    # bound the contract, so only an already-written version's changed send is asked again). Not ready is not written.
+    stock = RD.Stock(brand)
+    for label, _ in jobs:
+        slot, av = versions[label]
+        checks.append(RD.check(slot, brand, av, label, stock=stock, calendar=False))
+    ready = {c["label"] for c in checks if c["ready"]}
+    print("readiness, before any spend (%d ready, %d not ready):" % (len(ready), len(checks) - len(ready)))
+    for c in checks:
+        print("  " + RD.line(c))
+    if args.readiness:
+        print("readiness only: nothing written, nothing spent")
+        sys.exit(0)
+    not_ready = [c for c in checks if not c["ready"] and c["label"] in versions]
+    jobs = [(label, argv) for label, argv in jobs if label in ready]
     if args.limit:
         jobs = jobs[:args.limit]
 
     logf = (run_dir / "production.log").open("a")
+    if retry:
+        log(logf, f"=== retry of the failed only (last run {retry['of']}): {', '.join(retry['labels'])} ===")
+        gone = [lab for lab in retry["labels"] if lab not in versions and lab not in {c["label"] for c in checks}]
+        if gone:
+            log(logf, "      no longer a send on the calendar, not retried: " + ", ".join(gone))
     log(logf, f"=== production run: {len(jobs)} email(s) to build "
               f"({len(skipped)} skipped — no source), concurrency {args.concurrency} ===")
     if skipped:
         log(logf, "skipped (no source fits): " + ", ".join(skipped))
     for sid, why in blocked:
         log(logf, f"BLOCKED {sid} — {why[:200]}")
+    for c in checks:
+        log(logf, "readiness  " + RD.line(c)[:400])
+    if not_ready:
+        log(logf, "not written (not ready): " + ", ".join(c["label"] for c in not_ready))
 
-    code = produce(jobs, brand, logf, args.concurrency, skipped)
+    code = produce(jobs, brand, logf, args.concurrency, skipped, record=run_dir / LAST_RUN,
+                   not_ready=[c["label"] for c in not_ready], retry_of=(retry or {}).get("of"))
     # the final check spans the batch (no picture or concept repeated across it): run once, over every email built
     if DESIGN:
         built = [str(WORKSPACE / "runs" / "email-production" / brand / lab) for lab, _ in jobs
@@ -288,14 +367,21 @@ def main():
         if built:
             c = subprocess.run([sys.executable, "design/check.py"] + built, cwd=HERE, capture_output=True, text=True)
             log(logf, "final check:\n      " + (c.stdout or c.stderr).strip().replace("\n", "\n      "))
+    log(logf, "\n      ".join(COV.lines(brand, COV.for_brand(brand, cov_start), cov_start, 14)))   # what is still missing after
+    log(logf, "\n      ".join(COV.text_lines(brand, COV.texts_for_brand(brand, cov_start), cov_start, 14)))
     logf.close()
     sys.exit(code)
 
 
-def produce(jobs, brand, logf, concurrency, skipped=()):
+LAST_RUN = "last-run.json"
+
+
+def produce(jobs, brand, logf, concurrency, skipped=(), record=None, not_ready=(), retry_of=None):
     """Build every job; 1 only when an email FAILED. An email held at the
     delivery gate waits on a person's ruling and is not a failed run (HE-2
-    (held not failed), 2026-10-01) — the worker reads exit 0 as `done`."""
+    (held not failed), 2026-10-01) — the worker reads exit 0 as `done`.
+    With `record`, what this run built, held and failed is written there, so a
+    retry re-runs only the failed (LD-107 (retry failed only))."""
     built, held, failed = [], [], []
     with ThreadPoolExecutor(max_workers=concurrency) as ex:
         futures = {ex.submit(one_run, label, argv, brand, logf): label
@@ -314,6 +400,14 @@ def produce(jobs, brand, logf, concurrency, skipped=()):
                 log(logf, f"FAIL  {label}  [{status}]  ({seconds}s)")
                 log(logf, "      " + detail.replace("\n", "\n      "))
 
+    if record is not None:
+        try:
+            Path(record).write_text(json.dumps({
+                "at": time.strftime("%Y-%m-%dT%H:%M:%S"), "retry_of": retry_of,
+                "built": sorted(built), "held": sorted(held), "failed": sorted(failed),
+                "not_ready": sorted(not_ready), "skipped": sorted(skipped)}, indent=1) + "\n")
+        except OSError as e:
+            log(logf, f"      could not record this run for a retry ({e})")
     log(logf, f"=== done: {len(built)} built, {len(held)} held, {len(failed)} failed, "
               f"{len(skipped)} skipped ===")
     print(f"\ndone · {len(built)} built, {len(held)} held, {len(failed)} failed · "

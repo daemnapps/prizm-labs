@@ -1,4 +1,4 @@
-# Components triage: findings (the team)
+# Components triage: findings (the email lead)
 
 The triage owner's findings on the components / atlas list, for the two-week
 evaluation due 2026-10-16. One line each:

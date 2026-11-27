@@ -1,0 +1,1017 @@
+{
+ "_what": "Every piece of the four video components as the code runs them on 2026-11-17, in order, with what each piece reads and writes, what holds it, the skill that switches it on and the sub-processes it calls; then each seam between components (what the one hands over, what the next one's door reads) and the gaps where they do not meet. Read from code (file:line) by four readers on 2026-11-17. The base for defining and refining the workflows. Kinds: stage (a model call with a prompt) · gate (a check that can hold) · repair (a patch or retry loop) · sub-process (a call into another component or tool) · owner-stop (waits for a person) · filing · pack · station.",
+ "status": "draft",
+ "as_of": "2026-11-17",
+ "components": [
+  {
+   "id": "video-teardown",
+   "skill": "video-teardown",
+   "door": "components/video-teardown/machine/run.py <video> --brand <b> --route ai [--dry-run]",
+   "pieces": [
+    {
+     "id": "door",
+     "name": "Door: arguments, brand, route, dedupe",
+     "kind": "gate",
+     "runs": "run.py:3858",
+     "holds": "a video already torn down under another slug (unless --again)"
+    },
+    {
+     "id": "open",
+     "name": "Open the working run",
+     "kind": "filing",
+     "runs": "run.py:334",
+     "writes": "_work/<slug>/run.json, source.mp4, poster.jpg"
+    },
+    {
+     "id": "setup",
+     "name": "Product, authority, writing lane, route",
+     "kind": "gate",
+     "runs": "run.py:3071",
+     "reads": "runs/settings/settings.json, brands/<b>/winner.json",
+     "writes": "run.json product, writing_lane, production_route"
+    },
+    {
+     "id": "v2-reuse",
+     "name": "Reuse a swipe already read",
+     "kind": "filing",
+     "runs": "run.py:2754",
+     "reads": "_work/_shared-v2/<md5>/",
+     "when": "VT_CHAIN=v2"
+    },
+    {
+     "id": "plan",
+     "name": "Stage plan",
+     "kind": "gate",
+     "runs": "chain.stages chain.py:894; route_for chain.py:730",
+     "reads": "chain_config.json, extra-stages.json",
+     "writes": "run.json _order, route",
+     "holds": "STATIC or SEQUENTIAL lane → hands to image-teardown"
+    },
+    {
+     "id": "motion",
+     "name": "Motion pre-flight",
+     "kind": "sub-process",
+     "runs": "motion.py check()",
+     "holds": "never"
+    },
+    {
+     "id": "stage0",
+     "name": "Triage",
+     "kind": "stage",
+     "prompt": "prompts/stage-0-triage/triage-v3-owner.md",
+     "model": "gemini-3.1-pro-preview (video)",
+     "reads": "the video; elements style.video.json, format.video.json",
+     "writes": "stages/0-triage.md"
+    },
+    {
+     "id": "stage0-after",
+     "name": "Lane router, style, format, playbook builder",
+     "kind": "gate",
+     "runs": "run.py:2583, 3447",
+     "subs": [
+      "video-production playbook_builder.py (detached)"
+     ],
+     "writes": "run.json triage_lane, style_id, format_id, route",
+     "holds": "STATIC or SEQUENTIAL lane"
+    },
+    {
+     "id": "transcript",
+     "name": "Transcript (audio-teardown)",
+     "kind": "sub-process",
+     "runs": "transcript.py:80 → components/audio-teardown/run.py (ElevenLabs STT)",
+     "writes": "transcript.json"
+    },
+    {
+     "id": "stage1",
+     "name": "Teardown record",
+     "kind": "stage",
+     "prompt": "prompts/stage-1-teardown/stage1-teardown-v17-owner.md",
+     "model": "gemini-3.1-pro-preview (video)",
+     "reads": "the video; doctrine sections; video-doctrine shot language, look, staging, cutting",
+     "writes": "stages/1-teardown.md"
+    },
+    {
+     "id": "transcript-check",
+     "name": "Transcript check + sound sheet",
+     "kind": "sub-process",
+     "runs": "deepen.py:258; transcript.py:222",
+     "writes": "transcript.json, sound-sheet.json/.md, audio/, stages/1-transcript.md"
+    },
+    {
+     "id": "framemap",
+     "name": "Frame map",
+     "kind": "sub-process",
+     "runs": "framemap.py:241 (background)",
+     "prompt": "prompts/stage-1f-frame-map/stage1f-frame-map-v2-owner.md",
+     "model": "house judge",
+     "writes": "framemap/framemap.json, FRAME-MAP.md, shots/, frames/, elements/"
+    },
+    {
+     "id": "deepen",
+     "name": "Deepen people, visuals, music",
+     "kind": "sub-process",
+     "runs": "deepen.py:307; music.py:137 (Demucs, Shazam)",
+     "writes": "stages/1-teardown.md rewritten, music/"
+    },
+    {
+     "id": "stage1-checks",
+     "name": "Doctrine sections + depth",
+     "kind": "gate",
+     "runs": "run.py:2129",
+     "holds": "off-doctrine section or thin visuals after one re-read"
+    },
+    {
+     "id": "qc",
+     "name": "Creative QC after every stage",
+     "kind": "gate",
+     "runs": "run.py:1451 → marketing-chain-checks",
+     "writes": "qc-log/",
+     "holds": "never"
+    },
+    {
+     "id": "library",
+     "name": "Staleness + Drive swipe library",
+     "kind": "filing",
+     "runs": "run.py:2047, 2520 → library.py",
+     "writes": "Shared Assets/components/video-teardown/swipes/<label>/"
+    },
+    {
+     "id": "stage1k",
+     "name": "Culture read",
+     "kind": "stage",
+     "prompt": "components/culture/prompts/stage1k-culture-v5-owner.md",
+     "model": "gemini-3.1-pro-preview + search",
+     "subs": [
+      "culture.py post talk (yt-dlp)"
+     ],
+     "writes": "stages/1k-culture.md, 1k-culture.json, post-talk.json"
+    },
+    {
+     "id": "stage1c",
+     "name": "Doctrine read",
+     "kind": "stage",
+     "prompt": "prompts/stage-1c-doctrine/stage1c-doctrine-v4-owner.md",
+     "model": "opus",
+     "writes": "stages/1c-doctrine.md, doctrine.json"
+    },
+    {
+     "id": "elements",
+     "name": "Elements check",
+     "kind": "gate",
+     "runs": "elements_check.py:184",
+     "writes": "elements.json",
+     "holds": "never"
+    },
+    {
+     "id": "stage1b",
+     "name": "Audience",
+     "kind": "stage",
+     "prompt": "video-writing/prompts/stage-1b-audience/stage1b-audience-v13-owner.md",
+     "model": "opus",
+     "subs": [
+      "research-gatherer prefetch → research/inputs.json"
+     ],
+     "writes": "stages/1b-audience.md, run.json audience, market_state",
+     "holds": "no avatar fits",
+     "when": "waits for a route; files to the writing shelf"
+    },
+    {
+     "id": "stage2",
+     "name": "Replication spec",
+     "kind": "stage",
+     "prompt": "prompts/stage-2-replication/stage2-replication-v5-owner.md",
+     "model": "gemini-3.1-pro-preview (text)",
+     "writes": "stages/2-spec.md"
+    },
+    {
+     "id": "route-lock",
+     "name": "Route lock",
+     "kind": "owner-stop",
+     "runs": "run.py:3316, 3491",
+     "writes": "run.json waiting_for='route'",
+     "holds": "no route picked: the run files and waits"
+    },
+    {
+     "id": "format-call",
+     "name": "New-format call",
+     "kind": "owner-stop",
+     "runs": "run.py:3319",
+     "reads": "runs/video-teardown/format-calls.json",
+     "when": "VT_CHAIN=v2"
+    },
+    {
+     "id": "handoff-writing",
+     "name": "Hand-off to video-writing",
+     "kind": "sub-process",
+     "runs": "run.py:3378 → video-writing writing_v2.run_writing",
+     "when": "route ai (v2); creator and founder write v1 stages 3–8 inside the teardown"
+    },
+    {
+     "id": "v1-writing",
+     "name": "v1 writing loop (creator, founder)",
+     "kind": "stage",
+     "runs": "stages 3, 4r, 4b, 4a, 4c, 4d, 4e, 4g, 5 + gates, 7, 7b, 8 in run.py",
+     "when": "route creator or founder"
+    },
+    {
+     "id": "mirror",
+     "name": "Drive mirror",
+     "kind": "filing",
+     "runs": "chain.py:238",
+     "writes": "Shared Assets/runs/video-teardown/<b>/<slug>/"
+    },
+    {
+     "id": "doc",
+     "name": "Google Doc",
+     "kind": "sub-process",
+     "runs": "gdoc.py, drive.py → gdrive-creator",
+     "when": "not on the creator route unless VT_CREATOR_DOC=1"
+    },
+    {
+     "id": "records",
+     "name": "Records, copy source, ad words, framework bank",
+     "kind": "filing",
+     "runs": "run.py:3670",
+     "subs": [
+      "copywriter brief_words (when route + product)"
+     ]
+    },
+    {
+     "id": "filing",
+     "name": "File to the two shelves + number the brief",
+     "kind": "filing",
+     "runs": "file_run.py:198, :121, :167; brief_index.py",
+     "writes": "runs/video-teardown/<b>/<slug>/ (stages 0,1,1k,1c,2); runs/video-writing/<b>/<slug>/ (+ deliverable/5-brief.md when accepted); the register"
+    },
+    {
+     "id": "index",
+     "name": "Video index + board",
+     "kind": "filing",
+     "runs": "video_index.py:172; board.py",
+     "writes": "runs/video-teardown/VIDEO-INDEX.json"
+    }
+   ]
+  },
+  {
+   "id": "video-writing",
+   "skill": "video-writing",
+   "door": "components/video-writing/machine/run.py <teardown run folder | label> (or the teardown hands off at stage 3 with --writing v2)",
+   "pieces": [
+    {
+     "id": "route",
+     "name": "AI route only",
+     "kind": "gate",
+     "runs": "writing_v2.py:1128",
+     "holds": "route not ai: v2 writes nothing; creator and founder write on v1 inside the teardown loop"
+    },
+    {
+     "id": "format-call",
+     "name": "Format call",
+     "kind": "gate",
+     "runs": "writing_v2.py:905, :926; video-teardown layers.call_for (runs/video-teardown/format-calls.json)",
+     "holds": "a new: format with no call, unless --allow-new-format"
+    },
+    {
+     "id": "writing-lane",
+     "name": "Writing lane",
+     "kind": "gate",
+     "runs": "writing_v2.py:1147",
+     "reads": "run.json writing_lane {lane: winner+winner | swipe}",
+     "holds": "no lane, or a winner lane with no winner"
+    },
+    {
+     "id": "inputs",
+     "name": "Run inputs",
+     "kind": "sub-process",
+     "runs": "writing_v2.py:655, :767",
+     "reads": "elements format.video.json, video-production playbooks, VIDEO-SPICE.md, realism index, creative-controls, creative-moves.md, owner-notes.md, the winner run's teardown"
+    },
+    {
+     "id": "stage3",
+     "name": "Injection",
+     "kind": "stage",
+     "prompt": "prompts/v2/stage3-injection-v11-owner.md",
+     "model": "opus",
+     "reads": "1-teardown.md, 2-spec.md, 1c doctrine, culture map, brand avatar, language bank, position, identity anchors, story, product, offer bank, CAST.md, doctrine techniques",
+     "writes": "stages/3-injection.md",
+     "subs": [
+      "slot_research fill (brand files, then web)",
+      "spoken_check on T-rows"
+     ],
+     "holds": "slot research crash, a spoken fragment"
+    },
+    {
+     "id": "stage4i",
+     "name": "Controlling idea",
+     "kind": "stage",
+     "prompt": "prompts/v2/stage4i-idea-v1-owner.md",
+     "model": "opus",
+     "writes": "stages/4i-controlling-idea.md"
+    },
+    {
+     "id": "stage4v2a",
+     "name": "Reading + hooks",
+     "kind": "stage",
+     "prompt": "prompts/v2/stage4v2a-readhooks-v10-owner.md",
+     "model": "opus",
+     "writes": "stages/4ab-reading-hooks.md, split to 4a-reading.md and 4b-hooks.md"
+    },
+    {
+     "id": "hook-gates",
+     "name": "Hook matrix + hook format",
+     "kind": "gate",
+     "runs": "writing_v2.py:1010; hook_matrix.py; video-teardown hook_format.py",
+     "writes": "hook-matrix.json, HOOK-FORMAT.md",
+     "holds": "matrix problems or an open hook finding",
+     "repair": "one remake of reading + hooks with the findings"
+    },
+    {
+     "id": "stage4v2b",
+     "name": "Placement + expansion + close",
+     "kind": "stage",
+     "prompt": "prompts/v2/stage4v2b-build-v10-owner.md",
+     "model": "opus",
+     "subs": [
+      "research-gatherer (~research)"
+     ],
+     "writes": "stages/4cde-placement-expansion-close.md, split to 4c, 4d, 4e"
+    },
+    {
+     "id": "stage4e",
+     "name": "Audit",
+     "kind": "gate",
+     "prompt": "prompts/v2/stage4e-audit-v12-owner.md",
+     "model": "opus",
+     "writes": "stages/4f-audit.md, AUDIT-HOLD.md",
+     "holds": "verdict not SHIP",
+     "repair": "re-run INJECTION, HOOKS or BUILD (BUILD = one patch call, prompts/v2/stage4v2b-patch-v1-owner.md); budget 2 rounds (run.json writing_retry_budget)"
+    },
+    {
+     "id": "stage4g",
+     "name": "Spice",
+     "kind": "stage",
+     "prompt": "prompts/v2/stage4g-spice-v10-owner.md",
+     "model": "opus",
+     "writes": "stages/4g-spice.md"
+    },
+    {
+     "id": "stage5",
+     "name": "The brief",
+     "kind": "stage",
+     "prompt": "prompts/v2/stage5-ai-brief-v15-owner.md",
+     "model": "opus",
+     "reads": "every stage 4 output, spice, teardown, frame map, angles, settings, cast, offer, product",
+     "writes": "stages/5-brief.md (prose + the scene json block)"
+    },
+    {
+     "id": "5d",
+     "name": "Director",
+     "kind": "stage",
+     "prompt": "prompts/stage-5d-director/ (director, ladder, storyboard ask, pick, rulings)",
+     "model": "designs tier (director), checks tier (pick)",
+     "writes": "the json block's happens/do/action, a Director's picks section, director/",
+     "holds": "never"
+    },
+    {
+     "id": "slot-fill",
+     "name": "Slot fill",
+     "kind": "repair",
+     "runs": "video-production/machine/slotfill.py",
+     "holds": "cannot run"
+    },
+    {
+     "id": "claims",
+     "name": "Claims fix",
+     "kind": "repair",
+     "runs": "video-production/machine/claimfix.py",
+     "holds": "cannot run"
+    },
+    {
+     "id": "section-fit",
+     "name": "Section fit",
+     "kind": "repair",
+     "runs": "video-production/machine/sectionfit.py",
+     "holds": "cannot run"
+    },
+    {
+     "id": "scene-fold",
+     "name": "Scene fold + footage",
+     "kind": "sub-process",
+     "runs": "video-writing scene_shots.fold_file; video-production footage.storyboard_pass (asset-index)",
+     "writes": "stages/storyboard-footage.md",
+     "holds": "fold crash"
+    },
+    {
+     "id": "spoken",
+     "name": "Spoken words",
+     "kind": "gate",
+     "runs": "video-teardown spoken_check",
+     "holds": "a fragment"
+    },
+    {
+     "id": "cast-match",
+     "name": "Cast match",
+     "kind": "gate",
+     "runs": "video-writing cast_match.check",
+     "reads": "runs/ai-elements/<b>/casting/*/spec.json",
+     "holds": "an open R-/D- finding"
+    },
+    {
+     "id": "production-contract",
+     "name": "Production contract",
+     "kind": "gate",
+     "runs": "video-production model_inputs.brief_violations",
+     "holds": "any violation"
+    },
+    {
+     "id": "frame-carry",
+     "name": "Frame carry",
+     "kind": "gate",
+     "runs": "video-production storyboard_plan.swipe_carry",
+     "holds": "only when it cannot run"
+    },
+    {
+     "id": "5m",
+     "name": "Swipe match (retired)",
+     "kind": "gate",
+     "runs": "video-writing swipe_match.check",
+     "writes": "the brief's first two stamp lines (PASSED, brief-read APPROVED)",
+     "holds": "never while retired"
+    },
+    {
+     "id": "5n",
+     "name": "Manifest",
+     "kind": "gate",
+     "prompt": "prompts/stage-5n-manifest/manifest-v2-owner.md",
+     "model": "house judge (gemini)",
+     "writes": "manifest.json, the brief's MANIFEST block",
+     "holds": "core missing or an unsourced price"
+    },
+    {
+     "id": "acceptance",
+     "name": "Acceptance",
+     "kind": "filing",
+     "runs": "writing_result.record_acceptance",
+     "writes": "run.json writing_acceptance {accepted, source_sha256, context_sha256}, writing-result.json"
+    },
+    {
+     "id": "revalidate",
+     "name": "Revalidate",
+     "kind": "gate",
+     "runs": "writing_revalidate.revalidate (run.py --revalidate)",
+     "writes": "revalidation/<ts>/result.json, acceptance re-issued",
+     "when": "a stale acceptance"
+    },
+    {
+     "id": "5u",
+     "name": "Mark used",
+     "kind": "filing",
+     "runs": "video-teardown mark_used",
+     "writes": "runs/video-writing/<b>/<slug>/proposals/language-used/",
+     "when": "only when the teardown drives"
+    },
+    {
+     "id": "filing",
+     "name": "File + number",
+     "kind": "filing",
+     "runs": "video-teardown file_run.py file_run:121, number_brief:167; image-teardown tools/briefs.py open_video",
+     "writes": "runs/video-writing/<b>/<slug>/deliverable/5-brief.md (accepted only), the register entry, run.json brief",
+     "when": "only when the teardown drives"
+    }
+   ]
+  },
+  {
+   "id": "video-production",
+   "skill": "video-production",
+   "door": "components/video-production/machine/run.py start <brief> --brand <b> --format <format> (repo line); the Video Studio at :8922 (the line in use)",
+   "lines": [
+    {
+     "id": "repo",
+     "name": "The repo line (run.py start, record, pack; workflow.py stations)",
+     "pieces": [
+      {
+       "id": "plan",
+       "name": "Brief copy + plan",
+       "kind": "sub-process",
+       "runs": "run.py:1755",
+       "writes": "<run>/brief.md, plan.json, brief-view.md"
+      },
+      {
+       "id": "G1",
+       "name": "Swipe match stamp",
+       "kind": "gate",
+       "runs": "run.py:1772",
+       "holds": "stamp missing or stale"
+      },
+      {
+       "id": "G2",
+       "name": "Manifest COMPLETE",
+       "kind": "gate",
+       "runs": "run.py:1798",
+       "holds": "MISSING, including to-make only"
+      },
+      {
+       "id": "G3",
+       "name": "Brief names the product",
+       "kind": "gate",
+       "runs": "run.py:1840"
+      },
+      {
+       "id": "G4",
+       "name": "Brief read",
+       "kind": "gate",
+       "runs": "run.py:1864",
+       "holds": "retired by ruling"
+      },
+      {
+       "id": "G6",
+       "name": "Production gate + contract",
+       "kind": "gate",
+       "runs": "model_inputs.production_gate:1372, brief_violations:1030"
+      },
+      {
+       "id": "G7",
+       "name": "Banks (music, sfx)",
+       "kind": "gate",
+       "runs": "run.py:1936 banks.resolve",
+       "holds": "no made row"
+      },
+      {
+       "id": "G8",
+       "name": "Own footage first",
+       "kind": "gate",
+       "runs": "footage.gate:349 → asset-index search.py",
+       "skill": "asset-index"
+      },
+      {
+       "id": "routes",
+       "name": "Shot routes REAL/SWAP/AI",
+       "kind": "sub-process",
+       "runs": "route_facts.write:170",
+       "writes": "ROUTES.md, swap-orders.json"
+      },
+      {
+       "id": "G10",
+       "name": "Section fit",
+       "kind": "gate",
+       "runs": "sectionfit.check:72"
+      },
+      {
+       "id": "G11",
+       "name": "Elements lock",
+       "kind": "gate",
+       "runs": "elements_check.gate:797",
+       "skill": "casting",
+       "writes": "elements.json, elements-lock.json"
+      },
+      {
+       "id": "voice",
+       "name": "Voice read",
+       "kind": "station",
+       "runs": "voice.run_for:1333",
+       "model": "eleven-v3",
+       "writes": "vo/"
+      },
+      {
+       "id": "G13",
+       "name": "Audio gate",
+       "kind": "gate",
+       "runs": "audiocheck.check_run:160",
+       "model": "scribe_v1"
+      },
+      {
+       "id": "G14",
+       "name": "Song (Suno, by hand)",
+       "kind": "owner-stop",
+       "runs": "song.py",
+       "when": "song ads"
+      },
+      {
+       "id": "pictures",
+       "name": "Storyboard pictures",
+       "kind": "station",
+       "runs": "storyboard_plan.picture_jobs:1244",
+       "model": "gpt-image-2.5",
+       "skill": "frame-edit"
+      },
+      {
+       "id": "G16",
+       "name": "Subject zone",
+       "kind": "gate",
+       "runs": "safezone.check:232"
+      },
+      {
+       "id": "clips",
+       "name": "Clips",
+       "kind": "station",
+       "runs": "clips_run.start:1364, run_live:2319 (--yes, paid)",
+       "model": "seedance-2.5",
+       "holds": "clip_gate.ready, face gate, preflight rules 1-13"
+      },
+      {
+       "id": "record",
+       "name": "Record + line parity",
+       "kind": "station",
+       "runs": "run.py:2553",
+       "skill": "remake-clip",
+       "holds": "other words or cut off → remake order"
+      },
+      {
+       "id": "pack",
+       "name": "Pack + coverage",
+       "kind": "pack",
+       "runs": "run.py:2738",
+       "writes": "<run>/deliverable/, EDITOR-PACK.md (not a video-editor hand-off)"
+      }
+     ]
+    },
+    {
+     "id": "studio",
+     "name": "The Studio line (port 8922; not in git; the one in use)",
+     "pieces": [
+      {
+       "id": "B0",
+       "name": "Prepare hand-off (storyboard scenes approved)",
+       "kind": "owner-stop",
+       "writes": "runs/storyboard/handoff-requests/<idea>.json"
+      },
+      {
+       "id": "B1",
+       "name": "Checks + produce decision",
+       "kind": "station",
+       "runs": "video_studio.py:346",
+       "reads": "the writing run's stage5 status",
+       "holds": "stage 5 not done"
+      },
+      {
+       "id": "B2",
+       "name": "Seed the production",
+       "kind": "station",
+       "runs": "seed_from_brief.py:228",
+       "reads": "_work/<run>/stages/5-brief.md json block (not the filed deliverable)",
+       "writes": "<productions>/<n>/brief.json, scenes/<S>/take-1.json"
+      },
+      {
+       "id": "B4",
+       "name": "Song inputs + take",
+       "kind": "owner-stop",
+       "runs": "song.py --suno",
+       "when": "sung briefs"
+      },
+      {
+       "id": "B7",
+       "name": "Shot list from the swipe",
+       "kind": "station",
+       "runs": "swipe_shots.py",
+       "writes": "shot-list.json"
+      },
+      {
+       "id": "B8",
+       "name": "Shot fill from our footage",
+       "kind": "station",
+       "runs": "shot_fill.py → asset-index",
+       "skill": "asset-index",
+       "writes": "shot-fill.json"
+      },
+      {
+       "id": "B11",
+       "name": "Narrator voice",
+       "kind": "station",
+       "runs": "voice_continuous.py, voices.py",
+       "model": "eleven_v3 + scribe",
+       "writes": "voice/"
+      },
+      {
+       "id": "B12",
+       "name": "Cut scenes",
+       "kind": "station",
+       "runs": "swipe_cut.py; run_scene:1507"
+      },
+      {
+       "id": "B13",
+       "name": "Continuous take",
+       "kind": "sub-process",
+       "runs": "take.py scene():936",
+       "subs": [
+        "motion chain (components/motion)",
+        "3D set print (3d-print skill)",
+        "seedance take",
+        "face, beat and motion checks"
+       ]
+      },
+      {
+       "id": "B15",
+       "name": "Send to maker",
+       "kind": "pack",
+       "runs": "components/video-edit/maker/maker_pack.py (moved into the chain 2026-11-17)",
+       "writes": "runs/handoffs/video-editor/<brand>/<brief key>/"
+      },
+      {
+       "id": "B16",
+       "name": "Swipe check",
+       "kind": "gate",
+       "runs": "swipe_check.py",
+       "writes": "SWIPE-CHECK.json"
+      },
+      {
+       "id": "B17",
+       "name": "Render",
+       "kind": "station",
+       "runs": "to_studio.py → hyperframes",
+       "writes": "rough-cut-vN, versions/"
+      },
+      {
+       "id": "B18",
+       "name": "Edit stage",
+       "kind": "station",
+       "runs": "edit_stage.py"
+      },
+      {
+       "id": "B19",
+       "name": "Covers",
+       "kind": "station",
+       "runs": "covers_stage.py → image-production"
+      },
+      {
+       "id": "B20",
+       "name": "Approve tab",
+       "kind": "owner-stop",
+       "runs": "meta-upload approve page :8795"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "video-edit",
+   "skill": "video-edit (also video-briefs, recut, caption-look)",
+   "door": "components/video-edit/machine/run.py start <kit> | handoff <folder>; machine/line.py <production run>; open_brief.py for a person in Premiere or HyperFrames",
+   "roads": [
+    {
+     "id": "kit",
+     "name": "Kit road (run.py start / handoff / pack)",
+     "pieces": [
+      {
+       "id": "gather",
+       "name": "Gather the kit",
+       "kind": "step",
+       "runs": "run.py:93",
+       "reads": "edit-kit.json",
+       "holds": "an unapproved or unlabelled clip, no sound"
+      },
+      {
+       "id": "cut",
+       "name": "Cut sheet",
+       "kind": "stage",
+       "runs": "run.py:343 model_cut; assemble; helpers",
+       "prompt": "prompts/stage-2-cut (latest)",
+       "model": "designs tier",
+       "writes": "cutsheet-v1.json"
+      },
+      {
+       "id": "gate",
+       "name": "Gate",
+       "kind": "gate",
+       "runs": "cutsheet.check:79",
+       "holds": "any red"
+      },
+      {
+       "id": "timeline",
+       "name": "STOP 1 timeline",
+       "kind": "owner-stop",
+       "runs": "run.py:649",
+       "skill": "recut",
+       "writes": "work/rough-cut.mp4, timeline.html"
+      },
+      {
+       "id": "captions",
+       "name": "STOP 2 captions",
+       "kind": "owner-stop",
+       "runs": "run.py:654",
+       "skill": "caption-look"
+      },
+      {
+       "id": "export",
+       "name": "Final render",
+       "kind": "step",
+       "runs": "run.py:660, master:474",
+       "writes": "work/final.mp4"
+      },
+      {
+       "id": "audit",
+       "name": "Audit",
+       "kind": "gate",
+       "runs": "audit.py:340"
+      },
+      {
+       "id": "checks",
+       "name": "Final checks",
+       "kind": "gate",
+       "runs": "run.py:520"
+      },
+      {
+       "id": "file",
+       "name": "File + to Drive",
+       "kind": "filing",
+       "runs": "run.py:693; to_drive.py:55"
+      },
+      {
+       "id": "give-back",
+       "name": "Master into returned/ + take-back",
+       "kind": "filing",
+       "runs": "handoff_run.py:315",
+       "when": "handoff road"
+      },
+      {
+       "id": "card",
+       "name": "Approval card",
+       "kind": "filing",
+       "runs": "handoff_run.py:345 → meta-upload feed_video → to_check",
+       "writes": "Shared Assets/meta/<brand>/1-check/video/<ad>/",
+       "when": "handoff road"
+      },
+      {
+       "id": "learn",
+       "name": "Learn",
+       "kind": "stage",
+       "runs": "none: declared in steps.json, no code runs it"
+      }
+     ]
+    },
+    {
+     "id": "line",
+     "name": "Edit-map line (line.py)",
+     "pieces": [
+      {
+       "id": "final-ok",
+       "name": "Final OK before versions",
+       "kind": "gate",
+       "runs": "line.py:61 ad_approvals"
+      },
+      {
+       "id": "plan",
+       "name": "Edit map",
+       "kind": "step",
+       "runs": "edit_map.py"
+      },
+      {
+       "id": "music",
+       "name": "Music bed",
+       "kind": "sub-process",
+       "runs": "music_bed.py (ElevenLabs)",
+       "when": "music called for and none made"
+      },
+      {
+       "id": "sfx",
+       "name": "SFX make",
+       "kind": "sub-process",
+       "runs": "sfx_make.py → video-production make_bank.py"
+      },
+      {
+       "id": "mouths",
+       "name": "Mouths",
+       "kind": "gate",
+       "runs": "mouths.py"
+      },
+      {
+       "id": "render",
+       "name": "Render + listen + lips",
+       "kind": "step",
+       "runs": "render_map.py → listen.py, syncheck.py, map_sheet, compose"
+      },
+      {
+       "id": "audit",
+       "name": "Audit",
+       "kind": "gate",
+       "runs": "audit.py"
+      },
+      {
+       "id": "scan",
+       "name": "Scan",
+       "kind": "gate",
+       "runs": "line.py:626"
+      },
+      {
+       "id": "watch",
+       "name": "Watch",
+       "kind": "gate",
+       "runs": "watch.py",
+       "model": "house judge (gemini)",
+       "prompt": "prompts/stage-4-watch/cut-watch-v2-owner.md"
+      },
+      {
+       "id": "covers",
+       "name": "Covers",
+       "kind": "sub-process",
+       "runs": "image-production make.py --purpose cover"
+      },
+      {
+       "id": "copy",
+       "name": "Ad copy",
+       "kind": "sub-process",
+       "runs": "copywriter brief_words.py",
+       "skill": "copywriter"
+      },
+      {
+       "id": "deliver",
+       "name": "Names + card",
+       "kind": "step",
+       "runs": "deliver.py",
+       "skill": "naming"
+      },
+      {
+       "id": "file",
+       "name": "File to 1-check",
+       "kind": "filing",
+       "runs": "meta-upload to_check.py",
+       "skill": "meta-upload"
+      }
+     ]
+    },
+    {
+     "id": "by-hand",
+     "name": "Editor by hand (Premiere or HyperFrames)",
+     "pieces": [
+      {
+       "id": "check",
+       "name": "Hand-off checklist",
+       "kind": "gate",
+       "runs": "handoff_check.py:70"
+      },
+      {
+       "id": "open",
+       "name": "Editor's door",
+       "kind": "sub-process",
+       "runs": "open_brief.py list / open",
+       "skill": "video-briefs"
+      },
+      {
+       "id": "return",
+       "name": "Cut saved to returned/",
+       "kind": "owner-stop",
+       "runs": "a person"
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "seams": [
+  {
+   "from": "video-teardown",
+   "to": "video-writing",
+   "handed": "runs/video-teardown/_work/<label>/: run.json (brand, product, production_route, writing_lane, layers/format_id, doctrine, audience) and stages 0, 1, 1k, 1c, 1b, 2 done; transcript.json, framemap/, lips.json, research/inputs.json, source.mp4",
+   "door_reads": "writing run.py resolve(): a folder with run.json, or a label under _work",
+   "hand_off": "stage-handoff pack.py video-writing <label> (live)",
+   "gaps": [
+    "writing_lane is required by v2 but older teardowns lack it (0355's run has none)",
+    "The teardown's working folder is runs/video-teardown/_work/<slug>/; its CLAUDE.md and skill say machine/runs/<slug>/.",
+    "stage1b (audience) is listed as a teardown read but waits for a route and files to the writing shelf.",
+    "run.json state='failed' / stopped_at stay set after a later good pass."
+   ]
+  },
+  {
+   "from": "video-writing",
+   "to": "video-production",
+   "handed": "deliverable/5-brief.md: two stamp lines, LANE, the prose sections, the last json block (piece, cast, world, scenes, shots, beats, roll sheet, layers, song), the MANIFEST block; run.json writing_acceptance; the register number",
+   "door_reads": "repo: run.py start reads the stamps, MANIFEST COMPLETE and the json block. Studio: seed_from_brief reads the working stages/5-brief.md json block and run.json stage5 status, none of the stamps",
+   "hand_off": "stage-handoff pack.py video-production <brief> (live)",
+   "gaps": [
+    "Writing passes a MANIFEST MISSING (to-make only); the repo production start refuses anything but COMPLETE. Both real briefs carry MISSING.",
+    "The Studio seeds from the working brief, not the filed accepted one, so an unaccepted brief can be produced.",
+    "Standalone writing (its own door) never files or numbers the brief; only the teardown's run does.",
+    "The brief number is given at writing in the repo line, at Send to maker in the Studio (0355 vs 0366 on E06)."
+   ]
+  },
+  {
+   "from": "video-production",
+   "to": "video-edit",
+   "handed": "runs/handoffs/video-editor/<brand>/<brief key>/ from components/video-edit/maker/maker_pack.py: TIMELINE.html, BRIEF.md, CLIPS.md, clips.json, ELEMENTS.md, made/, voice/, song/, refs/, edit/<key>.premiere.xml, hyperframes/, RUN.md, run.json, returned/",
+   "door_reads": "by hand: handoff_check.py + open_brief.py read exactly this. Edit line: run.py handoff needs manifest.json {role, briefs[1]} + assets/**/edit-kit.json; line.py needs a video-production run",
+   "hand_off": "the maker pack (live, moved into the chain 2026-11-17)",
+   "gaps": [
+    "No builder makes a folder run.py handoff accepts: maker_pack writes no manifest or kit; editor_handoff.py writes a singular brief and no kit.",
+    "Two builders write the same folder in two shapes (maker_pack, editor_handoff.py).",
+    "Three return-name patterns: <key>-control.mp4, <key>_asset-NN, <brand>_<product>_<brief>_<batch>_asset-01.",
+    "Nothing picks a hand-cut master up from returned/ and files its card."
+   ]
+  },
+  {
+   "from": "video-edit",
+   "to": "approval",
+   "handed": "Shared Assets/meta/<brand>/1-check/video/<ad name>/ (card.json + videos + covers)",
+   "door_reads": "meta-upload approve page (:8795); going live is the owner's click",
+   "gaps": [
+    "The kit road's file step writes no card; only the handoff road and line.py file one."
+   ]
+  }
+ ],
+ "across": [
+  "Production runs as two lines that never call each other: the repo machine (19 gates) and the Studio (its own checks), and the Studio skips every repo gate.",
+  "Two ledgers: video-production work_queue.py cannot see Studio productions; the Studio reads the Queue at :8880.",
+  "9 of 14 production playbooks have no workflow steps.",
+  "video-edit steps.json 'learn' is declared and never run.",
+  "Several documented holding gates are now notes only (structure lock, swipe match, frame carry) since V57; the docs still say they stop the chain.",
+  "Prompt choice: writing v2 pins prompt file names; the frame map picks its own folder's newest; v2 culture read takes an older prompt (v4) than the live v5."
+ ]
+}

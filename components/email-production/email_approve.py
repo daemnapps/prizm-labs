@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The email approval page — every checked Klaviyo draft on one card; the owner's
+"""The email approval page — every checked Klaviyo draft on one card; owner's
 Approve → Schedule schedules it (never sends it now). EP-3 (email approval card).
 
     python3 email_approve.py              # http://localhost:8797  (launch config "email-approve")
@@ -14,12 +14,12 @@ them; this page never makes one.
 **Approve → Schedule** runs klaviyo_upload.schedule_card: every check again,
 the draft read back from Klaviyo and refused on any change, a fixed send time
 at least 30 minutes away, not the mini and not a worker or lab-run job,
-the team's off-switch (send-switch.json) on, and a name on approvers.json.
+designer's off-switch (send-switch.json) on, and a name on approvers.json.
 Then the one Klaviyo call, campaign-send-jobs. A failed call leaves the card
 `approved`; Retry is a fresh click. **Send back** needs one or more reasons
 (send-back-reasons.json) and a note; the draft stays in Klaviyo.
 
-the owner's own Claude reads GET /api/waiting (plain JSON) and acts on his typed
+owner's own Claude reads GET /api/waiting (plain JSON) and acts on his typed
 word through the same POSTs. Nothing here runs on a timer.
 
 Listens on 127.0.0.1 only. Every request must name this page as its Host
@@ -73,9 +73,13 @@ def card_files():
     for h in HANDOFFS:
         for f in sorted(Path(h).glob(f"klaviyo-uploader/*/*/{K.CARD}")):
             out[f"handoff/{f.parent.name}"] = ("handoff", f.parent, f)
+    # SMS cards (2026-11-04): sms_launch.py writes them beside each written text; the same gate approves them
+    for f in sorted(Path(ROOT).glob("*/*/sms-card.json")):
+        out[f"sms/{f.parts[-3]}/{f.parts[-2]}"] = ("sms", f.parent, f)
     if FAKE is not None:
-        for _, _, f in out.values():
-            FAKE.know(f)
+        for how, _, f in out.values():
+            if how != "sms":
+                FAKE.know(f)
     return out
 
 
@@ -89,7 +93,18 @@ def job_for(cid):
     return K.from_handoff(folder)
 
 
+def sms_state(card):
+    st = card.get("state") or ""
+    return "approved" if st.startswith("approved") else st
+
+
 def row_of(cid, card):
+    if card.get("kind") == "sms":
+        return {"id": cid, "kind": "sms", "brand": card.get("brand"), "email": card.get("label"),
+                "platform": card.get("platform"), "text": card.get("sent_text"), "follows": card.get("follows"),
+                "audience": card.get("segments") or [], "send": {"at": card.get("send_at"), "is": card.get("send_at_is")},
+                "job": card.get("job"), "state": sms_state(card), "approval": card.get("approval"),
+                "checks": [], "checks_ok": True, "preview_url": None}
     checks = card.get("checks") or []
     return {"id": cid, "brand": card.get("brand"), "email": card.get("email"),
             "campaign_id": card.get("campaign_id"), "campaign_name": card.get("campaign_name"),
@@ -109,7 +124,7 @@ def rows(state):
             card = json.loads(f.read_text())
         except (OSError, ValueError):
             continue
-        if card.get("state") == state:
+        if (sms_state(card) if card.get("kind") == "sms" else card.get("state")) == state:
             out.append(row_of(cid, card))
     return out
 
@@ -129,6 +144,8 @@ def answer(path, body):
     by = body.get("by")
     if by is not None and not isinstance(by, str):
         return 400, {"ok": False, "error": "\"by\" is a name"}
+    if cid.startswith("sms/"):
+        return sms_answer(path, cid, by, body)
     job = job_for(cid)
     if path == "/api/send-back":
         reasons, note = body.get("reasons"), body.get("note")
@@ -144,6 +161,27 @@ def answer(path, body):
                 raise K.Held(["only an approved card whose schedule failed can be retried"])
         campaign, card = K.schedule_card(job, by, env=ENV, home=HOME, online=ONLINE)
     return 200, {"ok": True, "state": card.get("state"), "id": cid, "campaign_id": campaign}
+
+
+def sms_answer(path, cid, by, body):
+    """An SMS card: Approve runs sms_launch.approve (the same refusals as an email); Send back records why."""
+    import sms_launch
+    hit = card_files().get(cid)
+    if not hit:
+        raise NotFound(f"no SMS card {cid!r}")
+    folder, f = hit[1], hit[2]
+    if path == "/api/send-back":
+        reasons, note = body.get("reasons"), (body.get("note") or "").strip()
+        if not reasons or not note:
+            raise K.Held(["a send-back needs a reason and a note"])
+        card = json.loads(f.read_text())
+        if card.get("state") != "waiting":
+            raise K.Held([f"this card is {card.get('state')} — it cannot be sent back from here"])
+        card.update(state="sent-back", sent_back={"by": K.who(by), "at": K.now(), "reasons": reasons, "note": note})
+        f.write_text(json.dumps(card, indent=1, ensure_ascii=False) + "\n")
+    else:
+        card = sms_launch.approve(folder, by, env=ENV, home=HOME, client=((lambda m, p, b: FAKE.kl(m, p, "fake", b)) if FAKE is not None else None))
+    return 200, {"ok": True, "state": card.get("state"), "id": cid, "campaign_id": card.get("campaign_id")}
 
 
 class Handler(BaseHTTPRequestHandler):

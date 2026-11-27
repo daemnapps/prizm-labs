@@ -1,26 +1,29 @@
 # The Viewer Check
 
-Page: (private page) · source `viewer-check.html` · prompt `prompts/viewer-check-v1-owner.md`
+> **Off in the video chain (owner, 2026-11-06).** By the end of writing the copy is written and reviewed, so this panel no longer gates a brief: not at stage 5, not in the writing re-check, not before production spends. It still runs by hand with `QC_VIEWER=1`, and its notes are kept for reading.
+
+
+Page: https://claude.ai/artifact/NpcmNYPNXqFdVJBEfkHyhT · source `viewer-check.html` · prompt `prompts/viewer-check-v1-owner.md`
 
 **LIVE 2026-10-02 in the video and statics chains** (the owner: "slide this into the chains and lets ride it"). Code: `marketing_chain_checks/viewer.py`. Prompts: `viewer-check`, `viewer-card`, `viewer-cut` (all `-v1-owner.md`).
 
 ## What runs today
 | Chain | Where | A fail goes back to |
 |---|---|---|
-| Video briefs | `tools/video-teardown/machine/run.py` `viewer_gate`, last stage-5 gate; also `_agent_stage.py done` | openings → 4b hooks · middle/giveaway → 4c placement · close → 4e close |
-| Statics & carousels | `tools/image-teardown/tools/run.py` `viewer_step`, after the stage-6 copy gate | openings → 4 headlines · middle/giveaway → 5 variations · close → 6 brief |
+| Video briefs | `components/video-teardown/machine/run.py` `viewer_gate`, last stage-5 gate; also `_agent_stage.py done` | openings → 4b hooks · middle/giveaway → 4c placement · close → 4e close |
+| Statics & carousels | `components/image-teardown/tools/run.py` `viewer_step`, after the stage-6 copy gate | openings → 4 headlines · middle/giveaway → 5 variations · close → 6 brief |
 | Landing pages | not yet — a page is reached from an ad, not seen in a feed; needs its own viewer | — |
 
 - **Blocks.** A fail re-makes that step with the viewers' words; a fresh set reads it. 2 fails → HOLD for the owner. "Not for me" → HOLD at once. Passes with `--approve-structure V` (video) or the `viewer` gate in check.json (statics).
 - **5 viewers.** With 3, an unchanged brief failed one round and passed the next. With 5, three rounds on Silent Chair all passed (watch-time 3, 5, 4 of 5; 5/5 stopped; 100% vs 20–33% for the real posts).
-- **Fallback.** Gemini refuses <brand> profiles (PROHIBITED_CONTENT) → GPT-5.5 / GPT-5.4-mini answer. Each verdict lists the models used.
+- **Fallback.** Gemini refuses Brand B profiles (PROHIBITED_CONTENT) → GPT-5.5 / GPT-5.4-mini answer. Each verdict lists the models used.
 - **Sub-avatar.** The viewers are the sub-avatar the brief names. The feed falls back to the core feed if the sub has none.
 - **One translation per brief.** The brief → what-a-viewer-sees step is cached per brief, so every round reads the same thing.
 - Each round is filed at `<run>/viewer-check/r<N>/` (sent, answers, VERDICT.md) and in `<run>/qc-log/`. Off: `QC_VIEWER=0`. Tests: `python3 test_viewer.py`.
 
 The last check after the writing stages. The ad is dropped into its avatar's real feed and scrolled by fresh viewers who aren't marketers. They're asked: do you stop, when do you leave, would you tap? Taken from Andrei Lunev's "Toilet Mike" (GreekOut II Mykonos 2026, Day 1).
 
-## First test: Silent Chair (<brand> glow-up, 2 Oct 2026)
+## First test: Silent Chair (Brand A glow-up, 2 Oct 2026)
 
 | | |
 |---|---|

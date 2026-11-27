@@ -1,0 +1,37 @@
+{
+ "title": "Fixture page in two versions",
+ "schema": 1,
+ "status": "draft",
+ "versions": {
+  "A": "versions.html",
+  "B": "versions.html"
+ },
+ "state_words": {
+  "wired": "the data exists",
+  "after-card": "needs a card",
+  "not-built": "no data yet"
+ },
+ "kinds": {
+  "data": {"letter": "D", "name": "Data", "means": "a value saved in a data file"},
+  "rule": {"letter": "R", "name": "Rule", "means": "the page works it out by its own rule"},
+  "media": {"letter": "M", "name": "Media", "means": "a picture, clip or voice file"},
+  "layout": {"letter": "L", "name": "Layout", "means": "arrangement, no data of its own"},
+  "action": {"letter": "A", "name": "Action", "means": "a button that runs a command"}
+ },
+ "features": [
+  {"n": 1, "name": "Saved time", "kind": "data", "state": "wired", "status": "draft",
+   "source": {"component": "fixture", "file": "data/index.json", "field": "as_of"},
+   "where": {"A": {"sel": "#snap", "text": null}, "B": {"sel": "#snap", "text": null}}},
+  {"n": 2, "name": "Absent here", "kind": "data", "state": "wired", "status": "draft",
+   "source": {"component": "fixture", "file": "data/runs/<run>.json", "field": "late"},
+   "where": {"A": null, "B": null}},
+  {"n": 3, "name": "Built by script", "kind": "layout", "state": "wired", "status": "draft", "source": null,
+   "where": {"A": {"sel": ".built", "text": null}, "B": {"sel": ".built", "text": null}}},
+  {"n": 4, "name": "Too complex", "kind": "rule", "state": "wired", "status": "draft", "source": null,
+   "where": {"A": {"sel": "main .later", "text": null}, "B": {"sel": "main", "text": "saved"}}},
+  {"n": 5, "name": "A tag selector", "kind": "layout", "state": "wired", "status": "draft", "source": null,
+   "where": {"A": {"sel": "main", "text": null}, "B": {"sel": "main", "text": null}}},
+  {"n": 6, "name": "A class selector", "kind": "layout", "state": "wired", "status": "draft", "source": null,
+   "where": {"A": {"sel": ".later", "text": null}, "B": {"sel": ".later", "text": null}}}
+ ]
+}

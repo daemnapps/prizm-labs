@@ -1,0 +1,102 @@
+{
+ "id": "creator-dub",
+ "name": "Creator Dub",
+ "kind": "edit",
+ "makes": "A creator's video dubbed into other languages with lip sync, per-language audio, styled captions and translated title and description.",
+ "source": [
+  "creator-dub/SKILL.md",
+  "creator-dub/references/translation_brief.md",
+  "creator-dub/references/languages.md",
+  "creator-dub/references/qa.md",
+  "creator-dub/references/youtube.md"
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "name": "Map stems and check against the published video",
+   "model": "none",
+   "cheap": "local Demucs for the split, free"
+  },
+  {
+   "n": 2,
+   "name": "Transcribe and fix lines",
+   "model": "none",
+   "cheap": "local Whisper stt, free"
+  },
+  {
+   "n": 3,
+   "name": "Translate and write metadata per language",
+   "model": "none",
+   "cheap": "Claude on the plan, free"
+  },
+  {
+   "n": 4,
+   "name": "Dub each language (voice only)",
+   "model": "audio_dubbing",
+   "cheap": "fewer languages; Kokoro tts draft"
+  },
+  {
+   "n": 5,
+   "name": "QA and window re-dub",
+   "model": "audio_dubbing",
+   "cheap": "reword shorter first, free"
+  },
+  {
+   "n": 6,
+   "name": "Mix, encode, captions",
+   "model": "none",
+   "cheap": "already free"
+  },
+  {
+   "n": 7,
+   "name": "Lip-sync each language",
+   "model": "sync_so",
+   "cheap": "skip for audio-only tracks"
+  },
+  {
+   "n": 8,
+   "name": "Package, upload, report",
+   "model": "none",
+   "cheap": null
+  }
+ ],
+ "price": "Not quoted in the library; estimate_audio_cost on one language first; dub billed by voice length, sync by video length, per language.",
+ "cheap_price": "Drop sync_so for audio tracks, dub 2-3 languages first, local Demucs and Whisper: pay only for the dubs you ship.",
+ "prompts": [
+  {
+   "label": "Translation brief template (filled once per video)",
+   "source": "creator-dub/references/translation_brief.md",
+   "text": "# Translation brief: \"<video title>\"\n\n<2–4 sentences: what the video is, who hosts it (and any co-host), the creator's tone, what is being made or shown, the story of\nany film or clip inside it, and who each character is (role, relationship).>\n\n## Input\n\n`lines.json` holds all lines in time order. Each line has:\n\n- `key`;\n- `speaker`;\n- `dubbed`: true means it's voiced in your language; false means subtitles only, and the clip audio stays in the original language;\n- `seconds`: the original length;\n- `text`: the original line.\n\n## Output\n\n1. `translations_<code>.json`: one JSON object `{\"<key>\": \"<translation>\"}` covering **every key** with non-empty text. UTF-8, `ensure_ascii=False`.\n2. `youtube_meta_<code>.json`: `{\"title\": ..., \"description\": ...}`, translated from `youtube_orig.json`:\n   - keep every URL, emoji and timestamp;\n   - translate the chapter names;\n   - title ≤ 100 characters.\n\n## This episode\n\n- **Jokes / double meanings:** <line → what it means and how it must land>\n- **Repeated lines** (translate identically every time): <list>\n- **Insults / slang:** <list>\n- **Names:** <every person/character and how it is written per script, see references/languages.md>\n- **Products and on-screen labels:** <anything beyond the standard list that must stay in Latin script>\n\n## Rules\n\nFollow `references/languages.md` (read it with `get_workflow_bundle_file`) for your languages: tone, address, names, numbers, length caps.\n\n## Check before you finish\n\nRun from the episode's `multi/` folder:\n\n```\npython3 $HF_WORKFLOWS/creator-dub/scripts/budget.py segments_final.json translations_<code>.json --lang <code> --keys dubbed_keys.json\npython3 $HF_WORKFLOWS/creator-dub/scripts/validate_meta.py youtube_orig.json <a file with {\"<code>\": meta}>\n```\n\nFix every flagged line, or leave a flag only when it can't get shorter without losing meaning (a name or a number).\n\nReport back:\n\n- the budget summary line;\n- the lines you shortened;\n- any flags you left and why;\n- the title."
+  },
+  {
+   "label": "Shared translation rules (all languages)",
+   "source": "creator-dub/references/languages.md",
+   "text": "## Shared rules\n\n- Translate the meaning, not word for word, in the creator's tone (the brief describes it). Clip/film characters keep their own voice. Subtitle-only lines (clips that stay in the original language) are translated too.\n- Keep jokes, double meanings and insults working (the episode brief lists them).\n- Repeated film lines must be translated identically every time.\n- **Product and channel names stay in Latin script exactly:** everything in the glossary's `keep_latin`, plus whatever the brief adds.\n- **On-screen labels** (buttons like \"Generate\") may stay in English when the viewer sees them on screen.\n- **Numbers:** keep 480p/1080p/2.5 as digits; spell units the native way; \"21 by 9\" → 21:9 in the local form.\n- **Length:** dubbed lines fit the original timing. Check them with `budget.py` (cap = characters ÷ original characters; lines under 2 s get 0.87 × cap). Cut filler until no line is flagged. Subtitle-only lines have no hard cap but stay concise.\n- **No quotation marks** inside lines unless the language needs them (Japanese 「」 is fine).\n- **Title/description:** same meaning as the original. A title should read like a native creator wrote it, keeping its hook and its length close to the original. Keep every URL, emoji and timestamp; translate chapter names; title ≤ 100 characters; no < or >.\n\n"
+  },
+  {
+   "label": "Dubbing request per language",
+   "source": "creator-dub/SKILL.md",
+   "text": "python3 $SK/dub_job.py request <code> <target_language> <orig>"
+  },
+  {
+   "label": "audio_dubbing submit",
+   "source": "creator-dub/SKILL.md",
+   "text": "{\"params\": {\"model\": \"audio_dubbing\", \"prompt\": \"<video> – <Language> dub\",\n            \"medias\": [{\"role\": \"audio\", \"value\": \"<voice media_id>\"}],\n            ...every key of req_<code>_r1.json}}"
+  },
+  {
+   "label": "Lip-sync submit (sync_so)",
+   "source": "creator-dub/SKILL.md",
+   "text": "{\"params\": {\"model\": \"sync_so\", \"sync_mode\": \"cut_off\",\n            \"medias\": [{\"role\": \"input_video\", \"value\": \"<video media_id>\"}, {\"role\": \"input_audio\", \"value\": \"<voice media_id>\"}],\n            \"segments\": [{\"start_time\": 1.2, \"end_time\": 4.9, \"active_speaker_detection\": {\"auto_detect\": true}}, ...]}}"
+  },
+  {
+   "label": "Mix and caption commands",
+   "source": "creator-dub/SKILL.md",
+   "text": "mkdir -p deliver out\npython3 $SK/mix.py ../stems_v2 \"\" dub_<code>_<round>.wav host_segments.json ../reverb_ir.npy|none \"deliver/<video> - <CODE>.wav\" --voices voices.json --bus-gain <bus_gain_db>\nffmpeg -v error -y -i \"deliver/<video> - <CODE>.wav\" -c:a aac -b:a 256k \"out/<video> - <CODE>.m4a\"\npython3 $SK/srt.py segments_final.json words_by_segment.json \"out/<video> - <ORIG>.ytt\" [--first <co-host id>] [--palette \"#hex\"]\npython3 $SK/srt.py segments_final.json words_by_segment.json \"out/<video> - <CODE>.ytt\" --text translations_<code>.json --lang <code> [--first ...] [--palette ...]"
+  },
+  {
+   "label": "Window re-dub commands (QA fix)",
+   "source": "creator-dub/references/qa.md",
+   "text": "2. **Dub the window.** Collect the bad lines of one language that are close together into one window:\n   ```\n   python3 $SK/dub_job.py request <code> <tag> <source> --round r2 --keys s064 s065\n   ```\n   It writes `req_<code>_r2.json` (only the lines in the window, shifted to start at 0) and `win_<code>_r2.wav` (that stretch of the voice, at least 30 s so the voice still clones). Upload the WAV, run `audio_dubbing` with the request, download the result, then put it back on the timeline:\n   ```\n   python3 $SK/dub_job.py place <code> r2 dubwin_<code>_r2.wav\n   ```\n   which writes the full-length `dub_<code>_r2.wav` (silent outside the window).\n3. **Check the re-render.** Run `bash $SK/qa_lang.sh r2 <code>` and compare the flags on the window's lines only (everything outside the window is silent in r2 and gets flagged; ignore it).\n4. **Splice the better takes:** `assemble.py host_segments.json choices.json dub_<code>_r3.wav` with `{\"renders\": {\"r1\": \"dub_<code>_r1.wav\", \"r2\": \"dub_<code>_r2.wav\"}, \"base\": \"r1\", \"swaps\": [[[\"s064\",\"s065\"], \"r2\"]]}`.\n   - It only splices where both renders are silent. If the only clean splice points bracket the whole window, swap the whole window's lines.\n   - Pick the take with clean words over the one with better timing (narration 1–2 s late over B-roll is fine; a garbled word is not).\n"
+  }
+ ]
+}

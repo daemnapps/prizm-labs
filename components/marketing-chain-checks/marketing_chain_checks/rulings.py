@@ -1,11 +1,11 @@
 """A person's ruling on a held problem, read back for the gate (HE-1 (fact
 rulings), 2026-10-01).
 
-the team rules on a held problem once — `rule.py` files one `fact-rulings` record
+email_lead rules on a held problem once — `rule.py` files one `fact-rulings` record
 per ruling on the records plane — and every gate that passes its problems as
 items drops what a standing ruling clears. THE BRAND'S VERIFIED FACTS ARE A
 READ OVER THESE RECORDS (standing true + fill), never a second store, and
-never brands/: folding them into the brand files is the team's own weekly act.
+never brands/: folding them into the brand files is email_lead's own weekly act.
 
     wrong       the email is wrong — nothing clears; changed words are a new id
     true        the files are behind — clears the id for every email of the brand
@@ -13,7 +13,7 @@ never brands/: folding them into the brand files is the team's own weekly act.
     fill        the fact a hole needed — joins the verified facts, clears nothing
     not-ours    the brand does not have this — clears the id for every email
 
-PRICES ARE OFFER-BANK-ONLY (the team, decision log 2026-10-01): a ruling never
+PRICES ARE OFFER-BANK-ONLY (designer, decision log 2026-10-01): a ruling never
 adds or clears a price. A ruling on a price item is ignored here even when a
 hand-written record exists; a wrong price is fixed in the offer bank.
 """

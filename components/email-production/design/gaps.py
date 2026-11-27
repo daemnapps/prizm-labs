@@ -1,10 +1,10 @@
 """Find every gap in a designed email and fill what the brand's own files can fill, before any person is asked.
 
-the owner, 2026-10-18 (the Brand-B product card showed "[UNFILLED: price]" and a tiny scene where the product belonged):
+owner, 2026-10-18 (the brand_b product card showed "[UNFILLED: price]" and a tiny scene where the product belonged):
 "we should be able to prompt the system to fill in gaps first, then if we need to do manual changes we do that, but
 we want to get the system automating as much of this process as possible."
 
-    python3 tools/email-production/design/gaps.py runs/email-production/<brand>/<label> [--fill]
+    python3 components/email-production/design/gaps.py runs/email-production/<brand>/<label> [--fill] [--no-images]
 
 A gap is anything a reader would see as unfinished: an "[UNFILLED: …]" note from the copy chain, a product card with
 no price, a picture slot never made, a picture the judge held or the model refused. fill() closes what the files
@@ -34,7 +34,8 @@ SALE = re.compile(r"black friday|cyber monday|sale|deal|% off|discount|price dro
 
 
 def offer_bank(brand):
-    """{product name lowercased: {"price", "funnel", "slug"}} from the brand's offer bank, read only."""
+    """{product name lowercased: {"price", "was", "funnel", "slug"}} from the brand's offer bank, read only. "was" is the
+    bank's own was-price on the Price line ("- Price: **$79.00**, was $136.00 (bought separately)")."""
     f = REPO / "brands" / brand / "products" / "offer-bank.md"
     out = {}
     if not f.is_file():
@@ -51,6 +52,9 @@ def offer_bank(brand):
         m = re.match(r"^- Price: \*\*(\$[\d.]+)\*\*", line)
         if m:
             cur["price"] = m.group(1)
+            w = re.search(r"\*\*, was (\$\d+(?:\.\d\d)?)", line)
+            if w:
+                cur["was"] = w.group(1)
         m = re.match(r"^- Sold in the CPK funnel at: (\$\d+(?:\.\d\d)?) \(1 Tube\)", line)
         if m:
             cur["funnel"] = m.group(1)
@@ -247,7 +251,7 @@ def patch(run, brand, lk, gaps):
 def fill(run, brand=None, lk=None, make_pictures=True, redesign=True, pictures_only=False):
     """Fill every gap the brand's files answer; returns {"filled": [...], "open": [...]} and writes <run>/gaps.json.
     pictures_only: the page's Make the missing parts makes pictures and nothing else; a price or a promise stays for
-    the team (the team, 2026-10-28: the patch applied a promise note that was noise and swapped a real photo on nov-04)."""
+    email_lead (email_lead, 2026-10-28: the patch applied a promise note that was noise and swapped a real photo on nov-04)."""
     run = Path(run)
     brand = brand or run.parent.name
     found = find(run)
@@ -258,7 +262,7 @@ def fill(run, brand=None, lk=None, make_pictures=True, redesign=True, pictures_o
     for g in gaps:
         s = spec["sections"][g["section"]]
         if pictures_only and "picture" not in g["kind"]:
-            left.append(dict(g, ask="the team's to settle: Make the missing parts only makes pictures"))
+            left.append(dict(g, ask="email_lead's to settle: Make the missing parts only makes pictures"))
             continue
         if g["kind"] == "price":
             name = (s.get("name") or "").lower()
@@ -329,7 +333,7 @@ if __name__ == "__main__":
         if "--fill" in sys.argv:
             sys.path.append(str(HERE))
             import look as L
-            res = fill(r, lk=L.load(Path(r).parent.name))
+            res = fill(r, lk=L.load(Path(r).parent.name), make_pictures="--no-images" not in sys.argv)
             print("%s  filled %d · open %d" % (Path(r).name, len(res["filled"]), len(res["open"])))
             for g in res["filled"]:
                 print("   filled  section %d %s: %s (%s)" % (g["section"] + 1, g["field"], g.get("now"), g.get("source") or g.get("by")))

@@ -4,9 +4,9 @@ and own_picture.py reads an S address S<part>.<picture> counted from 1, the way 
 0-based s5.0 is retired: a 0 in either place is refused naming the 1-based form. P codes are unchanged.
 No network, no Chrome, no real run.
 
-    python3 tools/email-production/adapter/test_pf11_part_codes.py
+    python3 components/email-production/adapter/test_pf11_part_codes.py
 
-own_picture is imported by its file path, so nothing but this folder is on sys.path (tools/email-production
+own_picture is imported by its file path, so nothing but this folder is on sys.path (components/email-production
 holds an email.py that would shadow the standard library's `email`). Its main() is __main__-guarded.
 """
 import importlib.util
@@ -114,14 +114,14 @@ def list_rows():
     assert [r["s"] for r in rows] == ["x · S2.1", "x · S3.1", "x · S3.2"], rows
     for r in rows:   # every row's S address resolves back to its own P code
         assert own_picture.pick(SPEC, r["s"])[0] == own_picture.pick(SPEC, r["code"])[0], r
-    src = read("tools/email-production/adapter/own_picture.py")
+    src = read("components/email-production/adapter/own_picture.py")
     assert '"s": "%s · S%d.%d" % (short, i + 1, j + 1)' in src, "list rows do not carry the 1-based S address"
     assert "s5.0 (section number as in design/email.json" not in src, "the docstring still teaches the raw s5.0"
 
 
 check("list shows each picture's 1-based S address beside its P code", list_rows)
 check("template partCode reads S, picCode unchanged", page_codes("platform/views/viewers/_templates/emails.html"))
-check("the team's draft partCode reads S", page_codes("platform/views/viewers/pm/drafts/emails--final.html"))
+check("email_lead's draft partCode reads S", page_codes("platform/views/viewers/email_lead/drafts/emails--final.html"))
 check("help line names an S part and a P picture", help_line)
 check("ask()'s machine bracket keeps the raw indexes", machine_bracket_kept)
 def feature_51():

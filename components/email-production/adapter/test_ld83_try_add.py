@@ -2,8 +2,8 @@
 """LD-83 (picture try first): a picture change asked in Claude makes numbered TRIES she sees at once (any selectable
 house model, nothing committed) and ADDS the one she picks — proven offline, on a temp fixture run.
 
-    python3 tools/email-production/adapter/test_ld83_try_add.py     (from the repo root: never with the working
-                                                                          folder inside tools/email-production,
+    python3 components/email-production/adapter/test_ld83_try_add.py     (from the repo root: never with the working
+                                                                          folder inside components/email-production,
                                                                           whose email.py shadows the stdlib's)
 
 Faked at the seams try_picture.py exposes: image-edit's edit() (it calls the judge_caller it is handed on each made
@@ -39,7 +39,7 @@ from pathlib import Path
 from unittest import mock
 
 HERE = Path(__file__).resolve().parent
-sys.path.insert(0, str(HERE))      # this folder FIRST; never tools/email-production (its email.py)
+sys.path.insert(0, str(HERE))      # this folder FIRST; never components/email-production (its email.py)
 import try_picture as TP           # noqa: E402
 import own_picture as OP           # noqa: E402
 import picture_record as PR        # noqa: E402  (try_picture put design/ on the path through sync)
@@ -67,7 +67,7 @@ REGISTRY = {"models": [
 ROWS = {"gpt-image-person": {"provider": "openai", "vendor_model": "gpt-image-2.5-sunburst", "house_job": "pictures.generate"},
         "gpt-image-edit": {"provider": "openai", "vendor_model": "gpt-image-2.5-sunburst", "house_job": "pictures.edit"},
         "gemini-image-object": {"provider": "google", "vendor_model": "gemini-3-pro-image", "house_job": "pictures.object"}}
-NO_DOOR_SEEDREAM = ("seedream-5-pro-edit@fal: no door for it yet (the owner's follow-up) — pick "
+NO_DOOR_SEEDREAM = ("seedream-5-pro-edit@fal: no door for it yet (owner's follow-up) — pick "
                     "gpt-image-2.5@openai · gemini-3-pro-image@google")
 
 
@@ -97,8 +97,8 @@ class Base(unittest.TestCase):
         (self.run / OLD_REC).write_text(json.dumps({
             "label": "zz-pic", "file": "media/" + PIC, "purpose": "email-story",
             "file_ref": {"drive_id": "id-pic", "label": "Shared Assets/runs/email-production/%s/%s/media/%s" % (BRAND, LABEL, PIC)},
-            "references": [{"path": "tools/email-production/design/fonts.css",
-                            "ref": "tools/email-production/design/fonts.css", "kind": "brand asset"},
+            "references": [{"path": "components/email-production/design/fonts.css",
+                            "ref": "components/email-production/design/fonts.css", "kind": "brand asset"},
                            {"path": "pin.jpg", "ref": {"drive_id": "id-pin", "label": "pin.jpg"}, "kind": "Pinterest pin (mood only)"}]}))
         self.spec = self.run / "design" / "email.json"
         self.spec.write_text(json.dumps({"brand": BRAND, "sections": [
@@ -191,7 +191,7 @@ class Base(unittest.TestCase):
     def tri(self, code="P1", change="warmer light", **k):
         k.setdefault("env", ENV)
         with contextlib.redirect_stdout(self.out):
-            return TP.try_change(self.run, code, change, "the team", edit=self.edit, opener=self.opener, judge=self.judge, **k)
+            return TP.try_change(self.run, code, change, "editor", edit=self.edit, opener=self.opener, judge=self.judge, **k)
 
     def tries(self, p="P1"):
         return json.loads((self.run / "tries" / p / "tries.json").read_text())
@@ -227,7 +227,7 @@ class TestTry(Base):
         self.assertEqual(len(recs), 1)
         r = recs[0]
         self.assertEqual((r["schema"], r["kind"], r["reviewer"], r["item"], r["via"]),
-                         (1, "model-outcome", "designer", LABEL + "-P1-try-1", "email-production/try_picture"))
+                         (1, "model-outcome", "editor", LABEL + "-P1-try-1", "email-production/try_picture"))
         self.assertEqual(r["verdict"], {"model": "gpt-image-2.5", "door": "openai", "purpose": "email-story",
                                         "brand": BRAND, "judge": {"result": "pass", "failing": []}, "picked": False,
                                         "cost": "not on record"})
@@ -305,7 +305,7 @@ class TestAdd(Base):
             self.tri()
         before = json.loads(self.spec.read_text())["sections"][1]["picture"]
         with contextlib.redirect_stdout(self.out):
-            res = TP.add(self.run, "P1", 3, "the team", place=self.place)
+            res = TP.add(self.run, "P1", 3, "editor", place=self.place)
         self.assertEqual(len(self.placed), 1)
         self.assertEqual(self.rebuilds, 1)
         p = self.placed[0]
@@ -325,10 +325,10 @@ class TestAdd(Base):
                          (OLD_REC, "media/" + PIC, "warmer light", "made", "media/own-p1-test.jpg", "email-story"))
         self.assertEqual(rec["file_ref"]["drive_id"], "id-placed")
         self.assertEqual(rec["references"][0]["kind"], "earlier version of this picture")
-        self.assertEqual([r["path"] for r in rec["references"][1:]], ["tools/email-production/design/fonts.css"])
+        self.assertEqual([r["path"] for r in rec["references"][1:]], ["components/email-production/design/fonts.css"])
         self.assertEqual(res["record"], "media/records/zz-pic-v2/record.json")
         self.assertEqual(res["try"], 3)
-        self.assertEqual(self.learned, [(BRAND, "picture", "Hero picture picture (a jar on a sink): warmer light", "the team", LABEL)])
+        self.assertEqual(self.learned, [(BRAND, "picture", "Hero picture picture (a jar on a sink): warmer light", "editor", LABEL)])
         recs = self.outcomes()
         self.assertEqual(len(recs), 4)                                          # three tries, then the add
         self.assertEqual([r["verdict"]["picked"] for r in recs].count(True), 1)
@@ -337,13 +337,13 @@ class TestAdd(Base):
                          (LABEL + "-P1-try-3", 3, "gpt-image-2.5"))
         self.assertNotIn("tries_before_pick", recs[0]["verdict"])
         with self.assertRaises(SystemExit):
-            TP.add(self.run, "P1", 9, "the team", place=self.place)
+            TP.add(self.run, "P1", 9, "editor", place=self.place)
         self.assertEqual(len(self.placed), 1)
 
     def test_5b_a_to_make_alt_is_still_refused(self):
         self.tri()
         with self.assertRaises(SystemExit):
-            TP.add(self.run, "P1", 1, "the team", alt="to make: a jar", place=self.place)
+            TP.add(self.run, "P1", 1, "editor", alt="to make: a jar", place=self.place)
         self.assertEqual(self.learned, [])
 
     def test_6_clear_removes_that_pictures_tries_only(self):
@@ -396,7 +396,7 @@ class TestRouting(Base):
             self.assertIn("say 'use try 1' to add it", self.out.getvalue())
             with mock.patch.object(ask, "share", lambda paths, msg: shared.append(paths) or "shared"):
                 code = self.ask(self.line("use try 2"),
-                                self.line('change the words: [{"path": "text", "value": "new"}]', " (from the team)"))
+                                self.line('change the words: [{"path": "text", "value": "new"}]', " (from email_lead)"))
         self.assertEqual(code, 0)
         self.assertEqual(self.calls[1:], [("add", "P1", 2, "graphic-designer"), ("apply", "words")])
         self.assertEqual(len(shared), 1)
@@ -430,15 +430,15 @@ class TestAdapter(Base):
         with mock.patch.object(TP, "try_change", try_change):
             out = io.StringIO()
             with contextlib.redirect_stdout(out), contextlib.redirect_stderr(io.StringIO()):
-                code = adapter.main(["try", "%s__%s" % (BRAND, LABEL), "2", "picture", "0: brighter", "--by", "the team",
+                code = adapter.main(["try", "%s__%s" % (BRAND, LABEL), "2", "picture", "0: brighter", "--by", "editor",
                                      "--model", "gemini-3-pro-image", "--count", "2"])
         self.assertEqual(code, 0)
         got = json.loads(out.getvalue())                                       # stdout stays JSON
         self.assertEqual((got["ok"], got["tries"][0]["n"]), (True, 1))
-        self.assertEqual(seen, [("P2", "brighter", "the team", {"model": "gemini-3-pro-image", "count": 2, "from_try": None})])
-        code, got = adapter.try_("%s__%s" % (BRAND, LABEL), "1", "words", "[]", "the team")
+        self.assertEqual(seen, [("P2", "brighter", "editor", {"model": "gemini-3-pro-image", "count": 2, "from_try": None})])
+        code, got = adapter.try_("%s__%s" % (BRAND, LABEL), "1", "words", "[]", "editor")
         self.assertEqual(code, 2)
-        code, got = adapter.try_("%s__%s" % (BRAND, LABEL), "1", "go", None, "the team")
+        code, got = adapter.try_("%s__%s" % (BRAND, LABEL), "1", "go", None, "editor")
         self.assertEqual(code, 2)
 
 
@@ -448,7 +448,7 @@ class TestPlane(Base):
         before = snapshot(*tops)
         self.tri(count=2)
         with contextlib.redirect_stdout(self.out):
-            TP.add(self.run, "P1", 1, "the team", place=self.place)
+            TP.add(self.run, "P1", 1, "editor", place=self.place)
         self.assertEqual(snapshot(*tops), before)
         self.assertEqual(len(self.outcomes()), 3)
         m = json.loads((REPO / "platform" / "data" / "kinds" / "model-outcome.json").read_text())

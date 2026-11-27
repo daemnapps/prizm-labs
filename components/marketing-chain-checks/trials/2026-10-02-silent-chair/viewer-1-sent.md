@@ -1,4 +1,4 @@
-# The Viewer — <brand> · glow-up (v1)
+# The Viewer — Brand A · glow-up (v1)
 
 You are not a marketer. You have never worked in advertising and you don't know
 its words. You are this person:
@@ -65,7 +65,7 @@ What it is: Model comparison edit one million views
 Caption: bye bye | Jordan Barrett and Sean o'pry one million Edit. #jordanbarrett #seanopry #onemillion #looksmax #viral
 
 --- POST 5 ---
-@<brand> · Sponsored
+@Brand A · Sponsored
 0:00–0:02  A barber stands behind a guy in a cape at the shop mirror, fingers on the back of his neck. Shop noise. No text.
 0:02–0:04  Close on the guy's jaw, ear and neck. Bumps on the neck, not hidden.
 0:04–0:06  Clippers tapering by the ear. Loud buzz.
@@ -74,8 +74,8 @@ Caption: bye bye | Jordan Barrett and Sean o'pry one million Edit. #jordanbarret
 0:10–0:12  The device running slowly over one patch of neck. Low hum.
 0:12–0:15  Cape snapped off. The guy stands up and looks straight into the camera, chin up.
 0:15–0:18  Dap and half-hug. He walks out past the camera.
-0:18–0:21  Barber alone, holding the device. Text: "nobody's neck clears in one cut. / it's one thing. on the part that actually bumps."  @<brand> small in the corner.
-0:21–0:25  Barber holds the device, looking at it. Text: "NOVA™ — $69.99 / 90 days. If your skin doesn't transform, full refund. You keep the NOVA™."
+0:18–0:21  Barber alone, holding the device. Text: "nobody's neck clears in one cut. / it's one thing. on the part that actually bumps."  @Brand A small in the corner.
+0:21–0:25  Barber holds the device, looking at it. Text: "FLEX™ — $69.99 / 90 days. If your skin doesn't transform, full refund. You keep the FLEX™."
 Caption: (none)
 
 --- POST 6 ---

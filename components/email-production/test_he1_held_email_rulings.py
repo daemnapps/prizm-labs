@@ -4,7 +4,7 @@ rulings alone and goes on to its Klaviyo DRAFT.
 
     python3 test_he1_held_email_rulings.py
 
-The real held run (brand-a-oct-03--fed-up-king: five product-fact problems, no
+The real held run (brand_a-oct-03--fed-up-king: five product-fact problems, no
 price) is COPIED into a temp workspace whose brands/ is a symlink to the
 repo's, read only. Then: the build holds it with five items; every item is
 ruled with rule.py (four true, the WRONG one true-once); the build passes with
@@ -29,14 +29,14 @@ os.environ["AI_WORKSPACE"] = str(TMP)            # before anything imports paths
 
 HERE = Path(__file__).resolve().parent
 REPO = next(d for d in HERE.parents if (d / "components" / "brand-finder").is_dir())
-BRAND, LABEL = "brand-a", "brand-a-oct-03--fed-up-king"
-SOURCE = (REPO / "platform/data/records/lab-runs/pm/pm-brand-a-oct-2026-mini-oct-05-07" / LABEL)
+BRAND, LABEL = "brand_a", "brand_a-oct-03--fed-up-king"
+SOURCE = (REPO / "platform/data/records/lab-runs/email_lead/email_lead-brand_a-oct-2026-mini-oct-05-07" / LABEL)
 COPY = TMP / "runs" / "email-production" / BRAND / LABEL
 RULE = REPO / "components" / "marketing-chain-checks" / "rule.py"
 FACTS = ["PRIME goes on right after cleansing, while the face is still damp.",
          "PRIME holds water in and regulates oil.",
          "Aloe vera in PRIME calms post-shave irritation.",
-         "A NOVA session runs about sixty seconds."]
+         "A FLEX session runs about sixty seconds."]
 
 
 def brand_state():
@@ -85,7 +85,7 @@ class TheHeldEmailIsClearedByRulings(unittest.TestCase):
                 args = [it["id"], "true-once", "--reason", "the routine order is right for this send"]
             else:
                 args = [it["id"], "true", next(facts)]
-            r = run(RULE, COPY, *args, "--by", "pm")
+            r = run(RULE, COPY, *args, "--by", "email_lead")
             self.assertEqual(r.returncode, 0, r.stderr)
         self.assertEqual(len(list((TMP / "platform/data/records/fact-rulings").glob("*.json"))), 5)
 
@@ -96,7 +96,7 @@ class TheHeldEmailIsClearedByRulings(unittest.TestCase):
         self.assertEqual((d["result"], d["problems"], d["items"]), ("pass", [], []))
         self.assertEqual(len(d["cleared"]), 5)
         self.assertEqual(sorted(c["ruling"] for c in d["cleared"]), ["true"] * 4 + ["true-once"])
-        self.assertEqual(r.stdout.count("cleared by pm's"), 5)
+        self.assertEqual(r.stdout.count("cleared by email_lead's"), 5)
 
         # (d) the uploader's dry run accepts: no subprocess, no socket, nothing written
         media = COPY / "media"
@@ -109,8 +109,11 @@ class TheHeldEmailIsClearedByRulings(unittest.TestCase):
         def refuse(*a, **k):
             raise AssertionError("the dry run reached out")
         out = io.StringIO()
+        # the audience is the month's and the brand's (this October send names a segment since renamed in the
+        # matrix); what this test proves is the delivery gate, so the audience is held to one id
         with mock.patch.object(socket.socket, "connect", refuse), \
-                mock.patch.object(subprocess, "run", refuse), contextlib.redirect_stdout(out):
+                mock.patch.object(subprocess, "run", refuse), contextlib.redirect_stdout(out), \
+                mock.patch.object(K.S, "audience", return_value=(["a segment"], ["ID1"], [])):
             code = K.main(["--run", str(COPY), "--dry-run"])
         self.assertEqual(code, 0, out.getvalue())
         st = json.loads(out.getvalue())

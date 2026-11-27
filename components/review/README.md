@@ -4,5 +4,5 @@
 
 an engine · one record grammar, one writer, one fold · 77 records on the review plane, loaded by eight callers through its declared Python API
 
-Owner: Engine the team; **definitions curator the team**
+Owner: Engine the developer; **definitions curator the email lead**
 

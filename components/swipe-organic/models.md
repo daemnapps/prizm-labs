@@ -44,7 +44,7 @@ work that looks made and work that looks broken.
 
 ## Making the shots — Seedance 2.5, at 480p
 
-Frames become video with Seedance 2.5 on Higgsfield, at 480p only; the clip is upscaled to 1080 × 1920 on this Mac afterwards (the owner, 2026-10-26). How a clip is asked for: `tools/video-production/SEEDANCE-INPUTS.md`.
+Frames become video with Seedance 2.5 on Higgsfield, at 480p only; the clip is upscaled to 1080 × 1920 on this Mac afterwards (the owner, 2026-10-26). How a clip is asked for: `components/video-production/SEEDANCE-INPUTS.md`.
 
 | Setting | Value |
 |---|---|

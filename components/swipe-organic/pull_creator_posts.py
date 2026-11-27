@@ -14,7 +14,7 @@ so_keys = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(so_keys)
 
 HANDLES = ["ambrosial_jax","briluv50","danisidor","elenaglow50","glamwithpammie",
-           "jodileabeauty","jojo.moran","just_janci","creator-a","lucianapatton",
+           "jodileabeauty","jojo.moran","just_janci","creator.zane","lucianapatton",
            "selfcarebykerin","thekeziahaynes","tammysagelessbeauty"]
 ACTOR = "shu8hvrXbJbY3Eb9W"          # apify/instagram-scraper
 

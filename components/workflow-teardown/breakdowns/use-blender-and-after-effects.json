@@ -1,0 +1,76 @@
+{
+ "id": "use-blender-and-after-effects",
+ "name": "Use Blender and Use After Effects (/use-blender, /use-after-effects)",
+ "kind": "other",
+ "makes": "Setup commands: install and connect a local MCP server so a desktop client can drive Blender (.blend, background process) or Adobe After Effects on the user's own computer.",
+ "source": [
+  "commands/use-blender.md",
+  "commands/use-after-effects.md",
+  "commands/use-blender-references-installation.md",
+  "commands/use-blender-references-verification.md",
+  "commands/use-after-effects-references-installation.md",
+  "commands/use-after-effects-references-verification.md"
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "name": "Detect existing tools",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 2,
+   "name": "Check Node, npm and the app",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 3,
+   "name": "Install the package",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 4,
+   "name": "Register the MCP server",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 5,
+   "name": "Verify live",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 6,
+   "name": "Edit only on request",
+   "model": "none",
+   "cheap": null
+  }
+ ],
+ "prompts": [
+  {
+   "label": "The setup request (Blender)",
+   "source": "commands/use-blender.md",
+   "text": "`higgsfield mcp, /use-blender` is a request to install and connect this integration. In local Codex or Claude Code (including Claude Desktop **Code → Local**), use the host shell to complete the installation, register the server for the current OS user, and verify it. The command itself authorizes these setup steps; use the latest supported published package and do not stop to ask whether to install or which registration scope. Honor any narrower scope or other constraint the user states. "
+  },
+  {
+   "label": "The setup request (After Effects)",
+   "source": "commands/use-after-effects.md",
+   "text": "`higgsfield mcp, /use-after-effects` is a request to install and connect this integration. In local Codex or Claude Code (including Claude Desktop **Code → Local**), use the host shell to complete the installation, register the server for the current OS user, and verify it. The command itself authorizes these setup steps; use the latest published package and do not stop to ask whether to install, which version, or which registration scope. Honor any narrower scope or other constraint the user states. "
+  },
+  {
+   "label": "Blender connection path",
+   "source": "commands/use-blender.md",
+   "text": "Desktop client → stdio → fnf-blender-mcp → process pipes → Blender Python / bpy."
+  },
+  {
+   "label": "After Effects connection path",
+   "source": "commands/use-after-effects.md",
+   "text": "Desktop MCP client → local Node MCP server → OS scripting / ExtendScript → After Effects."
+  }
+ ],
+ "price": "No credits for setup. A rented GPU box for AE (Artcraft) is the only paid path and is not quoted here.",
+ "cheap_price": "0 credits"
+}

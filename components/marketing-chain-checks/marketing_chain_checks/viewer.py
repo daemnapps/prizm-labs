@@ -1,6 +1,6 @@
 """THE VIEWER CHECK — the last check after the writing stages, in every chain
-(the owner, 2026-10-02: "slide this into the chains and lets ride it"; the design
-and first test: VIEWER-CHECK.md · (private page)).
+(owner, 2026-10-02: "slide this into the chains and lets ride it"; the design
+and first test: VIEWER-CHECK.md · https://claude.ai/artifact/NpcmNYPNXqFdVJBEfkHyhT).
 
 From Andrei Lunev's "Toilet Mike": the ad is judged by someone who is not a
 marketer, scrolling, and the maker never grades its own work. Ours drops the ad
@@ -30,6 +30,9 @@ from run_kit.claude_flags import effort_args      # noqa: E402  LD-73 (explicit 
 if "brandpath" not in sys.modules:
     sys.path.append(str(COMP.parent / "brandpath"))
 import brandpath as BP                            # noqa: E402  the one door into a brand's folders
+if "people" not in sys.modules:
+    sys.path.append(str(COMP.parent / "naming"))
+import people                                     # noqa: E402  the one door to a person (naming/PEOPLE.md)
 WS = RK.repo(HERE)
 PROMPTS = COMP / "prompts"
 CARDS = COMP / "records" / "viewer-cards"
@@ -57,8 +60,11 @@ def newest(stem: str) -> Path:
 
 
 def _key():
-    from marketing_chain_checks import mcc_keys   # the one loader: environment, then this repo's .env
-    return mcc_keys.key("GEMINI_API_KEY")
+    k = os.environ.get("GEMINI_API_KEY", "").strip()
+    if k:
+        return k
+    import daemn_keys
+    return daemn_keys.key("GEMINI_API_KEY")
 
 
 def _json(t: str) -> dict:
@@ -108,7 +114,7 @@ def _why(branch: str, said=None) -> None:
 
 
 def _claude_cli(text: str, as_json: bool):
-    """Claude on the owner's own plan, headless (`claude -p`, no tools, no API key).
+    """Claude on owner's own plan, headless (`claude -p`, no tools, no API key).
     Returns None when it isn't available, so the call falls through to Gemini,
     then OpenAI. Off: QC_VIEWER_CLAUDE=0. Every None leaves its reason in
     claude_why()."""
@@ -127,7 +133,7 @@ def _claude_cli(text: str, as_json: bool):
         _CLAUDE_OK[0] = False
         _why("claude not on PATH")
         return None
-    # NO ACCOUNT IS WIRED IN (the owner, 2026-10-23): run_kit's claude_door picks the
+    # NO ACCOUNT IS WIRED IN (owner, 2026-10-23): run_kit's claude_door picks the
     # credential and hands the CLI its own plain environment.
     from run_kit import claude_door        # run-kit is already on the path (top of this file)
     try:
@@ -157,16 +163,13 @@ def _claude_cli(text: str, as_json: bool):
 
 
 def _openai(text: str, as_json: bool, model: str):
-    from marketing_chain_checks import mcc_keys   # the one loader: environment, then this repo's .env
-    openai_key = mcc_keys.key("OPENAI_API_KEY")
-    if not openai_key:
-        raise RuntimeError(mcc_keys.missing("OPENAI_API_KEY"))
+    import daemn_keys
     body = {"model": model, "messages": [{"role": "user", "content": text}]}
     if as_json:
         body["response_format"] = {"type": "json_object"}
     req = urllib.request.Request("https://api.openai.com/v1/chat/completions", data=json.dumps(body).encode(),
                                  headers={"Content-Type": "application/json",
-                                          "Authorization": f"Bearer {openai_key}"})
+                                          "Authorization": f"Bearer {daemn_keys.key('OPENAI_API_KEY')}"})
     with urllib.request.urlopen(req, timeout=300) as r:
         t = json.loads(r.read())["choices"][0]["message"]["content"] or ""
     return _json(t) if as_json else t.strip()
@@ -206,7 +209,7 @@ HAND_DEFAULT = [None]   # set by run_loop to <run>/hand, so the session finds th
 
 
 def _hand(text: str, as_json: bool, image: str | None = None):
-    """THE SESSION HAND (the owner, 2026-10-03: "you can use claude for this anyways
+    """THE SESSION HAND (owner, 2026-10-03: "you can use claude for this anyways
     we're analyzing text"). With VIEWER_HAND_DIR set, every model call is left
     as a numbered prompt file and answered by Claude in the session — fresh
     helpers that see only that one prompt — instead of an API key. The run
@@ -241,12 +244,12 @@ def ask(text: str, temperature: float = 0.0, as_json: bool = True, caller=None, 
         return caller(text, temperature, as_json)
     if os.environ.get("VIEWER_HAND_DIR"):
         return _hand(text, as_json)
-    got = _claude_cli(text, as_json)       # the owner, 2026-10-03: "use claude for this … we're analyzing text"
+    got = _claude_cli(text, as_json)       # owner, 2026-10-03: "use claude for this … we're analyzing text"
     if got is not None:
         return got
     if not (ENGINE == "claude" and not _CLAUDE_CAPPED[0]):
         return _gemini(text, temperature, as_json, model)
-    # Claude only (the owner, 2026-10-03: "we can just use claude for this").
+    # Claude only (owner, 2026-10-03: "we can just use claude for this").
     # Headless Claude isn't signed in, so the question is left for the Claude
     # session running this brief to answer — but only when one is: run_loop set
     # HAND_DEFAULT and this is not the mini worker (DRIVE_MOUNT=off, LD-26 (mount
@@ -301,7 +304,14 @@ def _brand(brand: str, key: str, *rest: str) -> Path:
     return BP.brand_path(brand, key, *rest, root=WS / "brands")
 
 
+def _person(brand: str, avatar: str, sub: str = "") -> tuple[str, str]:
+    """(avatar folder, sub-avatar folder) as the brand keeps them, from a profile id, a new name or an old name."""
+    a, s, _ = people.folders(brand, avatar, sub)
+    return a or avatar, s or sub
+
+
 def profile_path(brand: str, avatar: str, sub: str | None = None) -> Path | None:
+    avatar, sub = _person(brand, avatar, sub or "")
     core = _brand(brand, "core-avatars", avatar)
     if sub:
         hits = sorted((core / "sub-avatars").glob(f"sub-*-{sub}.md")) + sorted((core / "sub-avatars").glob(f"{sub}.md"))
@@ -394,7 +404,7 @@ _W = re.compile(r"[a-z0-9$%]+")
 
 
 def offer_words(cut: dict) -> set:
-    """Every word shown or said from the offer onward (the owner, 2026-10-02: "we
+    """Every word shown or said from the offer onward (owner, 2026-10-02: "we
     still have to tell people what to do. They're still ads") — a 'pitch' that
     is the offer itself never fails the ad; only pitches before it do."""
     at = cut.get("offer_at")
@@ -446,7 +456,7 @@ def score(answers: list[list[dict]], ours_at: list[int], length_s: float, offer_
         "not_ad_before_stop": {"value": f"{early_ad} clocked it first", "passed": early_ad == 0},
         "would_act": {"value": f"{acts} of {n}", "passed": acts >= need},
     }
-    # v2 (Lunev's skeptic + the owner's "we need belief"): asked only of viewers who stopped
+    # v2 (Lunev's skeptic + owner's "we need belief"): asked only of viewers who stopped
     asked = any("believe" in p for p in mine)
     stopped = [p for p in mine if yes(p.get("stop"))]
     if asked:
@@ -542,7 +552,7 @@ def writer_notes(sc: dict, rt: dict) -> str:
              f"{len(sc['mine'])} people from this avatar scrolled the finished ad inside their real feed. "
              "Their reactions, word for word. Fix what made them leave or pass — inside the "
              "swipe's locked structure (adapt, never rebuild; a structural change still needs "
-             "the owner's numbered approval). Do not add claims, people or facts no source gives.",
+             "owner's numbered approval). Do not add claims, people or facts no source gives.",
              ""]
     for i, p in enumerate(sc["mine"], 1):
         lines.append(f"- Viewer {i}: stopped {p.get('stop')}, left at {p.get('left_at')}, "
@@ -559,7 +569,7 @@ def writer_notes(sc: dict, rt: dict) -> str:
 
 def brief_key(text: str) -> str:
     """What the stamp is tied to: the brief's json block — its truth, which a
-    later stamp line (swipe match, manifest, the owner's read) never changes — or
+    later stamp line (swipe match, manifest, owner's read) never changes — or
     the whole text when it has none."""
     import hashlib
     blocks = re.findall(r"```json\s*\n(.*?)\n```", text, re.S)
@@ -584,7 +594,7 @@ def worth_making(run_dir, brand, avatar, brief, kind="video", sub=None, handle=N
     text = Path(brief).read_text() if len(str(brief)) < 1000 and Path(str(brief)).exists() else str(brief)
     st = stamp_of(run_dir, text)
     if st and st.get("approved"):
-        return True, "passed by the owner (V)", st
+        return True, "passed by owner (V)", st
     if not st:
         if not avatar:
             return False, "no avatar on the run, so no viewer can be built", {}
@@ -609,7 +619,7 @@ def _next_round(run_dir) -> int:
 
 
 def approve(run_dir, brief) -> dict:
-    """the owner's V, written into the stamp for this exact brief."""
+    """owner's V, written into the stamp for this exact brief."""
     text = Path(brief).read_text() if len(str(brief)) < 1000 and Path(str(brief)).exists() else str(brief)
     f = Path(run_dir) / "viewer-check" / "STAMP.json"
     f.parent.mkdir(parents=True, exist_ok=True)
@@ -620,7 +630,7 @@ def approve(run_dir, brief) -> dict:
 
 
 SAY = {"openings": "the openings", "middle": "the middle", "giveaway": "the moment it read as an ad",
-       "close": "the close", "audience": "who it's for (the owner's call)", "staged": "the shot that looks fake or staged",
+       "close": "the close", "audience": "who it's for (owner's call)", "staged": "the shot that looks fake or staged",
        "words": "the lines that sound like a sales pitch", "muted": "the on-screen words (sound off)",
        "proof": "the proof: why they'd believe it",
        "diversity": "what makes it a new ad to Meta (who, awareness, format, face, place, look)"}
@@ -654,8 +664,16 @@ def diversity(brand: str, brief_text: str, run_dir=None) -> dict | None:
                     d, diff = DM.distance(mv, b["moves"])
                     if near is None or d < near[0]:
                         near = (d, b.get("brief"), [k for k in DM.BIG if k not in diff])
+        import creative_plan as PL                                       # every ad being made, whichever chain is making it (2026-11-25)
+        rd = Path(run_dir) if run_dir else None
+        ident = None if rd is None else (rd.parent.name if rd.name.startswith("viewer-") else rd.name)
+        pv = PL.look_at(brand, ident, mv) if PL.ledger(brand) else None
+        if pv and pv["where"] not in (None, "running") and (near is None or (pv["moves_apart"] or 0) < near[0]):
+            near = (pv["moves_apart"], pv["nearest"], pv["same_on"])
         bad_run = run.get("verdict") == "variation"
         bad_brief = near is not None and near[0] <= DK.DIMS["rule"]["variation_at_or_below"]
+        if ident and not (bad_run or bad_brief) and ident not in PL.ledger(brand):   # a row already planned is never overwritten by a reading
+            PL.claim(brand, ident, mv, by="viewer check")        # taken: the next ad, in any chain, sees it
         note = []
         if bad_run:
             note.append(f"It is {run['moves_apart']} move(s) from an ad already running (same {', '.join(run.get('same_on') or [])}).")
@@ -725,7 +743,7 @@ def objections(mine: list[dict], brand: str, avatar: str, caller=None) -> dict:
     return got
 
 
-# ── answers from real data (the owner, 2026-10-02: "everything needs to come from real data") ──
+# ── answers from real data (owner, 2026-10-02: "everything needs to come from real data") ──
 
 ANSWERS = COMP / "records" / "objection-answers"
 REAL_PEOPLE = {"customer", "churned", "lead", "commenter", "prospect"}   # never the brand's or a creator's own lines
@@ -737,7 +755,7 @@ PROOF_USES = {"post-use-feeling", "transformation-reaction", "objection", "refun
 def _rows(brand: str, avatar: str) -> list[dict]:
     """The brand's real language rows: every row for this avatar, plus other
     avatars' customers and refunders on results, doubts and refunds."""
-    q = str(WS / "tools" / "language-layer")
+    q = str(WS / "components" / "language-layer")
     if q not in sys.path:
         sys.path.insert(0, q)
     from language_layer import engine as LE
@@ -745,7 +763,9 @@ def _rows(brand: str, avatar: str) -> list[dict]:
     use = lambda r: set([r.get("use")] if isinstance(r.get("use"), str) else (r.get("use") or []))
     core = None
     try:
-        core = next((d.name for d in _brand(brand, "core-avatars").iterdir()
+        a0 = _person(brand, avatar)[0]
+        core = a0 if (_brand(brand, "core-avatars", a0) / "sub-avatars").is_dir() else None
+        core = core or next((d.name for d in _brand(brand, "core-avatars").iterdir()
                      if (d / "sub-avatars").is_dir() and any(avatar in x.name for x in (d / "sub-avatars").iterdir())), None)
     except Exception:
         pass
@@ -793,7 +813,7 @@ def find_answers(brand: str, avatar: str, worries: list[str], label: str = "", c
     head = "" if f.exists() else (f"# Answers from real data · {avatar} ({brand})\n\nWorries viewers raised that the objection bank "
                                   "didn't answer, answered only with real lines from the brand's language bank (survey responses, "
                                   "refunds, comments), each with its row id and checked word for word. Any real customer's line may go on "
-                                  "screen as a quoted review, word for word (the owner, 2026-10-03).\n")
+                                  "screen as a quoted review, word for word (owner, 2026-10-03).\n")
     out = [f"\n## {datetime.date.today().isoformat()} · {label}"]
     for a in got.get("answers") or []:
         out.append(f"\n### {a.get('worry')}")
@@ -811,7 +831,7 @@ def find_answers(brand: str, avatar: str, worries: list[str], label: str = "", c
     return got
 
 
-# ── the belief index (the owner, 2026-10-03: "believability has to do with what the
+# ── the belief index (owner, 2026-10-03: "believability has to do with what the
 #    data actually shows made customers believe in the brand and buy … that's
 #    the core index to roll on") ─────────────────────────────────────────────
 
@@ -841,7 +861,7 @@ def belief_drivers(cut: dict, brand: str, caller=None) -> dict:
     given = [d for d in ds if str(d.get("in_ad", "")).lower() == "yes"]
     missing = [d for d in ds if str(d.get("in_ad", "")).lower() == "no"]
     proof = [d for d in given if re.search(r"result|review|testimon", str(d.get("reason", "")), re.I)]
-    # the owner, 2026-10-03: at least one of the two proof reasons (real results or reviews) must be there.
+    # owner, 2026-10-03: at least one of the two proof reasons (real results or reviews) must be there.
     return {"drivers": ds, "given": len(given), "missing": [d.get("reason") for d in missing], "proof": len(proof),
             "passed": len(given) >= BELIEF_NEED and len(proof) >= 1, "need": BELIEF_NEED, "themes": themes}
 
@@ -922,7 +942,7 @@ def language_text(brand: str, avatar: str) -> str:
     """This avatar's REAL lines (survey answers, comments), verbatim with ids —
     the only words the rewrite may quote — plus the avatar's language rules."""
     out = []
-    rules = _brand(brand, "core-avatars", avatar, "language", "rules.md")
+    rules = _brand(brand, "core-avatars", _person(brand, avatar)[0], "language", "rules.md")
     if rules.exists():
         out.append(f"=== how to talk to them (rules, not quotes) ===\n{rules.read_text(errors='replace')[:8000]}")
     try:
@@ -948,7 +968,7 @@ def fix(brief_text: str, r: dict, brand: str, avatar: str, caller=None, refused:
         raise ValueError("the fixer returned no brief")
     # The offer is the website's wording: a rewrite that changes a price or
     # guarantee line is refused, whatever else it fixed (caught 2026-10-02:
-    # "NOVA™" quietly became "NOVA" on the price card).
+    # "FLEX™" quietly became "FLEX" on the price card).
     kept = [ln.strip() for ln in brief_text.splitlines() if re.search(r"\$\s?\d", ln)]
     for ln in kept:
         core = re.findall(r'"([^"]*\$\s?\d[^"]*)"', ln) or [ln]
@@ -959,7 +979,7 @@ def fix(brief_text: str, r: dict, brand: str, avatar: str, caller=None, refused:
         changes = _json(c.group(1)) if c else {}
     except ValueError:
         changes = {"changes": [], "unreadable": c.group(1)[:500] if c else ""}
-    # Everything from real data (the owner, 2026-10-02). Any line the rewrite puts
+    # Everything from real data (owner, 2026-10-02). Any line the rewrite puts
     # in quotes must exist word for word in the brand's real language or in the
     # answers found from it — not in the viewers' words, not in the bank's advice.
     real = _real_text(brand, avatar)
@@ -1155,7 +1175,7 @@ svg.cv{{width:100%;max-width:420px;height:auto}}
 
 
 # ── the whole loop, one piece (the video chain, the statics chain and the
-#    standalone runner all call this — the owner, 2026-10-03: "install this in the
+#    standalone runner all call this — owner, 2026-10-03: "install this in the
 #    actual process so we can start pumping out briefs") ────────────────────
 
 def _passes(r: dict) -> int:
@@ -1185,7 +1205,7 @@ def run_loop(run, brand: str, avatar: str, text: str, kind: str = "video", sub: 
             break
         failed.append(r)
         # Worries the bank can't answer get answered from real data first
-        # (the owner, 2026-10-02: "everything needs to come from real data").
+        # (owner, 2026-10-02: "everything needs to come from real data").
         new = (r.get("objections") or {}).get("new_objections") or []
         new = [w for w in new if w not in answered]
         if new:
@@ -1335,7 +1355,7 @@ def check(run_dir, brand: str, avatar: str, brief, kind: str = "video", sub: str
                                            + (f" · missing: {', '.join(bd['missing'][:3])}" if bd["missing"] else ""),
                                   "passed": bd["passed"]}
         sc["passed"] = all(c["passed"] for c in sc["checks"].values())
-    # NEW TO META (the owner, 2026-10-08: "add in to the viewer … identifying diversity
+    # NEW TO META (owner, 2026-10-08: "add in to the viewer … identifying diversity
     # against the scripts / briefs it reads"). Meta runs ads that "look or feel alike"
     # as one creative, so a brief that copies what's running — or a brief already
     # written — is sent back before a cent is spent. Read off the brief's words
@@ -1378,7 +1398,7 @@ def check(run_dir, brand: str, avatar: str, brief, kind: str = "video", sub: str
         notes += "\n\nTheir doubts are ones the brand already has answers for. Answer them with the bank's own words, quoted, nothing new:\n" + \
                  "\n".join(f"- \"{m.get('said')}\" → bank: \"{m.get('objection')}\" ({m.get('where')}) → answer on file: \"{m.get('answer')}\"" for m in known)
     if notes and ob.get("new_objections"):
-        notes += "\n\nNew worries the bank has no answer for (don't invent one — flag for the owner): " + "; ".join(ob["new_objections"])
+        notes += "\n\nNew worries the bank has no answer for (don't invent one — flag for owner): " + "; ".join(ob["new_objections"])
     verdict = ["# Viewer check — round " + str(round_n), "",
                f"**{'PASSED' if sc['passed'] else 'FAILED — goes back to ' + say(rt['fix_at'])}**"
                + (f" (around {rt['at']})" if rt.get("at") else ""), "",

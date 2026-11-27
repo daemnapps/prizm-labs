@@ -1,8 +1,8 @@
 """THE EMAIL PICTURE CHAIN: every made email picture goes the way picture ads go (2026-10-29).
 
-the owner asked on 2026-10-28 whether the email chain calls on image production. It did, the old way: design/line.py sent
+owner asked on 2026-10-28 whether the email chain calls on image production. It did, the old way: design/line.py sent
 each picture to the image engine's own prompt and judge, and simple_email.py called video-production's OpenAI door
-straight. Picture ads had moved on (tools/image-production/CLAUDE.md, "Every picture: a 3D set, printed, then the
+straight. Picture ads had moved on (components/image-production/CLAUDE.md, "Every picture: a 3D set, printed, then the
 words"). Now every email picture both doors make takes the same three steps:
 
 1. THE PRODUCT FROM ITS CASTING SHEET. A picture that shows one of the brand's products names its kit
@@ -32,7 +32,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[2]
-IMAGE_PRODUCTION = REPO / "tools" / "image-production"
+IMAGE_PRODUCTION = REPO / "components" / "image-production"
 
 # A product in a hand, on skin or being used is drawn from its casting sheet; anything else of ours in frame is at rest
 IN_USE = re.compile(r"(?i)\b(held|holds?|holding|grip\w*|in (?:his|her|a|the|one|their) (?:real )?hands?|hand holding|"
@@ -91,9 +91,27 @@ def products_in(brand, slot, text):
         if named and (named == slug or named in names or slug.startswith(named) or named.startswith(slug)
                       or (tail == [slug])):
             found.append(slug)
-        elif any(re.search(r"(?<![\w-])" + re.escape(n) + r"(?![\w-])", text, re.I) for n in names):
+        # a kit's name as a brief writes it: "brilliance-body-scrub" or "Brilliance Body Scrub" (2026-11-04)
+        elif any(re.search(r"(?<![\w-])" + re.escape(n).replace(r"\-", "[- ]") + r"(?![\w-])", text, re.I) for n in names):
             found.append(slug)
+    # a named set is its members (sets.json beside the kits): "the five pieces of the King Set" draws from FLEX, WAR,
+    # PRIME, CRUSH and MIRO's sheets; before, a set's name alone held the picture (brand_a dec-01, dec-04, 2026-11-13)
+    for slug, s in sets(brand).items():
+        names = {slug, *[str(a).lower() for a in s.get("aliases") or []]}
+        said = any(re.search(r"(?<![\w-])" + re.escape(n).replace(r"\-", "[- ]") + r"(?![\w-])", text, re.I) for n in names)
+        if (named and named in names) or said:
+            found += [m for m in s.get("members") or [] if m in ks and m not in found]
     return found
+
+
+def sets(brand):
+    """{set slug: {"aliases", "members"}} from runs/ai-elements/<brand>/products/sets.json; none when the file is missing."""
+    f = REPO / "runs" / "ai-elements" / brand / "products" / "sets.json"
+    try:
+        d = json.loads(f.read_text())
+    except (OSError, ValueError):
+        return {}
+    return {k: v for k, v in d.items() if not k.startswith("_") and isinstance(v, dict)}
 
 
 def _is_words(before, quote, joined):
@@ -129,7 +147,11 @@ def lift_words(text):
 
 
 def at_rest(text, products):
-    return bool(products) and not IN_USE.search(text)
+    """A product shown and not in use. The product's own name is not a verb: "Body Scrub" is not scrubbing."""
+    bare = text
+    for p in products or []:
+        bare = re.sub(re.escape(p).replace(r"\-", "[- ]"), " ", bare, flags=re.I)
+    return bool(products) and not IN_USE.search(bare)
 
 
 def find_set(brand, label):
@@ -183,7 +205,13 @@ def plan(brand, slot, label, concept=None, culture=None):
             sheets[p] = str(sheet.relative_to(REPO))
         else:
             missing.append(p)
-    route = "held" if missing else "set" if at_rest(direction, products) else "plain"   # the scene, never its words
+    from image_production import set_gate         # GATE-4 (2026-11-10): every picture is a 3D set print, email too;
+    every = set_gate.lane_on("email")              # with the email lane rolled back, the old split (at rest = set)
+    # 2026-11-11: with the email lane off, a product at rest needs a 3D set only while gate.set_required.email_at_rest is
+    # on; off, it uses a kept print when one exists and is otherwise one plain picture from its casting sheet
+    rest_rule = set_gate.config().get("email_at_rest", True) is not False
+    rest = at_rest(direction, products) and (rest_rule or find_set(brand, label) is not None)
+    route = "held" if missing else "set" if (every or rest) else "plain"   # the scene, never its words
     out = {"label": label, "route": route, "products": products, "sheets": sheets, "words": words,
            "direction": direction, "concept": concept, "culture": culture, "use": slot.get("use") or "story",
            "recipe": recipe(slot, concept, culture, direction, products, words)}
@@ -193,8 +221,10 @@ def plan(brand, slot, label, concept=None, culture=None):
         printed = find_set(brand, label)
         out["set_print"] = str(printed.relative_to(REPO)) if printed else None
         if not printed:
-            out["held"] = ("its product rests in the scene, so it is a 3D set printed with the casting sheet; no kept print "
-                           "names this picture yet (set request: media/sets/%s.json)" % label)
+            out["held"] = (("every picture is a 3D set printed with the casting sheet" if every else
+                            "its product rests in the scene, so it is a 3D set printed with the casting sheet")
+                           + "; no kept print names this picture yet (set request: media/sets/%s.json; queued for the "
+                             "3d-print skill, which builds, prints and files it)" % label)
     if route == "plain":
         pl = plain.plan(brand, direction, products=products, sections=_sections(concept, culture), rules_lines=RULES)
         out["prompt"], out["references"] = pl["prompt"], [str(Path(r).relative_to(REPO)) if str(r).startswith(str(REPO)) else str(r) for r in pl["refs"]]
@@ -203,7 +233,7 @@ def plan(brand, slot, label, concept=None, culture=None):
 
 def plain_text(text):
     """The concept or culture line without markdown marks (** and `): it quotes the culture map as written, and a mark in
-    a picture prompt is drawn (model-inputs refuses it; brand-a nov-05/06/07, 2026-10-30)."""
+    a picture prompt is drawn (model-inputs refuses it; brand_a nov-05/06/07, 2026-10-30)."""
     return re.sub(r"\*\*|`", "", text) if text else text
 
 
@@ -214,7 +244,7 @@ def _sections(concept, culture):
     body = "\n".join(x for x in (concept, ("Borrowed from: " + culture) if culture else "") if x)
     return [("THE EMAIL'S CONCEPT (the world this picture belongs to; draw only THE PICTURE, one photograph: never the "
              "email's other parts, no message cards, screens, buttons or labels, no product shot from another section; "
-             "brand-b nov-05, 2026-10-30)", body)] if body else []
+             "brand_b nov-05, 2026-10-30)", body)] if body else []
 
 
 def set_request(brand, run_dir, p):
@@ -240,6 +270,15 @@ def set_request(brand, run_dir, p):
     f = Path(run_dir) / "media" / "sets" / (p["label"] + ".json")
     f.parent.mkdir(parents=True, exist_ok=True)
     f.write_text(json.dumps(req, indent=1, ensure_ascii=False) + "\n")
+    try:                                   # the one 3D print queue (GATE-4): the 3d-print skill builds, prints and files it
+        from image_production import set_queue
+        set_queue.file(brand, p["direction"], name=p["label"], products=p["products"],
+                       words=[w["text"] for w in p["words"]], source="email-production picture_chain",
+                       resume={"tool": "picture_chain", "run": p["label"], "run_dir": str(run_dir), "label": p["label"],
+                               "note": "file the set with put --run <label>; the email's picture step then takes the print"},
+                       concept=p["concept"], culture=p["culture"], email_request=str(f))
+    except Exception as ex:                # noqa: BLE001  the email's own request file stands
+        print(f"  note: not queued for the 3D print ({type(ex).__name__}: {str(ex)[:120]})")
     return f
 
 
@@ -248,7 +287,7 @@ MAKEABLE = {"9:16": 9 / 16, "3:4": 3 / 4, "4:5": 4 / 5, "1:1": 1.0, "3:2": 3 / 2
 
 def aspect_for(ratio):
     """The shape the picture models make that is nearest a box's (width / height): a house picture is made at its
-    box's shape (LD-101 (Brand-B house look)), so nothing is cut to fit."""
+    box's shape (LD-101 (brand_b house look)), so nothing is cut to fit."""
     import math
     return min(MAKEABLE, key=lambda k: abs(math.log(MAKEABLE[k] / float(ratio))))
 
@@ -329,7 +368,9 @@ def make(brand, slot, label, out, concept=None, culture=None, ratio=0.8, tokens=
         p["made_by"] = "picture-set"                    # the print is the picture: nothing generated
     else:
         refs, says = cast_refs(brand, p["direction"]) if people else ([], {})
-        cast = {"references": refs, "ref_says": says} if refs else {}
+        # a picture with no cast says so: anything else needs a 3D set print (GATE-4, 2026-11-10)
+        cast = {"references": refs, "ref_says": says} if refs else ({} if people else {"people": False})
+        cast["lane"] = "email"                          # GATE-4's email lane: one switch rolls emails back on their own
         rec = plain.make(brand, p["direction"], raw, products=p["products"], aspect=aspect, recipe=p["recipe"],
                          sections=_sections(concept, culture), rules_lines=RULES, **cast)
         p.update({"made_by": rec.get("made_by") or rec.get("model"), "prompt": rec["prompt"], "references": rec["refs"]})

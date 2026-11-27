@@ -128,7 +128,7 @@ Write, into {kit}:
 
 Rules: {names}
 Never reproduce a competitor's body copy verbatim — describe what it does and rewrite it as a template. Plain language throughout; the reader has never run ads before. No jargon, no file paths, no talk of scrapers or data fields."""
-    # NO ACCOUNT IS WIRED IN (the owner, 2026-10-23): run_kit's claude_door picks the credential.
+    # NO ACCOUNT IS WIRED IN (owner, 2026-10-23): run_kit's claude_door picks the credential.
     from run_kit import claude_door      # run-kit is already on the path (top of this file)
     r = claude_door.run(["--allowedTools", "Read", "Write"], prompt,
                         timeout=1800, cwd=str(D.WS))

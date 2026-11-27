@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Package the competitor sweeps themselves as a download.
 
-the owner's ruling 2026-09-04: ship the dataset, named. This is the raw
+owner's ruling 2026-09-04: ship the dataset, named. This is the raw
 material behind My Feeds — paid — four brands, every angle they
 are running, the copy on it, how many creatives sit on each, and where
 the traffic goes.
@@ -9,7 +9,7 @@ the traffic goes.
     python3 paiddata.py [--site <where to write the zip>]
 
 Ships: the per-brand profile, the angle blocks, the landing-page record.
-Never ships: `own/` (the owner's own brands), scraped media, or anything
+Never ships: `own/` (owner's own brands), scraped media, or anything
 under a brand folder that is not one of the named records below.
 """
 import argparse, json, os, shutil, sys, zipfile

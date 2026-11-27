@@ -74,13 +74,13 @@ footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);font:12
 @media(max-width:560px){.step{grid-template-columns:40px 1fr}.sn{padding-left:12px}dl{grid-template-columns:1fr}.model{margin-left:0}}
 </style>
 <div class="wrap">
-<div class="eyebrow"><brand> · the email machine · 19 Sep 2026</div>
+<div class="eyebrow">Brand A · the email machine · 19 Sep 2026</div>
 <h1>The Email Chain</h1>
 <p class="lede">From the calendar to a draft sitting in Klaviyo: every station, how each one is triggered, the twelve writing steps with their prompts, and the knobs to turn — in order.</p>
 
 <section>
 <h2>The whole line</h2>
-<p class="sub">Stage one is the planning — brand record through hand-off (components/marketing-calendar). Stage two is the writing and the pictures (tools/email-production). Then the price check, Klaviyo and the send time.</p>
+<p class="sub">Stage one is the planning — brand record through hand-off (components/marketing-calendar). Stage two is the writing and the pictures (components/email-production). Then the price check, Klaviyo and the send time.</p>
 <ol class="line">
 <li class="st ok"><div class="stt"><b>Brand record</b><span class="chip ok">Works</span></div>
 <div class="when">Before any month</div><p>Check the brand can run, mine its old sends for moments, file them.</p><div class="how">Control Room: check-brand · mine-moments · file-moments</div></li>
@@ -91,24 +91,24 @@ footer{margin-top:56px;padding-top:16px;border-top:1px solid var(--line);font:12
 <li class="st ok"><div class="stt"><b>Hand-off</b><span class="chip ok">Works</span></div>
 <div class="when">Per send</div><p>Turns each calendar send into the exact instruction the writing chain gets, and flags anything that would fail before money is spent.</p><div class="how">copy_plan.py (the check) · brief.py (the instruction)</div></li>
 <li class="st tune"><div class="stt"><b>Writing</b><span class="chip tune">Tune</span></div>
-<div class="when">Per send · ~12 min</div><p>Twelve steps, below. Five on Opus, three on Sonnet, four on Haiku.</p><div class="how">tools/email-production/run_month.py — not in the Control Room yet</div></li>
+<div class="when">Per send · ~12 min</div><p>Twelve steps, below. Five on Opus, three on Sonnet, four on Haiku.</p><div class="how">components/email-production/run_month.py — not in the Control Room yet</div></li>
 <li class="st new"><div class="stt"><b>Pictures &amp; layout</b><span class="chip new">New today</span></div>
-<div class="when">Per send · ~2 min</div><p>GPT makes the hero and the offer picture; the email is laid out in <brand>&#x27;s look.</p><div class="how">simple_email.py</div></li>
+<div class="when">Per send · ~2 min</div><p>GPT makes the hero and the offer picture; the email is laid out in Brand A&#x27;s look.</p><div class="how">simple_email.py</div></li>
 <li class="st new"><div class="stt"><b>Price check</b><span class="chip new">New today</span></div>
 <div class="when">Per send</div><p>Every price in the email must be one the offer bank sells today for that send&#x27;s offer, or nothing goes to Klaviyo.</p><div class="how">simple_email.py — runs before every push</div></li>
 <li class="st new"><div class="stt"><b>Klaviyo</b><span class="chip new">New today</span></div>
 <div class="when">Per send</div><p>A draft campaign, to the send&#x27;s own segment, with the main subject line. Never sent by the machine — a person presses Schedule.</p><div class="how">simple_email.py --push</div></li>
 <li class="st new"><div class="stt"><b>Scheduling</b><span class="chip new">New today</span></div>
-<div class="when">Per send</div><p>Each draft is set for its calendar day at 1pm in the recipient&#x27;s own time zone — <brand>&#x27;s best-earning hour across 209 of its own sends.</p><div class="how">brands/<brand>/email/simple.json → send_time</div></li>
+<div class="when">Per send</div><p>Each draft is set for its calendar day at 1pm in the recipient&#x27;s own time zone — Brand A&#x27;s best-earning hour across 209 of its own sends.</p><div class="how">brands/Brand A/email/simple.json → send_time</div></li>
 <li class="st ok"><div class="stt"><b>Learnings</b><span class="chip ok">Works</span></div>
 <div class="when">After sends</div><p>Klaviyo results joined to what each email was; next month&#x27;s calendar plans from them.</p><div class="how">pull/learnings.py</div></li></ol>
 </section>
 
 <section>
-<h2>Next week, <brand></h2>
-<p class="sub">Every <brand> send on the rebuilt calendar, Sep 20–30. This pass writes the fed-up-king ones — eight emails. Sep 23 was the test: written, pictured, drafted — and held for a wrong price.</p>
+<h2>Next week, Brand A</h2>
+<p class="sub">Every Brand A send on the rebuilt calendar, Sep 20–30. This pass writes the fed-up-king ones — eight emails. Sep 23 was the test: written, pictured, drafted — and held for a wrong price.</p>
 <div class="tbl"><table><thead><tr><th>Day</th><th>Send</th><th>Type</th><th>To (Core |)</th><th>Sells</th><th>Status</th></tr></thead>
-<tbody><tr><td>Sun 20</td><td><code>sep-05</code></td><td>last-chance</td><td>Lead</td><td>Basics Set</td><td>not this pass — gift-buyer email</td></tr><tr><td>Mon 21</td><td><code>sep-06</code></td><td>content-request</td><td>VIP Customer</td><td>—</td><td>to write</td></tr><tr><td>Tue 22</td><td><code>sep-07</code></td><td>problem-explainer</td><td>Lead</td><td>—</td><td>to write</td></tr><tr><td>Wed 23</td><td><code>sep-08</code></td><td>bundle</td><td>One-Time Customer</td><td>The Starter Set</td><td>written · HELD in Klaviyo — sold a size the store dropped</td></tr><tr><td>Thu 24</td><td><code>sep-09</code></td><td>affiliate-feature</td><td>Churned</td><td>—</td><td>can&#x27;t write — no format on file</td></tr><tr><td>Fri 25</td><td><code>sep-10</code></td><td>myth-correction</td><td>Lead</td><td>—</td><td>not this pass — glow-up email</td></tr><tr><td>Sat 26</td><td><code>sep-11</code></td><td>guarantee</td><td>One-Time Customer</td><td>none — the type needs one</td><td>to write</td></tr><tr><td>Sun 27</td><td><code>sep-12</code></td><td>moment</td><td>Lead</td><td>—</td><td>to write</td></tr><tr><td>Mon 28</td><td><code>sep-13</code></td><td>subscription-invite</td><td>Subscriber</td><td>CORE™</td><td>to write</td></tr><tr><td>Tue 29</td><td><code>sep-14</code></td><td>what-went-wrong</td><td>Churned</td><td>—</td><td>to write</td></tr><tr><td>Wed 30</td><td><code>sep-15</code></td><td>guarantee</td><td>Subscriber</td><td>CORE™</td><td>to write</td></tr></tbody></table></div>
+<tbody><tr><td>Sun 20</td><td><code>sep-05</code></td><td>last-chance</td><td>Lead</td><td>Basics Set</td><td>not this pass — gift-buyer email</td></tr><tr><td>Mon 21</td><td><code>sep-06</code></td><td>content-request</td><td>VIP Customer</td><td>—</td><td>to write</td></tr><tr><td>Tue 22</td><td><code>sep-07</code></td><td>problem-explainer</td><td>Lead</td><td>—</td><td>to write</td></tr><tr><td>Wed 23</td><td><code>sep-08</code></td><td>bundle</td><td>One-Time Customer</td><td>The Vitals Set</td><td>written · HELD in Klaviyo — sold a size the store dropped</td></tr><tr><td>Thu 24</td><td><code>sep-09</code></td><td>affiliate-feature</td><td>Churned</td><td>—</td><td>can&#x27;t write — no format on file</td></tr><tr><td>Fri 25</td><td><code>sep-10</code></td><td>myth-correction</td><td>Lead</td><td>—</td><td>not this pass — glow-up email</td></tr><tr><td>Sat 26</td><td><code>sep-11</code></td><td>guarantee</td><td>One-Time Customer</td><td>none — the type needs one</td><td>to write</td></tr><tr><td>Sun 27</td><td><code>sep-12</code></td><td>moment</td><td>Lead</td><td>—</td><td>to write</td></tr><tr><td>Mon 28</td><td><code>sep-13</code></td><td>subscription-invite</td><td>Subscriber</td><td>CORE™</td><td>to write</td></tr><tr><td>Tue 29</td><td><code>sep-14</code></td><td>what-went-wrong</td><td>Churned</td><td>—</td><td>to write</td></tr><tr><td>Wed 30</td><td><code>sep-15</code></td><td>guarantee</td><td>Subscriber</td><td>CORE™</td><td>to write</td></tr></tbody></table></div>
 </section>
 
 <section>
@@ -534,12 +534,12 @@ device is one way of doing it.
 <article class="step tune" id="stage1b">
   <div class="sn">2b</div>
   <div class="sb">
-    <div class="sh"><h3>Context scout</h3><span class="chip tune">Tune</span><span class="model m-reads">haiku-4-5 → opus for <brand></span></div>
-    <p class="does">Looks through everything <brand> knows and picks only what this email needs.</p>
+    <div class="sh"><h3>Context scout</h3><span class="chip tune">Tune</span><span class="model m-reads">haiku-4-5 → opus for Brand A</span></div>
+    <p class="does">Looks through everything Brand A knows and picks only what this email needs.</p>
     <dl>
       <dt>Handed</dt><dd>step 0&#x27;s answers, step 2&#x27;s skeleton, an index of everything the brand knows, files every run loads, files every run loads</dd>
       <dt>Makes</dt><dd>the brand files this email uses</dd>
-      <dt>Knob</dt><dd class="knob"><brand> hands it 1.7MB, too big for Haiku, so it moves up to Opus every time. Trimming the input would put it back on Haiku.</dd>
+      <dt>Knob</dt><dd class="knob">Brand A hands it 1.7MB, too big for Haiku, so it moves up to Opus every time. Trimming the input would put it back on Haiku.</dd>
     </dl>
     <details><summary>The prompt · <code>stage1b-context-scout-v1-owner.md</code> · 98 lines</summary>
       <pre>Today is: {today}
@@ -858,7 +858,7 @@ have not injected anything.
 
 ## THE CUSTOMER&#x27;S OWN WORDS — the copywriter&#x27;s rules, word for word
 
-Carried from `tools/copywriter/prompts/stage3-injection-v2-owner.md` on
+Carried from `components/copywriter/prompts/stage3-injection-v2-owner.md` on
 2026-09-19 (the owner: &quot;hook up email to the actual customer&quot;). Email&#x27;s writer had
 the voice rules but never the queried rows, and never these rules for using them.
 
@@ -917,7 +917,7 @@ thought, not the sentence&quot;; 2026-09-20: &quot;all this choppiness… nobody
 going to read. It needs to actually feel real&quot;). An email is read, not heard —
 but it is read in the head, in a voice. So section 0 binds every line you
 write: **one thought is one sentence. Never chop a thought into a row of short
-statements.** &quot;Day 90. The Starter Set.&quot; is a chop; say the thought whole. The
+statements.** &quot;Day 90. The Vitals Set.&quot; is a chop; say the thought whole. The
 voice-model settings and the audio punctuation marks are for audio — ignore
 them here; the rhythm rules are not.
 
@@ -1086,7 +1086,7 @@ Give me the five decisions, labelled, each with its reason. Nothing else.
     <dl>
       <dt>Handed</dt><dd>the moment it&#x27;s tied to, the day it goes out, step 2c&#x27;s week, what it may sell, step 0&#x27;s answers, step 1&#x27;s record, step 2&#x27;s skeleton, step 3&#x27;s draft, step 4&#x27;s plan, who it&#x27;s from, the avatar&#x27;s voice rules, real customer sentences, step 2b&#x27;s picks, subject lines already used, how many subjects, the five awareness levels (doctrine)</dd>
       <dt>Makes</dt><dd>the subject + preview set</dd>
-      <dt>Knob</dt><dd class="knob">The <brand> test came back with no preview text on the main subject line. Require one.</dd>
+      <dt>Knob</dt><dd class="knob">The Brand B test came back with no preview text on the main subject line. Require one.</dd>
     </dl>
     <details><summary>The prompt · <code>stage5-subjects-v2-owner.md</code> · 124 lines</summary>
       <pre>Today is: {today}
@@ -1344,7 +1344,7 @@ thought, not the sentence&quot;; 2026-09-20: &quot;all this choppiness… nobody
 going to read. It needs to actually feel real&quot;). An email is read, not heard —
 but it is read in the head, in a voice. So section 0 binds every line you
 write: **one thought is one sentence. Never chop a thought into a row of short
-statements.** &quot;Day 90. The Starter Set.&quot; is a chop; say the thought whole. The
+statements.** &quot;Day 90. The Vitals Set.&quot; is a chop; say the thought whole. The
 voice-model settings and the audio punctuation marks are for audio — ignore
 them here; the rhythm rules are not.
 
@@ -1713,12 +1713,12 @@ reader cannot tell the difference between clean and unchecked.
 <section>
 <h2>Knobs, in the order to turn them</h2>
 <p class="sub">What to change before next week's emails go out, most urgent first.</p>
-<ol class="knobs"><li class="broken"><div class="kt"><b>Fix the week&#x27;s research</b><span class="chip bad">Broken</span></div><p>Step 2c is reading stale question lists from the old calendar. Regenerate them for the rebuilt September, and actually answer them, before writing next week.</p></li><li class="tune"><div class="kt"><b>Tell step 4 the simple shape</b><span class="chip tune">Tune</span></div><p>It plans three buttons and four pictures that step 8 then cuts. One button, a hero and an optional offer picture, planned from the start.</p></li><li class="tune"><div class="kt"><b>Put spice and awareness into step 3</b><span class="chip tune">Tune</span></div><p>The tone dials from the marketing doctrine (humour, delivery, pacing, register) and the awareness guidance, bound into the main writing step, then 5 and 7.</p></li><li class="tune"><div class="kt"><b>Require a preview line</b><span class="chip tune">Tune</span></div><p>Step 5&#x27;s main subject line can come back with no preview.</p></li><li class="tune"><div class="kt"><b>Drop step 9</b><span class="chip tune">Tune</span></div><p>A hand-build brief nothing reads any more. One fewer call per email.</p></li><li class="broken"><div class="kt"><b>Product files list sizes that aren&#x27;t for sale</b><span class="chip bad">Broken</span></div><p>The Sep 23 email sold &#x27;2 x The Starter Set, $99.99&#x27; — a size the store removed. The product file lists every size ever made; the writer took it from there. The price check now stops it reaching Klaviyo; the product file should mark what&#x27;s live.</p></li><li class="none"><div class="kt"><b>Writing in the Control Room</b><span class="chip none">Not built</span></div><p>Add &#x27;write emails&#x27; next to plan-month, so a week of emails is one trigger.</p></li><li class="new"><div class="kt"><b>The old email&#x27;s nav and footer words</b><span class="chip new">New today</span></div><p>FIXED in the prompts, to be proven on the next real run: the writer had copied the old email&#x27;s navigation and footer words into our body, and a typo from its preview line into ours. Step 1 (v2) now files furniture and broken lines under their own headings; step 2 (v2) builds from the message only; later steps never see the furniture.</p></li><li class="ok"><div class="kt"><b>The dry run is free</b><span class="chip ok">Works</span></div><p>FIXED: the dry run used to run step 0 before it stopped, so every check spent a call and left a folder behind. It now stops before any step, reports what only step 0 can know as &#x27;decided at triage&#x27;, and writes nothing.</p></li><li class="ok"><div class="kt"><b>One set of checks</b><span class="chip ok">Works</span></div><p>FIXED: the price check, the unfilled check and the check step&#x27;s reader are the shared ones every chain uses. check.json now says which gate held the email (delivery) instead of blaming prices for everything.</p></li><li class="ok"><div class="kt"><b>An email type nobody defined</b><span class="chip ok">Works</span></div><p>FIXED: a send whose type is not in the element library or the brand&#x27;s own type list is blocked before a word is written, with the real types named.</p></li></ol>
+<ol class="knobs"><li class="broken"><div class="kt"><b>Fix the week&#x27;s research</b><span class="chip bad">Broken</span></div><p>Step 2c is reading stale question lists from the old calendar. Regenerate them for the rebuilt September, and actually answer them, before writing next week.</p></li><li class="tune"><div class="kt"><b>Tell step 4 the simple shape</b><span class="chip tune">Tune</span></div><p>It plans three buttons and four pictures that step 8 then cuts. One button, a hero and an optional offer picture, planned from the start.</p></li><li class="tune"><div class="kt"><b>Put spice and awareness into step 3</b><span class="chip tune">Tune</span></div><p>The tone dials from the marketing doctrine (humour, delivery, pacing, register) and the awareness guidance, bound into the main writing step, then 5 and 7.</p></li><li class="tune"><div class="kt"><b>Require a preview line</b><span class="chip tune">Tune</span></div><p>Step 5&#x27;s main subject line can come back with no preview.</p></li><li class="tune"><div class="kt"><b>Drop step 9</b><span class="chip tune">Tune</span></div><p>A hand-build brief nothing reads any more. One fewer call per email.</p></li><li class="broken"><div class="kt"><b>Product files list sizes that aren&#x27;t for sale</b><span class="chip bad">Broken</span></div><p>The Sep 23 email sold &#x27;2 x The Vitals Set, $99.99&#x27; — a size the store removed. The product file lists every size ever made; the writer took it from there. The price check now stops it reaching Klaviyo; the product file should mark what&#x27;s live.</p></li><li class="none"><div class="kt"><b>Writing in the Control Room</b><span class="chip none">Not built</span></div><p>Add &#x27;write emails&#x27; next to plan-month, so a week of emails is one trigger.</p></li><li class="new"><div class="kt"><b>The old email&#x27;s nav and footer words</b><span class="chip new">New today</span></div><p>FIXED in the prompts, to be proven on the next real run: the writer had copied the old email&#x27;s navigation and footer words into our body, and a typo from its preview line into ours. Step 1 (v2) now files furniture and broken lines under their own headings; step 2 (v2) builds from the message only; later steps never see the furniture.</p></li><li class="ok"><div class="kt"><b>The dry run is free</b><span class="chip ok">Works</span></div><p>FIXED: the dry run used to run step 0 before it stopped, so every check spent a call and left a folder behind. It now stops before any step, reports what only step 0 can know as &#x27;decided at triage&#x27;, and writes nothing.</p></li><li class="ok"><div class="kt"><b>One set of checks</b><span class="chip ok">Works</span></div><p>FIXED: the price check, the unfilled check and the check step&#x27;s reader are the shared ones every chain uses. check.json now says which gate held the email (delivery) instead of blaming prices for everything.</p></li><li class="ok"><div class="kt"><b>An email type nobody defined</b><span class="chip ok">Works</span></div><p>FIXED: a send whose type is not in the element library or the brand&#x27;s own type list is blocked before a word is written, with the real types named.</p></li></ol>
 </section>
 
 <footer>
-Code: tools/email-production — email.py (the twelve steps) · simple_email.py (pictures, layout, Klaviyo) · run_month.py (a whole month) · prompts/<br>
-Look: brands/<brand>/email/simple.json · Runs: runs/email-production/<brand>/ · Pictures: Shared Assets/runs/email-production/<brand>/<br>
+Code: components/email-production — email.py (the twelve steps) · simple_email.py (pictures, layout, Klaviyo) · run_month.py (a whole month) · prompts/<br>
+Look: brands/Brand A/email/simple.json · Runs: runs/email-production/Brand A/ · Pictures: Shared Assets/runs/email-production/Brand A/<br>
 This page: python3 chain_page.py — steps, models, inputs and prompts are read from the code.
 </footer>
 </div>

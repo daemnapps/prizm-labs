@@ -111,7 +111,7 @@ have not injected anything.
 
 ## THE CUSTOMER'S OWN WORDS — the copywriter's rules, word for word
 
-Carried from `tools/copywriter/prompts/stage3-injection-v2-owner.md` on
+Carried from `components/copywriter/prompts/stage3-injection-v2-owner.md` on
 2026-09-19 (the owner: "hook up email to the actual customer"). Email's writer had
 the voice rules but never the queried rows, and never these rules for using them.
 
@@ -170,7 +170,7 @@ thought, not the sentence"; 2026-09-20: "all this choppiness… nobody is really
 going to read. It needs to actually feel real"). An email is read, not heard —
 but it is read in the head, in a voice. So section 0 binds every line you
 write: **one thought is one sentence. Never chop a thought into a row of short
-statements.** "Day 90. The Starter Set." is a chop; say the thought whole. The
+statements.** "Day 90. The Vitals Set." is a chop; say the thought whole. The
 voice-model settings and the audio punctuation marks are for audio — ignore
 them here; the rhythm rules are not.
 

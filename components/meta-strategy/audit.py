@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Grade one brand's Meta account against the Meta strategy (rules.json).
 
-    python3 components/meta-strategy/audit.py brand-b
+    python3 components/meta-strategy/audit.py brand_b
 
 Reads:
   - the day's structure read (campaigns · ad sets · ads with status and budget),
-    taken once per brand per day and saved (the owner: "do not pull on Meta too much")
+    taken once per brand per day and saved (owner: "do not pull on Meta too much")
   - the latest creative-diversity pull + matrix (runs/creative-diversity/<brand>/)
   - each saved asset's own file, for shape and sound (ffprobe, local)
   - the offer's break-even (lab/owner/media-buying/<brand>-offer-lines.json)
@@ -26,7 +26,7 @@ LIVE = ("ACTIVE", "IN_PROCESS", "WITH_ISSUES", "PENDING_REVIEW")
 
 def structure(brand, day):
     """Campaigns, ad sets and live ads from the team warehouse (meta_ads) — never
-    from Meta directly (the owner, 2026-10-08). Saved once per brand per day."""
+    from Meta directly (owner, 2026-10-08). Saved once per brand per day."""
     out = ROOT / "runs" / "meta-strategy" / brand / day
     f = out / "structure.json"
     if f.exists():
@@ -43,10 +43,10 @@ def structure(brand, day):
             sys.modules[modname] = mod
             spec.loader.exec_module(mod)
         return mod
-    url = _keys_mod("loader.py", "company_keys_loader").key("SUPABASE_DB_URL", required=False)
+    url = _keys_mod("loader.py", "upright_keys_loader").key("SUPABASE_DB_URL", required=False)
     if not url:
-        sys.exit("no SUPABASE_DB_URL — add SUPABASE_DB_URL=value to this repo's .env")
-    safe, child = _keys_mod("pg_argv.py", "company_pg_argv").for_psql(url)   # password in the env, not argv
+        sys.exit("no SUPABASE_DB_URL — add SUPABASE_DB_URL=value to ~/.upright-keys.env")
+    safe, child = _keys_mod("pg_argv.py", "upright_pg_argv").for_psql(url)   # password in the env, not argv
     acct = json.loads((ROOT / "brands" / brand / "meta" / "account.json").read_text())["account_id"]
     q = ("select ad_id, ad_name, adset_id, adset_name, campaign_id, campaign_name, effective_status "
          f"from meta_ads where account_id = '{acct}' and effective_status in ('ACTIVE','IN_PROCESS','WITH_ISSUES','PENDING_REVIEW')")

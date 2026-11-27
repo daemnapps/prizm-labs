@@ -1,0 +1,105 @@
+{
+ "id": "video-montage",
+ "name": "Video Montage",
+ "kind": "edit",
+ "makes": "Joins existing clips into one finished video, swaps or mixes a soundtrack, and burns timed speech captions on it, with no generation.",
+ "source": [
+  "video-montage/SKILL.md",
+  "video-montage/references/subtitles.md",
+  "video-montage/references/ugc-captions.md",
+  "video-montage/references/faceless-captions.md",
+  "video-montage/references/website-captions.md",
+  "video-montage/references/caption-clearance.md",
+  "video-montage/scripts/audio_to_captions.py.md",
+  "video-montage/scripts/subtitle_paper_burn.py.md"
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "name": "Probe every source",
+   "model": "none",
+   "cheap": "ffprobe is already free; local ffmpeg on this Mac does the same"
+  },
+  {
+   "n": 2,
+   "name": "Assemble",
+   "model": "none",
+   "cheap": "local ffmpeg concat (free)"
+  },
+  {
+   "n": 3,
+   "name": "Soundtrack",
+   "model": "none",
+   "cheap": "local ffmpeg mix; Demucs stems if speech must be split from music"
+  },
+  {
+   "n": 4,
+   "name": "Transcribe real audio",
+   "model": "none",
+   "cheap": "local Whisper stt on this Mac (free)"
+  },
+  {
+   "n": 5,
+   "name": "Verify transcript (gate)",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 6,
+   "name": "Clean-frame evidence and protected regions",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 7,
+   "name": "Burn one look",
+   "model": "none",
+   "cheap": "local ffmpeg + Pillow script (free)"
+  },
+  {
+   "n": 8,
+   "name": "Verify the burn",
+   "model": "none",
+   "cheap": null
+  }
+ ],
+ "prompts": [
+  {
+   "label": "Whisper timing, UGC and website captions",
+   "source": "video-montage/references/ugc-captions.md",
+   "text": "python3 \"${HF_WORKFLOWS}/video-montage/scripts/audio_to_captions.py\" output/final.mp4 \\\n  --mixed --language '<spoken-language-code>' --script script_manifest.json \\\n  --srt caps.srt --json caps.json --max-words 5 --max-chars 32"
+  },
+  {
+   "label": "Faceless caption burn (fixed look)",
+   "source": "video-montage/references/faceless-captions.md",
+   "text": "python3 \"${HF_WORKFLOWS}/video-montage/scripts/subtitle_paper_burn.py\" \\\n  --in final.mp4 --srt caps.srt --out final_subbed.mp4 \\\n  --style bold --no-caps --font-key montserrat --stroke-frac 0.045 \\\n  --profile faceless"
+  },
+  {
+   "label": "Per-block timing on clean voice files",
+   "source": "video-montage/references/subtitles.md",
+   "text": "python3 ${HF_WORKFLOWS}/video-montage/scripts/audio_to_captions.py final.mp4 --srt caps.srt --per-block final.mp4.assembly.json --voice-dir . --script script_manifest.json --language '<narration-language-code>'"
+  },
+  {
+   "label": "Mixed-audio timing",
+   "source": "video-montage/references/subtitles.md",
+   "text": "python3 ${HF_WORKFLOWS}/video-montage/scripts/audio_to_captions.py video.mp4 --srt caps.srt --mixed --language ru"
+  },
+  {
+   "label": "Burn: paper or bold",
+   "source": "video-montage/references/subtitles.md",
+   "text": "python3 ${HF_WORKFLOWS}/video-montage/scripts/subtitle_paper_burn.py --in video.mp4 --srt caps.srt \\\n    --out final_subbed.mp4 --style paper|bold [--no-outline] \\\n    [--font-key tiktok|caveat|patrick|marker|montserrat|anton]"
+  },
+  {
+   "label": "Burn: clean",
+   "source": "video-montage/references/subtitles.md",
+   "text": "bash ${HF_WORKFLOWS}/video-montage/scripts/burn_caps_clean.sh --in video.mp4 --srt caps.srt --out final_subbed.mp4"
+  },
+  {
+   "label": "UGC-natural variant (flags)",
+   "source": "video-montage/references/subtitles.md",
+   "text": "add `--no-caps --single-line --stroke-frac 0.045` to\nthe `bold` burner and pair it with `audio_to_captions.py --max-words 4`."
+  }
+ ],
+ "price": "No credits: it runs in the sandbox and calls no generation model. Nothing quoted in `_prices.md` applies.",
+ "cheap_price": "0 credits (all local-capable)"
+}

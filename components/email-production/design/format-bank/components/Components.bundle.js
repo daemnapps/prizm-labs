@@ -350,7 +350,7 @@ function Footer(_p = {}) {
       color: "rgb(255,255,255)",
       flexShrink: 0
     }
-  }, props.text4 ?? "BRAND-A LLC, 732 S 6th St #5503, Las Vegas, NV 89101-6948")));
+  }, props.text4 ?? "brand_a LLC, 732 S 6th St #5503, Las Vegas, NV 89101-6948")));
 }
 
 // figma node: 3:92 Header

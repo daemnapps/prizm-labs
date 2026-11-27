@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""The Klaviyo approval page: every finished email on one card; the owner's click puts it in Klaviyo as a DRAFT.
+"""The Klaviyo approval page: every finished email on one card; owner's click puts it in Klaviyo as a DRAFT.
 
     python3 approve_klaviyo.py                  # http://localhost:8798  (launch config "klaviyo-approve")
     python3 approve_klaviyo.py --fake-klaviyo   # trials: nothing reaches Klaviyo
 
-the owner, 2026-10-09: "Similar to how I have an approval page for Meta, I need the same exact thing,
+owner, 2026-10-09: "Similar to how I have an approval page for Meta, I need the same exact thing,
 but for Klaviyo." The twin of components/meta-upload/approve.py.
 
 Shows every card at runs/email-production/<brand>/<label>/klaviyo/card.json (any brand): the email
@@ -50,6 +50,7 @@ from urllib.parse import parse_qs, unquote, urlparse
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
+import picture_refs as P  # noqa: E402  (every picture in an email, and whether it loads)
 import klaviyo_upload as K  # noqa: E402  (the schedule guards; before S, which takes this folder off sys.path)
 import simple_email as S  # noqa: E402
 from paths import WORKSPACE  # noqa: E402
@@ -142,7 +143,7 @@ _ASKED, _ASK_LOCK, ASK_FOR = {}, threading.Lock(), 600   # page → (when, code)
 def link_status(url):
     """Each page is asked once, whatever its tracking tags, and the answer kept 10 minutes: the page's live check
     asks every link of every card at once, and twelve asks for one store page is what made it answer 429
-    (the team, 2026-10-27, as in design/check.py). The lock keeps those parallel asks to one per page."""
+    (email_lead, 2026-10-27, as in design/check.py). The lock keeps those parallel asks to one per page."""
     page = page_of(url)
     with _ASK_LOCK:
         hit = _ASKED.get(page)
@@ -177,7 +178,9 @@ def by_hand(c):
 
 def check(c):
     """Problems that hold the Approve button."""
-    probs = []
+    probs = S.CH.card_problems(WORKSPACE, c['brand'], RUNS / c['brand'] / c['label'], c)
+    if probs:
+        return probs
     segs, missing = audience(c)
     if missing:
         probs.append("no Klaviyo id for %s in the audience matrix" % ", ".join(missing))
@@ -185,6 +188,13 @@ def check(c):
         code = c.get("_link_status", {}).get(u) or link_status(u)
         c.setdefault("_link_status", {})[u] = code
         if code in ("429", "403") and page_of(u) in hand_pages(c):   # the store keeps machines out; a person confirms it below
+            continue
+        if code in ("429", "403"):   # kept out at the Go itself, not at the final check: a person confirms it the same way
+            pg = page_of(u)          # (email_lead, 2026-11-13: brand_a-nov-20's King Set page, live in the browser, 429 to the check)
+            if pg not in set((c.get("links_confirmed") or {}).get("pages") or []):
+                msg = "open and confirm by hand first: %s (the store answered %s)" % (pg, code)
+                if msg not in probs:
+                    probs.append(msg)
             continue
         if code != "200":
             probs.append("link %s answers %s" % (u, code))
@@ -203,42 +213,67 @@ def check(c):
     return probs
 
 
+def _fresh_final_check(d):
+    """True when the card's final check was made on this email.html; else design/check.py runs on the email now and
+    False is returned (the card was rewritten). brand_b-nov-23 (email_lead, 2026-11-16): a picture placed after the last
+    check rebuilt the email and left an older build's finding on the card, holding the Go for nothing."""
+    sys.path.insert(0, str(HERE / "design"))
+    import check as FC
+    c = json.loads((d / "card.json").read_text())
+    if FC.is_fresh(c, d / "email.html"):
+        return True
+    subprocess.run([sys.executable, str(HERE / "design" / "check.py"), str(d.parent)], cwd=str(HERE),
+                   capture_output=True, text=True, timeout=600)
+    return False
+
+
 def approve(brand, label, who):
     d = card_dir(brand, label)
     c = json.loads((d / "card.json").read_text())
     if c.get("klaviyo"):
         return {"ok": False, "error": "already in Klaviyo as draft %s" % c["klaviyo"]["campaign_id"]}
+    if not FAKE and not _fresh_final_check(d):   # the final check is about this build, never an older one
+        c = json.loads((d / "card.json").read_text())
     c["_dir"] = str(d)
     probs = check(c)
     if probs:
         return {"ok": False, "error": "held: " + "; ".join(probs)}
     lk = S.look(brand)
     doc = (d / "email.html").read_text()
-    pics = sorted(set(re.findall(r'src="(assets/[^"]+)"', doc)))
+    # every picture the email asks for, wherever it sits (an <img>, a background attribute, a CSS url(), Outlook's
+    # VML): brand_b-nov-10a went out 2026-11-12 with its background hero still at assets/s02.jpg (email_lead, 2026-11-13)
+    pics = sorted({u for _, u in P.refs(doc) if not re.match(r"(?i)https?://", u)})
     fp, fp_why = None, None
     if FAKE:
         hosted = {p: "https://fake.klaviyo.test/%s/%s" % (label, p) for p in pics}
         rec = {"campaign_id": "FAKE-%s" % label, "template_id": "FAKE", "status": "DRAFT (fake: nothing reached Klaviyo)"}
     else:
         # the team's pictures, not this Mac's: they are media, outside git, so a pulled email.html can sit beside an
-        # older build's pictures (brand-b-nov-01 on 2026-10-27, the team's redesign beside 21 October's pictures)
+        # older build's pictures (brand_b-nov-01 on 2026-10-27, editor's redesign beside 21 October's pictures)
         got = _layout_file().pull_build(brand, d.parent)
         if got["error"] or got["missing"]:
             return _refused(["the pictures could not be checked against the team's Drive (%s); nothing went to Klaviyo"
                              % (got["error"] or "not on the Drive: " + ", ".join(got["missing"]))])
+        old = _layout_file().cuts_off_layout(d.parent)   # the Drive's pictures are this build's (email_lead, 2026-11-16)
+        if old:
+            return _refused(["a picture on the team's Drive does not fit this email; nothing went to Klaviyo "
+                             "(the designer rebuilds the email so its pictures reach the Drive): " + x for x in old])
         key = S.kl_key(lk)
         hosted = {}
         for p in pics:
             hosted[p] = S.upload(key, str(d / p), "%s-%s-%s" % (brand, label, Path(p).stem))
         for p, url in hosted.items():
-            doc = doc.replace('src="%s"' % p, 'src="%s"' % url)
+            doc = re.sub(r"(?<=[\"'(])%s(?=[\"')])" % re.escape(p), url, doc)
         (d / "email-hosted.html").write_text(doc)
+        left = P.problems(doc, fetch=False) + P.missing_from((d / "email.html").read_text(), doc)
+        if left:
+            return _refused(["a picture would not show in the email; nothing went to Klaviyo: " + x for x in left])
         iso = _iso(c)
         cal = S.the_slot(brand, label) or {}     # the calendar's send: an offer send names its product as the offer
         cal_product = next((v for v in (cal.get("product"), cal.get("offer"))
                             if str(v or "").lower() not in ("", "none", "null")), "")
-        slot = {"date": iso, "product": c.get("product") or cal_product or ("product" if "nova" in " ".join(c.get("links", [])) else "war" if "/war" in " ".join(c.get("links", [])) else ""),
-                "segments": c["segments"]}
+        slot = dict(cal, date=iso, product=c.get("product") or cal_product or ("flex" if "flex" in " ".join(c.get("links", [])) else "war" if "/war" in " ".join(c.get("links", [])) else ""),
+                    segments=c['segments'])
         segs, _ = audience(c)
         future = datetime.datetime.fromisoformat("%sT%s" % (iso, c.get("send_local", "13:00"))) > datetime.datetime.now()
         strategy = S.send_strategy(lk, slot) if future else None
@@ -269,14 +304,16 @@ def approve(brand, label, who):
 
 def confirm_links(brand, label, who):
     """An approver opened every by-hand page and says it works: Approve and Schedule stop waiting on it
-    (the team, 2026-10-27: the store answers 429 to the check, so a person confirms instead)."""
+    (email_lead, 2026-10-27: the store answers 429 to the check, so a person confirms instead)."""
     d = card_dir(brand, label)
     c = json.loads((d / "card.json").read_text())
     try:
         by = K.who(who)
     except K.Held as e:
         return _refused(e.args[0])
-    pages = by_hand(c)
+    done0 = set((c.get("links_confirmed") or {}).get("pages") or [])
+    kept_out = [page_of(u) for u in c.get("links", []) if link_status(u) in ("429", "403")]
+    pages = list(dict.fromkeys(by_hand(c) + [p for p in kept_out if p not in done0]))
     if not pages:
         return {"ok": False, "error": "nothing waits to be confirmed by hand"}
     done = (c.get("links_confirmed") or {}).get("pages") or []
@@ -304,8 +341,11 @@ def schedule(brand, label, who, env=None, home=None, at=None):
         return {"ok": False, "error": "not in Klaviyo yet: approve it first"}
     if c.get("scheduled"):
         return {"ok": False, "error": "already scheduled by %s at %s" % (c["scheduled"]["by"], c["scheduled"]["at"])}
+    handoff = S.CH.card_problems(WORKSPACE, brand, RUNS / brand / label, c)
+    if handoff:
+        return _refused(handoff)
     if K.switch_state() != "on":
-        return _refused(["REFUSED: the email off-switch is off (tools/email-production/send-switch.json)"])
+        return _refused(["REFUSED: the email off-switch is off (components/email-production/send-switch.json)"])
     try:
         by = K.who(who)
     except K.Held as e:
@@ -335,6 +375,10 @@ def schedule(brand, label, who, env=None, home=None, at=None):
         if st.get("method") != "static" or earliest is None:
             return _refused(["REFUSED: the draft's send strategy is %s — it could send now; set a fixed time "
                              "in Klaviyo" % (st.get("method") or "not set")])
+        built = d / "email.html"
+        pic = P.problems(dr["html"]) + (P.missing_from(built.read_text(), dr["html"]) if built.exists() else [])
+        if pic:   # the email as Klaviyo holds it: every picture hosted and loading (email_lead, 2026-11-13)
+            return _refused(["REFUSED: a picture would not show in the email Klaviyo holds: " + x for x in pic])
         fp = K.fingerprint(dr["subject"], dr["preview"], dr["html"], dr["audience_ids"], st)
         was = k.get("fingerprint") or {}
         if not was.get("sha256"):
@@ -371,7 +415,7 @@ def send_back(brand, label, who, reasons, note):
 
 
 def redo(brand, label, who, note, stage):
-    """the team's refinement (the owner, 2026-10-17: "every time a shift is made … with the feedback, that all needs to be
+    """editor's refinement (owner, 2026-10-17: "every time a shift is made … with the feedback, that all needs to be
     stored and put into learnings back up and through the chain"): her note becomes a rule in the brand's
     learnings (design/learn.py) that every later email reads, then THIS email is redesigned, rebuilt and checked
     with it. A words note reruns the copy from its writing step first."""
@@ -493,10 +537,10 @@ details summary{cursor:pointer;color:var(--mut)}.why{display:grid;grid-template-
 .ready,.held{display:inline-block;margin:0 0 10px;font-size:12px;font-weight:600;border-radius:99px;padding:3px 10px}.ready{color:#0c100f;background:var(--ok)}.held{color:var(--bad);border:1px solid var(--bad)}@media(max-width:900px){.card{grid-template-columns:1fr}.frame{height:620px}}
 </style></head><body>
 <header><h1>Klaviyo approvals</h1><span>{{N}} emails · Approve makes a DRAFT in Klaviyo with its segments, subject and send time set. Schedule (two clicks) releases it; nothing goes out without that click.</span>
-<span class="fake">{{FAKE}}</span><div class="bar">{{BAR}}</div><label>Deciding: <select id="who"><option>the owner</option><option>the team</option><option>the team</option><option>the team</option></select></label></header>
+<span class="fake">{{FAKE}}</span><div class="bar">{{BAR}}</div><label>Deciding: <select id="who"><option>owner</option><option>email_lead</option><option>designer</option><option>developer</option></select></label></header>
 <main>{{CARDS}}</main>
 <script>
-const who=document.getElementById('who');try{who.value=localStorage.getItem('who')||'the owner'}catch(e){}
+const who=document.getElementById('who');try{who.value=localStorage.getItem('who')||'owner'}catch(e){}
 who.onchange=()=>{try{localStorage.setItem('who',who.value)}catch(e){}};
 document.querySelectorAll('.links li').forEach(li=>{fetch('/link?u='+encodeURIComponent(li.dataset.u)).then(r=>r.json()).then(j=>{const s=li.querySelector('.ls');s.textContent=j.code;s.className='ls '+(j.code==='200'?'ok':(j.code==='429'||j.code==='403')?'hand':'bad');if(j.code==='429'||j.code==='403')s.textContent=j.code+' · open it'})});
 const all=document.getElementById('all');if(all)all.onclick=async()=>{const m=document.getElementById('allmsg');
@@ -549,7 +593,7 @@ class H(BaseHTTPRequestHandler):
         with LOCK:
             try:
                 if self.path == "/approve":
-                    r = approve(j["brand"], j["label"], j.get("who") or "the owner")
+                    r = approve(j["brand"], j["label"], j.get("who") or "owner")
                 elif self.path == "/schedule":
                     r = schedule(j["brand"], j["label"], j.get("who"))   # checked against approvers.json, no default
                 elif self.path == "/redo":
@@ -557,7 +601,7 @@ class H(BaseHTTPRequestHandler):
                 elif self.path == "/confirm":
                     r = confirm_links(j["brand"], j["label"], j.get("who"))   # checked against approvers.json, no default
                 elif self.path == "/sendback":
-                    r = send_back(j["brand"], j["label"], j.get("who") or "the owner", j.get("reasons") or [], j.get("note") or "")
+                    r = send_back(j["brand"], j["label"], j.get("who") or "owner", j.get("reasons") or [], j.get("note") or "")
                 else:
                     r = {"ok": False, "error": "unknown action"}
             except SystemExit as e:

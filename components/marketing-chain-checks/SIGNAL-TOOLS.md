@@ -1,6 +1,6 @@
 # Ad Signal Tools — what we use (simplified 2 Oct 2026)
 
-Page: (private page) · source `signal-tools.html`. The full research list of 39 tools is in the page's earlier versions (v1–v6).
+Page: https://claude.ai/artifact/39U8ZoNkNmDEZ1NP4B6iEv · source `signal-tools.html`. The full research list of 39 tools is in the page's earlier versions (v1–v6).
 
 ## What we use (phone-first, open)
 1. **Hidden by the app?** No model needed; it's a rule in our tool. Each frame is checked against the TikTok, Reels and Shorts button and caption zones.
@@ -15,7 +15,7 @@ Page: (private page) · source `signal-tools.html`. The full research list of 39
 - **Outside services.** Higgsfield, fal and Gemini are called from that computer. Finished ads land in Google Drive.
 - **Access.** the owner and the video editors use it from any laptop. Nothing runs on the owner's Mac.
 - **Cost.** About $1–2/hour while on and $0 when switched off. One ad from start to finish is roughly 15 minutes and about $0.50. These are ballpark example figures.
-- **Who builds it.** It goes through the team.
+- **Who builds it.** It goes through the developer.
 
 ## What the avatar viewers already check (the viewer check, live)
 Stop in 2s against the real feed · the second they leave, plus a retention curve · when it felt like an ad and why · tap or tell a friend · what they'd remember. They read a description and don't see pixels, so they can't say where the eyes go, read the face, or see what's under the app's buttons. The models cover those three. "Will they keep watching" overlaps with the viewers, but reads the real video.

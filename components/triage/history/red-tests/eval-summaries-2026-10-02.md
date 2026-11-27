@@ -33,14 +33,14 @@ The stream checked two of the judge's error calls by hand, and both hold: R14 (`
 Claude's version, with its two errors corrected from the judge's notes:
 
 - R10: only the manifest check is red; the pricing tests pass.
-- R18: a second cause, the team's pm.html copy behind after PM-60 to PM-64. GLM found this one and Claude missed it.
+- R18: a second cause, the email lead's pm.html copy behind after PM-60 to PM-64. GLM found this one and Claude missed it.
 
 It is written to `summaries-2026-10-02.json` and shown on the red-tests page.
 
 ## What this means for the 302 atlas summaries
 
-If the team approves them, they go on the Claude route. GLM stays right for what it has proven: TI-23 (red-test fixes on GLM), test-only re-pins, 9 of 10 merged, with every changed assertion reviewed by the lead.
+If the developer approves them, they go on the Claude route. GLM stays right for what it has proven: TI-23 (red-test fixes on GLM), test-only re-pins, 9 of 10 merged, with every changed assertion reviewed by the lead.
 
 **Reverse if** a re-run on a fresh sample after a GLM model update scores ≥ 90% with no factual error in a P0/P1 item.
 
-Also from the judge: the team has asked not to be reminded about cs-loop (`workflows.json:379`), so R6 and R7 should not be raised with her.
+Also from the judge: the designer has asked not to be reminded about cs-loop (`workflows.json:379`), so R6 and R7 should not be raised with her.

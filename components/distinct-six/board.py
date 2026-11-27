@@ -2,7 +2,7 @@
 """The mix-and-match board — every section of a winner, its format versions and
 its Distinct Six side by side, from real frames.
 
-the owner, 2026-10-08: "we'll have all the frames and sections. We can actually see
+owner, 2026-10-08: "we'll have all the frames and sections. We can actually see
 how it would mix and match … I want to actually visually see this now."
 
     python3 components/distinct-six/board.py <winner run> [--formats <run> …] [--six <versions.json>] --out <file.html>
@@ -29,28 +29,6 @@ sys.argv_backup = sys.argv
 sys.argv = ["x"]
 sys.path.insert(0, str(HERE))
 import run as R  # noqa: E402
-
-
-def _shared_keys():
-    """The repo's one key loader (components/keys/loader.py): the environment,
-    then the repo's .env, then — quietly — the owner's personal fallbacks."""
-    import importlib.util
-    import sys as _sys
-    from pathlib import Path as _Path
-    mod = _sys.modules.get("shared_keys_loader")
-    if mod is None:
-        path = next(p / "components" / "keys" / "loader.py"
-                    for p in _Path(__file__).resolve().parents
-                    if (p / "components" / "keys" / "loader.py").is_file())
-        spec = importlib.util.spec_from_file_location("shared_keys_loader", str(path))
-        mod = importlib.util.module_from_spec(spec)
-        _sys.modules["shared_keys_loader"] = mod
-        try:
-            spec.loader.exec_module(mod)
-        except Exception:
-            _sys.modules.pop("shared_keys_loader", None)
-            raise
-    return mod
 sys.argv = sys.argv_backup
 
 C = R.COLOR
@@ -59,7 +37,7 @@ ORDER = [x["id"] for x in R.SECTIONS]
 e = html.escape
 
 
-CHAIN_RUNS = ROOT / "tools" / "video-teardown" / "machine" / "runs"
+CHAIN_RUNS = ROOT / "components" / "video-teardown" / "machine" / "runs"
 _TOKEN = [None]
 
 
@@ -76,7 +54,7 @@ def video_of(run, meta):
     """Where to read a run's video: its own copy, the chain's working copy, the
     recorded path — or, for a Drive file this Mac hasn't downloaded, the cloud
     (Drive API link, read by ffmpeg a few seconds at a time; nothing downloaded)."""
-    # Drive first (the owner, 2026-10-08: "we should always be pulling from the Google
+    # Drive first (owner, 2026-10-08: "we should always be pulling from the Google
     # Drive because that's literally going to have the most up-to-date content").
     rec = Path(meta.get("video") or "")
     try:
@@ -91,9 +69,10 @@ def video_of(run, meta):
         return None, []
     if _TOKEN[0] is None:
         sys.path.insert(0, str(ROOT / "components" / "gdrive-creator"))
+        import ds_keys
         from gdrive_creator import engine as G
         import google.auth.transport.requests as TR
-        G.configure(key_lookup=_shared_keys().lookup)
+        G.configure(key_lookup=ds_keys.key)
         c = G._creds()
         c.refresh(TR.Request())
         _TOKEN[0] = c.token
@@ -241,7 +220,7 @@ def main():
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
     with tempfile.TemporaryDirectory() as tmp:
-        w = source(a.winner, "Winner · " + Path(a.winner).name.replace("top1-brand-a-01-", ""), tmp)
+        w = source(a.winner, "Winner · " + Path(a.winner).name.replace("top1-brand_b-01-", ""), tmp)
         fs = [source(r, f"Format {i} · {Path(r).name.split('-x-')[-1]}", tmp) for i, r in enumerate(a.formats, 1)]
     vs = six(a.six) if a.six else []
     page(w, fs, vs, a.out)

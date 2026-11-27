@@ -1,0 +1,17 @@
+{
+  "id": "micro-drama",
+  "name": "Micro drama",
+  "what": "A 10-15 s scene with a conflict that turns on the product: a person is caught, judged, rejected or surprised, and the product flips it. Reads like a clip from a vertical drama series, not an ad.",
+  "seconds": 12,
+  "beats": [
+    {"id": "hook",   "at": [0, 2.5],  "does": "the conflict lands in the first frame: an accusation, a rejection, a reveal, a slap of a line"},
+    {"id": "stakes", "at": [2.5, 6],  "does": "why it hurts: the problem the product solves, shown on the person, said in the customer's own words"},
+    {"id": "turn",   "at": [6, 10],   "does": "the product enters and is used on camera; the other person reacts"},
+    {"id": "payoff", "at": [10, 12],  "does": "the flip: the result, the other person's new reaction, one line that lands the claim"}
+  ],
+  "cast": {"min": 2, "max": 3, "roles": ["hero (the avatar, has the problem)", "judge (reacts, sets the stakes)", "third (optional: rival, friend, family)"]},
+  "camera": "phone-shot drama look: handheld two-shot, punch-ins on reactions, one close-up on the product in use",
+  "sound": "spoken lines in the take's own voices; a tense sting under the hook",
+  "variation_axes": ["hook line and on-screen hook text", "who judges whom (relationship)", "setting", "the problem shown", "cast from the kit"],
+  "hooks_per_concept": 5
+}

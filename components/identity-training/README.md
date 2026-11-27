@@ -6,4 +6,3 @@ an engine · one command per brand asset · one lora.json out, weights on fal
 
 Owner: the developer (ruled 2026-09-01)
 
-## How to use it → (team dashboard)

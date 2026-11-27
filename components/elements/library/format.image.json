@@ -1,7 +1,7 @@
 {
  "element": "format",
  "asset": "image",
- "source": "tools/image-production/static/format-bank.json",
+ "source": "components/image-production/static/format-bank.json",
  "enforced_by": null,
  "note": null,
  "rows": [
@@ -16,7 +16,7 @@
    "examples": "https://drive.google.com/file/d/1dh5bcyJtexV675SQFxupYytQQd9X0gty/view",
    "evidence": "duplicated ×4 in the sample, across two different copy blocks",
    "approved": false,
-   "source": "tools/image-production/static/format-bank.json",
+   "source": "components/image-production/static/format-bank.json",
    "extra": {
     "provenance": "duplicated",
     "carries": [
@@ -42,7 +42,7 @@
    "examples": "https://drive.google.com/file/d/1VtT7oCLRuBYAW9wDQ2mkp3-37Iq78EqG/view",
    "evidence": "duplicated ×4 in the sample",
    "approved": false,
-   "source": "tools/image-production/static/format-bank.json",
+   "source": "components/image-production/static/format-bank.json",
    "extra": {
     "provenance": "duplicated",
     "carries": [
@@ -68,7 +68,7 @@
    "examples": "https://drive.google.com/file/d/1vLzT3UbhlzvDz9R1eVAog8oTU4g0_M0d/view",
    "evidence": "duplicated ×6 in the sample — the most repeated treatment overall, though it is an offer shape not an argument shape",
    "approved": false,
-   "source": "tools/image-production/static/format-bank.json",
+   "source": "components/image-production/static/format-bank.json",
    "extra": {
     "provenance": "duplicated",
     "carries": [
@@ -91,7 +91,7 @@
    "examples": "https://drive.google.com/file/d/119QUO4WOKzxux_BWQ2GHtTgOqONni9_g/view",
    "evidence": "duplicated ×3 in the Froya science block",
    "approved": false,
-   "source": "tools/image-production/static/format-bank.json",
+   "source": "components/image-production/static/format-bank.json",
    "extra": {
     "provenance": "duplicated",
     "carries": [
@@ -114,9 +114,9 @@
    "state": null,
    "signed": null,
    "examples": "https://drive.google.com/file/d/1uMq-BVW7W7mtXhNuVR7otMJ6McRKIXFD/view",
-   "evidence": "duplicated across BOTH advertisers — 4+ in the Froya science block, plus before/after use in Competitor-A",
+   "evidence": "duplicated across BOTH advertisers — 4+ in the Froya science block, plus before/after use in Brand C",
    "approved": false,
-   "source": "tools/image-production/static/format-bank.json",
+   "source": "components/image-production/static/format-bank.json",
    "extra": {
     "provenance": "duplicated",
     "carries": [
@@ -139,7 +139,7 @@
    "examples": "https://drive.google.com/file/d/1isCLC0eJJEIGTtzwrYcmeUKj51FxncD3/view",
    "evidence": "duplicated ×2 in the sample",
    "approved": false,
-   "source": "tools/image-production/static/format-bank.json",
+   "source": "components/image-production/static/format-bank.json",
    "extra": {
     "provenance": "duplicated",
     "carries": [
@@ -164,7 +164,7 @@
    "examples": "https://drive.google.com/file/d/1zBsjNnS84PqWXYIclgOHVnwL4nfPfzKP/view",
    "evidence": "duplicated ×3 in the sample",
    "approved": false,
-   "source": "tools/image-production/static/format-bank.json",
+   "source": "components/image-production/static/format-bank.json",
    "extra": {
     "provenance": "duplicated",
     "carries": [
@@ -189,7 +189,7 @@
    "examples": "https://drive.google.com/file/d/1cxkN8g60VzMM7n6GFs7u5zSjCIho4sQB/view",
    "evidence": "duplicated ×2, plus near-relatives (histology grid, molecular render) in the same block",
    "approved": false,
-   "source": "tools/image-production/static/format-bank.json",
+   "source": "components/image-production/static/format-bank.json",
    "extra": {
     "provenance": "duplicated",
     "carries": [
@@ -214,7 +214,7 @@
    "examples": "https://drive.google.com/file/d/1X9MD5VTc4BpU_HUfD4qtSyfhU7IKqI2u/view",
    "evidence": "duplicated ×2 in the sample",
    "approved": false,
-   "source": "tools/image-production/static/format-bank.json",
+   "source": "components/image-production/static/format-bank.json",
    "extra": {
     "provenance": "duplicated",
     "carries": [
@@ -239,7 +239,7 @@
    "examples": "https://drive.google.com/file/d/1Q9ZbDwmml58F3eDtlEMRBpw3WCal_Bgr/view",
    "evidence": "duplicated ×2 in the Froya science block",
    "approved": false,
-   "source": "tools/image-production/static/format-bank.json",
+   "source": "components/image-production/static/format-bank.json",
    "extra": {
     "provenance": "duplicated",
     "carries": [
@@ -262,7 +262,7 @@
    "examples": "https://drive.google.com/file/d/1wnBWZEkXLWAq7DGc7vffJkujRhjtysQ9/view",
    "evidence": "duplicated ×2 in the sample",
    "approved": false,
-   "source": "tools/image-production/static/format-bank.json",
+   "source": "components/image-production/static/format-bank.json",
    "extra": {
     "provenance": "duplicated",
     "carries": [
@@ -287,7 +287,7 @@
    "examples": "https://drive.google.com/file/d/1eXU15S1aw81Dn0SjHokWzkOBiC_t7TSA/view",
    "evidence": "duplicated ×2 in the sample",
    "approved": false,
-   "source": "tools/image-production/static/format-bank.json",
+   "source": "components/image-production/static/format-bank.json",
    "extra": {
     "provenance": "duplicated",
     "carries": [
@@ -299,7 +299,7 @@
     "usvsthem",
     "faceoff"
    ],
-   "note": "Decision 8: `faceoff` (10 live BRAND-A ads) maps here — a split of every other fix against ours is the same shape as the shelf against the one product."
+   "note": "Decision 8: `faceoff` (10 live Brand A ads) maps here — a split of every other fix against ours is the same shape as the shelf against the one product."
   },
   {
    "id": "annotated-face",
@@ -312,7 +312,7 @@
    "examples": "https://drive.google.com/file/d/1rxJvd1yX56YxBrjlVqkiN-1xUB7jubMD/view",
    "evidence": "observed ×2 in the sample",
    "approved": false,
-   "source": "tools/image-production/static/format-bank.json",
+   "source": "components/image-production/static/format-bank.json",
    "extra": {
     "provenance": "observed",
     "carries": [
@@ -336,7 +336,7 @@
    "examples": "https://drive.google.com/file/d/1W34xyC8JW3Vn5SkMaKHAwYGI79vH4iGI/view",
    "evidence": "observed ×2",
    "approved": false,
-   "source": "tools/image-production/static/format-bank.json",
+   "source": "components/image-production/static/format-bank.json",
    "extra": {
     "provenance": "observed",
     "carries": [
@@ -360,7 +360,7 @@
    "examples": "https://drive.google.com/file/d/1dithP4vEqcB34VwxGuQpoPWhxIhJj98q/view",
    "evidence": "observed ×1",
    "approved": false,
-   "source": "tools/image-production/static/format-bank.json",
+   "source": "components/image-production/static/format-bank.json",
    "extra": {
     "provenance": "observed",
     "carries": [
@@ -383,7 +383,7 @@
    "examples": "https://drive.google.com/file/d/117SQSPbZEQaC5vHdoR3gO0Nfb9RbikBG/view",
    "evidence": "observed ×1, with a big-number-plus-model variant in a second block",
    "approved": false,
-   "source": "tools/image-production/static/format-bank.json",
+   "source": "components/image-production/static/format-bank.json",
    "extra": {
     "provenance": "observed",
     "carries": [
@@ -406,7 +406,7 @@
    "examples": "https://drive.google.com/file/d/1pcfZr8mZc2McTvGTydfZULK_yu3lV0JD/view",
    "evidence": "observed ×2",
    "approved": false,
-   "source": "tools/image-production/static/format-bank.json",
+   "source": "components/image-production/static/format-bank.json",
    "extra": {
     "provenance": "observed",
     "carries": [
@@ -431,7 +431,7 @@
    "examples": "https://drive.google.com/file/d/1kQNzsuWq_eRWwzhv8jhB2CbduYSWJMpg/view",
    "evidence": "observed ×1",
    "approved": false,
-   "source": "tools/image-production/static/format-bank.json",
+   "source": "components/image-production/static/format-bank.json",
    "extra": {
     "provenance": "observed",
     "carries": [
@@ -454,7 +454,7 @@
    "examples": "https://drive.google.com/file/d/1e53PjsnBVW8vuhhx7uWFFP2f1BYzGsn5/view",
    "evidence": "observed ×1",
    "approved": false,
-   "source": "tools/image-production/static/format-bank.json",
+   "source": "components/image-production/static/format-bank.json",
    "extra": {
     "provenance": "observed",
     "carries": [
@@ -478,7 +478,7 @@
    "examples": "https://drive.google.com/file/d/1VmaNBhWapEyuDvtc_uBIox4Ml6avXsOz/view",
    "evidence": "observed ×1, but it opens the most-duplicated Froya block",
    "approved": false,
-   "source": "tools/image-production/static/format-bank.json",
+   "source": "components/image-production/static/format-bank.json",
    "extra": {
     "provenance": "observed",
     "carries": [
@@ -501,7 +501,7 @@
    "examples": "https://drive.google.com/file/d/13Feoh5UKiukOP4Q5ScNNiIhPrqhiB2_B/view",
    "evidence": "observed ×1",
    "approved": false,
-   "source": "tools/image-production/static/format-bank.json",
+   "source": "components/image-production/static/format-bank.json",
    "extra": {
     "provenance": "observed",
     "carries": [
@@ -525,7 +525,7 @@
    "examples": "https://drive.google.com/file/d/1AXyCk_nO1DCAmkrgVztt_FDbk2VvsoAF/view",
    "evidence": "observed ×2 in the Froya science block",
    "approved": false,
-   "source": "tools/image-production/static/format-bank.json",
+   "source": "components/image-production/static/format-bank.json",
    "extra": {
     "provenance": "observed",
     "carries": [
@@ -549,7 +549,7 @@
    "examples": "https://drive.google.com/file/d/1D55-oVyH2U-MqmQRYLif1tO_zoZ8ml_8/view",
    "evidence": "observed ×1",
    "approved": false,
-   "source": "tools/image-production/static/format-bank.json",
+   "source": "components/image-production/static/format-bank.json",
    "extra": {
     "provenance": "observed",
     "carries": [
@@ -572,7 +572,7 @@
    "examples": "https://drive.google.com/file/d/1vIdaYo7FAtZsFSQv9bVMgTSWICUEy_T7/view",
    "evidence": "observed ×3 in the sample",
    "approved": false,
-   "source": "tools/image-production/static/format-bank.json",
+   "source": "components/image-production/static/format-bank.json",
    "extra": {
     "provenance": "observed",
     "carries": [
@@ -595,7 +595,7 @@
    "examples": "https://drive.google.com/file/d/1mNni9zb5vriurSfaywaQKN3MYkMDlGwR/view",
    "evidence": "duplicated ×8 in the Froya clearance block — the single most repeated shape in that advertiser's set",
    "approved": false,
-   "source": "tools/image-production/static/format-bank.json",
+   "source": "components/image-production/static/format-bank.json",
    "extra": {
     "provenance": "duplicated",
     "carries": [
@@ -614,8 +614,8 @@
    "why_it_works": "It borrows the shape of what she already scrolls; the ad is read as a person before the defence goes up.",
    "status": "approved",
    "state": null,
-   "signed": "owner 2026-09-25 (approved as recommended)",
-   "examples": "tools/image-production/static/PIPELINE.md (the band ruling: 'a flat bar top and bottom announces a native-looking post as an advertisement'); the owner 2026-09-19: 'a native-looking image on Facebook'",
+   "signed": "the owner 2026-09-25 (approved as recommended)",
+   "examples": "components/image-production/static/PIPELINE.md (the band ruling: 'a flat bar top and bottom announces a native-looking post as an advertisement'); the owner 2026-09-19: 'a native-looking image on Facebook'",
    "evidence": "Named by the owner 2026-09-19; defined 2026-09-28 from the pipeline's native-post rule and the bare-photo row.",
    "approved": true,
    "source": "components/elements/additions.json",
@@ -630,7 +630,7 @@
    "why_it_works": null,
    "status": "draft",
    "state": null,
-   "signed": "owner 2026-09-23",
+   "signed": "the owner 2026-09-23",
    "examples": null,
    "evidence": "the owner, 2026-09-23, on six ads stage 2b answered none-fits for: \"I don't care what the formats are, just name them dude.\" The name and the definition are the labeller's own proposal, accepted unreviewed — signed into use, not signed as wording.",
    "approved": false,
@@ -646,7 +646,7 @@
    "why_it_works": null,
    "status": "draft",
    "state": null,
-   "signed": "owner 2026-09-23",
+   "signed": "the owner 2026-09-23",
    "examples": null,
    "evidence": "the owner, 2026-09-23, on six ads stage 2b answered none-fits for: \"I don't care what the formats are, just name them dude.\" The name and the definition are the labeller's own proposal, accepted unreviewed — signed into use, not signed as wording.",
    "approved": false,
@@ -662,7 +662,7 @@
    "why_it_works": null,
    "status": "draft",
    "state": null,
-   "signed": "owner 2026-09-23",
+   "signed": "the owner 2026-09-23",
    "examples": null,
    "evidence": "the owner, 2026-09-23, on six ads stage 2b answered none-fits for: \"I don't care what the formats are, just name them dude.\" The name and the definition are the labeller's own proposal, accepted unreviewed — signed into use, not signed as wording.",
    "approved": false,
@@ -678,7 +678,7 @@
    "why_it_works": null,
    "status": "draft",
    "state": null,
-   "signed": "owner 2026-09-23",
+   "signed": "the owner 2026-09-23",
    "examples": null,
    "evidence": "the owner, 2026-09-23, on six ads stage 2b answered none-fits for: \"I don't care what the formats are, just name them dude.\" The name and the definition are the labeller's own proposal, accepted unreviewed — signed into use, not signed as wording.",
    "approved": false,
@@ -694,7 +694,7 @@
    "why_it_works": null,
    "status": "draft",
    "state": null,
-   "signed": "owner 2026-09-23",
+   "signed": "the owner 2026-09-23",
    "examples": null,
    "evidence": "the owner, 2026-09-23, on six ads stage 2b answered none-fits for: \"I don't care what the formats are, just name them dude.\" The name and the definition are the labeller's own proposal, accepted unreviewed — signed into use, not signed as wording.",
    "approved": false,
@@ -710,7 +710,7 @@
    "why_it_works": null,
    "status": "draft",
    "state": null,
-   "signed": "owner 2026-09-23",
+   "signed": "the owner 2026-09-23",
    "examples": null,
    "evidence": "the owner, 2026-09-23, on six ads stage 2b answered none-fits for: \"I don't care what the formats are, just name them dude.\" The name and the definition are the labeller's own proposal, accepted unreviewed — signed into use, not signed as wording.",
    "approved": false,
@@ -726,7 +726,7 @@
    "why_it_works": null,
    "status": "draft",
    "state": null,
-   "signed": "owner 2026-09-23",
+   "signed": "the owner 2026-09-23",
    "examples": null,
    "evidence": "the owner, 2026-09-23: \"I don't care what the formats are, just name them dude.\" The seventh row of that batch — same ruling, same day. Name and definition are the labeller's own proposal, accepted unreviewed.",
    "approved": false,
@@ -744,7 +744,7 @@
    "why_it_works": null,
    "status": "draft",
    "state": null,
-   "signed": "owner 2026-09-23",
+   "signed": "the owner 2026-09-23",
    "examples": null,
    "evidence": "the owner, 2026-09-23: \"I don't care what the formats are, just name them dude.\" Stage 2b answered none-fits on eight more ads and proposed a row each; SEVEN of them described the same thing in different words (native-content-photo, bare-portrait, raw-native-photo, plain-photograph, bare-selfie, bare-photograph, plain-portrait), so they are ONE row — seven synonyms would make the format field useless for slicing a report, which is the only reason the field exists.",
    "approved": false,
@@ -762,7 +762,7 @@
    "why_it_works": null,
    "status": "draft",
    "state": null,
-   "signed": "owner 2026-09-23",
+   "signed": "the owner 2026-09-23",
    "examples": null,
    "evidence": "the owner, 2026-09-23: \"just name them dude.\" The labeller's own proposal for p161, accepted unreviewed.",
    "approved": false,
@@ -780,14 +780,14 @@
    "why_it_works": "The most-aware buyer knows the product; the only thing between him and the click is the fear of another purchase down the drain, so the guarantee leads.",
    "status": "approved",
    "state": null,
-   "signed": "owner 2026-09-25 · Cleanup Plan decision 8",
-   "examples": "runs/copywriter/brand-a/brand-a-run-01/copy.json › formats.apology; BRAND-A batch 260905a.03-apology-omar",
-   "evidence": "15 live BRAND-A ads (decision 8)",
+   "signed": "the owner 2026-09-25 · Cleanup Plan decision 8",
+   "examples": "runs/copywriter/Brand A/Brand A-run-01/copy.json › formats.apology; Brand A batch 260905a.03-apology-omar",
+   "evidence": "15 live Brand A ads (decision 8)",
    "approved": true,
    "source": "components/elements/additions.json",
    "extra": {},
    "aliases": [],
-   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 BRAND-A static formats added with hyphenated ids; the old squashed spelling is an alias."
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 Brand A static formats added with hyphenated ids; the old squashed spelling is an alias."
   },
   {
    "id": "distressed-poster",
@@ -796,16 +796,16 @@
    "why_it_works": "The poster is already the list; the picture carries the whole history of failure so the copy can turn fast to the one reason.",
    "status": "approved",
    "state": null,
-   "signed": "owner 2026-09-25 · Cleanup Plan decision 8",
-   "examples": "runs/copywriter/brand-a/brand-a-run-01/copy.json › formats.distressedposter; BRAND-A batch 260905a.02-poster-brett",
-   "evidence": "18 live BRAND-A ads (decision 8)",
+   "signed": "the owner 2026-09-25 · Cleanup Plan decision 8",
+   "examples": "runs/copywriter/Brand A/Brand A-run-01/copy.json › formats.distressedposter; Brand A batch 260905a.02-poster-brett",
+   "evidence": "18 live Brand A ads (decision 8)",
    "approved": true,
    "source": "components/elements/additions.json",
    "extra": {},
    "aliases": [
     "distressedposter"
    ],
-   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 BRAND-A static formats added with hyphenated ids; the old squashed spelling is an alias."
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 Brand A static formats added with hyphenated ids; the old squashed spelling is an alias."
   },
   {
    "id": "portrait-void",
@@ -814,16 +814,16 @@
    "why_it_works": "The picture names the man and his problem; nothing competes with the line.",
    "status": "approved",
    "state": null,
-   "signed": "owner 2026-09-25 · Cleanup Plan decision 8",
-   "examples": "runs/copywriter/brand-a/brand-a-run-01/copy.json › formats.portraitvoid; BRAND-A batch 260905a.01-void-beto",
-   "evidence": "12 live BRAND-A ads (decision 8)",
+   "signed": "the owner 2026-09-25 · Cleanup Plan decision 8",
+   "examples": "runs/copywriter/Brand A/Brand A-run-01/copy.json › formats.portraitvoid; Brand A batch 260905a.01-void-beto",
+   "evidence": "12 live Brand A ads (decision 8)",
    "approved": true,
    "source": "components/elements/additions.json",
    "extra": {},
    "aliases": [
     "portraitvoid"
    ],
-   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 BRAND-A static formats added with hyphenated ids; the old squashed spelling is an alias."
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 Brand A static formats added with hyphenated ids; the old squashed spelling is an alias."
   },
   {
    "id": "two-panel",
@@ -832,16 +832,16 @@
    "why_it_works": "It is before-and-after without a claim in words, so it reads as a demonstration rather than a promise.",
    "status": "approved",
    "state": null,
-   "signed": "owner 2026-09-25 · Cleanup Plan decision 8",
-   "examples": "runs/copywriter/brand-a/brand-a-run-01/copy.json › formats.twopanel",
-   "evidence": "6 live BRAND-A ads (decision 8)",
+   "signed": "the owner 2026-09-25 · Cleanup Plan decision 8",
+   "examples": "runs/copywriter/Brand A/Brand A-run-01/copy.json › formats.twopanel",
+   "evidence": "6 live Brand A ads (decision 8)",
    "approved": true,
    "source": "components/elements/additions.json",
    "extra": {},
    "aliases": [
     "twopanel"
    ],
-   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 BRAND-A static formats added with hyphenated ids; the old squashed spelling is an alias."
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 Brand A static formats added with hyphenated ids; the old squashed spelling is an alias."
   },
   {
    "id": "checklist",
@@ -850,14 +850,14 @@
    "why_it_works": "He has been changing the wrong variable for years; the list makes that point before a word of copy does.",
    "status": "approved",
    "state": null,
-   "signed": "owner 2026-09-25 · Cleanup Plan decision 8",
-   "examples": "runs/copywriter/brand-a/brand-a-run-01/copy.json › formats.checklist",
-   "evidence": "6 live BRAND-A ads (decision 8)",
+   "signed": "the owner 2026-09-25 · Cleanup Plan decision 8",
+   "examples": "runs/copywriter/Brand A/Brand A-run-01/copy.json › formats.checklist",
+   "evidence": "6 live Brand A ads (decision 8)",
    "approved": true,
    "source": "components/elements/additions.json",
    "extra": {},
    "aliases": [],
-   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 BRAND-A static formats added with hyphenated ids; the old squashed spelling is an alias."
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 Brand A static formats added with hyphenated ids; the old squashed spelling is an alias."
   },
   {
    "id": "mirror-selfie",
@@ -866,16 +866,16 @@
    "why_it_works": "The most personal shape in the set — first person, no brand voice, a caption not an ad.",
    "status": "approved",
    "state": null,
-   "signed": "owner 2026-09-25 · Cleanup Plan decision 8",
-   "examples": "runs/copywriter/brand-a/brand-a-run-01/copy.json › formats.mirrorselfie",
-   "evidence": "3 live BRAND-A ads (decision 8). Not the same as style/image `mirror-selfie` (a look); this is the shape of the ad.",
+   "signed": "the owner 2026-09-25 · Cleanup Plan decision 8",
+   "examples": "runs/copywriter/Brand A/Brand A-run-01/copy.json › formats.mirrorselfie",
+   "evidence": "3 live Brand A ads (decision 8). Not the same as style/image `mirror-selfie` (a look); this is the shape of the ad.",
    "approved": true,
    "source": "components/elements/additions.json",
    "extra": {},
    "aliases": [
     "mirrorselfie"
    ],
-   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 BRAND-A static formats added with hyphenated ids; the old squashed spelling is an alias."
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 Brand A static formats added with hyphenated ids; the old squashed spelling is an alias."
   },
   {
    "id": "product-void",
@@ -884,9 +884,9 @@
    "why_it_works": "The only shape with nobody in it, so the number in the picture opens the copy and the copy carries the story.",
    "status": "approved",
    "state": null,
-   "signed": "owner 2026-09-25 · Cleanup Plan decision 8",
-   "examples": "runs/copywriter/brand-a/brand-a-run-01/copy.json › formats.productvoid",
-   "evidence": "0 live BRAND-A ads (decision 8). `illustrated` maps here — an illustrated product-only ad is this shape in a drawn style; illustrated is a style, not a format.",
+   "signed": "the owner 2026-09-25 · Cleanup Plan decision 8",
+   "examples": "runs/copywriter/Brand A/Brand A-run-01/copy.json › formats.productvoid",
+   "evidence": "0 live Brand A ads (decision 8). `illustrated` maps here — an illustrated product-only ad is this shape in a drawn style; illustrated is a style, not a format.",
    "approved": true,
    "source": "components/elements/additions.json",
    "extra": {},
@@ -894,7 +894,7 @@
     "productvoid",
     "illustrated"
    ],
-   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 BRAND-A static formats added with hyphenated ids; the old squashed spelling is an alias."
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 Brand A static formats added with hyphenated ids; the old squashed spelling is an alias."
   },
   {
    "id": "caption-box",
@@ -903,16 +903,16 @@
    "why_it_works": "The least ad-shaped format in the set; if it reads like marketing it is dead.",
    "status": "approved",
    "state": null,
-   "signed": "owner 2026-09-25 · Cleanup Plan decision 8",
-   "examples": "runs/copywriter/brand-a/brand-a-run-01/copy.json › formats.captionbox",
-   "evidence": "2 live BRAND-A ads (decision 8)",
+   "signed": "the owner 2026-09-25 · Cleanup Plan decision 8",
+   "examples": "runs/copywriter/Brand A/Brand A-run-01/copy.json › formats.captionbox",
+   "evidence": "2 live Brand A ads (decision 8)",
    "approved": true,
    "source": "components/elements/additions.json",
    "extra": {},
    "aliases": [
     "captionbox"
    ],
-   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 BRAND-A static formats added with hyphenated ids; the old squashed spelling is an alias."
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 Brand A static formats added with hyphenated ids; the old squashed spelling is an alias."
   },
   {
    "id": "comment-reply",
@@ -921,16 +921,16 @@
    "why_it_works": "The comment does the hooking, so the answer can be direct and one idea long without selling over the top of it.",
    "status": "approved",
    "state": null,
-   "signed": "owner 2026-09-25 · Cleanup Plan decision 8",
-   "examples": "runs/copywriter/brand-a/brand-a-run-01/copy.json › formats.commentreply",
-   "evidence": "2 live BRAND-A ads (decision 8)",
+   "signed": "the owner 2026-09-25 · Cleanup Plan decision 8",
+   "examples": "runs/copywriter/Brand A/Brand A-run-01/copy.json › formats.commentreply",
+   "evidence": "2 live Brand A ads (decision 8)",
    "approved": true,
    "source": "components/elements/additions.json",
    "extra": {},
    "aliases": [
     "commentreply"
    ],
-   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 BRAND-A static formats added with hyphenated ids; the old squashed spelling is an alias."
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 Brand A static formats added with hyphenated ids; the old squashed spelling is an alias."
   },
   {
    "id": "routine-label",
@@ -939,16 +939,16 @@
    "why_it_works": "It sells the habit, not the problem — its job is to make one minute sound like nothing.",
    "status": "approved",
    "state": null,
-   "signed": "owner 2026-09-25 · Cleanup Plan decision 8",
-   "examples": "runs/copywriter/brand-a/brand-a-run-01/copy.json › formats.routinelabel",
-   "evidence": "1 live BRAND-A ad (decision 8)",
+   "signed": "the owner 2026-09-25 · Cleanup Plan decision 8",
+   "examples": "runs/copywriter/Brand A/Brand A-run-01/copy.json › formats.routinelabel",
+   "evidence": "1 live Brand A ad (decision 8)",
    "approved": true,
    "source": "components/elements/additions.json",
    "extra": {},
    "aliases": [
     "routinelabel"
    ],
-   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 BRAND-A static formats added with hyphenated ids; the old squashed spelling is an alias."
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 Brand A static formats added with hyphenated ids; the old squashed spelling is an alias."
   },
   {
    "id": "macro-texture",
@@ -957,16 +957,16 @@
    "why_it_works": "Texture at that scale is a problem the reader recognises on sight, before any claim is made.",
    "status": "approved",
    "state": null,
-   "signed": "owner 2026-09-25 · Cleanup Plan decision 8",
-   "examples": "brief p004 ad names, e.g. brand-a-flex-static-ai-omar-fedupking-folliculitis-razornotproblem-behindyou-macrotexture-p004-9x16-260913a-a01 (tools/image-teardown/briefs.json)",
-   "evidence": "0 live BRAND-A ads (decision 8). Meaning read off the p004 ad names — p004's brief was never written down, so the definition is the machine's; review pending.",
+   "signed": "the owner 2026-09-25 · Cleanup Plan decision 8",
+   "examples": "brief p004 ad names, e.g. Brand A-flex-static-ai-omar-fedupking-folliculitis-razornotproblem-behindyou-macrotexture-p004-9x16-260913a-a01 (components/image-teardown/briefs.json)",
+   "evidence": "0 live Brand A ads (decision 8). Meaning read off the p004 ad names — p004's brief was never written down, so the definition is the machine's; review pending.",
    "approved": true,
    "source": "components/elements/additions.json",
    "extra": {},
    "aliases": [
     "macrotexture"
    ],
-   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 BRAND-A static formats added with hyphenated ids; the old squashed spelling is an alias. defined by the machine, review pending"
+   "note": "Decision 8 (Cleanup Plan, 25 Sep): 11 Brand A static formats added with hyphenated ids; the old squashed spelling is an alias. defined by the machine, review pending"
   }
  ],
  "dropped": {

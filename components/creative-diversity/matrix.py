@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build the creative-diversity matrix from a tagged pull. Never calls Meta.
 
-    python3 components/creative-diversity/matrix.py brand-a [date]
+    python3 components/creative-diversity/matrix.py brand_b [date]
 
 Reads runs/creative-diversity/<brand>/<date>/{assets,ads,tags}.json and writes:
   matrix.json                                   the whole read, for the page
@@ -51,6 +51,15 @@ def avatar_of(brand, sub):
     for a in av:
         if sub == a["id"] or sub in (a.get("sub_avatars") or []):
             return a["id"]
+    try:                                    # a profile id or another spelling of the same person lands on the roster's own name
+        sys.path.append(str(ROOT / "components" / "naming"))
+        import people
+        a0, s0, _ = people.folders(brand, sub)
+        for a in av:
+            if a0 == a["id"] or s0 and s0 in (a.get("sub_avatars") or []):
+                return a["id"]
+    except Exception:                       # noqa: BLE001  no door, no match
+        pass
     return "unclear"
 
 
@@ -63,7 +72,7 @@ def build(brand, day=None):
     ads = json.loads((run / "ads.json").read_text())["ads"]
     tags = json.loads((run / "tags.json").read_text())["tags"]
     dims = json.loads((HERE / "dimensions.json").read_text())
-    offer = json.loads((ROOT / "brands" / brand / "strategy" / "offer-page.json").read_text())
+    offer = dims["fixed"]["offer"][brand]
     settings = json.loads((ROOT / "brands" / brand / "strategy" / "settings.json").read_text())["settings"]
     av = json.loads((ROOT / "brands" / brand / "core-avatars" / "avatars.json").read_text())["avatars"]
 

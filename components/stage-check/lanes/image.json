@@ -97,7 +97,7 @@
   {
    "id": "number",
    "name": "the brief number",
-   "proves": "tools/image-teardown/briefs.json",
+   "proves": "components/image-teardown/briefs.json",
    "checks": [
     "brief_number",
     "brief_links"

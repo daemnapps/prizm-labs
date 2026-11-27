@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""FIGMA BRIEF — what the designer actually gets (RULED 2026-09-09, the owner,
+"""FIGMA BRIEF — what the designer actually gets (RULED 2026-09-09, owner,
 superseding the draft-building step: "the actual designing of what you're
 doing looks like dog shit... it's more about just mapping out that month. We
 can still put the copy in Figma and pull in a reference email we've already
@@ -503,7 +503,7 @@ def card_text(run_dir, brand):
     src = source_email(brand, row)
     sid = label.split("--")[0]
     variant = label.split("--")[1] if "--" in label else ""
-    # the tag is the SEND DATE, never the slot's ordinal (the owner, 2026-09-09:
+    # the tag is the SEND DATE, never the slot's ordinal (owner, 2026-09-09:
     # "i told you to only make emails for september 14th onwards" - SEP-01 read
     # as the 1st when it is the first send, on the 14th)
     date = row.get("date", "")

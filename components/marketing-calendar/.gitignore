@@ -4,7 +4,7 @@
 # and a pointer to wherever the month was written.
 runs/*
 !runs/.gitkeep
-# EXCEPT a month's plan and review (EP-2 (month in the repo), the team "save
+# EXCEPT a month's plan and review (EP-2 (month in the repo), the designer "save
 # the month in the repo", 2026-09-29): the mini reads them after a pull.
 !runs/*/
 runs/*/*

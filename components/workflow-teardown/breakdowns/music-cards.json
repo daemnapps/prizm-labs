@@ -1,0 +1,101 @@
+{
+ "id": "music-cards",
+ "name": "Music Cards",
+ "kind": "video",
+ "makes": "A 20-120 s vertical cartoon greeting with an original song about one person, ending on the occasion's moment.",
+ "source": [
+  "music-cards/SKILL.md",
+  "commands/music-cards.md",
+  "music-cards/references/axes.md",
+  "music-cards/references/styles.md",
+  "music-cards/scripts/clip.py.md"
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "name": "Song (lyrics + one audio call)",
+   "model": "elevenlabs_music_v2_5",
+   "cheap": "none cheaper listed; keep"
+  },
+  {
+   "n": 2,
+   "name": "Listen (transcribe the song)",
+   "model": "none",
+   "cheap": "Whisper local, free"
+  },
+  {
+   "n": 3,
+   "name": "Film idea and story map",
+   "model": "none",
+   "cheap": "Claude, free"
+  },
+  {
+   "n": 4,
+   "name": "Style master + sheets",
+   "model": "seedream_5_5",
+   "cheap": "seedream_5_0_flash 2k (0.5)"
+  },
+  {
+   "n": 5,
+   "name": "Clips",
+   "model": "minimax_h3",
+   "cheap": "wan3_0 480p (7.5 per 10 s)"
+  },
+  {
+   "n": 6,
+   "name": "Assemble and captions",
+   "model": "none",
+   "cheap": "ffmpeg local, free"
+  },
+  {
+   "n": 7,
+   "name": "Finish and register",
+   "model": "none",
+   "cheap": null
+  }
+ ],
+ "prompts": [
+  {
+   "label": "Song call",
+   "source": "music-cards/SKILL.md",
+   "text": "- `generate_audio_batch` with one item: `model` `elevenlabs_music_v2_5`, `lyrics` = the text of `lyrics.txt`,\n  `prompt` = the music in one line (genre, tempo, mood, the kind of voice): the picked music's module, or with `auto` what fits\n  the person and the occasion, `duration` = `length`. Wait with `jobs_wait`, then `fetch \"<result_url>\" song.mp3`."
+  },
+  {
+   "label": "Lyrics rules",
+   "source": "music-cards/references/styles.md",
+   "text": "- Write `lyrics.txt` in the language `sing` is written in (with no `sing`, the language the user writes in). The song is the\n  greeting itself, written in the card's tone: the chorus sings the person's name and the occasion's wish. Verse, chorus, verse,\n  the same chorus again (from 45 seconds: a short bridge with the wishes before the last chorus; from 75 seconds: a third verse\n  too, and the chorus a third time); short lines; about two sung words a second for `length` seconds."
+  },
+  {
+   "label": "Style line feature3d",
+   "source": "music-cards/references/styles.md",
+   "text": "**Style line:** 3D animated feature-film look: smooth, rounded stylised characters with large expressive eyes, warm golden light, rich warm colours with one or two strong accents, richly dressed real-scale sets with gently rounded forms."
+  },
+  {
+   "label": "Style block feature3d",
+   "source": "music-cards/references/styles.md",
+   "text": "**Style block:** \"3D animated feature-film look: smooth, rounded, stylised 3D characters with slightly oversized heads, large expressive eyes with big irises and bright catchlights, full expressive brows, small soft noses, soft rounded jaws, smooth skin with a gentle warm glow and rosy cheeks, hair sculpted in soft flowing clumps with fine strands, rounded hands with five fingers; age shows in soft sculpted wrinkles and grey hair. Clothes in real fabrics with soft folds: fine knit, cotton, corduroy, wool. Sets at real scale with slightly simplified, rounded forms and clean, finished surfaces. Rich, warm colour: one or two strong, saturated colours in the clothes and the set, against warm neutrals.\""
+  },
+  {
+   "label": "Video words feature3d",
+   "source": "music-cards/references/styles.md",
+   "text": "**Video words:** \"Fast, punchy feature-animation acting: quick head turns, sharp reactions, big readable poses, eyes and brows snap; hair and cloth whip and settle. Energetic camera: quick push-ins, short whip pans, handheld energy in tense moments, tracking shots that keep up with fast walkers. Warm light with a gentle rim, shallow depth of field.\""
+  },
+  {
+   "label": "Master rules",
+   "source": "music-cards/SKILL.md",
+   "text": "**The master first, alone** (`generate_image_batch`, one item). One image: the style block word for word, then the main place with HERO and one other character in\nit, both described in words with their outfits, ages as numbers. Attach the look's donor images when it has them, then the\nphoto of each uploaded person in it (HERO's first), and write for each: \"<NAME>'s face and hair come from the attached photo\n<n>, redrawn in this style; nothing else from it: not its clothes, background or light\". With no uploaded person in it, the\nmaster has the donors only. Wait for it. Every later image attaches the master first and repeats the style block word for\nword."
+  },
+  {
+   "label": "Hero sheet",
+   "source": "music-cards/SKILL.md",
+   "text": "- **HERO's sheet**, with the master and then the photo attached (with no photo: described in words, like an invented\n  character's). A full-body front view, a full-body three-quarter view, a full-body profile view and one large head-and-shoulders\n  close-up, the same character in all, on plain light grey; a 2D look adds a back view. Write: \"His face and hair come from the\n  attached face photo: the face shape, the brows, the eyes, the nose, the mouth, <facial hair>, <marks by side>, <glasses if\n  worn>, the hairline and the hair, redrawn in this style\". Then the age as a number, \"an adult\", and the outfit from the story.\n  - **Identity only.** Take nothing else from the photo: not its clothes, not what hangs on or is held by the person, not the\n    background or the light. A test copied sunglasses hanging on a shirt into four sheets out of five."
+  },
+  {
+   "label": "Clip prompt (six sections)",
+   "source": "music-cards/SKILL.md",
+   "text": "subject_definitions:\n<Picture 1> is the <place>. <Picture 2> is the character sheet of <NAME>. ...\n<Subject 1> is <NAME>, <age, look, outfit>, as in <Picture 2>. ...\n\nsummary:\nreference generation — a 9:16 <style id> cartoon: <the clip's part of the story in one sentence>.\n\nretention_analysis:\n<Subject 1>: fully_preserved - the exact face, hair, body and clothes of <Picture 2>.\n<Picture 1>: partially_preserved - the place and its layout; full-screen scenes, never the sheet's panels or grey background.\n\ndetailed_description:\n<the style line>. Brisk, energetic real-time pace: every character moves with purpose, snappy and decisive, never slow motion,\nnever drifting or lingering. Every shot opens mid-action and contains one clear story action with a visible cause and result.\nHard cuts between shots. <the style's video words>\n[Shot 1] <framing>: <NAME> <action with its result>.\n[Shot 2] At 00:02.100, hard cut to <framing>: <NAME> <action with its result>.\n...\nThe characters act and react without speaking; no voice-over, no narration. No captions, no subtitles, no on-screen text. No slow\nmotion. Every character keeps the exact face, hair, body and clothes of their sheet in every shot; every place matches its sheet.\n\noverall_soundscape:\nN/A\n\nnon_diegetic_music:\nN/A"
+  }
+ ],
+ "price": "Quoted once before the first paid call; the three models are not on the price sheet (minimax_h3 sells only 2K).",
+ "cheap_price": "about 22 credits for 3 clips on wan3_0 480p plus about 6 for pictures on seedream_5_0_flash, song as quoted."
+}

@@ -35,7 +35,7 @@ def iso(s):
 def ask_model(prompt, model="haiku", timeout=600):
     """One prompt in, text out, through the Claude CLI this Mac is signed in
     to. Runs from an empty folder so no project instructions leak in."""
-    # NO ACCOUNT IS WIRED IN (the owner, 2026-10-23): run_kit's claude_door picks the
+    # NO ACCOUNT IS WIRED IN (owner, 2026-10-23): run_kit's claude_door picks the
     # credential and moves to the next when one runs out.
     from run_kit import claude_door      # run-kit is already on the path (top of this file)
     with tempfile.TemporaryDirectory() as d:
@@ -141,6 +141,32 @@ def feeds():
                     "last": sweeps[-1] if sweeps else None, "sweeps": len(sweeps),
                     "source_list": live})
     return out
+
+
+# A HAND PICK KEEPS ITS REASON (logic layer W1, 2026-11-18). A click on a feed card used to save the stock
+# line below and nothing else, so the teardown started with a link and no reason. The card already carries
+# what the sift read off the post: what format it is, why it holds attention, what it is. That goes with the
+# pick, plus the awareness level its lane enters at. Nothing is asked of the person clicking.
+HAND_PICK = "picked by hand on the page"
+NOT_READ = ("unread", "?", "none", "unknown", "")   # what the sift writes when it named no format
+LANE_AWARENESS = {"entertainment": "unaware", "educational": "problem-aware"}
+
+
+def hand_pick_why(card):
+    """The one line kept with a hand pick: format, why it holds attention, what it is, the level it enters
+    at. Built only from what is on the card; a card the sift has not read yet says it was picked by hand."""
+    c = card or {}
+    parts = []
+    fmt = next((str(v) for v in (c.get("format"), c.get("kind")) if v and str(v).lower() not in NOT_READ), "")
+    if fmt:
+        parts.append(f"format: {fmt}")
+    if c.get("why"):
+        parts.append(f"why the feed kept it: {c['why']}")
+    if c.get("what"):
+        parts.append(f"what it is: {c['what']}")
+    if LANE_AWARENESS.get(c.get("lane") or ""):
+        parts.append(f"enters at {LANE_AWARENESS[c['lane']]} ({c['lane']} lane)")
+    return HAND_PICK + (" — " + "; ".join(" ".join(str(x).split()) for x in parts) if parts else "")
 
 
 def cards(feed):

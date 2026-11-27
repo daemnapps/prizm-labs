@@ -81,7 +81,7 @@ class OneLocator(unittest.TestCase):
             clone = Path(tmp) / "clone"
             (clone / "components").mkdir(parents=True)
             (clone / "brands").mkdir()
-            self.assertNotEqual(clone.resolve(), (Path.home() / "Projects" / "workspace").resolve())
+            self.assertNotEqual(clone.resolve(), (Path.home() / "Projects" / "ai-workspace").resolve())
             with unittest.mock.patch.dict(os.environ, {"AI_WORKSPACE": str(clone)}):
                 self.assertEqual(Path(repo(HERE)).resolve(), clone.resolve())
                 for name, fn in LOCATORS:

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The composer: the brand's own record in, one month of slots out.
 
-    python3 compose.py 2026-09 --brand brand-a [--dry-run] [--label sep]
+    python3 compose.py 2026-09 --brand brand_a [--dry-run] [--label sep]
 
 Reads the brand tree (read-only, always): the type catalogue, the eight
 segments, the cultural moments, the learnings, and the whole sent library.
@@ -23,7 +23,7 @@ from pathlib import Path
 
 def _json_or(path, default):
     """A brand file that is not there yet reads as empty — a brand with no
-    history is a brand, not an error (Brand-B, 2026-09-09)."""
+    history is a brand, not an error (brand_b, 2026-09-09)."""
     try:
         return json.loads(path.read_text())
     except (FileNotFoundError, ValueError):

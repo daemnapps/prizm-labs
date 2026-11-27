@@ -11,7 +11,7 @@ output as sent. The layout is checked before it is kept: every section is one th
 picture is one the brand's look names, every proof id is in the brand's proof index, no picture repeats in
 the window. Nothing is generated: a picture still to make stays a `todo` slot until a person OKs it (step 3).
 Only pictures someone has looked at are offered (asset-index tag.py's tags.json, for proof and for product photos),
-and a real picture's alt is what was seen in it, never what the layout guessed (the team, 2026-10-28).
+and a real picture's alt is what was seen in it, never what the layout guessed (email_lead, 2026-10-28).
 """
 import argparse
 import calendar  # noqa: F401 -- pins the standard library's calendar before marketing-calendar's calendar.py can shadow it (LD-19 (calendar shadow fix))
@@ -25,6 +25,8 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 COMP = HERE.parent
+sys.path.append(str(COMP))
+import calendar_handoff as CH
 sys.path.insert(0, str(HERE))
 import look as L  # noqa: E402
 
@@ -70,7 +72,7 @@ GUIDE = {
     "foot": "the footer. No fields. Ends every email.",
 }
 
-# LD-101 (Brand-B house look): the sections a brand's `house` adds, offered only to a brand that has one. Shapes are
+# LD-101 (brand_b house look): the sections a brand's `house` adds, offered only to a brand that has one. Shapes are
 # the boxes' own (BOX): a picture is made at its box's shape, never cut to fit.
 HOUSE_GUIDE = {
     "hero_top": "headline (<=7 words, one <i>accent</i>), sub (one line), picture: the top of a dark hero photo (4:5). Follow it with cta {\"variant\": \"dark\"} and then hero_hands with the SAME picture: one photo, split by the live button.",
@@ -94,10 +96,88 @@ BOX = {("hero_top", "picture"): 0.8, ("hero_hands", "picture"): 0.8, ("ritual", 
 CUSTOMER_SECTIONS = ("selfies", "example", "grid", "picture", "bigquote", "quote")
 
 
+MONTHS = {m: i for i, m in enumerate(["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"], 1)}
+
+
+def ruled_lines(brand, date):
+    """The wording the owner ruled for emails in a window, read from brands/<brand>/products/offer-bank.md: a bullet carrying a date range
+    ("..., 19-30 Nov 2026 (...)") followed by indented bullets, among them `Email top bar: "..."` and `Email offer line: "..."`.
+    Returns {"top bar": ..., "offer line": ...} for the window holding `date` (YYYY-MM-DD), else {}."""
+    f = REPO / "brands" / brand / "products" / "offer-bank.md"
+    if not f.exists() or not date:
+        return {}
+    try:
+        y, m, d = (int(x) for x in str(date)[:10].split("-"))
+    except ValueError:
+        return {}
+    out, window = {}, False
+    for line in f.read_text().split("\n"):
+        if re.match(r"^- ", line):
+            r = re.search(r"(\d{1,2})\s*[-\u2013]\s*(\d{1,2})\s+([A-Za-z]{3})[a-z]*\.?\s+(\d{4})", line)
+            window = bool(r and MONTHS.get(r.group(3).lower()) == m and int(r.group(4)) == y and int(r.group(1)) <= d <= int(r.group(2)))
+            continue
+        if window:
+            for key, name in (("Email top bar", "top bar"), ("Email offer line", "offer line")):
+                q = re.search(key + r':\s*"([^"]+)"', line)
+                if q and name not in out:
+                    out[name] = q.group(1)
+    return out
+
+
+def ruled_text(brand, date):
+    r = ruled_lines(brand, date)
+    if not r:
+        return ""
+    t = "\n\nRULED WORDING for emails sent on this date (the owner's; use it word for word where it applies):"
+    if r.get("top bar"):
+        t += '\n- The gold marquee strip at the top of the email (and, if you repeat it, at the bottom) reads exactly: "%s".' % r["top bar"]
+    # only the top strip: the offer line in the email is the copy writer's own words, never replaced by the bank's
+    return t
+
+
+def figma_default(lk):
+    """True when the brand's look file says `"default_look": "figma"`: its new emails start from the Figma-look sections."""
+    return lk.get("default_look") == "figma"
+
+
+def apply_defaults(spec, lk):
+    """A brand's look file may carry `email_defaults` (email_lead, 2026-11-24, after editor put the same NOON frame by hand on
+    every brand_a email): `layout`, `tokens` and `styles` (by section type) laid under each new layout, so the email
+    reaches the designer already in her frame. The layout's own values win over the default."""
+    dd = lk.get("email_defaults") or {}
+    for k in ("layout", "tokens"):
+        if dd.get(k):
+            spec[k] = dict(dd[k], **(spec.get(k) or {}))
+    for sec in spec.get("sections") or []:
+        st = (dd.get("styles") or {}).get(sec.get("s"))
+        if st:
+            sec["style"] = dict(st, **(sec.get("style") or {}))
+    return spec
+
+
+def figma_box_ratios(spec, lk):
+    """Every picture still to make in a Figma-look email takes the shape of its own box (`ratio`), so nothing is cut to fit."""
+    import figma_look as FGL
+    for sec in spec.get("sections", []):
+        if sec.get("s") == "fg_hero" and isinstance(sec.get("picture"), dict) and "todo" in sec["picture"]:
+            r = FGL.box_ratio(sec)
+            if r:
+                sec["picture"]["ratio"] = r
+        for it in sec.get("items") or []:
+            if isinstance(it.get("picture"), dict) and "todo" in it["picture"] and not it["picture"].get("ratio"):
+                r = FGL.box_ratio(sec, it)
+                if r:
+                    it["picture"]["ratio"] = r
+    return spec
+
+
 def sections_text(lk):
     """The section list the layout prompt is offered: the general GUIDE, and for a brand with a house its sections
     and the house rule."""
     secs = "\n".join("%s: %s" % (k, v) for k, v in GUIDE.items() if k in EN.SECTIONS)
+    if figma_default(lk):                # the brand's look file says its default look is the Figma look (2026-11-19)
+        import figma_look as FGL
+        return FGL.guide_text((lk.get("figma") or {}).get("recipes"), (lk.get("figma") or {}).get("rules"))
     if (lk.get("house") or {}).get("sections"):
         have = set((lk.get("house") or {})["sections"])
         secs += "\n\nHOUSE SECTIONS (this brand's own; prefer them):\n" + "\n".join(
@@ -175,8 +255,8 @@ def products_of(lk):
 
 def product_key(brand, folder):
     """The product the brand declares for a picture's Drive folder name. The look names product pictures by their
-    Drive folder (nova-face-brush) and the brand may declare the product under a shorter key (flex): read
-    products/images.json's drive_folder, so the image engine is handed a product it knows (the team, 2026-10-22).
+    Drive folder (flex-face-brush) and the brand may declare the product under a shorter key (flex): read
+    products/images.json's drive_folder, so the image engine is handed a product it knows (email_lead, 2026-10-22).
     A folder no product claims is returned as it is."""
     try:
         rows = json.loads((Path(L.brandpath.brand_root(brand, REPO / "brands")) / "products" / "images.json")
@@ -191,7 +271,7 @@ def product_key(brand, folder):
 
 def proof_of(brand, limit=220):
     """The brand's real pictures for the layout: the proof index, with what is IN each picture when it has been tagged
-    (tools/asset-index/machine/tag.py → tags.json). Tagged, clean (no baked-in words), best quality first;
+    (components/asset-index/machine/tag.py → tags.json). Tagged, clean (no baked-in words), best quality first;
     pictures whose product looks wrong are left out."""
     d = REPO / "runs" / "asset-index" / brand / "proof"
     f = d / "proof.json"
@@ -209,7 +289,7 @@ def proof_of(brand, limit=220):
         bad = g.get("baked_text") == "large" or g.get("product_ok") is False
         return (1 if bad else 0, -int(g.get("quality") or 0))
     # a picture no one has looked at is not offered: from its name alone the layout writes what it guesses is in it
-    # (the team, 2026-10-28); tag it first (asset-index tag.py)
+    # (email_lead, 2026-10-28); tag it first (asset-index tag.py)
     items = [e for e in items if e["id"] in tags and tags[e["id"]].get("product_ok") is not False]
     if not items:
         return [], "(no proof described yet: every proof slot is a todo — describe it with asset-index tag.py)"
@@ -293,6 +373,22 @@ def _nfc(ref):
     return unicodedata.normalize("NFC", ref) if isinstance(ref, str) else ref
 
 
+def fair_share(refs, limit):
+    """The first `limit` photos, taken in turn from every product folder (drive:brands/<b>/products/<folder>/...),
+    each folder in its own order. A plain cut kept the alphabet's first folders: brand_b's 299 described photos
+    lost every travel-pouch one (positions 286-298), so a layout asked to show the pouch drew another picture
+    (email_lead, 2026-11-07: "why isn't the travel bag drawn right if there are photos of it?")."""
+    groups = {}
+    for r in refs:
+        bits = r.split("/")
+        groups.setdefault(bits[3] if len(bits) > 3 else "", []).append(r)
+    out, i = [], 0
+    while len(out) < limit and any(i < len(g) for g in groups.values()):
+        out += [g[i] for g in groups.values() if i < len(g)][:limit - len(out)]
+        i += 1
+    return out
+
+
 def described_photos(lk, limit=220):
     """photos_of, narrowed to the photos someone has looked at, each line saying what is in it. A photo listed by
     name only is never offered: the layout would pick it for its file name and describe what it guesses."""
@@ -300,7 +396,7 @@ def described_photos(lk, limit=220):
     if not refs:
         return refs, txt
     tags = photo_tags(lk.brand)
-    seen = [r for r in txt.splitlines() if _nfc(r) in tags and tags[_nfc(r)].get("product_ok") is not False][:limit]
+    seen = fair_share([r for r in txt.splitlines() if _nfc(r) in tags and tags[_nfc(r)].get("product_ok") is not False], limit)
     if not seen:
         return set(), "(no brand photo described yet: describe them with asset-index tag.py --label products)"
     lines = ["%s · %s · %s %s · shows %s · q%s · words %s · %s" % (
@@ -382,7 +478,7 @@ def answer_json(text):
 
 def validate(spec, lk, proof_ids, used, photo_refs=None, cleared=None, product="", slugs=None):
     """Problems that stop a layout being kept. `cleared` = {still id: {"creator", "products", ...}}: the people a house
-    email may show (LD-101 (Brand-B house look)); `product` = the email's own product slug, which every still must show
+    email may show (LD-101 (brand_b house look)); `product` = the email's own product slug, which every still must show
     (`slugs` = the brand's products, read from brands/<brand>/products/ when not given)."""
     probs = []
     prods = products_of(lk)
@@ -428,14 +524,22 @@ def validate(spec, lk, proof_ids, used, photo_refs=None, cleared=None, product="
         strip(test.get("sections", []))
         EN.sections({"sections": test.get("sections", []), "theme": None, "label": "test"}, lk)
     except Exception as e:
-        probs.append("the layout does not render: %s %s" % (type(e).__name__, e))
+        if isinstance(e, KeyError):    # say which field is missing, in words the layout step can act on
+            probs.append("the layout does not render: an item or section is missing its field %s; give every item exactly the fields the section list names for it" % e)
+        else:
+            probs.append("the layout does not render: %s %s" % (type(e).__name__, e))
     if spec.get("look") == "house":
         probs += house_problems(spec, lk, cleared or {})
         slugs = slugs if slugs is not None else brand_products(lk.brand)
         if product and product in slugs:       # a send with no product ("none") is not checked
             probs += still_product_problems(spec, cleared or {}, product, slugs)
+    if spec.get("look") == "figma":      # the designer's agreed rules, checked in code (rules_check.py); a broken one sends the layout back once
+        import rules_check as RC
+        soft = ("do not repeat a recent email", "gold strip under the header")
+        probs += ["agreed rule broken, %s: %s (%s)" % ("part %d" % (i + 1) if i is not None else "email", rule, what)
+                  for i, rule, what in RC.check(spec) if rule not in soft]
     names = [s.get("s") for s in spec.get("sections", [])]
-    if names and names[-1] != "foot":
+    if names and names[-1] not in ("foot", "fg_foot"):
         probs.append("the email does not end on the footer")
     if spec.get("kind") == "letter" and names.count("letter") == 0:
         probs.append("a letter with no letter block")
@@ -450,7 +554,7 @@ def _ref(p):
 
 
 def house_problems(spec, lk, cleared):
-    """LD-101 (Brand-B house look), the team's picture rule (2026-10-30): no picture twice in one email (hero_top and
+    """LD-101 (brand_b house look), email_lead's picture rule (2026-10-30): no picture twice in one email (hero_top and
     hero_hands are one photo split by design), no person twice, no picture made at another box's shape, nobody not
     cleared for email, and no customer picture from the proof index (no proof picture is cleared for email)."""
     probs, seen, people = [], {}, {}
@@ -527,7 +631,7 @@ def still_shows(info, product, slugs):
 
 def stills_as_stills(spec, cleared):
     """A cleared person's still the layout wrote as a proof id ({"proof": "<clip>@<s>"}) is the still it names: read back
-    as {"still": ...} so the house checks see it (brand-b nov-04's first run, 2026-10-30)."""
+    as {"still": ...} so the house checks see it (brand_b nov-04's first run, 2026-10-30)."""
     def walk(x):
         if isinstance(x, dict):
             if "s" not in x and x.get("proof") in cleared:
@@ -544,7 +648,7 @@ def stills_as_stills(spec, cleared):
 
 
 def still_product_problems(spec, cleared, product, slugs):
-    """LD-101 (Brand-B house look), the team 2026-10-30: a customer section's stills show the email's own product. A still
+    """LD-101 (brand_b house look), email_lead 2026-10-30: a customer section's stills show the email's own product. A still
     of another product, or one whose record names no product, holds the email."""
     probs = []
     def walk(x):
@@ -571,14 +675,14 @@ def still_product_problems(spec, cleared, product, slugs):
 
 
 def _asset_index():
-    """tools/asset-index/machine/search.py and shared_paths.py, loaded by file (the folder name has a hyphen)."""
+    """components/asset-index/machine/search.py and shared_paths.py, loaded by file (the folder name has a hyphen)."""
     import importlib.util
     mods = {}
     for name in ("asset_index_search", "asset_index_shared_paths"):
         if name in sys.modules:
             mods[name] = sys.modules[name]
             continue
-        f = REPO / "tools" / "asset-index" / "machine" / ("search.py" if name.endswith("search") else "shared_paths.py")
+        f = REPO / "components" / "asset-index" / "machine" / ("search.py" if name.endswith("search") else "shared_paths.py")
         sys.path.insert(0, str(f.parent))
         spec = importlib.util.spec_from_file_location(name, f)
         m = importlib.util.module_from_spec(spec)
@@ -593,10 +697,10 @@ PEOPLE_ASKS = ("woman smiling at the camera holding the {p}", "woman showing her
 
 
 def cleared_people(brand, product="", per_person=2, limit=24, slugs=None):
-    """LD-101 (Brand-B house look): the people a house email may show, from the asset-index search with use="email"
+    """LD-101 (brand_b house look): the people a house email may show, from the asset-index search with use="email"
     (one rights list: the brand's usage-rights register). ({id: {"creator", "clip_id", "t", "shows", "says", "path"}},
     the lines offered to the layout). An id is "<clip id>@<second>"; a person comes at most `per_person` times.
-    With a product, only stills whose clip record shows that product, and no other, are offered (the team, 2026-10-30)."""
+    With a product, only stills whose clip record shows that product, and no other, are offered (email_lead, 2026-10-30)."""
     slugs = slugs if slugs is not None else brand_products(brand)
     try:
         S, _ = _asset_index()
@@ -713,7 +817,12 @@ def moment_world(brand, avatar, moment, bdir, profile, culture, dry=False):
     return world.read_text()
 
 
-def run_send(brand, run_dir, slot, lk, proof_ids, proof_txt, used, dry):
+def run_send(brand, run_dir, slot, lk, proof_ids, proof_txt, used, dry, directions=False):
+    copy = json.loads((run_dir / 'deliverable/email.json').read_text())
+    audit = CH.inspect(REPO, brand, run_dir, slot=slot, copy=copy)
+    if audit['problems']:
+        print('HELD calendar handoff %s: %s' % (run_dir.name, '; '.join(audit['problems'])))
+        return None
     from run_kit import model as M
     import promises as PM
     lean_call = PM.lean()                    # LD-62 (lean model calls)
@@ -730,7 +839,11 @@ def run_send(brand, run_dir, slot, lk, proof_ids, proof_txt, used, dry):
         culture += "\n\n" + _read(hand[-1], 8000)
     moment = moment_of(slot)
     world = moment_world(brand, avatar, moment, bdir, profile, culture, dry) if moment else None
-    world_txt = world or ("(no moment)" if not moment else "(NO RESEARCH ON FILE for %s: the email is held until it is researched)" % moment)
+    # a moment with no research or no look of its own is still laid out, in the brand's own look, with a note for the
+    # designer: an email nobody can see is worse than a base to adjust (email_lead, 2026-11-03)
+    world_txt = world or ("(no moment)" if not moment else "(no research on file for %s yet: lay the email out from the copy, the "
+                          "brand and the avatar, in the brand's own look; the designer adjusts it to the moment afterwards. "
+                          "Never hold the layout for this.)" % moment)
     kind = {"kind": slot.get("kind", "design"), "format": slot.get("format"), "why": slot.get("kind_why", "")}
     rules = json.dumps(lk.get("design_rules") or {}, indent=1, ensure_ascii=False)
     send = {k: slot.get(k) for k in ("id", "date", "type", "category", "segments", "occasion", "product", "offer", "why")}
@@ -752,48 +865,68 @@ def run_send(brand, run_dir, slot, lk, proof_ids, proof_txt, used, dry):
     if form_problems(json.dumps(job), banned):
         job = answer_json(M.call(p1 + "\n\nYOUR LAST ANSWER WAS HELD FOR: " + "; ".join(form_problems(json.dumps(job), banned)) + ". Every product exactly as PRODUCT TRUTH describes it.", model, label="design1-fix", runner=lean_call.design_runner(M)))
     (d / "job.json").write_text(json.dumps(job, indent=1, ensure_ascii=False) + "\n")
-    secs = sections_text(lk)
-    is_house = bool((lk.get("house") or {}).get("sections"))
+    secs = sections_text(lk) + (ruled_text(brand, slot.get("date")) if figma_default(lk) else "")
+    is_house = bool((lk.get("house") or {}).get("sections")) and not figma_default(lk)   # a Figma-look default outranks the older house look
     cleared = {}
-    if is_house:                         # LD-101 (Brand-B house look): no proof picture is cleared for email
+    if is_house:                         # LD-101 (brand_b house look): no proof picture is cleared for email
         cleared, people_txt = cleared_people(brand, send.get("product") or "")
         proof_ids, proof_txt = [], "CLEARED PEOPLE (creators cleared for email; show them only through on_camera, each at most once):\n" + people_txt
     p2 = fill(_read(PROMPTS / "design2-layout-v1-owner.md"), learnings=LN.block(brand, ("design", "picture")), job=job, copy=copy, kind=kind, sections=secs,
               products="\n".join(products_of(lk)), proof=proof_txt, photos=photos_txt, used=json.dumps(used), moment_world=world_txt, design_rules=rules,
               product_truth=truth, visual_dna=dna_of(brand))
     (d / "design2--prompt.md").write_text(p2)
-    spec, probs = None, ["not run"]
-    for attempt in range(2):
-        model, _ = M.pick("designs", len(p2))
-        spec = answer_json(M.call(p2 + ("" if not attempt else "\n\nYOUR LAST ANSWER WAS HELD FOR: " + "; ".join(probs) + ". Fix exactly those."), model, label="design2-" + run_dir.name, runner=lean_call.design_runner(M)))
-        true_alts(spec, seen)
-        if is_house:
-            spec["look"] = "house"
-            stills_as_stills(spec, cleared)
-        import gaps as GP
-        probs = validate(spec, lk, set(proof_ids), used, photo_refs, cleared=cleared,
-                         product=send.get("product") if is_house else "") + form_problems(json.dumps(spec), banned) + [
-            "an unfinished sequence: it says \"%s\" but has no card for step %s — give every step its own card in the same form as the others"
-            % (claim, " or ".join(map(str, missing)))
-            for _, missing, claim in GP.sequence_gaps(spec)]
-        if not probs:                        # whole? every promise the email makes is kept (any brand, product, offer)
-            import promises as PM
-            try:
-                probs = PM.problems(PM.check(run_dir, spec, job, copy))
-            except Exception as e:  # noqa: BLE001 — a reader that won't answer never sinks the layout; it is noted
-                print("   promise check not run: %r" % e)
-        if not probs:
-            break
+    def _lay(p2x, tag=""):
+        spec, probs = None, ["not run"]
+        for attempt in range(2):
+            model, _ = M.pick("designs", len(p2x))
+            spec = answer_json(M.call(p2x + ("" if not attempt else "\n\nYOUR LAST ANSWER WAS HELD FOR: " + "; ".join(probs) + ". Fix exactly those."), model, label="design2%s-" % tag + run_dir.name, runner=lean_call.design_runner(M)))
+            true_alts(spec, seen)
+            if is_house:
+                spec["look"] = "house"
+                stills_as_stills(spec, cleared)
+            elif figma_default(lk):
+                spec["look"] = "figma"
+            import gaps as GP
+            probs = validate(spec, lk, set(proof_ids), used, photo_refs, cleared=cleared,
+                             product=send.get("product") if is_house else "") + form_problems(json.dumps(spec), banned) + [
+                "an unfinished sequence: it says \"%s\" but has no card for step %s — give every step its own card in the same form as the others"
+                % (claim, " or ".join(map(str, missing)))
+                for _, missing, claim in GP.sequence_gaps(spec)]
+            if not probs:                        # whole? every promise the email makes is kept (any brand, product, offer)
+                import promises as PM
+                try:
+                    probs = PM.problems(PM.check(run_dir, spec, job, copy))
+                except Exception as e:  # noqa: BLE001 — a reader that won't answer never sinks the layout; it is noted
+                    print("   promise check not run: %r" % e)
+            if not probs:
+                break
+        return spec, probs
+    if directions:
+        return _directions(brand, run_dir, slot, lk, copy, job, p2, _lay, audit, banned, used)
+    if figma_default(lk):          # Figma-look default: weigh three structures privately, deliver one, varied from the recent emails
+        import directions as DR
+        rec = DR.recent(brand, REPO, exclude=run_dir.name, before=slot.get("date"))
+        p2 = p2 + DR.single_text(rec)
+        spec, probs = _lay(p2)
+        rp = DR.repeat_problems(spec, rec)
+        if rp and not probs:
+            spec, probs = _lay(p2 + "\n\nYOUR LAST ANSWER REPEATED A RECENT EMAIL: " + "; ".join(rp) + ". Change them; keep every line of the copy.", "r")
+    else:
+        spec, probs = _lay(p2)
     spec.update(brand=brand, label=run_dir.name, date=slot.get("date"), format=slot.get("format"),
                 concept=job.get("concept"), culture=job.get("culture"), segments=segments_of(slot),
                 link=(copy.get("button") or {}).get("link", ""), job=job)
+    apply_defaults(spec, lk)
+    if audit['expected']:
+        spec['calendar_handoff'] = audit['expected']
     if spec.get("kind") == "design" and dna_of(brand).startswith("(no visual DNA"):
         probs = probs + ["no visual DNA on file for %s: a designed email is held until the brand's DNA is written" % brand]
+    notes = []
     if moment and not world:
-        probs = probs + ["no research on file for the moment `%s` for %s: add runs/moment-research/%s/%s/%s.research.md" % (moment, avatar, brand, avatar, moment)]
+        notes = notes + ["for editor: no research on file for the moment `%s` yet (runs/moment-research/%s/%s/%s.research.md); laid out from the copy, check it fits the moment" % (moment, brand, avatar, moment)]
     th = spec.get("theme")
     if th and th not in (lk.get("themes") or {}):
-        probs = probs + ["no %s look for the moment `%s` yet: make it (the brand's moment looks) before this email builds" % (brand, th)]
+        notes = notes + ["for editor: no %s look for the moment `%s` yet; this email uses the brand's own look: adjust it to the moment" % (brand, th)]
     used["concept:" + run_dir.name] = job.get("concept", "")
     if cleared and not probs:
         try:
@@ -801,6 +934,8 @@ def run_send(brand, run_dir, slot, lk, proof_ids, proof_txt, used, dry):
         except Exception as e:  # noqa: BLE001 -- a still that will not come is a held layout, named
             probs = probs + ["a cleared person's still could not be fetched: %s" % e]
     spec["held"] = probs
+    if notes:
+        spec["for_editor"] = notes
     (d / "email.json").write_text(json.dumps(spec, indent=1, ensure_ascii=False) + "\n")
     for key in ('"proof": "', '"photo": "'):
         for p in json.dumps(spec["sections"]).split(key)[1:]:
@@ -812,8 +947,73 @@ def run_send(brand, run_dir, slot, lk, proof_ids, proof_txt, used, dry):
                                           # (proof.py's lookup exits on an unknown id)
         spec["held"].append("preview: %s" % e)
         (d / "email.json").write_text(json.dumps(spec, indent=1, ensure_ascii=False) + "\n")
+    if spec.get("look") == "figma":      # the team page shows the wireframe until the pictures are made and the email is built
+        try:
+            import wireframe as WF
+            WF.make(brand, run_dir)
+        except Exception as e:  # noqa: BLE001 -- a wireframe that will not draw never sinks the layout
+            print("   wireframe for the team page not made: %s" % e)
     print("  %-28s %-6s %2d sections%s" % (run_dir.name, spec.get("kind"), len(spec.get("sections", [])), "  HELD: " + "; ".join(spec["held"]) if spec["held"] else ""))
     return spec
+
+
+def _directions(brand, run_dir, slot, lk, copy, job, p2, lay, audit, banned, used):
+    """Wireframe step: three layouts of this email, each with its own hero type and height band, checked against the brand's recent emails,
+    saved as design/direction-a|b|c.json and drawn side by side in design/directions.html. No picture is made and email.json is not written;
+    `--pick a|b|c` keeps one (editor, 2026-11-20: pick a design direction first, spend picture credits after)."""
+    import directions as DR
+    d = run_dir / "design"
+    rec = DR.recent(brand, REPO, exclude=run_dir.name, before=slot.get("date"))
+    items, summary, kept = [], [], []
+    for dr in DR.DIRECTIONS:
+        spec, probs = lay(p2 + DR.direction_text(dr, rec), dr["id"])
+        for prev in kept:               # three real options: a layout too much like an earlier one is laid out again, once
+            sim = DR.similarity(spec, prev[1])
+            if sim > DR.TOO_ALIKE:
+                spec, probs = lay(p2 + DR.direction_text(dr, rec) + "\n\nYOUR LAST ANSWER WAS TOO SIMILAR TO DIRECTION %s (%d%% the same blocks in the same order). Change the section ORDER and the blocks that lead; keep every line of the copy." % (prev[0].upper(), round(sim * 100)), dr["id"] + "r")
+                break
+        kept.append((dr["id"], spec))
+        spec.update(brand=brand, label=run_dir.name, date=slot.get("date"), format=slot.get("format"), concept=job.get("concept"),
+                    culture=job.get("culture"), segments=segments_of(slot), link=(copy.get("button") or {}).get("link", ""), job=job,
+                    direction=dr["id"])
+        if audit["expected"]:
+            spec["calendar_handoff"] = audit["expected"]
+        probs = list(probs) + DR.problems(spec, dr, rec)
+        spec["held"] = probs
+        (d / ("direction-%s.json" % dr["id"])).write_text(json.dumps(spec, indent=1, ensure_ascii=False) + "\n")
+        try:
+            html = EN.render(spec, L.load(brand, run_dir))
+        except (Exception, SystemExit) as e:  # noqa: BLE001
+            html = '<div style="color:#fff">preview: %s</div>' % e
+            spec["held"].append("preview: %s" % e)
+        hero = DR._hero(spec) or {}
+        note = "hero %s px · %d sections%s" % (hero.get("photo_h", "?"), len(spec.get("sections", [])), (" · HELD: " + "; ".join(spec["held"])[:160]) if spec["held"] else "")
+        items.append(("Direction %s: %s" % (dr["id"].upper(), dr["name"]), note, html))
+        summary.append({"id": dr["id"], "name": dr["name"], "hero_h": hero.get("photo_h"), "held": spec["held"]})
+        print("  %-28s direction %s  %-18s %s" % (run_dir.name, dr["id"].upper(), dr["name"], note))
+    (d / "directions.html").write_text(DR.compare_page(items))
+    (d / "directions.json").write_text(json.dumps({"recent": rec, "directions": summary}, indent=1, ensure_ascii=False) + "\n")
+    return None
+
+
+def pick_direction(brand, run_dir, letter):
+    """Keep one wireframe direction as the email: design/email.json and design/preview.html. Makes nothing and calls no model."""
+    d = run_dir / "design"
+    src = d / ("direction-%s.json" % letter.lower())
+    if not src.exists():
+        raise SystemExit("no %s in %s: run the directions first (--directions)" % (src.name, d))
+    spec = json.loads(src.read_text())
+    spec.pop("direction", None)
+    (d / "email.json").write_text(json.dumps(spec, indent=1, ensure_ascii=False) + "\n")
+    html = EN.render(spec, L.load(brand, run_dir))
+    (d / "preview.html").write_text('<!doctype html><meta charset="utf-8"><body style="margin:0;background:#222"><div style="max-width:400px;margin:24px auto">%s</div>' % html)
+    if spec.get("look") == "figma":
+        try:
+            import wireframe as WF
+            WF.make(brand, run_dir)
+        except Exception as e:  # noqa: BLE001
+            print("   wireframe for the team page not made: %s" % e)
+    print("  %s: direction %s kept as the email (%d sections); no picture made yet" % (run_dir.name, letter.upper(), len(spec.get("sections", []))))
 
 
 USE_PURPOSE = {"key-visual": "email-key-visual", "gift": "email-gift", "story": "email-story"}
@@ -841,12 +1041,17 @@ def make_pictures(brand, run_dir, lk, dry=False):
                 walk(v, i)
     house = spec.get("look") == "house"
     if house:
-        box_ratios(spec, lk)             # LD-101 (Brand-B house look): every picture made at its own box's shape
+        box_ratios(spec, lk)             # LD-101 (brand_b house look): every picture made at its own box's shape
+    elif spec.get("look") == "figma":
+        figma_box_ratios(spec, lk)       # Figma look: the same, from each picture's own w / h
     for i, s in enumerate(spec["sections"]):
         walk(s, i)
+    af = run_dir / "design" / "art-direction.md"       # the designer's art direction for this email, told after the wireframe is picked
+    art = ("\n\nART DIRECTION from the designer (it outranks the picture's own style words): " + af.read_text().strip()) if af.exists() and af.read_text().strip() else ""
     for n, p in enumerate(slots):
+        pc = dict(p, brief=(p.get("brief", "") + art).strip()) if art else p     # what the picture chain is told: the brief plus the art direction (never stored in the email)
         req = {"brand": brand, "purpose": USE_PURPOSE.get(p.get("use"), "email-story"),
-               "direction": p["todo"] + ". " + p.get("brief", ""), "out": str(run_dir / "media"),
+               "direction": p["todo"] + ". " + p.get("brief", "") + art, "out": str(run_dir / "media"),
                "label": "%s-p%s" % (run_dir.name, __import__("hashlib").sha1((p["todo"] + p.get("brief", "") + (
                    "@%.3f" % _ratio(p["ratio"]) if house and _ratio(p.get("ratio")) else "")).encode()).hexdigest()[:8]),
                "people": in_frame(p)}          # the brand's cast rides along only when a person is in the picture
@@ -854,7 +1059,7 @@ def make_pictures(brand, run_dir, lk, dry=False):
         if house and _ratio(p.get("ratio")):
             ratio = _ratio(p["ratio"])
         if dry:
-            pl = C.plan(brand, p, req["label"], concept, culture)
+            pl = C.plan(brand, pc, req["label"], concept, culture)
             print("   would make %-6s %-16s %s" % (pl["route"], req["purpose"], p["todo"][:80]))
             if pl.get("held"):
                 print("      held: %s" % pl["held"])
@@ -870,7 +1075,7 @@ def make_pictures(brand, run_dir, lk, dry=False):
             got = {}
         else:
             try:
-                got = C.make(brand, p, req["label"], done, concept, culture, ratio=ratio, tokens=lk.get("tokens"), run_dir=run_dir, people=req["people"],
+                got = C.make(brand, pc, req["label"], done, concept, culture, ratio=ratio, tokens=lk.get("tokens"), run_dir=run_dir, people=req["people"],
                              **({"aspect": C.aspect_for(ratio)} if house else {}))
             except Exception as e:           # one refused picture never sinks the email
                 print("   REFUSED %s: %s" % (p["todo"][:60], str(e)[:160]))
@@ -906,7 +1111,7 @@ _SOMEBODY = re.compile(r"\b(m[ae]n|wom[ae]n|person|people|customer|he|she|his|he
 
 def in_frame(p):
     """Is a person in this picture? The image engine hands the brand's own cast as references only when told yes
-    (the team, 2026-10-28: every email picture went out with nobody saying, so every face was drawn from words alone).
+    (email_lead, 2026-10-28: every email picture went out with nobody saying, so every face was drawn from words alone).
     The slot's own `people` wins; a gift picture has nobody; otherwise read from the direction, its "no people / no
     one" first (a picture of hands with "no face" still has a person), then any person, face or hand once the negated
     phrases and product names (Face Wash, Face Quench) are taken out. None when nothing says."""
@@ -922,7 +1127,7 @@ def in_frame(p):
 
 def unjudged(found):
     """The reason, when a picture was held or passed only because the picture judge could not run (no credits, no
-    key: Brand-B nov-04's two pictures were thrown away on 2026-10-21 for a 402 and the slots sat empty for a week).
+    key: brand_b nov-04's two pictures were thrown away on 2026-10-21 for a 402 and the slots sat empty for a week).
     None when the judge did look."""
     for x in json.loads(json.dumps(found or [], default=str)) if not isinstance(found, str) else [found]:
         for t in (x if isinstance(x, list) else [x]):
@@ -935,7 +1140,16 @@ def unjudged(found):
 def runs_for(brand, slot):
     """The copy runs for one calendar send: <brand>-<id> and its per-avatar versions."""
     base = RUNS / brand
-    out = [p for p in sorted(base.glob("%s-%s*" % (brand, slot["id"]))) if (p / "deliverable" / "email.json").exists()]
+    out = []
+    for p in sorted(base.glob(brand+'-*')):
+        if not (p / 'deliverable/email.json').exists():
+            continue
+        try:
+            own = CH.resolve(REPO, brand, p)
+        except (CH.Held, ValueError, OSError):
+            continue
+        if own and own.get('id')==slot['id'] and own.get('date')==slot.get('date'):
+            out.append(p)
     return out
 
 
@@ -976,12 +1190,27 @@ def main():
     ap.add_argument("--only")
     ap.add_argument("--run", action="append", default=[])
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--directions", action="store_true", help="lay the email out three ways (wireframes, no picture made) for a person to pick from")
+    ap.add_argument("--pick", help="keep one direction (a, b or c) as the email")
+    ap.add_argument("--art", help="the designer's art direction for this email's pictures, in words; saved as design/art-direction.md and used when the pictures are made (--pictures)")
     ap.add_argument("--pictures", action="store_true", help="also make every picture slot through the email picture chain")
     a = ap.parse_args()
     if a.month and a.run:   # a month lays out its whole window; with --run too, every send in it was redesigned (2026-10-28)
         sys.exit("give a month window or --run, not both: `line.py %s --run <run folder>` lays out that email only" % a.brand)
     import kinds
     import paths as CP
+    if a.pick:                      # keep one wireframe direction as the email; no model, no picture
+        for r in a.run:
+            pick_direction(a.brand, Path(r).resolve(), a.pick)
+        return
+    if a.art and not a.pictures:    # save the art direction only; pictures are made when --pictures is given
+        for r in a.run:
+            (Path(r).resolve() / "design" / "art-direction.md").write_text(a.art.strip() + "\n")
+            print("  art direction saved for %s; make the pictures with --pictures" % Path(r).name)
+        return
+    if a.art:
+        for r in a.run:
+            (Path(r).resolve() / "design" / "art-direction.md").write_text(a.art.strip() + "\n")
     lk = L.load(a.brand)
     proof_ids, proof_txt = proof_of(a.brand)
     used = {}
@@ -1000,18 +1229,16 @@ def main():
         r = Path(r).resolve()
         rj = json.loads((r / "run.json").read_text())
         sid = r.name.replace(a.brand + "-", "").split("--")[0]
-        mo = None
-        for m_ in sorted((REPO / "runs" / "marketing-calendar" / a.brand).glob("20*")):
-            f = m_ / "slots.json"
-            if f.exists():
-                for s in kinds.apply(json.loads(f.read_text()), CP.brand_root(a.brand)):
-                    if s["id"] == sid:
-                        mo = s
+        try:
+            mo = CH.resolve(REPO, a.brand, r, rj)
+        except (CH.Held, ValueError, OSError) as e:
+            print('HELD calendar handoff %s: %s' % (r.name, e))
+            continue
         todo.append((r, mo or slot_from_run(r, sid, rj.get("format"))))
     print("%s · %d email(s) to lay out" % (a.brand, len(todo)))
     for r, s in todo:
-        run_send(a.brand, r, s, lk, proof_ids, proof_txt, used, a.dry_run)
-        if a.pictures:
+        run_send(a.brand, r, s, lk, proof_ids, proof_txt, used, a.dry_run, a.directions)
+        if a.pictures and not a.directions:
             make_pictures(a.brand, r, L.load(a.brand, r), a.dry_run)
 
 

@@ -26,24 +26,24 @@ def test_never_imports_apify():
 def test_scan_refuses_ours_and_never_public_things():
     sys.path.insert(0, str(HERE))
     import feedsexport as F
-    for bad in ("brand-a--fed-up-king", "brand-b--spot-hider", "competitor-b", "/Users/someone", "act_123456", "meta_page_id",
+    for bad in ("brand_a--fed-up-king", "brand_b--spot-hider", "brand_e", "/Users/someone", "act_123456", "meta_page_id",
                 "app.adplexity.io/storage/x.jpg", "prompts-as-sent", "owner--saves",
                 "customer-base.md", "x.cloudfront.net/face.png", "APIFY_TOKEN"):
         assert F.dirty(bad), bad
     assert F.dirty("ad 916629913735911", {"916629913735911"})
-    for ok in ("Competitor-A", "Competitor-C", "Mars Men", "TikTok · 1.2M views"):
+    for ok in ("brand_c", "brand_d", "Mars Men", "TikTok · 1.2M views"):
         assert not F.dirty(ok), ok
-    # the owner, 1 Oct 2026: our brand NAMES show on My Feeds (he wants to see
+    # owner, 1 Oct 2026: our brand NAMES show on My Feeds (he wants to see
     # them). Read from brands/, never typed into the exporter.
-    for ok in ("BRAND-A", "Brand-B", "a BRAND-A customer"):
+    for ok in ("brand_a", "brand_b", "a brand_a customer"):
         assert not F.dirty(ok), ok
-    assert "brand-a" in F.OUR_BRANDS and "brand-b" in F.OUR_BRANDS
+    assert "brand_a" in F.OUR_BRANDS and "brand_b" in F.OUR_BRANDS
 
 
 def test_export_writes_no_brand_keyed_ids():
     sys.path.insert(0, str(HERE))
     import feedsexport as F
-    assert F.public_id("brand-a--fed-up-king") == "fed-up-king"
+    assert F.public_id("brand_a--fed-up-king") == "fed-up-king"
     assert F.public_id("owner--my-saves") == "my-saves"
     assert not F.dirty(F.public_id("owner--saves"))
 
@@ -51,8 +51,8 @@ def test_export_writes_no_brand_keyed_ids():
 def test_guard_allows_public_competitors_only_when_asked(tmp_path):
     sys.path.insert(0, str(HERE))
     import packs
-    (tmp_path / "a.json").write_text('{"brand": "Competitor-A"}')
+    (tmp_path / "a.json").write_text('{"brand": "brand_c"}')
     assert packs.guard(tmp_path)                          # packs still name nobody
     assert not packs.guard(tmp_path, allow_competitors=True)
-    (tmp_path / "b.json").write_text('{"brand": "brand-a"}')
+    (tmp_path / "b.json").write_text('{"brand": "brand_a"}')
     assert packs.guard(tmp_path, allow_competitors=True)  # our own names: always refused

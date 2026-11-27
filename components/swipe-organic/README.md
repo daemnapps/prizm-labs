@@ -17,15 +17,15 @@
 > `dig.py` (ask → plan → pull → sift → follow winners) · `sift.py` (keep/drop
 > against the ask) · `daily.py` (every feed, every morning, with a money floor) ·
 > `desklib.py` (shared) · prompts in `prompts/feed-*.md`, shown verbatim on the
-> page. Asked feeds land beside the avatar feeds as `owner--<name>/` — same four
+> page. Asked feeds land beside the avatar feeds as `the owner--<name>/` — same four
 > files.
 >
 > **Ruled by the owner the same day: "This is what we're going with, and we don't
 > use the old one."** My Feeds is THE board. Swipe Studio and the per-feed
 > pages (feedapp.py) are not opened any more. (This block said his saves
-> "already show here as the `owner · saves` feed" — they did not: that feed is
+> "already show here as the `the owner · saves` feed" — they did not: that feed is
 > DUG from the creators he saves twice or more. His actual saves arrived on
-> 2026-09-22 as `owner · my saves`; see the block above.) New layers get added
+> 2026-09-22 as `the owner · my saves`; see the block above.) New layers get added
 > to My Feeds, never as another board.
 >
 > **The standing content rule (the owner, same day): pure entertainment only.**
@@ -56,9 +56,9 @@
 > **HIS SAVES ARE A FEED HERE NOW (2026-09-22).** He asked the right question —
 > "we have My Feeds, why are we still using Swipe Studio?" — and the honest
 > answer was that his actual saves only ever lived on the old board. They are
-> projected into the feed store by `saves_feed.py` and show as **owner · my
+> projected into the feed store by `saves_feed.py` and show as **the owner · my
 > saves**, with covers, search, and Tear down. The feed already called
-> `owner--saves` is a different thing and was retitled **owner · creators I
+> `the owner--saves` is a different thing and was retitled **the owner · creators I
 > save**: it is DUG from the accounts he saves twice or more, not the saves.
 > Tear down on a feed with no avatar of its own now asks which brand and runs
 > the machine on that brand — the pick-a-brand flow Swipe Studio had, which was
@@ -88,7 +88,7 @@
 > me to review." Until 23 Sep 2026 it ran every night at 01:00: `daily.py`
 > pulled every feed, then `briefs.py` sent each avatar feed's best untouched
 > entertainment post through
-> `tools/video-teardown/machine/run.py --no-frames` (the full chain to the
+> `components/video-teardown/machine/run.py --no-frames` (the full chain to the
 > stage-5 brief, nothing generated). Each landed on the page's **Briefs to
 > review** tab with Yes / No, the verdict written only by the page
 > (`records/desk/briefs/<label>.json`).
@@ -112,8 +112,8 @@
 >
 > | What it had | Where it is now |
 > |---|---|
-> | the saves board | the **owner · my saves** feed (`saves_feed.py`) |
-> | fit filter (<brand> / <brand> / General) | the brand chips — a feed with no avatar is filtered per CARD, on the fit he saved it for |
+> | the saves board | the **the owner · my saves** feed (`saves_feed.py`) |
+> | fit filter (Brand A / Brand B / General) | the brand chips — a feed with no avatar is filtered per CARD, on the fit he saved it for |
 > | lane filter (swipes / organic) | the **Ad-shaped / Culture** chips |
 > | click → tear down → inject into a brand | **Tear down** on any card; a feed with no avatar asks which brand |
 > | the format library | **Format library**, in the page header |
@@ -168,14 +168,14 @@ The how-to is the atlas page linked at the top of this file (**How to use it**).
 | `feed.py` | runs one avatar-feed sweep against the feed backend |
 | `hops.py` | graph hops — seats new feed sources from winner edges, on probation |
 | `personakit.py` | builds a persona account's starter pack from owned data |
-| `saves_feed.py` | projects the saves catalog into the feed store as **owner · my saves**, so My Feeds carries his saves (2026-09-22) |
+| `saves_feed.py` | projects the saves catalog into the feed store as **the owner · my saves**, so My Feeds carries his saves (2026-09-22) |
 | `app.py` | Swipe Studio, RETIRED 2026-09-22 — no longer a server; kept as the library behind My Feeds' `/formats` and `/handoff/<code>`. Was: saves board w/ thumbnails, click → pick brand → teardown chain runs → brief served. Desktop launcher: "Swipe Studio.app" |
 
 **The library** — everything the tools produce:
 
 | | |
 |---|---|
-| `records/owner-saves/` | the owner's 429 saved IG posts, listed and categorized |
+| `records/the owner-saves/` | the owner's 429 saved IG posts, listed and categorized |
 | `records/culture-digs/` | deep digs into an avatar's world — posts, comments verbatim, room + opportunity reads |
 | `records/avatar-feeds/` | auto-updating organic feeds per avatar, with full history |
 
@@ -183,8 +183,8 @@ Each shelf has a README saying exactly what every file is. Text in git,
 media on Drive, one `**Drive:**` pointer per post.
 
 Media: `Shared Assets/swipe/organic/<brand>/<avatar>/<sub>/`, reached through
-`components/swipe-paid/swipe_home.py`. the team moved it there from
-`Shared Assets/lab/owner/swipe-organic/` on 2026-10-07; old stored lab paths
+`components/swipe-paid/swipe_home.py`. the developer moved it there from
+`Shared Assets/lab/the owner/swipe-organic/` on 2026-10-07; old stored lab paths
 still resolve through `swipe_home.resolve()`.
 
 ## Brand-agnostic, with teeth
@@ -216,7 +216,7 @@ each earns), a weekly-delta sweep, and the written profile the bank feeds.
 ## The split, same as swipe-paid (the owner, 2026-08-31)
 
 **Words in git, media on Drive.** Post media lives at
-`Shared Assets/lab/owner/creators/<handle>/posts/` (the creator library) and
+`Shared Assets/lab/the owner/creators/<handle>/posts/` (the creator library) and
 anything non-creator at `Shared Assets/swipe/organic/` (through
 `components/swipe-paid/swipe_home.py`). Profiles
 live here: `creators/<handle>/PROFILE.md`, regenerated by `profile.py`, with

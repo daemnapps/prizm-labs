@@ -1,6 +1,6 @@
 # Quality Check Inventory (2 Oct 2026)
 
-Page: (private page) · source `quality-inventory.html`
+Page: https://claude.ai/artifact/Rw4ARFxmZEUkudNwBAEZ4e · source `quality-inventory.html`
 
 This lists everything in the workspace whose name says quality, QC, check, review, judge, gate or audit. Each entry says what it actually does and who owns it.
 
@@ -9,9 +9,9 @@ This lists everything in the workspace whose name says quality, QC, check, revie
 | Folder | Owner | What it does | Judged by |
 |---|---|---|---|
 | `components/marketing-chain-checks/` (was `quality-checks/` until 2 Oct) | the owner | Checks the ads and briefs our chains make and holds bad work. It has the shared hold (5 gates), the price/unfilled/copy checks, the creative review after every stage, the QC log, and the viewer check. | A machine plus code |
-| `components/qc-checks/` | Engine the team · definitions the team | Checks finished text and pages for defects. `text_check` is live, `voice_check` and `avatar_walk` are pending. Findings are filed to `review`. | Code plus a dictionary, then a person |
-| `components/review/` | Engine the team · definitions the team | Not a checker. It records a person's verdict: request → verdict → close (RQ-… records). | A person |
-| `components/page-picture-review/` | the team | Numbers the picture slots on a built page and records the decisions. | People |
+| `components/qc-checks/` | Engine the designer · definitions the email lead | Checks finished text and pages for defects. `text_check` is live, `voice_check` and `avatar_walk` are pending. Findings are filed to `review`. | Code plus a dictionary, then a person |
+| `components/review/` | Engine the developer · definitions the email lead | Not a checker. It records a person's verdict: request → verdict → close (RQ-… records). | A person |
+| `components/page-picture-review/` | the developer | Numbers the picture slots on a built page and records the decisions. | People |
 
 qc-checks files its findings into review. marketing-chain-checks calls neither. Its notes used to say it called qc-checks, but no code ever did, and that line is removed.
 
@@ -24,7 +24,7 @@ qc-checks files its findings into review. marketing-chain-checks calls neither. 
 Other checks on the system, owned by others: /system-review and the control room's machine check.
 
 ## Name clashes
-- **quality-checks vs qc-checks**: resolved 2 Oct. the owner's is renamed **marketing-chain-checks**. the team ruled on 30 Sep that the two stay separate (SD-2). A stub at `components/quality-checks/` forwards old imports.
+- **quality-checks vs qc-checks**: resolved 2 Oct. the owner's is renamed **marketing-chain-checks**. the developer ruled on 30 Sep that the two stay separate (SD-2). A stub at `components/quality-checks/` forwards old imports.
 - **review** means five different things:
   - quality-checks `review.py`: a machine reviews each stage.
   - `review/`: a person's verdict.
@@ -32,8 +32,8 @@ Other checks on the system, owned by others: /system-review and the control room
   - `/system-review`: does a folder follow the rules.
   - `review_page.py` in meta-upload and language-layer, and `build_review.py` in email: a look-over page for a person.
 - **QC** means:
-  - `qc-checks/`: the team's defect checks.
-  - `/qc-check`: runs the team's text check.
+  - `qc-checks/`: the developer's defect checks.
+  - `/qc-check`: runs the developer's text check.
   - video-production `qc.py`: every check on one video ad.
   - email `sweep/qc.py`: rebuilt emails checked against their sources.
   - `qc_log`: there is one log. Video-production's copy points to it.

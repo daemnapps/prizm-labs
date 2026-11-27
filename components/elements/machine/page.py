@@ -154,7 +154,7 @@ footer{{margin-top:60px;border-top:1px solid var(--line);padding-top:16px;font:1
 </div>
 <div class="tiles">{tiles}</div>
 {"".join(sections)}
-<footer>Rebuilt by components/elements/machine/page.py from library/ · the lists stay where their tools read them (sources.json) · the owner's new rows are drafts in additions.json until he defines and signs them.</footer>
+<footer>Rebuilt by components/elements/machine/page.py from library/ · the lists stay where their tools read them (sources.json) · owner's new rows are drafts in additions.json until he defines and signs them.</footer>
 </div>
 """
     out.write_text(page)

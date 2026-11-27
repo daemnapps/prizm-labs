@@ -1,0 +1,87 @@
+{
+ "id": "presets",
+ "name": "Presets",
+ "kind": "effect",
+ "makes": "80 one-shot slash recipes (45 stills such as /hero-shot, 18 product-effect videos such as /paint-wave, 17 person-effect videos such as /abandoned-carnival): a supplied photo plus a command gives a fixed-prompt result with no questions.",
+ "source": [
+  "presets/ (80 files)",
+  "_catalog-presets.md",
+  "SOURCES.md"
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "name": "Take the supplied image (confirmed media id, upload widget, or HTTPS import); upload once",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 2,
+   "name": "Image recipe: one generate_image with the preset's fixed model, settings and master prompt unchanged",
+   "model": "gpt_image_2_6 (45 recipes)",
+   "cheap": "gpt_image_2_6_flare 1k low (0.75) or seedream_5_0_flash 2k (0.5)"
+  },
+  {
+   "n": 3,
+   "name": "Video recipe (35): make one hidden start frame with the Preprocessing master prompt",
+   "model": "gpt_image_2_6_flare (17 person effects) / nano_banana_pro (18 product effects)",
+   "cheap": "seedream_5_0_flash 2k (0.5)"
+  },
+  {
+   "n": 4,
+   "name": "Video recipe: one generate_video, frame as start_image, video master prompt, silent",
+   "model": "seedance_2_5 (17 person effects, 8 s 9:16) / seedance_2_0 (18 product effects, 6 s 3:4)",
+   "cheap": "wan3_0 480p (7.5 / 10 s) or gemini_omni_flash_1_2 360p (7.5 / 10 s)"
+  },
+  {
+   "n": 5,
+   "name": "Wait with jobs_wait 15 s; show the result through the generation widget; report only real job state",
+   "model": "none",
+   "cheap": null
+  }
+ ],
+ "price": "Each recipe quotes before paying. Image recipe: one gpt_image_2_6 call (not quoted; proxy gpt_image_2_6_flare 2k high 2.25). Person-effect video: flare start frame plus one seedance_2_5 8 s 1080p clip (160 per 10 s quoted, about 130 scaled to 8 s, not quoted). Product-effect video: nano_banana_pro start frame plus one seedance_2_0 6 s 1080p clip (not quoted).",
+ "cheap_price": "Video on wan3_0 480p about 5 to 6 credits for a 6 to 8 s clip (7.5 per 10 s) plus a 0.5 seedream_5_0_flash frame; image recipes 0.5 to 0.75.",
+ "prompts": [
+  {
+   "label": "/hero-shot master prompt",
+   "source": "presets/hero-shot.md",
+   "text": "Create a polished commercial still using the supplied image as the authoritative product reference. Place the product large and dominant, standing on a clean seamless studio surface whose tone and texture complement the product's palette, against a softly graded backdrop with generous negative space. Light it like a premium advertising shoot: one large soft key from the upper front-left, a subtle rim light for edge separation, controlled speculars that follow the product's real materials, and one coherent soft shadow grounding it. Shoot at product eye level with a slight hero low angle and a moderate telephoto perspective, keeping the entire product in crisp focus. Add no props, scenery, or set dressing beyond this surface and backdrop unless they are present in the reference. If the reference photo was taken from a tilted or elevated angle, do not inherit that viewpoint: straighten the product and compose it cleanly and level within the frame, in the natural orientation for this shot. Preserve the exact product identity, silhouette, proportions, materials, colors, logo placement, packaging structure, and readable label text — reproduce every printed element, including stickers, fine print, and secondary marks, exactly as in the reference; never invent, translate, or substitute words or characters, and keep unreadable glyphs as faithful shapes. If people or hands appear, keep anatomy natural and product scale believable. Do not add unsupported claims, prices, extra logos, watermarks, or unrelated products. Deliver a photorealistic, production-ready image with clean edges and coherent shadows."
+  },
+  {
+   "label": "/product-spin master prompt",
+   "source": "presets/product-spin.md",
+   "text": "Create a 6-second silent premium product video using the supplied image as the authoritative starting frame and product reference. Keep the camera locked while the product completes one smooth 360-degree turn on a clean turntable. Use constant angular speed, stable studio lighting, and a subtle grounded shadow. Infer unseen surfaces conservatively and preserve design continuity. Preserve the exact product identity, silhouette, proportions, materials, colors, logo placement, packaging structure, and readable label text in every frame. Keep motion physically plausible, temporal consistency high, edges stable, and lighting coherent. Do not morph, melt, duplicate, replace, or redesign the product. Do not add people, hands, unsupported claims, extra logos, captions, watermarks, or unrelated products. End on a clean, stable product frame suitable for social media."
+  },
+  {
+   "label": "/before-after master prompt",
+   "source": "presets/before-after.md",
+   "text": "Create a production-ready marketing still from the supplied image, treating it as the authoritative product reference. Build a clear visual problem-to-solution concept in one frame: the product is the decisive solution, while the problem is represented through a simple environmental contrast. Avoid medical, performance, or numerical claims not visible in the source. If the reference photo was taken from a tilted or elevated angle, do not inherit that viewpoint: straighten the product and compose it cleanly and level within the frame, in the natural orientation for this shot. Preserve the exact product identity, silhouette, proportions, materials, colors, logo placement, packaging structure, and readable source text. Keep typography concise, correctly spelled, and visually subordinate to the product. Do not invent prices, statistics, endorsements, ingredients, certifications, or product claims. Do not add unrelated logos, watermarks, or extra products."
+  },
+  {
+   "label": "/unboxing master prompt",
+   "source": "presets/unboxing.md",
+   "text": "Create a polished commercial still using the supplied image as the authoritative product reference. Show a premium package-opening still with the product revealed inside or beside its box. Preserve the supplied packaging design, make inserts and folds physically plausible, and avoid inventing accessories not implied by the source. If the reference photo was taken from a tilted or elevated angle, do not inherit that viewpoint: straighten the product and compose it cleanly and level within the frame, in the natural orientation for this shot. Preserve the exact product identity, silhouette, proportions, materials, colors, logo placement, packaging structure, and readable label text. If people or hands appear, keep anatomy natural and product scale believable. Do not add unsupported claims, prices, extra logos, watermarks, or unrelated products. Deliver a photorealistic, production-ready image with clean edges and coherent shadows."
+  },
+  {
+   "label": "/abandoned-carnival master prompt",
+   "source": "presets/abandoned-carnival.md",
+   "text": "Use the supplied photograph as the identity reference for the single main person. Preserve their recognizable facial proportions, apparent age, natural skin tone, hairstyle and gender presentation. If multiple people appear in the source, use the most prominent foreground person only. Animate the supplied scene into an 8-second silent vertical shot as the camera slowly pushes closer. During seconds 1–5 theatrical makeup gradually appears on the original face: a thin porcelain-white cosmetic base that retains facial detail, softly smudged dark eye accents, a small muted-red painted nose and a red smile following the natural mouth. Geometry and individual features do not stretch. The person develops a small unsettling smile. During seconds 4–8 the carousel lights flicker on in sequence and it turns slowly; one red balloon rises at the frame edge without covering the face. Keep the costume, skin detail and carnival perspective consistent. No exaggerated mouth, lunging or jump scare. Photorealistic skin, fabric and environment; coherent anatomy, restrained motion and stable identity. One continuous shot. No cuts, text, captions, logos, gore, blood, facial melting, duplicate main people or extra limbs."
+  },
+  {
+   "label": "/alien-reveal master prompt",
+   "source": "presets/alien-reveal.md",
+   "text": "Use the supplied photograph as the identity reference for the single main person. Preserve their recognizable facial proportions, apparent age, natural skin tone, hairstyle and gender presentation. If multiple people appear in the source, use the most prominent foreground person only. Animate the supplied scene into an 8-second silent vertical science-fiction shot. During seconds 0–2 a cool white beam surrounds the person, lifting dust and small leaves as the camera slowly moves closer. During seconds 2–6 a narrow scanning light travels downward across the face; where it passes the skin develops subtle pearlescence and delicate faintly luminous markings. Irises become dark and reflective with a thin silver ring. Preserve the exact original eye shape, nose, mouth, jaw and head size. During seconds 6–8 the person lowers their gaze from the sky into the lens with an enigmatic expression. Maintain road, jacket, UFO position and one continuous body; no oversized head or facial stretching. Photorealistic skin, fabric and environment; coherent anatomy, restrained motion and stable identity. One continuous shot. No cuts, text, captions, logos, gore, blood, facial melting, duplicate main people or extra limbs."
+  },
+  {
+   "label": "/push-in master prompt",
+   "source": "presets/push-in.md",
+   "text": "Create a 6-second silent premium product video using the supplied image as the authoritative starting frame and product reference. Perform one slow, steady camera push toward the product, beginning with environmental context and ending on a strong close hero framing. Preserve perspective, focus behavior, and product geometry. Preserve the exact product identity, silhouette, proportions, materials, colors, logo placement, packaging structure, and readable label text in every frame. Keep motion physically plausible, temporal consistency high, edges stable, and lighting coherent. Do not morph, melt, duplicate, replace, or redesign the product. Do not add people, hands, unsupported claims, extra logos, captions, watermarks, or unrelated products. End on a clean, stable product frame suitable for social media."
+  },
+  {
+   "label": "/moodboard master prompt",
+   "source": "presets/moodboard.md",
+   "text": "Create a production-ready marketing still from the supplied image, treating it as the authoritative product reference. Create a curated moodboard around the product using material swatches, palette chips, contextual fragments, and close details derived from the source. Keep the product whole and central, with a cohesive editorial grid. Swatch and chip captions may name only materials, colors, and textures. Never write taste, quality, comparative, emotional, or health claims, slogans, or taglines; the only product wording allowed is text visibly present in the reference. Never fabricate contact details, phone numbers, addresses, QR codes, or URLs. If the reference photo was taken from a tilted or elevated angle, do not inherit that viewpoint: straighten the product and compose it cleanly and level within the frame, in the natural orientation for this shot. Preserve the exact product identity, silhouette, proportions, materials, colors, logo placement, packaging structure, and readable source text. Keep typography concise, correctly spelled, and visually subordinate to the product. Do not invent prices, statistics, endorsements, ingredients, certifications, or product claims. Do not add unrelated logos, watermarks, or extra products."
+  }
+ ]
+}

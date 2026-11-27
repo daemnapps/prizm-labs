@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""A Shared Assets folder as a local folder: through the API first, the Drive folder second (the owner, 20 Oct 2026:
+"""A Shared Assets folder as a local folder: through the API first, the Drive folder second (owner, 20 Oct 2026:
 "there is a drive but it's connected directly via API, which our tools need to default to and use normal mounts").
 
     from gdrive_creator import shared as SH
     d = SH.folder("meta")                 # a local Path holding Shared Assets/meta
     ...read and write files under d as before...
-    SH.save(d / "brand-a/1-check/image/x/card.json")   # a changed file goes back to the Drive
+    SH.save(d / "brand_a/1-check/image/x/card.json")   # a changed file goes back to the Drive
 
 ROUTE (route()): GDRIVE_SA_KEY in the environment -> "api", even where a Drive folder exists; else the Drive for
 Desktop folder (components/brandpath drive_index.mount()) -> "mount"; else NoDrive. DRIVE_ROUTE=mount pins the

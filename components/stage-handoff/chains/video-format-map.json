@@ -1,0 +1,275 @@
+{
+ "_what": "The format map: every format-like name the video chain holds, sorted into what it really is, with duplicates grouped and the open calls. A PROPOSAL built from the lists as they stand on 2026-11-17 and the owner's rulings of 2026-09-11 and 2026-11-02; nothing in any bank has been changed.",
+ "status": "draft",
+ "as_of": "2026-11-17",
+ "parts": [
+  {
+   "name": "Hook",
+   "what": "The first seconds. One job: earn the next beat.",
+   "choices": "**Hook type** (what it does) × **hook format** (how it is made, when that differs from the body)"
+  },
+  {
+   "name": "Body",
+   "what": "The argument and the proof.",
+   "choices": "**Script format** (what it says) × **production format** (how it is made)"
+  },
+  {
+   "name": "Close",
+   "what": "The offer and the ask.",
+   "choices": "Offer, ask and end frame, from the offer bank"
+  }
+ ],
+ "around": "**Set once for the whole ad:** avatar · angle · awareness · structure · style · delivery · caption look · maker",
+ "layers": [
+  {
+   "name": "Avatar and sub-avatar",
+   "q": "Who is it for?",
+   "test": "A description of a person.",
+   "eg": "the fed-up shaver",
+   "today": "each brand's avatar folders"
+  },
+  {
+   "name": "Angle",
+   "q": "What do we claim?",
+   "test": "One sentence she could agree or disagree with.",
+   "eg": "the razor was never the problem",
+   "today": "each brand's angle list"
+  },
+  {
+   "name": "Awareness and framework",
+   "q": "How much does she already know, and in what order do we argue?",
+   "test": "Changes which sections the ad has and their order.",
+   "eg": "problem aware: problem, mechanism, proof, offer",
+   "today": "the marketing doctrine"
+  },
+  {
+   "name": "Script format",
+   "q": "What does the body say?",
+   "test": "Film it three different ways and it is still the same idea.",
+   "eg": "remedy · demonstration · testimonial montage",
+   "today": "7 in the bank, 8 more in a second list, 14 named only inside recipes"
+  },
+  {
+   "name": "Production format",
+   "q": "How is the body made?",
+   "test": "It needs its own production line: different things on screen, or something else carrying the sound.",
+   "eg": "single presenter · song ad · text thread",
+   "today": "3 in the bank, 8 recipes outside it"
+  },
+  {
+   "name": "Hook type",
+   "q": "What do the first seconds do?",
+   "test": "Swap it and the body does not change.",
+   "eg": "question · bold claim · result first",
+   "today": "13 types, used only by the variations tool"
+  },
+  {
+   "name": "Hook format",
+   "q": "How is the opening made, when it is made differently from the body?",
+   "test": "A stunt or spectacle that ends where the pitch starts.",
+   "eg": "a faked impossible moment, then the pitch",
+   "today": "filed as full formats and recipes"
+  },
+  {
+   "name": "Structure",
+   "q": "What is the beat-by-beat build of the proven post we are borrowing?",
+   "test": "Same mechanic with different footage is the same structure.",
+   "eg": "talking head under a fixed headline",
+   "today": "52 from organic posts, 50 not yet reviewed"
+  },
+  {
+   "name": "Style",
+   "q": "What does it look like?",
+   "test": "Change it and the script and the shots stay the same.",
+   "eg": "phone camera · claymation · family 3D",
+   "today": "36 looks"
+  },
+  {
+   "name": "Delivery",
+   "q": "How is it said?",
+   "test": "Same words, different person saying them.",
+   "eg": "deadpan · confessional · storyteller",
+   "today": "13"
+  },
+  {
+   "name": "Caption look",
+   "q": "How do the words sit on screen?",
+   "test": "A setting at the edit.",
+   "eg": "Instagram native · lyric line",
+   "today": "11 looks, a pick for 2 formats"
+  },
+  {
+   "name": "Maker",
+   "q": "Who makes it?",
+   "test": "AI, a creator, or the founder.",
+   "eg": "ai · creator · founder",
+   "today": "set on the run"
+  }
+ ],
+ "production": [
+  {
+   "id": "single-presenter",
+   "name": "Single presenter",
+   "what": "One person to camera. Their voice carries it.",
+   "folds": "",
+   "runs": "50 teardowns, 16 productions",
+   "note": "Also filed a second time as a variant of the multi-speaker recipe."
+  },
+  {
+   "id": "multi-speaker-scene",
+   "name": "Multi-speaker scene",
+   "what": "Two or more people in a room, talking to each other and to the lens.",
+   "folds": "sports interview · talking object (the same scene, animated)",
+   "runs": "recipe seeded from 5 runs",
+   "note": "Not in the bank, so production refuses it by name today."
+  },
+  {
+   "id": "narrator-montage",
+   "name": "Narrator montage",
+   "what": "One voice over a run of shots. Nobody talks on screen.",
+   "folds": "voiceover explainer · voiceover montage · voiceover pitch · narrated story · animated explainer (the same thing in an animated look)",
+   "runs": "5 briefs, none produced on the chain",
+   "note": "Five names for one thing today."
+  },
+  {
+   "id": "song-ad",
+   "name": "Song ad",
+   "what": "A song carries it. Every sung line is a clip.",
+   "folds": "freestyle battle · music-video narrative · character song",
+   "runs": "12 teardowns, 20 productions",
+   "note": "The only format with settings of its own in production."
+  },
+  {
+   "id": "short-movie",
+   "name": "Short movie",
+   "what": "A story acted out with no words: sound effects and music only.",
+   "folds": "",
+   "runs": "recipe drafted, no runs",
+   "note": "Not in the bank."
+  },
+  {
+   "id": "text-thread",
+   "name": "Text thread",
+   "what": "Drawn in code. No people, no camera.",
+   "folds": "chat prank",
+   "runs": "3 finished by hand",
+   "note": "No teardown, writing or production path."
+  }
+ ],
+ "hook_formats": [
+  {
+   "id": "vfx-stunt-hook",
+   "name": "VFX stunt",
+   "what": "One impossible, obviously faked moment in real handheld footage, then straight to the pitch.",
+   "now": "filed as a full production recipe"
+  },
+  {
+   "id": "fooh-stunt",
+   "name": "Fake billboard stunt",
+   "what": "A giant billboard comes alive on a real street and hands the product out.",
+   "now": "filed as a full production recipe, with 2 variants"
+  },
+  {
+   "id": "dramatic-continuation",
+   "name": "Dramatic continuation",
+   "what": "Watch-bait drama that cuts to the sales pitch.",
+   "now": "filed as a format and as a variant of the multi-speaker recipe"
+  },
+  {
+   "id": "stunt-funnel-reveal",
+   "name": "Weird stunt, then the pitch",
+   "what": "An attention toll that has nothing to do with the offer, then the reveal.",
+   "now": "filed as a structure"
+  }
+ ],
+ "script_groups": [
+  {
+   "name": "In the bank (7)",
+   "names": "remedy · demonstration · expert consultation · testimonial montage · meme · micro-drama · comedy skit",
+   "note": "Each is also filed as a variant under a production recipe, which mixes the two kinds. Remedy sits in four places and its caption look is under a fifth name."
+  },
+  {
+   "name": "In a second list only (7)",
+   "names": "letter to my younger self · then and now photo · home video flashback · classic commercial remake · infomercial throwback · era roll call · continue screen",
+   "note": "The teardown and writing accept these. Production refuses them: they are not in the bank. 17 idea-only runs used era roll call and none reached a brief."
+  },
+  {
+   "name": "Named only inside recipes (14)",
+   "names": "TV shopping · grandma explainer · body-scan recipe · public reaction · expert stitch · expert reaction · split-screen comparison · makeover reveal · founder story · VSL · expert VSL · founder VSL · symptom checker · problem-solution dance",
+   "note": "Never defined anywhere. Most arrived when a recipe was built from one swipe."
+  },
+  {
+   "name": "Filed as structures (2)",
+   "names": "before, turn, after story · timeline turn",
+   "note": "These are argument shapes, not beat-by-beat builds."
+  },
+  {
+   "name": "Borrowed shows (11)",
+   "names": "fight night · cooking show · soap opera · home shopping · courtroom · true crime · game show · home makeover · nature documentary · analyst desk · boss fight",
+   "note": "A show is a script format with six roles to cast. Nothing in the chain reads this list as a format."
+  }
+ ],
+ "same_thing": [
+  "**An expert carries it:** expert consultation · expert stitch · expert reaction · expert VSL",
+  "**Real people vouch for it:** testimonial montage · public reaction · stranger answer montage",
+  "**The product does the work:** demonstration · TV shopping · body-scan recipe · makeover reveal",
+  "**A long straight pitch:** VSL · expert VSL · founder VSL (who tells it is the maker, not the format)",
+  "**A played character:** comedy skit · character sketch · micro-drama"
+ ],
+ "not_formats": [
+  {
+   "name": "Ad series",
+   "is": "a run of ads, each with its own format"
+  },
+  {
+   "name": "Founder story, founder VSL",
+   "is": "the maker (founder) plus a script format"
+  },
+  {
+   "name": "Animated explainer",
+   "is": "narrator montage in an animated style"
+  },
+  {
+   "name": "The 3D world skit tool",
+   "is": "a way to make scenes, not a format"
+  },
+  {
+   "name": "Copy formats (16) and email formats",
+   "is": "other outputs that share the word"
+  }
+ ],
+ "calls": [
+  {
+   "n": 1,
+   "q": "An ad is hook, body and close, and the hook gets its own two choices.",
+   "yes": "The 4 stunt-type names move out of formats into hook formats."
+  },
+  {
+   "n": 2,
+   "q": "Six production formats, as listed.",
+   "yes": "Five voiceover names become narrator montage; three song names become song ad."
+  },
+  {
+   "n": 3,
+   "q": "Script formats stop being filed under production recipes.",
+   "yes": "Remedy, demonstration and the rest are named once, beside the production format, on every run."
+  },
+  {
+   "n": 4,
+   "q": "The 7 nostalgia formats join the bank as script formats.",
+   "yes": "Production stops refusing them."
+  },
+  {
+   "n": 5,
+   "q": "The same-thing groups each become one script format with variants.",
+   "yes": "About 20 names become about 5."
+  },
+  {
+   "n": 6,
+   "q": "Ad series is a container, not a format.",
+   "yes": "It leaves the format bank."
+  }
+ ],
+ "canvas": "https://claude.ai/artifact/H1WiuMEqNKAE7n8ZNYeb1h",
+ "creative_system": "https://claude.ai/artifact/2TgVZ54rsm2EQtnfEGt7w4"
+}

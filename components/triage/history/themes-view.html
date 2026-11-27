@@ -39,13 +39,13 @@ footer{font-size:13px;color:var(--ink3)}
 <div class="wrap">
 
 <header class="head">
-  <span class="eyebrow">Triage component · design draft · 2026-10-02 · for the team, the engine owner</span>
-  <p style="border-left:4px solid var(--prop,#9a6205);padding:8px 12px;margin:0 0 6px"><b>Merged into <a href="(private page)">the triage approach page</a> (2026-10-02).</b> That page now carries the two themes side by side (red tests set aside) and the component drawn to the atlas standard. This earlier view is kept only as history.</p>
+  <span class="eyebrow">Triage component · design draft · 2026-10-02 · for the developer, the engine owner</span>
+  <p style="border-left:4px solid var(--prop,#9a6205);padding:8px 12px;margin:0 0 6px"><b>Merged into <a href="https://claude.ai/artifact/4BsAyTeRYP7Z1UWBgcpx6s">the triage approach page</a> (2026-10-02).</b> That page now carries the two themes side by side (red tests set aside) and the component drawn to the atlas standard. This earlier view is kept only as history.</p>
   <h1>One engine, a pack per theme</h1>
   <p class="lede">Every list that gets triaged is a <b>theme</b>, with its own owners, priorities and flow. Each theme is described in one <b>pack</b>, curated by its triage owner, and runs through the same <b>core engine</b>. The atlas comes first because it's the one worked out today. Red tests are the second pack, there to prove the shape fits.</p>
 </header>
 
-<p class="rule"><b>The rule:</b> the core never names a person, a path, a cause class or a priority rule. All of that comes from the pack. Changing how one theme is triaged is its triage owner's edit to the pack; changing how every theme is triaged is the team's edit to the core. The walls bind every theme, and no pack can relax one.</p>
+<p class="rule"><b>The rule:</b> the core never names a person, a path, a cause class or a priority rule. All of that comes from the pack. Changing how one theme is triaged is its triage owner's edit to the pack; changing how every theme is triaged is the developer's edit to the core. The walls bind every theme, and no pack can relax one.</p>
 
 <div class="panel">
   <h2>How the pieces fit</h2>
@@ -53,19 +53,19 @@ footer{font-size:13px;color:var(--ink3)}
   <svg viewBox="0 0 960 470" width="100%" style="min-width:860px" role="img" aria-label="Three theme packs feed one core engine of nine passes, which produces shared outputs">
     <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink3)"/></marker></defs>
     <text x="20" y="22" font-size="11" font-weight="600" letter-spacing="1.3" fill="var(--ink3)">THEME PACKS</text>
-    <text x="330" y="22" font-size="11" font-weight="600" letter-spacing="1.3" fill="var(--ink3)">CORE ENGINE · ENGINEER</text>
+    <text x="330" y="22" font-size="11" font-weight="600" letter-spacing="1.3" fill="var(--ink3)">CORE ENGINE · the developer</text>
     <text x="700" y="22" font-size="11" font-weight="600" letter-spacing="1.3" fill="var(--ink3)">SHARED BY EVERY THEME</text>
     <!-- packs -->
     <rect x="20" y="40" width="250" height="110" rx="10" fill="var(--ats)" stroke="var(--at)" stroke-width="2"/>
     <text x="34" y="64" font-size="14.5" font-weight="700" fill="var(--at)">Atlas · component issues</text>
-    <text x="34" y="84" font-size="12.5" fill="var(--ink)">Triage owner: the team</text>
+    <text x="34" y="84" font-size="12.5" fill="var(--ink)">Triage owner: the email lead</text>
     <text x="34" y="102" font-size="12" fill="var(--ink2)">685 open · eight-part summaries</text>
     <text x="34" y="119" font-size="12" fill="var(--ink2)">owners from the Residents table</text>
     <text x="34" y="138" font-size="11.5" fill="var(--ink3)">themes/atlas.json</text>
 
     <rect x="20" y="170" width="250" height="110" rx="10" fill="var(--rts)" stroke="var(--rt)" stroke-width="2"/>
     <text x="34" y="194" font-size="14.5" font-weight="700" fill="var(--rt)">Red tests</text>
-    <text x="34" y="214" font-size="12.5" fill="var(--ink)">Triage owner: the team</text>
+    <text x="34" y="214" font-size="12.5" fill="var(--ink)">Triage owner: the developer</text>
     <text x="34" y="232" font-size="12" fill="var(--ink2)">34 red · engine verdict + summaries</text>
     <text x="34" y="249" font-size="12" fill="var(--ink2)">closes itself when the suite goes green</text>
     <text x="34" y="268" font-size="11.5" fill="var(--ink3)">themes/red-tests.json</text>
@@ -132,7 +132,7 @@ footer{font-size:13px;color:var(--ink3)}
   <div class="tw"><table>
     <thead><tr><th></th><th class="at">Atlas · component issues</th><th class="rt">Red tests</th><th class="pc">Parked cards (to write)</th></tr></thead>
     <tbody>
-      <tr><td>Triage owner</td><td>the team</td><td>the team</td><td class="tbd">to name (the lead holds the decks)</td></tr>
+      <tr><td>Triage owner</td><td>the email lead</td><td>the developer</td><td class="tbd">to name (the lead holds the decks)</td></tr>
       <tr><td>An item is</td><td>an issue, <code>&lt;component&gt;#&lt;n&gt;</code></td><td>a red suite, by its path</td><td class="tbd">a parked card, by its id</td></tr>
       <tr><td>Read from</td><td>compiled atlas data (each component's newest run)</td><td>the red-test reporter's newest record</td><td class="tbd">the cards status index</td></tr>
       <tr><td>Already fixed?</td><td>next system run re-reads; triage marks "looks fixed"</td><td>run the suite once; the next sweep decides</td><td class="tbd">still wanted? (a question, not a fix)</td></tr>
@@ -167,7 +167,7 @@ footer{font-size:13px;color:var(--ink3)}
 </section>
 
 <footer>
-  <p>Files: <code>components/triage/CONTRACT-themes.md</code>, <code>…/component/themes/atlas.json</code>, <code>…/component/themes/red-tests.json</code>. Draft for the team, the engine owner (ruled 2026-10-02); not ruled. Related: the triage log page and the Option 3 proposal.</p>
+  <p>Files: <code>components/triage/CONTRACT-themes.md</code>, <code>…/component/themes/atlas.json</code>, <code>…/component/themes/red-tests.json</code>. Draft for the developer, the engine owner (ruled 2026-10-02); not ruled. Related: the triage log page and the Option 3 proposal.</p>
 </footer>
 
 </div>

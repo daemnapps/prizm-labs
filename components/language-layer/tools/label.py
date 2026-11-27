@@ -2,7 +2,7 @@
 """Label customer-language rows with the doctrine's awareness level, a
 sophistication signal and the lane their words point to.
 
-Ruled 2026-09-28 (the language bank upgrade — tools/language-layer/docs/
+Ruled 2026-09-28 (the language bank upgrade — components/language-layer/docs/
 PROPOSAL.md): every row says what its speaker knows, so every hook, body
 and close can pull words spoken from the level it is writing for.
 
@@ -119,7 +119,7 @@ def product_names(brand):
 def _keys_loader():
     """components/keys/loader.py, loaded by path (never on sys.path), found from this file."""
     import importlib.util
-    mod = sys.modules.get("company_keys_loader")
+    mod = sys.modules.get("upright_keys_loader")
     if mod is None:
         d = os.path.dirname(os.path.abspath(__file__))
         while not os.path.isfile(os.path.join(d, "components", "keys", "loader.py")):
@@ -127,9 +127,9 @@ def _keys_loader():
                 raise RuntimeError("components/keys/loader.py not found above " + __file__)
             d = os.path.dirname(d)
         spec = importlib.util.spec_from_file_location(
-            "company_keys_loader", os.path.join(d, "components", "keys", "loader.py"))
+            "upright_keys_loader", os.path.join(d, "components", "keys", "loader.py"))
         mod = importlib.util.module_from_spec(spec)
-        sys.modules["company_keys_loader"] = mod
+        sys.modules["upright_keys_loader"] = mod
         spec.loader.exec_module(mod)
     return mod
 
@@ -137,7 +137,7 @@ def _keys_loader():
 def gemini_key():
     """GEMINI_API_KEY, by NAME, through the one key loader
     (components/keys/loader.py): the environment (the name the mini's
-    env.template and the dispatch grants know), then this repo's .env on a
+    env.template and the dispatch grants know), then ~/.upright-keys.env on a
     person's machine. Asked for by NAME, never read from a path."""
     k = os.environ.get("GEMINI_API_KEY")
     if k:
@@ -147,7 +147,7 @@ def gemini_key():
     except Exception:
         k = None
     if not k:
-        raise RuntimeError("GEMINI_API_KEY is not set in the environment or this repo's .env")
+        raise RuntimeError("GEMINI_API_KEY is not set in the environment or ~/.upright-keys.env")
     return k
 
 
@@ -426,7 +426,7 @@ def cmd_origin(a):
             after[new] = after.get(new, 0) + 1
             if old != new:
                 prop.row(f, i, e, origin=new)
-    s = dict(rule="origin_of() in tools/language-layer/tools/label.py", where=a.where or "(every row)",
+    s = dict(rule="origin_of() in components/language-layer/tools/label.py", where=a.where or "(every row)",
              rows_matched=seen, origin_before=before, origin_after=after, changed=len(prop.rows))
     print(json.dumps(s))
     if not prop.rows:
@@ -456,7 +456,10 @@ def main(argv=None):
     ap.add_argument("--run", default=None, help="the run folder under runs/language-layer/<brand>/ (default: resume or a new dated one)")
     ap.add_argument("--where", default="", help="origin: only rows whose source name contains this")
     ap.add_argument("--propose-only", action="store_true", help="write the proposal under runs/ and stop — nothing applied")
-    a = ap.parse_args(argv)
+    import importlib.util as _u, pathlib as _pl
+    _s = _u.spec_from_file_location("profile_arg", next(q for q in _pl.Path(__file__).resolve().parents if q.name == "components") / "naming" / "profile_arg.py")
+    _PA = _u.module_from_spec(_s); _s.loader.exec_module(_PA)   # --profile <avatar>[_<sub>][_<demographic>] (naming/PEOPLE.md)
+    a = ap.parse_args(_PA.expand(argv, has=('avatar',)))
     return {"sample": cmd_sample, "apply": cmd_apply, "origin": cmd_origin}[a.cmd](a) or 0
 
 

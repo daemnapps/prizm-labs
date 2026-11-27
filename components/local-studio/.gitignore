@@ -2,3 +2,4 @@
 models/
 .venv-mlx/
 src/
+.venv-vlm/

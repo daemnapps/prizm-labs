@@ -1,3 +1,5 @@
-# products/
+# products
 
-One folder per product: its facts here, its photos and video on the Drive at the same path.
+One folder per product, plus the banks that describe them all.
+
+**Empty on purpose.** Leave it empty until you have the real thing — a tool reading an empty file asks you a question; a tool reading an invented one ships the invention.

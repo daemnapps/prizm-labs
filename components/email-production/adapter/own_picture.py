@@ -1,16 +1,16 @@
 """Put a picture a person made outside Claude (Higgsfield, a camera, a designer's file) into a designed email.
 
-the team's own-picture step (the team's lab, 2026-10-21). email-production's `sync.py` can only remake or edit a picture
-with AI; this places a file the team brings, in place of one picture of the email, and rebuilds the email.
+editor's own-picture step (email_lead's lab, 2026-10-21). email-production's `sync.py` can only remake or edit a picture
+with AI; this places a file editor brings, in place of one picture of the email, and rebuilds the email.
 
     own_picture.py list  <run>                                   every picture of the email, with its code (P1, P2, …)
     own_picture.py place <run> <P-code> <file> --alt "<words>"   put the file in that picture's place, rebuild
     own_picture.py newest <run> [--role graphic-designer]       show the newest file in the email's returned/ folder (moves nothing)
     own_picture.py newest <run> <P-code> --alt "<words>" --made-with "<tool>"
-                                                                 "use my newest", LD-90 (the team takes newest): that file is
+                                                                 "use my newest", LD-90 (editor takes newest): that file is
                                                                  MOVED into the run's Drive media, then placed as above
 
-<run>   an email label (oct-20, brand-b-oct-20) or a run folder path; --brand picks the brand (default:
+<run>   an email label (oct-20, brand_b-oct-20) or a run folder path; --brand picks the brand (default:
         the one brand folder holding that label).
 <P-code> P2, or "2", or an S address S6.1 (part 6 as the emails page shows it, its first picture; both count
         from 1, so S6.1 is section 5, picture 0 of design/email.json; "nov-02 · S6.1" works too). S6 alone
@@ -24,9 +24,9 @@ media/ folder (gitignored) and mirrors it to the Drive at Shared Assets/runs/ema
 keeping the old one in the picture's `history`; rebuilds and checks the email with email-production's own
 design/build.py and design/check.py; prints where the rebuilt email is.
 
-What newest does (LD-90 (the team takes newest), the words the team says are the team's: "<id> P<n>: use my newest"): lists
+What newest does (LD-90 (editor takes newest), the words editor says are email_lead's: "<id> P<n>: use my newest"): lists
 the email's own handoff folder for the asker's role, Shared Assets/runs/handoffs/<role>/<brand>/<email label>/returned/
-(role from tools/image-edit delivery.json `roles`; never a person's folder, the owner 2026-10-27), and its direct
+(role from components/image-edit delivery.json `roles`; never a person's folder, owner 2026-10-27), and its direct
 subfolders by API, takes the newest picture by its Drive
 modified time, MOVES it (LD-89 (tracked Drive moves)'s move(), which writes a drive-move record) to the run's
 Shared Assets/runs/email-production/<brand>/<label>/media/, reads it back by id and places it as above. The picture
@@ -36,7 +36,7 @@ file is gone from the returned/ folder: that is how she sees it moved. Undo is t
 and putting an earlier picture back is a place too, so nothing is rewritten.
 
 A place from the command line (place_own) also writes one model-outcome record, and a picture read from a link (a
-Higgsfield result) keeps `made_from` {link, id}, --source-id being the tool's own id for it (the team, 2026-10-23).
+Higgsfield result) keeps `made_from` {link, id}, --source-id being the tool's own id for it (developer, 2026-10-23).
 
 Nothing here talks to Klaviyo, deletes anything, or commits. The alt text is required and must describe the NEW
 picture: an alt still holding a "to make" prompt is refused.
@@ -56,7 +56,7 @@ sys.path.insert(0, str(next(d for d in HERE.parents if (d / "components" / "run-
 from run_kit import paths  # noqa: E402
 
 REPO = paths.repo(HERE)
-EM = REPO / "tools" / "email-production"
+EM = REPO / "components" / "email-production"
 RUNS = REPO / "runs" / "email-production"
 BAD_ALT = re.compile(r"to make|after your ok|change:|^\s*$", re.I)
 REAL_PHOTO = re.compile(r"^\s*(?:an?\s+)?(?:real\s+)?(?:photo|photograph|camera)\s*$", re.I)
@@ -155,7 +155,7 @@ MAX_LINK_BYTES = 60 * 1024 * 1024
 
 def from_link(url, tmp, opener=None):
     """A picture's https link (a Higgsfield result, as its connector lists it, or any public file link) downloaded to
-    tmp. Higgsfield (the team, 2026-10-22, the team's ask): the team's Claude reads her newest generation's link through the
+    tmp. Higgsfield (email_lead, 2026-10-22, developer's ask): editor's Claude reads her newest generation's link through the
     Higgsfield connector and places it with no download or drag. Refuses a non-https link, a page that is not a
     picture, and anything over 60 MB; never sends anything, only reads the one link."""
     import urllib.request
@@ -286,7 +286,7 @@ def place(run, code, src, alt, by, made_with, ratio, focus, drive, *, original=N
             "see": str(run / "klaviyo" / "email.html")}
 
 
-# --------------------------------------------------------------- "use my newest", LD-90 (the team takes newest)
+# --------------------------------------------------------------- "use my newest", LD-90 (editor takes newest)
 
 def _drive_lister(svc=None):
     """lister(parts) -> the children of Shared Assets/<parts> as [{id, name, modified, folder}], or None when the
@@ -389,7 +389,7 @@ def is_link(src):
 
 def place_own(run, code, src, alt, by, made_with, ratio, focus, drive, source_id=None, outcome_root=None):
     """`place` for a picture a person brings (a file, a Drive link, a Higgsfield link), with the two things the team
-    Drive flow asks of every picture (the team, 2026-10-23: the system knows where each one came from): a picture read
+    Drive flow asks of every picture (developer, 2026-10-23: the system knows where each one came from): a picture read
     from a link keeps `made_from` {link, id} — the id is the tool's own (a Higgsfield generation id) — and one
     model-outcome record is written, the same as "use my newest". Returns place()'s dict + {"outcome": record path}."""
     run = Path(run)
@@ -407,8 +407,8 @@ def place_own(run, code, src, alt, by, made_with, ratio, focus, drive, source_id
     return dict(res, outcome=str(rec))
 
 
-ROLE = "graphic-designer"     # who makes an email's own pictures, by role, never by name (the owner, 2026-10-27)
-ROLES = REPO / "tools" / "image-edit" / "delivery.json"      # who fills each role: the one setting
+ROLE = "graphic-designer"     # who makes an email's own pictures, by role, never by name (owner, 2026-10-27)
+ROLES = REPO / "components" / "image-edit" / "delivery.json"      # who fills each role: the one setting
 
 
 def role_of(by):
@@ -423,7 +423,7 @@ def role_of(by):
 
 def returned_parts(brand, label, role=ROLE):
     """Where a person puts the pictures they made for one email: its handoff folder's returned/, the one shape every
-    handoff has, the same words in the repo and on the Drive (the owner, 2026-10-27: "the name of the folders need to be the
+    handoff has, the same words in the repo and on the Drive (owner, 2026-10-27: "the name of the folders need to be the
     same for both repo and drive"; "standardization is the default")."""
     # under runs/ like every hand-off since 2026-10-28 ()
     return ["runs", "handoffs", role, brand, label, "returned"]
@@ -474,7 +474,7 @@ def take_newest(run, code, alt, by, made_with, role=None, svc=None, mover=None, 
 
 
 def moved_line(r):
-    """The reply's proof it moved (the team, ~04:30Z: gone from her folder, and where it went)."""
+    """The reply's proof it moved (developer, ~04:30Z: gone from her folder, and where it went)."""
     m = r["moved"]
     return "%s moved from %s to %s (record %s)" % (m.get("name") or r["newest"]["name"], m.get("from"), m.get("to"),
                                                    m.get("record"))

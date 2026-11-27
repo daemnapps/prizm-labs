@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """form_problems(): a word naming a product in a form it never takes (a 'jar' for a tube) holds the layout, but the
-same word inside a "never …" / "no …" / "not …" clause is the product truth repeated, not a wrong form (brand-b
+same word inside a "never …" / "no …" / "not …" clause is the product truth repeated, not a wrong form (brand_b
 nov-04, 2026-10-30: "Never a jar, pot, bottle or tub" held its own layout three times).
 
-    /usr/bin/python3 tools/email-production/design/test_form_negation.py
+    /usr/bin/python3 components/email-production/design/test_form_negation.py
 """
 import sys
 import unittest

@@ -54,7 +54,7 @@ Subject lines (all ship, none ranked):
 **VERSION 0 — THE CONTROL, SWIPED STRAIGHT**
 
 **Subject:** Forty years of shaving made him doubt it
-**Preview:** Until NOVA™ changed his mornings: Real story, real progress
+**Preview:** Until FLEX™ changed his mornings: Real story, real progress
 
 *(The source's exact shape — an 8-word declarative ending on the downbeat, a preview opening on "Until" that finishes the sentence. Substitutions only: two decades → forty years, failed treatments → shaving, skeptical → doubt it (the ledger has already spent "skeptic" twice, 2026-03-04 and 2025-02-26, so the word does not re-run even in the control), changed his life → changed his mornings.)*
 
@@ -74,7 +74,7 @@ Subject lines (all ship, none ranked):
 *Leads on a real sentence from the language bank ("At my age I should not be having issues with bumps on my face..Really need a reliable product.") instead of the brand's paraphrase. Betting that a customer's syntax in the inbox reads as a person, not a campaign.*
 
 **Subject:** "At my age I should not be having issues"
-**Preview:** Forty years in, he had stopped expecting different. Then NOVA™
+**Preview:** Forty years in, he had stopped expecting different. Then FLEX™
 
 ---
 
@@ -98,13 +98,13 @@ Subject lines (all ship, none ranked):
 *No arc, no withholding, no turn — just the contents named. Betting that after 308 sends of constructed openings, the un-constructed one is the one that reads as real.*
 
 **Subject:** One man. Forty years. One story
-**Preview:** He is 61 and he had given up on it. NOVA™ is what changed
+**Preview:** He is 61 and he had given up on it. FLEX™ is what changed
 
 ---
 
 **THE FROM-NAME**
 
-Triage ruled `BRAND`, and the sender file binds the brand's from-line to exactly `<brand>`. There is no legitimate variant here: the construct forbids first person anywhere, so `the owner from <brand>` would put a person's name on an email that never says "I" — a from-line the body cannot honour. **No from-name option offered.** One string ships: `<brand>`.
+Triage ruled `BRAND`, and the sender file binds the brand's from-line to exactly `Brand A`. There is no legitimate variant here: the construct forbids first person anywhere, so `the owner from Brand A` would put a person's name on an email that never says "I" — a from-line the body cannot honour. **No from-name option offered.** One string ships: `Brand A`.
 
 ---
 

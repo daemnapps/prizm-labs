@@ -4,7 +4,7 @@
     /usr/bin/python3 components/ad-handoff/tests/test_take_back.py
 
 SI-143 (take-back home): the Klaviyo uploader, meta-upload and video-edit
-called take_back by executing the owner's lab hand-off file; they now load
+called take_back by executing owner's lab hand-off file; they now load
 `components/ad-handoff/take_back.py` by path. AI_WORKSPACE points at a temp
 tree WITH brands/ and a decoy naming module, to prove naming is found by the
 file's own location. Offline: no key, no network, no Drive.
@@ -96,9 +96,9 @@ class TakeBack(unittest.TestCase):
 class CallersLoadTheComponent(unittest.TestCase):
     # upload.py's catalog reads still use the lab tool; they are not take-back
     EXCEPT = {"components/meta-upload/upload.py": {"_funnel_of", "link_url"}}
-    CALLERS = ("tools/email-production/klaviyo_upload.py",
+    CALLERS = ("components/email-production/klaviyo_upload.py",
                "components/meta-upload/upload.py",
-               "tools/video-edit/machine/handoff_run.py")
+               "components/video-edit/machine/handoff_run.py")
 
     def test_v_no_lab_handoff_on_a_take_back_line(self):
         for rel in self.CALLERS:

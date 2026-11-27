@@ -26,7 +26,7 @@ CATEGORY = {"ask": "Promotional", "help": "Educational", "belong": "Cultural",
             "real": "Community", "brand": "Brand", "affiliate": "Affiliate"}
 
 # The brand's language bank — who its avatars are, in its customers' own
-# words. `tools/language-layer/` owns it; before that was extracted, the
+# words. `components/language-layer/` owns it; before that was extracted, the
 # email chain reached sideways into another lab machine's folder for it.
 # Absent, a brand simply has no roster yet — that is a brand, not an error.
 # Found, never counted: this file has moved folders twice and a `parents[N]`
@@ -37,7 +37,7 @@ CATEGORY = {"ask": "Promotional", "help": "Educational", "belong": "Cultural",
 def _language_layer():
     here = Path(__file__).resolve()
     for d in [here.parent, *here.parents]:
-        cand = d / "tools" / "language-layer"
+        cand = d / "components" / "language-layer"
         if cand.is_dir():
             sys.path.append(str(cand))
             try:
@@ -53,7 +53,7 @@ L = _language_layer()
 
 def _json_or(path, default):
     """A brand file that is not there yet reads as empty — a brand with no
-    history is a brand, not an error (Brand-B, 2026-09-09)."""
+    history is a brand, not an error (brand_b, 2026-09-09)."""
     try:
         return json.loads(path.read_text())
     except (FileNotFoundError, ValueError):
@@ -83,7 +83,7 @@ def bank_is_per_avatar(text, roster):
 
     Both shapes exist and they are read differently. The older one used
     `## <avatar>` with `### <offer>` beneath; the current generated one is flat
-    — `## <key> — <name>` per offer, brand-wide, after the owner's 2026-09-13
+    — `## <key> — <name>` per offer, brand-wide, after owner's 2026-09-13
     ruling ("stop overcomplicating these things"). Guessing wrong is not a
     cosmetic error: on 2026-09-14 the flat bank was read with the old rule, so
     every product heading looked like an avatar, no line looked like an offer,
@@ -111,7 +111,7 @@ def offerless_avatars(brand_root, roster):
     return {a for a in roster if a not in sections}
 
 
-def render_types(path):
+def render_types(path, include_notes=True):
     """The full catalogue as the composer reads it — role, arc, needs, usage."""
     d = json.loads(Path(path).read_text())
     out = []
@@ -124,7 +124,7 @@ def render_types(path):
                     + (f" · then: {', '.join(t['then'])}" if t.get("then") else "")
                     + f" · sent {t.get('n', 0)}x · {t['what']}")
             out.append(line)
-            for k in ("note", "arc_note"):
+            for k in (("note", "arc_note") if include_notes else ("arc_note",)):
                 if t.get(k):
                     out.append(f"    ({t[k]})")
         out.append("")
@@ -137,9 +137,46 @@ def render_types(path):
     return "\n".join(out)
 
 
+def identity_sources(brand_root):
+    """Authoritative identity/origin inputs from this brand only; catalogue hints are not evidence."""
+    root = Path(brand_root)
+    return {rel: (root / rel).read_text() for rel in
+            ("brand-identity/position.md", "brand-identity/story.md") if (root / rel).is_file()}
+
+
+def planner_types(path, brand_root):
+    """Format choices plus sourced identity; free-form catalogue notes never supply biographies."""
+    sources = identity_sources(brand_root)
+    identity = "\n\n".join("### %s\n%s" % (rel, text) for rel, text in sources.items())
+    return ("## Format catalogue — format choices only, not evidence of credentials or origin\n"
+            + render_types(path, include_notes=False)
+            + "\n\n## Identity and origin from this brand's own sources\n"
+            + (identity or "No identity source supplied. Do not propose founder credentials or origin claims.")
+            + "\n\nCredential, founder, family and formulation claims must be supported by these identity sources. "
+              "A format name, example, catalogue note or another brand is not evidence. "
+              "Do not turn a manufacturer or family member's work into the founder's personal credential.")
+
+
+def identity_problems(slots, brand_root):
+    """Flag credential claims when that credential is absent from the brand's identity sources."""
+    sources = "\n".join(identity_sources(brand_root).values()).lower()
+    credential = r"pharmacist|dermatologist|doctor|chemist"
+    claim = re.compile(r"\b(?:is|was|am|as)\s+(?:a[n]?\s+)?(" + credential + r")\b|\b(" + credential + r")\s+who\b", re.I)
+    out = []
+    for slot in slots:
+        text = json.dumps({k: slot.get(k) for k in ("variants", "angle", "why")}, ensure_ascii=False)
+        for match in claim.finditer(text):
+            word = next(x for x in match.groups() if x).lower()
+            if not re.search(r"\b" + word + r"\b", sources):
+                out.append("%s: identity claim uses %s without support in this brand's position/story; catalogue hints are not identity evidence" % (slot.get("id", "move"), word))
+    return out
+
+
 NOTE_KEYS = {"guarantee", "guarantees", "social-proof", "cadence", "rules",
              "open", "funnel-shape", "page-pricing", "sms-capture",
-             "never-pair", "promo-calendar", "brand-owned-claims"}
+             "never-pair", "promo-calendar", "brand-owned-claims",
+             "funnel-offer-map", "storefront-order",   # storefront-order: which products lead, in order (2026-11-04)
+             "popup"}                                  # popup: the sign-up opt-in, not an offer a send carries (2026-11-04)
 
 
 def render_offers(brand_root, roster=()):
@@ -149,6 +186,14 @@ def render_offers(brand_root, roster=()):
     what the thing costs.** A price is what makes an offer an offer, and it is
     the only test that survives the bank being reshaped — which it was, on
     2026-09-13, silently emptying both banks for a day.
+
+    In a FLAT bank a `### ` heading is held to the same test as a `## ` one
+    (2026-11-03). A flat bank keeps its generated products as `## ` and its
+    human-ruled offers as `### ` beneath them — a funnel offer, a dated
+    promotion — and reading only `## ` made every ruled offer invisible while
+    its prose was swallowed into the last product's section. Every heading's
+    section now ends at the next heading of either depth, so a note's section
+    (`## Guarantees`) and the sections beneath it are each judged on their own.
     """
     text = (brand_root / "products" / "offer-bank.md").read_text()
     per_avatar = bank_is_per_avatar(text, roster)
@@ -157,7 +202,7 @@ def render_offers(brand_root, roster=()):
     def body(i):
         out = []
         for ln in lines[i + 1:]:
-            if ln.startswith("## ") or (per_avatar and ln.startswith("### ")):
+            if ln.startswith("## ") or ln.startswith("### "):
                 break
             out.append(ln)
         return out
@@ -167,7 +212,7 @@ def render_offers(brand_root, roster=()):
         rows = body(i)
         priced = any(re.match(r"\s*[-*]\s*(price|subscribed)\b", b, re.I)
                      or "$" in b for b in rows)
-        # A FREE THING IS NOT AN OFFER. Brand-B's bank carries three samples at
+        # A FREE THING IS NOT AN OFFER. brand_b's bank carries three samples at
         # $0.00 and $1.00 straight off the storefront; you cannot ask somebody
         # to buy something that costs nothing, and a send built on one would be
         # an ask with no ask in it (2026-09-14).
@@ -185,11 +230,153 @@ def render_offers(brand_root, roster=()):
                 out.append(f"\n## {head}")          # an avatar's section
             else:
                 emit(head, i, out)                  # one flat list of offers
-        elif line.startswith("### ") and per_avatar:
+        elif line.startswith("### "):
             emit(line[4:].strip(), i, out)
     out.append("\nOnly a line marked OFFER is an offer a send can carry. "
                "A note is context.")
     return "\n".join(out)
+
+
+MONTHS = {m: i + 1 for i, m in enumerate(
+    ("jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"))}
+_DAY = r"\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s+(\d{1,2})\b"
+
+
+def order_by_dates(brand_root, year):
+    """The brand's own order-by dates: [{arrive_by, order_by, label}], dated in
+    `year`, from the order-by table in `operations/shipping.md` (2026-11-03).
+
+    The table is the shipping record's — a heading naming order-by, then rows
+    with a "To arrive by" and an "Order by" column. A row whose order-by cell
+    is not one plain date ("arrive about Dec 4–8") states no order-by date and
+    is skipped. No table, no dates: a brand that has not measured its shipping
+    has no order-by date, and none is worked out for it here.
+    """
+    text = _text_or(brand_root / "operations" / "shipping.md")
+    sec = re.search(r"^#{2,3} [^\n]*order-by[^\n]*\n(.*?)(?=^#{1,3} |\Z)", text, re.I | re.S | re.M)
+    if not sec:
+        return []
+    rows = [[c.strip() for c in ln.strip().strip("|").split("|")]
+            for ln in sec.group(1).splitlines() if ln.strip().startswith("|")]
+    if not rows:
+        return []
+    head = [h.lower() for h in rows[0]]
+    try:
+        ia = next(i for i, h in enumerate(head) if "arrive by" in h)
+        io = next(i for i, h in enumerate(head) if "order by" in h)
+    except StopIteration:
+        return []
+
+    def day(m):
+        return datetime.date(year, MONTHS[m.group(1).lower()], int(m.group(2)))
+
+    out = []
+    for r in rows[1:]:
+        if len(r) <= max(ia, io) or set(r[0]) <= set("-: "):
+            continue
+        cell = re.sub(r"\*", "", r[io]).strip()
+        cell = re.sub(r"^[A-Za-z]+day,\s*", "", cell)
+        om = re.fullmatch(_DAY, cell)
+        am = list(re.finditer(_DAY, r[ia]))
+        if not om or not am:
+            continue
+        out.append({"arrive_by": day(am[-1]).isoformat(), "order_by": day(om).isoformat(),
+                    "label": re.sub(r"\*", "", r[ia]).strip()})
+    return out
+
+
+def lead_products(brand_root):
+    """The products the brand's own `storefront-order` note leads with, in its order (2026-11-04): every
+    **bold** name in that section that is a product key or a product's own section of the bank (a bundle can be
+    sold before it has a product file). [] when the bank keeps no such note."""
+    text = _text_or(brand_root / "products" / "offer-bank.md")
+    m = re.search(r"^#{2,3}\s+storefront-order\b(.*?)(?=^#{1,3}\s|\Z)", text, re.M | re.S)
+    if not m:
+        return []
+    keys = {k for k, _f in product_files(brand_root)} | set(re.findall(r"(?m)^## ([a-z0-9-]+) — ", text))
+    out = []
+    for k in re.findall(r"\*\*([a-z0-9-]+)\*\*", m.group(1)):
+        if k in keys and k not in out:
+            out.append(k)
+    return out
+
+
+def _named_products(line, products):
+    """The product keys a line of prose names: the key itself (bold or not, any case), or the product's own
+    title as the bank spells it, without a leading "The" and the trademark sign. In the order named."""
+    low = line.lower().replace("™", "")
+    hits = []
+    for key, title in products.items():
+        t = re.sub(r"[™®]", "", title or "").strip()
+        names = {key.lower(), re.sub(r"^the\s+", "", t.lower())}
+        pos = [low.find(n) for n in names if n and re.search(rf"(?<![a-z0-9-]){re.escape(n)}(?![a-z0-9-])", low)]
+        if pos:
+            hits.append((min(p for p in pos if p >= 0), key))
+    return [k for _, k in sorted(hits)]
+
+
+def storefront_mix(brand_root):
+    """How the brand's own `storefront-order` note mixes products in a send (2026-11-04), read from its lines:
+    {"lead": [the products a promo's lead sends carry together], "singles": {set: [its single products]}}.
+    A line saying lead sends mix … names the lead mix; a line naming a set's sends with the option to buy …
+    on its own names that set and its singles. Empty when the note says neither."""
+    text = _text_or(brand_root / "products" / "offer-bank.md")
+    m = re.search(r"^#{2,3}\s+storefront-order\b(.*?)(?=^#{1,3}\s|\Z)", text, re.M | re.S)
+    out = {"lead": [], "singles": {}}
+    if not m:
+        return out
+    prods = {k: product_title(f) for k, f in product_files(brand_root)}
+    bullets = []
+    for ln in m.group(1).splitlines():                # a bullet may wrap onto the next lines
+        if ln.strip().startswith("-"):
+            bullets.append(ln.strip())
+        elif bullets and ln.startswith("  ") and ln.strip():
+            bullets[-1] += " " + ln.strip()
+        elif not ln.strip():
+            bullets.append("")
+    for ln in bullets:
+        if not ln:
+            continue
+        named = _named_products(ln, prods)
+        if re.search(r"\blead sends?\b.*\bmix", ln, re.I) and len(named) >= 2:
+            out["lead"] = named
+        elif re.search(r"\bon its own\b|\bsingles?\b|\bindividual", ln, re.I) and len(named) >= 2:
+            out["singles"][named[0]] = named[1:]
+    return out
+
+
+def standing_offer(brand_root, roster=()):
+    """What a brand sells when no sale is on (2026-11-04: every week sells something). -> (offer key, mix or None,
+    lead product or None). The brand's own storefront-order note: its lead mix, else the first product it leads with;
+    else its ruled `paid-funnel` section (what its ads sell); else its one front-end product (`_hero: paid`).
+    (None, None, None) when the bank answers none of these — nothing is invented."""
+    mix = storefront_mix(brand_root)
+    if mix["lead"]:
+        return mix["lead"][0], list(mix["lead"]), mix["lead"][0]
+    leads = lead_products(brand_root)
+    if leads:
+        return leads[0], None, leads[0]
+    heroes = hero_products(brand_root)
+    one = next(iter(heroes.values())) if len(set(heroes.values())) == 1 else None
+    offers = [ln.split("`")[1] for ln in render_offers(brand_root, roster).splitlines() if ln.startswith("- OFFER `")]
+    if "paid-funnel" in offers:
+        return "paid-funnel", None, one
+    return (one, None, one) if one else (None, None, None)
+
+
+def hero_products(brand_root):
+    """{lane: product} — the front-end product of each lane, from the offer bank's own
+    `_lane: <avatar>_ · _hero: paid_` line under a product's section (both the bank's rule:
+    "The hero offer is the front end. One per lane"). Only lanes the bank has ruled."""
+    text = _text_or(brand_root / "products" / "offer-bank.md")
+    out, key = {}, None
+    for ln in text.splitlines():
+        if ln.startswith("## "):
+            key = ln[3:].strip().split(" ")[0].strip("`")
+        m = re.search(r"_lane:\s*([a-z0-9-]+)_\s*·\s*_hero:\s*paid_", ln)
+        if m and key:
+            out.setdefault(m.group(1), key)
+    return out
 
 
 def findings(brand_root):
@@ -239,7 +426,7 @@ def responsiveness(brand_root):
     recipient against unsubscribe cost, joined from the ledger (who each
     send went to) and the performance record (what it did).
 
-    This is the signal frequency follows (the owner: cadence is not a rule; no
+    This is the signal frequency follows (owner: cadence is not a rule; no
     ceiling, no floor — what goes out is decided by what a send earns). An
     audience that earns well and unsubscribes little can carry more; one
     that earns little and costs list can carry less. The number of emails is
@@ -390,7 +577,7 @@ def check(slots, month, types_by_key, sends_dir, roster,
     the brand's anchored calendar; (None, None) means usable any time.
     moment_keys: every key the brand's calendar knows, in or out of window.
     A slot whose occasion names a moment outside its window is a break —
-    that is how Black Friday landed in October (the owner, 2026-09-02)."""
+    that is how Black Friday landed in October (owner, 2026-09-02)."""
     errors, warns = [], []
     ids = {s.get("id") for s in slots}
     earned = {}   # segment -> [date of each earns/sets-up slot]
@@ -494,9 +681,12 @@ def check(slots, month, types_by_key, sends_dir, roster,
         if not later:
             warns.append(f"{s.get('id')}: type `{t['key']}` obliges {t['then']} and "
                          "nothing meets it — schedule the follow-up or drop the slot")
-    # PROMOTIONAL ARC (RULED, the owner, 2026-08-31): a promotional moment is
+    # PROMOTIONAL ARC (RULED, owner, 2026-08-31): a promotional moment is
     # never one email. Every offer-carrying ask needs a WARM-UP before it and
-    # a COOL-DOWN after it, to the same segment, linked by follows/then.
+    # a COOL-DOWN after it, to the same segment, linked by follows/then — or,
+    # for an ask inside a holiday period's arc (2026-11-03: two to three sends
+    # a day, 2026-10-09), linked by the arc they all name: the arc's own
+    # warm-up before it and its own close after it, to the same segment.
     WARM = {"earns", "sets-up"}
     COOL = {"recovers", "closes"}
     by_id = {s.get("id"): s for s in slots}
@@ -513,6 +703,17 @@ def check(slots, month, types_by_key, sends_dir, roster,
         cool = (cool_ref and segs_of(cool_ref) & segs_of(s)
                 and cool_ref.get("date", "") > when
                 and cool_ref.get("role") in COOL)
+        arc = s.get("arc")
+        if arc:
+            members = [x for x in slots if x.get("arc") == arc and x is not s and segs_of(x) & segs_of(s)]
+            warm = warm or [x for x in members if x.get("date", "") < when and x.get("role") in WARM]
+            cool = cool or any(x.get("date", "") > when and x.get("role") in COOL for x in members)
+        if s.get("type") == "early-access" and s.get("arc"):
+            # early access opens the arc for the best customers (2026-11-04): the arc's own warm-up and close
+            # stand around it, whichever audience they go to, so a VIP list that is not live gets one send, not an arc
+            arc_all = [x for x in slots if x.get("arc") == s["arc"] and x is not s]
+            warm = warm or [x for x in arc_all if x.get("role") in WARM and x.get("date", "") <= when]
+            cool = cool or any(x.get("role") in COOL and x.get("date", "") > when for x in arc_all)
         if not warm:
             errors.append(f"{sid}: promotional ask carrying offer "
                           f"{s.get('offer')!r} has no WARM-UP — a promotional "
@@ -523,6 +724,15 @@ def check(slots, month, types_by_key, sends_dir, roster,
                           f"{s.get('offer')!r} has no COOL-DOWN — it must name "
                           f"a recovers/closes slot to {seg} in `then`, dated "
                           "after it")
+    # AN SMS IS A COMPANION (2026-11-04): it follows an email of the same day and audience, never stands alone
+    for s in slots:
+        if s.get("channel") != "sms":
+            continue
+        e = by_id.get(s.get("follows"))
+        if not (e and e.get("channel", "email") == "email" and e.get("date") == s.get("date")
+                and segs_of(e) & segs_of(s)):
+            errors.append(f"{s.get('id')}: an SMS is the companion of an email — it must follow an email "
+                          "sent the same day to the same audience, named in `follows`")
     # The plan must match the decision it was built from: one slot per SEND.
     # Variants live inside a slot; a variant split into its own slot inflates
     # what a person receives (hit 2026-08-31).
@@ -530,7 +740,7 @@ def check(slots, month, types_by_key, sends_dir, roster,
         live = {c.get("segment") for c in cells.get("serve", []) if c.get("live", True)}
         for s in slots:
             for sg in segs_of(s):
-                if live and sg not in live:
+                if live and sg not in live and not (s.get("early_access_call") and s.get("type") == "early-access"):
                     errors.append(f"{s.get('id')}: sends to {sg}, which "
                                   "the cells stage did not make live this month")
     held = [s for s in slots if "HELD OPEN" in (s.get("occasion") or "").upper()]

@@ -89,7 +89,7 @@
   "rule": "Each ad set needs about 50 results a week to exit learning (Meta), so the campaign's daily budget is about 7 × cost per purchase × the number of live ad sets (ours). Below that, the ad sets stay 'learning limited'; add ad sets only as budget allows.",
   "whose": "meta (50 results/week) + ours (the arithmetic)",
   "results_per_week": 50,
-  "cpa_source": "lab/owner/media-buying/<brand>-offer-lines.json (break_even_cpa) until real CPA exists"
+  "cpa_source": "lab/the owner/media-buying/<brand>-offer-lines.json (break_even_cpa) until real CPA exists"
  },
  "cadence": {
   "rule": "Read Monday (one Meta pull) · brief to the gaps Tuesday · drop the week's new creatives into the ad set as one batch Thursday, take out what Meta marks creative limited/fatigue · no edits while learning.",
@@ -97,24 +97,28 @@
   "drop_day": "Thursday"
  },
  "offers": {
-  "brand-a": {
-   "product": "nova",
-   "page": "https://flex.brand-a.com/icon/flex/",
+  "Brand A": {
+   "product": "flex",
+   "page": "https://flex.Brand A.com/icon/flex/",
    "match": [
-    "flex.brand-a.com/icon/flex",
-    "method.brand-a.com/icon/portal-ingrown",
-    "method.brand-a.com/icon/flex"
+    "flex.Brand A.com/icon/flex",
+    "method.Brand A.com/icon/portal-ingrown",
+    "method.Brand A.com/icon/flex"
    ],
-   "campaign_product": "nova",
-   "_method_quiz": "9 Oct 2026, the owner: the LeBron ad goes to the new Bump Check portal on the BRAND-A CPK (method.brand-a.com/icon/portal-ingrown/), which ends on the CPK NOVA offer page; both count as the NOVA offer."
+   "campaign_product": "flex",
+   "_method_quiz": "9 Oct 2026, the owner: the LeBron ad goes to the new Bump Check portal on the Brand A CPK (method.Brand A.com/icon/portal-ingrown/), which ends on the CPK FLEX offer page; both count as the FLEX offer."
   },
-  "brand-b": {
+  "Brand B": {
    "product": "brilliance-face-scrub",
-   "page": "https://recipe.brand-b.com/brand-b-facescrub-cpk/landing/",
+   "page": "https://recipe.Brand B.com/Brand B-facescrub-cpk/landing/",
    "match": [
-    "brand-b-facescrub-cpk"
+    "Brand B-facescrub-cpk",
+    "Brand B-facescrub-subscribe",
+    "Brand B-scrub-cpk",
+    "Brand B-scrub-subscribe"
    ],
    "campaign_product": "brilliance-face-scrub",
+   "_body_portal": "2 Nov 2026: body and face scrub, one-time and subscription, offer, portal and quiz pages all take ads.",
    "cpa_offer": "Face Scrub · ads funnel (CPK)"
   }
  }

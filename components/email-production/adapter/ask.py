@@ -1,4 +1,4 @@
-"""Carry out the requests a person pasted from the emails page, in one command (the team's lab, 2026-10-21).
+"""Carry out the requests a person pasted from the emails page, in one command (email_lead's lab, 2026-10-21).
 
     ask.py <file>            the pasted text, saved as is: one or more lines starting "Email request ("
     ask.py <file> --dry-run  read the requests and say what would run; change nothing
@@ -9,14 +9,14 @@ Each line names its email, part and picture exactly, in brackets: [brand/label, 
 - use try N / add try N -> `try_picture.py`'s add: try-N.jpg goes into the email (own_picture.place), its record and
   one picture learning are written, and it is committed with the rest;
 - this part looks right, redesign this part, move this part up/down, remove this part,
-  change the words, make the missing parts, Done: send to the team, redo the whole email, I scheduled it in Klaviyo
+  change the words, make the missing parts, Done: send to email_lead, redo the whole email, I scheduled it in Klaviyo
   -> one call each to email-production's own `adapter/sync.py apply`, in the order pasted;
-- use my newest (made with <tool>): <what it shows> -> LD-90 (the team takes newest): `own_picture.py`'s take_newest: the
+- use my newest (made with <tool>): <what it shows> -> LD-90 (editor takes newest): `own_picture.py`'s take_newest: the
   newest picture in her Shared Assets/team/<person>/email-production/ is MOVED into the run's Drive media and goes into
   the email; the reply names where it went and the drive-move record; both records are committed with the email;
 - use my own picture -> not run here (it needs the person's file and an alt text): listed under "still to do",
   for `own_picture.py place`.
-Word changes from anyone but the team file a review request to the team (components/review file_request), so she is told.
+Word changes from anyone but email_lead file a review request to email_lead (components/review file_request), so she is told.
 Then everything that changed is committed in one commit (the emails' run folders, runs/learnings/, the review
 record, and after an add platform/data/records/model-outcome/) and pushed after `git pull --rebase`. Pictures are
 media and stay out of git (gitignored; on the Drive). A try commits nothing.
@@ -39,17 +39,27 @@ sys.path.insert(0, str(next(d for d in HERE.parents if (d / "components" / "run-
 from run_kit import paths  # noqa: E402
 
 REPO = paths.repo(HERE)
-SYNC = REPO / "tools" / "email-production" / "adapter" / "sync.py"
-WORDS_REVIEWER = "pm"     # the words are the team's (README, "Requests from the email page")
+SYNC = REPO / "components" / "email-production" / "adapter" / "sync.py"
+WORDS_REVIEWER = "email_lead"     # the words are email_lead's (README, "Requests from the email page")
 LINE = re.compile(r"Email request \([^)]*\):\s*(?P<code>[^\[]*?)\s*\[(?P<brand>[\w-]+)/(?P<label>[\w-]+)"
                   r"(?:,\s*section\s+(?P<section>\d+))?(?:,\s*picture\s+(?P<picture>\d+))?\]\s*·\s*(?P<rest>.*)$")
 WHAT = [("change this picture", "picture"), ("use my own picture", "own"), ("this part looks right", "ok"),
         ("redesign this part", "look"), ("move this part", "move"), ("remove this part", "remove"),
-        ("change the words", "words"), ("make the missing parts", "fill"), ("done: send to pm", "done"),
+        ("change the words", "words"), ("make the missing parts", "fill"), ("done: send to email_lead", "done"),
         ("make the klaviyo draft", "go"),
         ("redo the whole email", "send_back"), ("i scheduled it in klaviyo", "scheduled"),
         ("add try", "add"), ("use try", "add"), ("use my newest", "newest")]
 NEEDS_NOTE = {"picture", "look", "send_back"}
+APPROVERS_F = REPO / "components" / "email-production" / "approvers.json"   # this component's own list
+
+
+def approvers():
+    """Whose Go and "scheduled" count: the names on approvers.json (email_lead, 2026-11-05: whoever is available)."""
+    try:
+        names = json.loads(APPROVERS_F.read_text())["approvers"]
+    except (OSError, ValueError, KeyError, TypeError):
+        return []
+    return [n for n in names if isinstance(n, str) and n.strip()] if isinstance(names, list) else []
 KEEP_MARKS = {"picture", "words", "fill"}   # same parts after the rebuild: keep the parts marked right (prepare.keep_card)
 
 
@@ -107,11 +117,11 @@ def parse(text):
         if act in ("picture", "own", "add", "newest") and "picture" not in k:
             out.append((None, "%s: no picture named" % k["code"]))
             continue
-        if act == "go" and who != "the team":
-            out.append((None, "%s: the team makes the Klaviyo draft, after her words (the team's part is Done)" % k["code"]))
-            continue
-        if act == "scheduled" and who != "the team":
-            out.append((None, "%s: only the team marks an email scheduled" % k["code"]))
+        if act in ("go", "scheduled") and who not in approvers():
+            # email_lead, 2026-11-05: any approver's Go counts, whoever is available (approvers.json), not only hers
+            out.append((None, "%s: only an approver (%s) %s, after reading the email (editor's part is Done)"
+                        % (k["code"], ", ".join(approvers()) or "approvers.json is empty",
+                           "makes the Klaviyo draft" if act == "go" else "marks an email scheduled")))
             continue
         out.append((k, None))
     return out
@@ -180,7 +190,7 @@ def add_one(k):
 
 
 def newest_one(k):
-    """LD-90 (the team takes newest): her team folder's newest picture is moved into the run's Drive media and placed
+    """LD-90 (editor takes newest): her team folder's newest picture is moved into the run's Drive media and placed
     (own_picture.take_newest). Returns (ok, what to say, the two record paths to commit with the run)."""
     sys.path.insert(0, str(HERE))
     import own_picture
@@ -223,7 +233,7 @@ def pictures_up(brand, run, reach=None):
 
 
 def mark_done(k, root=REPO):
-    """the team's Done: the card says she is done (eve_done), and the team gets a review request. Nothing goes to Klaviyo."""
+    """editor's Done: the card says she is done (editor_done), and email_lead gets a review request. Nothing goes to Klaviyo."""
     run = Path(root) / "runs" / "email-production" / k["brand"] / k["label"]
     f = run / "klaviyo" / "card.json"
     c = json.loads(f.read_text())
@@ -232,7 +242,7 @@ def mark_done(k, root=REPO):
     stop = pictures_up(k["brand"], run)
     if stop:
         return False, stop
-    c["eve_done"] = {"by": k["by"], "at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")}
+    c["editor_done"] = {"by": k["by"], "at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")}
     f.write_text(json.dumps(c, indent=1, ensure_ascii=False) + "\n")
     sys.path.insert(0, str(REPO / "components" / "review"))
     from review_request import file_request
@@ -249,8 +259,8 @@ def mark_done(k, root=REPO):
     return True, out.get("path")
 
 
-def tell_pm(k, root=REPO):
-    """A review request to the team naming each changed line, before -> after. Returns the record's path."""
+def tell_email_lead(k, root=REPO):
+    """A review request to email_lead naming each changed line, before -> after. Returns the record's path."""
     sys.path.insert(0, str(REPO / "components" / "review"))
     from review_request import file_request
     lines = "; ".join('%s: "%s" -> "%s"' % (e.get("path"), e.get("before", "?"), e.get("value")) for e in k["edits"])
@@ -278,10 +288,35 @@ def share(paths_, message):
         return "not committed: " + (c.stderr or c.stdout).strip().splitlines()[-1]
     p = git("pull", "--rebase")
     if p.returncode:
+        # A rebase refuses ANY uncommitted file, even one this request never touched (editor, 2026-11-11: her Done stayed
+        # on her Mac behind an unrelated index.json). A merge pull refuses only a file the team also changed, so it
+        # is tried before giving up; never a stash, a reset or a force.
         git("rebase", "--abort")
-        return "committed here, not pushed: git pull --rebase stopped (%s). Tell the team." % (p.stderr or p.stdout).strip().splitlines()[-1]
+        p = git("pull", "--no-rebase", "--no-edit")
+        if p.returncode:
+            git("merge", "--abort")
+            return NOT_SHARED % ("git pull stopped: %s" % _last(p))
     s = git("push")
-    return "shared" if not s.returncode else "committed, not pushed: %s. Tell the team." % (s.stderr or s.stdout).strip().splitlines()[-1]
+    return "shared" if not s.returncode else NOT_SHARED % ("git push stopped: %s" % _last(s))
+
+
+def page_note(root=REPO):
+    """After a pull: which shared-page changes the asker's own emails page still lacks (page_sync.after_pull_note)."""
+    try:
+        from run_kit import people
+        import page_sync
+        return page_sync.after_pull_note(people.try_person_of(root, people.git_email(root)))
+    except Exception as e:  # noqa: BLE001 — a note, never in the Done's way
+        return "PAGE · could not check the shared page's changes: %s" % str(e)[:200]
+
+
+NOT_SHARED = ("NOT on the team page yet: your change is saved only on this Mac (%s). "
+              "Nobody else sees it until it is pushed. Tell email_lead, and paste her this line.")
+
+
+def _last(r):
+    t = (r.stderr or r.stdout or "").strip().splitlines()
+    return t[-1] if t else "no message"
 
 
 def run_paths(reqs):
@@ -324,13 +359,13 @@ def main(argv=None):
             drafted = None
         if drafted and k["action"] not in ("ok", "scheduled", "go", "picture"):
             print("  ! %s is already a Klaviyo draft (%s): this change updates the email here, not the draft in "
-                  "Klaviyo. Tell the team to make the same change in the Klaviyo draft." % (k["label"], drafted))
+                  "Klaviyo. Tell email_lead to make the same change in the Klaviyo draft." % (k["label"], drafted))
         if k["action"] == "done":
             try:
                 ok, res = mark_done(k)
             except Exception as e:  # noqa: BLE001 — said, never hidden
                 ok, res = False, str(e)[:200]
-            print(("✓ " if ok else "✗ ") + say + ("  (the team has been told)" if ok else " — " + res))
+            print(("✓ " if ok else "✗ ") + say + ("  (email_lead has been told)" if ok else " — " + res))
             if ok:
                 done.append(k)
                 extra.append(res)
@@ -343,7 +378,7 @@ def main(argv=None):
             if not ok:
                 failed.append(say)
             continue
-        if k["action"] == "newest":                     # LD-90 (the team takes newest): moved, placed, records committed
+        if k["action"] == "newest":                     # LD-90 (editor takes newest): moved, placed, records committed
             ok, res, recs = newest_one(k)
             print(("✓ " if ok else "✗ ") + say + " — " + res)
             extra += recs
@@ -367,18 +402,23 @@ def main(argv=None):
             failed.append(say)
             continue
         done.append(k)
-        if k["action"] == "words" and k["by"] != "the team":
+        if k["action"] == "words" and k["by"] != "email_lead":
             try:
-                extra.append(tell_pm(k))
-                print("  the team has been sent a review request for these words")
-            except Exception as e:  # noqa: BLE001 — the change stays; telling the team is said to have failed
-                failed.append("%s: the words changed but the team's review request failed (%s)" % (k["code"], str(e)[:120]))
-                print("  ✗ couldn't send the team the review request: %s" % str(e)[:120])
+                extra.append(tell_email_lead(k))
+                print("  email_lead has been sent a review request for these words")
+            except Exception as e:  # noqa: BLE001 — the change stays; telling email_lead is said to have failed
+                failed.append("%s: the words changed but email_lead's review request failed (%s)" % (k["code"], str(e)[:120]))
+                print("  ✗ couldn't send email_lead the review request: %s" % str(e)[:120])
     if done:
-        words = [k["code"] for k in done if k["action"] == "words" and k["by"] != "the team"]
+        words = [k["code"] for k in done if k["action"] == "words" and k["by"] != "email_lead"]
         head = ("%s changed words: %s; " % (done[0]["by"], ", ".join(words))) if words else ""
         msg = "%s%s requests: %s" % (head, done[0]["by"], "; ".join("%s %s" % (k["code"], k["action"]) for k in done))
-        print("git: " + share(run_paths(done) + [p for p in extra if p], msg[:300]))
+        said = share(run_paths(done) + [p for p in extra if p], msg[:300])
+        print("git: " + said)
+        if said == "shared":                     # the pull brought the team's changes: is her own page behind now?
+            note = page_note()
+            if note:
+                print(note)
     return 0 if not failed and not todo else 1
 
 

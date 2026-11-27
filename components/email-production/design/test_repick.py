@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""repick.py: a laid-out email's real pictures chosen again, every section and word kept (the team, 2026-10-28).
+"""repick.py: a laid-out email's real pictures chosen again, every section and word kept (email_lead, 2026-10-28).
 
-    python3 tools/email-production/design/test_repick.py
+    python3 components/email-production/design/test_repick.py
 
   a  slots: brand photos and customer pictures only; made pictures (run:), cut-outs, todos and a customer picture
      sitting with that customer's own words are never touched
@@ -11,7 +11,7 @@
      is recorded; the words are byte for byte the same
   d  used_elsewhere: the brand's other emails' pictures, the batch's own emails left out
   e  a model answer with words or a second object after its JSON is read, not refused
-The brand-a-nov-02--glow-up layout (charging case in THE CHECK) is the fixture. No network, no model.
+The brand_a-nov-02--glow-up layout (charging case in THE CHECK) is the fixture. No network, no model.
 """
 import copy
 import json
@@ -34,8 +34,8 @@ except ImportError:
     sys.modules["PIL"] = PIL
 import repick as RP  # noqa: E402
 
-CASE = "drive:brands/b/products/nova-charging-case/lifestyle/x_mirror.jpg"
-FOAM = "drive:brands/b/products/nova-face-brush/lifestyle/x_in-hand-foam.jpg"
+CASE = "drive:brands/b/products/flex-charging-case/lifestyle/x_mirror.jpg"
+FOAM = "drive:brands/b/products/flex-face-brush/lifestyle/x_in-hand-foam.jpg"
 WASH = "drive:brands/b/products/war-face-wash/lifestyle/x_in-hand-with-flex.jpg"
 
 
@@ -45,11 +45,11 @@ def email():
         {"s": "hero_type", "eyebrow": "SAVE THIS", "headline": "That's not acne on your <i>jaw</i>",
          "picture": {"photo": "run:media/hero.png", "alt": "the chart", "source": "made"}},
         {"s": "photo_card", "title": "THE CHECK", "text": "You can check it on your own jaw tonight.",
-         "picture": {"photo": CASE, "ratio": 0.8, "focus": [0.5, 0.3], "alt": "NOVA in its case on the shelf", "source": "photo"}},
+         "picture": {"photo": CASE, "ratio": 0.8, "focus": [0.5, 0.3], "alt": "FLEX in its case on the shelf", "source": "photo"}},
         {"s": "example", "picture": {"proof": "p-andrew", "alt": "Andrew"}, "quote": "My hair grows in curly", "who": "Andrew", "ask": "a"},
         {"s": "tiles", "title": "Two bumps. Two answers.", "tiles": [
             {"picture": {"stage": "product:crush", "alt": "tube", "source": "cut"}, "name": "CRUSH", "line": "The jaw"},
-            {"picture": {"photo": FOAM, "alt": "brush", "source": "photo"}, "name": "NOVA", "line": "WAR goes on with this"}]},
+            {"picture": {"photo": FOAM, "alt": "brush", "source": "photo"}, "name": "FLEX", "line": "WAR goes on with this"}]},
         {"s": "picture", "picture": {"todo": "a razor", "alt": "a razor"}},
         {"s": "foot"}]}
 
@@ -70,8 +70,8 @@ class Repick(unittest.TestCase):
         ok = {"slots": [{"n": 1, "photo": WASH}, {"n": 2, "keep": True}]}
         self.assertEqual(RP.problems(ok, sl, offered, set(), {}), {})
         self.assertIn(1, RP.problems({"slots": [{"n": 1, "photo": "drive:not-offered.jpg"}, {"n": 2, "keep": True}]}, sl, offered, set(), {}))
-        self.assertIn(1, RP.problems(ok, sl, offered, set(), {WASH: "brand-a-nov-04"}))
-        self.assertIn(2, RP.problems(ok, sl, offered, set(), {FOAM: "brand-a-nov-05--glow-up"}))     # kept, but taken
+        self.assertIn(1, RP.problems(ok, sl, offered, set(), {WASH: "brand_a-nov-04"}))
+        self.assertIn(2, RP.problems(ok, sl, offered, set(), {FOAM: "brand_a-nov-05--glow-up"}))     # kept, but taken
         self.assertIn(2, RP.problems({"slots": [{"n": 1, "photo": WASH}, {"n": 2, "photo": WASH}]}, sl, offered, set(), {}))
         self.assertIn(2, RP.problems({"slots": [{"n": 1, "keep": True}]}, sl, offered, set(), {}))
 
@@ -80,11 +80,11 @@ class Repick(unittest.TestCase):
         before = copy.deepcopy(words(spec))
         sl = RP.slots(spec)
         changed = RP.apply(sl, {"slots": [{"n": 1, "photo": WASH, "why": "the case is sold separately"},
-                                          {"n": 2, "todo": "NOVA in a hand, WAR on it", "brief": "real NOVA", "why": "x"}]}, {})
+                                          {"n": 2, "todo": "FLEX in a hand, WAR on it", "brief": "real FLEX", "why": "x"}]}, {})
         self.assertEqual(words(spec), before)
         card = spec["sections"][2]["picture"]
         self.assertEqual(card, {"photo": WASH, "ratio": 0.8, "focus": [0.5, 0.3], "source": "photo"})
-        self.assertEqual(spec["sections"][4]["tiles"][1]["picture"]["todo"], "NOVA in a hand, WAR on it")
+        self.assertEqual(spec["sections"][4]["tiles"][1]["picture"]["todo"], "FLEX in a hand, WAR on it")
         self.assertEqual([c["from"] for c in changed], [CASE, FOAM])
         self.assertEqual(spec["sections"][1]["picture"]["photo"], "run:media/hero.png")
         self.assertEqual(spec["sections"][3]["picture"]["proof"], "p-andrew")

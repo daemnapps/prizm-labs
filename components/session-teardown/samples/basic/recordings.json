@@ -1,0 +1,5329 @@
+{
+"s0000": {
+"duration_s": 84,
+"active_s": 59,
+"clicks": 5,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T08:51:00+00:00"
+},
+"s0001": {
+"duration_s": 30,
+"active_s": 19,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T12:22:00+00:00"
+},
+"s0002": {
+"duration_s": 43,
+"active_s": 22,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T20:48:00+00:00"
+},
+"s0003": {
+"duration_s": 50,
+"active_s": 12,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T07:17:00+00:00"
+},
+"s0004": {
+"duration_s": 47,
+"active_s": 27,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T20:13:00+00:00"
+},
+"s0005": {
+"duration_s": 52,
+"active_s": 47,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T13:18:00+00:00"
+},
+"s0006": {
+"duration_s": 30,
+"active_s": 14,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T11:00:00+00:00"
+},
+"s0007": {
+"duration_s": 56,
+"active_s": 12,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T00:56:00+00:00"
+},
+"s0009": {
+"duration_s": 30,
+"active_s": 18,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T02:07:00+00:00"
+},
+"s0010": {
+"duration_s": 51,
+"active_s": 39,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T12:58:00+00:00"
+},
+"s0011": {
+"duration_s": 58,
+"active_s": 26,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T02:46:00+00:00"
+},
+"s0012": {
+"duration_s": 51,
+"active_s": 44,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T10:37:00+00:00"
+},
+"s0013": {
+"duration_s": 59,
+"active_s": 17,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T20:32:00+00:00"
+},
+"s0014": {
+"duration_s": 33,
+"active_s": 72,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T22:58:00+00:00"
+},
+"s0015": {
+"duration_s": 30,
+"active_s": 12,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T07:24:00+00:00"
+},
+"s0016": {
+"duration_s": 52,
+"active_s": 14,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T09:07:00+00:00"
+},
+"s0017": {
+"duration_s": 37,
+"active_s": 71,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T06:42:00+00:00"
+},
+"s0020": {
+"duration_s": 48,
+"active_s": 81,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T03:49:00+00:00"
+},
+"s0021": {
+"duration_s": 54,
+"active_s": 64,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T20:01:00+00:00"
+},
+"s0023": {
+"duration_s": 149,
+"active_s": 14,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T17:29:00+00:00"
+},
+"s0024": {
+"duration_s": 30,
+"active_s": 18,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T14:45:00+00:00"
+},
+"s0025": {
+"duration_s": 80,
+"active_s": 71,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T07:49:00+00:00"
+},
+"s0026": {
+"duration_s": 53,
+"active_s": 57,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T04:02:00+00:00"
+},
+"s0027": {
+"duration_s": 47,
+"active_s": 6,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T23:35:00+00:00"
+},
+"s0028": {
+"duration_s": 30,
+"active_s": 8,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T00:22:00+00:00"
+},
+"s0029": {
+"duration_s": 30,
+"active_s": 14,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T18:35:00+00:00"
+},
+"s0030": {
+"duration_s": 30,
+"active_s": 6,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T23:30:00+00:00"
+},
+"s0033": {
+"duration_s": 54,
+"active_s": 23,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T14:38:00+00:00"
+},
+"s0034": {
+"duration_s": 41,
+"active_s": 59,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T07:59:00+00:00"
+},
+"s0035": {
+"duration_s": 57,
+"active_s": 53,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T17:35:00+00:00"
+},
+"s0036": {
+"duration_s": 41,
+"active_s": 9,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T13:02:00+00:00"
+},
+"s0037": {
+"duration_s": 30,
+"active_s": 20,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T03:09:00+00:00"
+},
+"s0038": {
+"duration_s": 43,
+"active_s": 13,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T21:14:00+00:00"
+},
+"s0039": {
+"duration_s": 30,
+"active_s": 15,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T02:52:00+00:00"
+},
+"s0040": {
+"duration_s": 44,
+"active_s": 34,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T01:27:00+00:00"
+},
+"s0041": {
+"duration_s": 30,
+"active_s": 16,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T11:46:00+00:00"
+},
+"s0043": {
+"duration_s": 50,
+"active_s": 73,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T20:10:00+00:00"
+},
+"s0044": {
+"duration_s": 53,
+"active_s": 84,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T22:40:00+00:00"
+},
+"s0045": {
+"duration_s": 30,
+"active_s": 14,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T19:35:00+00:00"
+},
+"s0046": {
+"duration_s": 54,
+"active_s": 43,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T09:58:00+00:00"
+},
+"s0047": {
+"duration_s": 30,
+"active_s": 13,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T22:59:00+00:00"
+},
+"s0048": {
+"duration_s": 54,
+"active_s": 54,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T08:19:00+00:00"
+},
+"s0049": {
+"duration_s": 70,
+"active_s": 80,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T12:17:00+00:00"
+},
+"s0050": {
+"duration_s": 57,
+"active_s": 69,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T20:43:00+00:00"
+},
+"s0051": {
+"duration_s": 41,
+"active_s": 9,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T18:25:00+00:00"
+},
+"s0052": {
+"duration_s": 37,
+"active_s": 4,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T00:41:00+00:00"
+},
+"s0054": {
+"duration_s": 45,
+"active_s": 22,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T08:13:00+00:00"
+},
+"s0055": {
+"duration_s": 41,
+"active_s": 90,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T13:11:00+00:00"
+},
+"s0056": {
+"duration_s": 41,
+"active_s": 14,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T03:23:00+00:00"
+},
+"s0057": {
+"duration_s": 50,
+"active_s": 30,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T18:17:00+00:00"
+},
+"s0059": {
+"duration_s": 45,
+"active_s": 22,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T07:26:00+00:00"
+},
+"s0060": {
+"duration_s": 43,
+"active_s": 41,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T11:17:00+00:00"
+},
+"s0061": {
+"duration_s": 36,
+"active_s": 10,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T18:17:00+00:00"
+},
+"s0063": {
+"duration_s": 158,
+"active_s": 74,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T02:28:00+00:00"
+},
+"s0064": {
+"duration_s": 57,
+"active_s": 54,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T21:31:00+00:00"
+},
+"s0067": {
+"duration_s": 45,
+"active_s": 11,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T14:23:00+00:00"
+},
+"s0068": {
+"duration_s": 78,
+"active_s": 35,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T08:03:00+00:00"
+},
+"s0069": {
+"duration_s": 41,
+"active_s": 64,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T18:01:00+00:00"
+},
+"s0070": {
+"duration_s": 30,
+"active_s": 13,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T08:40:00+00:00"
+},
+"s0071": {
+"duration_s": 30,
+"active_s": 14,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T05:11:00+00:00"
+},
+"s0072": {
+"duration_s": 161,
+"active_s": 71,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T11:28:00+00:00"
+},
+"s0073": {
+"duration_s": 30,
+"active_s": 9,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T22:53:00+00:00"
+},
+"s0074": {
+"duration_s": 56,
+"active_s": 35,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T19:56:00+00:00"
+},
+"s0075": {
+"duration_s": 154,
+"active_s": 33,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T19:34:00+00:00"
+},
+"s0076": {
+"duration_s": 46,
+"active_s": 41,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T15:44:00+00:00"
+},
+"s0078": {
+"duration_s": 47,
+"active_s": 80,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T06:45:00+00:00"
+},
+"s0081": {
+"duration_s": 30,
+"active_s": 7,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T13:09:00+00:00"
+},
+"s0082": {
+"duration_s": 36,
+"active_s": 64,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T23:56:00+00:00"
+},
+"s0083": {
+"duration_s": 49,
+"active_s": 84,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T10:53:00+00:00"
+},
+"s0084": {
+"duration_s": 30,
+"active_s": 20,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T05:03:00+00:00"
+},
+"s0085": {
+"duration_s": 48,
+"active_s": 44,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T09:51:00+00:00"
+},
+"s0086": {
+"duration_s": 41,
+"active_s": 63,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T06:31:00+00:00"
+},
+"s0088": {
+"duration_s": 59,
+"active_s": 24,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T10:38:00+00:00"
+},
+"s0089": {
+"duration_s": 35,
+"active_s": 14,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T15:03:00+00:00"
+},
+"s0090": {
+"duration_s": 44,
+"active_s": 89,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T17:46:00+00:00"
+},
+"s0091": {
+"duration_s": 45,
+"active_s": 40,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T18:10:00+00:00"
+},
+"s0092": {
+"duration_s": 30,
+"active_s": 14,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T03:49:00+00:00"
+},
+"s0094": {
+"duration_s": 30,
+"active_s": 7,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T06:13:00+00:00"
+},
+"s0095": {
+"duration_s": 46,
+"active_s": 37,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T03:31:00+00:00"
+},
+"s0096": {
+"duration_s": 45,
+"active_s": 87,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T03:27:00+00:00"
+},
+"s0097": {
+"duration_s": 52,
+"active_s": 16,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T15:06:00+00:00"
+},
+"s0098": {
+"duration_s": 59,
+"active_s": 57,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T23:53:00+00:00"
+},
+"s0099": {
+"duration_s": 50,
+"active_s": 4,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T04:02:00+00:00"
+},
+"s0100": {
+"duration_s": 30,
+"active_s": 15,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T21:06:00+00:00"
+},
+"s0101": {
+"duration_s": 198,
+"active_s": 25,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T07:11:00+00:00"
+},
+"s0103": {
+"duration_s": 76,
+"active_s": 83,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T11:46:00+00:00"
+},
+"s0104": {
+"duration_s": 39,
+"active_s": 70,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T15:31:00+00:00"
+},
+"s0105": {
+"duration_s": 30,
+"active_s": 19,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T13:27:00+00:00"
+},
+"s0106": {
+"duration_s": 50,
+"active_s": 74,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T09:10:00+00:00"
+},
+"s0107": {
+"duration_s": 58,
+"active_s": 4,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T23:14:00+00:00"
+},
+"s0108": {
+"duration_s": 51,
+"active_s": 20,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T03:19:00+00:00"
+},
+"s0109": {
+"duration_s": 30,
+"active_s": 14,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T03:49:00+00:00"
+},
+"s0110": {
+"duration_s": 30,
+"active_s": 17,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T22:15:00+00:00"
+},
+"s0113": {
+"duration_s": 49,
+"active_s": 65,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T21:23:00+00:00"
+},
+"s0115": {
+"duration_s": 61,
+"active_s": 17,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T20:09:00+00:00"
+},
+"s0116": {
+"duration_s": 47,
+"active_s": 14,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T17:38:00+00:00"
+},
+"s0117": {
+"duration_s": 52,
+"active_s": 8,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T01:32:00+00:00"
+},
+"s0118": {
+"duration_s": 33,
+"active_s": 4,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T01:02:00+00:00"
+},
+"s0119": {
+"duration_s": 30,
+"active_s": 9,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T21:43:00+00:00"
+},
+"s0120": {
+"duration_s": 30,
+"active_s": 19,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T09:40:00+00:00"
+},
+"s0121": {
+"duration_s": 30,
+"active_s": 8,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T19:21:00+00:00"
+},
+"s0122": {
+"duration_s": 36,
+"active_s": 75,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T06:13:00+00:00"
+},
+"s0123": {
+"duration_s": 54,
+"active_s": 24,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T23:19:00+00:00"
+},
+"s0125": {
+"duration_s": 30,
+"active_s": 20,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T23:22:00+00:00"
+},
+"s0126": {
+"duration_s": 43,
+"active_s": 17,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T21:00:00+00:00"
+},
+"s0127": {
+"duration_s": 30,
+"active_s": 20,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T22:46:00+00:00"
+},
+"s0128": {
+"duration_s": 48,
+"active_s": 31,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T23:47:00+00:00"
+},
+"s0129": {
+"duration_s": 50,
+"active_s": 53,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T22:39:00+00:00"
+},
+"s0130": {
+"duration_s": 60,
+"active_s": 71,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T11:26:00+00:00"
+},
+"s0131": {
+"duration_s": 54,
+"active_s": 76,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T03:29:00+00:00"
+},
+"s0132": {
+"duration_s": 30,
+"active_s": 20,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T21:41:00+00:00"
+},
+"s0133": {
+"duration_s": 44,
+"active_s": 12,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T16:22:00+00:00"
+},
+"s0134": {
+"duration_s": 39,
+"active_s": 30,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T10:28:00+00:00"
+},
+"s0135": {
+"duration_s": 45,
+"active_s": 16,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T13:09:00+00:00"
+},
+"s0137": {
+"duration_s": 32,
+"active_s": 40,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T16:55:00+00:00"
+},
+"s0138": {
+"duration_s": 46,
+"active_s": 66,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T21:02:00+00:00"
+},
+"s0139": {
+"duration_s": 48,
+"active_s": 18,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T04:46:00+00:00"
+},
+"s0140": {
+"duration_s": 50,
+"active_s": 86,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T20:10:00+00:00"
+},
+"s0141": {
+"duration_s": 39,
+"active_s": 81,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T13:44:00+00:00"
+},
+"s0142": {
+"duration_s": 157,
+"active_s": 20,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T18:30:00+00:00"
+},
+"s0143": {
+"duration_s": 44,
+"active_s": 35,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T14:26:00+00:00"
+},
+"s0144": {
+"duration_s": 50,
+"active_s": 22,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T10:20:00+00:00"
+},
+"s0145": {
+"duration_s": 55,
+"active_s": 59,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T20:59:00+00:00"
+},
+"s0147": {
+"duration_s": 56,
+"active_s": 62,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T18:51:00+00:00"
+},
+"s0148": {
+"duration_s": 70,
+"active_s": 58,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T20:13:00+00:00"
+},
+"s0149": {
+"duration_s": 38,
+"active_s": 66,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T23:38:00+00:00"
+},
+"s0150": {
+"duration_s": 178,
+"active_s": 64,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T10:05:00+00:00"
+},
+"s0151": {
+"duration_s": 43,
+"active_s": 82,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T15:43:00+00:00"
+},
+"s0152": {
+"duration_s": 44,
+"active_s": 17,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T02:08:00+00:00"
+},
+"s0153": {
+"duration_s": 50,
+"active_s": 12,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T02:34:00+00:00"
+},
+"s0156": {
+"duration_s": 59,
+"active_s": 14,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T05:31:00+00:00"
+},
+"s0157": {
+"duration_s": 162,
+"active_s": 30,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T05:56:00+00:00"
+},
+"s0158": {
+"duration_s": 48,
+"active_s": 30,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T15:19:00+00:00"
+},
+"s0161": {
+"duration_s": 30,
+"active_s": 17,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T18:27:00+00:00"
+},
+"s0162": {
+"duration_s": 51,
+"active_s": 67,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T04:21:00+00:00"
+},
+"s0163": {
+"duration_s": 60,
+"active_s": 6,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T18:06:00+00:00"
+},
+"s0164": {
+"duration_s": 50,
+"active_s": 22,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T20:57:00+00:00"
+},
+"s0165": {
+"duration_s": 54,
+"active_s": 30,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T18:30:00+00:00"
+},
+"s0166": {
+"duration_s": 56,
+"active_s": 68,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T11:11:00+00:00"
+},
+"s0167": {
+"duration_s": 54,
+"active_s": 20,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T04:22:00+00:00"
+},
+"s0168": {
+"duration_s": 49,
+"active_s": 4,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T08:16:00+00:00"
+},
+"s0169": {
+"duration_s": 65,
+"active_s": 22,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T01:20:00+00:00"
+},
+"s0170": {
+"duration_s": 30,
+"active_s": 16,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T13:39:00+00:00"
+},
+"s0171": {
+"duration_s": 130,
+"active_s": 37,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T22:58:00+00:00"
+},
+"s0172": {
+"duration_s": 30,
+"active_s": 15,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T20:57:00+00:00"
+},
+"s0173": {
+"duration_s": 57,
+"active_s": 12,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T03:49:00+00:00"
+},
+"s0174": {
+"duration_s": 63,
+"active_s": 86,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T07:43:00+00:00"
+},
+"s0175": {
+"duration_s": 44,
+"active_s": 6,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T17:52:00+00:00"
+},
+"s0176": {
+"duration_s": 63,
+"active_s": 14,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T06:25:00+00:00"
+},
+"s0177": {
+"duration_s": 42,
+"active_s": 87,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T16:05:00+00:00"
+},
+"s0178": {
+"duration_s": 54,
+"active_s": 77,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T19:30:00+00:00"
+},
+"s0179": {
+"duration_s": 64,
+"active_s": 61,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T23:36:00+00:00"
+},
+"s0180": {
+"duration_s": 64,
+"active_s": 5,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T04:32:00+00:00"
+},
+"s0181": {
+"duration_s": 55,
+"active_s": 45,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T10:31:00+00:00"
+},
+"s0183": {
+"duration_s": 53,
+"active_s": 29,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T00:20:00+00:00"
+},
+"s0184": {
+"duration_s": 30,
+"active_s": 17,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T07:48:00+00:00"
+},
+"s0185": {
+"duration_s": 35,
+"active_s": 78,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T16:49:00+00:00"
+},
+"s0186": {
+"duration_s": 49,
+"active_s": 76,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T20:33:00+00:00"
+},
+"s0187": {
+"duration_s": 58,
+"active_s": 63,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T04:00:00+00:00"
+},
+"s0188": {
+"duration_s": 47,
+"active_s": 31,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T20:38:00+00:00"
+},
+"s0189": {
+"duration_s": 30,
+"active_s": 15,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T22:52:00+00:00"
+},
+"s0190": {
+"duration_s": 39,
+"active_s": 75,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T20:26:00+00:00"
+},
+"s0191": {
+"duration_s": 46,
+"active_s": 76,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T09:52:00+00:00"
+},
+"s0193": {
+"duration_s": 75,
+"active_s": 16,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T08:22:00+00:00"
+},
+"s0194": {
+"duration_s": 30,
+"active_s": 17,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T07:04:00+00:00"
+},
+"s0195": {
+"duration_s": 54,
+"active_s": 22,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T19:10:00+00:00"
+},
+"s0196": {
+"duration_s": 49,
+"active_s": 16,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T06:53:00+00:00"
+},
+"s0197": {
+"duration_s": 30,
+"active_s": 19,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T18:18:00+00:00"
+},
+"s0199": {
+"duration_s": 43,
+"active_s": 17,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T23:44:00+00:00"
+},
+"s0200": {
+"duration_s": 30,
+"active_s": 16,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T05:42:00+00:00"
+},
+"s0202": {
+"duration_s": 44,
+"active_s": 60,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T10:03:00+00:00"
+},
+"s0203": {
+"duration_s": 60,
+"active_s": 27,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T01:03:00+00:00"
+},
+"s0204": {
+"duration_s": 54,
+"active_s": 21,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T20:53:00+00:00"
+},
+"s0205": {
+"duration_s": 79,
+"active_s": 48,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T22:28:00+00:00"
+},
+"s0207": {
+"duration_s": 45,
+"active_s": 61,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T01:24:00+00:00"
+},
+"s0208": {
+"duration_s": 53,
+"active_s": 11,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T17:36:00+00:00"
+},
+"s0209": {
+"duration_s": 49,
+"active_s": 25,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T15:13:00+00:00"
+},
+"s0210": {
+"duration_s": 54,
+"active_s": 60,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T08:04:00+00:00"
+},
+"s0211": {
+"duration_s": 30,
+"active_s": 10,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T08:10:00+00:00"
+},
+"s0213": {
+"duration_s": 52,
+"active_s": 10,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T08:24:00+00:00"
+},
+"s0215": {
+"duration_s": 30,
+"active_s": 19,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T05:14:00+00:00"
+},
+"s0216": {
+"duration_s": 30,
+"active_s": 11,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T14:32:00+00:00"
+},
+"s0218": {
+"duration_s": 40,
+"active_s": 36,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T21:59:00+00:00"
+},
+"s0219": {
+"duration_s": 41,
+"active_s": 69,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T18:27:00+00:00"
+},
+"s0220": {
+"duration_s": 50,
+"active_s": 15,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T02:35:00+00:00"
+},
+"s0221": {
+"duration_s": 53,
+"active_s": 64,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T10:21:00+00:00"
+},
+"s0223": {
+"duration_s": 42,
+"active_s": 24,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T10:16:00+00:00"
+},
+"s0224": {
+"duration_s": 38,
+"active_s": 90,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T12:59:00+00:00"
+},
+"s0225": {
+"duration_s": 54,
+"active_s": 64,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T12:23:00+00:00"
+},
+"s0226": {
+"duration_s": 180,
+"active_s": 39,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T02:44:00+00:00"
+},
+"s0227": {
+"duration_s": 51,
+"active_s": 4,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T19:41:00+00:00"
+},
+"s0228": {
+"duration_s": 62,
+"active_s": 46,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T08:49:00+00:00"
+},
+"s0229": {
+"duration_s": 35,
+"active_s": 67,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T08:52:00+00:00"
+},
+"s0230": {
+"duration_s": 58,
+"active_s": 9,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T19:44:00+00:00"
+},
+"s0232": {
+"duration_s": 46,
+"active_s": 44,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T14:02:00+00:00"
+},
+"s0234": {
+"duration_s": 39,
+"active_s": 84,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T13:51:00+00:00"
+},
+"s0236": {
+"duration_s": 30,
+"active_s": 18,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T08:08:00+00:00"
+},
+"s0237": {
+"duration_s": 61,
+"active_s": 22,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T14:08:00+00:00"
+},
+"s0238": {
+"duration_s": 65,
+"active_s": 11,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T13:37:00+00:00"
+},
+"s0239": {
+"duration_s": 36,
+"active_s": 61,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T06:49:00+00:00"
+},
+"s0240": {
+"duration_s": 30,
+"active_s": 35,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T18:37:00+00:00"
+},
+"s0242": {
+"duration_s": 49,
+"active_s": 25,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T12:52:00+00:00"
+},
+"s0243": {
+"duration_s": 30,
+"active_s": 14,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T03:43:00+00:00"
+},
+"s0244": {
+"duration_s": 40,
+"active_s": 53,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T06:12:00+00:00"
+},
+"s0245": {
+"duration_s": 41,
+"active_s": 38,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T08:25:00+00:00"
+},
+"s0246": {
+"duration_s": 48,
+"active_s": 55,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T09:34:00+00:00"
+},
+"s0247": {
+"duration_s": 45,
+"active_s": 60,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T13:50:00+00:00"
+},
+"s0248": {
+"duration_s": 43,
+"active_s": 53,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T08:53:00+00:00"
+},
+"s0249": {
+"duration_s": 30,
+"active_s": 8,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T15:40:00+00:00"
+},
+"s0250": {
+"duration_s": 65,
+"active_s": 43,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T06:27:00+00:00"
+},
+"s0251": {
+"duration_s": 30,
+"active_s": 11,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T00:01:00+00:00"
+},
+"s0252": {
+"duration_s": 46,
+"active_s": 88,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T04:17:00+00:00"
+},
+"s0253": {
+"duration_s": 47,
+"active_s": 81,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T23:55:00+00:00"
+},
+"s0254": {
+"duration_s": 30,
+"active_s": 9,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T23:42:00+00:00"
+},
+"s0255": {
+"duration_s": 47,
+"active_s": 36,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T21:31:00+00:00"
+},
+"s0256": {
+"duration_s": 30,
+"active_s": 20,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T21:31:00+00:00"
+},
+"s0257": {
+"duration_s": 52,
+"active_s": 54,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T07:33:00+00:00"
+},
+"s0258": {
+"duration_s": 30,
+"active_s": 20,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T00:35:00+00:00"
+},
+"s0259": {
+"duration_s": 53,
+"active_s": 28,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T17:50:00+00:00"
+},
+"s0260": {
+"duration_s": 112,
+"active_s": 56,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T23:51:00+00:00"
+},
+"s0261": {
+"duration_s": 61,
+"active_s": 60,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T02:32:00+00:00"
+},
+"s0262": {
+"duration_s": 58,
+"active_s": 25,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T00:41:00+00:00"
+},
+"s0263": {
+"duration_s": 48,
+"active_s": 39,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T12:32:00+00:00"
+},
+"s0264": {
+"duration_s": 48,
+"active_s": 13,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T21:58:00+00:00"
+},
+"s0265": {
+"duration_s": 40,
+"active_s": 66,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T00:53:00+00:00"
+},
+"s0266": {
+"duration_s": 42,
+"active_s": 14,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T21:09:00+00:00"
+},
+"s0267": {
+"duration_s": 32,
+"active_s": 43,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T03:43:00+00:00"
+},
+"s0268": {
+"duration_s": 41,
+"active_s": 9,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T10:24:00+00:00"
+},
+"s0269": {
+"duration_s": 34,
+"active_s": 33,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T10:33:00+00:00"
+},
+"s0270": {
+"duration_s": 47,
+"active_s": 51,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T17:22:00+00:00"
+},
+"s0272": {
+"duration_s": 47,
+"active_s": 76,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T10:15:00+00:00"
+},
+"s0273": {
+"duration_s": 30,
+"active_s": 13,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T22:06:00+00:00"
+},
+"s0274": {
+"duration_s": 52,
+"active_s": 46,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T17:56:00+00:00"
+},
+"s0276": {
+"duration_s": 30,
+"active_s": 14,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T01:30:00+00:00"
+},
+"s0277": {
+"duration_s": 39,
+"active_s": 36,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T05:10:00+00:00"
+},
+"s0278": {
+"duration_s": 47,
+"active_s": 79,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T03:51:00+00:00"
+},
+"s0280": {
+"duration_s": 40,
+"active_s": 83,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T14:35:00+00:00"
+},
+"s0281": {
+"duration_s": 30,
+"active_s": 17,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T07:25:00+00:00"
+},
+"s0283": {
+"duration_s": 51,
+"active_s": 51,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T01:41:00+00:00"
+},
+"s0284": {
+"duration_s": 188,
+"active_s": 90,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T16:15:00+00:00"
+},
+"s0285": {
+"duration_s": 47,
+"active_s": 66,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T12:24:00+00:00"
+},
+"s0286": {
+"duration_s": 58,
+"active_s": 36,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T12:18:00+00:00"
+},
+"s0287": {
+"duration_s": 30,
+"active_s": 13,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T06:03:00+00:00"
+},
+"s0288": {
+"duration_s": 30,
+"active_s": 8,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T10:02:00+00:00"
+},
+"s0289": {
+"duration_s": 84,
+"active_s": 46,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T15:39:00+00:00"
+},
+"s0290": {
+"duration_s": 45,
+"active_s": 63,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T00:30:00+00:00"
+},
+"s0291": {
+"duration_s": 30,
+"active_s": 11,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T19:50:00+00:00"
+},
+"s0292": {
+"duration_s": 35,
+"active_s": 12,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T03:45:00+00:00"
+},
+"s0294": {
+"duration_s": 40,
+"active_s": 69,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T16:47:00+00:00"
+},
+"s0296": {
+"duration_s": 30,
+"active_s": 16,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T08:14:00+00:00"
+},
+"s0297": {
+"duration_s": 51,
+"active_s": 43,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T07:28:00+00:00"
+},
+"s0298": {
+"duration_s": 69,
+"active_s": 78,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T17:41:00+00:00"
+},
+"s0300": {
+"duration_s": 30,
+"active_s": 10,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T06:39:00+00:00"
+},
+"s0301": {
+"duration_s": 30,
+"active_s": 20,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T09:22:00+00:00"
+},
+"s0302": {
+"duration_s": 52,
+"active_s": 77,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T17:15:00+00:00"
+},
+"s0303": {
+"duration_s": 41,
+"active_s": 45,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T18:19:00+00:00"
+},
+"s0304": {
+"duration_s": 51,
+"active_s": 80,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T14:47:00+00:00"
+},
+"s0305": {
+"duration_s": 130,
+"active_s": 23,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T02:12:00+00:00"
+},
+"s0306": {
+"duration_s": 67,
+"active_s": 88,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T18:57:00+00:00"
+},
+"s0307": {
+"duration_s": 55,
+"active_s": 62,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T16:32:00+00:00"
+},
+"s0308": {
+"duration_s": 41,
+"active_s": 84,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T17:27:00+00:00"
+},
+"s0309": {
+"duration_s": 49,
+"active_s": 81,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T04:36:00+00:00"
+},
+"s0310": {
+"duration_s": 51,
+"active_s": 35,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T07:40:00+00:00"
+},
+"s0311": {
+"duration_s": 54,
+"active_s": 7,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T01:08:00+00:00"
+},
+"s0312": {
+"duration_s": 41,
+"active_s": 56,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T10:52:00+00:00"
+},
+"s0313": {
+"duration_s": 42,
+"active_s": 67,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T13:06:00+00:00"
+},
+"s0314": {
+"duration_s": 34,
+"active_s": 66,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T22:17:00+00:00"
+},
+"s0315": {
+"duration_s": 51,
+"active_s": 60,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T16:23:00+00:00"
+},
+"s0316": {
+"duration_s": 30,
+"active_s": 6,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T03:33:00+00:00"
+},
+"s0317": {
+"duration_s": 30,
+"active_s": 14,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T12:55:00+00:00"
+},
+"s0319": {
+"duration_s": 50,
+"active_s": 6,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T17:58:00+00:00"
+},
+"s0320": {
+"duration_s": 128,
+"active_s": 73,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T02:23:00+00:00"
+},
+"s0321": {
+"duration_s": 46,
+"active_s": 38,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T09:27:00+00:00"
+},
+"s0322": {
+"duration_s": 41,
+"active_s": 9,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T00:47:00+00:00"
+},
+"s0323": {
+"duration_s": 56,
+"active_s": 57,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T07:48:00+00:00"
+},
+"s0324": {
+"duration_s": 51,
+"active_s": 36,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T17:09:00+00:00"
+},
+"s0325": {
+"duration_s": 41,
+"active_s": 75,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T21:38:00+00:00"
+},
+"s0326": {
+"duration_s": 53,
+"active_s": 52,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T09:09:00+00:00"
+},
+"s0327": {
+"duration_s": 44,
+"active_s": 73,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T08:01:00+00:00"
+},
+"s0328": {
+"duration_s": 61,
+"active_s": 22,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T01:55:00+00:00"
+},
+"s0330": {
+"duration_s": 48,
+"active_s": 58,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T11:23:00+00:00"
+},
+"s0331": {
+"duration_s": 51,
+"active_s": 15,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T19:11:00+00:00"
+},
+"s0332": {
+"duration_s": 43,
+"active_s": 20,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T06:11:00+00:00"
+},
+"s0333": {
+"duration_s": 47,
+"active_s": 11,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T08:23:00+00:00"
+},
+"s0335": {
+"duration_s": 46,
+"active_s": 41,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T14:08:00+00:00"
+},
+"s0336": {
+"duration_s": 61,
+"active_s": 30,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T06:46:00+00:00"
+},
+"s0337": {
+"duration_s": 33,
+"active_s": 76,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T11:55:00+00:00"
+},
+"s0338": {
+"duration_s": 43,
+"active_s": 29,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T12:36:00+00:00"
+},
+"s0339": {
+"duration_s": 41,
+"active_s": 13,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T03:22:00+00:00"
+},
+"s0340": {
+"duration_s": 45,
+"active_s": 11,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T23:51:00+00:00"
+},
+"s0341": {
+"duration_s": 61,
+"active_s": 70,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T12:34:00+00:00"
+},
+"s0342": {
+"duration_s": 47,
+"active_s": 57,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T03:17:00+00:00"
+},
+"s0343": {
+"duration_s": 43,
+"active_s": 87,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T03:56:00+00:00"
+},
+"s0344": {
+"duration_s": 49,
+"active_s": 5,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T12:08:00+00:00"
+},
+"s0345": {
+"duration_s": 38,
+"active_s": 79,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T03:07:00+00:00"
+},
+"s0347": {
+"duration_s": 74,
+"active_s": 25,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T19:58:00+00:00"
+},
+"s0348": {
+"duration_s": 49,
+"active_s": 30,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T08:05:00+00:00"
+},
+"s0349": {
+"duration_s": 30,
+"active_s": 12,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T17:55:00+00:00"
+},
+"s0350": {
+"duration_s": 35,
+"active_s": 61,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T02:12:00+00:00"
+},
+"s0351": {
+"duration_s": 46,
+"active_s": 89,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T16:21:00+00:00"
+},
+"s0352": {
+"duration_s": 166,
+"active_s": 59,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T06:03:00+00:00"
+},
+"s0353": {
+"duration_s": 30,
+"active_s": 16,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T13:57:00+00:00"
+},
+"s0354": {
+"duration_s": 30,
+"active_s": 6,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T18:56:00+00:00"
+},
+"s0355": {
+"duration_s": 38,
+"active_s": 33,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T07:10:00+00:00"
+},
+"s0356": {
+"duration_s": 43,
+"active_s": 46,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T04:05:00+00:00"
+},
+"s0357": {
+"duration_s": 52,
+"active_s": 74,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T23:16:00+00:00"
+},
+"s0358": {
+"duration_s": 54,
+"active_s": 77,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T13:41:00+00:00"
+},
+"s0360": {
+"duration_s": 51,
+"active_s": 63,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T22:16:00+00:00"
+},
+"s0362": {
+"duration_s": 66,
+"active_s": 33,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T04:04:00+00:00"
+},
+"s0363": {
+"duration_s": 40,
+"active_s": 78,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T23:32:00+00:00"
+},
+"s0364": {
+"duration_s": 35,
+"active_s": 16,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T22:51:00+00:00"
+},
+"s0366": {
+"duration_s": 71,
+"active_s": 48,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T05:52:00+00:00"
+},
+"s0367": {
+"duration_s": 49,
+"active_s": 71,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T04:39:00+00:00"
+},
+"s0369": {
+"duration_s": 38,
+"active_s": 85,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T05:00:00+00:00"
+},
+"s0370": {
+"duration_s": 47,
+"active_s": 33,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T16:08:00+00:00"
+},
+"s0371": {
+"duration_s": 54,
+"active_s": 54,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T11:07:00+00:00"
+},
+"s0372": {
+"duration_s": 52,
+"active_s": 66,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T19:07:00+00:00"
+},
+"s0373": {
+"duration_s": 39,
+"active_s": 54,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T17:46:00+00:00"
+},
+"s0374": {
+"duration_s": 42,
+"active_s": 84,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T14:27:00+00:00"
+},
+"s0375": {
+"duration_s": 53,
+"active_s": 44,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T22:40:00+00:00"
+},
+"s0376": {
+"duration_s": 198,
+"active_s": 90,
+"clicks": 5,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T12:45:00+00:00"
+},
+"s0377": {
+"duration_s": 51,
+"active_s": 41,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T07:06:00+00:00"
+},
+"s0378": {
+"duration_s": 68,
+"active_s": 50,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T05:36:00+00:00"
+},
+"s0379": {
+"duration_s": 63,
+"active_s": 62,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T09:49:00+00:00"
+},
+"s0380": {
+"duration_s": 30,
+"active_s": 9,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T19:10:00+00:00"
+},
+"s0381": {
+"duration_s": 72,
+"active_s": 73,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T08:52:00+00:00"
+},
+"s0383": {
+"duration_s": 47,
+"active_s": 11,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T04:44:00+00:00"
+},
+"s0384": {
+"duration_s": 59,
+"active_s": 50,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T16:33:00+00:00"
+},
+"s0385": {
+"duration_s": 54,
+"active_s": 64,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T06:12:00+00:00"
+},
+"s0386": {
+"duration_s": 33,
+"active_s": 72,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T01:44:00+00:00"
+},
+"s0388": {
+"duration_s": 72,
+"active_s": 35,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T18:08:00+00:00"
+},
+"s0391": {
+"duration_s": 46,
+"active_s": 12,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T22:59:00+00:00"
+},
+"s0392": {
+"duration_s": 30,
+"active_s": 9,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T09:39:00+00:00"
+},
+"s0393": {
+"duration_s": 52,
+"active_s": 34,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T03:34:00+00:00"
+},
+"s0394": {
+"duration_s": 51,
+"active_s": 53,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T09:22:00+00:00"
+},
+"s0395": {
+"duration_s": 30,
+"active_s": 19,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T22:25:00+00:00"
+},
+"s0396": {
+"duration_s": 53,
+"active_s": 70,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T14:01:00+00:00"
+},
+"s0397": {
+"duration_s": 110,
+"active_s": 80,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T15:25:00+00:00"
+},
+"s0398": {
+"duration_s": 52,
+"active_s": 33,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T17:37:00+00:00"
+},
+"s0399": {
+"duration_s": 52,
+"active_s": 26,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T22:58:00+00:00"
+},
+"s0400": {
+"duration_s": 162,
+"active_s": 11,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T15:29:00+00:00"
+},
+"s0401": {
+"duration_s": 63,
+"active_s": 82,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T10:48:00+00:00"
+},
+"s0402": {
+"duration_s": 46,
+"active_s": 29,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T07:43:00+00:00"
+},
+"s0403": {
+"duration_s": 121,
+"active_s": 86,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T17:58:00+00:00"
+},
+"s0404": {
+"duration_s": 124,
+"active_s": 7,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T05:40:00+00:00"
+},
+"s0405": {
+"duration_s": 30,
+"active_s": 18,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T08:31:00+00:00"
+},
+"s0406": {
+"duration_s": 41,
+"active_s": 30,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T17:22:00+00:00"
+},
+"s0407": {
+"duration_s": 30,
+"active_s": 10,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T01:13:00+00:00"
+},
+"s0408": {
+"duration_s": 51,
+"active_s": 31,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T19:26:00+00:00"
+},
+"s0409": {
+"duration_s": 30,
+"active_s": 18,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T07:40:00+00:00"
+},
+"s0410": {
+"duration_s": 75,
+"active_s": 30,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T23:37:00+00:00"
+},
+"s0411": {
+"duration_s": 51,
+"active_s": 78,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T04:00:00+00:00"
+},
+"s0413": {
+"duration_s": 30,
+"active_s": 12,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T16:26:00+00:00"
+},
+"s0414": {
+"duration_s": 37,
+"active_s": 29,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T10:15:00+00:00"
+},
+"s0415": {
+"duration_s": 30,
+"active_s": 18,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T00:30:00+00:00"
+},
+"s0416": {
+"duration_s": 49,
+"active_s": 71,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T00:09:00+00:00"
+},
+"s0417": {
+"duration_s": 30,
+"active_s": 7,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T16:55:00+00:00"
+},
+"s0418": {
+"duration_s": 48,
+"active_s": 88,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T16:13:00+00:00"
+},
+"s0420": {
+"duration_s": 49,
+"active_s": 16,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T18:00:00+00:00"
+},
+"s0421": {
+"duration_s": 56,
+"active_s": 46,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T23:58:00+00:00"
+},
+"s0422": {
+"duration_s": 30,
+"active_s": 17,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T08:52:00+00:00"
+},
+"s0424": {
+"duration_s": 42,
+"active_s": 36,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T08:10:00+00:00"
+},
+"s0425": {
+"duration_s": 67,
+"active_s": 83,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T20:07:00+00:00"
+},
+"s0426": {
+"duration_s": 47,
+"active_s": 34,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T10:01:00+00:00"
+},
+"s0427": {
+"duration_s": 111,
+"active_s": 71,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T19:07:00+00:00"
+},
+"s0428": {
+"duration_s": 68,
+"active_s": 40,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T05:09:00+00:00"
+},
+"s0429": {
+"duration_s": 47,
+"active_s": 35,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T07:26:00+00:00"
+},
+"s0430": {
+"duration_s": 30,
+"active_s": 10,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T18:38:00+00:00"
+},
+"s0431": {
+"duration_s": 30,
+"active_s": 12,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T10:50:00+00:00"
+},
+"s0432": {
+"duration_s": 43,
+"active_s": 69,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T21:58:00+00:00"
+},
+"s0433": {
+"duration_s": 47,
+"active_s": 30,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T05:20:00+00:00"
+},
+"s0434": {
+"duration_s": 101,
+"active_s": 15,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T16:45:00+00:00"
+},
+"s0435": {
+"duration_s": 62,
+"active_s": 32,
+"clicks": 5,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T14:18:00+00:00"
+},
+"s0436": {
+"duration_s": 30,
+"active_s": 11,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T09:53:00+00:00"
+},
+"s0438": {
+"duration_s": 48,
+"active_s": 64,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T18:33:00+00:00"
+},
+"s0439": {
+"duration_s": 30,
+"active_s": 11,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T23:35:00+00:00"
+},
+"s0440": {
+"duration_s": 49,
+"active_s": 65,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T08:14:00+00:00"
+},
+"s0441": {
+"duration_s": 140,
+"active_s": 32,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T22:55:00+00:00"
+},
+"s0443": {
+"duration_s": 44,
+"active_s": 20,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T22:37:00+00:00"
+},
+"s0444": {
+"duration_s": 60,
+"active_s": 36,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T16:39:00+00:00"
+},
+"s0445": {
+"duration_s": 48,
+"active_s": 33,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T02:17:00+00:00"
+},
+"s0446": {
+"duration_s": 52,
+"active_s": 87,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T08:31:00+00:00"
+},
+"s0448": {
+"duration_s": 151,
+"active_s": 51,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T08:36:00+00:00"
+},
+"s0450": {
+"duration_s": 46,
+"active_s": 4,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T07:44:00+00:00"
+},
+"s0451": {
+"duration_s": 46,
+"active_s": 39,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T12:32:00+00:00"
+},
+"s0452": {
+"duration_s": 109,
+"active_s": 61,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T11:12:00+00:00"
+},
+"s0453": {
+"duration_s": 44,
+"active_s": 17,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T07:19:00+00:00"
+},
+"s0454": {
+"duration_s": 55,
+"active_s": 42,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T09:33:00+00:00"
+},
+"s0455": {
+"duration_s": 39,
+"active_s": 79,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T16:03:00+00:00"
+},
+"s0456": {
+"duration_s": 46,
+"active_s": 11,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T18:21:00+00:00"
+},
+"s0457": {
+"duration_s": 42,
+"active_s": 45,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T17:36:00+00:00"
+},
+"s0458": {
+"duration_s": 75,
+"active_s": 50,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T07:11:00+00:00"
+},
+"s0459": {
+"duration_s": 59,
+"active_s": 86,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T15:34:00+00:00"
+},
+"s0460": {
+"duration_s": 50,
+"active_s": 65,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T18:29:00+00:00"
+},
+"s0461": {
+"duration_s": 62,
+"active_s": 79,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T09:37:00+00:00"
+},
+"s0462": {
+"duration_s": 37,
+"active_s": 5,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T11:12:00+00:00"
+},
+"s0463": {
+"duration_s": 43,
+"active_s": 33,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T13:13:00+00:00"
+},
+"s0464": {
+"duration_s": 38,
+"active_s": 13,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T23:19:00+00:00"
+},
+"s0465": {
+"duration_s": 43,
+"active_s": 37,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T21:15:00+00:00"
+},
+"s0466": {
+"duration_s": 30,
+"active_s": 18,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T01:54:00+00:00"
+},
+"s0467": {
+"duration_s": 56,
+"active_s": 41,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T11:29:00+00:00"
+},
+"s0468": {
+"duration_s": 51,
+"active_s": 88,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T09:04:00+00:00"
+},
+"s0469": {
+"duration_s": 30,
+"active_s": 7,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T17:42:00+00:00"
+},
+"s0470": {
+"duration_s": 45,
+"active_s": 62,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T09:45:00+00:00"
+},
+"s0471": {
+"duration_s": 42,
+"active_s": 63,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T23:43:00+00:00"
+},
+"s0472": {
+"duration_s": 54,
+"active_s": 23,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T17:04:00+00:00"
+},
+"s0473": {
+"duration_s": 30,
+"active_s": 18,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T23:43:00+00:00"
+},
+"s0474": {
+"duration_s": 54,
+"active_s": 12,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T12:46:00+00:00"
+},
+"s0475": {
+"duration_s": 61,
+"active_s": 44,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T17:57:00+00:00"
+},
+"s0476": {
+"duration_s": 35,
+"active_s": 83,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T03:52:00+00:00"
+},
+"s0477": {
+"duration_s": 30,
+"active_s": 14,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T19:10:00+00:00"
+},
+"s0478": {
+"duration_s": 38,
+"active_s": 13,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T22:48:00+00:00"
+},
+"s0479": {
+"duration_s": 50,
+"active_s": 35,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T04:34:00+00:00"
+},
+"s0480": {
+"duration_s": 30,
+"active_s": 9,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T10:10:00+00:00"
+},
+"s0481": {
+"duration_s": 56,
+"active_s": 69,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T05:00:00+00:00"
+},
+"s0482": {
+"duration_s": 44,
+"active_s": 47,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T17:03:00+00:00"
+},
+"s0484": {
+"duration_s": 61,
+"active_s": 52,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T10:37:00+00:00"
+},
+"s0485": {
+"duration_s": 30,
+"active_s": 16,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T11:04:00+00:00"
+},
+"s0486": {
+"duration_s": 49,
+"active_s": 87,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T21:38:00+00:00"
+},
+"s0488": {
+"duration_s": 64,
+"active_s": 31,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T03:57:00+00:00"
+},
+"s0489": {
+"duration_s": 30,
+"active_s": 20,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T17:55:00+00:00"
+},
+"s0490": {
+"duration_s": 43,
+"active_s": 65,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T14:11:00+00:00"
+},
+"s0491": {
+"duration_s": 50,
+"active_s": 17,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T14:29:00+00:00"
+},
+"s0492": {
+"duration_s": 53,
+"active_s": 73,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T15:36:00+00:00"
+},
+"s0493": {
+"duration_s": 123,
+"active_s": 69,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T06:23:00+00:00"
+},
+"s0494": {
+"duration_s": 44,
+"active_s": 85,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T02:45:00+00:00"
+},
+"s0495": {
+"duration_s": 44,
+"active_s": 52,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T18:03:00+00:00"
+},
+"s0496": {
+"duration_s": 30,
+"active_s": 7,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T18:26:00+00:00"
+},
+"s0497": {
+"duration_s": 68,
+"active_s": 31,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T22:48:00+00:00"
+},
+"s0498": {
+"duration_s": 139,
+"active_s": 31,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T14:57:00+00:00"
+},
+"s0499": {
+"duration_s": 30,
+"active_s": 11,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T16:17:00+00:00"
+},
+"s0500": {
+"duration_s": 46,
+"active_s": 80,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T18:20:00+00:00"
+},
+"s0501": {
+"duration_s": 49,
+"active_s": 62,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T21:52:00+00:00"
+},
+"s0502": {
+"duration_s": 53,
+"active_s": 24,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T21:42:00+00:00"
+},
+"s0503": {
+"duration_s": 30,
+"active_s": 7,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T23:20:00+00:00"
+},
+"s0505": {
+"duration_s": 54,
+"active_s": 58,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T17:27:00+00:00"
+},
+"s0506": {
+"duration_s": 59,
+"active_s": 84,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T15:16:00+00:00"
+},
+"s0507": {
+"duration_s": 59,
+"active_s": 55,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T03:21:00+00:00"
+},
+"s0509": {
+"duration_s": 56,
+"active_s": 36,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T00:44:00+00:00"
+},
+"s0510": {
+"duration_s": 49,
+"active_s": 67,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T19:25:00+00:00"
+},
+"s0511": {
+"duration_s": 30,
+"active_s": 17,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T15:30:00+00:00"
+},
+"s0513": {
+"duration_s": 126,
+"active_s": 42,
+"clicks": 5,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T12:51:00+00:00"
+},
+"s0514": {
+"duration_s": 106,
+"active_s": 81,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T20:48:00+00:00"
+},
+"s0515": {
+"duration_s": 30,
+"active_s": 12,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T03:28:00+00:00"
+},
+"s0517": {
+"duration_s": 35,
+"active_s": 6,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T23:42:00+00:00"
+},
+"s0518": {
+"duration_s": 51,
+"active_s": 53,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T16:13:00+00:00"
+},
+"s0519": {
+"duration_s": 41,
+"active_s": 28,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T13:32:00+00:00"
+},
+"s0520": {
+"duration_s": 49,
+"active_s": 52,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T23:13:00+00:00"
+},
+"s0521": {
+"duration_s": 53,
+"active_s": 75,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T08:14:00+00:00"
+},
+"s0522": {
+"duration_s": 37,
+"active_s": 14,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T23:14:00+00:00"
+},
+"s0523": {
+"duration_s": 41,
+"active_s": 18,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T01:06:00+00:00"
+},
+"s0524": {
+"duration_s": 42,
+"active_s": 42,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T19:02:00+00:00"
+},
+"s0525": {
+"duration_s": 51,
+"active_s": 86,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T21:08:00+00:00"
+},
+"s0526": {
+"duration_s": 49,
+"active_s": 22,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T07:37:00+00:00"
+},
+"s0528": {
+"duration_s": 42,
+"active_s": 64,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T16:02:00+00:00"
+},
+"s0529": {
+"duration_s": 65,
+"active_s": 68,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T19:57:00+00:00"
+},
+"s0531": {
+"duration_s": 30,
+"active_s": 15,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T22:42:00+00:00"
+},
+"s0532": {
+"duration_s": 42,
+"active_s": 71,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T02:14:00+00:00"
+},
+"s0533": {
+"duration_s": 174,
+"active_s": 38,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T11:00:00+00:00"
+},
+"s0535": {
+"duration_s": 45,
+"active_s": 40,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T04:38:00+00:00"
+},
+"s0537": {
+"duration_s": 51,
+"active_s": 74,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T23:30:00+00:00"
+},
+"s0539": {
+"duration_s": 30,
+"active_s": 10,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T05:05:00+00:00"
+},
+"s0540": {
+"duration_s": 40,
+"active_s": 19,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T02:56:00+00:00"
+},
+"s0543": {
+"duration_s": 48,
+"active_s": 23,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T17:29:00+00:00"
+},
+"s0544": {
+"duration_s": 47,
+"active_s": 73,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T09:34:00+00:00"
+},
+"s0545": {
+"duration_s": 40,
+"active_s": 65,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T08:15:00+00:00"
+},
+"s0547": {
+"duration_s": 100,
+"active_s": 13,
+"clicks": 5,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T10:26:00+00:00"
+},
+"s0548": {
+"duration_s": 52,
+"active_s": 25,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T15:42:00+00:00"
+},
+"s0549": {
+"duration_s": 30,
+"active_s": 16,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T08:36:00+00:00"
+},
+"s0550": {
+"duration_s": 30,
+"active_s": 14,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T07:53:00+00:00"
+},
+"s0551": {
+"duration_s": 49,
+"active_s": 88,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T08:27:00+00:00"
+},
+"s0552": {
+"duration_s": 46,
+"active_s": 55,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T01:33:00+00:00"
+},
+"s0553": {
+"duration_s": 78,
+"active_s": 66,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T11:30:00+00:00"
+},
+"s0555": {
+"duration_s": 30,
+"active_s": 16,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T18:36:00+00:00"
+},
+"s0556": {
+"duration_s": 46,
+"active_s": 32,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T13:44:00+00:00"
+},
+"s0557": {
+"duration_s": 45,
+"active_s": 15,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T06:23:00+00:00"
+},
+"s0560": {
+"duration_s": 66,
+"active_s": 32,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T21:01:00+00:00"
+},
+"s0561": {
+"duration_s": 57,
+"active_s": 19,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T07:30:00+00:00"
+},
+"s0562": {
+"duration_s": 63,
+"active_s": 55,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T03:30:00+00:00"
+},
+"s0563": {
+"duration_s": 55,
+"active_s": 50,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T17:23:00+00:00"
+},
+"s0564": {
+"duration_s": 39,
+"active_s": 56,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T17:15:00+00:00"
+},
+"s0565": {
+"duration_s": 52,
+"active_s": 27,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T17:40:00+00:00"
+},
+"s0566": {
+"duration_s": 43,
+"active_s": 23,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T02:19:00+00:00"
+},
+"s0567": {
+"duration_s": 123,
+"active_s": 28,
+"clicks": 5,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T03:30:00+00:00"
+},
+"s0568": {
+"duration_s": 30,
+"active_s": 14,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T11:11:00+00:00"
+},
+"s0569": {
+"duration_s": 136,
+"active_s": 28,
+"clicks": 5,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T01:04:00+00:00"
+},
+"s0570": {
+"duration_s": 38,
+"active_s": 77,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T16:58:00+00:00"
+},
+"s0571": {
+"duration_s": 45,
+"active_s": 31,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T07:51:00+00:00"
+},
+"s0572": {
+"duration_s": 52,
+"active_s": 46,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T00:34:00+00:00"
+},
+"s0573": {
+"duration_s": 40,
+"active_s": 52,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T08:42:00+00:00"
+},
+"s0574": {
+"duration_s": 49,
+"active_s": 17,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T12:17:00+00:00"
+},
+"s0575": {
+"duration_s": 39,
+"active_s": 4,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T21:59:00+00:00"
+},
+"s0576": {
+"duration_s": 43,
+"active_s": 67,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T20:15:00+00:00"
+},
+"s0577": {
+"duration_s": 67,
+"active_s": 40,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T14:15:00+00:00"
+},
+"s0578": {
+"duration_s": 30,
+"active_s": 11,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T22:07:00+00:00"
+},
+"s0579": {
+"duration_s": 48,
+"active_s": 61,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T03:07:00+00:00"
+},
+"s0580": {
+"duration_s": 38,
+"active_s": 45,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T04:59:00+00:00"
+},
+"s0581": {
+"duration_s": 34,
+"active_s": 86,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T03:15:00+00:00"
+},
+"s0582": {
+"duration_s": 67,
+"active_s": 82,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T10:01:00+00:00"
+},
+"s0583": {
+"duration_s": 45,
+"active_s": 44,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T12:46:00+00:00"
+},
+"s0584": {
+"duration_s": 37,
+"active_s": 83,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T21:29:00+00:00"
+},
+"s0585": {
+"duration_s": 30,
+"active_s": 20,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T18:07:00+00:00"
+},
+"s0586": {
+"duration_s": 38,
+"active_s": 85,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T20:22:00+00:00"
+},
+"s0587": {
+"duration_s": 123,
+"active_s": 15,
+"clicks": 5,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T17:02:00+00:00"
+},
+"s0588": {
+"duration_s": 47,
+"active_s": 88,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T15:54:00+00:00"
+},
+"s0589": {
+"duration_s": 56,
+"active_s": 69,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T13:33:00+00:00"
+},
+"s0590": {
+"duration_s": 173,
+"active_s": 7,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T15:19:00+00:00"
+},
+"s0591": {
+"duration_s": 58,
+"active_s": 58,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T02:56:00+00:00"
+},
+"s0594": {
+"duration_s": 49,
+"active_s": 16,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T21:17:00+00:00"
+},
+"s0595": {
+"duration_s": 42,
+"active_s": 86,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T21:45:00+00:00"
+},
+"s0596": {
+"duration_s": 30,
+"active_s": 15,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T21:01:00+00:00"
+},
+"s0597": {
+"duration_s": 118,
+"active_s": 86,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T07:44:00+00:00"
+},
+"s0598": {
+"duration_s": 62,
+"active_s": 48,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T23:16:00+00:00"
+},
+"s0599": {
+"duration_s": 42,
+"active_s": 77,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T10:58:00+00:00"
+},
+"s0600": {
+"duration_s": 42,
+"active_s": 42,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T03:34:00+00:00"
+},
+"s0601": {
+"duration_s": 43,
+"active_s": 61,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T12:02:00+00:00"
+},
+"s0602": {
+"duration_s": 77,
+"active_s": 57,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T03:46:00+00:00"
+},
+"s0604": {
+"duration_s": 30,
+"active_s": 15,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T06:39:00+00:00"
+},
+"s0605": {
+"duration_s": 172,
+"active_s": 28,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T13:51:00+00:00"
+},
+"s0606": {
+"duration_s": 60,
+"active_s": 4,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T16:40:00+00:00"
+},
+"s0607": {
+"duration_s": 37,
+"active_s": 41,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T17:48:00+00:00"
+},
+"s0608": {
+"duration_s": 155,
+"active_s": 85,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T22:57:00+00:00"
+},
+"s0609": {
+"duration_s": 30,
+"active_s": 13,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T09:47:00+00:00"
+},
+"s0610": {
+"duration_s": 60,
+"active_s": 52,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T02:26:00+00:00"
+},
+"s0611": {
+"duration_s": 65,
+"active_s": 82,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T22:43:00+00:00"
+},
+"s0612": {
+"duration_s": 180,
+"active_s": 8,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T06:49:00+00:00"
+},
+"s0613": {
+"duration_s": 49,
+"active_s": 6,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T23:15:00+00:00"
+},
+"s0614": {
+"duration_s": 112,
+"active_s": 13,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T13:03:00+00:00"
+},
+"s0615": {
+"duration_s": 42,
+"active_s": 88,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T02:47:00+00:00"
+},
+"s0616": {
+"duration_s": 30,
+"active_s": 12,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T06:56:00+00:00"
+},
+"s0617": {
+"duration_s": 58,
+"active_s": 40,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T10:57:00+00:00"
+},
+"s0618": {
+"duration_s": 43,
+"active_s": 18,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T09:14:00+00:00"
+},
+"s0619": {
+"duration_s": 53,
+"active_s": 80,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T04:54:00+00:00"
+},
+"s0621": {
+"duration_s": 48,
+"active_s": 87,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T16:45:00+00:00"
+},
+"s0622": {
+"duration_s": 131,
+"active_s": 58,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T04:25:00+00:00"
+},
+"s0623": {
+"duration_s": 61,
+"active_s": 53,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T10:52:00+00:00"
+},
+"s0625": {
+"duration_s": 46,
+"active_s": 23,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T02:10:00+00:00"
+},
+"s0628": {
+"duration_s": 37,
+"active_s": 68,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T12:53:00+00:00"
+},
+"s0629": {
+"duration_s": 31,
+"active_s": 79,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T01:17:00+00:00"
+},
+"s0630": {
+"duration_s": 115,
+"active_s": 28,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T00:57:00+00:00"
+},
+"s0632": {
+"duration_s": 39,
+"active_s": 90,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T22:05:00+00:00"
+},
+"s0633": {
+"duration_s": 48,
+"active_s": 84,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T21:43:00+00:00"
+},
+"s0634": {
+"duration_s": 55,
+"active_s": 33,
+"clicks": 5,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T22:43:00+00:00"
+},
+"s0635": {
+"duration_s": 51,
+"active_s": 59,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T03:30:00+00:00"
+},
+"s0636": {
+"duration_s": 66,
+"active_s": 51,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T14:37:00+00:00"
+},
+"s0637": {
+"duration_s": 55,
+"active_s": 52,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T05:53:00+00:00"
+},
+"s0639": {
+"duration_s": 39,
+"active_s": 52,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T22:06:00+00:00"
+},
+"s0640": {
+"duration_s": 47,
+"active_s": 74,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T08:31:00+00:00"
+},
+"s0641": {
+"duration_s": 35,
+"active_s": 11,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T04:54:00+00:00"
+},
+"s0642": {
+"duration_s": 56,
+"active_s": 82,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T13:26:00+00:00"
+},
+"s0644": {
+"duration_s": 47,
+"active_s": 74,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T23:33:00+00:00"
+},
+"s0645": {
+"duration_s": 30,
+"active_s": 20,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T11:05:00+00:00"
+},
+"s0646": {
+"duration_s": 30,
+"active_s": 18,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T21:48:00+00:00"
+},
+"s0647": {
+"duration_s": 30,
+"active_s": 20,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T10:58:00+00:00"
+},
+"s0650": {
+"duration_s": 30,
+"active_s": 9,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T18:19:00+00:00"
+},
+"s0652": {
+"duration_s": 30,
+"active_s": 20,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T07:07:00+00:00"
+},
+"s0653": {
+"duration_s": 30,
+"active_s": 20,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T02:13:00+00:00"
+},
+"s0654": {
+"duration_s": 40,
+"active_s": 47,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T03:07:00+00:00"
+},
+"s0656": {
+"duration_s": 55,
+"active_s": 83,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T12:35:00+00:00"
+},
+"s0657": {
+"duration_s": 30,
+"active_s": 12,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T00:55:00+00:00"
+},
+"s0658": {
+"duration_s": 64,
+"active_s": 4,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T20:01:00+00:00"
+},
+"s0660": {
+"duration_s": 49,
+"active_s": 36,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T13:12:00+00:00"
+},
+"s0661": {
+"duration_s": 42,
+"active_s": 6,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T09:13:00+00:00"
+},
+"s0662": {
+"duration_s": 50,
+"active_s": 57,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T15:50:00+00:00"
+},
+"s0663": {
+"duration_s": 54,
+"active_s": 56,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T10:56:00+00:00"
+},
+"s0664": {
+"duration_s": 52,
+"active_s": 67,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T23:41:00+00:00"
+},
+"s0665": {
+"duration_s": 99,
+"active_s": 42,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T03:43:00+00:00"
+},
+"s0666": {
+"duration_s": 128,
+"active_s": 22,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T01:11:00+00:00"
+},
+"s0667": {
+"duration_s": 73,
+"active_s": 39,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T14:11:00+00:00"
+},
+"s0668": {
+"duration_s": 44,
+"active_s": 87,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T10:48:00+00:00"
+},
+"s0670": {
+"duration_s": 51,
+"active_s": 33,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T15:03:00+00:00"
+},
+"s0671": {
+"duration_s": 48,
+"active_s": 5,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T00:46:00+00:00"
+},
+"s0672": {
+"duration_s": 44,
+"active_s": 87,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T02:11:00+00:00"
+},
+"s0673": {
+"duration_s": 40,
+"active_s": 41,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T12:33:00+00:00"
+},
+"s0675": {
+"duration_s": 30,
+"active_s": 9,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T01:26:00+00:00"
+},
+"s0676": {
+"duration_s": 46,
+"active_s": 56,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T03:26:00+00:00"
+},
+"s0677": {
+"duration_s": 43,
+"active_s": 33,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T03:28:00+00:00"
+},
+"s0678": {
+"duration_s": 53,
+"active_s": 50,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T07:19:00+00:00"
+},
+"s0679": {
+"duration_s": 30,
+"active_s": 10,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T15:43:00+00:00"
+},
+"s0682": {
+"duration_s": 38,
+"active_s": 84,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T14:50:00+00:00"
+},
+"s0683": {
+"duration_s": 166,
+"active_s": 26,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T05:57:00+00:00"
+},
+"s0684": {
+"duration_s": 30,
+"active_s": 10,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T04:36:00+00:00"
+},
+"s0685": {
+"duration_s": 30,
+"active_s": 18,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T22:45:00+00:00"
+},
+"s0686": {
+"duration_s": 58,
+"active_s": 19,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T01:21:00+00:00"
+},
+"s0687": {
+"duration_s": 44,
+"active_s": 14,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T11:27:00+00:00"
+},
+"s0688": {
+"duration_s": 43,
+"active_s": 26,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T08:14:00+00:00"
+},
+"s0689": {
+"duration_s": 35,
+"active_s": 6,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T19:14:00+00:00"
+},
+"s0690": {
+"duration_s": 41,
+"active_s": 63,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T23:40:00+00:00"
+},
+"s0691": {
+"duration_s": 30,
+"active_s": 16,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T17:10:00+00:00"
+},
+"s0692": {
+"duration_s": 41,
+"active_s": 17,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T06:24:00+00:00"
+},
+"s0693": {
+"duration_s": 34,
+"active_s": 57,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T08:11:00+00:00"
+},
+"s0695": {
+"duration_s": 30,
+"active_s": 9,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T21:31:00+00:00"
+},
+"s0696": {
+"duration_s": 66,
+"active_s": 56,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T19:42:00+00:00"
+},
+"s0697": {
+"duration_s": 46,
+"active_s": 30,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T20:43:00+00:00"
+},
+"s0699": {
+"duration_s": 62,
+"active_s": 57,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T04:03:00+00:00"
+},
+"s0700": {
+"duration_s": 40,
+"active_s": 37,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T00:42:00+00:00"
+},
+"s0701": {
+"duration_s": 30,
+"active_s": 17,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T10:51:00+00:00"
+},
+"s0703": {
+"duration_s": 164,
+"active_s": 33,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T12:08:00+00:00"
+},
+"s0704": {
+"duration_s": 42,
+"active_s": 31,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T05:41:00+00:00"
+},
+"s0705": {
+"duration_s": 53,
+"active_s": 5,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T13:27:00+00:00"
+},
+"s0706": {
+"duration_s": 59,
+"active_s": 77,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T13:53:00+00:00"
+},
+"s0707": {
+"duration_s": 43,
+"active_s": 81,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T09:21:00+00:00"
+},
+"s0708": {
+"duration_s": 36,
+"active_s": 30,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T10:20:00+00:00"
+},
+"s0709": {
+"duration_s": 45,
+"active_s": 23,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T21:27:00+00:00"
+},
+"s0710": {
+"duration_s": 49,
+"active_s": 43,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T16:06:00+00:00"
+},
+"s0711": {
+"duration_s": 56,
+"active_s": 38,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T04:31:00+00:00"
+},
+"s0713": {
+"duration_s": 50,
+"active_s": 35,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T08:44:00+00:00"
+},
+"s0714": {
+"duration_s": 66,
+"active_s": 25,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T15:01:00+00:00"
+},
+"s0715": {
+"duration_s": 55,
+"active_s": 43,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T21:17:00+00:00"
+},
+"s0717": {
+"duration_s": 42,
+"active_s": 47,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T18:36:00+00:00"
+},
+"s0718": {
+"duration_s": 50,
+"active_s": 18,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T02:58:00+00:00"
+},
+"s0719": {
+"duration_s": 48,
+"active_s": 51,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T13:54:00+00:00"
+},
+"s0720": {
+"duration_s": 115,
+"active_s": 56,
+"clicks": 5,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T23:02:00+00:00"
+},
+"s0721": {
+"duration_s": 149,
+"active_s": 74,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T12:48:00+00:00"
+},
+"s0722": {
+"duration_s": 75,
+"active_s": 72,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T11:08:00+00:00"
+},
+"s0723": {
+"duration_s": 45,
+"active_s": 57,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T14:35:00+00:00"
+},
+"s0724": {
+"duration_s": 30,
+"active_s": 7,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T21:59:00+00:00"
+},
+"s0725": {
+"duration_s": 50,
+"active_s": 69,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T10:55:00+00:00"
+},
+"s0726": {
+"duration_s": 45,
+"active_s": 21,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T07:18:00+00:00"
+},
+"s0727": {
+"duration_s": 30,
+"active_s": 12,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T14:24:00+00:00"
+},
+"s0728": {
+"duration_s": 54,
+"active_s": 21,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T21:24:00+00:00"
+},
+"s0729": {
+"duration_s": 30,
+"active_s": 15,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T16:05:00+00:00"
+},
+"s0731": {
+"duration_s": 51,
+"active_s": 33,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T09:28:00+00:00"
+},
+"s0732": {
+"duration_s": 46,
+"active_s": 61,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T04:33:00+00:00"
+},
+"s0733": {
+"duration_s": 83,
+"active_s": 65,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T22:34:00+00:00"
+},
+"s0734": {
+"duration_s": 48,
+"active_s": 37,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T01:16:00+00:00"
+},
+"s0735": {
+"duration_s": 47,
+"active_s": 31,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T04:27:00+00:00"
+},
+"s0736": {
+"duration_s": 30,
+"active_s": 8,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T19:18:00+00:00"
+},
+"s0737": {
+"duration_s": 52,
+"active_s": 71,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T08:08:00+00:00"
+},
+"s0738": {
+"duration_s": 62,
+"active_s": 40,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T12:34:00+00:00"
+},
+"s0740": {
+"duration_s": 42,
+"active_s": 18,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T06:08:00+00:00"
+},
+"s0741": {
+"duration_s": 49,
+"active_s": 44,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T16:37:00+00:00"
+},
+"s0742": {
+"duration_s": 30,
+"active_s": 14,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T00:00:00+00:00"
+},
+"s0744": {
+"duration_s": 47,
+"active_s": 47,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T20:12:00+00:00"
+},
+"s0745": {
+"duration_s": 74,
+"active_s": 34,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T15:03:00+00:00"
+},
+"s0746": {
+"duration_s": 63,
+"active_s": 77,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T01:33:00+00:00"
+},
+"s0747": {
+"duration_s": 50,
+"active_s": 56,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T12:45:00+00:00"
+},
+"s0748": {
+"duration_s": 48,
+"active_s": 79,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T08:46:00+00:00"
+},
+"s0749": {
+"duration_s": 30,
+"active_s": 6,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T23:17:00+00:00"
+},
+"s0750": {
+"duration_s": 60,
+"active_s": 17,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T08:54:00+00:00"
+},
+"s0751": {
+"duration_s": 45,
+"active_s": 24,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T05:43:00+00:00"
+},
+"s0755": {
+"duration_s": 50,
+"active_s": 54,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T16:04:00+00:00"
+},
+"s0756": {
+"duration_s": 43,
+"active_s": 64,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T11:00:00+00:00"
+},
+"s0757": {
+"duration_s": 57,
+"active_s": 71,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T02:26:00+00:00"
+},
+"s0759": {
+"duration_s": 39,
+"active_s": 17,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T14:14:00+00:00"
+},
+"s0760": {
+"duration_s": 49,
+"active_s": 8,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T13:24:00+00:00"
+},
+"s0761": {
+"duration_s": 54,
+"active_s": 48,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T14:07:00+00:00"
+},
+"s0763": {
+"duration_s": 47,
+"active_s": 32,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T21:54:00+00:00"
+},
+"s0764": {
+"duration_s": 30,
+"active_s": 17,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T17:44:00+00:00"
+},
+"s0765": {
+"duration_s": 43,
+"active_s": 45,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T22:10:00+00:00"
+},
+"s0766": {
+"duration_s": 30,
+"active_s": 8,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T18:31:00+00:00"
+},
+"s0767": {
+"duration_s": 48,
+"active_s": 33,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T09:16:00+00:00"
+},
+"s0768": {
+"duration_s": 45,
+"active_s": 19,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T00:54:00+00:00"
+},
+"s0769": {
+"duration_s": 44,
+"active_s": 57,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T01:35:00+00:00"
+},
+"s0770": {
+"duration_s": 50,
+"active_s": 69,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T23:34:00+00:00"
+},
+"s0771": {
+"duration_s": 51,
+"active_s": 73,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T14:42:00+00:00"
+},
+"s0772": {
+"duration_s": 37,
+"active_s": 30,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T21:11:00+00:00"
+},
+"s0773": {
+"duration_s": 44,
+"active_s": 43,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T00:09:00+00:00"
+},
+"s0774": {
+"duration_s": 30,
+"active_s": 20,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T12:42:00+00:00"
+},
+"s0775": {
+"duration_s": 56,
+"active_s": 19,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T17:38:00+00:00"
+},
+"s0776": {
+"duration_s": 42,
+"active_s": 29,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T02:50:00+00:00"
+},
+"s0778": {
+"duration_s": 49,
+"active_s": 58,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T16:19:00+00:00"
+},
+"s0779": {
+"duration_s": 30,
+"active_s": 16,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T01:35:00+00:00"
+},
+"s0780": {
+"duration_s": 53,
+"active_s": 54,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T05:35:00+00:00"
+},
+"s0782": {
+"duration_s": 30,
+"active_s": 18,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T09:44:00+00:00"
+},
+"s0783": {
+"duration_s": 55,
+"active_s": 24,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T19:53:00+00:00"
+},
+"s0784": {
+"duration_s": 153,
+"active_s": 13,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T06:10:00+00:00"
+},
+"s0785": {
+"duration_s": 59,
+"active_s": 9,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T03:13:00+00:00"
+},
+"s0786": {
+"duration_s": 45,
+"active_s": 25,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T04:09:00+00:00"
+},
+"s0788": {
+"duration_s": 42,
+"active_s": 30,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T09:37:00+00:00"
+},
+"s0789": {
+"duration_s": 66,
+"active_s": 80,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T09:27:00+00:00"
+},
+"s0790": {
+"duration_s": 30,
+"active_s": 15,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T08:47:00+00:00"
+},
+"s0791": {
+"duration_s": 43,
+"active_s": 33,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T20:20:00+00:00"
+},
+"s0792": {
+"duration_s": 47,
+"active_s": 19,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T01:35:00+00:00"
+},
+"s0794": {
+"duration_s": 40,
+"active_s": 63,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T07:08:00+00:00"
+},
+"s0797": {
+"duration_s": 30,
+"active_s": 10,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T01:00:00+00:00"
+},
+"s0799": {
+"duration_s": 42,
+"active_s": 45,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T13:56:00+00:00"
+},
+"s0801": {
+"duration_s": 44,
+"active_s": 8,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T15:31:00+00:00"
+},
+"s0802": {
+"duration_s": 50,
+"active_s": 19,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T17:42:00+00:00"
+},
+"s0803": {
+"duration_s": 30,
+"active_s": 16,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T02:39:00+00:00"
+},
+"s0804": {
+"duration_s": 64,
+"active_s": 66,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T15:41:00+00:00"
+},
+"s0807": {
+"duration_s": 37,
+"active_s": 52,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T03:04:00+00:00"
+},
+"s0808": {
+"duration_s": 148,
+"active_s": 81,
+"clicks": 5,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T10:27:00+00:00"
+},
+"s0809": {
+"duration_s": 44,
+"active_s": 67,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T14:56:00+00:00"
+},
+"s0810": {
+"duration_s": 30,
+"active_s": 6,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T15:11:00+00:00"
+},
+"s0811": {
+"duration_s": 50,
+"active_s": 13,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T02:50:00+00:00"
+},
+"s0812": {
+"duration_s": 47,
+"active_s": 15,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T08:21:00+00:00"
+},
+"s0813": {
+"duration_s": 51,
+"active_s": 57,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T11:16:00+00:00"
+},
+"s0814": {
+"duration_s": 136,
+"active_s": 6,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T16:04:00+00:00"
+},
+"s0815": {
+"duration_s": 50,
+"active_s": 68,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T14:06:00+00:00"
+},
+"s0816": {
+"duration_s": 35,
+"active_s": 86,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T23:38:00+00:00"
+},
+"s0817": {
+"duration_s": 38,
+"active_s": 75,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T23:49:00+00:00"
+},
+"s0819": {
+"duration_s": 30,
+"active_s": 12,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T22:00:00+00:00"
+},
+"s0820": {
+"duration_s": 59,
+"active_s": 36,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T04:40:00+00:00"
+},
+"s0821": {
+"duration_s": 57,
+"active_s": 52,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T19:22:00+00:00"
+},
+"s0822": {
+"duration_s": 42,
+"active_s": 23,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T12:24:00+00:00"
+},
+"s0823": {
+"duration_s": 55,
+"active_s": 64,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T07:09:00+00:00"
+},
+"s0824": {
+"duration_s": 42,
+"active_s": 52,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T22:23:00+00:00"
+},
+"s0825": {
+"duration_s": 42,
+"active_s": 87,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T21:32:00+00:00"
+},
+"s0826": {
+"duration_s": 42,
+"active_s": 50,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T02:02:00+00:00"
+},
+"s0827": {
+"duration_s": 42,
+"active_s": 13,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T15:06:00+00:00"
+},
+"s0828": {
+"duration_s": 54,
+"active_s": 69,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T07:52:00+00:00"
+},
+"s0829": {
+"duration_s": 143,
+"active_s": 80,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T14:43:00+00:00"
+},
+"s0831": {
+"duration_s": 56,
+"active_s": 50,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T10:21:00+00:00"
+},
+"s0832": {
+"duration_s": 45,
+"active_s": 51,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T09:16:00+00:00"
+},
+"s0834": {
+"duration_s": 53,
+"active_s": 78,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T13:41:00+00:00"
+},
+"s0836": {
+"duration_s": 120,
+"active_s": 21,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T07:26:00+00:00"
+},
+"s0838": {
+"duration_s": 154,
+"active_s": 42,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T09:18:00+00:00"
+},
+"s0839": {
+"duration_s": 140,
+"active_s": 49,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T20:26:00+00:00"
+},
+"s0840": {
+"duration_s": 50,
+"active_s": 27,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T18:20:00+00:00"
+},
+"s0841": {
+"duration_s": 47,
+"active_s": 50,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T12:57:00+00:00"
+},
+"s0843": {
+"duration_s": 30,
+"active_s": 11,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T11:22:00+00:00"
+},
+"s0844": {
+"duration_s": 45,
+"active_s": 59,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T08:56:00+00:00"
+},
+"s0845": {
+"duration_s": 30,
+"active_s": 10,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T03:17:00+00:00"
+},
+"s0847": {
+"duration_s": 67,
+"active_s": 27,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T18:08:00+00:00"
+},
+"s0848": {
+"duration_s": 44,
+"active_s": 69,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T15:53:00+00:00"
+},
+"s0849": {
+"duration_s": 66,
+"active_s": 48,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T18:18:00+00:00"
+},
+"s0850": {
+"duration_s": 60,
+"active_s": 73,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T00:29:00+00:00"
+},
+"s0852": {
+"duration_s": 30,
+"active_s": 19,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-10T22:05:00+00:00"
+},
+"s0853": {
+"duration_s": 63,
+"active_s": 62,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T22:56:00+00:00"
+},
+"s0854": {
+"duration_s": 66,
+"active_s": 68,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T22:51:00+00:00"
+},
+"s0855": {
+"duration_s": 38,
+"active_s": 83,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T08:20:00+00:00"
+},
+"s0857": {
+"duration_s": 30,
+"active_s": 6,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T11:28:00+00:00"
+},
+"s0858": {
+"duration_s": 30,
+"active_s": 15,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T10:11:00+00:00"
+},
+"s0859": {
+"duration_s": 48,
+"active_s": 60,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-01T14:03:00+00:00"
+},
+"s0860": {
+"duration_s": 75,
+"active_s": 50,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T03:09:00+00:00"
+},
+"s0861": {
+"duration_s": 30,
+"active_s": 9,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T14:59:00+00:00"
+},
+"s0862": {
+"duration_s": 49,
+"active_s": 32,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-08T15:15:00+00:00"
+},
+"s0863": {
+"duration_s": 51,
+"active_s": 73,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-11T23:47:00+00:00"
+},
+"s0864": {
+"duration_s": 45,
+"active_s": 38,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T13:47:00+00:00"
+},
+"s0865": {
+"duration_s": 173,
+"active_s": 15,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T15:07:00+00:00"
+},
+"s0866": {
+"duration_s": 48,
+"active_s": 23,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T11:34:00+00:00"
+},
+"s0867": {
+"duration_s": 30,
+"active_s": 19,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-02T10:09:00+00:00"
+},
+"s0868": {
+"duration_s": 30,
+"active_s": 7,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T15:03:00+00:00"
+},
+"s0869": {
+"duration_s": 30,
+"active_s": 13,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T12:52:00+00:00"
+},
+"s0870": {
+"duration_s": 40,
+"active_s": 11,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T15:56:00+00:00"
+},
+"s0871": {
+"duration_s": 54,
+"active_s": 18,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T16:08:00+00:00"
+},
+"s0872": {
+"duration_s": 30,
+"active_s": 20,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T05:11:00+00:00"
+},
+"s0873": {
+"duration_s": 41,
+"active_s": 77,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T08:17:00+00:00"
+},
+"s0874": {
+"duration_s": 38,
+"active_s": 42,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-09T05:43:00+00:00"
+},
+"s0876": {
+"duration_s": 40,
+"active_s": 38,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T12:53:00+00:00"
+},
+"s0877": {
+"duration_s": 30,
+"active_s": 7,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T01:36:00+00:00"
+},
+"s0878": {
+"duration_s": 50,
+"active_s": 67,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T19:23:00+00:00"
+},
+"s0879": {
+"duration_s": 43,
+"active_s": 73,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T23:22:00+00:00"
+},
+"s0880": {
+"duration_s": 60,
+"active_s": 55,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T10:29:00+00:00"
+},
+"s0881": {
+"duration_s": 46,
+"active_s": 69,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T08:24:00+00:00"
+},
+"s0882": {
+"duration_s": 45,
+"active_s": 62,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T01:00:00+00:00"
+},
+"s0883": {
+"duration_s": 48,
+"active_s": 61,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T09:55:00+00:00"
+},
+"s0884": {
+"duration_s": 30,
+"active_s": 17,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-13T09:23:00+00:00"
+},
+"s0885": {
+"duration_s": 30,
+"active_s": 16,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-07T00:30:00+00:00"
+},
+"s0886": {
+"duration_s": 53,
+"active_s": 20,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-05T08:44:00+00:00"
+},
+"s0888": {
+"duration_s": 67,
+"active_s": 69,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-03T22:18:00+00:00"
+},
+"s0889": {
+"duration_s": 39,
+"active_s": 79,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T17:00:00+00:00"
+},
+"s0890": {
+"duration_s": 45,
+"active_s": 38,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T12:28:00+00:00"
+},
+"s0891": {
+"duration_s": 46,
+"active_s": 7,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-14T00:40:00+00:00"
+},
+"s0892": {
+"duration_s": 50,
+"active_s": 35,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-06T11:27:00+00:00"
+},
+"s0894": {
+"duration_s": 30,
+"active_s": 15,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T02:58:00+00:00"
+},
+"s0895": {
+"duration_s": 138,
+"active_s": 58,
+"clicks": 5,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T04:58:00+00:00"
+},
+"s0896": {
+"duration_s": 45,
+"active_s": 83,
+"clicks": 3,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-04T07:44:00+00:00"
+},
+"s0897": {
+"duration_s": 56,
+"active_s": 70,
+"clicks": 4,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T17:14:00+00:00"
+},
+"s0899": {
+"duration_s": 30,
+"active_s": 17,
+"clicks": 2,
+"start_url": "https://funnel.example.com/body-cpk/quiz/",
+"start": "2026-11-12T17:37:00+00:00"
+}
+}

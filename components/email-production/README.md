@@ -1,6 +1,19 @@
 # email-production — brand context in, campaign emails out
 
 
+## Calendar handoff and local readiness
+
+`calendar_handoff.py` owns reviewed slot identity, schedule and audience checks. `brief.py` carries its snapshot into writing; design, card building, upload and approval reuse it. A calendar-bound send never silently falls back to a design/brand send hour. Buyer assumptions for a lead audience and stale or ambiguous assignments hold before model/production work. Another released version with the same send/audience blocks a duplicate release.
+
+Audit saved work without network, generation or rendering:
+
+```sh
+python3 reconcile_calendar.py --brand <brand> --month YYYY-MM --from-date YYYY-MM-DD
+python3 reconcile_calendar.py --brand <brand> --month YYYY-MM --from-date YYYY-MM-DD --write
+```
+
+`--write` reconciles local unreleased card metadata, retains the original in `klaviyo/calendar-handoff-before.json`, and writes a report under `runs/email-production/<brand>/calendar-handoff-YYYY-MM/`. Approved/platform card fields stay frozen; divergence is reported for a separate explicit platform action. Reports separate saved copy review, holds and existing platform work. A passing saved alternative subject can be offered for copy review without selecting it or generating a replacement; saved fact holds remain unresolved until reconciled. No report is visual or launch approval. Tests: `python3 test_calendar_handoff.py`.
+
 > **Current as of 2026-09-20: read `CLAUDE.md` first** — it has what this tool
 > takes and makes, how to run it, the free dry run and the checks that hold an
 > email back from Klaviyo. What follows below is the 2026-08-27 starting note,
@@ -19,9 +32,9 @@ email.**
 
 | | |
 |---|---|
-| Brand context | `../brands/<brand>/` — read-only, never written to |
-| Email swipes | `../brands/<brand>/existing-content/emails/` — **empty** |
-| Variable map | `brand-maps/<brand>.md` |
+| Brand context | `../brands/Brand A/` — read-only, never written to |
+| Email swipes | `../brands/Brand A/existing-content/emails/` — **empty** |
+| Variable map | `brand-maps/Brand A.md` |
 | The chain | `prompts/` — one file per stage, highest `-vN-` wins |
 | The runner | `email_line.py` |
 | The picture | `render.py` |
@@ -34,13 +47,13 @@ email.**
 Check the wiring first — free, no model calls:
 
 ```
-python3 email_line.py <source> --brand <brand> --avatar fed-up-king --dry-run
+python3 email_line.py <source> --brand Brand A --avatar fed-up-king --dry-run
 ```
 
 Then the chain:
 
 ```
-python3 email_line.py <source> --brand <brand> --avatar fed-up-king \
+python3 email_line.py <source> --brand Brand A --avatar fed-up-king \
   [--product <path>] [--subjects 5] [--label <name>]
 python3 render.py results/<label>
 ```

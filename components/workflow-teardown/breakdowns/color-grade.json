@@ -1,0 +1,83 @@
+{
+ "id": "color-grade",
+ "name": "Color Grade (/color-grade)",
+ "kind": "edit",
+ "makes": "Matches an image or video's colours to reference stills or one of 20 movie looks with a NumPy/OpenCV engine, with previews and an optional .cube LUT; no generation.",
+ "source": [
+  "color-grade/README.md",
+  "color-grade/SKILL.md",
+  "commands/color-grade.md",
+  "commands/color-grade-references-ops.md",
+  "commands/color-grade-references-render.md",
+  "color-grade/scripts/grade.py.md",
+  "color-grade/scripts/video.py.md",
+  "color-grade/scripts/looks/looks.json.md"
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "name": "Intake",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 2,
+   "name": "Choose the look",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 3,
+   "name": "Preview",
+   "model": "none",
+   "cheap": "already free"
+  },
+  {
+   "n": 4,
+   "name": "Refine",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 5,
+   "name": "Render",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 6,
+   "name": "Deliver",
+   "model": "none",
+   "cheap": null
+  }
+ ],
+ "prompts": [
+  {
+   "label": "Image preview, sheet, compare",
+   "source": "commands/color-grade-references-render.md",
+   "text": "python3 \"$CG/grade.py\" ~/grade/target.png --look amelie --ref ~/grade/ref.png --max-side 1200 --out ~/grade/preview.jpg\npython3 \"$CG/sheet.py\" ~/grade/comparison.jpg ~/grade/target.png ~/grade/preview.jpg ~/grade/ref.png --labels original graded reference\npython3 \"$CG/compare.py\" --look amelie --images ~/grade/target.png ~/grade/preview.jpg"
+  },
+  {
+   "label": "Video preview and full render",
+   "source": "commands/color-grade-references-render.md",
+   "text": "python3 \"$CG/video.py\" ~/grade/input.mp4 --look amelie --ref ~/grade/ref.png --preview 2 --out ~/grade/preview.jpg\npython3 \"$CG/video.py\" ~/grade/input.mp4 --look amelie --ref ~/grade/ref.png --mode full --out ~/grade/graded.mp4"
+  },
+  {
+   "label": "Look recipe, Amelie (verbatim from looks.json)",
+   "source": "color-grade/scripts/looks/looks.json.md",
+   "text": "  \"amelie\": {\n    \"name\": \"Amélie\",\n    \"look\": \"green and red\",\n    \"aliases\": [\"amelie\", \"amélie\"],\n    \"params\": {\n      \"tone\": 0.5,\n      \"color\": 0.85,\n      \"palette\": 0.4,\n      \"skin\": 0.55\n    },\n    \"ops\": [\n      {\n        \"op\": \"hue_curves\",\n        \"keys\": [\n          {\n            \"hue\": 270,\n            \"width\": 45,\n            \"sat\": 0.45\n          },\n          {\n            \"hue\": 140,\n            \"width\": 35,\n            \"sat\": 1.25\n          },\n          {\n            \"hue\": 35,\n            \"width\": 22,\n            \"sat\": 1.3\n          },\n          {\n            \"hue\": 95,\n            \"width\": 25,\n            \"shift\": 12\n          }\n        ]\n      },\n      {\n        \"op\": \"split_tone\",\n        \"mids\": [-2, 9],\n        \"highlights\": [0, 10]\n      },\n      {\n        \"op\": \"halation\",\n        \"amount\": 0.15\n      },\n      {\n        \"op\": \"vignette\",\n        \"amount\": 0.3\n      },\n      {\n        \"op\": \"grain\",\n        \"amount\": 0.018,\n        \"size\": 1.4\n      }\n    ]\n  }"
+  },
+  {
+   "label": "How the engine grades (order)",
+   "source": "commands/color-grade-references-ops.md",
+   "text": "1. **balance**: measures the color cast of the near-neutral pixels (grey, white, steel) and removes it, so the look starts from a clean base.\n2. **tone**: builds a smooth luma curve that moves the source's black level, mids and highlights toward the reference percentiles.\n3. **color**: splits the image into shadows, mids and highlights and moves each zone's color mean and spread to the reference zone (Monge-Kantorovich linear transfer in Lab).\n4. **palette**: hue-specific matching with sliced optimal transport (Pitié iterative distribution transfer) on a color sample of the references. This is what puts teal in the sky and orange on skin instead of one tint over everything.\n5. **recipe ops** (per pixel): hue curves, split tone, curves, saturation, mono, bleach bypass, Technicolor, day for night, channel mixer.\n6. **masks**: skin protection (face detection plus a skin color model learned from that face), sky secondary, and mono selective color with skin excluded.\n7. **finish**: haze, bloom, halation, softness, sharpening, vignette, grain."
+  },
+  {
+   "label": "Guard-rail switch-off for an extreme look",
+   "source": "commands/color-grade-references-ops.md",
+   "text": "--set sat_limit=0 --set max_cast=0 --set match_exposure=0"
+  }
+ ],
+ "price": "No credits: no generation model is called. Nothing in `_prices.md` applies.",
+ "cheap_price": "0 credits"
+}

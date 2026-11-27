@@ -4,8 +4,8 @@
     python3 components/marketing-doctrine/lint_story.py            # every brand
     python3 components/marketing-doctrine/lint_story.py <file> ... # named files
 
-Mirrors lint_position.py. The shape is the one BRAND-A's hand-built file set and
-the owner approved on 2026-09-19 ("story looks good"); brands/_TEMPLATE/story.md
+Mirrors lint_position.py. The shape is the one brand_a's hand-built file set and
+owner approved on 2026-09-19 ("story looks good"); brands/_TEMPLATE/story.md
 carries it with no brand in it.
 
 What it checks, per file:

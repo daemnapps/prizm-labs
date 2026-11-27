@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """The used lane, awareness and the query — a fixture tree, no network, no real brand.
 
-    python3 -m unittest discover -s tests          # from tools/language-layer
-    python3 tools/language-layer/tests/test_used_lane.py
+    python3 -m unittest discover -s tests          # from components/language-layer
+    python3 components/language-layer/tests/test_used_lane.py
 """
 import json, os, sys, tempfile, unittest
 from pathlib import Path
@@ -112,7 +112,7 @@ class Workspace(unittest.TestCase):
             self.skipTest("AI_WORKSPACE is set; the default is the named tree")
         here = Path(E.__file__).resolve().parents[3]
         self.assertEqual(E._default_workspace(), here)
-        self.assertTrue((here / "tools" / "language-layer").is_dir())
+        self.assertTrue((here / "components" / "language-layer").is_dir())
 
     def test_ai_workspace_names_the_tree(self):
         old = os.environ.get("AI_WORKSPACE")

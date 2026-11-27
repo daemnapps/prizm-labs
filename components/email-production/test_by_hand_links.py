@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """A link the store keeps the check out of (429) is a "by-hand" row on the final check: it holds nothing on the
 team's page, and the approval page (approve_klaviyo.py, :8798) waits for an approver to open it and confirm
-before Approve or Schedule (the team, 2026-10-27). No network, no key.
+before Approve or Schedule (email_lead, 2026-10-27). No network, no key.
 
     python3 test_by_hand_links.py
 
   1  an unconfirmed by-hand page holds Approve, naming the page; its live 429 is not a second problem
   2  someone not on approvers.json cannot confirm; nothing is written
-  3  the team confirms: the card records who, when and which pages, and Approve stops waiting
+  3  email_lead confirms: the card records who, when and which pages, and Approve stops waiting
   4  a real PROBLEM row still holds after the confirm
   5  Schedule refuses while a by-hand page waits
   6  the page shows the row as BY HAND with the confirm button, and the button goes once confirmed
@@ -15,6 +15,7 @@ before Approve or Schedule (the team, 2026-10-27). No network, no key.
   8  the page's live check asks each page once, whatever its tracking tags
   9  Approve refuses, and reaches nothing, when the team's Drive copy of the pictures can't be read
  10  a pull puts the Drive's pictures over this Mac's and names the ones the Drive does not have
+ 11  a page the final check reached but the store keeps out at the Go (429) waits for a person, and their confirm clears it
 """
 import json
 import os
@@ -53,7 +54,7 @@ class Base(unittest.TestCase):
         self.switch = TMP / "send-switch.json"
         write(self.switch, {"email_schedule": "on"})
         self.approvers = TMP / "approvers.json"
-        write(self.approvers, {"approvers": ["the owner", "the team"]})
+        write(self.approvers, {"approvers": ["owner", "email_lead"]})
         self.p = [mock.patch.object(A, "RUNS", RUNS),
                   mock.patch.object(A, "FAKE", False),
                   mock.patch.object(A, "audience", lambda c: ([("Core", "SEG1")], [])),
@@ -99,23 +100,23 @@ class ByHand(Base):
         self.assertIn("approver", r["error"])
         self.assertNotIn("links_confirmed", self.card())
 
-    def test_03_pm_confirms(self):
+    def test_03_email_lead_confirms(self):
         self.make_card()
-        r = A.confirm_links(BRAND, LABEL, "the team")
+        r = A.confirm_links(BRAND, LABEL, "email_lead")
         self.assertTrue(r["ok"], r)
         lc = self.card()["links_confirmed"]
-        self.assertEqual((lc["by"], lc["pages"]), ("the team", [PAGE]))
+        self.assertEqual((lc["by"], lc["pages"]), ("email_lead", [PAGE]))
         self.assertTrue(lc["at"])
         self.assertEqual(self.problems(), [])
 
     def test_04_a_real_problem_still_holds(self):
         self.make_card([HAND, {"result": "PROBLEM", "detail": "https://example.com/gone → 404"}])
-        A.confirm_links(BRAND, LABEL, "the team")
+        A.confirm_links(BRAND, LABEL, "email_lead")
         self.assertEqual(self.problems(), ["final check: https://example.com/gone → 404"])
 
     def test_05_schedule_waits(self):
         self.make_card(klaviyo=True)
-        r = A.schedule(BRAND, LABEL, "the team", env={}, home=TMP)
+        r = A.schedule(BRAND, LABEL, "email_lead", env={}, home=TMP)
         self.assertFalse(r["ok"])
         self.assertIn("confirm by hand", r["error"])
         self.assertNotIn("scheduled", self.card())
@@ -127,19 +128,27 @@ class ByHand(Base):
             self.assertIn("BY HAND", html)
             self.assertIn('data-a="confirm"', html)
             self.assertIn("Open 1 link first", html)
-            A.confirm_links(BRAND, LABEL, "the team")
+            A.confirm_links(BRAND, LABEL, "email_lead")
             html = A.page()
         self.assertNotIn('data-a="confirm"', html)
-        self.assertIn("confirmed by the team", html)
+        self.assertIn("confirmed by email_lead", html)
         self.assertIn("Ready for Klaviyo", html)
+
+    def test_11_kept_out_at_the_go(self):
+        self.make_card([{"result": "ok", "detail": "subject: A subject"}])   # the final check got in; the Go does not
+        self.assertEqual(self.problems(), ["open and confirm by hand first: %s (the store answered 429)" % PAGE])
+        r = A.confirm_links(BRAND, LABEL, "email_lead")
+        self.assertTrue(r["ok"], r)
+        self.assertEqual(r["confirmed"], [PAGE])
+        self.assertEqual(self.problems(), [])
 
     def test_07_team_page_and_queue_do_not_hold(self):
         sys.path.insert(0, str(HERE / "adapter"))
         import adapter as AD
         self.assertEqual(AD._held({"final_check": [HAND, {"result": "ok", "detail": "x"}]}), [])
         self.assertEqual(AD._held({"final_check": [HAND, {"result": "PROBLEM", "detail": "y"}]}), ["y"])
-        # the emails page (sync.py) splits holds by who fixes them (the team, 2026-10-28): by-hand and notes hold no one,
-        # a picture problem holds the team, the words and the product hold only the team
+        # the emails page (sync.py) splits holds by who fixes them (email_lead, 2026-10-28): by-hand and notes hold no one,
+        # a picture problem holds editor, the words and the product hold only email_lead
         sys.path.insert(0, str(HERE / "design"))
         import check as CK
         card = {"product_check": [{"result": "PROBLEM", "detail": "price $9", }],
@@ -149,14 +158,14 @@ class ByHand(Base):
 
 
 class PicturesFromTheDrive(Base):
-    """Approve uploads the team's pictures from the Drive, never this Mac's older copies (the team, 2026-10-27)."""
+    """Approve uploads the team's pictures from the Drive, never this Mac's older copies (email_lead, 2026-10-27)."""
     def test_09_approve_refuses_when_the_drive_cannot_be_read(self):
         self.make_card([{"result": "ok", "detail": "subject: A subject"}])
         (self.dir / "email.html").write_text('<img src="assets/s01.jpg">')
         lf = mock.Mock(pull_build=lambda brand, run: {"got": [], "missing": [], "error": "NoDrive: no route"})
         with mock.patch.object(A, "_layout_file", lambda: lf), mock.patch.object(A, "link_status", lambda u: "200"), \
                 mock.patch.object(A.S, "look", lambda b: {}), mock.patch.object(A.S, "kl_key", lambda lk: self.fail("reached Klaviyo")):
-            r = A.approve(BRAND, LABEL, "the team")
+            r = A.approve(BRAND, LABEL, "email_lead")
         self.assertFalse(r["ok"])
         self.assertIn("team's Drive", r["error"])
         self.assertNotIn("klaviyo", self.card())

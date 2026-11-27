@@ -148,7 +148,7 @@ def mix_bar(slots):
 
 def matrix_section(slots, brand):
     """The cells — every avatar and sub-avatar, served or cold. The unit of
-    planning is the cell, not the day (the owner, 2026-08-29)."""
+    planning is the cell, not the day (owner, 2026-08-29)."""
     if not slots:
         return ""
     roster = (L.avatars(brand) if L else []) or []
@@ -559,7 +559,7 @@ CAL_STAGES = [
      "The public holidays that land in this month, with their real dates — "
      "from the tool's holidays table, calendar facts that are the same for "
      "every brand. Which ones the brand plans against is its own call, made "
-     "in its moments file. Layer 1 of the ground-up build (the owner, 2 Sep)."
+     "in its moments file. Layer 1 of the ground-up build (owner, 2 Sep)."
      " -> results/calendar-<month>/1-holidays/"),
     ("cal2", "THE CULTURAL MOMENTS", "code", None,
      "The brand's own moments that land in this month — sports seasons, "

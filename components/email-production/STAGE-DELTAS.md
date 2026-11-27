@@ -28,7 +28,7 @@ speaker is identifiable.
   lane's. Campaign or flow, and which one.
 - **`SENDER`** — new, email only. Brand name, a person's name, a person at the
   brand, or a support address. This is part of the argument, not metadata: the
-  same words from "<brand>" and from "Creator-A at <brand>" are two different
+  same words from "Brand B" and from "a creator at Brand B" are two different
   emails. Everything downstream binds to it.
 
 ## 1 · Read — `stage1-read-v1-owner.md`

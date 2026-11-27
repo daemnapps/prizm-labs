@@ -1,0 +1,13 @@
+{
+ "id": "gta-porch",
+ "status": "draft",
+ "state": "seed",
+ "what": "An early-2000s open-world game look: a sunny block, a porch, a store, a street, a bathroom, a skin cross-section. Original art only, no real game assets, names or footage.",
+ "locations": ["porch", "bathw", "storew", "runw", "neckw", "crossw", "prodw", "end"],
+ "look": {"res": [720, 1280], "post": "shadows, focus, bloom, grain, vignette, warm grade", "framing": "full-screen vertical, close coverage, handheld drift"},
+ "cast": {"lead": "3d/tre-rigged.glb", "second": "3d/dre-rigged.glb", "clips": "3d/clips.json", "product": "3d/flex.glb", "hands": "placed by reach, never by pose numbers"},
+ "game_moves": ["red failure card", "wanted stars", "+BUMPS counter", "review unlocked card", "spec callouts", "unlocked a new character"],
+ "sound": {"beds": ["amb-morning", "amb-neck"], "music": ["music-porch", "music-bumped", "music-flex"], "effects": "per-beat, each stops at its section"},
+ "voices": "cast per character, checked by label and by ear; lines reuse the banked read when the words are unchanged",
+ "caps": {"opening_seconds_min": 1.5, "on_screen_disclaimers": false}
+}

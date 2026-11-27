@@ -1,0 +1,72 @@
+{
+ "id": "lighting-hf",
+ "name": "Lighting Looks (/<look>-hf)",
+ "kind": "edit",
+ "makes": "Relights a user's clip with one of 62 lighting looks through Seedance 2.5 video edit, changing only light and colour, then restores the original audio.",
+ "source": [
+  "lighting-hf/SKILL.md",
+  "commands/high-key-hf.md"
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "name": "Clip",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 2,
+   "name": "Probe",
+   "model": "none",
+   "cheap": "local ffprobe (free)"
+  },
+  {
+   "n": 3,
+   "name": "Cost line",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 4,
+   "name": "Generate",
+   "model": "seedance_2_5",
+   "cheap": "`gemini_omni_flash_1_2` mode `edit`, 360p (source 3-15 s, up to 7 image refs): the same 7.5 credits per 10 s tier as its quoted reference-to-video; the edit price itself is not quoted, re-quote first"
+  },
+  {
+   "n": 5,
+   "name": "Restore audio",
+   "model": "none",
+   "cheap": "local ffmpeg remux (free)"
+  },
+  {
+   "n": 6,
+   "name": "Deliver",
+   "model": "none",
+   "cheap": null
+  }
+ ],
+ "prompts": [
+  {
+   "label": "The look prompt (High-key example, verbatim)",
+   "source": "commands/high-key-hf.md",
+   "text": "LIGHTING & COLOUR CHANGE ONLY - HIGH-KEY.\n\nKEEP MY SHOT: @Video1 is my original video. Keep it exactly as it is: the same location, architecture, walls,\nwindows, floor, background, every object, every person, their faces, hair and clothes, their positions,\nmovements, gestures, expressions and lip movement, and the camera movement, framing and timing. Nobody gets a\nhat, cap or any new accessory. Never add, remove, replace or redecorate anything. Only the light falling on\nthe existing scene and the colour grade change.\n\nNEW LIGHT:\n- Exposure raised by about 2 stops: the whole image is very bright, airy and luminous, much lighter than the\noriginal in every frame.\n- Huge soft white light from in front and from both sides, out of frame, floods the people: faces bright and\nglowing, almost no shadows under the chins or noses.\n- The existing walls, floor and objects turn bright and pale; the lightest parts of the background bloom to\nnear pure white while their shapes stay visible.\n- Shadows lifted to light grey, never dark; very low contrast, soft white bloom around highlights, clean\nbright skin, gentle saturation, crisp commercial look.\n- The change from the original light is obvious at first glance in every frame.\n\nThe location of @Video1 stays fully recognisable in every frame. Light is physically real: it wraps faces and\nbodies and moves correctly as people and camera move, never a flat filter. Photorealistic, natural skin\ntexture, original lens perspective. No added text, no music."
+  },
+  {
+   "label": "Sentence added when the clip has on-screen text",
+   "source": "lighting-hf/SKILL.md",
+   "text": "Keep every\ncaption, subtitle, title, logo and other on-screen text exactly as in @Video1: same words, styling, position\nand timing; only the light on the scene changes."
+  },
+  {
+   "label": "Generation request",
+   "source": "lighting-hf/SKILL.md",
+   "text": "{\"params\":{\"model\":\"seedance_2_5\",\"mode\":\"video_edit\",\"prompt\":\"<the look's prompt>\",\"count\":1,\"duration\":<ceil(D)>,\"resolution\":\"720p\",\"aspect_ratio\":\"auto\",\"generate_audio\":false,\"medias\":[{\"value\":\"<clip media id>\",\"role\":\"video\"}]}}"
+  },
+  {
+   "label": "Look list (commands)",
+   "source": "lighting-hf/SKILL.md",
+   "text": "| Command                 | Look                     |\n| ----------------------- | ------------------------ |\n| `/high-key-hf`          | High-key                 |\n| `/low-key-hf`           | Low-key                  |\n| `/rembrandt-hf`         | Rembrandt                |\n| `/butterfly-hf`         | Butterfly (Paramount)    |\n| `/split-hf`             | Split                    |\n| `/loop-hf`              | Loop                     |\n| `/broad-hf`             | Broad                    |\n| `/short-hf`             | Short                    |\n| `/chiaroscuro-hf`       | Chiaroscuro              |\n| `/silhouette-hf`        | Silhouette               |\n| `/rim-light-hf`         | Rim / backlight          |\n| `/hard-light-hf`        | Hard light               |\n| `/soft-light-hf`        | Soft light               |\n| `/bounce-hf`            | Bounce                   |\n| `/top-light-hf`         | Top light                |\n| `/under-lighting-hf`    | Under lighting           |\n| `/golden-hour-hf`       | Golden hour              |\n| `/blue-hour-hf`         | Blue hour                |\n| `/day-for-night-hf`     | Day-for-night            |\n| `/moonlight-hf`         | Moonlight                |\n| `/window-light-hf`      | Window light             |\n| `/practical-hf`         | Practical                |\n| `/firelight-hf`         | Firelight / candlelight  |\n| `/venetian-blinds-hf`   | Venetian blinds          |\n| `/dappled-hf`           | Dappled / gobo           |\n| `/god-rays-hf`          | Volumetric (god rays)    |\n| `/overcast-hf`          | Overcast / flat          |\n| `/neon-hf`              | Neon                     |\n| `/teal-orange-hf`       | Teal & orange            |\n| `/monochrome-red-hf`    | Monochrome red           |\n| `/screen-glow-hf`       | Screen glow              |\n| `/passing-light-hf`     | Passing light            |\n| `/strobe-hf`            | Strobe / flicker         |\n| `/spotlight-hf`         | Theatrical spotlight     |\n| `/clamshell-hf`         | Clamshell                |\n| `/three-point-hf`       | Three-point              |\n| `/cross-lighting-hf`    | Cross lighting           |\n| `/kicker-hf`            | Kicker                   |\n| `/eye-light-hf`         | Eye light                |\n| `/ring-light-hf`        | Ring light               |\n| `/direct-flash-hf`      | Direct flash             |\n| `/snow-light-hf`        | Snow light               |\n| `/lens-flare-hf`        | Lens flare               |\n| `/lightning-hf`         | Lightning                |\n| `/atmospheric-fog-hf`   | Atmospheric fog          |\n| `/sodium-vapour-hf`     | Sodium vapour            |\n| `/fluorescent-hf`       | Fluorescent              |\n| `/bare-bulb-hf`         | Bare bulb                |\n| `/flashlight-hf`        | Flashlight               |\n| `/dashboard-light-hf`   | Dashboard light          |\n| `/police-lights-hf`     | Police lights            |\n| `/projector-beams-hf`   | Projector beams          |\n| `/stained-glass-hf`     | Stained glass            |\n| `/searchlight-hf`       | Searchlight              |\n| `/explosion-hf`         | Explosion                |\n| `/laser-light-hf`       | Laser light              |\n| `/blacklight-hf`        | Blacklight               |\n| `/bi-colour-hf`         | Bi-colour light          |\n| `/mixed-temperature-hf` | Mixed colour temperature |\n| `/cast-shadow-hf`       | Cast shadow              |\n| `/city-bokeh-hf`        | City bokeh               |\n| `/bloom-hf`             | Bloom / halation         |"
+  }
+ ],
+ "price": "Quotes by length at the resolution; one paid generation per clip per look. `seedance_2_5` video_edit is not quoted in `_prices.md` (omni_reference draft 480p/10 s is 30 credits): not quoted, re-quote before running.",
+ "cheap_price": "not quoted; ~160 -> ~7.5 per 10 s if Gemini edit prices like its reference mode"
+}

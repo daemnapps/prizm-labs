@@ -2,15 +2,15 @@
 
 
 **marketing-doctrine** — the doctrine every marketing machine cites. It takes
-the four definition files (`frameworks.json`, `delivery.json`, `spoken.json`,
-`ad-frameworks.json`), makes the twelve rendered slices in `slices/` that a
+the five definition files (`frameworks.json`, `delivery.json`, `spoken.json`,
+`ad-frameworks.json`, `mechanics.json`), makes the sixteen rendered slices in `slices/` that a
 prompt binds by path; its three lint gates (`lint_prompts.py`,
 `lint_position.py`, `lint_story.py`) check prompts and brand files and write
 nothing. Does not write anything but `slices/*.md`, and a slice is never edited
 by hand (the next render erases it). Triggered by
 `python3 components/marketing-doctrine/render.py`.
 
-**Owner: the owner** (engine and definitions both). Engine named by the team 2026-10-07 (triage action 3 (definition lines and registry rows)). Resident since 2026-09-18.
+**Owner: the owner** (engine and definitions both). Engine named by the developer 2026-10-07 (triage action 3 (definition lines and registry rows)). Resident since 2026-09-18.
 
 The creative layer runs on one doctrine, and this folder is where it lives:
 mass desire, the five awareness levels, the five sophistication stages, the
@@ -25,6 +25,7 @@ any file here.
 | `delivery.json` | **the taste layer.** The labelled delivery dials — humor level, delivery style, register, pacing, reference world, avoid — each value carrying what it does, when it fits, its risk and the receipt it needs |
 | `spoken.json` | **the spoken layer.** The rules of spoken copy (written-vs-spoken, each with its receipt URL), the five colloquialism levels as a dial, a register recipe per delivery style with the voice-model settings that match it, the punctuation map for the voice model the track is made on, and the demographic bands a colloquialism is keyed to — options tied to the profile's `### demographics` block, researched, and measured against the brand's own creators |
 | `ad-frameworks.json` | **the second door.** Assembled frameworks — an ad's plan, chosen rather than read off a swipe — each row naming its sections, in order, with the technique that builds each one and the scene shape that beat takes |
+| `mechanics.json` | **the conversion layer.** Mechanics with their evidence tier, a move per surface (ad, email, page, portal), the number each moves, and the yes-or-no gates. The measured ones reach every writing chain through the strategist's who reader |
 | `SCHWARTZ.md` | the human-readable doctrine, in our words, in chain order — for people, not machines |
 | `slices/*.md` | one rendered block per framework, which is what a prompt actually binds. **Never hand-edited** |
 | `render.py` | renders every slice from the JSON; `--check` fails if a slice on disk has drifted |
@@ -55,6 +56,9 @@ lane (lane doctrine §2, one vocabulary):
 
 | Variable | Slice |
 |---|---|
+| `{words}` | `components/marketing-doctrine/slices/words.md` (what avatar, angle, moment, idea, hook and format mean, with the test for each and where its list is kept) |
+| `{people_layers}` | `components/marketing-doctrine/slices/people.md` (avatar, sub-avatar, demographic: their one home) |
+| `{belief_doubts}` | `components/marketing-doctrine/slices/belief.md` (the four doubts, the claim, a chosen group) |
 | `{desire_dimensions}` | `components/marketing-doctrine/slices/desire.md` |
 | `{awareness_levels}` | `components/marketing-doctrine/slices/awareness.md` |
 | `{sophistication_stages}` | `components/marketing-doctrine/slices/sophistication.md` |
@@ -112,7 +116,7 @@ Three rules travel with it and none of them is negotiable:
   proof always follows it.
 
 The humor rules, ruled by the owner 2026-10-06 ("All six", on the humor
-research in `lab/owner/context/humor-engine-owner.md`):
+research in `lab/the owner/context/humor-engine-owner.md`):
 
 - **A planted joke comes from the room.** A straight source may take one only
 when the culture read or the avatar's culture map shows this audience already
@@ -204,7 +208,7 @@ Two ways a row gets here:
 
 - **Seeded** — the eight `frameworks_crosswalk` rows in `frameworks.json`,
   expanded to full shape by hand. `source: "seed — crosswalk row <name>"`.
-- **Promoted** — `python3 tools/video-teardown/machine/framework_bank.py
+- **Promoted** — `python3 components/video-teardown/machine/framework_bank.py
   --promote <run-label>` copies the framework a run OBSERVED (its
   `doctrine.json`) in as a new row, `status: "draft"`, `state: "seed"`, `source: "observed —
   <label>"`. **Run this only on the owner's own word.** This file is curated
@@ -215,10 +219,10 @@ Only the owner moves a row's `state` from `seed` to `proven` (and its `status` f
 produced were judged. No coined names anywhere in this file: a promoted row
 takes its crosswalk row's name or a plain description, never an invented one.
 
-`tools/video-teardown/machine/compose.py` is the consumer — `plan` /
+`components/video-teardown/machine/compose.py` is the consumer — `plan` /
 `run` / `grid` open a run on the FRAMEWORK lane from a chosen `{avatar,
 awareness, format, framework}`, with no swipe and no model call until every
-stage resolves. See `tools/video-teardown/machine/README.md` ("The
+stage resolves. See `components/video-teardown/machine/README.md` ("The
 second door") and `prompts/README.md` ("Stage 2f") for the chain side.
 
 Each slice is self-contained — it names the variable it is bound as, states its
@@ -251,12 +255,12 @@ Runs by: person
 
 | question | answer |
 |---|---|
-| **engine + owner** | `render.py` + `lint_prompts.py` — two stdlib scripts, no state, no credential. Engine owner **the owner** (the team, 2026-10-07); the owner's chain is the first caller |
+| **engine + owner** | `render.py` + `lint_prompts.py` — two stdlib scripts, no state, no credential. Engine owner **the owner** (the developer, 2026-10-07); the owner's chain is the first caller |
 | **definitions + curator** | `frameworks.json` — **the owner curates.** It is doctrine, so a change to a framework is a ruling, not a maker's judgment. The line pointers are the audit trail |
 | **the plane it emits** | **none — `slices/` is a rendered projection of the definitions, not a run record.** Nothing here writes outside this folder and there is no run to file |
 | **what the manifest declares per entry** | every row carries `ref` (its `[L####]` pointer), and every technique additionally carries `when`, `owning_stage`, `research_question` and `scene_shape`; every research question carries `framework`, `tags` and the `stages` it feeds; every entry of the four files carries `status` (draft / approved / deprecated, rule 6) and every ad-frameworks row also `state` (seed / proven) |
 
-**Read surface — what other components may use** (the team, 2026-10-07, triage action 6 (declare public surfaces), provisionally on the owner's behalf — the owner sees it in the decision log and may strike any line). Besides the `frameworks.json` schema, the slice/variable map and the linter's exit codes above, these are part of the contract:
+**Read surface — what other components may use** (the developer, 2026-10-07, triage action 6 (declare public surfaces), provisionally on the owner's behalf — the owner sees it in the decision log and may strike any line). Besides the `frameworks.json` schema, the slice/variable map and the linter's exit codes above, these are part of the contract:
 1. **`slices/<name>.md`** — any slice, bound by path (the rule above).
 2. **`ad-frameworks.json`** (the second door) and **`spoken.json`** (`punctuation_map`, the written-vs-spoken rules).
 3. **`delivery.json`** — `dials[id=delivery_style].values[].id` (audio-teardown's voice-card check).

@@ -14,7 +14,7 @@ A layer is a stage in a chain in the ordinary sense: it takes what the layers
 before it settled, adds exactly one kind of decision, writes that decision
 down in its own numbered folder, and hands on. Seven are plain code and cost
 nothing to re-run. Two think, and those two are the ones whose prompt and
-output have to stay nameable forever — the owner's standing rule is that the
+output have to stay nameable forever — owner's standing rule is that the
 prompt is the product, so a month whose prompt version cannot be named is not
 a month anyone can reason about.
 """
@@ -30,7 +30,7 @@ import brandpath as BP                                # noqa: E402
 
 CODE, AI = "code", "ai"
 
-# THE COMMERCIAL FLOOR — the owner, 2026-09-14: "every single month for every
+# THE COMMERCIAL FLOOR — owner, 2026-09-14: "every single month for every
 # single brand, we should have 20% ask, 80% the rest. Really, every week should
 # have an offer. I don't see a reason to not have offers every single week."
 #
@@ -61,7 +61,7 @@ def N(path, required, gives, without):
 
     That last field is the point of this whole structure. A brand missing an
     optional file still gets a month, and the month looks exactly as confident
-    as one planned on a full record — which is how Brand-B came to be planned
+    as one planned on a full record — which is how brand_b came to be planned
     with three of its evidence inputs missing and nothing anywhere saying so
     (found 2026-09-13). A degraded layer has to announce itself.
     """
@@ -186,7 +186,7 @@ STAGES = [
 # ---------------------------------------------------------- the whole run ---
 # The nine layers are the PLANNING. They are not the whole thing a person does
 # to get a month, and a chain that only declares its middle leaves everyone to
-# remember the ends. the owner, 2026-09-14: "establish this chain of all the stages
+# remember the ends. owner, 2026-09-14: "establish this chain of all the stages
 # that we did to get here."
 #
 # BEFORE runs per brand and rarely — it changes what the brand KNOWS.

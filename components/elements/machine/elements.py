@@ -12,13 +12,13 @@ place a tool asks "is this a real one?".
     E.get("format", "video", "song-ad")           # the row, or raises Unknown
     E.check({("format", "video"): "song-ad"})     # [] or a list of problems
 
-the owner, 2026-09-20: *"If we have these different formats, structures,
+owner, 2026-09-20: *"If we have these different formats, structures,
 frameworks, styles, we need to define all these unique elements… Things
 aren't enforced… Everything needs to be green light."*
 
 WHAT IT DOES NOT DO: it never edits a source list. Every list stays where the
 tool that uses it reads it (sources.json says where). A list is changed at its
-source; `build` refreshes the library. Rows the owner has named that no list holds
+source; `build` refreshes the library. Rows owner has named that no list holds
 yet live in additions.json, as drafts.
 
 THE SAME FIELDS ON EVERY ROW: id · name · what · why_it_works · status · state · signed · examples · evidence · source · extra · aliases · note.
@@ -27,7 +27,7 @@ THE SAME FIELDS ON EVERY ROW: id · name · what · why_it_works · status · st
 ALIASES (2026-09-28, Master Plan v2 3.1). An id is lowercase with "-" between
 words, never squashed (`sticky-note`, not `stickynote`). Old spellings live on
 as `aliases` on their row, so `get()` and `check()` resolve them; they are
-never a second row. the owner's rulings over a source list — a rename, an alias,
+never a second row. owner's rulings over a source list — a rename, an alias,
 a dropped id, a status — live in decisions.json and are applied at build; the
 source list itself is not touched.
 """
@@ -95,7 +95,7 @@ def _aliases(v):
 
 
 def _decide(key, entry, decisions):
-    """Apply the owner's rulings for one list (decisions.json): renames, aliases,
+    """Apply owner's rulings for one list (decisions.json): renames, aliases,
     dropped ids, status rulings. The source list is never touched."""
     d = decisions.get(key) or {}
     unresolved = []
@@ -163,7 +163,7 @@ def build():
                                            "note": src.get("note"), "rows": []})
             for raw in rows:
                 entry["rows"].append(_shape(raw, src, asset, label))
-    # rows the owner has named that no source holds yet
+    # rows owner has named that no source holds yet
     for add in json.loads((ROOT / "additions.json").read_text())["rows"]:
         key = f'{add["element"]}/{add["asset"]}'
         entry = lists.setdefault(key, {"element": add["element"], "asset": add["asset"],
@@ -179,7 +179,7 @@ def build():
         row["aliases"] = _aliases(add.get("aliases"))
         row["note"] = add.get("note")
         entry["rows"].append(row)
-    # the owner's rulings over the source lists — applied here, never written back
+    # owner's rulings over the source lists — applied here, never written back
     dfile = ROOT / "decisions.json"
     decisions = (json.loads(dfile.read_text()).get("lists") or {}) if dfile.is_file() else {}
     LIBRARY.mkdir(exist_ok=True)
@@ -255,7 +255,7 @@ def aliases(element, asset):
 
 
 def dropped(element, asset):
-    """{id: why} — ids the owner dropped from this list; asking for one is refused
+    """{id: why} — ids owner dropped from this list; asking for one is refused
     with the reason, not with a guess."""
     return _list(element, asset).get("dropped") or {}
 

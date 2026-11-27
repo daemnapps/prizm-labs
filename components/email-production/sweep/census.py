@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The sweep, step 1: census every email in the format bank. (the owner,
+"""The sweep, step 1: census every email in the format bank. (owner,
 2026-08-31: "this is bigger than just the simple 8" — so the format
 vocabulary is read off ALL the boards, not the sample.)
 

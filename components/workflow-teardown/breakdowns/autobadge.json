@@ -1,0 +1,87 @@
+{
+ "id": "autobadge",
+ "name": "Autobadge (/autobadge)",
+ "kind": "video",
+ "makes": "Makes a Talent Contest video badge: a tuxedo portrait from the user's photo (one Seedream 5.5 image) and their name, built into a 10.333 s vertical 1080x1920 video by a bundled script.",
+ "source": [
+  "autobadge/SKILL.md",
+  "autobadge/scripts/autobadge.py.md",
+  "autobadge/scripts/name_layer.py.md",
+  "autobadge/scripts/translit.py.md",
+  "autobadge/scripts/live.py.md"
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "name": "Name check (free)",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 2,
+   "name": "Photo",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 3,
+   "name": "Price and OK",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 4,
+   "name": "Portrait",
+   "model": "seedream_5_5",
+   "cheap": "`seedream_5_0_flash` 2k: 0.5 credits a picture quoted, against 1.75-2.5 for 2k pictures"
+  },
+  {
+   "n": 5,
+   "name": "Look at the portrait",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 6,
+   "name": "Build (free)",
+   "model": "none",
+   "cheap": "already free"
+  },
+  {
+   "n": 7,
+   "name": "Check",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 8,
+   "name": "Deliver and clean up",
+   "model": "none",
+   "cheap": null
+  }
+ ],
+ "prompts": [
+  {
+   "label": "Portrait prompt (verbatim in the request)",
+   "source": "autobadge/SKILL.md",
+   "text": "Studio portrait of the same person from the reference photo wearing a black tuxedo, white shirt and black bow tie, chest-up, centered, facing camera, pure black background, soft studio key light, white rim light from behind along the hair and shoulders, bottom of the frame fading to black."
+  },
+  {
+   "label": "Portrait request",
+   "source": "autobadge/SKILL.md",
+   "text": "{\n  \"params\": {\n    \"model\": \"seedream_5_5\",\n    \"aspect_ratio\": \"9:16\",\n    \"resolution\": \"2k\",\n    \"count\": 1,\n    \"medias\": [{ \"value\": \"<photo media id>\", \"role\": \"image\" }],\n    \"prompt\": \"Studio portrait of the same person from the reference photo wearing a black tuxedo, white shirt and black bow tie, chest-up, centered, facing camera, pure black background, soft studio key light, white rim light from behind along the hair and shoulders, bottom of the frame fading to black.\"\n  }\n}"
+  },
+  {
+   "label": "Name check command",
+   "source": "autobadge/SKILL.md",
+   "text": "mkdir -p ~/autobadge/<run> && cd ~/autobadge/<run> && cat > name.txt <<'AUTOBADGE_NAME'\n<the name, exactly as typed>\nAUTOBADGE_NAME\npython3 \"$HF_WORKFLOWS/autobadge/scripts/autobadge.py\" --name-file name.txt --check-name"
+  },
+  {
+   "label": "Build command",
+   "source": "autobadge/SKILL.md",
+   "text": "cd ~/autobadge/<run> \\\n  && python3 \"$HF_WORKFLOWS/autobadge/scripts/autobadge.py\" --portrait portrait.img --name-file name.txt --out out \\\n  && <the PUT command of the autobadge.mp4 slot, with out/autobadge.mp4 as the file> \\\n  && <the PUT command of the autobadge_phone.mp4 slot, with out/autobadge_phone.mp4 as the file>"
+  }
+ ],
+ "price": "Quotes with `get_cost` before the one image; the command's own sample line reads 'Seedream 5.5: about 2.5 credits'. Build is free. One badge is about 2.5 credits; a new name on the same portrait is free.",
+ "cheap_price": "~2.5 -> ~0.5 credits"
+}

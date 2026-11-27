@@ -1,0 +1,58 @@
+{
+  "_note": "Empty on purpose. Fill this in for your brand \u2014 the shape below is what the tools read.",
+  "_shape_from": "the same file in a live brand",
+  "_example_keys": {
+    "generated": "",
+    "note": "",
+    "families": [
+      {
+        "id": "",
+        "name": "",
+        "count": 0,
+        "variants": [
+          "\u2026"
+        ],
+        "mixes": [
+          "\u2026"
+        ],
+        "themes": [
+          "\u2026"
+        ]
+      }
+    ],
+    "emails": [
+      {
+        "code": "",
+        "board": "",
+        "month": "",
+        "name": "",
+        "w": 0,
+        "h": 0,
+        "ground": "",
+        "blocks": [
+          "\u2026"
+        ]
+      }
+    ],
+    "layouts": [
+      {
+        "id": "",
+        "signature": "",
+        "count": 0,
+        "recipe": [
+          "\u2026"
+        ],
+        "example": "",
+        "emails": [
+          "\u2026"
+        ],
+        "months": [
+          "\u2026"
+        ],
+        "themes": [
+          "\u2026"
+        ]
+      }
+    ]
+  }
+}

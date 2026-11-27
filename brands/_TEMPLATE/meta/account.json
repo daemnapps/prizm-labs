@@ -1,19 +1,50 @@
 {
-  "_what": "This brand's Meta account, read by components/meta-upload (brand.py, meta.py) and business.py. Ids are the brand's own; fill them in your copy of this folder, never in a tool.",
-  "account_id": "<META_AD_ACCOUNT_ID>",
-  "page_id": "<META_PAGE_ID>",
-  "pixel_id": "<META_PIXEL_ID>",
-  "instagram_id": "<INSTAGRAM_ACCOUNT_ID>",
+  "_what": "Everything the Meta upload tools need about this brand: which account they write to, and where this brand's inputs live. Copy this file to brands/<brand>/meta/account.json and fill it in. The tools name no brand — this file is the only place brand context enters (workspace rule 7).",
+  "_read_by": "components/meta-upload/brand.py — run `python3 brand.py <brand>` to check it",
+  "_ids": "Read these off the live account, never guess them. account_id is in the Ads Manager URL (act=...). page_id, pixel_id and instagram_id come off an existing ad in that account.",
+  "account_id": "",
+  "account_name": "",
+  "page_id": "",
+  "page_name": "",
+  "pixel_id": "",
+  "pixel_name": "",
+  "instagram_id": "",
   "token_key": "PRIZM_META_TOKEN",
-  "campaign": {"budget": "cbo", "market": "us", "event": "purchase", "product": "<product-slug>"},
-  "call_to_action": "SHOP_NOW",
-  "inputs": {"pictures": "runs/image-teardown/<brand>", "copy": "runs/copywriter/<brand>", "pages": "", "roster": "", "adsets": "", "offers": ""},
-  "naming": {
-    "campaign": "campaign{sep}{brand}{sep}{market}{sep}{product}{sep}{funnel}{sep}{event}{sep}{budget}",
-    "campaign_sep": "_",
-    "ad_set": "adset{sep}{brand}{sep}{avatar}{sep}{angle}",
-    "ad_set_sep": "_",
-    "ad_set_by": ["avatar", "angle"]
+  "_campaign": "Feeds naming.campaign() -> `MARKET | PRODUCT | FUNNEL | Lane`. Read the convention off the account first; do not invent one. The lane is per-drop (--lane), not here, because a brand runs several and they never blend.",
+  "campaign": {
+    "market": "us",
+    "product": "",
+    "funnel": ""
   },
-  "store": {"kind": "shopify", "name": "<store name shown on the business page>", "label": "<account_label in the warehouse, for kind nextcommerce>"}
+  "_defaults": "Sensible for a direct-response conversions campaign. Change only what this brand actually runs.",
+  "objective": "Outcome Sales",
+  "optimization_goal": "OFFSITE_CONVERSIONS",
+  "conversion_event": "PURCHASE",
+  "daily_budget": 100,
+  "countries": [
+    "US"
+  ],
+  "age": [
+    18,
+    65
+  ],
+  "publisher_platforms": [
+    "facebook",
+    "instagram"
+  ],
+  "display_link": "",
+  "call_to_action": "SHOP_NOW",
+  "creative_type": "Link Page Post Ad",
+  "_inputs": "Paths from the repo root. pictures, copy and pages are required. roster, adsets and offers are optional — the builder says which are missing rather than failing.",
+  "inputs": {
+    "pictures": "",
+    "copy": "",
+    "pages": "",
+    "roster": "",
+    "adsets": "",
+    "offers": ""
+  },
+  "_spelling": "Only the slugs a plain capitalise gets wrong. Everything else needs no entry.",
+  "spelling": {},
+  "_token": "One Prizm Labs system-user key reaches every ad account shared to the Prizm Labs business (1 Oct 2026). Keychain daemn-PRIZM_META_TOKEN."
 }

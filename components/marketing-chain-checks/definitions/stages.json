@@ -67,6 +67,17 @@
      ],
      "fix_at": "stage4b"
     },
+    "stage4e": {
+     "what": "the script audit report (internal stage4e, displayed 4f): required checks, evidence, verdict and repair findings",
+     "compare_against": "the complete supplied audit prompt, the script under audit, upstream writing, run-specific source instructions, and the supplied product, offer and customer-language evidence",
+     "hard_bars": [
+      "every check required by the supplied audit prompt is evaluated with specific script and source evidence",
+      "findings distinguish actual source instructions from assumptions; missing evidence is named rather than invented",
+      "the verdict agrees with the check results; an unresolved required failure cannot receive SHIP",
+      "each required repair names the responsible upstream writing stage and the actual defect; the output remains the requested audit report"
+     ],
+     "fix_at": "stage4e (audit report)"
+    },
     "stage4": {
      "what": "a writing stage of our script (placement, expansion, close, spice)",
      "compare_against": "the stage before, the spec, the offer and the language bank",

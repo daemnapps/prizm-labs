@@ -4,5 +4,5 @@
 
 an engine · two imported chains (15 and 11 stages) · writes only under --out · runs by hand or on the mini
 
-Owner: the team for now; the owner consulted on return
+Owner: the developer for now; the owner consulted on return
 

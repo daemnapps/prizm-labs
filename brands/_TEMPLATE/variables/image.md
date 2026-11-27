@@ -13,6 +13,6 @@ and there is no default: a run that does not declare one is writing to nobody.
 | `{avatar}` | `core-avatars/<avatar>/profile.md` |
 | `{language_bank}` | `core-avatars/<avatar>/language/rules.md` |
 | `{product_file}` | `products/` |
-| `{offer_file}` | `offers/offer-bank.md` |
+| `{offer_file}` | `products/offer-bank.md` |
 
 NOTE: drafted — wired when the image lane adopts the convention.

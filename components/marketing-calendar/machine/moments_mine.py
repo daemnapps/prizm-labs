@@ -4,7 +4,7 @@
     python3 moments_mine.py --brand <brand>
     python3 moments_mine.py --brand <brand> --out runs/marketing-calendar/<brand>/moments-<YYYY-MM-DD>/mined.md
 
-the owner, 2026-09-13: *"How do we even go through the research of identifying what
+owner, 2026-09-13: *"How do we even go through the research of identifying what
 a brand moment is?"* Until now the honest answer was: a person read the sends
 once and typed a file. Nothing re-ran, so a moment the brand started using last
 month stayed invisible.

@@ -7,12 +7,12 @@ that step and a run ends with nothing anyone can open, which is exactly what
 happened that day. This closes it — a chain makes its own Doc, every run.
 
 ONE HOME (GC-1 (gdrive creator), 2026-09-02). This engine used to live inside
-`tools/video-teardown/machine/drive.py` — component internals nothing
+`components/video-teardown/machine/drive.py` — component internals nothing
 else may depend on (components rule 2) — and the copy lab reached in through a
 `sys.path.insert` into that machine's folder, which would have broken on any
 vt-internal refactor. Both callers are now thin, so the pipe has one home:
-`tools/video-teardown/machine/drive.py` is a same-command shim over this
-file, and `tools/copywriter/machine/gdoc_out.py` imports this component directly.
+`components/video-teardown/machine/drive.py` is a same-command shim over this
+file, and `components/copywriter/machine/gdoc_out.py` imports this component directly.
 
 LAYOUT IS NOT PIPE (the ruled design line). What a document LOOKS like is
 per-machine and stays there — the video machine's `gdoc.py` did not move and
@@ -131,7 +131,7 @@ def _in_a_test():
 
 def _loader_key(name):
     """The one key loader's answer for `name` (components/keys/loader.py, found upward, loaded by
-    path under its own module name): the environment, then a person's this repo's .env; never
+    path under its own module name): the environment, then a person's ~/.upright-keys.env; never
     read on the mini. None when there is no loader or no such key. The DEFAULT key lookup since
     LD-47 (Drive sweep) step 1.6 (2026-10-20), so a key in a person's key file counts as present
     with no export at each entry point. Never prints a value.
@@ -148,12 +148,12 @@ def _loader_key(name):
                  if (d / "keys" / "loader.py").is_file()), None)
     if home is None:
         return None
-    mod = sys.modules.get("company_keys_loader")
+    mod = sys.modules.get("upright_keys_loader")
     if mod is None:
-        spec = importlib.util.spec_from_file_location("company_keys_loader", str(home))
+        spec = importlib.util.spec_from_file_location("upright_keys_loader", str(home))
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
-        sys.modules["company_keys_loader"] = mod
+        sys.modules["upright_keys_loader"] = mod
     try:
         return mod.key(name, required=False) or None
     except Exception:
@@ -339,7 +339,7 @@ def _folder_listed(svc, name, parent_id):
 def folder(name, parent_id, svc=None):
     """A Drive folder by name under a parent, made if it is not there.
 
-    The Docs live in one folder per creator so the owner can hand that folder to
+    The Docs live in one folder per creator so owner can hand that folder to
     his content manager and she can pass it straight to the creator — the
     working files stay behind in the run folders where they belong
     (2026-08-28).
@@ -364,7 +364,7 @@ def folder(name, parent_id, svc=None):
 def share(file_id, role="reader", svc=None):
     """Anyone with the link. `reader` for briefs, `writer` for deliverables so
     a creator can drop her finished videos in without an account or an invite
-    (the owner, 2026-08-28).
+    (owner, 2026-08-28).
 
     BEST EFFORT, ALWAYS. The Workspace refuses anyone/writer, and letting that
     403 escape took down the whole document stage: JEN-02 and PAM-01 finished
@@ -399,7 +399,7 @@ def creator_share(handle, svc=None, parent_id=None, brand=""):
     """The one folder a chain sends: BRIEFS to read, DELIVERABLES to write.
 
     Creators sit under their brand — creators/<brand>/<handle>/ — since
-    2026-09-18 (the owner: "why do you have a <brand> creator in that folder?").
+    2026-09-18 (owner: "why do you have a <brand> creator in that folder?").
     A caller that names no brand gets the old flat shape, so nothing that
     never passed one changes.
 
@@ -530,14 +530,16 @@ def list_files(folder_id, svc=None):
     """Every non-folder, non-trashed child of a folder, as [{id, name,
     mimeType}], across every page — the files `get_media` can then read back
     by id. Parent-scoped, so `supportsAllDrives` + `includeItemsFromAllDrives`
-    is enough, as in `_folder_listed`."""
+    is enough, as in `_folder_listed`. Each also carries `modifiedTime` when
+    Drive gives one (2026-11-06: the content queue tells new work in returned/
+    from old work by it)."""
     svc = svc or service()
     q = (f"'{folder_id}' in parents and trashed = false "
          f"and mimeType != '{FOLDER_MIME}'")
     out = []
     token = None
     while True:
-        kw = dict(q=q, fields="nextPageToken, files(id,name,mimeType)",
+        kw = dict(q=q, fields="nextPageToken, files(id,name,mimeType,modifiedTime)",
                   pageSize=100, supportsAllDrives=True,
                   includeItemsFromAllDrives=True)
         if token:
@@ -546,8 +548,11 @@ def list_files(folder_id, svc=None):
         for f in r.get("files") or []:
             if f.get("mimeType") == FOLDER_MIME:
                 continue
-            out.append({"id": f.get("id"), "name": f.get("name"),
-                        "mimeType": f.get("mimeType")})
+            row = {"id": f.get("id"), "name": f.get("name"),
+                   "mimeType": f.get("mimeType")}
+            if f.get("modifiedTime"):
+                row["modifiedTime"] = f["modifiedTime"]
+            out.append(row)
         token = r.get("nextPageToken")
         if not token:
             return out
@@ -584,7 +589,7 @@ def upload_file(path, name, parent_id, mime="application/octet-stream",
     already handed out keeps working after a re-run. Resumable upload because
     ad renders run 3–8 MB and a shared-drive PUT can stall.
 
-    IT DETECTS THE MEDIA TYPE (the team, 2026-09-17, verbatim "detect media type").
+    IT DETECTS THE MEDIA TYPE (developer, 2026-09-17, verbatim "detect media type").
     Precedence: the caller's `mime` when it passes one, then
     `mimetypes.guess_type`, then `EXTRA_TYPES`, and `OCTET` only as the last
     fallback. WHY IT IS NOT TIDINESS: `mirror_tree` uploads whole folders, so

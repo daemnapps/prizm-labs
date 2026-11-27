@@ -1,0 +1,18 @@
+{
+  "_note": "Empty on purpose. Fill this in for your brand \u2014 the keys below are what the tools read.",
+  "_shape_from": "the same file in a live brand",
+  "_example_keys": {
+    "_what": "",
+    "_rebank": "",
+    "brand": "",
+    "count": 0,
+    "elements": [
+      {
+        "name": "\u2026",
+        "category": "\u2026",
+        "element_id": "\u2026",
+        "source": "\u2026"
+      }
+    ]
+  }
+}

@@ -11,7 +11,7 @@
 | Wall time · spend | — · Claude plan | 1,715 s · glm-5.3 only, "plan window" |
 
 **Errors that would mislead the triage owner:**
-1. meta-upload#11: GLM says <brand> has no funnels registry. `brands/<brand>/web/funnels/funnels.json` exists at the base with 5 funnels, and the gap was <brand>'s, already fixed by aed8f7989. Its response asks for work that is done.
+1. meta-upload#11: GLM says Brand B has no funnels registry. `brands/Brand B/web/funnels/funnels.json` exists at the base with 5 funnels, and the gap was Brand A's, already fixed by aed8f7989. Its response asks for work that is done.
 2. atlas#6: GLM says the id-tag lint flags the component's CLAUDE.md. The lint scans only the decision log, PLATFORM-CONTEXT and `team/plans/` (`.githooks/id-tag-lint.py:35-38`).
 
 The stream re-checked both against the base; the judge's other five GLM errors are cited in `judge/verdicts-briefs.json`.

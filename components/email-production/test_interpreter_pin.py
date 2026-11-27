@@ -32,6 +32,7 @@ import run_month  # noqa: E402
 class InterpreterPin(unittest.TestCase):
     def test_chain_argv_starts_with_this_interpreter(self):
         argv = brief.chain_argv({"id": "sep-01", "type": "house-special",
+                                 "date":"2026-09-01", "hour":13, "local":True, "segment":"Core | Lead",
                                  "source": "old-email.md"}, "zz-test-brand")
         self.assertEqual(argv[0], sys.executable)
         self.assertEqual(argv[1], "email_line.py")

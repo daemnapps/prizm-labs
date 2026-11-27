@@ -4,7 +4,7 @@
     python3 copy_plan.py ../../runs/marketing-calendar/<brand>/2026-09
     python3 copy_plan.py <run> --only sep-01,sep-04
 
-the owner, 2026-09-14: *"we need to have a clear workflow that is extracting from
+owner, 2026-09-14: *"we need to have a clear workflow that is extracting from
 this calendar so it knows the content of what we're doing, and then goes through
 the copy machine to then write those emails."*
 
@@ -96,7 +96,7 @@ def flag(argv, slot, avatar, angle, brand=None):
     src = slot.get("source") or ""
     if argv is None or src.startswith("["):
         # A blocked line that only says NO says nothing. It cost a wrong answer
-        # to the owner on 2026-09-21: an `affiliate-feature` read as blocked, and
+        # to owner on 2026-09-21: an `affiliate-feature` read as blocked, and
         # "no shape on file" was relayed to him as "no affiliate on file" —
         # while MANE had been recorded since 2026-09-02. A block now names what
         # WOULD unblock it, and never speaks for a roster it has not read.
@@ -167,7 +167,11 @@ def resolve(run_dir, only=None):
             continue
         note = s["_review"]["note"]
         for avatar, angle, label in brief.variant_runs(s, brand):
-            argv = brief.chain_argv(s, brand, avatar, angle, label, note=note or None)
+            held=[]
+            try:
+                argv = brief.chain_argv(s, brand, avatar, angle, label, note=note or None)
+            except brief.CH.Held as e:
+                argv=None;held=[('blocked','calendar handoff: '+str(e))]
             rows.append({
                 "label": label, "slot": s["id"], "date": s.get("date"),
                 "type": s.get("type"), "segment": s.get("segment"),
@@ -176,7 +180,7 @@ def resolve(run_dir, only=None):
                           if argv and "--offer" in argv else s.get("offer")),
                 "source": s.get("source"), "source_brand": s.get("source_brand"),
                 "note": note, "edits": list((s["_review"]["edits"] or {}).keys()),
-                "argv": argv, "flags": flag(argv, s, avatar, angle, brand),
+                "argv": argv, "flags": held+flag(argv, s, avatar, angle, brand),
             })
     # THE SAME ARGUMENT, TWICE. The cells stage attaches an angle to a
     # (segment, avatar) CELL, and every send to that cell inherits it — so a

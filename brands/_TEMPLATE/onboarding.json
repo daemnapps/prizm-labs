@@ -76,7 +76,7 @@
    "required": true,
    "ask": "Here's the story I read off your site — what's wrong or missing?",
    "fills": [
-    "brand-identity/story.md"
+    "story.md"
    ],
    "claude_can_fetch": "About / Our story page"
   },
@@ -100,7 +100,7 @@
    "required": true,
    "ask": "In one sentence: who is this for, what does it do, and why does it work when other things didn't?",
    "fills": [
-    "brand-identity/position.md"
+    "position.md"
    ],
    "claude_can_fetch": "product pages, homepage, reviews"
   },
@@ -125,9 +125,9 @@
    "required": true,
    "ask": "Drop your logo here (a PNG with a clear background is best). Do you have brand fonts, or should I use what your site uses?",
    "fills": [
-    "brand-identity/ (logo files)",
-    "brand-identity/palette.md",
-    "brand-identity/fonts.md"
+    "identity/ (logo files)",
+    "identity/palette.md",
+    "identity/fonts.md"
    ],
    "claude_can_fetch": "fonts and colours from the website"
   },
@@ -148,7 +148,7 @@
    "required": false,
    "ask": "If a customer remembered one sentence from your ads, what should it be?",
    "fills": [
-    "brand-identity/core-message/core-message.json"
+    "strategy/core-message.json"
    ]
   },
   {
@@ -235,7 +235,7 @@
    "required": false,
    "ask": "Do you send ads to any landing pages other than the product page? Paste the links.",
    "fills": [
-    "web/funnels/funnels.json"
+    "funnels/funnels.json"
    ]
   },
   {
@@ -282,7 +282,7 @@
    "required": true,
    "ask": "Where are your reviews? Paste the page (your site, Amazon, Trustpilot…) or drop an export file.",
    "fills": [
-    "intake/reviews/",
+    "customer/",
     "core-avatars/<avatar>/language/"
    ],
    "claude_can_fetch": "public review pages"
@@ -346,7 +346,7 @@
    "required": true,
    "ask": "Who are the 3–5 brands your customers compare you to?",
    "fills": [
-    "competitors/"
+    "competitive/"
    ],
    "claude_can_fetch": "their websites and social handles"
   },
@@ -366,7 +366,7 @@
    "required": true,
    "ask": "Paste 1–3 videos or image ads you wish were yours — anyone's.",
    "fills": [
-    "intake/swipes.md (the links)"
+    "customer/swipes.md (the links)"
    ]
   },
   {
@@ -388,8 +388,8 @@
    "required": false,
    "ask": "Got ads or posts that did well for you? Drop them, or paste your Ad Library page.",
    "fills": [
-    "intake/",
-    "ads/top/"
+    "customer/",
+    "existing-content/top/"
    ],
    "claude_can_fetch": "your public Meta Ad Library page"
   },
@@ -410,7 +410,7 @@
    "required": false,
    "ask": "Do you have product photos or brand video beyond the product page? Paste a folder link or drop them.",
    "fills": [
-    "brand-assets/"
+    "identity/"
    ]
   },
   {
@@ -429,7 +429,7 @@
    "required": false,
    "ask": "Do you work with any creators or UGC people? Paste their handles, or 'not now'.",
    "fills": [
-    "content-creators/"
+    "creators/"
    ]
   },
   {

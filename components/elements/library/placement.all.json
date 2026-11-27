@@ -1,7 +1,7 @@
 {
  "element": "placement",
  "asset": "all",
- "source": "tools/copywriter/bank/format-bank.json",
+ "source": "components/copywriter/bank/format-bank.json",
  "enforced_by": null,
  "note": "Where a piece runs — Meta primary text, a subject line, a landing page. Separate from format: the same format can run in several placements.",
  "rows": [
@@ -16,7 +16,7 @@
    "examples": null,
    "evidence": "proven — copy machine `caption` row; 216 swiped examples in corpus",
    "approved": false,
-   "source": "tools/copywriter/bank/format-bank.json",
+   "source": "components/copywriter/bank/format-bank.json",
    "extra": {
     "channel": "paid-social",
     "length": {
@@ -40,7 +40,7 @@
    "examples": null,
    "evidence": "evidenced — 15 real AdPlexity titles in corpus ('Collagen creams can't absorb. This serum can.')",
    "approved": false,
-   "source": "tools/copywriter/bank/format-bank.json",
+   "source": "components/copywriter/bank/format-bank.json",
    "extra": {
     "channel": "paid-social",
     "length": {
@@ -64,7 +64,7 @@
    "examples": null,
    "evidence": "proven — copy machine defaults (2 at 3 words)",
    "approved": false,
-   "source": "tools/copywriter/bank/format-bank.json",
+   "source": "components/copywriter/bank/format-bank.json",
    "extra": {
     "channel": "paid-social",
     "length": {
@@ -88,7 +88,7 @@
    "examples": null,
    "evidence": "evidenced — 223 swiped angles across four brands, ranked by heat",
    "approved": false,
-   "source": "tools/copywriter/bank/format-bank.json",
+   "source": "components/copywriter/bank/format-bank.json",
    "extra": {
     "channel": "paid-social",
     "length": {
@@ -112,7 +112,7 @@
    "examples": null,
    "evidence": "evidenced — 46 overlay sets extracted from teardowns; music-only sources carry the whole script this way",
    "approved": false,
-   "source": "tools/copywriter/bank/format-bank.json",
+   "source": "components/copywriter/bank/format-bank.json",
    "extra": {
     "channel": "paid-social",
     "length": {
@@ -136,7 +136,7 @@
    "examples": null,
    "evidence": "proven — the video-teardown chain end to end (hooks v11, close v6)",
    "approved": false,
-   "source": "tools/copywriter/bank/format-bank.json",
+   "source": "components/copywriter/bank/format-bank.json",
    "extra": {
     "channel": "paid-social",
     "length": {
@@ -160,7 +160,7 @@
    "examples": null,
    "evidence": "evidenced — 360 real captions in corpus with views/likes signals",
    "approved": false,
-   "source": "tools/copywriter/bank/format-bank.json",
+   "source": "components/copywriter/bank/format-bank.json",
    "extra": {
     "channel": "organic-social",
     "length": {
@@ -184,7 +184,7 @@
    "examples": null,
    "evidence": "proven — video-teardown 4b (entry test, four-word test, photograph test)",
    "approved": false,
-   "source": "tools/copywriter/bank/format-bank.json",
+   "source": "components/copywriter/bank/format-bank.json",
    "extra": {
     "channel": "organic-social",
     "length": {
@@ -208,7 +208,7 @@
    "examples": null,
    "evidence": "proven — copy machine short-form + long-form rows",
    "approved": false,
-   "source": "tools/copywriter/bank/format-bank.json",
+   "source": "components/copywriter/bank/format-bank.json",
    "extra": {
     "channel": "organic-social",
     "length": {
@@ -232,7 +232,7 @@
    "examples": null,
    "evidence": "proven — video-teardown ORGANIC lane (expansion stage gated in)",
    "approved": false,
-   "source": "tools/copywriter/bank/format-bank.json",
+   "source": "components/copywriter/bank/format-bank.json",
    "extra": {
     "channel": "organic-social",
     "length": {
@@ -254,9 +254,9 @@
    "state": null,
    "signed": null,
    "examples": null,
-   "evidence": "proven — email machine; 309 shipped BRAND-A sends classified in corpus",
+   "evidence": "proven — email machine; 309 shipped Brand A sends classified in corpus",
    "approved": false,
-   "source": "tools/copywriter/bank/format-bank.json",
+   "source": "components/copywriter/bank/format-bank.json",
    "extra": {
     "channel": "email",
     "length": {
@@ -278,9 +278,9 @@
    "state": null,
    "signed": null,
    "examples": null,
-   "evidence": "drafted — flow sends sit inside the BRAND-A scrape, not yet split out",
+   "evidence": "drafted — flow sends sit inside the Brand A scrape, not yet split out",
    "approved": false,
-   "source": "tools/copywriter/bank/format-bank.json",
+   "source": "components/copywriter/bank/format-bank.json",
    "extra": {
     "channel": "email",
     "length": {
@@ -304,7 +304,7 @@
    "examples": null,
    "evidence": "evidenced — 309 subject+preview pairs indexed in the send catalogue",
    "approved": false,
-   "source": "tools/copywriter/bank/format-bank.json",
+   "source": "components/copywriter/bank/format-bank.json",
    "extra": {
     "channel": "email",
     "length": {
@@ -328,7 +328,7 @@
    "examples": null,
    "evidence": "evidenced — 47 swiped pages captured (incl. a 21,490px advertorial), 4 of ours",
    "approved": false,
-   "source": "tools/copywriter/bank/format-bank.json",
+   "source": "components/copywriter/bank/format-bank.json",
    "extra": {
     "channel": "owned-pages",
     "length": {
@@ -350,9 +350,9 @@
    "state": null,
    "signed": null,
    "examples": null,
-   "evidence": "proven — quiz-funnel skill + 1 shipped brand-b quiz; competitor-b runs quiz.competitor_blab.com as its whole front door",
+   "evidence": "proven — quiz-funnel skill + 1 shipped Brand B quiz; Brand E runs quiz.serlinolab.com as its whole front door",
    "approved": false,
-   "source": "tools/copywriter/bank/format-bank.json",
+   "source": "components/copywriter/bank/format-bank.json",
    "extra": {
     "channel": "owned-pages",
     "length": {
@@ -376,7 +376,7 @@
    "examples": null,
    "evidence": "drafted — brand product files exist; no PDP spec has been exercised by a machine yet",
    "approved": false,
-   "source": "tools/copywriter/bank/format-bank.json",
+   "source": "components/copywriter/bank/format-bank.json",
    "extra": {
     "channel": "owned-pages",
     "length": {

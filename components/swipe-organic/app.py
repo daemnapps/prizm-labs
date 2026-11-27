@@ -5,7 +5,7 @@ Board of cards (thumbnail, copy, signal, lane, brand fit). Click a card →
 **Tear down** (brand-neutral: strip the asset to structure, stages 1–2).
 Once torn down, **Inject** it into any brand (stages 3 + 5 → the brief).
 Brands are discovered from the brand cabinets on disk, so new brands just
-appear — the owner's ruling 2026-08-31: teardown first, brand chosen after,
+appear — owner's ruling 2026-08-31: teardown first, brand chosen after,
 numerous brands coming.
 
     python3 app.py          # http://localhost:8765
@@ -85,7 +85,7 @@ def teardown_worker(row):
                  "cover_file": str(cover) if cover.is_file() else None}
         (out / "asset.json").write_text(json.dumps(asset, indent=1))
         stage_list = "\n".join(f"  {i+1}. {CHAIN / s}" for i, s in enumerate(S12))
-        prompt = f"""Run the BRAND-NEUTRAL half of the owner's teardown chain on one swiped asset — strip it to structure. No brand is chosen yet; do not inject or reference any of our brands.
+        prompt = f"""Run the BRAND-NEUTRAL half of owner's teardown chain on one swiped asset — strip it to structure. No brand is chosen yet; do not inject or reference any of our brands.
 
 The asset: {out / 'asset.json'}
 Look at its cover image{' and, if useful, probe the downloaded video with ffmpeg (extract a few frames)' if vids else ''}. There is no transcript; work from caption + visuals and say so honestly wherever the chain expects a script.
@@ -113,7 +113,7 @@ def inject_worker(code, brand):
     try:
         stage_list = "\n".join(f"  {i+1}. {CHAIN / s}" for i, s in enumerate(S35))
         bdir = brands()[brand]
-        prompt = f"""Run the INJECTION half of the owner's teardown chain: take a finished brand-neutral teardown and inject the brand `{brand}` into it, ending in the brief.
+        prompt = f"""Run the INJECTION half of owner's teardown chain: take a finished brand-neutral teardown and inject the brand `{brand}` into it, ending in the brief.
 
 Inputs, already written:
   the asset: {out / 'asset.json'}
@@ -233,10 +233,10 @@ def board_html():
 <header><h1>Swipe Studio</h1><span class="sub">{len(cards)} saves · click a card → Tear down → Inject into any brand</span>
 <span class="sub" style="margin-left:auto"><a href="/formats"><b>Format library</b></a> · Feeds:
 <a href="/feed/owner--saves">My saves feed</a> ·
-<a href="/feed/brand-a--glow-up">Glow-up feed</a></span></header>
+<a href="/feed/brand_a--glow-up">Glow-up feed</a></span></header>
 <div class="chips">
-<button class="chip on" data-b="all">All fits</button><button class="chip" data-b="brand-a">BRAND-A</button>
-<button class="chip" data-b="brand-b">Brand-B</button><button class="chip" data-b="general">General</button>
+<button class="chip on" data-b="all">All fits</button><button class="chip" data-b="brand_a">brand_a</button>
+<button class="chip" data-b="brand_b">brand_b</button><button class="chip" data-b="general">General</button>
 <span class="gap"></span>
 <button class="chip on" data-l="all">Both lanes</button><button class="chip" data-l="swipe">Swipes</button>
 <button class="chip" data-l="organic">Organic</button></div>
@@ -389,7 +389,7 @@ ON-SCREEN TEXT
 CAMERA
 {f.get('camera','—')}
 
-HIGGSFIELD — IMAGE
+3D SET PRINT — WORDS (build the 3D set, print it with the cast board; never a flat picture)
 {f['higgsfield']['image']}
 
 HIGGSFIELD — MOTION
@@ -501,7 +501,7 @@ def formats_page():
 <p class="mech">{html.escape(f['mechanic'])}</p>
 <p class="why"><b>Why it works.</b> {html.escape(f['why_it_works'])}</p>
 <div class="beats">{''.join(f'<div class="beat">{html.escape(b)}</div>' for b in f['beats'])}</div>
-<div class="kit"><div class="klabel">Higgsfield — image</div><pre class="pp">{html.escape(f['higgsfield']['image'])}</pre>
+<div class="kit"><div class="klabel">3D set print — words (build the set, print with the cast board)</div><pre class="pp">{html.escape(f['higgsfield']['image'])}</pre>
 <div class="klabel">Higgsfield — motion</div><pre class="pp">{html.escape(f['higgsfield']['motion'])}</pre></div>
 <div class="ev">{evidence_line}{'<br>Yours: ' + links if links else ''}</div></div>""")
     # formats the machine proposed that aren't in the library yet — the discovery surface

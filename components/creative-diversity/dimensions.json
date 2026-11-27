@@ -21,45 +21,209 @@
   },
   "fixed": {
     "_what": "Never varies. Every creative, every format: one product, one offer page, one core message.",
-    "offer": "brands/<brand>/strategy/offer-page.json — product · page · match (shape in brands/_TEMPLATE/strategy/offer-page.json)",
-    "core_message": "brands/<brand>/brand-identity/core-message/core-message.json#core"
+    "offer": {
+      "Brand A": {
+        "product": "flex",
+        "page": "https://flex.Brand A.com/icon/flex/",
+        "match": [
+          "flex.Brand A.com/icon/flex"
+        ]
+      },
+      "Brand B": {
+        "product": "face-scrub",
+        "page": "https://recipe.Brand B.com/Brand B-facescrub-cpk/landing/",
+        "match": [
+          "Brand B-facescrub-cpk"
+        ]
+      }
+    },
+    "core_message": {
+      "Brand A": "brands/Brand A/brand-identity/core-message/core-message.json#core",
+      "Brand B": "brands/Brand B/brand-identity/core-message/core-message.json#core"
+    }
   },
   "big": [
-    {"id": "who", "meta": "persona / use case / motivation", "name": "Persona (sub-avatar + desire)", "values": "brands/<brand>/core-avatars/avatars.json → sub_avatars (desire from each sub-avatar card)", "read_as": "sub_avatar"},
-    {"id": "awareness", "meta": "message", "name": "Awareness level", "values": "components/elements/library/doctrine.awareness.json", "read_as": "awareness"},
-    {"id": "argument", "meta": "message", "name": "Angle", "values": "brands/<brand>/strategy/angles.json (active rows)", "read_as": "angle"},
-    {"id": "format", "meta": "storyline", "name": "Format / structure", "values": "components/elements/library/format.video.json · structure.video.json · format.image.json · format.carousel.json", "read_as": "format"},
-    {"id": "face", "meta": "look and feel (visuals)", "name": "Face / talent", "values": "brands/<brand>/ai-elements/characters/casting/cards-v6.json (gender · age-band · ethnic-appearance · role)", "read_as": "face"},
-    {"id": "setting", "meta": "look and feel (visuals)", "name": "Setting", "values": "brands/<brand>/strategy/settings.json", "read_as": "setting"},
-    {"id": "look", "meta": "look and feel (visuals)", "name": "Visual style", "values": "components/elements/library/style.video.json · style.image.json", "read_as": "style"}
+    {
+      "id": "who",
+      "meta": "persona / use case / motivation",
+      "name": "Persona (sub-avatar + desire)",
+      "values": "brands/<brand>/core-avatars/avatars.json → sub_avatars (desire from each sub-avatar card)",
+      "read_as": "sub_avatar"
+    },
+    {
+      "id": "awareness",
+      "meta": "message",
+      "name": "Awareness level",
+      "values": "components/elements/library/doctrine.awareness.json",
+      "read_as": "awareness"
+    },
+    {
+      "id": "argument",
+      "meta": "message",
+      "name": "Angle",
+      "values": "brands/<brand>/strategy/angles.json (active rows)",
+      "read_as": "angle"
+    },
+    {
+      "id": "format",
+      "meta": "storyline",
+      "name": "Format / structure",
+      "values": "components/elements/library/format.video.json · structure.video.json · format.image.json · format.carousel.json",
+      "read_as": "format"
+    },
+    {
+      "id": "face",
+      "meta": "look and feel (visuals)",
+      "name": "Face / talent",
+      "values": "brands/<brand>/ai-elements/characters/casting/cards-v6.json (gender · age-band · ethnic-appearance · role)",
+      "read_as": "face"
+    },
+    {
+      "id": "setting",
+      "meta": "look and feel (visuals)",
+      "name": "Setting",
+      "values": "brands/<brand>/strategy/settings.json",
+      "read_as": "setting"
+    },
+    {
+      "id": "look",
+      "meta": "look and feel (visuals)",
+      "name": "Visual style",
+      "values": "components/elements/library/style.video.json · style.image.json",
+      "read_as": "style"
+    }
   ],
   "portfolio": {
     "_what": "Meta's own rules for every ad set the creative goes into. Each line is Meta's, with its number.",
     "rules": [
-      {"id": "format-mix", "rule": "each ad set holds an image, a video and a 9:16 video with audio", "meta": "9.1% lower CPA (1M+ ad sets); 7.3% lower CPA (Cyber 5 2025)"},
-      {"id": "vertical-audio-share", "rule": "at least 20% of an ad set's assets are 9:16 video with audio", "meta": "7% lower CPA (~530k ad sets)"},
-      {"id": "fewer-ads-more-assets", "rule": "fewer ads per ad set, each a flexible ad with up to 10 diverse assets; max 50 ads per ad set", "meta": "'Decrease ads per ad set, but maintain diverse creative assets per ad set'"},
-      {"id": "new-footage", "rule": "a new creative uses an image or video not already shown on the Page", "meta": "fatigue counts 'all recent exposures of the ad's image or video, including those from other campaigns from your Page'"},
-      {"id": "sound", "rule": "music or voiceover on every Reel", "meta": "up to 13% more incremental conversions"},
-      {"id": "safe-zone", "rule": "key messages inside the 9:16 safe zone", "meta": "34.5% lower cost per result vs image ads (with 9:16 + audio)"},
-      {"id": "creators", "rule": "creator content runs as partnership ads", "meta": "19% lower acquisition cost"}
+      {
+        "id": "format-mix",
+        "rule": "each ad set holds an image, a video and a 9:16 video with audio",
+        "meta": "9.1% lower CPA (1M+ ad sets); 7.3% lower CPA (Cyber 5 2025)"
+      },
+      {
+        "id": "vertical-audio-share",
+        "rule": "at least 20% of an ad set's assets are 9:16 video with audio",
+        "meta": "7% lower CPA (~530k ad sets)"
+      },
+      {
+        "id": "fewer-ads-more-assets",
+        "rule": "fewer ads per ad set, each a flexible ad with up to 10 diverse assets; max 50 ads per ad set",
+        "meta": "'Decrease ads per ad set, but maintain diverse creative assets per ad set'"
+      },
+      {
+        "id": "new-footage",
+        "rule": "a new creative uses an image or video not already shown on the Page",
+        "meta": "fatigue counts 'all recent exposures of the ad's image or video, including those from other campaigns from your Page'"
+      },
+      {
+        "id": "sound",
+        "rule": "music or voiceover on every Reel",
+        "meta": "up to 13% more incremental conversions"
+      },
+      {
+        "id": "safe-zone",
+        "rule": "key messages inside the 9:16 safe zone",
+        "meta": "34.5% lower cost per result vs image ads (with 9:16 + audio)"
+      },
+      {
+        "id": "creators",
+        "rule": "creator content runs as partnership ads",
+        "meta": "19% lower acquisition cost"
+      }
     ]
   },
   "carried": [
-    {"id": "sophistication", "name": "Market sophistication", "values": "components/elements/library/doctrine.sophistication.json; the brand's stage is the MARKET STAGE line in brands/<brand>/brand-identity/position.md", "note": "Read on every creative and must match the brand's stage. Not a diversification move: the market is at one stage."},
-    {"id": "language", "name": "Language layer", "values": "brands/<brand>/core-avatars/<avatar>/language/", "note": "The words come from the avatar's bank. Read on every creative as 'their words / our words'."}
+    {
+      "id": "sophistication",
+      "name": "Market sophistication",
+      "values": "components/elements/library/doctrine.sophistication.json; the brand's stage is the MARKET STAGE line in brands/<brand>/brand-identity/position.md",
+      "note": "Read on every creative and must match the brand's stage. Not a diversification move: the market is at one stage."
+    },
+    {
+      "id": "language",
+      "name": "Language layer",
+      "values": "brands/<brand>/core-avatars/<avatar>/language/",
+      "note": "The words come from the avatar's bank. Read on every creative as 'their words / our words'."
+    }
   ],
   "iteration": {
     "_what": "Meta's 'creative iteration' — worth testing, but only inside a creative that already counts as new. Meta groups these with the original.",
-    "moves": ["hook text / first line", "caption & headline", "CTA", "music swap", "overlay colour", "small trims or reorders"]
+    "moves": [
+      "hook text / first line",
+      "caption & headline",
+      "CTA",
+      "music swap",
+      "overlay colour",
+      "small trims or reorders"
+    ]
   },
   "spread": {
     "_what": "What a healthy library looks like across awareness — the farm makes the top, the ads harvest the bottom.",
-    "target_share": {"unaware": 0.15, "problem-aware": 0.25, "solution-aware": 0.25, "product-aware": 0.25, "most-aware": 0.10},
+    "target_share": {
+      "unaware": 0.15,
+      "problem-aware": 0.25,
+      "solution-aware": 0.25,
+      "product-aware": 0.25,
+      "most-aware": 0.1
+    },
     "note": "Starting targets, ours, the owner to tune."
   },
   "not_meta": {
     "_what": "Repeated everywhere, never said by Meta. Never build on these.",
-    "claims": ["'Entity ID' (agency term; Meta confirms grouping only)", "a '>60% similarity score' suppresses an ad", "'8–15+ ads per ad set' (Meta says the opposite)", "similar ads pay higher CPMs"]
+    "claims": [
+      "'Entity ID' (agency term; Meta confirms grouping only)",
+      "a '>60% similarity score' suppresses an ad",
+      "'8–15+ ads per ad set' (Meta says the opposite)",
+      "similar ads pay higher CPMs"
+    ]
+  },
+  "matrix": {
+    "_what": "THE CREATIVE MATRIX. Every batch, whatever its format, is this grid first: one row per picture or cut, one cell per column, every value from a list. Nothing is made until the grid passes; what is made is read back against its row.",
+    "said": [
+      "who",
+      "awareness",
+      "argument"
+    ],
+    "seen": [
+      "format",
+      "face",
+      "setting",
+      "look"
+    ],
+    "rules": [
+      {
+        "id": "pair",
+        "rule": "any two rows differ on at least 3 of the 7 columns",
+        "min": 3
+      },
+      {
+        "id": "seen",
+        "rule": "and on at least 2 of the 4 columns that are seen (format, face, setting, look)",
+        "min": 2
+      },
+      {
+        "id": "spread",
+        "rule": "no value fills more than half of a seen column, once a batch has 4 rows or more",
+        "max_share": 0.5,
+        "from_rows": 4
+      },
+      {
+        "id": "outside",
+        "rule": "and the same 3 and 2 against everything running and everything being made"
+      },
+      {
+        "id": "version",
+        "rule": "a headline version is not a row"
+      }
+    ],
+    "steps": [
+      "people",
+      "grid",
+      "check",
+      "make",
+      "read back",
+      "file"
+    ]
   }
 }

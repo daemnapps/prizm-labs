@@ -10,8 +10,8 @@ Each list is a **theme** with its own rules. Today there are two, and more will 
 
 | Theme | Owner (theme and triage) | The list | Its queue |
 |---|---|---|---|
-| components / atlas | the team | open issues on the component pages | (private page) |
-| operations | the team | signals from the metrics dashboards; P&L next | (private page) |
+| components / atlas | the email lead | open issues on the component pages | https://claude.ai/artifact/1Zac5idyUk2e5THqbzpGiQ |
+| operations | the designer | signals from the metrics dashboards; P&L next | https://claude.ai/artifact/8CrU9QAiubQnjfL257BFa7 |
 
 ## Open it in Claude (no shared link needed)
 
@@ -25,7 +25,7 @@ The skill lives in `.claude/skills/triage/`. Each run lands in `runs/triage/<the
 
 ## Start here
 
-1. `approach-two-themes.html`: how it works, step by step, with both themes as real examples. Published at (private page) (private; ask the team to share it).
+1. `approach-two-themes.html`: how it works, step by step, with both themes as real examples. Published at https://claude.ai/artifact/4BsAyTeRYP7Z1UWBgcpx6s (private; ask the developer to share it).
 2. `CONTRACT-themes.md`: what the engine does and what each theme file must give it.
 3. `themes/atlas.json`, `themes/operations.json`: each theme's own rules, including its grouping and priority lists.
 4. `HANDOFF.md`: where things stand, what's open, what's next.
@@ -34,5 +34,5 @@ The skill lives in `.claude/skills/triage/`. Each run lands in `runs/triage/<the
 
 ## Evaluation, 2026-10-02 → 2026-10-16
 
-the team and the team each work their own list and hand in one findings file, `themes/<theme>-FEEDBACK.md`. Each finding gives the item, what's wrong, the change wanted, and whether it is a **theme** change or an **engine** change.
+the email lead and the designer each work their own list and hand in one findings file, `themes/<theme>-FEEDBACK.md`. Each finding gives the item, what's wrong, the change wanted, and whether it is a **theme** change or an **engine** change.
 

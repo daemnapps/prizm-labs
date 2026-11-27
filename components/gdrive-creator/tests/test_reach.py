@@ -249,7 +249,7 @@ class TestRoute(Base):
     def key_file(self, line):
         home = self.tmp / "home"
         home.mkdir()
-        (home / ".company-keys.env").write_text(line + "\n")
+        (home / ".upright-keys.env").write_text(line + "\n")
         os.environ["HOME"] = str(home)
         os.environ.pop("KEYS_NO_FALLBACK", None)
         os.environ["GDRIVE_KEY_FILE_IN_TESTS"] = "1"     # opt in past the engine's test guard
@@ -373,7 +373,7 @@ class TestPut(Base):
             R.put(self.files(b"x", "a.png"), ["runs"], find_engine=lambda: eng)
 
     def test_no_delete_trash_or_rename_and_moves_only_through_move(self):
-        """NARROWED by LD-89 (tracked Drive moves), a RULED change (the team ~04:25Z: "since the move is
+        """NARROWED by LD-89 (tracked Drive moves), a RULED change (developer ~04:25Z: "since the move is
         by machine anwayys, it should be fully tracked"), not a weakened assertion. Was
         test_no_delete_move_or_rename_in_the_source. Now: moves only through gdrive_creator move(),
         every move recorded; still no delete, trash or rename anywhere, and no move in reach.py or
@@ -465,7 +465,7 @@ class TestReadable(Base):
                                     svc=Exploding(), find_engine=Exploding), ph)
 
     def test_a_key_reads_through_the_api_even_where_the_mount_lists(self):
-        # LD-47 step 1.5 (the team, 2026-10-20: "all of the components use the key"): a key decides the
+        # LD-47 step 1.5 (developer, 2026-10-20: "all of the components use the key"): a key decides the
         # route for reads too, so the mount is never read when one is set — reversing the old
         # "a key does not send a readable path to the API" (this test's predecessor's assertion).
         sa, ph = self.mounted_photos()

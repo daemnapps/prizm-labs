@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The wiring doctor: is this brand connected and pulling, row by row?
 
-    python3 doctor.py --brand brand-a
+    python3 doctor.py --brand brand_a
 
 Walks the ONBOARDING.md contract — every brand fact the system reads — and
 reports OK / MISSING per row with size and freshness. Then runs the two

@@ -7,7 +7,7 @@
                                                                  the 'checks' tier writes the fix note on a fail)
     python3 stage_check.py --batch <file of ids, or ids,comma> [--fix] [--judge]
 
-the owner, 2026-10-25: "anytime we make assets or move one asset from one stage to the next stage there always needs
+owner, 2026-10-25: "anytime we make assets or move one asset from one stage to the next stage there always needs
 to be a check or verification ... and something that can actually action on making the update directly ... clear
 criteria, and if it's not that, then activate sonnet". The lane's steps, in order, are written down in
 `lanes/<lane>.json`: the file that proves each step happened, the checks it must pass, the fix that acts on a miss.
@@ -24,7 +24,7 @@ sys.path.append(str(HERE.parent / "run-kit"))
 from run_kit.paths import repo  # noqa: E402
 
 REPO = repo()
-IT = REPO / "tools" / "image-teardown"
+IT = REPO / "components" / "image-teardown"
 REGISTER = IT / "briefs.json"
 PY = sys.executable
 ANGLE = None                                     # --angle, for a card whose brief has no signed angle
@@ -35,12 +35,12 @@ ANGLE = None                                     # --angle, for a card whose bri
 def _teardown_run(repo, run, brand=None):
     """A picture run's folder on the image-teardown plane: runs/image-teardown/<brand>/<run>/, its one home since
     2026-10-28 (components/naming/WHERE-EVERYTHING-GOES-owner.md item 4). The old lane folder
-    tools/image-teardown/runs/<run>/ is read for one release, for a checkout that has not moved its runs."""
+    components/image-teardown/runs/<run>/ is read for one release, for a checkout that has not moved its runs."""
     root = Path(repo) / "runs" / "image-teardown"
     run = Path(str(run)).name
     hits = ([root / str(brand).lower() / run] if brand else []) + sorted(root.glob(f"*/{run}"))
     work = [d for d in hits if (d / "out").is_dir() or (d / "vars").is_dir()]
-    old = Path(repo) / "tools" / "image-teardown" / "runs" / run
+    old = Path(repo) / "components" / "image-teardown" / "runs" / run
     if work:
         return work[0]
     if old.is_dir():
@@ -58,6 +58,49 @@ def _register():
         except (ValueError, KeyError):
             time.sleep(1 + i)
     return json.loads(REGISTER.read_text())["briefs"]
+
+
+def _video_runs(root, run, brand=None):
+    """Find video records on their declared shelves, including legacy read-only locations."""
+    root, run = Path(root), Path(str(run))
+    slug = run.name
+    direct = run if run.is_absolute() else root / run
+    video_shelves = {"video-teardown", "video-writing", "video-production", "video-edit"}
+    candidates = [direct] if len(run.parts) > 1 and video_shelves.intersection(direct.parts) else []
+    candidates += [root / "runs/video-teardown/_work" / slug]
+    for machine in ("video-teardown", "video-writing"):
+        base = root / "runs" / machine
+        candidates += [base / brand / slug] if brand else sorted(base.glob("*/" + slug))
+    candidates += [root / "components/video-teardown/machine/runs" / slug]
+    return list(dict.fromkeys(p for p in candidates if p.is_dir()))
+
+
+def video_route(record, folders):
+    """Explicit maker choice only. The source video's ORGANIC/PAID triage is not a maker route."""
+    choices = []
+    kind = (record or {}).get("type")
+    if kind in ("video-ai", "video-creator"):
+        choices.append(("brief register", "ai" if kind == "video-ai" else "creator"))
+    for folder in folders:
+        try:
+            state = json.loads((folder / "run.json").read_text())
+        except (OSError, ValueError):
+            continue
+        for key in ("production_route", "lane", "route"):
+            value = state.get(key)
+            if isinstance(value, str) and value.lower() in ("ai", "creator", "founder"):
+                try:
+                    source = str((folder / "run.json").relative_to(REPO))
+                except ValueError:
+                    source = "external-run:" + folder.name
+                choices.append((source + ":" + key, value.lower()))
+    routes = {value for _, value in choices}
+    if "ai" in routes and routes & {"creator", "founder"}:
+        return None, choices, "maker route conflict between AI and human records; reconcile the source records first"
+    if not routes:
+        return None, choices, "maker route not recorded: choose ai, creator or founder; no production route inferred"
+    route = "ai" if "ai" in routes else "founder" if "founder" in routes else "creator"
+    return route, choices, "recorded maker route: " + route
 
 class Piece:
     """One piece of work, found from its brief number or its run name."""
@@ -82,21 +125,30 @@ class Piece:
                 if hit:
                     self.brief_id, self.rec = hit
         self.run_name = (self.rec or {}).get("run") or key
-        self.lane_run = _teardown_run(REPO, self.run_name, (self.rec or {}).get("brand") or brand)
+        kind = (self.rec or {}).get("type") or ""
+        folders = _video_runs(REPO, self.run_name, (self.rec or {}).get("brand") or brand)
+        video = kind.startswith("video") or (not kind and bool(folders))
+        self.lane_run = (folders[0] if folders else REPO / "runs/video-teardown/_work" / Path(self.run_name).name) if video else _teardown_run(REPO, self.run_name, (self.rec or {}).get("brand") or brand)
         if not self.rec and not self.lane_run.is_dir():
-            sys.exit(f"no brief and no image-teardown run called {key}")
+            sys.exit(f"no brief or run called {key}")
         self.brand = (self.rec or {}).get("brand") or brand or self._brand_from_run()
         self.product = (self.rec or {}).get("product") or product
         self.avatar = (self.rec or {}).get("avatar") or avatar
         self._given = (brand, product, avatar)
-        kind = (self.rec or {}).get("type") or ""
-        self.lane = "video" if kind.startswith("video") else ("email" if kind == "email" else "image")
+        self.maker_route, self.route_evidence, self.route_message = (video_route(self.rec, folders) if video else (None, [], "not video"))
+        self.lane = ("video" if self.maker_route == "ai" else "video-creator" if self.maker_route in ("creator", "founder") else "video-unresolved") if video else ("email" if kind == "email" else "image")
+        self.video_folders = folders
         self.record = REPO / "runs" / "image-teardown" / (self.brand or "_") / self.run_name
         self.pictures = self.record / "pictures"
 
     def _brand_from_run(self):
         f = self.lane_run / "vars" / "brand_name.md"
-        return f.read_text().strip().lower() if f.is_file() else None
+        if f.is_file():
+            return f.read_text().strip().lower()
+        try:
+            return json.loads((self.lane_run / "run.json").read_text()).get("brand")
+        except (OSError, ValueError):
+            return None
 
     @property
     def label(self):
@@ -123,11 +175,11 @@ class Piece:
         """Where each stage of this piece lives, for the lanes whose steps are written as path templates."""
         b, slug = self.brand or "_", Path(self.run_name).name
         pl = {"brand": b, "slug": slug, "brief_key": self.brief_id or ""}
-        if self.lane == "video":
-            pl["work"] = REPO / "runs/video-teardown/_work" / slug
+        if self.lane.startswith("video"):
+            pl["work"] = self.lane_run
             pl["writing"] = REPO / "runs/video-writing" / b / slug
-            prod = None
-            for rj in sorted((REPO / "runs/video-production" / b).glob("*/run.json")):
+            prod = self.lane_run if "video-production" in self.lane_run.parts and self.maker_route == "ai" else None
+            for rj in (sorted((REPO / "runs/video-production" / b).glob("*/run.json")) if self.maker_route == "ai" else []):
                 try:
                     if f"/{slug}/" in str(json.loads(rj.read_text()).get("brief_from") or ""):
                         prod = rj.parent
@@ -192,6 +244,21 @@ def _cards(piece, lane="image"):
 
 def check(piece, cid, want=6):
     name, _, arg = cid.partition(":")
+    if name == "maker_route":
+        return bool(getattr(piece, "maker_route", None)), getattr(piece, "route_message", "maker route missing")
+    if name == "creator_brief":
+        files = [piece.lane_run / "stages/5-brief.md", piece.lane_run / "5-brief.md",
+                 REPO / "runs/video-writing" / (piece.brand or "_") / Path(piece.run_name).name / "deliverable/5-brief.md"]
+        brief = next((p for p in files if p.is_file()), None)
+        if brief is None:
+            return False, "no creator filming brief found"
+        text = brief.read_text()
+        missing = [field for field, pattern in [("Film", r"\bFilm\b"), ("Say", r"\bSay\b"), ("Hear", r"\bHear\b"),
+                   ("Wearing", r"\b(?:Wearing|Wardrobe)\b"), ("On screen", r"\bOn[ -]screen\b")]
+                   if not re.search(pattern, text, re.I)]
+        if re.search(r"\[(?:UNFILLED|TODO|SLOT)\b", text, re.I):
+            missing.append("unresolved filming slots")
+        return not missing, "filming brief has Film/Say/Hear/Wearing/On-screen" if not missing else "creator brief missing: " + ", ".join(missing)
     if name in ("file", "glob", "json"):
         spec = arg if name != "json" else arg.rsplit(":", 1)[0]
         path, missing = piece.fill(spec)
@@ -363,6 +430,11 @@ def _sh(cmd):
 
 def fix(piece, step, note=None, links=None, words=None, want=6, replaces=None):
     """Act on one failed step. Returns (acted, what happened)."""
+    if getattr(piece, "lane", "").startswith("video"):
+        if not getattr(piece, "maker_route", None):
+            return False, "maker route unresolved; no repair command run"
+        if piece.maker_route != "ai":
+            return False, step.get("why_no_fix") or "human filming brief: resume its recorded creator/founder writing route; no AI repair run"
     kind, _, arg = (step.get("fix") or "").partition(":")
     av = ["--avatar", piece.avatar] if piece.avatar else []
     if kind == "run_stage":
@@ -509,7 +581,7 @@ def batch_dir(piece):
 
 
 def six_pictures(piece):
-    """The six, in order (the owner, 2026-10-27: "6 total images in that batch: 5 unique variations from the initial one
+    """The six, in order (owner, 2026-10-27: "6 total images in that batch: 5 unique variations from the initial one
     that we made"): the approved picture, then each of the brief's five variations image-edit made from it."""
     first = approved_picture(piece)
     if not first:
@@ -533,12 +605,12 @@ def make_batch(piece, want=6):
         return False, "the first picture waits for a person's look (Looks good on the board); the 5 come from it"
     vf = piece.out("variations.json")
     if not vf.is_file():
-        ok, msg = _sh([PY, str(REPO / "tools" / "image-writing" / "run.py"), piece.run_name, "5", "--brand",
+        ok, msg = _sh([PY, str(REPO / "components" / "image-writing" / "run.py"), piece.run_name, "5", "--brand",
                        piece.brand, "--product", piece.product or ""])
         if not ok or not vf.is_file():
             return False, msg or "the five variations could not be written"
     if len(six_pictures(piece)) < want:
-        ok, msg = _sh([PY, str(REPO / "tools" / "image-edit" / "vary.py"), str(first), "--brand", piece.brand,
+        ok, msg = _sh([PY, str(REPO / "components" / "image-edit" / "vary.py"), str(first), "--brand", piece.brand,
                        "--from-brief", str(vf), "--label", f"{piece.run_name}--batch"])
         if not ok:
             return False, msg or "the variations could not be made"
@@ -547,7 +619,7 @@ def make_batch(piece, want=6):
 
 
 def make_six(piece, want=6, model_call=None):
-    """Every concept ships as six (the owner, 2026-10-25): each headline × each people/scene version, one picture each,
+    """Every concept ships as six (owner, 2026-10-25): each headline × each people/scene version, one picture each,
     retried until it lands. Pictures that are not part of the set are set aside, never deleted."""
     try:
         plan = six_plan(piece, model_call)
@@ -751,7 +823,9 @@ def write_record(piece, rows):
     d = REPO / "runs" / "stage-check" / (piece.brand or "_") / piece.label
     d.mkdir(parents=True, exist_ok=True)
     rec = {"piece": piece.label, "brief": piece.brief_id, "run": piece.run_name, "brand": piece.brand,
-           "product": piece.product, "at": dt.datetime.now().isoformat(timespec="seconds"),
+           "product": piece.product, "checklist": getattr(piece, "lane", "image"),
+           "maker_route": getattr(piece, "maker_route", None), "route_evidence": getattr(piece, "route_evidence", []),
+           "completion_scope": "human filming brief only; not approval, filming, editing or launch" if getattr(piece, "lane", "") == "video-creator" else "AI video production/edit/card" if getattr(piece, "lane", "") == "video" else "route selection required" if getattr(piece, "lane", "") == "video-unresolved" else getattr(piece, "lane", "image"), "at": dt.datetime.now().isoformat(timespec="seconds"),
            "next": next((r["name"] for r in rows if not r["ok"]), "done"), "steps": rows}
     (d / "latest.json").write_text(json.dumps(rec, indent=1, ensure_ascii=False))
     with open(d / "history.jsonl", "a") as h:
@@ -762,7 +836,7 @@ def write_record(piece, rows):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    ap.add_argument("ref", nargs="?", help="a brief id (brand_a_nova_brief-0243, or brief-0243 with --brand/--product) or a run name")
+    ap.add_argument("ref", nargs="?", help="a brief id (brand_a_flex_brief-0243, or brief-0243 with --brand/--product) or a run name")
     ap.add_argument("--batch", help="several refs: a file with one per line, or comma-separated")
     ap.add_argument("--brand"); ap.add_argument("--product")
     ap.add_argument("--review", action="store_true", help="write the batch review sheet even for one piece")
@@ -774,7 +848,10 @@ def main():
     ap.add_argument("--angle", help="the signed angle for the card, when the brief carries none (ads without an angle have no ad set)")
     ap.add_argument("--replaces", help="the brief this run replaces (it is marked deprecated, superseded_by this one; its card leaves the Approve list once this one's card is filed)")
     ap.add_argument("--words", help="words for the card (words.json or a copywriter run), when the replaced brief's card has none")
-    a = ap.parse_args()
+    import importlib.util as _u, pathlib as _pl
+    _s = _u.spec_from_file_location("profile_arg", next(q for q in _pl.Path(__file__).resolve().parents if q.name == "components") / "naming" / "profile_arg.py")
+    _PA = _u.module_from_spec(_s); _s.loader.exec_module(_PA)   # --profile <avatar>[_<sub>][_<demographic>] (naming/PEOPLE.md)
+    a = ap.parse_args(_PA.expand(None, has=('avatar',)))
     global ANGLE
     ANGLE = a.angle
     refs = []

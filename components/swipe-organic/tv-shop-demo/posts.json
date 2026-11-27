@@ -1,0 +1,30 @@
+{
+ "_what": "tv-shop-demo — AI-made TV-shopping-channel live demo ads. Added by hand through add.py on the owner's ask, 2026-10-05.",
+ "brand": "Brand B",
+ "platform": "instagram",
+ "pulled": "2026-10-05",
+ "group": "tv-shop-demo",
+ "source": "paid",
+ "owner": "competitor",
+ "drive_root": "",
+ "posts_seen": 1,
+ "posts": [
+  {
+   "file": "01_swipe-Dd7GVDvprzl.md",
+   "id": "Dd7GVDvprzl",
+   "creator": "frankyshaw",
+   "views": 0,
+   "engagement": 429,
+   "url": "https://www.instagram.com/p/Dd7GVDvprzl/",
+   "caption": "This mascara BLEW UP overnight from this 👇 … (Franky Shaw, creative strategist: an AI micro-drama mascara ad — story first, the product written into the drama)",
+   "seconds": 140,
+   "source": "paid",
+   "owner": "competitor",
+   "kind": "video",
+   "drive": "Shared Assets/lab/the owner/swipe-organic/records/swipe-videos/Dd7GVDvprzl/video.mp4",
+   "posted": "2026-09-30",
+   "format": "subtitled-monologue-evidence-cutaways",
+   "what": "A host demonstrates a mascara's effects on a model and a mannequin to prove its superiority over traditional tubing formulas."
+  }
+ ]
+}

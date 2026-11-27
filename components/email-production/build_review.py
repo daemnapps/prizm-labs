@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """The review page — every email produced for a month, on one local page,
-so the month can be read before anything goes near Klaviyo (the owner,
+so the month can be read before anything goes near Klaviyo (owner,
 2026-09-02: "show me the emails in a local page so we can review; do not
 send to Klaviyo right away").
 
@@ -8,7 +8,7 @@ send to Klaviyo right away").
         # -> runs/email-production/<brand>/review-2026-09/review-2026-09.html
 
 One card per send, in calendar order: date, who it goes to, why it exists,
-every subject line the chain wrote (none ranked — choosing is the owner's), and
+every subject line the chain wrote (none ranked — choosing is owner's), and
 the rendered email itself in the brand's skin. A send with several avatar
 variants shows each variant side by side. A send not yet produced says so.
 Written under runs/email-production/<brand>/review-<month>/ (email-production#19),

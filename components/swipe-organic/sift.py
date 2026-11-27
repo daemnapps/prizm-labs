@@ -41,7 +41,7 @@ def main():
     # what the person watches, not what is sold to them. A feed whose whole
     # subject IS the selling (a shop's own posts, a clipper's remakes) says so
     # in its sources.json, because dropping those would empty the feed it was
-    # built to fill. the owner, 2 Oct: "Everything follows into a lane."
+    # built to fill. owner, 2 Oct: "Everything follows into a lane."
     keep_lanes = set(S.get("keep_lanes") or ["entertainment", "educational"])
 
     def one(chunk):

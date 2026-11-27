@@ -12,7 +12,7 @@ HERE = Path(__file__).resolve().parent.parent
 import os as _os
 root = Path(_os.environ["FORMAT_BANK_DIR"]).resolve() if _os.environ.get("FORMAT_BANK_DIR") else HERE / "results" / "format-bank"
 URLBASE = f"/results/{root.name}"
-OUT = Path(os.environ.get("PAIR_OUT", "/private/tmp/<session>/e9ec6931-750e-46f4-abfe-c324e2c720f1/scratchpad"))
+OUT = Path(os.environ.get("PAIR_OUT", "/private/tmp/claude-501/-Users-damondixon-Projects-ai-workspace/e9ec6931-750e-46f4-abfe-c324e2c720f1/scratchpad"))
 
 board, i = sys.argv[1], int(sys.argv[2])
 y0 = int(sys.argv[3]) if len(sys.argv) > 3 else 0

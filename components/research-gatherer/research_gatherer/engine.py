@@ -30,7 +30,7 @@ per-chain definition. A caller hands it in as `chain_profile`:
     }
 
 Any key can be omitted — the section it feeds records `[UNFILLED: why]`
-rather than guessing. `tools/video-teardown/machine/research.py` and
+rather than guessing. `components/video-teardown/machine/research.py` and
 any sibling chain's shim hand in their own map; this engine holds none.
 
 Reuses rather than re-implements (workspace convention — CC-3):
@@ -312,14 +312,15 @@ def sub_file(brand, avatar, sub, root=None):
     d = avatar_dir(brand, avatar, root) / "sub-avatars"
     if not d.is_dir() or not sub:
         return None
+    key = re.sub(r"^sub-\d+-", "", str(sub))          # an id or the card's file name: both name the same sub-avatar
     for f in sorted(d.glob("*.md")):
-        if sub_slug(f) == sub:
+        if sub_slug(f) in (sub, key) or f.stem == sub:
             return f
     return None
 
 
 def sub_home(brand, avatar, sub, root=None):
-    """ONE home per sub-avatar (the owner, 2026-09-18): the folder beside its
+    """ONE home per sub-avatar (owner, 2026-09-18): the folder beside its
     card, named exactly like the card — `sub-avatars/<card stem>/` — holding
     `language/` (its clean rows, read by every chain through the language
     layer) and `research/<date>/` (the readable report). Raw pulls never
@@ -336,7 +337,7 @@ def profile_file(brand, avatar, root=None):
 
 # ---------------------------------------------------------------- confirmed vs. seeded
 
-# THE LOCK IS THE LINE, NOT THE HEADING. the owner ruled it on 2026-09-18:
+# THE LOCK IS THE LINE, NOT THE HEADING. owner ruled it on 2026-09-18:
 # "he should never have to write down rooms, the system finds where the avatar talks on its own".
 # A `### rooms` block is treated as a PERSON'S ruling only when it
 # carries a `confirmed by: <name>` line; everything else — an agent's seed, a
@@ -446,7 +447,7 @@ def _words_from(texts, topics=None):
 
 # ---------------------------------------------------------------- demographic fit
 
-# THE RULING (the owner, 2026-09-18): room discovery for a sun-damage sub-avatar
+# THE RULING (owner, 2026-09-18): room discovery for a sun-damage sub-avatar
 # came back with r/Blackskincare, r/skincare_ph and r/indianbeautyyappers, and
 # that brand's customers are none of those people. **Research has to be
 # reconciled against the avatar's own demographics or it is irrelevant for that
@@ -746,7 +747,7 @@ def _find_rooms_detail(brand, avatar, sub, cap=None, root=None, use_cache=True,
                     why="[UNFILLED: this avatar names no desire words to search on — "
                         "a `Core desire` line on the avatar file is what discovery searches on]")
     query = discovery_query(words)
-    # `v2` in the key: the first live discovery (2026-09-18, brand-b /
+    # `v2` in the key: the first live discovery (2026-09-18, brand_b /
     # sun-damage-reckoner) came back with ONE room, because the door's
     # default `maxComments: 25` let a single viral thread's comments eat the
     # entire 25-item budget — 1 post, 24 comments, one room, and the room was
@@ -812,12 +813,27 @@ def find_rooms(brand, avatar, sub, cap=40, **kw):
     return _find_rooms_detail(brand, avatar, sub, cap=cap, **kw).get("rooms") or []
 
 
-def write_rooms_block(path, found, when=None, dropped=None):
-    """Write the found rooms back into the avatar's own file, REPLACING any
-    earlier gatherer/agent-seeded block and leaving every other byte of the
-    file exactly as it was. A block a person confirmed is never touched.
+def rooms_proposal_path(path):
+    """Where the found rooms go when the avatar's file is a brand file: brands/ is read-only to machines (the wall,
+    builder card), so a change to one is a proposal under runs/ that a person commits (2026-11-04).
+    runs/research/<brand>/rooms-proposals/<the file's path inside the brand>. None when the file is not a brand file."""
+    parts = Path(path).parts
+    if "brands" not in parts:
+        return None
+    i = len(parts) - 1 - parts[::-1].index("brands")
+    if i + 2 >= len(parts):
+        return None
+    return Path(*parts[:i]) / "runs" / "research" / parts[i + 1] / "rooms-proposals" / Path(*parts[i + 2:])
 
-    ONLY THE KEPT ROOMS ARE LISTED (the owner, 2026-09-18). Rooms dropped for a
+
+def write_rooms_block(path, found, when=None, dropped=None):
+    """Write the found rooms for the avatar's own file, REPLACING any earlier
+    gatherer/agent-seeded block and leaving every other byte of the file
+    exactly as it was. A block a person confirmed is never touched. A brand
+    file is never written: the same file, changed, lands as a proposal under
+    runs/ (rooms_proposal_path) for a person to read and commit.
+
+    ONLY THE KEPT ROOMS ARE LISTED (owner, 2026-09-18). Rooms dropped for a
     demographic mismatch get one line naming them, so the file says out loud
     that discovery found them and the check threw them out — a dropped room
     never sits in the block looking like a room to pull from.
@@ -843,6 +859,11 @@ def write_rooms_block(path, found, when=None, dropped=None):
     new = (text[:m.start()] + block + text[m.end():]) if m else (text.rstrip("\n") + "\n\n" + block)
     if new == text:
         return False
+    proposal = rooms_proposal_path(path)
+    if proposal is not None:
+        proposal.parent.mkdir(parents=True, exist_ok=True)
+        proposal.write_text(new)
+        return proposal
     path.write_text(new)
     return True
 
@@ -853,7 +874,7 @@ def resolve_rooms(brand, avatar, sub=None, topics=None, root=None, discover=True
 
     A `### rooms` block a PERSON confirmed wins outright. Otherwise the
     gatherer goes and finds the rooms itself, writes them back into the
-    avatar's own file, and uses them — the owner's 2026-09-18 ruling: nobody
+    avatar's own file, and uses them — owner's 2026-09-18 ruling: nobody
     should have to write down where an avatar talks. Discovery that comes
     back empty (no key, a 403) falls back to whatever the seeded block
     already said, so this is never worse than the old behaviour."""
@@ -891,8 +912,9 @@ def resolve_rooms(brand, avatar, sub=None, topics=None, root=None, discover=True
         return seeded, words, det
     target = texts[0][0] if texts else None
     det["source"] = "discovery"
-    det["written_to"] = (str(target) if (target and write_rooms_block(
-        target, found, dropped=det.get("dropped"))) else None)
+    written = write_rooms_block(target, found, dropped=det.get("dropped")) if target else None
+    det["written_to"] = (str(written) if isinstance(written, Path) else str(target)) if written else None
+    det["proposal"] = bool(isinstance(written, Path))
     return [f"r/{r['room']}" for r in found], words, det
 
 
@@ -973,6 +995,26 @@ def build_queries_per_question(words, questions):
         query = " ".join(x for x in [base, seed] if x).strip() or (base or "help")
         out.append(dict(question=q, query=query))
     return out
+
+
+def search_phrases(brand, avatar, sub, make=False):
+    """The searches this person's newest plan holds (`gather.py person --plan`), or [] when there is none. The card's own
+    phrases are how WE wrote them, and nobody types them."""
+    fs = sorted((WORKSPACE / "runs" / "research" / brand).glob("person-%s-*/plan.json" % re.sub(r"^sub-\d+-", "", str(sub))))
+    if not fs and make:
+        try:
+            from . import person
+            d = person.plan(brand, avatar, sub)
+            f = person.folder(brand, d["sub"])
+            f.mkdir(parents=True, exist_ok=True)
+            (f / "plan.json").write_text(json.dumps(d, indent=1, ensure_ascii=False) + "\n")
+            fs = [f / "plan.json"]
+        except (Exception, SystemExit) as e:  # noqa: BLE001 -- no plan is the old way, said
+            print("  search phrases: none written (%s)" % str(e)[:100])
+    try:
+        return json.loads(fs[-1].read_text())["reddit"]["searches"] if fs else []
+    except (OSError, ValueError, KeyError):
+        return []
 
 
 # ---------------------------------------------------------------- the reddit door, driven
@@ -1242,7 +1284,10 @@ def render_rooms_md(discovery):
     dropped = discovery.get("dropped") or []
     L_ += ["", "### Rooms dropped — demographic mismatch", "",
            render_dropped_md(dropped)]
-    if discovery.get("written_to"):
+    if discovery.get("written_to") and discovery.get("proposal"):
+        L_ += ["", f"Proposed in `{discovery['written_to']}`: the avatar's file with these rooms in it. A brand file "
+               "is never written by a machine; a person reads it and commits it."]
+    elif discovery.get("written_to"):
         L_ += ["", f"Written back into `{discovery['written_to']}` as a gatherer block — "
                'edit it freely, or add `confirmed by: <your name>` to lock it.']
     return "\n".join(L_)
@@ -1391,7 +1436,7 @@ def row_count(brand, avatar, sub, root=None):
     """Depends on `language_layer` only for this one count — imported
     lazily so a caller that never touches `deep` mode never needs it on
     its path."""
-    sys.path.insert(0, str(WORKSPACE / "tools" / "language-layer"))
+    sys.path.insert(0, str(WORKSPACE / "components" / "language-layer"))
     from language_layer import engine as _lang
     rows = _lang.load(brand, avatar, root=root)
     return sum(1 for r in rows if r.get("sub") == sub)
@@ -1413,7 +1458,7 @@ def build_bank_rows(brand, avatar, sub, posts_by_ref, comments_by_ref, demo=None
     permalink never enters — `posts_by_ref`/`comments_by_ref` are keyed by
     ref, so an empty key is the drop signal, checked again here.
 
-    AND (the owner, 2026-09-18) every row carries the demographic verdict of the
+    AND (owner, 2026-09-18) every row carries the demographic verdict of the
     room it came from, in a `fit` field; a row from a room the check says `no`
     to is NEVER filed. `dropped_out`, when a list is handed in, collects those
     rows so a run record can show what was thrown away and why."""
@@ -1469,7 +1514,7 @@ def _write_deep_run_record(out_root, brand, avatar, sub, entries, spend, plan, i
             json.dumps({"brand": brand, "avatar": avatar, "sub": sub,
                         "date": date.today().isoformat(),
                         "why": "the room these rows came from does not match this avatar's "
-                               "demographics (the owner, 2026-09-18) — never filed into the bank",
+                               "demographics (owner, 2026-09-18) — never filed into the bank",
                         "demographics": demo or {}, "rows": dropped_rows}, indent=1))
     L_ = [f"# Deep research — {brand} / {avatar} / {sub}", "", METHOD_HEADER, "",
          "**demographics** (what every room was reconciled against): "
@@ -1525,7 +1570,7 @@ def deep_for(brand, avatar, sub, cap, dry_run=False):
     text = f.read_text()
     state, _m = rooms_block_state(text)
     demo = demographics(brand, avatar, sub, sub_path=f)
-    # DISCOVERY FIRST unless a person has confirmed the block (the owner, 2026-09-18).
+    # DISCOVERY FIRST unless a person has confirmed the block (owner, 2026-09-18).
     # A dry run discovers nothing — it spends nothing, by contract — and says
     # instead what the real run would go and look for.
     # THE ELEMENTS GATE, before a cent is spent (rollout 2026-09-20): every
@@ -1545,6 +1590,10 @@ def deep_for(brand, avatar, sub, cap, dry_run=False):
     rooms, words, discovery = resolve_rooms(brand, avatar, sub, root=None,
                                             discover=not dry_run, sub_path=f)
     plan = build_queries_per_question(words, questions)
+    said = search_phrases(brand, avatar, sub, make=not dry_run)      # what people type, from what the profile is missing (2026-11-25)
+    for n_, x in enumerate(plan):
+        if said:
+            x["query"] = said[n_ % len(said)]
 
     if dry_run:
         return dict(ok=True, dry_run=True, rooms=rooms, words=words, fallback_questions=is_fallback,
@@ -1626,7 +1675,7 @@ def deep_for(brand, avatar, sub, cap, dry_run=False):
                     held="delivery", problems=held)
 
     # Every row the gatherer writes carries the proposal's fields (lane by
-    # language, awareness, sophistication — tools/language-layer/docs/STANDARD.md,
+    # language, awareness, sophistication — components/language-layer/docs/STANDARD.md,
     # 2026-09-28). Optional: with no model or no doctrine the rows go out as before.
     try:
         from . import annotate as _A
@@ -1696,7 +1745,10 @@ def main(argv=None):
     # search) while `deep` keeps its own, bigger default.
     ap.add_argument("--cap", type=int, default=None)
     ap.add_argument("--dry-run", action="store_true", help="print the queries; spend nothing")
-    a = ap.parse_args(argv)
+    import importlib.util as _u, pathlib as _pl
+    _s = _u.spec_from_file_location("profile_arg", next(q for q in _pl.Path(__file__).resolve().parents if q.name == "components") / "naming" / "profile_arg.py")
+    _PA = _u.module_from_spec(_s); _s.loader.exec_module(_PA)                                   # --profile <avatar>[_<sub>][_<demographic>] (naming/PEOPLE.md)
+    a = ap.parse_args(_PA.expand(argv, has=("avatar", "sub")))
 
     if a.pick_thinnest:
         picked, ranked = pick_thinnest()
@@ -1770,7 +1822,8 @@ def main(argv=None):
             target = texts[0][0] if texts else None
             if target and state != "confirmed":
                 changed = write_rooms_block(target, det["rooms"], dropped=det.get("dropped"))
-                print(f"  {'written back into' if changed else 'unchanged:'} {target}")
+                print(f"  proposed in {changed}" if isinstance(changed, Path) else
+                      f"  {'written back into' if changed else 'unchanged:'} {target}")
         return 0
 
     for t in targets:

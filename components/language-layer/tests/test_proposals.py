@@ -4,7 +4,7 @@ research gatherer's apply step is what writes them (O5: `brands/` is
 read-only to machines; the gatherer is the one carved-out writer).
 Fixture trees only: no model call, no network, no key.
 
-    python3 -m unittest discover -s tests          # from tools/language-layer
+    python3 -m unittest discover -s tests          # from components/language-layer
 """
 import contextlib, hashlib, io, json, sys, tempfile, unittest
 from pathlib import Path

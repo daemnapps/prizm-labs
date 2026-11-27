@@ -6,7 +6,7 @@
     python3 sounds.py tag                              # mood / energy / kind, by Haiku
     python3 sounds.py status
 
-the owner, 2026-09-23: "I wouldn't want to use existing meme sounds, I would only
+owner, 2026-09-23: "I wouldn't want to use existing meme sounds, I would only
 really want to use sounds that are more recent." Organic posts only — he is
 not running TikTok ads, so commercial licensing is not a filter here.
 
@@ -29,7 +29,7 @@ which is the hand-off: a brief names a sound by its id.
 
 Audio lives on the Drive (the organic swipe home's sounds/, via swipe_home),
 never in git. Money: the pull (~$0.21) and the audio fallback are the only
-spends. Nothing is scheduled (the owner, 2026-09-23: no automated check) — a pull
+spends. Nothing is scheduled (owner, 2026-09-23: no automated check) — a pull
 runs when he presses the button on the page, which shows the cost first.
 """
 import argparse, json, re, subprocess, sys, tempfile, urllib.request
@@ -427,8 +427,8 @@ def write_index(pool):
                   key=lambda r: r.get("pick_at") or "", reverse=True)
     INDEX.write_text(json.dumps({
         "_readme": [
-            "THE TRENDING-SOUNDS SHORTLIST (swipe-organic, 2026-09-23). the owner's kept sounds from "
-            "records/sounds/pool.json, in the same row shape as tools/video-production/banks/*/index.json. "
+            "THE TRENDING-SOUNDS SHORTLIST (swipe-organic, 2026-09-23). owner's kept sounds from "
+            "records/sounds/pool.json, in the same row shape as components/video-production/banks/*/index.json. "
             "A brief names one by id (`sound: \"snd-<tiktok id>\"`); the edit reads `file` from here.",
             "Organic posts only. `status: made` means the audio is on the Drive at `file`. "
             "A row whose sound has left the chart carries `off_chart_since` — it is getting old."],

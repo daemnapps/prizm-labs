@@ -2,7 +2,7 @@
 """The plumbing a stage runs on: find the prompt, fill it, send it, stamp it.
 
 Four small things, kept together because every one of them is about the
-PROMPT being the product (the owner's standing rule) rather than about calendars:
+PROMPT being the product (owner's standing rule) rather than about calendars:
 
     latest_prompt(stage)   the highest -vN- file wins
     fill(template, fields) deterministic substitution, so a run replays
@@ -53,7 +53,11 @@ def pick_model(key, prompt_chars=0, forced=None):
     tier = LAYER_TIERS.get(key, "designs")
     M = _kit_model()
     if M:
-        return M.pick(tier, prompt_chars, forced)
+        try:   # the one model table (run-kit tiers.json, entry "marketing-calendar"), 2026-11-26
+            from run_kit import tiers as T
+            return M.pick(tier, prompt_chars, forced, tiers=T.for_chain("marketing-calendar"))
+        except ImportError:
+            return M.pick(tier, prompt_chars, forced)
     return (forced, "forced") if forced else (_FALLBACK_TIERS[tier], tier)
 
 
@@ -102,7 +106,7 @@ def claude(prompt_text, model=DEFAULT_MODEL):
     # human, so the session writes its answer to the HOOK instead of the
     # deliverable and the output is silently wrong (hit in copy, 2026-08-24).
     # Keep the tree clean of whatever a Stop hook guards before running.
-    # NO ACCOUNT IS WIRED IN (the owner, 2026-10-23): run_kit's claude_door picks the
+    # NO ACCOUNT IS WIRED IN (owner, 2026-10-23): run_kit's claude_door picks the
     # credential — company key, long-life token, then this machine's login.
     from paths import COMPONENT
     kit = str(COMPONENT.parent / "run-kit")          # the sibling component, appended
@@ -129,7 +133,7 @@ def claude(prompt_text, model=DEFAULT_MODEL):
 
 
 def catalogue_path(brand, workspace, seed=None):
-    """The type catalogue is the BRAND's knowledge (the owner, 2026-08-31). A brand
+    """The type catalogue is the BRAND's knowledge (owner, 2026-08-31). A brand
     without one runs on the component's clean seed — and should copy that seed
     into its own folder to own it."""
     from paths import BP

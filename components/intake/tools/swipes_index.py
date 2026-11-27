@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """THE SWIPES INDEX — one living row per swipe, so a tool reads one file instead of digging through nine pools.
 
-The same front door as the product index (tools/video-production/machine/product_index.py), for swipes. The
+The same front door as the product index (components/video-production/machine/product_index.py), for swipes. The
 audit that asked for it: components/naming/WHERE-EVERYTHING-GOES-owner.md ("swipes in about 9 places ... the Drive
 swipe front door is stale ... no index for swipes").
 
@@ -10,7 +10,7 @@ Built from, read only:
   the swipe pools, read live through pools.py      every swipe saved for the brand, plus every `shared` one
   runs/intake/<brand>/<label>/swipes.jsonl          every earlier intake snapshot (a swipe a pool no longer holds stays)
   runs/video-teardown/VIDEO-INDEX.json              which source videos were torn down, by which run, into which briefs
-  tools/image-teardown/briefs.json             the brief register: brief numbers, and the paid blocks image briefs came from
+  components/image-teardown/briefs.json             the brief register: brief numbers, and the paid blocks image briefs came from
 
 It writes:
 
@@ -53,7 +53,7 @@ def _json(p):
         return None
 
 
-# ── the video key: the same rule as tools/video-teardown/machine/video_index.py key_of_url (copied, not
+# ── the video key: the same rule as components/video-teardown/machine/video_index.py key_of_url (copied, not
 #    imported: importing that module opens the teardown's working folder) ─────────────────────────────────────
 def key_of_url(u):
     u = (u or "").strip()
@@ -122,7 +122,7 @@ def teardowns():
 
 def register():
     """The brief register: id -> brief number, and (advertiser, block) -> image briefs made from that paid block."""
-    reg = _json(P.workspace() / "tools" / "image-teardown" / "briefs.json") or {}
+    reg = _json(P.workspace() / "components" / "image-teardown" / "briefs.json") or {}
     number, blocks = {}, collections.defaultdict(list)
     for shelf in ("briefs", "retired"):
         for bid, b in (reg.get(shelf) or {}).items():

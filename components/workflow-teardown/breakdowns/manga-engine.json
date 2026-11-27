@@ -1,0 +1,118 @@
+{
+ "id": "manga-engine",
+ "name": "Manga & Comics (/manga)",
+ "kind": "picture",
+ "makes": "Turns an idea, script or photos into a lettered manga, comic or webtoon chapter with consistent characters (sheets, poster, pages), then exports PDF, CBZ or a video; a sandbox engine writes every picture prompt.",
+ "source": [
+  "commands/manga.md",
+  "manga-engine/SKILL.md",
+  "manga-engine/scripts/steps/concept.md",
+  "manga-engine/scripts/steps/designs.md",
+  "manga-engine/scripts/steps/plan.md",
+  "manga-engine/scripts/steps/script.md",
+  "manga-engine/scripts/data/prompts.json.md",
+  "manga-engine/scripts/data/layouts.json.md",
+  "manga-engine/scripts/data/rules.json.md",
+  "manga-engine/scripts/manga.py.md",
+  "commands/manga-references-styles.md",
+  "commands/manga-references-engine.md",
+  "commands/manga-references-runtime.md",
+  "commands/manga-references-webtoon.md",
+  "commands/manga-references-review-and-export.md",
+  "commands/manga-references-video.md"
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "name": "Intake",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 2,
+   "name": "Story steps (free)",
+   "model": "none",
+   "cheap": "Claude on the plan (free to us)"
+  },
+  {
+   "n": 3,
+   "name": "Script approval",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 4,
+   "name": "Price and approval",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 5,
+   "name": "Reference sheets",
+   "model": "gpt_image_2_6",
+   "cheap": "`seedream_5_0_flash` 2k: 0.5 credits a picture quoted, against 1.75-2.5 for 2k pictures"
+  },
+  {
+   "n": 6,
+   "name": "Pages",
+   "model": "gpt_image_2_6 (comics: nano_banana_2_1)",
+   "cheap": "`seedream_5_0_flash` 2k: 0.5 credits a picture quoted, against 1.75-2.5 for 2k pictures; `gpt_image_2_6_flare` 1k low: 0.75 credits a picture quoted"
+  },
+  {
+   "n": 7,
+   "name": "Check every page",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 8,
+   "name": "Export (free)",
+   "model": "none",
+   "cheap": null
+  }
+ ],
+ "prompts": [
+  {
+   "label": "Intro, B/W story page",
+   "source": "manga-engine/scripts/data/prompts.json.md",
+   "text": "You are drawing an interior page of a Japanese manga printed in black and white: black ink line art on white paper, the look of a page from a printed manga magazine or collected volume. It is NOT a grey illustration, NOT a painting, NOT an American comic and NOT a webtoon."
+  },
+  {
+   "label": "Style, B/W story page",
+   "source": "manga-engine/scripts/data/prompts.json.md",
+   "text": "STYLE — MANGA, BLACK INK ON WHITE PAPER:\n- Economical line art: few, confident G-pen lines with clear thick-thin weight — bolder outer contours, thin inner lines; no line is spent on surface texture.\n- Simple character shapes: an oval face, simple eyes with one small catchlight, a short tick for the nose, a simple mouth, no shading on skin; hair as a few large clumps — one solid black mass, or a white shape outlined with a few strokes — never fine strands; clothes as flat white, flat black or one flat tone with only two to four fold lines.\n- Backgrounds only where they are needed: the place is drawn in at most one or two panels of the page, in clean open line art with white surfaces and very little texture; in close-ups, reactions, dialogue and action panels the figures stand on plain white paper, speed lines, focus lines or a single floor line.\n- Solid flat black for dark hair, dark clothing, cast shadows and night skies; a few small hard-edged areas of flat dot screentone or parallel hatching only where a shadow or a mood needs it.\n- No surface texture anywhere: no fur strands, no leaf-by-leaf foliage, no brick-by-brick walls, stone, wood grain or fabric weave, no stitch-by-stitch knit or plaid (a pattern is a few lines), no rendered clouds, smoke, fog or water (simple outlines with white inside), no glow, no soft shadows, no grain.\n- Manga devices where the beat calls for them: speed lines behind a moving figure, radial focus lines behind a reaction, a black flash for a realisation, sweat drops and simple comic faces in a comic beat."
+  },
+  {
+   "label": "Output, B/W story page",
+   "source": "manga-engine/scripts/data/prompts.json.md",
+   "text": "OUTPUT: a single manga interior page, {{FRAME}}, BLACK INK ON WHITE PAPER ONLY — the look of a printed black-and-white manga page: clean pen line art and large areas of untouched white paper; a background in at most one or two panels, every other panel shows the figures against plain white, speed lines or a single floor or horizon line; wherever the place is drawn it is flat and clean — big simple shapes in clean lines, white or one flat grey, a few key objects drawn simply, never texture; solid flat black for dark hair, clothes, shadows and night; grey only as small hard-edged areas of flat dot screentone or hatching. Never a grey wash, gradient, airbrush, soft shading or painted texture. A white page margin around the panels and clean white gutters. {{READING_ORDER}}"
+  },
+  {
+   "label": "Final, B/W story page",
+   "source": "manga-engine/scripts/data/prompts.json.md",
+   "text": "DO NOT use colour of any kind — no sepia, cream or warm tint, no coloured light. DO NOT shade with grey — no grey wash, gradients, airbrush, soft shadows or rendered light; grey only as flat dot screentone or hatching. DO NOT draw surface texture (fur strands, single leaves, stone, wood grain, fabric) or a detailed background in every panel. DO NOT texture a background: no rows of individual book spines, no brick, tile, plank or paving patterns, no rain streaks over every surface, no hatching fields, no wet or glossy reflections. DO NOT draw semi-realistic shaded faces, strand-by-strand hair or many clothing folds. DO NOT render a page number. DO NOT letter the @ handles, reference image numbers, panel numbers or any instruction text from this prompt."
+  },
+  {
+   "label": "Negative (default)",
+   "source": "manga-engine/scripts/data/prompts.json.md",
+   "text": "NEGATIVE PROMPT — under no circumstance render any of the following on this page:\n{{NEGATIVE_PROMPT_BLOCK}}"
+  },
+  {
+   "label": "Reference sheet style, B/W",
+   "source": "manga-engine/scripts/data/prompts.json.md",
+   "text": "Black-and-white manga art in black ink on white paper: clean, economical G-pen line art with clear thick-thin weight. Characters in simple manga shapes — an oval face, simple eyes with one small catchlight, a short tick for the nose, a simple mouth, no shading on skin; hair as a few large clumps (one solid black mass, or a white shape outlined with a few strokes), never fine strands; clothes as flat white or flat solid black areas with two to four fold lines. Places and objects in clean open line art — their main shapes and a few perspective lines, white surfaces, flat solid black only for dark openings and dark materials, no surface texture. A small flat dot-tone area only where two parts must read apart. No grey shading, no gradients, no colour anywhere. Hand-drawn 2D line art on white paper — never photographic, never a 3D render, never a grey painting."
+  },
+  {
+   "label": "Reference sheet layout",
+   "source": "manga-engine/scripts/data/prompts.json.md",
+   "text": "SHEET LAYOUT — follow exactly.\nOne landscape image split into three equal-width vertical panels of identical height, separated by two solid pure-black vertical dividers about 0.6% of the image width. Nothing crosses a divider. No outer border, no frame, no drop shadow.\nPanel 1, left — full body, front view, square to camera, head to feet, eyes to the lens.\nPanel 2, centre — full body, back view of the same subject at the SAME scale and camera distance as panel 1: head, shoulders, hips and feet at the same heights. Back fully to camera, head not turned.\nPanel 3, right — three-quarter close-up portrait: head, shoulders and upper chest, cropped at mid-chest, body turned about thirty-five degrees off axis, face back to the lens.\nFraming: in panels 1 and 2 the subject fills about ninety percent of the panel height, centred, with thin headroom and the ground visible below the feet. In panel 3 the head fills about forty-five percent."
+  },
+  {
+   "label": "Page rules for the script step",
+   "source": "manga-engine/scripts/steps/script.md",
+   "text": "- One page = one beat of the story. A page holds 1-{{CAP}} panels: 4 for action, 5 for mixed,\n  6 for conversation; 1 only for a splash (size \"splash\", role impact, reveal or establishing).\n- Each panel draws ONE moment: one action, one shot. Its `action` (at most 40 words, English)\n  names every character drawn by @handle and says what they do, where they look and how they\n  feel. Never restate a design; the sheets carry it.\n- Lettering: at most 4 items a panel, 2 balloons a panel, 12 items and 210 words a page, and\n  {{BALLOON_WORDS}} words a balloon. Lines are short, spoken, in the lettering language; sound\n  effects (`sfx`) are written in its letters. Lettered text never holds an @handle.\n- Every speaker is in the page's `cast`, or `offPanel` with `\"off\": true`, or an extra by label.\n- Every scene starts on a new page and follows the plan's order; `scene` is the plan's scene\n  number. Use the plan's key details and quotes word for word.\n- The last page has role \"closing\", 1 or 3 panels, and ends on the chapter's cliffhanger; its\n  last panel's role is \"cliffhanger\". `closingLines` holds the closing caption and the end\n  marker, in the lettering language.\n- When the series has chapter title pages, page 1 has role \"cover\" and one panel with no lines,\n  and `cover` names who is on it.\n- UNDER 18: never describe a character under 18 by body, figure, fit or skin; nothing sexual."
+  }
+ ],
+ "price": "Quotes before drawing with `estimate_image_cost` on each parameter set, times counts, plus the 2-redraw ceiling at the page price. `gpt_image_2_6` is not in `_prices.md`; its flare sibling quotes 1.75 at 2k medium. A 20-page chapter is 6 sheets, 1 poster and 20 pages = 27 images, about 47 credits at that rate. The command's own sample line reads 'about 34 (up to 36 if a page needs a redraw)'.",
+ "cheap_price": "~47 -> ~14 credits for a 20-page chapter (Seedream flash)"
+}

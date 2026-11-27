@@ -2,7 +2,7 @@
 """The tools, the CLI and the component's hygiene — fixture trees only: no
 model call, no network, no key, nothing written outside a temp folder.
 
-    python3 -m unittest discover -s tests          # from tools/language-layer
+    python3 -m unittest discover -s tests          # from components/language-layer
 """
 import ast, importlib.util, json, os, re, subprocess, sys, tempfile, unittest
 from pathlib import Path

@@ -26,7 +26,7 @@ import elements as E  # noqa: E402
 RULE6 = {"draft", "approved", "deprecated"}
 MOVED = {"unreviewed", "proposed", "seed"}
 SOURCES = {"components/swipe-organic/formats.json": "formats",
-           "tools/video-production/styles/bank.json": "styles"}
+           "components/video-production/styles/bank.json": "styles"}
 
 
 def _all_rows(index):
@@ -92,8 +92,8 @@ class Readers(unittest.TestCase):
         shapes = {
             "components/swipe-organic/app.py": 'st = f.get("state") or f.get("status", "unreviewed")',
             "components/swipe-organic/feedsexport.py": '"status", "state", "family"',
-            "tools/video-production/styles/render_board.py": '"fits_formats", "status", "state", "keeps_proof"',
-            "tools/video-production/styles/board-template.html": "${h(s.state || s.status)}",
+            "components/video-production/styles/render_board.py": '"fits_formats", "status", "state", "keeps_proof"',
+            "components/video-production/styles/board-template.html": "${h(s.state || s.status)}",
             "components/elements/machine/page.py": 'e(r.get("state") or r.get("status") or "draft")',
         }
         for path, shape in shapes.items():

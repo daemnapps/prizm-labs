@@ -1,6 +1,6 @@
 """QB-6 (content queue page): view.py, the page's read door, and the new settable field `due`.
 
-A fixture index (one entry of each type, one the owner removed, one gone) and a fixture shadow root (the team's set who /
+A fixture index (one entry of each type, one owner removed, one gone) and a fixture shadow root (email_lead's set who /
 priority and an add) are copied into a temp folder; view.py runs as the kit runs it (this Python, from the repo
 root) and must leave both byte-identical with no new file. `due` goes through `cq.py set --no-commit` only.
 Stdlib only, no network, no git.
@@ -58,30 +58,30 @@ class View(unittest.TestCase):
 
     def test_rows_without_video_with_shadow_decisions_and_adds(self):
         d, rows = self.view()
-        self.assertEqual(sorted(d), ["owner_age_h", "owner_built", "people", "rows", "shadow_root", "stages"])
+        self.assertEqual(sorted(d), ["calendar", "owner_age_h", "owner_built", "from_register", "ledger", "loose", "people", "register_runs", "rows", "shadow_root", "stages", "towrite", "trail"])
         # QB-7 (content queue Monday): the index's email rows are dropped, video is kept read only
         self.assertEqual(sorted(set(r["type"] for r in rows.values())), ["carousel", "image-ad", "landing-page", "video-ad"])
         self.assertEqual(rows["fxbrand_fx_brief-0001"]["read_only"], "video")   # a video ad shows, read only
-        # the team's set on a piece in the owner's index shows, with who decided it
+        # email_lead's set on a piece in owner's index shows, with who decided it
         r = rows["fxbrand_fx_brief-0048"]
-        self.assertEqual((r["who"], r["priority"], r["due"]), ("designer", "1", None))
-        self.assertEqual(r["decided_by"]["who"], {"by": "pm", "made": "2026-10-23T13:40:00Z"})
-        self.assertEqual(r["decided_by"]["priority"]["by"], "pm")
+        self.assertEqual((r["who"], r["priority"], r["due"]), ("editor", "1", None))
+        self.assertEqual(r["decided_by"]["who"], {"by": "email_lead", "made": "2026-10-23T13:40:00Z"})
+        self.assertEqual(r["decided_by"]["priority"]["by"], "email_lead")
         self.assertEqual((r["stage"], r["flag"], r["since"], r["title"], r["brand"]),
                          ("final-needs-you", "stuck", "2026-10-16", "Brief 0048 · fx", "fxbrand"))
         self.assertIs(r["in_owner"], True)
         self.assertEqual(r["thumb"], "http://127.0.0.1:8795/thumb/fx.png")
-        # links: 127.0.0.1 and localhost are the owner's Mac only; a real web link is not
+        # links: 127.0.0.1 and localhost are owner's Mac only; a real web link is not
         self.assertEqual(r["links"], [{"label": "Open in Launch to Meta", "url": "http://127.0.0.1:8795/", "local": True},
                                       {"label": "The brief", "url": "https://docs.google.com/document/d/fx/edit"}])
         self.assertIs(rows["fxbrand_fx_carousel-0002"]["links"][0]["local"], True)
-        # a shadow add is a row of its own, not in the owner's list
+        # a shadow add is a row of its own, not in owner's list
         a = rows["fxbrand_image-ad_baseline-03"]
         self.assertEqual((a["title"], a["brand"], a["type"], a["who"], a["stage"]),
-                         ("Baseline 03", "fxbrand", "image-ad", "designer", None))
+                         ("Baseline 03", "fxbrand", "image-ad", "editor", None))
         self.assertIs(a["in_owner"], False)
-        self.assertEqual(a["added_by"]["by"], "pm")
-        # QB-7 (content queue Monday): an email in the owner's index is gone (emails come from the email line);
+        self.assertEqual(a["added_by"]["by"], "email_lead")
+        # QB-7 (content queue Monday): an email in owner's index is gone (emails come from the email line);
         # removed and gone rows are kept, marked
         self.assertNotIn("fxbrand_email_fxbrand-oct-20", rows)
         gone = rows["fxbrand_page_fx-cpk-01"]
@@ -97,7 +97,7 @@ class View(unittest.TestCase):
         d, _ = self.view()
         self.assertEqual(d["owner_built"], "2026-10-22T02:00:00+00:00")
         self.assertEqual(d["owner_age_h"], 36.0)
-        self.assertEqual(d["people"], ["the owner", "the team", "the team"])     # QB-7 (content queue Monday): without Christine
+        self.assertEqual(d["people"], ["owner", "email_lead", "editor"])     # QB-7 (content queue Monday): without Christine
         self.assertEqual(d["shadow_root"], str(self.root))
         self.assertEqual([s["id"] for s in d["stages"]][:2], ["idea", "brief"])
 
@@ -106,8 +106,8 @@ class View(unittest.TestCase):
         self.view()
         self.assertEqual(snapshot(self.tmp), before)
         self.assertEqual(sorted(str(p.relative_to(self.tmp)) for p in self.tmp.rglob("*")),
-                         sorted(["index.json", "shadow", "shadow/decisions", "shadow/decisions/pm",
-                                 "shadow/decisions/pm/2026-10-23.jsonl"]))
+                         sorted(["index.json", "shadow", "shadow/decisions", "shadow/decisions/email_lead",
+                                 "shadow/decisions/email_lead/2026-10-23.jsonl"]))
 
     def test_view_refuses_the_live_queue_as_root(self):
         code, out, err = run("view.py", "--index", str(self.index), "--root", str(REPO / "runs" / "queue"), "--now", NOW)
@@ -115,13 +115,13 @@ class View(unittest.TestCase):
         self.assertIn("REFUSED", err)
 
     def test_due_round_trips_and_a_bad_date_exits_2(self):
-        base = ["--by", "pm", "--root", str(self.root), "--no-commit"]
+        base = ["--by", "email_lead", "--root", str(self.root), "--no-commit"]
         code, out, err = run("cq.py", "set", "fxbrand_fx_brief-0048", "due", "2026-10-27", *base)
         self.assertEqual(code, 0, err)
         _, rows = self.view()
         r = rows["fxbrand_fx_brief-0048"]
         self.assertEqual(r["due"], "2026-10-27")
-        self.assertEqual(r["decided_by"]["due"]["by"], "pm")
+        self.assertEqual(r["decided_by"]["due"]["by"], "email_lead")
         before = snapshot(self.root)
         for bad in ("27/10", "2026-10-32", "2026-1-27", "tomorrow"):
             code, out, err = run("cq.py", "set", "fxbrand_fx_brief-0048", "due", bad, *base)
@@ -132,6 +132,45 @@ class View(unittest.TestCase):
         self.assertEqual(code, 0, err)
         _, rows = self.view()
         self.assertEqual(rows["fxbrand_fx_brief-0048"]["due"], "")   # "" clears it
+
+    def test_a_test_brand_is_hidden_like_a_test_id(self):
+        # 2026-11-06: zzbrand's widget showed in the page's brand filter; a brand starting zz is a test, hidden everywhere
+        idx = json.loads(self.index.read_text())
+        idx["entries"].append({"id": "zzbrand_idea_zzbrand_widget_brief-0002", "brand": "zzbrand", "type": "image-ad", "title": "Widget",
+                               "stage": "live", "flag": None, "since": "2026-10-01", "thumb": None, "links": [], "email_run": None,
+                               "updated": "2026-10-22T01:00:00"})
+        self.index.write_text(json.dumps(idx))
+        d, rows = self.view()
+        self.assertNotIn("zzbrand_idea_zzbrand_widget_brief-0002", rows)
+        self.assertIn("fxbrand_fx_brief-0001", rows, "a real brand stays")
+
+    def test_a_date_on_an_id_not_in_the_index_is_loose_never_a_row(self):
+        # 2026-11-03: a hand-off owner's list has not caught up with keeps its own date, by its exact key
+        base = ["--by", "email_lead", "--root", str(self.root), "--no-commit"]
+        code, out, err = run("cq.py", "set", "fxbrand_fx_brief-9001", "due", "2026-11-06", *base)
+        self.assertEqual(code, 0, err)
+        d, rows = self.view()
+        self.assertNotIn("fxbrand_fx_brief-9001", rows)
+        self.assertEqual(d["loose"]["fxbrand_fx_brief-9001"], {"due": "2026-11-06", "due_by": "email_lead"},
+                         "who set the due rides along (2026-11-06: an email moved by owner or designer stays on its day)")
+        for r in rows:                                               # a piece in the index is a row, never loose
+            self.assertNotIn(r, d["loose"])
+
+    def test_a_hand_off_taken_off_or_put_back_is_loose(self):
+        # 2026-11-06: owner dropped a campaign's statics and sent others back for a redo
+        base = ["--by", "email_lead", "--root", str(self.root), "--no-commit"]
+        for args in (("remove", "fxbrand_fx_brief-9002"), ("set", "fxbrand_fx_brief-9003", "due", "2026-11-06"),
+                     ("remove", "fxbrand_fx_brief-9003"), ("restore", "fxbrand_fx_brief-9003")):
+            code, out, err = run("cq.py", *args, *base)
+            self.assertEqual(code, 0, err)
+        d, rows = self.view()
+        self.assertEqual(d["loose"]["fxbrand_fx_brief-9002"], {"removed": True})
+        back = d["loose"]["fxbrand_fx_brief-9003"]
+        self.assertEqual(back["due"], "2026-11-06")
+        self.assertRegex(back["back_on"], r"^\d{4}-\d{2}-\d{2}T")
+        self.assertNotIn("removed", back)
+        self.assertNotIn("fxbrand_fx_brief-9002", rows)
+
 
 
 if __name__ == "__main__":

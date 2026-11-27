@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """What every send actually did, joined to what it was.
 
-    python3 calendar/performance.py --brand brand-a [--months 12]
+    python3 calendar/performance.py --brand brand_a [--months 12]
 
 The classification says what each email WAS. This says what it DID. Joined,
 they answer the question the calendar exists to settle: what earns, by
@@ -58,7 +58,7 @@ def main():
     ap.add_argument("--label", default=None, help="the proposal run (default facts-<UTC day>)")
     args = ap.parse_args()
     if args.conversion is None:
-        # never another brand's metric — the default was brand-a' id for every brand
+        # never another brand's metric — the default was brand_a' id for every brand
         if args.brand not in D.BRANDS:
             sys.exit(f"{args.brand} has no row in pull/accounts.json — add one, or pass --conversion")
         args.conversion = D.BRANDS[args.brand]["placed_order"]

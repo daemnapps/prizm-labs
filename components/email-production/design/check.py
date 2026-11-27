@@ -1,6 +1,6 @@
 """The final check on a batch of designed emails, any brand, written onto each Klaviyo card (card.json → final_check).
 
-Lifted from runs/email-production/brand-a/week-2026-10-12/final_check.py. Run after build.py, over the
+Lifted from runs/email-production/brand_a/week-2026-10-12/final_check.py. Run after build.py, over the
 whole batch (a calendar window), because one check spans the batch:
 
     python3 design/check.py <run folder> [<run folder> ...]
@@ -10,7 +10,8 @@ again after the store's wait, and one that stays 429, or a Cloudflare challenge,
 the approval page asks a person to open the page and confirm before Approve); subject and preview set; unsubscribe and preferences tags present;
 alt text on every picture; no picture over 1MB, the whole email under 2.5MB; no name on the brand's
 never-use list; the product check passed; a concept and its culture source on the card (EMAIL-LINE
-step 1b, never generic). Across the batch: no customer photo or made picture used in two emails.
+step 1b, never generic); the subject not used by another email of the brand to an overlapping audience
+within 14 days (the design step writes its own subject, after the copy stage's ledger check). Across the batch: no customer photo or made picture used in two emails.
 The approval page holds Approve until every row is ok.
 """
 import html
@@ -20,6 +21,7 @@ import subprocess
 import sys
 import time
 from collections import defaultdict
+from datetime import date
 from pathlib import Path
 from urllib.parse import urlsplit, urlunsplit
 
@@ -34,6 +36,50 @@ ANSWERS = {}                                   # one answer per page for the who
 def page_of(url):
     p = urlsplit(url)
     return urlunsplit((p.scheme, p.netloc.lower(), p.path.rstrip("/") or "/", "", ""))
+
+
+SUBJECT_WINDOW_DAYS = 14                       # a subject may not repeat for the same audience inside this many days
+
+
+def _norm(s):
+    return re.sub(r"[^a-z0-9]+", " ", html.unescape(str(s or "")).lower()).strip()
+
+
+def _day(c):
+    try:
+        return date.fromisoformat(str(c.get("date") or "")[:10])
+    except ValueError:
+        return None
+
+
+def repeated_subject(d, c):
+    """The other emails of this brand whose subject is this one's, sent to an overlapping audience within
+    SUBJECT_WINDOW_DAYS. The design step writes its own subject, after the copy stage's hook ledger has
+    been checked, so two designs that borrow the same culture entry can land on the same line
+    (brand_a-nov-15 and brand_a-nov-58, both 'The barbershop debate nobody wins', same audience, two days
+    apart; email_lead, 2026-11-10: fix it at the root). Reads the brand's sibling cards; writes nothing."""
+    sub = _norm(((c.get("subjects") or [{}])[0] or {}).get("subject"))
+    day = _day(c)
+    if not sub or not day:
+        return []
+    segs = set(c.get("segments") or [])
+    out = []
+    for f in sorted(Path(d).parent.glob("*/klaviyo/card.json")):
+        if f.parent.parent == Path(d):
+            continue
+        try:
+            o = json.loads(f.read_text())
+        except (OSError, ValueError):
+            continue
+        if o.get("status") == "deprecated" or _norm(((o.get("subjects") or [{}])[0] or {}).get("subject")) != sub:
+            continue
+        oday = _day(o)
+        if not oday or abs((oday - day).days) > SUBJECT_WINDOW_DAYS:
+            continue
+        if segs and o.get("segments") and not segs & set(o.get("segments")):
+            continue
+        out.append(o.get("label") or f.parent.parent.name)
+    return out
 
 
 PACE, RETRIES = 5, 2                           # seconds between pages; asks again after a 429
@@ -52,7 +98,7 @@ def ask(url):
 
 def code(url, wait=time.sleep):
     """Pages are asked a few seconds apart, and a store that says 429 (too many requests) is asked again after
-    the wait it names, up to 90 seconds, twice at most (the team, 2026-10-27: the BRAND-A store answers 429 to a
+    the wait it names, up to 90 seconds, twice at most (email_lead, 2026-10-27: the brand_a store answers 429 to a
     check that visits the same page twelve times in a row). A Cloudflare challenge (403 with cf-mitigated:
     challenge) is never asked again: it wants a browser, and asking only deepens the block."""
     page = page_of(url)
@@ -69,10 +115,26 @@ def code(url, wait=time.sleep):
     return ANSWERS[page]
 
 
+def html_sha(page):
+    """The sha256 of a built email.html, so a final check names the build it checked; None when there is none."""
+    import hashlib
+    try:
+        return hashlib.sha256(Path(page).read_bytes()).hexdigest()
+    except OSError:
+        return None
+
+
+def is_fresh(card, page):
+    """The card's final check was made on this email.html. A rebuild with no check after it (a picture placed or
+    swapped through prepare.py or own_picture.py) left brand_b-nov-23 holding an older build's finding (email_lead,
+    2026-11-16); an older card that never recorded its build counts as not fresh."""
+    return bool(card.get("final_check")) and card.get("final_check_of") == html_sha(page)
+
+
 def holds(card):
-    """What holds an email, split by who fixes it (the team, 2026-10-28): a problem ABOUT A PICTURE is the designer's
-    and is the only thing that stops the team's Done; every other problem is the words or the product, which the team
-    settles before the email reaches the team, so it holds only the approver. Notes and by-hand rows hold no one.
+    """What holds an email, split by who fixes it (email_lead, 2026-10-28): a problem ABOUT A PICTURE is the designer's
+    and is the only thing that stops editor's Done; every other problem is the words or the product, which email_lead
+    settles before the email reaches editor, so it holds only the approver. Notes and by-hand rows hold no one.
     Returns (designer, approver), each a list of the problems' words, in order, without repeats."""
     rows = [x for x in (card.get("product_check") or []) + (card.get("final_check") or [])
             if x.get("result") not in ("ok", BY_HAND, NOTE)]
@@ -119,6 +181,9 @@ def main(dirs):
         sub = (c.get("subjects") or [{}])[0]
         row(bool(sub.get("subject")), "subject: %s" % sub.get("subject"))
         row(bool(sub.get("preview")), "preview: %s" % sub.get("preview"))
+        twin = repeated_subject(d, c)
+        row(not twin, "subject not used by another email to the same audience within %d days" % SUBJECT_WINDOW_DAYS
+            if not twin else "subject repeats %s (same audience, within %d days): change one" % (", ".join(twin), SUBJECT_WINDOW_DAYS))
         row("{% unsubscribe" in doc and "{% manage_preferences" in doc, "unsubscribe + preferences tags in the footer")
         imgs = re.findall(r"<img [^>]*>", doc)
         no_alt = [i for i in imgs if 'alt=""' in i and "foot.jpg" not in i]
@@ -144,13 +209,14 @@ def main(dirs):
                     rows.append(hand)
             else:
                 row(k == "200", "%s → %s" % (u.split("?")[0], k))
-        # A picture shared with another email is a NOTE, never a hold (the team, 2026-10-28): the same product
+        # A picture shared with another email is a NOTE, never a hold (email_lead, 2026-10-28): the same product
         # picture in several emails is fine, and the designer decides whether to swap it.
         rep = sorted(p for p in pictures_of(spec) if len(used[p]) > 1)
         rows.append({"result": "ok" if not rep else NOTE, "detail": "no picture shared with another email in this batch"
                      if not rep else "also used in %s: %s" % (
                          ", ".join(sorted({x for p in rep for x in used[p] if x != c["label"]})), ", ".join(rep))})
         c["final_check"] = rows
+        c["final_check_of"] = html_sha(f.parent / "email.html")   # which build these rows are about (2026-11-16)
         f.write_text(json.dumps(c, indent=1, ensure_ascii=False) + "\n")
         bad = [r["detail"] for r in rows if r["result"] not in ("ok", BY_HAND, NOTE)]
         hand = [r["detail"].split(" → ")[0] for r in rows if r["result"] == BY_HAND]

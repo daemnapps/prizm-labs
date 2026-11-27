@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Put a lane on every post in a feed, without a model.
 
-    python3 sift_rules.py --avatar brand-a--based-shop [--dry-run]
+    python3 sift_rules.py --avatar brand_a--based-shop [--dry-run]
 
 sift.py is the real sorter: it sends each post to a model and gets back a lane,
 a kind and a reason. This is its stand-in for when that call cannot be made —

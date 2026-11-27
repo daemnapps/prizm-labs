@@ -1,0 +1,31 @@
+{
+  "_note": "Empty on purpose. Fill this in for your brand \u2014 the keys below are what the tools read.",
+  "_shape_from": "the same file in a live brand",
+  "_example_keys": {
+    "file": "",
+    "read": "",
+    "note": "",
+    "faces": [
+      ""
+    ],
+    "drafts_host_page": "",
+    "drafts_host_note": "",
+    "original_file": {
+      "key": "",
+      "name": "",
+      "note": ""
+    },
+    "templates": [
+      {
+        "id": "\u2026",
+        "name": "\u2026",
+        "section": "\u2026",
+        "h": "\u2026",
+        "D": "\u2026",
+        "S": "\u2026",
+        "B": "\u2026",
+        "C": "\u2026"
+      }
+    ]
+  }
+}

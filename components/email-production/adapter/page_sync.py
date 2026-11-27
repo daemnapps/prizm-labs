@@ -1,13 +1,13 @@
-"""Keep a person's own emails page and the shared one in step, both ways (the team, 2026-10-22).
+"""Keep a person's own emails page and the shared one in step, both ways (email_lead, 2026-10-22).
 
-the team has her own live page (platform/views/viewers/designer/emails.html, cut by the team on 2026-10-22); the team keeps the shared
+editor has her own live page (platform/views/viewers/editor/emails.html, cut by developer on 2026-10-22); email_lead keeps the shared
 one (platform/views/viewers/_templates/emails.html and its preview page). Changes do not flow on their own, so each
 side records how far it has brought the other's in, in the person's sync record
 (platform/views/viewers/<person>/emails.sync.json), and this lists what is still to bring, from git:
 
-    page_sync.py status --person designer      what the shared page has that the team's page doesn't yet, and the reverse
-    page_sync.py mark --person designer --into own      after bringing the shared page's changes into the team's page
-    page_sync.py mark --person designer --into shared   after bringing the team's changes into the shared page
+    page_sync.py status --person editor      what the shared page has that editor's page doesn't yet, and the reverse
+    page_sync.py mark --person editor --into own      after bringing the shared page's changes into editor's page
+    page_sync.py mark --person editor --into shared   after bringing editor's changes into the shared page
 
 `mark` records the newest commit on the other side as brought in; run it only after every listed change is in (or
 left out on purpose and said so). Nothing here edits a page: the person's Claude makes the change (/page-change).
@@ -70,6 +70,31 @@ def status(person):
     for h, s in to_shared:
         print("  %s %s" % (h, s))
     return 0
+
+
+def still_to_bring(person):
+    """[(sha, subject)] shared-page changes this person's own page still lacks, leaving out a commit that changed
+    their own page in the same act (it is already there; only the record lags)."""
+    if not (REPO / own(person)[0]).is_file():
+        return []
+    mine = set(h for h, _ in commits(load(person).get("shared_brought_in", ""), own(person)))
+    return [(h, s) for h, s in commits(load(person).get("shared_brought_in", ""), SHARED) if h not in mine]
+
+
+def after_pull_note(person):
+    """The line a pull ends with when the person's own page is behind (email_lead, 2026-11-12: editor pulled through her
+    Done and the shared page's changes never reached her page, because only "start my email session" brought them
+    in). Empty when nothing is to bring. Never raises: a note, never in the way of the pull it follows."""
+    try:
+        left = still_to_bring(person) if person else []
+    except (SystemExit, Exception) as e:  # noqa: BLE001
+        return "PAGE · could not check the shared page's changes: %s" % str(e)[:200]
+    if not left:
+        return ""
+    lines = ["PAGE · the shared emails page has %d change(s) your own page doesn't have yet. Bring them in now, "
+             "unasked (adapter README, \"After every pull\"):" % len(left)]
+    lines += ["  %s %s" % (h, s) for h, s in left]
+    return "\n".join(lines)
 
 
 def mark(person, into):

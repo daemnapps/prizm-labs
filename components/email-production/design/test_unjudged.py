@@ -1,4 +1,4 @@
-"""A picture the judge never looked at is said, never silent (the team, 2026-10-28: Brand-B nov-04's two pictures were
+"""A picture the judge never looked at is said, never silent (email_lead, 2026-10-28: brand_b nov-04's two pictures were
 thrown away on 2026-10-21 because the judge had no credits, and the slots sat empty for a week with no reason given).
 
     /usr/bin/python3 test_unjudged.py
@@ -43,7 +43,7 @@ class MissingList(unittest.TestCase):
         self.assertIn("402", why[0])
         self.assertIn("Make the missing parts", why[0])
 
-    def test_a_picture_placed_without_the_judge_asks_eve_to_look(self):
+    def test_a_picture_placed_without_the_judge_asks_editor_to_look(self):
         why = self.run_with([{"photo": "run:media/x.png", "alt": "a woman", "unchecked": NO_CREDITS}])
         self.assertEqual(len(why), 1)
         self.assertIn("look at it yourself", why[0])
@@ -56,7 +56,7 @@ class MissingList(unittest.TestCase):
 
 
 class PersonInFrame(unittest.TestCase):
-    """The engine hands the brand's cast only when told a person is in the picture (the team, 2026-10-28)."""
+    """The engine hands the brand's cast only when told a person is in the picture (email_lead, 2026-10-28)."""
     def test_tomorrows_briefs_read_right(self):
         cases = [
             ({"todo": "A woman in her late fifties at her kitchen table", "brief": "No product in this frame."}, True),
@@ -73,7 +73,7 @@ class PersonInFrame(unittest.TestCase):
 
 class FillPicturesOnly(unittest.TestCase):
     def test_the_page_fill_leaves_words_prices_and_promises_alone(self):
-        """the team, 2026-10-28: Make the missing parts makes pictures and nothing else."""
+        """email_lead, 2026-10-28: Make the missing parts makes pictures and nothing else."""
         d = Path(tempfile.mkdtemp())
         (d / "design").mkdir()
         spec = {"sections": [{"s": "letter", "text": "[UNFILLED: the headline]"}, {"s": "product", "name": "X", "price": ""}]}
@@ -81,7 +81,7 @@ class FillPicturesOnly(unittest.TestCase):
         out = G.fill(d, brand="nobrand", lk={}, make_pictures=False, redesign=True, pictures_only=True)
         self.assertEqual(out["filled"], [])
         self.assertEqual(json.loads((d / "design" / "email.json").read_text()), spec)
-        self.assertTrue(all("the team's to settle" in g["ask"] for g in out["open"]))
+        self.assertTrue(all("email_lead's to settle" in g["ask"] for g in out["open"]))
 
 
 if __name__ == "__main__":

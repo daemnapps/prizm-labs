@@ -59,7 +59,7 @@ printed.** A link to an incomplete handoff costs more time than no link.
 - **Manifest per entry:** none — the drop's own `copy.csv`, `drop.csv` and
   per-ad `manifest.json` are the record. This adds no fourth list.
 
-**Public names** (the team, 2026-10-07, triage action 6 (declare public surfaces), provisionally on the owner's behalf — he sees it in the decision log and may strike any line). Besides the command and its exit code, a caller that loads `handoff.py` may use only these, all pure reads of a drop folder:
+**Public names** (the developer, 2026-10-07, triage action 6 (declare public surfaces), provisionally on the owner's behalf — he sees it in the decision log and may strike any line). Besides the command and its exit code, a caller that loads `handoff.py` may use only these, all pure reads of a drop folder:
 1. `ad_folders(d)` → the drop's ad folders, sorted, hidden ones skipped.
 2. `copy_rows(d)` → the rows of `copy.csv` as dicts (`[]` if absent).
 3. `links(d)` → `{name: url}` — the funnel links the ads point at, from `links.json`, else from the table in the drop's `HANDOFF.md`, else `{}`.

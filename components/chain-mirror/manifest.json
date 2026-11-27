@@ -211,6 +211,698 @@
     "to": "components/brandpath",
     "replace": true
    }
+  ],
+  "shared": [
+   {
+    "from": "components/marketing-doctrine",
+    "to": "components/marketing-doctrine",
+    "replace": true
+   },
+   {
+    "from": "components/language-layer",
+    "to": "components/language-layer",
+    "replace": true
+   },
+   {
+    "from": "components/research-gatherer",
+    "to": "components/research-gatherer",
+    "replace": true
+   },
+   {
+    "from": "components/GLOSSARY.md",
+    "to": "components/GLOSSARY.md"
+   }
+  ],
+  "brand-template": [
+   {
+    "from": "brands/_TEMPLATE",
+    "to": "brands/_TEMPLATE"
+   }
+  ],
+  "everything-else": [
+   {
+    "from": "components/3d-recipes",
+    "to": "components/3d-recipes",
+    "replace": true
+   },
+   {
+    "from": "components/3d",
+    "to": "components/3d",
+    "replace": true
+   },
+   {
+    "from": "components/ad-handoff",
+    "to": "components/ad-handoff",
+    "replace": true
+   },
+   {
+    "from": "components/ad-volume",
+    "to": "components/ad-volume",
+    "replace": true
+   },
+   {
+    "from": "components/apify",
+    "to": "components/apify",
+    "replace": true
+   },
+   {
+    "from": "components/brand-finder",
+    "to": "components/brand-finder",
+    "replace": true
+   },
+   {
+    "from": "components/chain-runner",
+    "to": "components/chain-runner",
+    "replace": true
+   },
+   {
+    "from": "components/creative-diversity",
+    "to": "components/creative-diversity",
+    "replace": true
+   },
+   {
+    "from": "components/creative-queue",
+    "to": "components/creative-queue",
+    "replace": true
+   },
+   {
+    "from": "components/culture",
+    "to": "components/culture",
+    "replace": true
+   },
+   {
+    "from": "components/distinct-six",
+    "to": "components/distinct-six",
+    "replace": true
+   },
+   {
+    "from": "components/editor-skills",
+    "to": "components/editor-skills",
+    "replace": true
+   },
+   {
+    "from": "components/elements",
+    "to": "components/elements",
+    "replace": true
+   },
+   {
+    "from": "components/email-production",
+    "to": "components/email-production",
+    "replace": true
+   },
+   {
+    "from": "components/gdrive-creator",
+    "to": "components/gdrive-creator",
+    "replace": true
+   },
+   {
+    "from": "components/identity-training",
+    "to": "components/identity-training",
+    "replace": true
+   },
+   {
+    "from": "components/intake",
+    "to": "components/intake",
+    "replace": true
+   },
+   {
+    "from": "components/kalodata",
+    "to": "components/kalodata",
+    "replace": true
+   },
+   {
+    "from": "components/local-studio",
+    "to": "components/local-studio",
+    "replace": true
+   },
+   {
+    "from": "components/marketing-calendar",
+    "to": "components/marketing-calendar",
+    "replace": true
+   },
+   {
+    "from": "components/marketing-chain-checks",
+    "to": "components/marketing-chain-checks",
+    "replace": true
+   },
+   {
+    "from": "components/media-buying",
+    "to": "components/media-buying",
+    "replace": true
+   },
+   {
+    "from": "components/media-render",
+    "to": "components/media-render",
+    "replace": true
+   },
+   {
+    "from": "components/meta-strategy",
+    "to": "components/meta-strategy",
+    "replace": true
+   },
+   {
+    "from": "components/objects",
+    "to": "components/objects",
+    "replace": true
+   },
+   {
+    "from": "components/page-features",
+    "to": "components/page-features",
+    "replace": true
+   },
+   {
+    "from": "components/page-picture-review",
+    "to": "components/page-picture-review",
+    "replace": true
+   },
+   {
+    "from": "components/page-production",
+    "to": "components/page-production",
+    "replace": true
+   },
+   {
+    "from": "components/page-teardown",
+    "to": "components/page-teardown",
+    "replace": true
+   },
+   {
+    "from": "components/page-writing",
+    "to": "components/page-writing",
+    "replace": true
+   },
+   {
+    "from": "components/profiles",
+    "to": "components/profiles",
+    "replace": true
+   },
+   {
+    "from": "components/qc-checks",
+    "to": "components/qc-checks",
+    "replace": true
+   },
+   {
+    "from": "components/quality-checks",
+    "to": "components/quality-checks",
+    "replace": true
+   },
+   {
+    "from": "components/reference-edit",
+    "to": "components/reference-edit",
+    "replace": true
+   },
+   {
+    "from": "components/review",
+    "to": "components/review",
+    "replace": true
+   },
+   {
+    "from": "components/session-teardown",
+    "to": "components/session-teardown",
+    "replace": true
+   },
+   {
+    "from": "components/stage-check",
+    "to": "components/stage-check",
+    "replace": true
+   },
+   {
+    "from": "components/stage-handoff",
+    "to": "components/stage-handoff",
+    "replace": true
+   },
+   {
+    "from": "components/swipe-organic",
+    "to": "components/swipe-organic",
+    "replace": true,
+    "exclude": [
+     "(^|/)(records|product-pictures)/"
+    ]
+   },
+   {
+    "from": "components/swipe-paid",
+    "to": "components/swipe-paid",
+    "replace": true,
+    "exclude": [
+     "^components/swipe-paid/(?!(machine|tools|prompts|tests|definitions|context|page)/)[^/]+/"
+    ]
+   },
+   {
+    "from": "components/trendtrack",
+    "to": "components/trendtrack",
+    "replace": true
+   },
+   {
+    "from": "components/triage",
+    "to": "components/triage",
+    "replace": true
+   },
+   {
+    "from": "components/video-doctrine",
+    "to": "components/video-doctrine",
+    "replace": true
+   },
+   {
+    "from": "components/workflow-teardown",
+    "to": "components/workflow-teardown",
+    "replace": true,
+    "exclude": [
+     "(^|/)sources/"
+    ]
+   },
+   {
+    "from": "components/world-skit",
+    "to": "components/world-skit",
+    "replace": true
+   }
+  ],
+  "skills": [
+   {
+    "from": ".claude/skills/3d-print",
+    "to": ".claude/skills/3d-print",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/ad-handoff",
+    "to": ".claude/skills/ad-handoff",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/ad-review",
+    "to": ".claude/skills/ad-review",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/ad-variations",
+    "to": ".claude/skills/ad-variations",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/ask-first",
+    "to": ".claude/skills/ask-first",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/asset-index",
+    "to": ".claude/skills/asset-index",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/atlas-view",
+    "to": ".claude/skills/atlas-view",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/avatar-profile",
+    "to": ".claude/skills/avatar-profile",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/brief-handoff",
+    "to": ".claude/skills/brief-handoff",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/caption-look",
+    "to": ".claude/skills/caption-look",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/cast-deslop",
+    "to": ".claude/skills/cast-deslop",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/casting",
+    "to": ".claude/skills/casting",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/copywriter",
+    "to": ".claude/skills/copywriter",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/creative-strategist",
+    "to": ".claude/skills/creative-strategist",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/design-bench",
+    "to": ".claude/skills/design-bench",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/design-mock",
+    "to": ".claude/skills/design-mock",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/dev-issues",
+    "to": ".claude/skills/dev-issues",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/email-design",
+    "to": ".claude/skills/email-design",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/email-production",
+    "to": ".claude/skills/email-production",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/email-review",
+    "to": ".claude/skills/email-review",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/email-upload",
+    "to": ".claude/skills/email-upload",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/focus",
+    "to": ".claude/skills/focus",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/frame-edit",
+    "to": ".claude/skills/frame-edit",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/gut-check",
+    "to": ".claude/skills/gut-check",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/image-draft",
+    "to": ".claude/skills/image-draft",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/image-edit",
+    "to": ".claude/skills/image-edit",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/image-production",
+    "to": ".claude/skills/image-production",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/image-sequence",
+    "to": ".claude/skills/image-sequence",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/image-teardown",
+    "to": ".claude/skills/image-teardown",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/image-variation",
+    "to": ".claude/skills/image-variation",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/image-writing",
+    "to": ".claude/skills/image-writing",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/marketing-calendar",
+    "to": ".claude/skills/marketing-calendar",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/media-buying",
+    "to": ".claude/skills/media-buying",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/meta-upload",
+    "to": ".claude/skills/meta-upload",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/mini-compare",
+    "to": ".claude/skills/mini-compare",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/mini-debug",
+    "to": ".claude/skills/mini-debug",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/mini-list",
+    "to": ".claude/skills/mini-list",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/mini-run",
+    "to": ".claude/skills/mini-run",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/mini-status",
+    "to": ".claude/skills/mini-status",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/naming",
+    "to": ".claude/skills/naming",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/narrator-montage",
+    "to": ".claude/skills/narrator-montage",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/outlier-brief",
+    "to": ".claude/skills/outlier-brief",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/page-catch-up",
+    "to": ".claude/skills/page-catch-up",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/page-change",
+    "to": ".claude/skills/page-change",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/page-compare",
+    "to": ".claude/skills/page-compare",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/page-draft",
+    "to": ".claude/skills/page-draft",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/page-list",
+    "to": ".claude/skills/page-list",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/page-live",
+    "to": ".claude/skills/page-live",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/page-server",
+    "to": ".claude/skills/page-server",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/page-share",
+    "to": ".claude/skills/page-share",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/personal-view",
+    "to": ".claude/skills/personal-view",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/product-research",
+    "to": ".claude/skills/product-research",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/qc-check",
+    "to": ".claude/skills/qc-check",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/recut",
+    "to": ".claude/skills/recut",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/remake-clip",
+    "to": ".claude/skills/remake-clip",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/research-round",
+    "to": ".claude/skills/research-round",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/review-request",
+    "to": ".claude/skills/review-request",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/review-status",
+    "to": ".claude/skills/review-status",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/slots",
+    "to": ".claude/skills/slots",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/stage-check",
+    "to": ".claude/skills/stage-check",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/stage-handoff",
+    "to": ".claude/skills/stage-handoff",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/statics-sprint",
+    "to": ".claude/skills/statics-sprint",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/swipe-intake",
+    "to": ".claude/skills/swipe-intake",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/swipe-paid",
+    "to": ".claude/skills/swipe-paid",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/system-fit",
+    "to": ".claude/skills/system-fit",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/system-ready",
+    "to": ".claude/skills/system-ready",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/system-research",
+    "to": ".claude/skills/system-research",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/system-review",
+    "to": ".claude/skills/system-review",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/task-breakdown",
+    "to": ".claude/skills/task-breakdown",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/teardown-copy",
+    "to": ".claude/skills/teardown-copy",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/teardown-email",
+    "to": ".claude/skills/teardown-email",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/teardown-page",
+    "to": ".claude/skills/teardown-page",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/trendtrack",
+    "to": ".claude/skills/trendtrack",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/triage",
+    "to": ".claude/skills/triage",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/video-briefs",
+    "to": ".claude/skills/video-briefs",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/video-edit",
+    "to": ".claude/skills/video-edit",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/video-production",
+    "to": ".claude/skills/video-production",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/video-system-sync",
+    "to": ".claude/skills/video-system-sync",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/video-teardown",
+    "to": ".claude/skills/video-teardown",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/video-writing",
+    "to": ".claude/skills/video-writing",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/voice-pull",
+    "to": ".claude/skills/voice-pull",
+    "replace": true
+   },
+   {
+    "from": ".claude/skills/winners",
+    "to": ".claude/skills/winners",
+    "replace": true
+   }
   ]
- }
+ },
+ "_company_only": [
+  "atlas",
+  "component-candidates",
+  "cs-metrics",
+  "eu-customs-faq-assistant",
+  "feedback-forms",
+  "funnel-tracking",
+  "keys",
+  "metrics",
+  "promo-calendar",
+  "promo-pack",
+  "stock-runway",
+  "store-page-design",
+  "storefront-promo-edit",
+  "subscription-compliance",
+  "system-integration"
+ ]
 }

@@ -1,0 +1,868 @@
+{
+ "title": "Run detail feature catalog",
+ "schema": 1,
+ "status": "draft",
+ "checked_against": "ai-workspace main 305159c83b, 2026-10-21",
+ "versions": {
+  "A": "new-workflow-design/builds/design-bench/runs/mini-runs-run-detail-merge-1020b/out/claude-fable-5-1.rebuilt.html",
+  "B": "new-workflow-design/builds/design-bench/runs/mini-runs-run-detail-merge-1020/out/gpt-6-astra.html"
+ },
+ "state_words": {
+  "wired": "the data exists on main today",
+  "after-card": "needs the Drive-id cards folded 2026-10-21",
+  "not-built": "no data anywhere yet"
+ },
+ "kinds": {
+  "data": {
+   "letter": "D",
+   "name": "Data",
+   "means": "a value saved in a data file, shown as it is"
+  },
+  "rule": {
+   "letter": "R",
+   "name": "Rule",
+   "means": "the page works it out from data by its own rule; the rule lives in the page, so two pages can disagree"
+  },
+  "media": {
+   "letter": "M",
+   "name": "Pictures and video",
+   "means": "a picture, clip or voice file kept on Drive"
+  },
+  "layout": {
+   "letter": "L",
+   "name": "Layout",
+   "means": "how the page is arranged, ordered or navigated, or a line of help; no data of its own"
+  },
+  "action": {
+   "letter": "A",
+   "name": "Action",
+   "means": "a button that changes something; it runs a component's own command"
+  }
+ },
+ "features": [
+  {
+   "n": 1,
+   "name": "Pick a run",
+   "kind": "layout",
+   "state": "wired",
+   "status": "draft",
+   "place": "The mini's list of runs",
+   "source": {
+    "component": "mini-worker (platform)",
+    "file": "platform/data/mini-runs/index.json",
+    "field": "runs[]"
+   },
+   "note": "Version A uses a dropdown. Version B uses tabs that show each run's state at a glance.",
+   "where": {
+    "A": {
+     "sel": ".switch",
+     "text": null
+    },
+    "B": {
+     "sel": ".switcher",
+     "text": null
+    }
+   }
+  },
+  {
+   "n": 2,
+   "name": "When the data was saved",
+   "kind": "data",
+   "state": "wired",
+   "status": "draft",
+   "place": "The mini's list of runs, its saved time",
+   "source": {
+    "component": "mini-worker (platform)",
+    "file": "platform/data/mini-runs/index.json",
+    "field": "as_of"
+   },
+   "note": "Both pages say 'saved snapshot, not live'. The list is rebuilt at most every 5 minutes, and only when something changed.",
+   "where": {
+    "A": {
+     "sel": "#snap",
+     "text": null
+    },
+    "B": {
+     "sel": "#snapshot",
+     "text": null
+    }
+   }
+  },
+  {
+   "n": 3,
+   "name": "Back to the run list",
+   "kind": "layout",
+   "state": "wired",
+   "status": "draft",
+   "place": "No data. A link back to the list.",
+   "source": null,
+   "note": "Off the dashboard there is no shared run list page. A personal page needs its own list, built from feature 1's data.",
+   "where": {
+    "A": {
+     "sel": ".crumbs",
+     "text": null
+    },
+    "B": {
+     "sel": ".back",
+     "text": null
+    }
+   }
+  },
+  {
+   "n": 4,
+   "name": "What the work is",
+   "kind": "data",
+   "state": "wired",
+   "status": "draft",
+   "place": "The run's detail file: brand, step, work name, route",
+   "source": {
+    "component": "mini-worker (platform)",
+    "file": "platform/data/mini-runs/runs/<run>.json",
+    "field": "brand, component, request.args.label, request.args.route"
+   },
+   "note": "",
+   "where": {
+    "A": {
+     "sel": ".run-head .eyebrow",
+     "text": null
+    },
+    "B": {
+     "sel": ".work-title",
+     "text": null
+    }
+   }
+  },
+  {
+   "n": 5,
+   "name": "Who filed it, who owns the work",
+   "kind": "data",
+   "state": "wired",
+   "status": "draft",
+   "place": "Who filed: the run's detail file. Who owns: the mini's run record.",
+   "source": {
+    "component": "mini-worker (platform)",
+    "file": "platform/data/mini-runs/runs/<run>.json · platform/data/records/lab-runs/<person>/<run>.json",
+    "field": "filed_by · owner"
+   },
+   "note": "The owner is only in the mini's run record, not in the detail file. A page needs both files, or the detail file gains an owner field.",
+   "where": {
+    "A": {
+     "sel": ".run-head .lead",
+     "text": null
+    },
+    "B": {
+     "sel": ".receipt > div:nth-child(1) dd",
+     "text": null
+    }
+   }
+  },
+  {
+   "n": 6,
+   "name": "The run's state",
+   "kind": "data",
+   "state": "wired",
+   "status": "draft",
+   "place": "The run's detail file, its saved state",
+   "source": {
+    "component": "mini-worker (platform)",
+    "file": "platform/data/mini-runs/runs/<run>.json",
+    "field": "result.status"
+   },
+   "note": "Saved words: done, failed, refused, held, running. Both pages turn 'failed' into plainer states (Stopped, Can't run here) by their own reading.",
+   "where": {
+    "A": {
+     "sel": ".state-wrap .state",
+     "text": null
+    },
+    "B": {
+     "sel": ".outcome-line .badge",
+     "text": null
+    }
+   }
+  },
+  {
+   "n": 7,
+   "name": "What kind of stop",
+   "kind": "rule",
+   "state": "wired",
+   "status": "draft",
+   "place": "Worked out by the page from the run's last lines",
+   "source": {
+    "component": "the page itself",
+    "file": "platform/data/mini-runs/runs/<run>.json",
+    "field": "result.reason, result.tail (read by the page's rules)"
+   },
+   "note": "Not saved anywhere. Each page has its own rules, so two pages can disagree.",
+   "where": {
+    "A": {
+     "sel": ".hero-grid .cat",
+     "text": null
+    },
+    "B": {
+     "sel": ".outcome-line .category",
+     "text": null
+    }
+   }
+  },
+  {
+   "n": 8,
+   "name": "The headline in plain words",
+   "kind": "rule",
+   "state": "wired",
+   "status": "draft",
+   "place": "Worked out by the page from the run's last lines",
+   "source": {
+    "component": "the page itself",
+    "file": "platform/data/mini-runs/runs/<run>.json",
+    "field": "result.reason, result.tail"
+   },
+   "note": "",
+   "where": {
+    "A": {
+     "sel": ".hero-grid .big",
+     "text": null
+    },
+    "B": {
+     "sel": "#outcome-title",
+     "text": null
+    }
+   }
+  },
+  {
+   "n": 9,
+   "name": "Who moves it on, and what to do",
+   "kind": "rule",
+   "state": "wired",
+   "status": "draft",
+   "place": "Worked out by the page",
+   "source": {
+    "component": "the page itself",
+    "file": "platform/data/mini-runs/runs/<run>.json",
+    "field": "result.tail + the owner (feature 5)"
+   },
+   "note": "Version A sends machine faults to the developer and creative ones to the work's owner. Version B marks every run 'Needs you' in red.",
+   "where": {
+    "A": {
+     "sel": "aside.next",
+     "text": null
+    },
+    "B": {
+     "sel": "aside.next-person",
+     "text": null
+    }
+   }
+  },
+  {
+   "n": 10,
+   "name": "How sure the page is, and when to rethink",
+   "kind": "rule",
+   "state": "wired",
+   "status": "draft",
+   "place": "Worked out by the page",
+   "source": null,
+   "note": "",
+   "where": {
+    "A": {
+     "sel": "aside.next .conf",
+     "text": null
+    },
+    "B": {
+     "sel": ".next-person .judgment",
+     "text": null
+    }
+   }
+  },
+  {
+   "n": 11,
+   "name": "How long it took, and how long it waited",
+   "kind": "data",
+   "state": "wired",
+   "status": "draft",
+   "place": "The run's detail file, its times",
+   "source": {
+    "component": "mini-worker (platform)",
+    "file": "platform/data/mini-runs/runs/<run>.json",
+    "field": "timeline.filed, timeline.picked, timeline.started, timeline.ended"
+   },
+   "note": "Both pages were drawn before the detail file had a pickup time. A uses the start time as pickup; B says pickup is not supplied. The file has it now.",
+   "where": {
+    "A": {
+     "sel": ".facts > div:nth-child(2)",
+     "text": null
+    },
+    "B": {
+     "sel": ".receipt > div:nth-child(2)",
+     "text": null
+    }
+   }
+  },
+  {
+   "n": 12,
+   "name": "Cost in dollars",
+   "kind": "data",
+   "state": "not-built",
+   "status": "draft",
+   "place": "Nowhere yet",
+   "source": null,
+   "note": "No dollar figure is saved anywhere. The pages show one typed from a chat thread. Needs token use (feature 27) times the model rates in components/models/models.json, where many models are still unpriced. A run on someone's Claude plan is not billed per dollar.",
+   "where": {
+    "A": {
+     "sel": ".facts > div:nth-child(3)",
+     "text": null
+    },
+    "B": {
+     "sel": ".receipt > div:nth-child(3)",
+     "text": null
+    }
+   }
+  },
+  {
+   "n": 13,
+   "name": "Whose Claude plan paid",
+   "kind": "data",
+   "state": "wired",
+   "status": "draft",
+   "place": "The run's detail file, the plan it used",
+   "source": {
+    "component": "mini-worker (platform)",
+    "file": "platform/data/mini-runs/runs/<run>.json",
+    "field": "plan"
+   },
+   "note": "Empty for 129 of 153 runs, the older ones. Set on runs since per-person tokens.",
+   "where": {
+    "A": {
+     "sel": ".facts > div:nth-child(1) small",
+     "text": null
+    },
+    "B": {
+     "sel": ".receipt > div:nth-child(1) small",
+     "text": null
+    }
+   }
+  },
+  {
+   "n": 14,
+   "name": "How many files it saved",
+   "kind": "data",
+   "state": "wired",
+   "status": "draft",
+   "place": "The mini's run record (full count); the detail file lists up to 50",
+   "source": {
+    "component": "mini-worker (platform)",
+    "file": "platform/data/records/lab-runs/<person>/<run>.json · platform/data/mini-runs/runs/<run>.json",
+    "field": "files_written · outputs.files"
+   },
+   "note": "The detail file lists at most 50 paths. The full count is in the mini's run record.",
+   "where": {
+    "A": {
+     "sel": ".facts > div:nth-child(4)",
+     "text": null
+    },
+    "B": {
+     "sel": ".receipt > div:nth-child(4)",
+     "text": null
+    }
+   }
+  },
+  {
+   "n": 15,
+   "name": "Section list and order",
+   "kind": "layout",
+   "state": "wired",
+   "status": "draft",
+   "place": "No data. The page's own layout.",
+   "source": null,
+   "note": "Version A: steps, inputs, saved, why it stopped, cost, ask. Version B puts why it stopped second, then inputs, steps, saved, cost, ask.",
+   "where": {
+    "A": {
+     "sel": "nav.jump",
+     "text": null
+    },
+    "B": {
+     "sel": "nav.contents",
+     "text": null
+    }
+   }
+  },
+  {
+   "n": 16,
+   "name": "Step by step",
+   "kind": "data",
+   "state": "not-built",
+   "status": "draft",
+   "place": "The run's detail file has the field, but it is empty",
+   "source": {
+    "component": "mini-worker (platform)",
+    "file": "platform/data/mini-runs/runs/<run>.json",
+    "field": "steps"
+   },
+   "note": "Empty for all 153 runs: the steps print no step lines. Both pages rebuild steps from saved output lines instead. Needs each step to print a step line.",
+   "where": {
+    "A": {
+     "sel": "#steps .tl",
+     "text": null
+    },
+    "B": {
+     "sel": "#steps .events",
+     "text": null
+    }
+   }
+  },
+  {
+   "n": 17,
+   "name": "What comes after this run",
+   "kind": "rule",
+   "state": "not-built",
+   "status": "draft",
+   "place": "Nowhere yet",
+   "source": null,
+   "note": "Both pages guess the next station. No run is linked to the next run of the same work. Needs a link from one run to the next.",
+   "where": {
+    "A": {
+     "sel": "#steps .aside",
+     "text": null
+    },
+    "B": {
+     "sel": "#steps .next-station",
+     "text": null
+    }
+   }
+  },
+  {
+   "n": 18,
+   "name": "Which copies it used, and how old",
+   "kind": "data",
+   "state": "wired",
+   "status": "draft",
+   "place": "The run's detail file, its input lines",
+   "source": {
+    "component": "mini-worker (platform)",
+    "file": "platform/data/mini-runs/runs/<run>.json",
+    "field": "sources"
+   },
+   "note": "12 of 153 runs have them: the runs since the station-path runner (LD-53) started writing them.",
+   "where": {
+    "A": {
+     "sel": "#inputs .cb",
+     "text": null
+    },
+    "B": {
+     "sel": "#inputs .chapter-body",
+     "text": null
+    }
+   }
+  },
+  {
+   "n": 19,
+   "name": "Files to read first",
+   "kind": "rule",
+   "state": "wired",
+   "status": "draft",
+   "place": "The run's detail file, its saved files",
+   "source": {
+    "component": "mini-worker (platform)",
+    "file": "platform/data/mini-runs/runs/<run>.json",
+    "field": "outputs.files"
+   },
+   "note": "The page picks which files matter by their names.",
+   "where": {
+    "A": {
+     "sel": "#outputs .rl",
+     "text": null
+    },
+    "B": {
+     "sel": "#saved .reading-files",
+     "text": null
+    }
+   }
+  },
+  {
+   "n": 20,
+   "name": "Where the outputs went on Drive",
+   "kind": "data",
+   "state": "after-card",
+   "status": "draft",
+   "place": "A Drive record each run will write (carded today)",
+   "source": {
+    "component": "run-kit + mini-worker",
+    "file": "<run folder>/drive.json → platform/data/mini-runs/runs/<run>.json",
+    "field": "outputs.drive.folder, outputs.drive.folder_id"
+   },
+   "note": "Today only an output line says 'handed on … to Shared Assets/…', and that folder's name can differ from the run's name. The Drive-id cards fix both.",
+   "where": {
+    "A": {
+     "sel": "#outputs .shelf",
+     "text": null
+    },
+    "B": {
+     "sel": "#saved .shelf",
+     "text": null
+    }
+   }
+  },
+  {
+   "n": 21,
+   "name": "The mini's folder and the repo copy",
+   "kind": "data",
+   "state": "wired",
+   "status": "draft",
+   "place": "The run's detail file and the mini's run record",
+   "source": {
+    "component": "mini-worker (platform)",
+    "file": "platform/data/mini-runs/runs/<run>.json · platform/data/records/lab-runs/<person>/<run>.json",
+    "field": "outputs.out · text_mirror.dir"
+   },
+   "note": "",
+   "where": {
+    "A": {
+     "sel": "#outputs .shelf:nth-of-type(2)",
+     "text": null
+    },
+    "B": {
+     "sel": "#saved .shelf:nth-of-type(2)",
+     "text": null
+    }
+   }
+  },
+  {
+   "n": 22,
+   "name": "Other tries at the same work",
+   "kind": "data",
+   "state": "wired",
+   "status": "draft",
+   "place": "The run's detail file, its work name, matched across runs",
+   "source": {
+    "component": "mini-worker (platform)",
+    "file": "platform/data/mini-runs/runs/<run>.json",
+    "field": "request.args.label"
+   },
+   "note": "The run list does not carry the work name, so a page must open every detail file to find the other tries.",
+   "where": {
+    "A": {
+     "sel": "#outputs .tb",
+     "text": null
+    },
+    "B": {
+     "sel": "#saved .related",
+     "text": null
+    }
+   }
+  },
+  {
+   "n": 23,
+   "name": "Why it stopped, in the run's own words",
+   "kind": "data",
+   "state": "wired",
+   "status": "draft",
+   "place": "The run's detail file, its reason and last lines",
+   "source": {
+    "component": "mini-worker (platform)",
+    "file": "platform/data/mini-runs/runs/<run>.json",
+    "field": "result.reason, result.tail"
+   },
+   "note": "",
+   "where": {
+    "A": {
+     "sel": "#why .ev",
+     "text": null
+    },
+    "B": {
+     "sel": "#stop .panel",
+     "text": null
+    }
+   }
+  },
+  {
+   "n": 24,
+   "name": "The stop, item by item",
+   "kind": "data",
+   "state": "wired",
+   "status": "draft",
+   "place": "The audit file the run wrote, or the run's last lines",
+   "source": {
+    "component": "mini-worker (platform)",
+    "file": "platform/data/records/lab-runs/<person>/<run>/<work>/AUDIT-HOLD.md · platform/data/mini-runs/runs/<run>.json",
+    "field": "failed checks · result.tail"
+   },
+   "note": "Failed audit checks come from the audit file, copied into git as text. Unapproved clips come from the last lines, which keep at most 20.",
+   "where": {
+    "A": {
+     "sel": "#why .ev table",
+     "text": null
+    },
+    "B": {
+     "sel": "#stop table",
+     "text": null
+    }
+   }
+  },
+  {
+   "n": 25,
+   "name": "Things the page noticed",
+   "kind": "rule",
+   "state": "wired",
+   "status": "draft",
+   "place": "Worked out by the page from the run's last lines",
+   "source": {
+    "component": "the page itself",
+    "file": "platform/data/mini-runs/runs/<run>.json",
+    "field": "result.tail"
+   },
+   "note": "Contradictions, and files that won't open on another machine. Shows only on runs that have them.",
+   "where": {
+    "A": {
+     "sel": "#why .find",
+     "text": null
+    },
+    "B": {
+     "sel": "#stop .finding",
+     "text": null
+    }
+   }
+  },
+  {
+   "n": 26,
+   "name": "The run's last lines",
+   "kind": "data",
+   "state": "wired",
+   "status": "draft",
+   "place": "The run's detail file, its last lines",
+   "source": {
+    "component": "mini-worker (platform)",
+    "file": "platform/data/mini-runs/runs/<run>.json",
+    "field": "result.tail"
+   },
+   "note": "At most 20 lines. The mini already drops Python warnings.",
+   "where": {
+    "A": {
+     "sel": "#why details.log",
+     "text": null
+    },
+    "B": {
+     "sel": "#stop details.detail-row",
+     "text": "Saved output"
+    }
+   }
+  },
+  {
+   "n": 27,
+   "name": "Claude use by model",
+   "kind": "data",
+   "state": "wired",
+   "status": "draft",
+   "place": "The run's detail file, its Claude calls and token use",
+   "source": {
+    "component": "mini-worker (platform)",
+    "file": "platform/data/mini-runs/runs/<run>.json",
+    "field": "cost.claude_calls, cost.claude_usage"
+   },
+   "note": "Token use is measured only on runs that used a person's token. Login runs count calls only.",
+   "where": {
+    "A": {
+     "sel": "#cost table.ut",
+     "text": null
+    },
+    "B": {
+     "sel": "#use table.usage",
+     "text": null
+    }
+   }
+  },
+  {
+   "n": 28,
+   "name": "Ask your own Claude",
+   "kind": "layout",
+   "state": "wired",
+   "status": "draft",
+   "place": "The run list names each run's detail file",
+   "source": {
+    "component": "mini-worker (platform)",
+    "file": "platform/data/mini-runs/index.json",
+    "field": "runs[].detail_path"
+   },
+   "note": "Both pages call the file 'proposed'. It is published now, one per run.",
+   "where": {
+    "A": {
+     "sel": "#ask .ask",
+     "text": null
+    },
+    "B": {
+     "sel": "#ask .ask-card",
+     "text": null
+    }
+   }
+  },
+  {
+   "n": 29,
+   "name": "The chat thread about this run",
+   "kind": "data",
+   "state": "not-built",
+   "status": "draft",
+   "place": "The run's detail file has the field, but it is empty",
+   "source": {
+    "component": "mini-worker (platform)",
+    "file": "platform/data/mini-runs/runs/<run>.json",
+    "field": "links.thread"
+   },
+   "note": "No run has one: chat thread folders are named after people and sessions, not runs.",
+   "where": {
+    "A": {
+     "sel": "#ask .askf > div:first-child",
+     "text": null
+    },
+    "B": {
+     "sel": "#ask .ask-bottom > div:first-child",
+     "text": null
+    }
+   }
+  },
+  {
+   "n": 30,
+   "name": "Record details",
+   "kind": "data",
+   "state": "wired",
+   "status": "draft",
+   "place": "The run's detail file and the mini's run record",
+   "source": {
+    "component": "mini-worker (platform)",
+    "file": "platform/data/mini-runs/runs/<run>.json · platform/data/records/lab-runs/<person>/<run>.json",
+    "field": "label, request.args, timeline.slot · sha, exit_code"
+   },
+   "note": "Code version and exit code are only in the mini's run record.",
+   "where": {
+    "A": {
+     "sel": "details.rec",
+     "text": null
+    },
+    "B": {
+     "sel": "details.detail-row",
+     "text": "Saved status"
+    }
+   }
+  },
+  {
+   "n": 31,
+   "name": "Tap a number for what it means",
+   "kind": "layout",
+   "state": "wired",
+   "status": "draft",
+   "place": "No data. The page explains its own numbers.",
+   "source": null,
+   "note": "Both pages explain every number when you tap it.",
+   "where": {
+    "A": {
+     "sel": "#outputs .total",
+     "text": null
+    },
+    "B": {
+     "sel": "#saved .display",
+     "text": null
+    }
+   }
+  },
+  {
+   "n": 32,
+   "name": "Pictures the run made",
+   "kind": "media",
+   "state": "after-card",
+   "status": "draft",
+   "place": "Drive, found through the run's Drive record (carded today)",
+   "source": {
+    "component": "run-kit + gdrive-creator",
+    "file": "<run folder>/drive.json → platform/data/mini-runs/runs/<run>.json",
+    "field": "outputs.drive.files[kind=image].id"
+   },
+   "note": "Shown as small Drive previews, fetched with the viewer's own Drive key by their own page server.",
+   "where": {
+    "A": null,
+    "B": null
+   }
+  },
+  {
+   "n": 33,
+   "name": "Play the clips and the voice",
+   "kind": "media",
+   "state": "after-card",
+   "status": "draft",
+   "place": "Drive, found through the run's Drive record (carded today)",
+   "source": {
+    "component": "run-kit + gdrive-creator",
+    "file": "<run folder>/drive.json → platform/data/mini-runs/runs/<run>.json",
+    "field": "outputs.drive.files[kind=video|audio].id"
+   },
+   "note": "Full files stream once and are kept on the viewer's machine.",
+   "where": {
+    "A": null,
+    "B": null
+   }
+  },
+  {
+   "n": 34,
+   "name": "The swipe beside the result",
+   "kind": "media",
+   "state": "after-card",
+   "status": "draft",
+   "place": "The run's input lines name the swipe video's Drive path",
+   "source": {
+    "component": "mini-worker (platform)",
+    "file": "platform/data/mini-runs/runs/<run>.json",
+    "field": "sources ('source: Shared Assets …/source.mp4')"
+   },
+   "note": "The swipe video is named by Drive path only. It needs a Drive id, like the outputs.",
+   "where": {
+    "A": null,
+    "B": null
+   }
+  },
+  {
+   "n": 35,
+   "name": "Live progress while it runs",
+   "kind": "data",
+   "state": "not-built",
+   "status": "draft",
+   "place": "Nowhere yet",
+   "source": null,
+   "note": "Needs step lines (feature 16) and a faster refresh than the run list's 5 minutes.",
+   "where": {
+    "A": null,
+    "B": null
+   }
+  },
+  {
+   "n": 36,
+   "name": "Is the mini working right now",
+   "kind": "data",
+   "state": "not-built",
+   "status": "draft",
+   "place": "The run list has the field, but off the dashboard it says nothing",
+   "source": {
+    "component": "mini-worker (platform)",
+    "file": "platform/data/mini-runs/index.json",
+    "field": "workers[].alive"
+   },
+   "note": "Each slot says 'needs the dashboard': the heartbeat is served only by the dashboard. A personal page needs it in the file.",
+   "where": {
+    "A": null,
+    "B": null
+   }
+  },
+  {
+   "n": 37,
+   "name": "Run it again",
+   "kind": "action",
+   "state": "not-built",
+   "status": "draft",
+   "place": "A new mini run, filed the way the mini-run skill files one",
+   "source": {
+    "component": "mini-run skill",
+    "file": "platform/data/records/workflow-requests/<stamp>--<person>--<label>.json",
+    "field": "a new request record"
+   },
+   "note": "No button on either page: pages only read. A button would file the request through the mini-run skill's own command, never write records itself.",
+   "where": {
+    "A": null,
+    "B": null
+   }
+  }
+ ]
+}

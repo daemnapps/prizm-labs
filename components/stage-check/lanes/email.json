@@ -7,7 +7,7 @@
   {"id": "month", "name": "the calendar month", "checks": ["file:runs/marketing-calendar/{brand}/{month}/slots.json"], "fix": null, "why_no_fix": "the month is planned on the calendar, a person's review"},
   {"id": "copy", "name": "the email's stages", "checks": ["file:{email_run}/stage9--brief.md"], "fix": null, "why_no_fix": "re-run through run_month.py --only <slot>, which knows the slot's arguments"},
   {"id": "built", "name": "built + delivery check", "checks": ["file:{email_run}/deliverable/email.json", "json:{email_run}/deliverable/check.json:delivery.result=pass"],
-   "fix": "cmd:python3 tools/email-production/simple_email.py {email_run} --brand {brand}"},
-  {"id": "number", "name": "the brief number", "checks": ["json:{email_run}/run.json:brief"], "fix": "cmd:python3 tools/image-teardown/tools/briefs.py open {email_run} --brand {brand} --type email"}
+   "fix": "cmd:python3 components/email-production/simple_email.py {email_run} --brand {brand}"},
+  {"id": "number", "name": "the brief number", "checks": ["json:{email_run}/run.json:brief"], "fix": "cmd:python3 components/image-teardown/tools/briefs.py open {email_run} --brand {brand} --type email"}
  ]
 }

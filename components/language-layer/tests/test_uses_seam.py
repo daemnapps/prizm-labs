@@ -2,8 +2,8 @@
 """The public uses seam — `engine.uses` is public, `_uses` stays as its alias
 (SI-102 (public uses seam), language-layer#9 (public uses seam)).
 
-    python3 -m unittest discover -s tests          # from tools/language-layer
-    python3 tools/language-layer/tests/test_uses_seam.py
+    python3 -m unittest discover -s tests          # from components/language-layer
+    python3 components/language-layer/tests/test_uses_seam.py
 """
 import sys, unittest
 from pathlib import Path

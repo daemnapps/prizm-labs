@@ -1,0 +1,591 @@
+{
+ "id": "ugc-video",
+ "name": "UGC Video",
+ "status": "draft",
+ "higgsfield": {
+  "workflow": "ugc-video",
+  "library": [
+   "sources/higgsfield/ugc-video/SKILL.md",
+   "sources/higgsfield/ugc-video/references/formats/review.md",
+   "sources/higgsfield/ugc-video/references/duration.md",
+   "sources/higgsfield/ugc-video/references/boards.md",
+   "sources/higgsfield/ugc-video/references/product-intake.md",
+   "sources/higgsfield/ugc-video/references/ugc-character.md",
+   "sources/higgsfield/ugc-video/references/monologue-craft.md",
+   "sources/higgsfield/ugc-video/references/ugc-board.md",
+   "sources/higgsfield/ugc-video/references/ugc-clip.md",
+   "sources/higgsfield/ugc-video/scripts/plan_duration.py.md"
+  ]
+ },
+ "makes": "A 9:16 creator video: our own cast member talks to camera about a product (or tells a story with none), cut eight ways per clip from a storyboard sheet, speaking the avatar's words in a voice we own. Five other formats change the board, the creator and the clip prompt (see formats).",
+ "default_format": "review",
+ "inputs": [
+  {
+   "name": "creator",
+   "from": "brands/<brand>/ai-cast/<name>/ masters (master-sheet.png); else runs/ai-elements/<brand>/casting/<role>/full/master.png",
+   "required": true
+  },
+  {
+   "name": "script words",
+   "from": "brands/<brand>/core-avatars/<avatar>/language/ (customers, evidence, churned: verbatim lines with source)",
+   "required": true
+  },
+  {
+   "name": "product",
+   "from": "brands/<brand>/products/<product>/images/ (some brands keep brands/<brand>/products/images/<product>-*.jpg)",
+   "required": false
+  },
+  {
+   "name": "product facts and approved claims",
+   "from": "brands/<brand>/products/<product>/product.md or brands/<brand>/products/<product>.md",
+   "required": false
+  },
+  {
+   "name": "voice",
+   "from": "brands/<brand>/ai-elements/voices.json (the creator's <sex>/<age band>/<ethnicity> row)",
+   "required": true
+  },
+  {
+   "name": "duration and angle",
+   "from": "the brief: brands/<brand>/briefs/briefs.json",
+   "required": true
+  },
+  {
+   "name": "house rules",
+   "from": "brands/<brand>/CLAUDE.md + brands/<brand>/rulings.md + the owner's hard rules (no disclaimers on screen, clothed cast, men never kiss or hug men)",
+   "required": true
+  },
+  {
+   "name": "site URL (website format only)",
+   "from": "brands/<brand>/products/store.json site where present; any other site: no home yet",
+   "required": false
+  },
+  {
+   "name": "package picture (unboxing format only)",
+   "from": "no home yet (a product image of the packed box, if one sits in the product's images/)",
+   "required": false
+  }
+ ],
+ "steps": [
+  {
+   "n": 0,
+   "name": "Safety, truth and intake gate",
+   "job": "none",
+   "what": "Higgsfield's gate before any spend: an adult authorized creator, an allowed product, claims only from an allowlist, no fake testimonials; then one bundled question for duration and creator. Ours: the brief and lane.json answer every intake question, so nothing is asked.",
+   "hf": {
+    "model": "the chat model directing the run",
+    "credits": 0
+   },
+   "house": {
+    "model": "brief + lane.json (owner's go and credit cap) + brands/<brand>/CLAUDE.md and rulings.md",
+    "credits": 0
+   },
+   "cheap": null,
+   "local": null,
+   "prompt_hf": "## Safety and truth gate — before intake or generation\n\nIf any item below fails, do not generate and do not route around the gate:\n\n- **Creator authorization:** use only a generated adult age 21+ or a consenting\n  adult non-public person whose image the user is authorized to use. A supplied\n  photo is not permission to impersonate its subject. If third-party consent is\n  unclear, ask once; decline public figures, celebrities, minors, and deceptive\n  identity use. Never clone or imitate a supplied person's voice.\n- **Allowed promotion:** decline political persuasion and promotion of prohibited\n  or age-restricted goods or services, including adult sexual content, products,\n  or services; gambling; illegal or regulated drugs, drug paraphernalia, and\n  prescription medication; tobacco or nicotine; weapons, explosives, or harmful\n  materials; counterfeit or illicit goods; extremist goods; deceptive or\n  high-risk financial services; malware or spyware; fraud; and covert\n  surveillance. A neutral educational mention is not a product promotion and\n  belongs outside this workflow.\n- **Truthful claims:** `approved_claims` is the complete allowlist of product\n  claims supplied by the user. Preserve each allowed claim verbatim; never\n  strengthen, combine, infer, or derive another claim. With no allowlist, create\n  claim-free copy about visible materials, controls, application, packaging, and\n  other directly observable mechanics.\n- **No synthetic testimonials:** a generated creator is a host or demonstrator,\n  never a real customer. Do not invent purchase, ownership, use, results,\n  before/after outcomes, ratings, reviews, social proof, relationships, or lived\n  experience. First-person experience is allowed only when a consenting user\n  supplies the exact script and confirms it describes their own experience.\n- **Transparent framing:** describe product-present output as a brand demo,\n  creator concept, or sponsored creative—not an organic customer review. When a\n  post package is requested, include an appropriate ad/sponsorship disclosure.\n\n## Phase 0 — Intake\n\nAfter the safety and truth gate passes, parse an optional product photo or URL,\nduration, creator photo or requested gender, and\nexplicit overrides for location, hair, ethnicity, outfit register, mood, props,\nlanguage, accent, music, `approved_claims`, and on-video text.\n\nClassify specificity:\n\n- `auto`: 1–5 words with no scenario; choose the complete treatment.\n- `guided`: 1–3 sentences of tone or rough flow; preserve that direction.\n- `director`: 4+ sentences, scenario, shot list, or location sequence; map the\n  supplied beats one-to-one to slots.\n\nAsk only for real gaps, bundled into one question: duration (offer 10s, 15s,\n30s, 45s) and creator photo/gender when absent. Never ask for a product merely\nbecause none was supplied; lock `product_reference:null` and\n`product_description:null` and continue with creator-led, scenario-driven UGC. Include\nan accent or physical quirk option only when the brief already signals origin or\ndeliberately unusual character energy. Never ask about locked models, aspect\nratios, boards, resolution, audio, batching, or identity training.\n\nDo not start paid generation until the required creator input and duration are\nresolved. The later text/post-package choice is the only sanctioned second ask.",
+   "prompt_ours": "Creator = our own generated adult cast member {creator_name} (brands/<brand>/ai-cast/{creator_name}/), never a real person. Product = {product} or none. Claims allowed = only these lines, verbatim: {approved_claims}; with none, say only what can be seen (materials, how it opens, how it is applied). The creator is a host, never a customer: no 'I've used it for weeks', no results, ratings or reviews unless the words are a real customer line from {language_folder} said as a quote. Duration {seconds} s, 9:16. {house_rules}",
+   "check": "lane.json carries the owner's go and a credit cap; claims list resolved; creator is an ai-cast master."
+  },
+  {
+   "n": 1,
+   "name": "Duration plan and the price",
+   "job": "plan.quote",
+   "what": "Split the length into 4-15 s Seedance clips with no short tail (30 s = 15 + 15; 31 s = 15 + 12 + 4), then quote every picture and clip before the first paid call.",
+   "hf": {
+    "model": "plan_duration.py in the sandbox; quotes via estimate_image_cost / estimate_video_cost",
+    "credits": 0
+   },
+   "house": {
+    "model": "same planner rule in the run folder; same quotes (they submit nothing)",
+    "credits": 0
+   },
+   "cheap": null,
+   "local": "python3 -c the planner (count = ceil(s/15), tail borrowed up to 4 s); ffprobe later for actual lengths",
+   "prompt_hf": "# Duration planning\n\nRequire an integer target duration of at least four seconds; do not silently round\nor assume 15 seconds. Each Seedance clip is 4–15 seconds. In sandbox_exec create\nan input JSON such as {\"duration_seconds\":31} in the task working directory and run:\n\n```bash\npython3 \"${HF_WORKFLOWS}/ugc-video/scripts/plan_duration.py\" --input output/ugc-duration.json\n```\n\nUse the returned clip_durations and clip_count for every board, script and request.\nThe planner preserves total duration with the minimum number of clips:\n16 → 12+4; 19 → 15+4; 31 → 15+12+4; 46 → 15+15+12+4.\nTutorial has four global step slots per board. Website uses this same planner\nwithout boards. Do not put Pi-only duration_policy fields into the MCP schema.",
+   "prompt_ours": "Target {seconds} s. Clips = {clip_durations} (planner: 15 s each, last clip at least 4 s). Quote one board, one cleanup and one clip per distinct length; add up; write total and cap into lane.json; stop for the go.",
+   "check": "Sum of clip_durations = target; total quote under the lane.json cap."
+  },
+  {
+   "n": 2,
+   "name": "Product facts",
+   "job": "write.product",
+   "what": "One canonical product description, tier from packaging, category and the exact opening/use mechanic, plus the approved claims list. Skipped when the video has no product.",
+   "hf": {
+    "model": "the chat model reads the photo or product page",
+    "credits": 0
+   },
+   "house": {
+    "model": "Claude on the plan, from brands/<brand>/products/ (product file + images)",
+    "credits": 0
+   },
+   "cheap": {
+    "model": "Claude on the plan (writing costs don't count)",
+    "registry": "claude-sonnet-5",
+    "credits": 0,
+    "note": "Nothing lost: our product files already hold the real description and the label photos."
+   },
+   "local": null,
+   "prompt_hf": "## Phase 1 — Normalize the optional product\n\nIf a product photo or URL was supplied, read `references/product-intake.md` and\nfollow it exactly. Resolve once:\n\n- `product_reference`: confirmed attachment or imported HTTPS image `media_id`;\n- canonical `product_description`;\n- `tier`: `luxury`, `premium`, or `drugstore` from visual packaging cues only;\n- `category` and exact usage/opening mechanic.\n- `approved_claims`: exact user-supplied strings, or an empty list.\n\nReuse those values verbatim downstream. Never infer price, invent claims or\ncreator experience, or\nreplace a blocked/thin product page with a stock or generated product. If no\nproduct was supplied, skip the reference, keep both product fields null, and\nuse the no-product branches in `ugc-board.md`, `ugc-clip.md`, and monologue craft.",
+   "prompt_ours": "product_reference = {product_image} (real label photo, front). product_description = {product_description}. tier = from the packaging only. category = {category}; opening/use mechanic = {mechanic}. approved_claims = {approved_claims} (verbatim, or empty).",
+   "check": "Reference is a real photo of our product, never generated; label readable."
+  },
+  {
+   "n": 3,
+   "name": "Lock the creator",
+   "job": "pictures.cast",
+   "what": "One creator picture that seeds every board and clip. Higgsfield generates a fresh Soul 2 selfie; we use our banked ai-cast master so the same face runs across ads.",
+   "hf": {
+    "model": "soul_2, 3:4, 2k",
+    "credits": "not quoted (re-quote before a run)"
+   },
+   "house": {
+    "model": "banked master from brands/<brand>/ai-cast/<name>/ (0); a new cast member only through the casting chain, GPT Image 2.5 (gpt-image-2.5)",
+    "credits": "0 banked"
+   },
+   "cheap": {
+    "model": "banked master (0); a missing one: GPT Image 2.6 Flare 1k low (gpt_image_2_6_flare)",
+    "registry": "missing",
+    "credits": "0 banked; 0.75 for a gap",
+    "note": "A banked master costs nothing and keeps one face across every ad; Flare at 1k low is softer and needs the cleanup pass."
+   },
+   "local": null,
+   "prompt_hf": "A [age band from Variety pool] [man/woman], [expression — pick one from the Approved mid-action expressions list], [hair color + length from Variety pool], [build vibe], with high model facial features, symmetrical features, well-proportioned figure, natural skin texture, standing in a [specific location with architectural details].\n[Light direction and quality — MUST be cool/neutral daylight, NEVER golden hour, NEVER warm sunset, NEVER orange/amber cast] falls across her face — neutral, clean, no warm cast, no retouched glow. Skin texture is real, with visible pores and natural unevenness.\n[He/She] wears [outfit matching category × tier from the matrix — pick a non-default option from the matrix's list; a dressed option realizes as the Wardrobe Bank recipe — layered with the Universal modesty triplet and any per-garment specifics]. Body in a calm neutral pose — relaxed standing, one hand resting naturally.\nThe background features [specific details: materials, colors, furniture].\nColor palette dominated by [space colors — keep neutrals; avoid amber/orange dominance].\nCasual handheld iPhone selfie taken by [her/him] at arm's length — head and shoulders fill the frame, slight natural tilt, slightly off-center, intuitive composition, captured mid-moment. Subject in clear focus with the background naturally falling out as in any phone photo.\nShot on iPhone front-facing camera. Phone-sensor grain and realistic skin texture preserved, no retouch, no smooth-skin filter. No fisheye lens, no ultra-wide distortion. Authentic UGC creator phone selfie, NOT editorial portrait, NOT fashion magazine.\n\nSelf-portrait selfie shot on iPhone front-facing camera held by the subject at arm's length — head and shoulders fill the frame, casual handheld framing, slight natural tilt, slightly off-center, slightly imperfect, not posed. Phone-sensor grain and realistic skin texture preserved, no retouch, no smooth-skin filter. No fisheye lens, no ultra-wide distortion. Authentic UGC creator phone selfie, NOT editorial portrait, NOT fashion magazine.",
+   "prompt_ours": "Use {creator_master} unchanged as character_media_id. Only if no master exists: A {age_band} {sex}, {expression}, {hair}, {build}, standing in {location}. Cool neutral daylight across the face; real skin texture with visible pores. Wears {outfit}. Calm neutral pose. Background: {background}. Casual handheld iPhone selfie at arm's length, head and shoulders fill the frame. No product in the picture.",
+   "check": "Same face as the cast sheet; adult; no product in frame; filed back to ai-cast if new."
+  },
+  {
+   "n": 4,
+   "name": "Monologue",
+   "job": "write.script",
+   "what": "What the creator says, split into one segment per clip: a hook, a story shape, the avatar's own words, the anti-slop pass. Ours writes from the avatar's language bank instead of inventing lines.",
+   "hf": {
+    "model": "the chat model",
+    "credits": 0
+   },
+   "house": {
+    "model": "Claude on the signed-in plan, from brands/<brand>/core-avatars/<avatar>/language/",
+    "credits": 0
+   },
+   "cheap": {
+    "model": "Claude on the plan (writing costs don't count)",
+    "registry": "claude-sonnet-5",
+    "credits": 0,
+    "note": "Nothing lost; spend nothing here."
+   },
+   "local": null,
+   "prompt_hf": "## Truth contract — mandatory for every run\n\nThe parent skill's safety and truth gate always applies. `approved_claims` is the complete claim\nallowlist, including when it is empty. Never invent or imply purchase, ownership, use, results,\nbefore/after outcomes, ratings, reviews, social proof, relationships, or lived experience.\n\n- **Generated creator:** write a host/demonstrator script using observable product mechanics and exact\n  allowlisted claims only. Never give the fictional creator a customer history.\n- **Authorized user as creator:** first-person experience is legal only when the user supplied the\n  exact first-person script and confirmed it is their own experience. Do not embellish it.\n- **Productless mode:** fictional storytelling is allowed, but do not impersonate a real person or\n  invent claims about a real person, organization, product, or service.\n- Quoted lines and pattern examples below are structural examples, never factual source material.\n\n**Productless mode:** when both product fields are null, the creator's topic, routine, experience,\nor story carries the whole arc. Never invent a product, brand, review claim, product entrance, or\nsales CTA. Ignore every product-entry, product-pressure, product-mechanic, and product-claim rule in\nthis reference; choose a story shape that works without an object and end on the human resolution.\n\n## Voice archetype (a default, not a question — state it for veto)\n\nEvery video gets ONE performance persona that colours HOW the creator talks. It is picked from the\ntier of the already-resolved register and NEVER changes that register. Resolve the register FIRST\n(NATURAL by default; HYPED or CALM only on an explicit signal), THEN pick a persona from its tier:\n\n- **NATURAL tier (the default — use unless a signal says otherwise):** a warm, genuine, engaged\n  creator — girl-next-door / easy-going relatable / dry-witty. Lively and real, ONE honest\n  human-scale peak (a real grin, a delighted \"oh\"), NEVER squealing or screaming. Beauty, fashion,\n  and most briefs get THIS by default — not It-Girl.\n- **HYPED tier (only on a hyped signal):** 2000s It-Girl (stretched vowels, squeals on the reveal),\n  Hype Beast (explosive bursts), Drama Queen.\n- **CALM tier (only on a calm signal):** Deadpan Contrast (flat, one micro-crack at the peak), quiet\n  Gossip Whisperer, Southern Sweetheart (soft warm).\n\nHARD RULE: under the NATURAL default the persona sentence carries NO energy words — never `squeal`,\n`scream`, `stretched vowels`, `explosive`, `screaming`. Energy comes from the REGISTER; the persona\nadds only attitude, melody, and cadence, never volume. Write the chosen persona as ONE sentence and\ncarry it verbatim into the character prompt, every board prompt, and every clip prompt — restated\neach time, or it drifts. Archetype and accent stack independently.\n\n## Accent and quirk (opt-in)\n\nIf the brief names an identifiable origin for the creator, or asks for \"weird\" / \"viral\" character\nenergy, offer it inside the single intake question (accent consent + one quirk). Never add an accent\nthe user did not approve; the default is neutral English with no quirk. If opted in, write the\npersona/quirk sentence once (identity + attitude, e.g. \"a young Korean it-girl — English is her\nsecond language and you hear it in every sentence\") and restate it verbatim everywhere downstream.\nText-only accent enforcement lands roughly one render in three: if the user can drop a 5-10s voice\nsample, attach it to the clip generation as an audio reference (\"accent and vocal delivery reference\nonly — do not copy words, only the accent, melody, and timbre\"). Offer that once; never block on it.\n\n## Story mode is the default\n\nONE scenario spans the whole video: situational stakes first, framed without claiming that a\ngenerated creator really experienced them. If\na product is present, it enters as a SUPPORTING ACTOR at 40-60% of total runtime, mapped onto the arc roles —\nstakes live in the HOOK board, the single \"but then\" twist opens the mid arc, and the CTA rides\nINSIDE the closer's resolution, never as an outro beat. The story must survive with the product\ndeleted. Plain review structure only on explicit request.\n\n**Story-shape menu — pick ONE spine (it decides WHAT happens; the hook pattern decides how it\nOPENS). Brainstorm at least 3 candidates, then choose; combine two only if it deepens the gap\nwithout clutter:**\n\n- S1 Demonstration Discovery (problem appears → feature is demonstrated)\n- S2 Mechanism Loop (open on an observable action, then show how it works)\n- S3 Alternate Use (show a second visible use without claiming personal ownership)\n- S4 Guided Comparison (compare only visible mechanics or exact allowlisted claims)\n- S5 Behind-the-Concept (explain the creative or product setup without a testimonial)\n- S6 Interrupted Storytime (a story about something else; the product interrupts, the story never\n  quite finishes)\n- S7 GRWM With Stakes (getting ready FOR a charged thing; the stakes carry it)\n- S8 New-Place Mini-Vlog\n- S9 Day-in-the-Life With a Twist\n- S10 Product Reveal (clearly staged reveal, no claimed first reaction)\n- S11 POV Frame (talks TO the viewer as a character)\n- S12 Process Win (real work, one small win — native for B2B and small business)\n- S13 FAQ Reply (answer a product question with observable evidence)\n- S14 Green-Screen Commentary (talk over on-screen evidence)\n- S15 Feature Checklist (show a set of observable attributes)\n- S16 Host Question (one direct question answered by the demonstrator)\n- S17 Baseline-to-Demo (show an observable setup change without invented results)\n- S18 Silent Flex\n- S19 ASMR (see the silent/ASMR mode below)\n\nEvery shape carries exactly ONE \"but then\" twist (the mid-arc peak) — no twist is a flat anecdote,\ntwo will not fit in 15s. Realize the shape through the arc-role boards, never as a new field.\n\n**Review-style / demo mode** (only on an explicit \"review it / plain demo\" ask): convert the request\ninto a truthful demonstration, not a customer testimonial. Give the body ONE\ncompact skeleton — PAS (Problem → Agitate → Solve), BAB (Before → After → Bridge),\nHook-Story-Offer, Us-vs-Them (against a lazy pricey default), or Demonstration (\"watch this\" — the\nproduct does something visible in ~5s). Two or three spoken lines; even here the FIRST line carries\none observable detail or exact allowlisted claim. Do not invent a before/after result.\n\n## Hook-pattern menu — the HOOK board's opener\n\nPick ONE pattern per video, never blend. The pattern decides what KIND of moment the opener is; the\nfirst-word constraint below still governs its words. H2/H5/H7 are text-led — the opener LINE\nembodies them. H1/H3/H4 are visual-led — the line lands mid-event and the staging carries it.\n\n- **H1 Impact Action** — frame one is something physical mid-peak (box mid-rip, product mid-catch,\n  mid-stumble); the first word lands DURING the action.\n- **H2 Mid-Sentence Confession** — opens on word four of a sentence, as if the viewer walked in on\n  it; confessional volume.\n- **H3 Pattern Interrupt** — a normal setting with one thing deeply wrong, delivered with total\n  normalcy; the wrongness is visual, the voice ignores it.\n- **H4 Freeze-Reaction** — frame one: the face already in full reaction, locked on something; a\n  performed hold (<=0.7s), THEN the first line.\n- **H5 Hostile Open** — the first line is a challenge or accusation aimed at the viewer; slight\n  lean-in, finger already pointing.\n- **H6 Quirk-First** — the quirk IS the literal first event, before any context. Only when a quirk\n  was opted into.\n- **H7 Mechanism-First** — an observable product action is already underway in frame one; the first\n  line names that visible action or repeats an exact allowlisted claim. Never imply a personal\n  outcome, transformation, or before/after result.\n- **H8 Product Cold Open** (advanced, story mode only, needs a product image) — board 1 slot 1 is\n  clearly staged product-only footage (rougher light, slight compression, no face); ONE hard cut\n  into slot 2 where the creator is mid-reaction with the product already in hand and the first line\n  lands on the cut. The character enters one slot later than usual. Never frame the opening as\n  found/reposted third-party footage and never add social proof. The slot-1 footage is a produced\n  cold open, not the product's story entrance, so the 40-60% product entry still stands.\n\nWrite the chosen pattern into the HOOK board's prompt as ONE plain visual staging sentence — same\nmechanism as the persona sentence, on board 1 only, never a pattern code.\n\n## Anti-slop pass on every line\n\n- The first words are never `Okay wait / Okay so / OMG / Hey guys / So basically / Stop scrolling /\n  You NEED this / Story time`.\n- Banned anywhere: \"literally\", \"obsessed\", \"game-changer\", \"holy grail\", \"changed my life\", \"hits\n  different\", and corporate words (elevate / seamless / effortless).\n- Demonstration-first openers beat unsupported enthusiasm (\"Here is the part that twists open.\").\n- Every product claim must be an exact `approved_claims` string. With an empty allowlist, use only\n  observable mechanics or sensory descriptions visible from the supplied product; never invent a\n  number, duration, comparison, result, purchase count, or measurement for specificity.\n- At most ONE peak reaction per clip in the monologue (the clip prompt may stage up to two — the arc\n  peak plus an optional product-motivated closer beat).\n- Echoes and repeats count toward the word budget but carry no information — cut them first.\n\n**First-word constraint (positional, every board's segment):** the literal FIRST WORD must be hook\ncontent — never `OK / Okay / Okay so / Alright / Alright so / So / Yeah so / Right so / Um / Well /\nLike / Wait / Wait what / Hold on`. Those read as recording warmup. They are fine mid-sentence\nlater; the constraint is the first word only.\n\n**Performed dialogue** (emotion lives IN the words — the video model under-renders flat prose):\nvowel-stretch on the peak word (\"it's SO good\"), 1-2 CAPS volume spikes per line max, one broken\nsentence at the peak (\"it's— okay wait. LOOK.\"), a whisper-to-spike swing, and a flat → spike →\nsettle arc across the clip. Under the NATURAL default the peak stays human-scale (a real gasp, a\nbreaking grin), never staged screaming. NEVER write engineered or dramatic pauses — they bloat the\nline and break the render.",
+   "prompt_ours": "Write {seconds} s of talk for {creator_name}, a host (never a customer), to {avatar} about {problem}. Hook in the first 1-2 s from the avatar's own words: {language_lines} (verbatim, with source). Story mode: the moment, the problem, what the product does that can be seen, one action. Claims only from {approved_claims}. About 2.5 words a second; split into {clip_count} segments of {clip_durations} s; segment 2 onward continues mid-thought, no greeting, no re-introducing the product. Ban AI-tell words (obsessed, game-changer, holy grail, literally, elevate, seamless). No disclaimers.",
+   "check": "Every line traces to the language folder or the product file; no invented use, results or reviews; word count fits each clip."
+  },
+  {
+   "n": 5,
+   "name": "Voice read",
+   "job": "sound.voice",
+   "what": "Higgsfield has no voice step: Seedance speaks the lines itself (generate_audio true, no TTS). The house reads each segment in our own voice first and hands that read to the clip, so the creator speaks in a voice we own.",
+   "hf": {
+    "model": "none: Seedance native speech",
+    "credits": 0
+   },
+   "house": {
+    "model": "ElevenLabs v3 (eleven-v3), the creator's voice from brands/<brand>/ai-elements/voices.json, one read per segment with a delivery tag",
+    "credits": "metered (cents)"
+   },
+   "cheap": {
+    "model": "Kokoro-82M stock voice on this Mac (local-studio tts)",
+    "registry": "kokoro-82m",
+    "credits": 0,
+    "note": "Free, but stock voices only: no voice of our own, flatter delivery. Or skip the read and let the clip model speak in its own voice (loses voice consistency across ads)."
+   },
+   "local": "python3 components/local-studio/local.py tts \"{segment}\" -o read.wav --voice am_michael",
+   "prompt_hf": "5. Compile every clip prompt before submission. Use the selected format's ordered\n   reference roles, native audio, `seedance_2_5`, `mode:\"omni_reference\"`, and\n   `generate_audio:true`. Do not add a separate narration/TTS job. Follow batch\n   and upload limits in the runtime contract above, not another host's schema.",
+   "prompt_ours": "[{delivery_tag}] {segment_text}",
+   "check": "Heard back (Scribe): every word, in order; read length fits its clip (<= clip seconds)."
+  },
+  {
+   "n": 6,
+   "name": "Storyboard sheets",
+   "job": "pictures.board",
+   "what": "One 21:9 sheet per clip with eight 9:16 slots in one row, each slot a different camera setup; sheet K carries the cleaned sheet K-1 forward. Made one after another.",
+   "hf": {
+    "model": "gpt_image_2_6 (Sunburst), 21:9, 2k, quality high; product + creator (+ previous clean board) as image refs",
+    "credits": "≈2.25 each (Flare 2k high quote; Sunburst not quoted)"
+   },
+   "house": {
+    "model": "GPT Image 2.5 (gpt-image-2.5), quality high, from the cast master and product photo",
+    "credits": "metered (OpenAI direct), about 2 credits' worth"
+   },
+   "cheap": {
+    "model": "GPT Image 2.6 Flare 1k low (gpt_image_2_6_flare)",
+    "registry": "missing",
+    "credits": 0.75,
+    "note": "Eight slots at 1k are small; faces and labels blur, so the cleanup and the check carry more weight. Seedream 5.0 Flash at 0.5 is the other pick (registry: missing)."
+   },
+   "local": null,
+   "prompt_hf": "[@Image1 product reference + ANGLE LOCK if product is present.] [@Image2 character reference, or @Image1 if no product.] [@Image3 previous-board reference if K > 1, with explicit instruction to preserve identity / location / lighting / wardrobe / product from this reference.] The same person appears in every slot with identical face, hair, body, and identity — no changes to features, hair, or proportions between slots.\n\nA single horizontal storyboard sheet composed of exactly EIGHT equal-size 9:16 vertical slots arranged in ONE HORIZONTAL ROW, separated by thin white gutters on a clean white background, total sheet aspect 21:9. Do NOT make two rows and do NOT make a grid — exactly eight panels in one row, never ten, never twelve. All eight slots are active photorealistic UGC iPhone-style stills that tell one continuous [clip_duration]-second video clip as eight sequential beats — slot 1 is beat 1 (opening), slot 8 is beat 8 (closing). There are no placeholder slots. Each adjacent pair of slots is a DIFFERENT camera setup — a different POV (selfie vs static camera), a different distance band (tight/macro vs medium vs wide), and a different action — so every beat boundary reads as a crisp hard cut, never a morph.\n\nSetting and lighting in all eight slots default to the same environment, time of day, and light direction visible in the character reference image (and previous-board reference if provided), unless the story requires a different location. Outfit stays identical across slots within the same location.\n\nProduct (if present) appears at realistic real-world scale, approximately [X cm] in real size, fitting naturally in the character's hand without enlargement. Exactly one [product] appears in frame in every slot where it is visible — never a duplicate, never a look-alike clone. Product placement in every slot is clean: either fully visible held in one hand, fully hidden inside a closed bag/box/pocket, or absent from the frame — never half-sticking out, never balancing awkwardly, never partial.\n\nThe character has exactly two hands. In selfie POV slots, one hand is occupied by the phone (off-frame or visible at edge), so only one hand is available for action — never two objects in selfie POV. Every slot names what EACH hand is doing — one role per hand, the idle hand parked explicitly (holding the phone, resting at her side, flat on the counter) — never more than two simultaneous hand-roles. Slots requiring two free hands are static camera POV with the phone not in frame. POV may change between slots — every POV change aligns with a hard cut between slots, never a smooth transition.\n\nSlot 1 — exact 9:16 vertical photorealistic UGC iPhone still, [selfie/static camera POV], [distance band]: [camera framing, character action, product placement (visible in hand / hidden inside X / absent), explicit hand allocation naming BOTH hands' roles (e.g. \"left hand holds phone off-frame, right hand holds product\"; an idle hand is parked — resting at her side, flat on the counter), micro-behavior, light/setting note].\n\nSlot 2 — exact 9:16 vertical still, [POV — different framing from slot 1], [distance band — different from slot 1]: [...].\n\nSlot 3 — exact 9:16 vertical still, [POV/band different from slot 2]: [...].\n\nSlot 4 — exact 9:16 vertical still, [POV/band different from slot 3]: [...].\n\nSlot 5 — exact 9:16 vertical still, [POV/band different from slot 4]: [...].\n\nSlot 6 — exact 9:16 vertical still, [POV/band different from slot 5]: [...].\n\nSlot 7 — exact 9:16 vertical still, [POV/band different from slot 6]: [...].\n\nSlot 8 — exact 9:16 vertical still, [POV/band different from slot 7]: [...].\n\nRendering rules: every slot is an exact 9:16 vertical rectangle, all eight slots identical in size, arranged in ONE HORIZONTAL ROW (do NOT make two rows or a grid — exactly eight panels in one row, never ten, never twelve) with thin white gutters on a clean white background, total sheet aspect 21:9. All eight slots are active — there are no placeholder slots. No two adjacent slots share both their POV and their distance band. Active slots are photorealistic iPhone-style UGC stills with natural light and casual real-life feel. The character's identity is identical across all eight panels. The character has exactly two hands; selfie POV occupies one hand with the phone, leaving one hand for action; two-handed actions are static camera POV; every slot names each hand's single role, the idle hand parked explicitly, and the total simultaneous hand-roles never exceed two. POV may change between slots; every POV change aligns with a hard cut, never a smooth transition. The product (if present) appears at realistic real-world scale relative to the character's hand and body, never enlarged for visibility, and keeps the same visible angle from the reference image across all appearances. Product placement is always clean: fully held in hand, fully hidden inside a closed container, or absent — never partial, never sticking out, never balancing awkwardly. Exactly one product in frame wherever it appears — never duplicated. Each prop holds exactly one state per slot — a cap is on or off, never both. No on-image text of any kind: no header, no metadata, no captions, no pop-text, no badges, no numbers, no subtitles, no watermarks. No legible text or numbers on any prop beyond the product's own label and the garment's own large fictional print. No shallow depth of field, no bokeh, no lens flare, no beauty filter, no cinematic color grade [omit these negatives when user_request explicitly asks for a cinematic look]. No fisheye lens, no ultra-wide distortion. No mirror or reflection shots (unavoidable mirror = partial reflection only, matching the subject exactly). No deformed hands. No third arm, no extra hands, no duplicated limbs. No additional brands or logos beyond the user's product. No invented product claims.",
+   "prompt_ours": "@Image1 {product} reference, ANGLE LOCK (omit when no product, renumber). @Image2 {creator_name}. @Image3 the cleaned board {K_minus_1} when K > 1: keep identity, place, light, wardrobe and product state. The same person in every slot. One horizontal sheet of exactly EIGHT 9:16 slots in one row, thin white gutters, 21:9. Slot 1 = the hook: {hook_visual}. Slots 2-8 = {beats}, each a different POV and distance from the one before, each naming what both hands do. Setting {location}. Product at real size, about {size_cm} cm, one only. No on-image text, no other brands, no shallow depth of field, no beauty filter. {house_rules}",
+   "check": "Eight slots in one row; same face; real label; no text; distinct beats."
+  },
+  {
+   "n": 7,
+   "name": "Board cleanup",
+   "job": "pictures.edit",
+   "what": "A realism pass over each raw board: same layout, poses, identity and label; only skin, material, light and phone grain change. Mandatory: the raw board never seeds anything.",
+   "hf": {
+    "model": "seedream_5_5 (now seedream_v5_pro), 21:9, 2k, raw board as image input",
+    "credits": 2.5
+   },
+   "house": {
+    "model": "GPT Image 2.5 edit (gpt-image-2.5); Seedream (seedream-5-pro-edit) when GPT refuses",
+    "credits": "metered, about 2 credits' worth"
+   },
+   "cheap": {
+    "model": "Seedream 5.0 Flash 2k (seedream_5_0_flash)",
+    "registry": "missing",
+    "credits": 0.5,
+    "note": "Same job at a fifth of the price; texture is lighter and it drifts faces more often, so inspect harder."
+   },
+   "local": null,
+   "prompt_hf": "After every raw board, submit generate_image_batch with a stable index and params:\nmodel seedream_5_5, count 1, aspect_ratio 21:9, resolution 2k, the raw board's\ncompleted result_url as image input in full-profile (full: import that URL once with\nmedia_import_url and use its confirmed media ID), and this prompt:\n\n> KEEP EXACTLY the framing, composition, slot layout, camera distances, poses,\n> identity, body, product geometry and real label. Change only micro-realism:\n> natural skin/material texture, gentle daylight and fine sensor noise, authentic\n> phone photo, deep focus. Preserve face proportions exactly. Avoid waxy skin,\n> beauty filters, oversaturation, HDR glow, oversharpening and cinematic bokeh.\n> No added watermark or text. Preserve existing tutorial Step N headings exactly.",
+   "prompt_ours": "KEEP EXACTLY the framing, composition, slot layout, camera distances, poses, identity, body, product geometry and real label. Change only micro-realism: natural skin/material texture, gentle daylight and fine sensor noise, authentic phone photo, deep focus. Preserve face proportions exactly. Avoid waxy skin, beauty filters, oversaturation, HDR glow, oversharpening and cinematic bokeh. No added watermark or text.",
+   "check": "Raw and cleaned kept separately; only the cleaned board moves on."
+  },
+  {
+   "n": 8,
+   "name": "Board check",
+   "job": "behind.judge",
+   "what": "Look at each cleaned board: identity, product shape and state, slot count, distinct beats, no text. A failed check stops the clips that depend on it.",
+   "hf": {
+    "model": "the directing chat model looks at the image",
+    "credits": 0
+   },
+   "house": {
+    "model": "Gemini 3.1 Pro judge (gemini-3.1-pro-preview)",
+    "credits": "metered, cents"
+   },
+   "cheap": {
+    "model": "Gemini 3 Flash fast read (gemini-3-flash-preview)",
+    "registry": "gemini-3-flash-preview",
+    "credits": "cents",
+    "note": "House rule: every read inside a run is the judge; Flash is a person's pick only."
+   },
+   "local": null,
+   "prompt_hf": "Poll the cleanup to completion, retain its job ID and URL separately from the raw\nboard, then inspect its encoded image for identity, product anatomy/state, slot\ncount, distinct beats and text. Use the current host's image inspection capability;\nif unavailable, stop before dependent generation and report the missing check.\nOnly the inspected cleaned result seeds board K+1 and video. Never erase real\nbranding or relabel raw input as cleaned. On failure follow the entrypoint's\nfailure rules; no provider-hopping or raw-board fallback.",
+   "prompt_ours": "Board {K} of {N}: is it {creator_name} in all eight slots, is the {product} label real and readable, eight slots in one row, eight different beats, no text? Pass or name the slot that fails.",
+   "check": "Pass, or remake that board only."
+  },
+  {
+   "n": 9,
+   "name": "Talking clips",
+   "job": "clips.talking",
+   "what": "One clip per board: the eight slots become eight hard cuts while the creator speaks that segment. Higgsfield lets Seedance invent the voice; the house sends our voice read in the same call so the lips follow it.",
+   "hf": {
+    "model": "seedance_2_5 omni_reference, 9:16, 1080p, generate_audio true, 15 s; clean board + creator + product as image refs",
+    "credits": "160 per 10 s (240 per 15 s clip)"
+   },
+   "house": {
+    "model": "Seedance 2.5 (seedance-2.5) reference-to-video at 480p with the ElevenLabs v3 read as the voice reference, upscaled on this Mac",
+    "credits": "30 per 10 s (45 per 15 s clip)"
+   },
+   "cheap": {
+    "model": "Wan 3.0, 480p, image references + the read as audio_references (wan-3.0@higgsfield)",
+    "registry": "wan-3.0",
+    "credits": "7.5 per 10 s (11.25 per 15 s clip)",
+    "note": "Takes up to 10 image refs and 5 audio refs, clips to 30 s; lip-sync and cut timing are looser than Seedance and Alibaba moderates it harder. Second pick: Gemini Omni Flash 1.2 at 360p, 7.5 per 10 s, max 10 s per clip, no audio reference (registry: missing)."
+   },
+   "local": "RIFE interpolation if motion stutters (local-studio interp)",
+   "prompt_hf": "Style & Mood: UGC iPhone aesthetic, [light description matching the board], [SELFIE: front-facing camera, intimate handheld feel | STATIC: locked-off static camera, completely static, frozen frame | MIXED: starts SELFIE handheld, hard-cuts to STATIC locked-off, hard-cuts back to SELFIE handheld — POV alternates per cut], social media vertical format.\n\nNarrative Summary: [1 sentence stating what happens in this clip — references the arc_role and the throughline of the 8 cuts. Close it with a register calibration phrase, gated THREE ways by `user_request`: NATURAL (DEFAULT — no signals needed) — close with `performed by a natural, engaged creator — genuine reactions, lively but human, never staged screaming energy` (or near-equivalent). HYPED (opt-in ONLY) — when `user_request` carries an explicit energy signal (`hyped` / `hype` / `energetic` / `explosive` / `high-energy` / `viral energy` / `insane energy`), close with `performed by an INSANELY hyped creator with explosive screaming energy throughout` (or near-equivalent). CALM — skip the calibration phrase entirely when `user_request` signals a calm-tone aesthetic (`goth` / `vampire` / `cinematic noir` / `cold` / `passive` / `deadpan` / `clinical` / `refined` / `luxury-passive` / `minimal` / `somber` / `serious` / `dark` / `shadowy` / `quiet` / `GRWM` / `routine` / `process-led`). The explicit `user_request` word always wins].\n\nDynamic Description:\nCut 1 (0-Xs) — [framing distance per board slot 1, e.g. MEDIUM CLOSE-UP, TIGHT CLOSE-UP, MACRO, WIDER, PRODUCT-EXTENDED] [POV per slot 1]: [action from slot 1, explicit hand allocation (role of EACH hand, ≤ 2 simultaneous hand roles), 2+ micro-behaviors, expression, and — only when present — product placement]. Hard cut to.\nCut 2 (...) — [framing distance / POV per slot 2, a DIFFERENT framing from cut 1]: [action from slot 2, hand allocation, 2+ micro-behaviors, expression, and optional product placement]. Hard cut to.\nCut 3 (...) — [per slot 3, different framing from cut 2]: [action from slot 3, hand allocation, 2+ micro-behaviors, expression, and optional product placement]. Hard cut to.\nCut 4 (...) — [per slot 4, different from cut 3]: [action from slot 4, hand allocation, 2+ micro-behaviors, expression, and optional product placement]. Hard cut to.\nCut 5 (...) — [per slot 5, different from cut 4]: [action from slot 5, hand allocation, 2+ micro-behaviors, expression, and optional product placement]. Hard cut to.\nCut 6 (...) — [per slot 6, different from cut 5]: [action from slot 6, hand allocation, 2+ micro-behaviors, expression, and optional product placement]. Hard cut to.\nCut 7 (...) — [per slot 7, different from cut 6]: [action from slot 7, hand allocation, 2+ micro-behaviors, expression, and optional product placement]. Hard cut to.\nCut 8 (Ys-end) — [per slot 8, different from cut 7]: [action from slot 8, hand allocation, 2+ micro-behaviors, expression, and optional product placement].\n\nStatic Description: [1-2 sentences: setting, ambient details, props, light direction — match the board image's environment].\n\nAudio: She speaks to camera, iPhone microphone audio with natural room tone[, IF K==1 AND non-verbal cues used: include bracketed sounds at the start of Cut 1, e.g. [*small bright laugh*] [*soft gasp*] [*delighted 'oh!'*] (HYPED register only: [*explosive gasp*] [*hyped yelp*])]: \"[monologue_segment, distributed across the 8 cuts at natural phrase boundaries]\"\n\n[ONLY when user_request explicitly asks for music or names a genre/mood — Music: [genre/mood], low in the mix under the voice, swells at [the peak beat], returns under the closer.]\n\nFacial features clear and undistorted, consistent clothing throughout. Shot on iPhone, natural lighting, social media aesthetic. [SELFIE-only: slight natural handheld micro-shake from her grip | STATIC-only: locked-off static camera, absolutely static, zero camera movement of any kind, no shake, no drift, no breathing wobble | MIXED: handheld micro-shake during selfie cuts, locked-off frozen frame during static-camera cuts]. No on-screen text, no subtitles, no captions, no watermarks, no legible text on any object except [when a product exists: the product's own label and] the garment's own large fictional print, no real brand logos anywhere, no cinematic grade, no film grain, no bokeh, no lens flare, no fisheye lens, no ultra-wide distortion, no slow motion, no beauty filter, no third arm, no extra hands, no duplicated limbs, no deformed hands.",
+   "prompt_ours": "Style & Mood: UGC iPhone aesthetic, {light}, {pov_mode}, social media vertical format.\nNarrative Summary: {one_sentence_arc}, performed by a natural, engaged creator — genuine reactions, lively but human, never staged screaming energy.\nDynamic Description:\nCut 1 (0-{t1}s) — {framing_1} {pov_1}: {action_1}, {hands_1}, {micro_1}, {expression_1}. Hard cut to.\n... Cut 8 ({t7}s-end) — {framing_8} {pov_8}: {action_8}.\nStatic Description: {setting}.\nAudio: {He/She} speaks to camera in the attached voice, iPhone microphone audio with natural room tone: \"{segment_text}\"\nFacial features clear and undistorted, consistent clothing throughout. Shot on iPhone, natural lighting. No on-screen text, no subtitles, no captions, no watermarks, no legible text except the {product}'s own label, no other brand logos, no cinematic grade, no slow motion, no beauty filter, no extra hands, no deformed hands.",
+   "check": "Send clip 1 alone and check it first; then the rest as a batch."
+  },
+  {
+   "n": 10,
+   "name": "Clip check",
+   "job": "behind.judge",
+   "what": "Each clip: same face and product, real length, 9:16, every word of the segment spoken, no stray text. Remake only a clip that fails.",
+   "hf": {
+    "model": "the directing chat model + ffprobe",
+    "credits": 0
+   },
+   "house": {
+    "model": "Gemini 3.1 Pro judge (gemini-3.1-pro-preview) + Scribe heard-back (scribe_v1)",
+    "credits": "metered, cents"
+   },
+   "cheap": {
+    "model": "Whisper on this Mac for the words + Gemini 3 Flash (gemini-3-flash-preview)",
+    "registry": "whisper-large-v3-turbo",
+    "credits": "cents",
+    "note": "Whisper is free and good enough for the words; the picture read stays the judge inside a run."
+   },
+   "local": "python3 components/local-studio/local.py stt clip.mp4 -o words.json; ffprobe; 2 fps contact sheet",
+   "prompt_hf": "6. Inspect completed clips for identity/product continuity, actual duration,\n   framing, speech and intended text. Tutorial Step N labels are required;\n   other generated text is forbidden. Correct only identified failed clips.",
+   "prompt_ours": "Clip {K}: {creator_name}'s face in every cut, the {product} label real, {clip_seconds} s, 9:16, the words \"{segment_text}\" all heard in order, no text on screen. Pass or name the cut that fails.",
+   "check": "Every segment heard in order; contact sheet clean; remake only failed indices."
+  },
+  {
+   "n": 11,
+   "name": "Upscale",
+   "job": "behind.upscale",
+   "what": "House clips are made at 480p and upscaled here; Higgsfield renders 1080p directly, so it has no such step.",
+   "hf": {
+    "model": "none (1080p rendered)",
+    "credits": 0
+   },
+   "house": {
+    "model": "Real-ESRGAN on this Mac (real-esrgan)",
+    "credits": 0
+   },
+   "cheap": {
+    "model": "Real-ESRGAN animevideov3, local (real-esrgan)",
+    "registry": "real-esrgan",
+    "credits": 0,
+    "note": "About 11 s of compute per video-second; skin is smoother than a native 1080p render."
+   },
+   "local": "python3 components/local-studio/local.py upscale clip.mp4 -o out.mp4 --esrgan-model realesr-animevideov3",
+   "prompt_hf": null,
+   "prompt_ours": null,
+   "check": "1080x1920, faces not waxy."
+  },
+  {
+   "n": 12,
+   "name": "Assembly and captions",
+   "job": "edit.assemble",
+   "what": "Join the accepted clips in order, keep their sound, add captions only when asked (tutorial keeps its Step labels). Higgsfield hands this to its video-montage workflow.",
+   "hf": {
+    "model": "video-montage workflow, ffmpeg in the sandbox",
+    "credits": 0
+   },
+   "house": {
+    "model": "Video Edit (components/video-edit), the Studio's edit line; word timings from Scribe (scribe_v1)",
+    "credits": 0
+   },
+   "cheap": {
+    "model": "ffmpeg + Whisper captions on this Mac",
+    "registry": "whisper-large-v3-turbo",
+    "credits": 0,
+    "note": "Nothing lost for a straight join."
+   },
+   "local": "ffmpeg concat; python3 components/local-studio/local.py stt final.mp4 -o words.json for captions",
+   "prompt_hf": "7. For assembly and requested captions load video-montage directly, passing ordered\n   accepted clip URLs, authored words, language, look and any website hook/card\n   clearance. Physical captions/post package are opt-in; website retains its\n   upfront selection. Caption scripts belong exclusively to video-montage.",
+   "prompt_ours": "Clips 1..{N} in order, their own sound, 1080x1920. Captions only if the brief asks: the monologue words, timed from the read. No offer, price, disclaimer or call to action burned in unless the brief's own words ask for it.",
+   "check": "Length = {seconds} s within 0.1 s; audio present; captions match the words."
+  },
+  {
+   "n": 13,
+   "name": "Check and deliver",
+   "job": "behind.judge",
+   "what": "Check the finished file's real metadata and frames, then deliver to the Studio and Drive. Retry only failed pieces; never switch models silently.",
+   "hf": {
+    "model": "the directing chat model; media_upload + show_result",
+    "credits": 0
+   },
+   "house": {
+    "model": "Gemini 3.1 Pro judge (gemini-3.1-pro-preview); delivered to the Studio and Drive",
+    "credits": "metered, cents"
+   },
+   "cheap": {
+    "model": "Gemini 3 Flash fast read (gemini-3-flash-preview)",
+    "registry": "gemini-3-flash-preview",
+    "credits": "cents",
+    "note": "House rule: every read inside a run is the judge; Flash is a person's pick only."
+   },
+   "local": "ffprobe + 0.5 fps contact sheet",
+   "prompt_hf": "## Failures and delivery\n\nA timeout or unknown outcome is not a failed submission: poll existing IDs first.\nNever resubmit a whole batch because one index failed. An explicit technical\nfailure may be retried once within authorized spending; a bare failed status with\nno reason remains unknown. Moderation stops the dependent path; do not switch\nproviders, regenerate identities, remove references or use text-to-video to bypass it.\nNever replace a locked model silently. Retain successful artifacts for recovery.\nReturn the confirmed finished video and requested chat-only post package. Check\nactual output metadata and encoded frames; job completion alone is not quality proof.",
+   "prompt_ours": "Check: the hook in second 1-2; same face start to end; product label readable; every seam; every word heard; no disclaimer or stray text. Report the credits spent and any line that is not from the language folder or the product file.",
+   "check": "Delivered to the Studio and Drive, never to Meta from here."
+  }
+ ],
+ "formats": [
+  {
+   "id": "review",
+   "name": "Review (default)",
+   "when": "A creator talks to camera about a product, or tells a story with no product.",
+   "file": "sources/higgsfield/ugc-video/references/formats/review.md",
+   "slots_per_board": 8,
+   "changes": "The steps above as written: product optional, on-camera speech, eight slots per board.",
+   "board": {
+    "file": "sources/higgsfield/ugc-video/references/ugc-board.md",
+    "key_prompt_line": "[@Image1 product reference + ANGLE LOCK if product is present.] [@Image2 character reference, or @Image1 if no product.] [@Image3 previous-board reference if K > 1, with explicit instruction to preserve identity / location / lighting / wardrobe / product from this reference.] The same person appears in every slot with identical face, hair, body, and identity — no changes to features, hair, or proportions between slots."
+   },
+   "character": {
+    "file": "sources/higgsfield/ugc-video/references/ugc-character.md",
+    "key_prompt_line": "A [age band from Variety pool] [man/woman], [expression — pick one from the Approved mid-action expressions list], [hair color + length from Variety pool], [build vibe], with high model facial features, symmetrical features, well-proportioned figure, natural skin texture, standing in a [specific location with architectural details]."
+   },
+   "clip": {
+    "file": "sources/higgsfield/ugc-video/references/ugc-clip.md",
+    "key_prompt_line": "Style & Mood: UGC iPhone aesthetic, [light description matching the board], [SELFIE: front-facing camera, intimate handheld feel | STATIC: locked-off static camera, completely static, frozen frame | MIXED: starts SELFIE handheld, hard-cuts to STATIC locked-off, hard-cuts back to SELFIE handheld — POV alternates per cut], social media vertical format."
+   },
+   "extra": [
+    {
+     "file": "sources/higgsfield/ugc-video/references/monologue-craft.md",
+     "key_prompt_line": "ONE scenario spans the whole video: situational stakes first, framed without claiming that a"
+    },
+    {
+     "file": "sources/higgsfield/ugc-video/references/product-intake.md",
+     "key_prompt_line": "Write ONE canonical `product_description` and reuse it verbatim in every downstream prompt:"
+    }
+   ]
+  },
+  {
+   "id": "product",
+   "name": "Product (voiceover)",
+   "when": "The product is the hero; an off-screen voice talks; any person is hands-only and silent. Needs a real product photo.",
+   "file": "sources/higgsfield/ugc-video/references/formats/product.md",
+   "slots_per_board": 4,
+   "changes": "Skip step 3 (no creator). Product photo required. Boards have four slots. The voice is off-screen: the house read becomes the narrator voice (voices.json, narrator row) and no mouth is shown; for Wan the read goes in as audio_references, or the clip is made silent and the read laid on.",
+   "board": {
+    "file": "sources/higgsfield/ugc-video/references/ugc-product-boards.md",
+    "key_prompt_line": "[@Image1 product reference + ANGLE LOCK.] [@Image2 previous-board reference if K > 1, with explicit instruction to preserve product / location / lighting from this reference.] The product is the hero of every slot. The person, when present in any slot, is auxiliary — cropped, hands-only, partial body, or first-person POV — never the focal subject. Person's mouth is closed; no on-camera dialogue. Auxiliary person's gender, when present, is [female | male — derived from voice_gender], consistent within this board."
+   },
+   "character": null,
+   "clip": {
+    "file": "sources/higgsfield/ugc-video/references/ugc-product-clip-prompt.md",
+    "key_prompt_line": "Style & Mood: UGC iPhone aesthetic — phone-sensor grain, natural ambient light typical of a phone photo (NOT studio strobes, NOT moody side-light, NOT dramatic mood lighting, NOT golden hour), NOT editorial product photography, NOT studio shoot, NOT magazine commercial; [light description matching the board — soft neutral daylight or even ambient room light], [STATIC: locked-off static camera, completely static, frozen frame | FIRST-PERSON-POV: handheld first-person, slight natural micro-shake, only the operator's hand or forearm at frame edge if natural, phone object NEVER visible | MIXED: starts STATIC locked-off, hard-cuts to FIRST-PERSON-POV handheld, hard-cuts to MACRO locked-off, hard-cuts back to STATIC locked-off — POV alternates per cut], social media vertical format."
+   },
+   "extra": [
+    {
+     "file": "sources/higgsfield/ugc-video/references/product-product-intake.md",
+     "key_prompt_line": "Both input forms (a photo the user attached, or a product URL) must end in the SAME structured"
+    }
+   ]
+  },
+  {
+   "id": "unboxing",
+   "name": "Unboxing",
+   "when": "A visible creator opens the package and reacts. Only when the brief asks for a creator-led reveal.",
+   "file": "sources/higgsfield/ugc-video/references/formats/unboxing.md",
+   "slots_per_board": 4,
+   "changes": "Product required, plus a package picture if we have one (else a plain brown delivery box). Four slots per board: packed, opening, reveal, react/use. Same creator and voice steps.",
+   "board": {
+    "file": "sources/higgsfield/ugc-video/references/ugc-unboxing-board.md",
+    "key_prompt_line": "[@Image1 product reference + ANGLE LOCK if product is present.] [@Image2 character reference, or @Image1 if no product.] [@Image3 package reference if provided — Slot 1 PACKED depicts THIS exact package. Otherwise Slot 1 uses a generic plain brown taped delivery box.] [@Image4 (or @Image3 if no package) previous-board reference if K > 1, with explicit instruction to preserve identity / location / lighting / wardrobe / product from this reference.] The same person appears in every slot with identical face, hair, body, and identity — no changes to features, hair, or proportions between slots."
+   },
+   "character": {
+    "file": "sources/higgsfield/ugc-video/references/unboxing-ugc-character.md",
+    "key_prompt_line": "A [age band from Variety pool] [man/woman], [expression — pick one from the Approved mid-action expressions list], [hair color + length from Variety pool], [build vibe], with high model facial features, symmetrical features, well-proportioned figure, natural skin texture, standing in a [specific location with architectural details]."
+   },
+   "clip": {
+    "file": "sources/higgsfield/ugc-video/references/ugc-unboxing-clip.md",
+    "key_prompt_line": "Style & Mood: UGC iPhone aesthetic, [light description matching the board], [SELFIE: front-facing camera, intimate handheld feel | STATIC: locked-off static camera, completely static, frozen frame | MIXED: starts SELFIE handheld, hard-cuts to STATIC locked-off, hard-cuts back to SELFIE handheld — POV alternates per cut], social media vertical format."
+   },
+   "extra": [
+    {
+     "file": "sources/higgsfield/ugc-video/references/product-product-intake.md",
+     "key_prompt_line": "Both input forms (a photo the user attached, or a product URL) must end in the SAME structured"
+    }
+   ]
+  },
+  {
+   "id": "try-on",
+   "name": "Try-on",
+   "when": "A creator wears the item and shows fit and texture. Wearables only.",
+   "file": "sources/higgsfield/ugc-video/references/formats/try-on.md",
+   "slots_per_board": 8,
+   "changes": "Product must be wearable; the board uses a GARMENT CONSISTENCY LOCK instead of the angle lock. Eight slots, seven hard cuts. Same creator and voice steps.",
+   "board": {
+    "file": "sources/higgsfield/ugc-video/references/ugc-try-board.md",
+    "key_prompt_line": "[@Image1 product reference + GARMENT CONSISTENCY LOCK if product is present.] [@Image2 character reference, or @Image1 if no product.] [@Image3 previous-board reference if K > 1, with explicit instruction to preserve identity / location / lighting / wardrobe / product / hairstyle from this reference.] The same person appears in every slot with identical face, hair, body, and identity — no changes to features, hair, or proportions between slots."
+   },
+   "character": {
+    "file": "sources/higgsfield/ugc-video/references/try-on-ugc-character.md",
+    "key_prompt_line": "A [age band from Variety pool] [man/woman], [expression — pick one from the Approved mid-action expressions list], [hair color + length from Variety pool], [build vibe], with high model facial features, symmetrical features, well-proportioned figure, natural skin texture, standing in a [specific location with architectural details]."
+   },
+   "clip": {
+    "file": "sources/higgsfield/ugc-video/references/ugc-try-clip.md",
+    "key_prompt_line": "Style & Mood: UGC iPhone aesthetic, [light description matching the board, tier-matched], [SELFIE: front-facing camera, intimate handheld feel | STATIC: locked-off static camera, completely static, frozen frame | MIXED: starts SELFIE handheld, hard-cuts to STATIC locked-off, then alternates POV per cut across the eight beats], social media vertical format."
+   },
+   "extra": [
+    {
+     "file": "sources/higgsfield/ugc-video/references/product-product-intake.md",
+     "key_prompt_line": "Both input forms (a photo the user attached, or a product URL) must end in the SAME structured"
+    }
+   ]
+  },
+  {
+   "id": "tutorial",
+   "name": "Tutorial",
+   "when": "A creator shows real use, step by step, with a 'Step N — Heading' label in every slot.",
+   "file": "sources/higgsfield/ugc-video/references/formats/tutorial.md",
+   "slots_per_board": 4,
+   "changes": "Product required. Four step slots per board, each with exactly one Step N label: the only format where generated text is allowed, and the cleanup keeps the labels. Clips are mostly static camera.",
+   "board": {
+    "file": "sources/higgsfield/ugc-video/references/ugc-tutorial-boards.md",
+    "key_prompt_line": "[@Image1 product reference + ANGLE LOCK if product is present.] [@Image2 character reference, or @Image1 if no product.] [@Image3 previous-board reference if K > 1, with explicit instruction to preserve identity / location / lighting / wardrobe / product from this reference.] The same person appears in every slot with identical face, hair, body, and identity — no changes to features, hair, or proportions between slots."
+   },
+   "character": {
+    "file": "sources/higgsfield/ugc-video/references/soul-v2-ugc-character.md",
+    "key_prompt_line": "A [age band from Variety pool] [man/woman], [expression — pick one from the Approved mid-action expressions list], [hair color + length from Variety pool, build vibe], with high model facial features, symmetrical features, well-proportioned figure, natural skin texture, standing in a [specific location with architectural details]."
+   },
+   "clip": {
+    "file": "sources/higgsfield/ugc-video/references/ugc-tutorial-clip-prompt.md",
+    "key_prompt_line": "Style & Mood: UGC iPhone aesthetic, [light description matching the board], [SELFIE: front-facing camera, intimate handheld feel | STATIC: locked-off static camera, completely static, frozen frame | MIXED: starts STATIC locked-off, hard-cuts to STATIC locked-off, hard-cuts to STATIC locked-off, hard-cuts to SELFIE handheld — POV alternates per cut as specified], social media vertical format. Each cut shows the on-screen text caption \"Step N — Heading\" baked into the frame in [font vibe] style, identical typography across cuts in this clip."
+   },
+   "extra": [
+    {
+     "file": "sources/higgsfield/ugc-video/references/product-product-intake.md",
+     "key_prompt_line": "Both input forms (a photo the user attached, or a product URL) must end in the SAME structured"
+    }
+   ]
+  },
+  {
+   "id": "website",
+   "name": "Website tour",
+   "when": "A talking-head creator with real screenshots of a site as cards. Only when the page itself must appear; a product link alone is not this format.",
+   "file": "sources/higgsfield/ugc-video/references/formats/website.md",
+   "slots_per_board": 0,
+   "changes": "No boards: skip steps 6-8. Capture real mobile screenshots of the URL first (free, headless browser on this Mac). Each clip is one continuous talking-head shot (no cuts); the screenshots are laid over at word times in assembly. 22-40 words per clip by length.",
+   "board": null,
+   "character": {
+    "file": "sources/higgsfield/ugc-video/references/saas-ugc-character.md",
+    "key_prompt_line": "This is the **step-5 Seedance target**, not something you compose in the seed: the `soul_2` seed is a"
+   },
+   "clip": {
+    "file": "sources/higgsfield/ugc-video/references/saas-clip-prompt.md",
+    "key_prompt_line": "Compose each clip prompt from these parts, in this order:"
+   },
+   "extra": [
+    {
+     "file": "sources/higgsfield/ugc-video/references/saas-monologue.md",
+     "key_prompt_line": "The creator never cuts away; the site appears as overlay cards during the body. Write the body so it"
+    },
+    {
+     "file": "sources/higgsfield/ugc-video/references/website-capture.md",
+     "key_prompt_line": "Produce `output/site_full.png` (one mobile full-page capture → the section map) plus dedicated stills"
+    },
+    {
+     "file": "sources/higgsfield/ugc-video/references/screen-broll-and-composite.md",
+     "key_prompt_line": "The creator is on camera the whole video (the clips are the base picture and the continuous voice)."
+    }
+   ]
+  }
+ ],
+ "checks": [
+  "Price quoted and under the lane.json cap before the first paid call",
+  "Creator is our banked adult cast member; the same face in every board and clip",
+  "Claims only from the product file's approved list; the creator never claims personal use or results",
+  "Only cleaned, checked boards seed the next board or a clip",
+  "First clip checked alone before the batch",
+  "Every monologue word heard in order",
+  "No text on screen except tutorial Step labels and the product's own label",
+  "Length = target within 0.1 s; 1080x1920; audio present"
+ ],
+ "price": {
+  "higgsfield": "≈490 credits plus the Soul creator picture (2 boards ≈4.5 + 2 cleanups 5 + 2 clips at 1080p 480)",
+  "house": "≈90 credits (2 Seedance 480p clips with our voice read, 45 each) + GPT Image boards and cleanups and the ElevenLabs read on metered keys (cents); banked creator 0; upscale free",
+  "cheap": "≈25 credits (2 Wan 3.0 480p clips with the read as audio reference 22.5 + Flare 1k boards 1.5 + Seedream Flash cleanups 1; banked creator, free local upscale): about a twentieth of Higgsfield",
+  "basis": "30 s review video = 2 clips of 15 s, 2 boards; prices quoted 2026-11-21",
+  "card": {
+   "higgsfield": "≈490 cr",
+   "cheap": "≈25 cr",
+   "per": "30 s review"
+  }
+ },
+ "rules": [
+  "One creator, our own banked adult cast member, every board and clip",
+  "Words from the avatar's language folder; claims only from the approved list; the creator is a host, never a customer",
+  "Our voice (voices.json), never the clip model's invented one",
+  "Raw boards never seed anything; only cleaned, checked boards",
+  "No disclaimers, offer, price or call to action on screen unless the brief's own words ask",
+  "Clothed cast, no brands but ours, men never kiss or hug men",
+  "A failed clip is remade alone; never switch models silently"
+ ]
+}

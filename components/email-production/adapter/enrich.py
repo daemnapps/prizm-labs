@@ -1,4 +1,4 @@
-"""Make each picture on the team's page say where it lives, in words the team uses, with a link to open it in Drive.
+"""Make each picture on editor's page say where it lives, in words editor uses, with a link to open it in Drive.
 
 adapter/sync.py list gives every real picture `how.from` as a raw reference ("drive:brands/…", a proof id,
 or nothing for a product cut-out). This reads the same email.json the rows came from, walks the pictures in the
@@ -6,14 +6,14 @@ same order sync.py does, and rewrites each picture's `source` and `how` for the 
 
     source   "Real product photo, cut out" / "Real product photo" / "Real customer or brand photo" /
              "Made by the picture machine" / "Not made yet"
-    how      {"made": false, "from": "Shared Assets › brands › brand-b › …", "link": "https://drive.google.com/…"}
+    how      {"made": false, "from": "Shared Assets › brands › brand_b › …", "link": "https://drive.google.com/…"}
              {"made": false, "todo": true} for a picture still to make
 
 The Drive link comes from the proof index (runs/asset-index/<brand>/proof/proof.json, drive_url) or, for a file on
 the Shared Assets drive, from the Drive for desktop mount (the file's item id). A person's run on a laptop; with no
 mount the path is still shown, without a link.
 
-    python3 tools/email-production/adapter/enrich.py rows.json > rows-enriched.json
+    python3 components/email-production/adapter/enrich.py rows.json > rows-enriched.json
 """
 import json
 import subprocess

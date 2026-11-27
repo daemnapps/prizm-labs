@@ -1,0 +1,44 @@
+{
+"pages": {
+"sample_body-cpk_quiz": {
+"brand": "sample",
+"place": "body-cpk",
+"page": "quiz",
+"step": "landing",
+"kind": "quiz",
+"url": "https://funnel.example.com/body-cpk/quiz/",
+"product": "body-scrub",
+"status": "draft",
+"state": "live",
+"versions": [
+{
+"version": "v1",
+"control": true,
+"url": "https://funnel.example.com/body-cpk/quiz/",
+"offer": "1"
+}
+],
+"tests": []
+},
+"sample_body-cpk_landing": {
+"brand": "sample",
+"place": "body-cpk",
+"page": "landing",
+"step": "landing",
+"kind": "offer",
+"url": "https://funnel.example.com/body-cpk/landing/",
+"product": "body-scrub",
+"status": "draft",
+"state": "live",
+"versions": [
+{
+"version": "v1",
+"control": true,
+"url": "https://funnel.example.com/body-cpk/landing/",
+"offer": "1"
+}
+],
+"tests": []
+}
+}
+}

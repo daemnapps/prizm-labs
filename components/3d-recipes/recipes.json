@@ -1,0 +1,3156 @@
+[
+ {
+  "name": "Brand A CORE product casting sheet",
+  "recipe": "Brand A-core-product-casting-sheet",
+  "source_project": "ab4bc075-8dbf-4a31-8bd1-4018237e5423",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 6920
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 6855
+   }
+  ],
+  "total_bytes": 13775,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A CORE v2 product master",
+  "recipe": "Brand A-core-v2-product-master",
+  "source_project": "dd106597-4102-440a-ab9f-14b1c96df012",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 6721
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 839
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 2582
+   }
+  ],
+  "total_bytes": 10142,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A CRUSH product casting sheet",
+  "recipe": "Brand A-crush-product-casting-sheet",
+  "source_project": "b176c23f-b9fa-46ae-941a-059a7b52d61d",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 9586
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 7191
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 6273
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 1539
+   }
+  ],
+  "total_bytes": 24589,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A CRUSH v2 product master",
+  "recipe": "Brand A-crush-v2-product-master",
+  "source_project": "cda3a88a-c916-4ed1-9c28-78f3ccd6d19a",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 6945
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 7387
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 376
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 1109
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 407
+   },
+   {
+    "file": "step-06.py",
+    "bytes": 2583
+   }
+  ],
+  "total_bytes": 18807,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A FLEX CHARGING CASE product casting sheet",
+  "recipe": "Brand A-flex-charging-case-product-casting-sheet",
+  "source_project": "59f82e66-48ab-4ef8-8733-02dd7f7fa697",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 7261
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 7219
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 1067
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 1008
+   }
+  ],
+  "total_bytes": 16555,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A FLEX charging case v2, open and closed",
+  "recipe": "Brand A-flex-charging-case-v2-open-and-closed",
+  "source_project": "3bcb6260-806c-4373-98d6-fd58e870ece5",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 13133
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 1786
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 3842
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 3304
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 294
+   }
+  ],
+  "total_bytes": 22359,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A FLEX product casting sheet",
+  "recipe": "Brand A-flex-product-casting-sheet",
+  "source_project": "cb659331-a37b-4316-ae3f-b34139c20c3c",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 4389
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 1236
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 877
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 3741
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 895
+   },
+   {
+    "file": "step-06.py",
+    "bytes": 1461
+   },
+   {
+    "file": "step-07.py",
+    "bytes": 4842
+   },
+   {
+    "file": "step-08.py",
+    "bytes": 1531
+   },
+   {
+    "file": "step-09.py",
+    "bytes": 1506
+   },
+   {
+    "file": "step-10.py",
+    "bytes": 4534
+   },
+   {
+    "file": "step-11.py",
+    "bytes": 1413
+   },
+   {
+    "file": "step-12.py",
+    "bytes": 1346
+   },
+   {
+    "file": "step-13.py",
+    "bytes": 8354
+   },
+   {
+    "file": "step-14.py",
+    "bytes": 519
+   },
+   {
+    "file": "step-15.py",
+    "bytes": 4951
+   },
+   {
+    "file": "step-16.py",
+    "bytes": 4539
+   },
+   {
+    "file": "step-17.py",
+    "bytes": 1306
+   },
+   {
+    "file": "step-18.py",
+    "bytes": 1200
+   },
+   {
+    "file": "step-19.py",
+    "bytes": 1146
+   },
+   {
+    "file": "step-20.py",
+    "bytes": 5968
+   },
+   {
+    "file": "step-21.py",
+    "bytes": 1334
+   },
+   {
+    "file": "step-22.py",
+    "bytes": 4317
+   },
+   {
+    "file": "step-23.py",
+    "bytes": 1518
+   },
+   {
+    "file": "step-24.py",
+    "bytes": 7043
+   },
+   {
+    "file": "step-25.py",
+    "bytes": 1416
+   },
+   {
+    "file": "step-26.py",
+    "bytes": 1416
+   },
+   {
+    "file": "step-27.py",
+    "bytes": 969
+   },
+   {
+    "file": "step-28.py",
+    "bytes": 4583
+   },
+   {
+    "file": "step-29.py",
+    "bytes": 1025
+   },
+   {
+    "file": "step-30.py",
+    "bytes": 2651
+   },
+   {
+    "file": "step-31.py",
+    "bytes": 3592
+   },
+   {
+    "file": "step-32.py",
+    "bytes": 1506
+   },
+   {
+    "file": "step-33.py",
+    "bytes": 3696
+   },
+   {
+    "file": "step-34.py",
+    "bytes": 1214
+   },
+   {
+    "file": "step-35.py",
+    "bytes": 5414
+   },
+   {
+    "file": "step-36.py",
+    "bytes": 1122
+   },
+   {
+    "file": "step-37.py",
+    "bytes": 806
+   },
+   {
+    "file": "step-38.py",
+    "bytes": 264
+   }
+  ],
+  "total_bytes": 99640,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A PRIME product casting sheet",
+  "recipe": "Brand A-prime-product-casting-sheet",
+  "source_project": "9c7d1cd3-941a-4e70-9a6e-dac9e8c29f82",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 6687
+   }
+  ],
+  "total_bytes": 6687,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A PRIME v2 product master",
+  "recipe": "Brand A-prime-v2-product-master",
+  "source_project": "4cff8c89-8080-4b66-8b97-6ddb52b3d409",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 5704
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 5270
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 2583
+   }
+  ],
+  "total_bytes": 13557,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A The Jet",
+  "recipe": "Brand A-the-jet",
+  "source_project": "9d656f43-3ca4-409f-adad-3384076a0d4c",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 4435
+   }
+  ],
+  "total_bytes": 4435,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A WAR product casting sheet",
+  "recipe": "Brand A-war-product-casting-sheet",
+  "source_project": "05b4da67-8297-46c2-9dc1-8dcd04ed74ed",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 6685
+   }
+  ],
+  "total_bytes": 6685,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A WAR v2 product master",
+  "recipe": "Brand A-war-v2-product-master",
+  "source_project": "1ec0dddb-a450-4c62-93f6-d1e830604081",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 5449
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 6829
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 1942
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 4855
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 932
+   },
+   {
+    "file": "step-06.py",
+    "bytes": 1800
+   },
+   {
+    "file": "step-07.py",
+    "bytes": 1869
+   },
+   {
+    "file": "step-08.py",
+    "bytes": 2918
+   },
+   {
+    "file": "step-09.py",
+    "bytes": 2551
+   },
+   {
+    "file": "step-10.py",
+    "bytes": 2727
+   }
+  ],
+  "total_bytes": 31872,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A World: Around Town",
+  "recipe": "Brand A-world-around-town",
+  "source_project": "3db3c21e-d8b2-4178-9e12-f70a38013459",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 9634
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 225
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 2658
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 3203
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 1103
+   },
+   {
+    "file": "step-06.py",
+    "bytes": 3742
+   },
+   {
+    "file": "step-07.py",
+    "bytes": 251
+   },
+   {
+    "file": "step-08.py",
+    "bytes": 767
+   },
+   {
+    "file": "step-09.py",
+    "bytes": 1882
+   },
+   {
+    "file": "step-10.py",
+    "bytes": 601
+   },
+   {
+    "file": "step-11.py",
+    "bytes": 5171
+   },
+   {
+    "file": "step-12.py",
+    "bytes": 649
+   },
+   {
+    "file": "step-13.py",
+    "bytes": 6053
+   }
+  ],
+  "total_bytes": 35939,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A World: The Arena",
+  "recipe": "Brand A-world-the-arena",
+  "source_project": "6f4fa1f0-cb5b-47c0-9fa2-d095f12d5dae",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 12836
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 306
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 352
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 5335
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 2002
+   },
+   {
+    "file": "step-06.py",
+    "bytes": 2764
+   },
+   {
+    "file": "step-07.py",
+    "bytes": 3513
+   },
+   {
+    "file": "step-08.py",
+    "bytes": 449
+   },
+   {
+    "file": "step-09.py",
+    "bytes": 2660
+   },
+   {
+    "file": "step-10.py",
+    "bytes": 4256
+   }
+  ],
+  "total_bytes": 34473,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A World: The Family House",
+  "recipe": "Brand A-world-the-family-house",
+  "source_project": "260239df-60a9-4d1d-bfe8-52aa3e51fc93",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 14633
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 3651
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 504
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 309
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 311
+   },
+   {
+    "file": "step-06.py",
+    "bytes": 2605
+   },
+   {
+    "file": "step-07.py",
+    "bytes": 7434
+   }
+  ],
+  "total_bytes": 29447,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A World: The Gym",
+  "recipe": "Brand A-world-the-gym",
+  "source_project": "b3e176c1-68ea-41e9-a8bf-e33b372d2010",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 9831
+   }
+  ],
+  "total_bytes": 9831,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A World: The Job",
+  "recipe": "Brand A-world-the-job",
+  "source_project": "6b839673-4b44-4a54-a6a7-d69018c38a36",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 11094
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 209
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 2175
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 280
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 112
+   }
+  ],
+  "total_bytes": 13870,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A World: The Megachurch",
+  "recipe": "Brand A-world-the-megachurch",
+  "source_project": "00ec836c-aea5-48b4-b455-fc1a7d1b09b0",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 10064
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 209
+   }
+  ],
+  "total_bytes": 10273,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A World: The Shop",
+  "recipe": "Brand A-world-the-shop",
+  "source_project": "b563b0a2-f6e1-482a-935d-601e66127a17",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 9997
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 2665
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 756
+   }
+  ],
+  "total_bytes": 13418,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B BF body scrub 09-11 sets",
+  "recipe": "Brand B-bf-body-scrub-09-11-sets",
+  "source_project": "58a17d5d-9cd1-47e6-9c40-ed3e98f56deb",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 9477
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 3025
+   }
+  ],
+  "total_bytes": 12502,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B Brilliance Body Scrub product casting sheet",
+  "recipe": "Brand B-brilliance-body-scrub-product-casting-sheet",
+  "source_project": "c140384f-caee-4a98-9ee5-f5b186b1585e",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 7103
+   }
+  ],
+  "total_bytes": 7103,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B Brilliance Body Scrub v2 product master",
+  "recipe": "Brand B-brilliance-body-scrub-v2-product-master",
+  "source_project": "acc0a4ce-a906-458e-85d6-f0b66f9f83d6",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 10340
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 4187
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 693
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 1691
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 2517
+   },
+   {
+    "file": "step-06.py",
+    "bytes": 1253
+   },
+   {
+    "file": "step-07.py",
+    "bytes": 5951
+   },
+   {
+    "file": "step-08.py",
+    "bytes": 10162
+   },
+   {
+    "file": "step-09.py",
+    "bytes": 1713
+   },
+   {
+    "file": "step-10.py",
+    "bytes": 3064
+   },
+   {
+    "file": "step-11.py",
+    "bytes": 6374
+   },
+   {
+    "file": "step-12.py",
+    "bytes": 2062
+   },
+   {
+    "file": "step-13.py",
+    "bytes": 1334
+   }
+  ],
+  "total_bytes": 51341,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B Brilliance Face Scrub product casting sheet",
+  "recipe": "Brand B-brilliance-face-scrub-product-casting-sheet",
+  "source_project": "38f2034c-4c65-4e10-b6b5-5825cbffb99b",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 6544
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 1063
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 4618
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 1417
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 2153
+   },
+   {
+    "file": "step-06.py",
+    "bytes": 1372
+   },
+   {
+    "file": "step-07.py",
+    "bytes": 2844
+   },
+   {
+    "file": "step-08.py",
+    "bytes": 1367
+   },
+   {
+    "file": "step-09.py",
+    "bytes": 4728
+   }
+  ],
+  "total_bytes": 26106,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B Brilliance Face Scrub v2 product master",
+  "recipe": "Brand B-brilliance-face-scrub-v2-product-master",
+  "source_project": "2091ebc6-d652-4c31-ace7-e40cc6d43317",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 14281
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 1912
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 7644
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 5147
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 1143
+   },
+   {
+    "file": "step-06.py",
+    "bytes": 10011
+   },
+   {
+    "file": "step-07.py",
+    "bytes": 996
+   },
+   {
+    "file": "step-08.py",
+    "bytes": 1314
+   },
+   {
+    "file": "step-09.py",
+    "bytes": 1930
+   },
+   {
+    "file": "step-10.py",
+    "bytes": 1784
+   },
+   {
+    "file": "step-11.py",
+    "bytes": 4527
+   },
+   {
+    "file": "step-12.py",
+    "bytes": 1312
+   },
+   {
+    "file": "step-13.py",
+    "bytes": 4664
+   },
+   {
+    "file": "step-14.py",
+    "bytes": 2251
+   },
+   {
+    "file": "step-15.py",
+    "bytes": 752
+   },
+   {
+    "file": "step-16.py",
+    "bytes": 1235
+   },
+   {
+    "file": "step-17.py",
+    "bytes": 4126
+   },
+   {
+    "file": "step-18.py",
+    "bytes": 1509
+   },
+   {
+    "file": "step-19.py",
+    "bytes": 11553
+   },
+   {
+    "file": "step-20.py",
+    "bytes": 3948
+   },
+   {
+    "file": "step-21.py",
+    "bytes": 2438
+   },
+   {
+    "file": "step-22.py",
+    "bytes": 2905
+   },
+   {
+    "file": "step-23.py",
+    "bytes": 4806
+   },
+   {
+    "file": "step-24.py",
+    "bytes": 2357
+   },
+   {
+    "file": "step-25.py",
+    "bytes": 5112
+   }
+  ],
+  "total_bytes": 99657,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B Coco's kitchen shot sets",
+  "recipe": "Brand B-coco-s-kitchen-shot-sets",
+  "source_project": "082a2e56-9e1f-4ca9-9625-8a6d2ebb0df9",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 4042
+   }
+  ],
+  "total_bytes": 4042,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B Radiance Body Cream product casting sheet",
+  "recipe": "Brand B-radiance-body-cream-product-casting-sheet",
+  "source_project": "12f62e0a-0848-47bb-ac64-d83cf040f5d0",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 6308
+   }
+  ],
+  "total_bytes": 6308,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B Radiance Body Cream v2 product master",
+  "recipe": "Brand B-radiance-body-cream-v2-product-master",
+  "source_project": "d6291a07-fd13-4006-b412-26b61c3327d8",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 10338
+   }
+  ],
+  "total_bytes": 10338,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B World: a creator's House",
+  "recipe": "Brand B-world-a creator-s-house",
+  "source_project": "78e6f005-e761-48c6-89d0-6ccf92fd358b",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 10788
+   }
+  ],
+  "total_bytes": 10788,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B World: Margo's Desert Estate",
+  "recipe": "Brand B-world-margo-s-desert-estate",
+  "source_project": "3cc8435f-6d1d-4d19-a2e4-2215f8b0cfbb",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 15379
+   }
+  ],
+  "total_bytes": 15379,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B World: Sunday Church",
+  "recipe": "Brand B-world-sunday-church",
+  "source_project": "7bf07898-b5cd-4e1f-a3ee-c35e588c36e5",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 9553
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 393
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 180
+   }
+  ],
+  "total_bytes": 10126,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B World: The Clinic",
+  "recipe": "Brand B-world-the-clinic",
+  "source_project": "7b945ec8-cf20-4fa8-94d4-f8655a800088",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 11555
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 203
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 190
+   }
+  ],
+  "total_bytes": 11948,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B World: Yai's Golden Siam",
+  "recipe": "Brand B-world-yai-s-golden-siam",
+  "source_project": "5b9a9c70-9bc1-4f0b-b2a8-615f80466fa2",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 8463
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 2812
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 3594
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 394
+   }
+  ],
+  "total_bytes": 15263,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B Yai court-interior (casting room)",
+  "recipe": "Brand B-yai-court-interior-casting-room",
+  "source_project": "3e5109dd-06a0-45f0-a22a-4f1e0892b29e",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 3954
+   }
+  ],
+  "total_bytes": 3954,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B Yai gilded-pavilion (casting room)",
+  "recipe": "Brand B-yai-gilded-pavilion-casting-room",
+  "source_project": "f8abed86-2b84-482d-b8dd-06916f82f5c6",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 3815
+   }
+  ],
+  "total_bytes": 3815,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B Yai gold-leaf-road (casting room)",
+  "recipe": "Brand B-yai-gold-leaf-road-casting-room",
+  "source_project": "8f1486a6-e381-4b52-ad6b-c0ebc9d22704",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 3888
+   }
+  ],
+  "total_bytes": 3888,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B Yai golden-barge (casting room)",
+  "recipe": "Brand B-yai-golden-barge-casting-room",
+  "source_project": "17fc1b0f-9d10-4241-a922-6003ada9a763",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 4023
+   }
+  ],
+  "total_bytes": 4023,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B Yai lotus-terrace (casting room)",
+  "recipe": "Brand B-yai-lotus-terrace-casting-room",
+  "source_project": "f3393fcb-9094-4188-8786-db1ccf253337",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 3939
+   }
+  ],
+  "total_bytes": 3939,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B Yai turmeric-kitchen (casting room)",
+  "recipe": "Brand B-yai-turmeric-kitchen-casting-room",
+  "source_project": "7c1a4f96-cf6d-40dd-acfb-54d547854dc1",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 4280
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 1333
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 3364
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 1071
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 911
+   }
+  ],
+  "total_bytes": 10959,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B desert estate pool terrace (casting room)",
+  "recipe": "Brand B-desert-estate-pool-terrace-casting-room",
+  "source_project": "164c2edc-d720-4cc7-a3ce-463649949fa7",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 3487
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 677
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 907
+   }
+  ],
+  "total_bytes": 5071,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B desert golf-fairway (casting room)",
+  "recipe": "Brand B-desert-golf-fairway-casting-room",
+  "source_project": "1c5a1e8b-8990-48e0-9664-8df0a43d1b13",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 4132
+   }
+  ],
+  "total_bytes": 4132,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B desert helipad (casting room)",
+  "recipe": "Brand B-desert-helipad-casting-room",
+  "source_project": "00de2d47-9a29-4735-8019-6ff23adb7511",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 4357
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 849
+   }
+  ],
+  "total_bytes": 5206,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B desert living-room (casting room)",
+  "recipe": "Brand B-desert-living-room-casting-room",
+  "source_project": "80958650-62e5-44be-9aa8-91076002285f",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 4876
+   }
+  ],
+  "total_bytes": 4876,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B desert outdoor-bar (casting room)",
+  "recipe": "Brand B-desert-outdoor-bar-casting-room",
+  "source_project": "f84dd346-c88d-4447-9ba4-b736e4a916a6",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 3796
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 680
+   }
+  ],
+  "total_bytes": 4476,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B desert walk-in-closet (casting room)",
+  "recipe": "Brand B-desert-walk-in-closet-casting-room",
+  "source_project": "3df0364e-1788-4bd0-9610-344cad536fe8",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 4207
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 712
+   }
+  ],
+  "total_bytes": 4919,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B At-Home Thai Spa Bundle hero set",
+  "recipe": "Brand B-thai-spa-bundle-hero",
+  "source_project": "78e6f005-e761-48c6-89d0-6ccf92fd358b",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 10788
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 7981
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 1794
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 5604
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 290
+   }
+  ],
+  "total_bytes": 26457,
+  "outside_refs": [],
+  "note": "Steps 02-04 consolidate the set edits into three; not yet rerun in a fresh project."
+ },
+ {
+  "name": "Brand B At-Home Thai Spa Bundle store picture on white",
+  "recipe": "Brand B-thai-spa-bundle-white",
+  "source_project": "78e6f005-e761-48c6-89d0-6ccf92fd358b",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 10788
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 7981
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 1794
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 5604
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 290
+   },
+   {
+    "file": "step-06.py",
+    "bytes": 3681
+   },
+   {
+    "file": "step-07.py",
+    "bytes": 2847
+   }
+  ],
+  "total_bytes": 32985,
+  "outside_refs": [],
+  "note": "Steps 01-05 are the hero set's (a creator House and the true-size tubes and pouch); 06 builds the white studio from copies of them, 07 is the approved layout: three tubes standing in the open pouch. Not yet rerun in a fresh project."
+ },
+ {
+  "name": "Brand B Brilliance Body Scrub texture swirl (How to Use card)",
+  "recipe": "Brand B-body-scrub-swirl",
+  "source_project": "78e6f005-e761-48c6-89d0-6ccf92fd358b",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 3093
+   }
+  ],
+  "total_bytes": 3093,
+  "outside_refs": [],
+  "note": "Full-frame bed of body scrub combed into broad wavy ridges rising lower-left to upper-right (rot 48 deg) to match the face scrub and body cream swirl cards; print 3:4 with real body scrub photos as the reference, crop the centre to 4:5."
+ },
+ {
+  "name": "Brand B pop-up 3-pack sets (body + face scrub in the open pouch, white studio)",
+  "recipe": "Brand B-popup-3pack-sets",
+  "source_project": "78e6f005-e761-48c6-89d0-6ccf92fd358b",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 2427
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 331
+   }
+  ],
+  "total_bytes": 2758,
+  "outside_refs": [],
+  "needs": "Brand B-thai-spa-bundle-white already built in the same project"
+ },
+ {
+  "name": "Brand A idea2 Cole hug set (campus plaza)",
+  "recipe": "Brand A-idea2-cole-hug-plaza",
+  "source_project": "d1979cd0-dadf-4b80-8a17-fafbb4a067eb",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 5027
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 1191
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 1001
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 2485
+   }
+  ],
+  "total_bytes": 9704,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B I stole a bottle · cast stage (four people at true build, body scrub at true size)",
+  "recipe": "Brand B-stole-cast-stage",
+  "source_project": "eebe4c38-3760-4a55-bac6-2de4d74a9a4c",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 4188
+   }
+  ],
+  "total_bytes": 4188,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B I stole a bottle · locations (ten empty rooms, one camera each)",
+  "recipe": "Brand B-stole-locations",
+  "source_project": "eebe4c38-3760-4a55-bac6-2de4d74a9a4c",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 4708
+   }
+  ],
+  "total_bytes": 4708,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B nov-39 sets (a creator armchair, duo shelf, textures)",
+  "recipe": "Brand B-nov39-sets",
+  "source_project": "0052598c-a1a3-48a8-bb93-d9465a2ab4d9",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 10788
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 4416
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 1864
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 540
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 5101
+   },
+   {
+    "file": "step-06.py",
+    "bytes": 1745
+   },
+   {
+    "file": "step-07.py",
+    "bytes": 376
+   },
+   {
+    "file": "step-08.py",
+    "bytes": 5041
+   },
+   {
+    "file": "step-09.py",
+    "bytes": 1961
+   },
+   {
+    "file": "step-10.py",
+    "bytes": 1837
+   }
+  ],
+  "total_bytes": 33669,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A nov-42 trophy case (six failed products, FLEX in hand + PRIME, no case; FLEX and PRIME close-up cameras)",
+  "recipe": "Brand A-nov-42-trophy-case",
+  "source_project": "1e68bcf0-8837-4bc5-b460-f4a5bae3d9c8",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 9155
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 2140
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 1313
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 795
+   }
+  ],
+  "total_bytes": 13403,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A nov-39 closing-time counter (FLEX in cradle + MIRO, razor and acid)",
+  "recipe": "Brand A-nov39-counter",
+  "source_project": "418067ff-ff2a-4370-9064-9f5d74e159b6",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 7088
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 1041
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 4546
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 1220
+   }
+  ],
+  "total_bytes": 13895,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A nov-41 razor aisle (hero + WAR product close-up with ingredients)",
+  "recipe": "Brand A-nov41-razor-aisle",
+  "source_project": "a61ca310-aec0-441f-9395-5c2da2b5cf43",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 8455
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 2880
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 1008
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 3748
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 918
+   }
+  ],
+  "total_bytes": 17009,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A nov-38 flyer set (Black Friday flyer on the big-bathroom vanity, hero + product close-ups; needs Brand A-world-the-family-house first)",
+  "recipe": "Brand A-nov38-flyer-set",
+  "source_project": "94881891-2226-414b-ba39-a432879b76af",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 5467
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 2055
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 1249
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 2793
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 1091
+   },
+   {
+    "file": "step-06.py",
+    "bytes": 1103
+   },
+   {
+    "file": "step-07.py",
+    "bytes": 1103
+   },
+   {
+    "file": "step-08.py",
+    "bytes": 1859
+   },
+   {
+    "file": "step-09.py",
+    "bytes": 1862
+   },
+   {
+    "file": "step-10.py",
+    "bytes": 1869
+   }
+  ],
+  "total_bytes": 20451,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A nov-38 pharmacy (old neighbourhood pharmacy at night, no person)",
+  "recipe": "Brand A-nov38-pharmacy",
+  "source_project": "566a5d86-0438-499a-9ad8-a45b6ba864c0",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 4339
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 826
+   }
+  ],
+  "total_bytes": 5165,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A nov-38 skin cut-away (curl / blade / acid cross-section views for the infographic)",
+  "recipe": "Brand A-nov38-skin-cutaway",
+  "source_project": "96189065-df9f-4e76-8556-e48aca83d570",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 5509
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 595
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 608
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 2083
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 929
+   }
+  ],
+  "total_bytes": 9724,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A nov-43 closing shop (barbershop at closing time: CLOSING TIME chalkboard, the King Set with the FLEX Charging Case open and empty; steps 05-06 the hard-light-shaft camera CAM_nov43_beam)",
+  "recipe": "Brand A-nov-43-closing-shop",
+  "source_project": "b6362fd7-4caf-4992-9cc6-c5ed1a802c91",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 10519
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 2584
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 998
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 458
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 4337
+   },
+   {
+    "file": "step-06.py",
+    "bytes": 553
+   }
+  ],
+  "total_bytes": 19449,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A nov-44 final buzzer court (five King Set pieces at centre court of a dark arena, one spotlight, black basketball, no case; one close camera per product, render-singles.py renders each; step-04 the worn razor alone; step-05 warm golden re-light and new cameras, render-singles-warm.py)",
+  "recipe": "Brand A-nov-44-final-buzzer-court",
+  "source_project": "810b6832-2e63-4d11-9ea8-86ab6bf6e78b",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 5691
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 1229
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 895
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 2184
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 3769
+   }
+  ],
+  "total_bytes": 13768,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A nov-45 last night at the shop (barbershop after closing through the glass door: CLOSED card, five empty chairs, FLEX in its cradle + MIRO under one pendant)",
+  "recipe": "Brand A-nov45-last-night-shop",
+  "source_project": "7267d775-34e6-4b3f-9ffb-a663d6ec25d9",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 10369
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 1398
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 834
+   }
+  ],
+  "total_bytes": 12601,
+  "outside_refs": [
+   "Brand A-nov39-counter"
+  ]
+ },
+ {
+  "name": "Brand A nov-45 shop counter top (the editor's art direction: high angle on glossy black marble, red + blue gel light; CLOSED card, FLEX in cradle, MIRO, barber tools and old razors, chair arm)",
+  "recipe": "Brand A-nov45-shop-counter-top",
+  "source_project": "00ccfd32-966f-480c-821e-ee5e712bbc84",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 8528
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 927
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 426
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 2437
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 1551
+   }
+  ],
+  "total_bytes": 13869,
+  "outside_refs": [
+   "Brand A-nov45-last-night-shop"
+  ]
+ },
+ {
+  "name": "Brand B nov-43 sets (round 1 blue wall; round 2 warm desert editorial: a creator in sun, hands, arm, three product stones, bundle on sand)",
+  "recipe": "Brand B-nov43-sets",
+  "source_project": "0052598c-a1a3-48a8-bb93-d9465a2ab4d9",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 6653
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 419
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 957
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 333
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 7785
+   },
+   {
+    "file": "step-06.py",
+    "bytes": 4280
+   },
+   {
+    "file": "step-07.py",
+    "bytes": 716
+   }
+  ],
+  "total_bytes": 21143,
+  "outside_refs": [
+   "Brand B-nov39-sets"
+  ]
+ },
+ {
+  "name": "Brand B nov-42 sets (a creator robe hero, scrub, arm, cream, duo with travel bag)",
+  "recipe": "Brand B-nov42-sets",
+  "source_project": "4696c9a8-9e8f-4a8d-ae7a-bead0f9cfbe7",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 9296
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 815
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 1026
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 428
+   }
+  ],
+  "total_bytes": 11565,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A FLEX statics sets, 7 Nov (briefs 0107, 0108, 0204)",
+  "recipe": "Brand A-flex-statics-1107-sets",
+  "source_project": "cb659331-a37b-4316-ae3f-b34139c20c3c",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 5207
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 495
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 402
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 334
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 5819
+   },
+   {
+    "file": "step-06.py",
+    "bytes": 6632
+   },
+   {
+    "file": "step-07.py",
+    "bytes": 609
+   },
+   {
+    "file": "step-08.py",
+    "bytes": 1724
+   },
+   {
+    "file": "step-09.py",
+    "bytes": 647
+   },
+   {
+    "file": "step-10.py",
+    "bytes": 2962
+   }
+  ],
+  "total_bytes": 24831,
+  "outside_refs": [
+   "charger_shell and flex_seat (the FLEX product project's SET_store_charger: the product and its cradle, copied by steps 05 and 06)"
+  ]
+ },
+ {
+  "name": "Brand B December Christmas statics sets (T7 white letter page, K1 red palm, K2 grey two-tube, M1)",
+  "recipe": "Brand B-dec26-christmas-statics-sets",
+  "source_project": "44599646-543d-42e1-a4cd-511924b844c4",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 8801
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 3954
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 711
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 3860
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 730
+   },
+   {
+    "file": "step-06.py",
+    "bytes": 2838
+   },
+   {
+    "file": "step-07.py",
+    "bytes": 859
+   }
+  ],
+  "outside_refs": [],
+  "total_bytes": 21753
+ },
+ {
+  "name": "Brand A_flex-face-brush_brief-0336 · family-3d cast stage",
+  "recipe": "Brand A-brief-0336-family-3d-cast-stage",
+  "source_project": "8bc9bb8f-61d7-4371-a3c5-1a2c80ebd371",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 5132
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 966
+   }
+  ],
+  "total_bytes": 6098,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A idea-15 family-3d empty sets (brief 0336)",
+  "recipe": "Brand A-idea15-family-3d-sets",
+  "source_project": "5352122b-415c-4b12-b050-b378992c3590",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 18076
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 777
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 802
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 2613
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 1293
+   },
+   {
+    "file": "step-06.py",
+    "bytes": 16104
+   },
+   {
+    "file": "step-07.py",
+    "bytes": 764
+   },
+   {
+    "file": "step-08.py",
+    "bytes": 775
+   },
+   {
+    "file": "step-09.py",
+    "bytes": 3676
+   },
+   {
+    "file": "step-10.py",
+    "bytes": 1293
+   },
+   {
+    "file": "step-11.py",
+    "bytes": 873
+   }
+  ],
+  "total_bytes": 47046,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A FLEX family-3d product print (brief 0336)",
+  "recipe": "Brand A-flex-family-3d-product-print",
+  "source_project": "cb659331-a37b-4316-ae3f-b34139c20c3c",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 1309
+   }
+  ],
+  "total_bytes": 1309,
+  "outside_refs": [
+   "runs inside the Brand A FLEX product casting sheet project; needs its SET_store_charger (charger_shell and flex_seat) and CAM_store_charger"
+  ]
+ },
+ {
+  "name": "Brand A brief-0336 + brief-0339 family-3d empty sets (coffee shop, office, gym, bedroom, church steps, church altar, reception, product void; mama's table, balcony, party bathroom, pore world, shared sink, golden doorway)",
+  "recipe": "Brand A-0336-family-3d-sets",
+  "source_project": "32e17024-078a-4d79-a183-64babcf33e35",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 21576
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 366
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 379
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 7431
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 347
+   },
+   {
+    "file": "step-06.py",
+    "bytes": 6669
+   },
+   {
+    "file": "step-07.py",
+    "bytes": 2073
+   },
+   {
+    "file": "step-08.py",
+    "bytes": 6647
+   },
+   {
+    "file": "step-09.py",
+    "bytes": 1186
+   },
+   {
+    "file": "step-10.py",
+    "bytes": 14319
+   },
+   {
+    "file": "step-11.py",
+    "bytes": 321
+   },
+   {
+    "file": "step-12.py",
+    "bytes": 754
+   },
+   {
+    "file": "step-13.py",
+    "bytes": 2057
+   },
+   {
+    "file": "step-14.py",
+    "bytes": 1935
+   },
+   {
+    "file": "step-15.py",
+    "bytes": 2051
+   },
+   {
+    "file": "step-16.py",
+    "bytes": 25287
+   },
+   {
+    "file": "step-17.py",
+    "bytes": 437
+   },
+   {
+    "file": "step-18.py",
+    "bytes": 18453
+   },
+   {
+    "file": "step-19.py",
+    "bytes": 1571
+   },
+   {
+    "file": "step-20.py",
+    "bytes": 1392
+   }
+  ],
+  "total_bytes": 115251,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A brief-0336 family-3d bedroom (runs on the Family House world)",
+  "recipe": "Brand A-0336-bedroom-family-3d",
+  "source_project": "260239df-60a9-4d1d-bfe8-52aa3e51fc93",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 4645
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 8188
+   }
+  ],
+  "total_bytes": 12833,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B brief-0380 porch sets (17 start pictures; builds on the brief's porch set, whose first three revisions have no saved recipe)",
+  "recipe": "Brand B-brilliance-body-scrub-brief-0380-porch-sets",
+  "source_project": "62e00cd8-cf8b-45b9-90ab-af1548313010",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 10317
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 9753
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 884
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 5690
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 1260
+   },
+   {
+    "file": "step-06.py",
+    "bytes": 917
+   },
+   {
+    "file": "step-07.py",
+    "bytes": 1509
+   },
+   {
+    "file": "step-08.py",
+    "bytes": 754
+   },
+   {
+    "file": "step-09.py",
+    "bytes": 930
+   },
+   {
+    "file": "step-10.py",
+    "bytes": 1712
+   },
+   {
+    "file": "step-11.py",
+    "bytes": 2138
+   },
+   {
+    "file": "step-12.py",
+    "bytes": 1064
+   },
+   {
+    "file": "step-13.py",
+    "bytes": 3659
+   },
+   {
+    "file": "step-14.py",
+    "bytes": 5690
+   },
+   {
+    "file": "step-15.py",
+    "bytes": 5570
+   },
+   {
+    "file": "step-16.py",
+    "bytes": 4488
+   },
+   {
+    "file": "step-17.py",
+    "bytes": 6832
+   },
+   {
+    "file": "step-18.py",
+    "bytes": 6899
+   },
+   {
+    "file": "step-19.py",
+    "bytes": 5619
+   },
+   {
+    "file": "step-20.py",
+    "bytes": 6236
+   },
+   {
+    "file": "step-21.py",
+    "bytes": 3282
+   }
+  ],
+  "total_bytes": 85203,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B brief-0384 sets (second shopper hands master, parody lotion gift set, try-me shower bay, empty big-box beauty aisle)",
+  "recipe": "Brand B-brief-0384-sets",
+  "source_project": "e0ab3787-861d-4c94-b2cb-48973afeb471",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 13989
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 1509
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 1131
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 1326
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 1358
+   }
+  ]
+ },
+ {
+  "name": "Brand A idea-15 cover room (small bathroom of The Family House, two men selfie)",
+  "recipe": "Brand A-idea-15-cover-room",
+  "source_project": "260239df-60a9-4d1d-bfe8-52aa3e51fc93",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 5138
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 1251
+   }
+  ],
+  "total_bytes": 6389,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B b-roll tube hold and rub (a creator's House bathroom vanity, hands only; runs after the a creator's House world steps)",
+  "recipe": "Brand B-broll-tube-hold-rub-set",
+  "source_project": "78e6f005-e761-48c6-89d0-6ccf92fd358b",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 8418
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 3796
+   }
+  ],
+  "total_bytes": 12214,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A dec-01 December board at the barbershop (Christmas in the NOON look): chalkboard + pine garland + fairy lights, FLEX in its cradle, black gift with sage ribbon; King Set camera; WAR/PRIME/CRUSH/MIRO single close-ups",
+  "recipe": "Brand A-dec01-december-board",
+  "source_project": "6b67a9d8-6697-44ce-b09a-af1d67b7545d",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 11521
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 849
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 872
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 1342
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 595
+   },
+   {
+    "file": "step-06.py",
+    "bytes": 1543
+   },
+   {
+    "file": "step-07.py",
+    "bytes": 1555
+   },
+   {
+    "file": "step-08.py",
+    "bytes": 1555
+   },
+   {
+    "file": "step-09.py",
+    "bytes": 1534
+   }
+  ],
+  "total_bytes": 21366,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A dec-04 black gift table (Christmas presents in matte black paper with silver-grey ribbon, hand-lettered name tags, one blank tag in front, tree-light bokeh; WAR, CRUSH, PRIME by the blank tag; FLEX in its cradle; three cameras: hero, vitals, flex)",
+  "recipe": "Brand A-dec04-black-gift-table",
+  "source_project": "35a6b30a-e587-4635-8310-6d2e4b6b7bbd",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 10378
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 1836
+   }
+  ],
+  "total_bytes": 12214,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A dec-02 Christmas chair (empty barber chair, pine garland with warm lights and silver baubles over the mirror, FLEX in its cradle + MIRO on the station; hero + product close cameras)",
+  "recipe": "Brand A-dec02-christmas-chair",
+  "source_project": "c320aaa8-fd58-4daf-9602-72d76754577b",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 12158
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 2227
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 489
+   }
+  ],
+  "total_bytes": 14874,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A dec-03 The book is full (Christmas in the NOON look): barbershop front desk at night by the snowy window, sage wreath, brass lamp, open appointment book stamped FULL, King Set behind it; hero, King Set group and WAR/CRUSH/FLEX/PRIME/MIRO single close-ups",
+  "recipe": "Brand A-dec03-book-full-window",
+  "source_project": "d4d2ac24-a78b-4c37-aca3-a4030a655dc5",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 10029
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 1667
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 1116
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 1138
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 1431
+   }
+  ],
+  "renders": [
+   {
+    "file": "render-group-wide.py",
+    "bytes": 739
+   },
+   {
+    "file": "render-solo.py",
+    "bytes": 1754
+   }
+  ]
+ },
+ {
+  "name": "Brand A dec-05 christmas wrapping table (three black-paper gifts tagged MOM / MY GIRL / LIL BRO, WAR standing unwrapped with a blank tag and a pen, dark tree bokeh); cameras CAM_hero and CAM_product",
+  "recipe": "Brand A-dec05-christmas-wrapping-table",
+  "source_project": "629a432c-64df-4e0d-976e-eda08dc81f7d",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 8339
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 1280
+   }
+  ],
+  "total_bytes": 9619,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B nov-44 sets (Black Friday festive: Lorna hero, hands, bundle, three product cards, ritual closing; ivory walls, wine gifts, gold ribbon and confetti; tubes at true size from the real packshots)",
+  "recipe": "Brand B-nov44-sets",
+  "source_project": "75d318db-9c92-42c3-beab-33e80e7bf880",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 5268
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 10524
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 1040
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 541
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 7189
+   },
+   {
+    "file": "step-06.py",
+    "bytes": 3333
+   },
+   {
+    "file": "step-07.py",
+    "bytes": 569
+   },
+   {
+    "file": "step-08.py",
+    "bytes": 5042
+   },
+   {
+    "file": "step-09.py",
+    "bytes": 732
+   }
+  ],
+  "total_bytes": 34238,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A Fed-Up King carousel sets (bathroom with a posed stand-in, 2 a.m. store aisle, clearance bin)",
+  "recipe": "Brand A-fuk-carousel-bath-and-aisle-sets",
+  "source_project": "c0ccf443-baa1-4a72-8839-71fd11917515",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 4389
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 5394
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 407
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 2920
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 2768
+   }
+  ],
+  "total_bytes": 15878,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A dec-10 closing-time barbershop door (pine wreath with silver bow + CLOSED sign on the glass, string lights, night street; King Set row, cape, keys, pine + silver baubles on the console); cameras CAM_hero, CAM_group, CAM_WAR/CRUSH/PRIME/FLEXMIRO",
+  "recipe": "Brand A-dec10-closing-door",
+  "source_project": "69d05a04-b0c1-499d-8100-bba3b7a786d3",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 9806
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 805
+   },
+   {
+    "file": "render-solo.py",
+    "bytes": 1817
+   }
+  ],
+  "total_bytes": 12428,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A dec-07 christmas mantel (four stuffed stockings stitched MOM / POPS / BRO / HER, a fifth black stocking empty with a blank cuff, FLEX in its cradle on the shelf above it, pine garland, candles, low fire); cameras CAM_dec07_hero, CAM_dec07_flex and CAM_dec07_stocking",
+  "recipe": "Brand A-dec07-christmas-mantel",
+  "source_project": "57440b9c-b5b6-4463-809c-8d487e4295bf",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 9201
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 759
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 1054
+   }
+  ],
+  "total_bytes": 11014,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A dec-06 the December shelf (charcoal tile bathroom wall, floating stone shelf, pine garland with warm fairy lights and silver baubles, black gift with sage ribbon; empty gap, then WAR, PRIME, CRUSH, MIRO, FLEX in its base and the pill-shaped charging case); cameras CAM_dec06_empty, CAM_dec06_full, CAM_dec06_case",
+  "recipe": "Brand A-dec06-december-shelf",
+  "source_project": "6a60bab8-3241-402a-b391-6e04c8fd0b0e",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 11141
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 2504
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 3345
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 2725
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 1177
+   }
+  ],
+  "total_bytes": 20892,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A dec-11 steamed mirror list (his own bathroom on a December night: fogged mirror with MA / POP / THE KIDS / THE BARBER struck and MY FACE, hallway Christmas tree through the door, black stone vanity, candle, pine sprig, FLEX in its low cradle + MIRO; hero, list close and product close cameras)",
+  "recipe": "Brand A-dec11-steamed-mirror-list",
+  "source_project": "00869424-ddc2-409b-9fab-60fa95dff114",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 12630
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 4912
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 1311
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 2998
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 1095
+   }
+  ],
+  "total_bytes": 22946,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A dec-12 christmas stocking mantel (black stone fireplace, low fire, pine garland; four charcoal stockings stitched MA / POPS / NIA / DRE and one plain black stocking with a blank sage cuff; WAR, CRUSH, PRIME on the mantel top); cameras CAM_dec12_hero, CAM_dec12_vitals, CAM_dec12_blank",
+  "recipe": "Brand A-dec12-christmas-stockings-mantel",
+  "source_project": "9acbf57a-3f79-4f2d-91b6-8bcf931b5ad8",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 9387
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 2272
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 784
+   }
+  ],
+  "total_bytes": 12443,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A dec-12 christmas car boot (black SUV in a cold car park at night, tailgate up, netted tree on the roof, boot of black-paper presents with silver ribbon tagged MA / POPS / NIA / DRE, one small black box with a sage ribbon and a blank tag; WAR, CRUSH, PRIME on the boot carpet); cameras CAM_dec12_hero, CAM_dec12_vitals, CAM_dec12_tag, CAM_dec12_solo_{war,crush,prime}; step 3 brighter with gold accents",
+  "recipe": "Brand A-dec12-christmas-car-boot",
+  "source_project": "b6bf5d0d-e506-49aa-8ed6-0ecbe6ff1067",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 10611
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 1493
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 3907
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 1571
+   }
+  ],
+  "total_bytes": 17582,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A dec-08 Christmas mantel (fireplace at night in the NOON look: four black knit stockings tagged POPS / UNC / MY BARBER / LIL BRO, one empty brass hook, pine garland with warm lights; FLEX in its cradle + MIRO folded with a FREE tag on the shelf; hero, product, flex and miro cameras)",
+  "recipe": "Brand A-dec08-christmas-mantel",
+  "source_project": "e15f77ce-54e3-43d6-a73e-16935b292ad0",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 12903
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 1558
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 1162
+   }
+  ],
+  "total_bytes": 15623,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A dec-08 presents under the tree (Christmas in the NOON look: dark tree with warm lights and silver baubles, five black/charcoal gifts with silver ribbon tagged POPS / UNC / MY BARBER / LIL BRO / MA; FLEX in its cradle + MIRO folded with a FREE tag on the floor; hero, product, flex and miro cameras). Replaces Brand A-dec08-christmas-mantel for this email.",
+  "recipe": "Brand A-dec08-presents-under-tree",
+  "source_project": "7749f8ae-0b95-4095-993b-af247a9131eb",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 10159
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 1132
+   }
+  ],
+  "total_bytes": 11291,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A dec-14 bright daytime christmas barbershop (storefront window daylight, sage tile, brass mirror with gold and silver tinsel and baubles, small decorated tree; black chair mid-turn toward the mirror with the cape slipping; marble counter with WAR + FLEX, CRUSH, PRIME in front of an open green gift box); cameras CAM_dec14_hero (products hidden from v3), CAM_dec14_step1, CAM_dec14_step2, CAM_dec14_step3",
+  "recipe": "Brand A-dec14-christmas-daytime-barbershop",
+  "source_project": "12face4e-8ab5-46c6-996b-c8d1acbad4d5",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 16440
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 2173
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 798
+   }
+  ],
+  "total_bytes": 19411,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A dec-13 christmas shop window at dusk (deep green shop front, brushed-gold window frame, snow on sill and pavement, garland with warm lights and gold/silver baubles; inside a warm cream window with two lit pine trees, hanging baubles, a sage-ribbon gift and a black stone plinth with a gold edge holding WAR, PRIME, CRUSH on its cap, MIRO folded, FLEX in its base; street lamp, falling snow); cameras CAM_dec13_hero, CAM_dec13_hero_words (taller plain sign board above the window, headroom for the email words), CAM_dec13_set, CAM_dec13_flex (FLEX turned to face in for that camera only)",
+  "recipe": "Brand A-dec13-christmas-shop-window",
+  "source_project": "b943f0de-9a8e-4cc4-bc7a-1344684a69a2",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 12656
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 1086
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 1229
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 1186
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 1785
+   }
+  ],
+  "total_bytes": 17942,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A dec-15 King Set open-box Christmas flat-lay (matte black gift box on cream gold-dot paper, the five in a row on cream tissue, lid with sage bow behind, pine and gold baubles); cameras CAM_dec15_hero, CAM_dec15_five, CAM_dec15_flex, CAM_dec15_pair_wp (WAR+PRIME), CAM_dec15_pair_cm (CRUSH+MIRO), neighbours hidden per pair render",
+  "recipe": "Brand A-dec15-king-set-flatlay",
+  "source_project": "2dd04cbd-3599-4840-bc45-7a1f1bc2e8c9",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 10595
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 1390
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 1820
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 650
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 929
+   },
+   {
+    "file": "step-06.py",
+    "bytes": 1170
+   }
+  ],
+  "total_bytes": 16554,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A dec-17 hallway one box (bright winter front hallway: sage-grey panelled wall, dark oak console table with ONE black-wrapped box with sage ribbon and blank gold tag, brass key dish, pine sprig; charcoal coat + sage scarf on brass hooks; charcoal-black front door with daylight glass and pine wreath; the box opened with WAR, PRIME, CRUSH, FLEX in its base and folded MIRO; the closed FLEX charging case beside the box); the five products alone on the console (step 3, renders by query: step-03-renders.py with G set); cameras CAM_dec17_hero, CAM_dec17_open, CAM_dec17_case",
+  "recipe": "Brand A-dec17-hallway-one-box",
+  "source_project": "e21943cb-da5f-44cd-a3a5-c5b7d70a3f1d",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 15059
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 2384
+   },
+   {
+    "file": "step-03-renders.py",
+    "bytes": 704
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 5012
+   }
+  ],
+  "total_bytes": 23159,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B dec-01 sets (December home Thai spa: Luciana hero, ritual forearm, bundle with pouch, three product plinths; ivory limewash, teak, celadon, orchids, candles, pine with fairy lights)",
+  "recipe": "Brand B-dec01-sets",
+  "source_project": "96dbb625-6f2e-4702-a6f2-9683e18fa63c",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 5268
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 10322
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 547
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 1109
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 949
+   }
+  ],
+  "total_bytes": 18195,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B dec-04 sets (Christmas morning oak table, hands front and centre: Becky with a mug, gift box with the three tubes, tying a velvet bow, cream on the back of the hand beside the bundle and pouch; tubes at true size)",
+  "recipe": "Brand B-dec04-sets",
+  "source_project": "fe274500-80a8-419c-b2b3-e43f13b0f943",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 5268
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 9751
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 1715
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 547
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 450
+   },
+   {
+    "file": "step-06.py",
+    "bytes": 1238
+   },
+   {
+    "file": "step-07.py",
+    "bytes": 1325
+   },
+   {
+    "file": "step-08.py",
+    "bytes": 728
+   },
+   {
+    "file": "step-09.py",
+    "bytes": 562
+   },
+   {
+    "file": "step-10.py",
+    "bytes": 675
+   },
+   {
+    "file": "step-11.py",
+    "bytes": 2301
+   },
+   {
+    "file": "step-12.py",
+    "bytes": 1351
+   }
+  ],
+  "total_bytes": 25911,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A dec-19 Christmas morning living room (warm white walls, big window, cream boucle sofa with sage cushion, fir with gold + sage baubles, walnut coffee table; everyone's presents opened around it; ONE box still wrapped in sage-green paper with black ribbon and gold tag); the box opened with WAR, PRIME, CRUSH on its cap, FLEX in its cradle, folded MIRO (close camera, step 4); FLEX in its cradle beside a small wrapped gift (step 5); the products alone on the table (renders by query: step-03-renders.py with G set); cameras CAM_dec19_hero, CAM_dec19_open, CAM_dec19_flex, CAM_dec19_solo* — RESTYLED 2026-11-26 to the editor's warm references (steps 6–7): taupe panelled wall, low golden sun, dark walnut floor, cognac leather sofa, fir with brass + oxblood baubles, opened oxblood/green/kraft boxes; HIS box bottle-green with oxblood velvet ribbon and brass tag; solo tiles get a kraft box in oxblood velvet, an oxblood bauble and green satin ribbon (SOLO<x>_prop_*); renders by query at full size",
+  "recipe": "Brand A-dec19-christmas-morning-living-room",
+  "source_project": "d2c41ac9-6789-4efc-81bb-e8bbfbca144b",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 16333
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 1295
+   },
+   {
+    "file": "step-03-renders.py",
+    "bytes": 1099
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 1182
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 1336
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 838
+   },
+   {
+    "file": "step-06.py",
+    "bytes": 9593
+   },
+   {
+    "file": "step-07.py",
+    "bytes": 1096
+   }
+  ],
+  "total_bytes": 22083,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A dec-21 game night locker room (bright home-team locker room: deep sage lockers with blank brass plates, maple bench, hardwood; coach's whiteboard bracket THE LIST with a blank fifth line; FLEX leaning in a low black cup cradle; plain orange ball, white towel, marker; step-03 renders one camera per edit at full print size, set CAM); cameras CAM_dec21_hero, CAM_dec21_close, CAM_dec21_board",
+  "recipe": "Brand A-dec21-game-night-locker-room",
+  "source_project": "fb610fa8-fd3b-4eba-9c97-84dcf80ac451",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 10007
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 1917
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 582
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 2259
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 1024
+   }
+  ],
+  "total_bytes": 15789,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A dec-21 THE LIST as gifts (the editor's references 2026-11-26: oxblood panelled wall, walnut floor, lit tree, cognac leather armchair with knit throw and leather basketball; four wrapped gifts with kraft tags MOM/HER/THE KIDS/THE GUY AT WORK; open cream box with FLEX in its low cradle and a blank tag; a walnut wall shelf with FLEX, tumbler and velvet ribbon); cameras CAM_gl_hero, CAM_gl_close, CAM_gl_tags",
+  "recipe": "Brand A-dec21-gift-list",
+  "source_project": "3cf6f24d-ee77-4cb6-b47f-f74592b605c6",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 12677
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 2507
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 885
+   }
+  ],
+  "total_bytes": 16069,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A dec-22 Christmas card line (bright warm sage-white wall, six blank cream cards on a twine line with brass clips, pine garland along a pale oak sideboard; FLEX leaning in its charging base, MIRO folded); cameras CAM_dec22_hero, CAM_dec22_flex; step 3-4 (the editor 2026-11-26): oxblood wall + glass shelf set RED_ (cards tied with twine, kraft gift with forest-green velvet bow, FLEX in cradle, MIRO, pine in fluted glass, window shadow), cameras CAM_dec22_red_hero, CAM_dec22_red_flex; step 5: MIRO tied with velvet ribbon, CAM_dec22_red_miro",
+  "recipe": "Brand A-dec22-christmas-card-line",
+  "source_project": "96958cdc-94f9-405a-9fb7-8693a323731e",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 9718
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 2248
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 8552
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 1611
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 2898
+   }
+  ]
+ },
+ {
+  "name": "Brand A dec-18 reception desk appointment book (bright barbershop reception: dark walnut desk, light sage wall, white window frame with winter daylight, pine wreath with gold berries; the appointment book open with one line circled in gold, gold pen, brass bell; WAR, PRIME and CRUSH upright right of the book; the closed book behind the three for the gift camera; each product alone by query: step-05-renders.py with G set); cameras CAM_dec18_hero, CAM_dec18_gift, CAM_dec18_war/_prime/_crush",
+  "recipe": "Brand A-dec18-reception-desk-book",
+  "source_project": "a13d79fa-a6a6-4994-8015-909475746e5e",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 11103
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 1805
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 2195
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 2281
+   },
+   {
+    "file": "step-05-renders.py",
+    "bytes": 689
+   }
+  ],
+  "total_bytes": 18073,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A dec-18 v2 oxblood barbershop christmas (the editor 2026-11-26 direction: oxblood wall in low window sun through window-frame gobos, lit tree, cognac leather armchair with charcoal knit throw, kraft and forest-green gifts; walnut desk with the appointment book open, one line circled in gold, WAR/PRIME/CRUSH; a glass shelf with the three; WAR on a forest-green sweep with green ribbon; CRUSH on a kraft box with oxblood bow; PRIME on a knit throw on cognac leather); renders by query (step-05-renders.py with CAMS set); cameras CAM_dec18b_hero/_gift/_war/_crush/_prime",
+  "recipe": "Brand A-dec18-oxblood-barbershop",
+  "source_project": "a77b649e-557c-44d3-86cc-3e6529adf885",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 12232
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 1219
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 1942
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 623
+   },
+   {
+    "file": "step-05-renders.py",
+    "bytes": 466
+   }
+  ],
+  "total_bytes": 16482,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A dec-20 barbershop crowd at the front counter (three cast men over one phone, garland, tree; step 5/7 warm editorial restyle: golden light, forest-green panelling, parcels with oxblood ribbon); still lifes: oxblood wall + glass shelf (WAR, PRIME, CRUSH, MIRO), forest-green paper + satin ribbon (FLEX, FLEX front-on); cameras CAM_dec20_hero, CAM_dec20_sh_*, CAM_dec20_gr_flex, CAM_dec20_gr_front",
+  "recipe": "Brand A-dec20-barbershop-crowd-counter",
+  "source_project": "b11b5830-e1c6-4830-a3bb-76417af1c5e0",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 12126
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 2003
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 5472
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 825
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 3970
+   },
+   {
+    "file": "step-06.py",
+    "bytes": 8621
+   },
+   {
+    "file": "step-07.py",
+    "bytes": 939
+   },
+   {
+    "file": "step-08.py",
+    "bytes": 1577
+   },
+   {
+    "file": "step-09.py",
+    "bytes": 1278
+   }
+  ]
+ },
+ {
+  "name": "Brand A dec-24 Christmas the editor bathroom vanity (forest-green glazed tile, brass-framed round mirror with pine sprig, brass sconces, walnut vanity with cream stone basin and brass faucet, watch on a brass tray, pine in fluted glass; FLEX leaning in its charging base, MIRO folded with pine); cameras CAM_dec24_hero, CAM_dec24_offer, CAM_dec24_miro",
+  "recipe": "Brand A-dec24-christmas-the editor-vanity",
+  "source_project": "bcb69096-2002-44bf-9be6-82e91b69ba8f",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 10200
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 3725
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 1008
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 904
+   }
+  ]
+ },
+ {
+  "name": "Brand A dec-27 Christmas den with a trophy shelf (forest-green panelling, dark walnut built-in bookcase, brass trophy cups, old leather football, cloth books, small lit pine in a kraft pot, fairy lights on the shelf edges, brass banker's lamp with green glass shade, oxblood leather armchair; King Set row on the cabinet top, case apart for the set shot); cameras CAM_hero (1:1), CAM_set (4:3), CAM_t_flex/war/prime/crush/miro (1:1)",
+  "recipe": "Brand A-dec27-christmas-den",
+  "source_project": "6d5a5e16-5b40-4fa4-80d1-59dc380f4b10",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 13562
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 1145
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 1178
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 2408
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 1447
+   },
+   {
+    "file": "step-06.py",
+    "bytes": 1180
+   },
+   {
+    "file": "step-07.py",
+    "bytes": 1122
+   }
+  ],
+  "total_bytes": 22042,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A dec-26 camera-ready corner (forest-green wall over walnut panelling, window light from the left, phone on a black tripod inside a brass ring of warm globe bulbs, gold tape X on the oak floor, pine wreath with oxblood bow, round walnut side table with FLEX in its cradle + CRUSH + kraft gift); cameras CAM_hero (9:16), CAM_flex, CAM_crush (1:1), CAM_three (4:3, three CRUSH, T3_ shown only for it)",
+  "recipe": "Brand A-dec26-camera-ready-corner",
+  "source_project": "b66a9957-45e9-483a-8896-65eb1114efa9",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 10315
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 571
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 4029
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 3490
+   }
+  ],
+  "total_bytes": 18405,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand A dec-25 barber's mirror station before the Christmas shave (green tile, brass mirror + garland, walnut counter, hot towel, razor, FLEX in its cradle; hero + FLEX close-up + closed charging case), standalone set",
+  "recipe": "Brand A-dec25-barber-mirror-station",
+  "source_project": "7a52e014-0a77-4281-a0a3-c295adc264fa",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 9691
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 2720
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 1581
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 889
+   },
+   {
+    "file": "step-05.py",
+    "bytes": 2278
+   },
+   {
+    "file": "step-06.py",
+    "bytes": 958
+   }
+  ],
+  "total_bytes": 18117,
+  "outside_refs": []
+ },
+ {
+  "name": "Brand B dec-11 sets (winter-sun sage panelled sitting room with a linen window seat: the counter-woman cast writing the blank tag on the last gift, a hands-and-tag close-up, the Glow Duo standing in an open ivory gift box, Body Scrub on the seat, Body Cream by the amaryllis; tubes at true size)",
+  "recipe": "Brand B-dec11-sets",
+  "source_project": "ddb336c5-e06f-4bfc-8e82-0436c57234b5",
+  "steps": [
+   {
+    "file": "step-01.py",
+    "bytes": 5268
+   },
+   {
+    "file": "step-02.py",
+    "bytes": 8884
+   },
+   {
+    "file": "step-03.py",
+    "bytes": 1069
+   },
+   {
+    "file": "step-04.py",
+    "bytes": 671
+   }
+  ],
+  "total_bytes": 15892,
+  "outside_refs": []
+ }
+]

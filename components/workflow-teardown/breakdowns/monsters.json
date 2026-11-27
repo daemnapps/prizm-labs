@@ -1,0 +1,78 @@
+{
+ "id": "monsters",
+ "name": "Monsters",
+ "kind": "picture",
+ "makes": "Photoreal monsters and creatures (a grey sculpt, then real material samples photographed), including 'turn me into a monster' from a selfie, a creature from the user's photo, body+head+legs builds, and robots, equipment, vehicles, objects, buildings and locations; then variations, retextures, 3D.",
+ "source": [
+  "monsters/SKILL.md",
+  "monsters/_files.md",
+  "monsters/references/driver.md",
+  "monsters/references/choices.md",
+  "monsters/references/pictures.md",
+  "monsters/references/after.md",
+  "monsters/scripts/img.py.md",
+  "commands/monsters.md"
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "name": "Intake (category, look, description, selfie/photo, materials, frame)",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 2,
+   "name": "Write choices.json; `new` builds and prices it (free)",
+   "model": "none (monsters.mjs engine)",
+   "cheap": null
+  },
+  {
+   "n": 3,
+   "name": "User OKs the price; `start`",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 4,
+   "name": "Loop: `next` prints uploads (material samples, face crop, photo) and one GENERATE step at a time",
+   "model": "engine-chosen image models (grey sculpt, head study, material pass)",
+   "cheap": "not swappable inside the engine; see cheap swap"
+  },
+  {
+   "n": 5,
+   "name": "Record each job (`started`, `done`) until DONE; show the final picture once",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 6,
+   "name": "Optional: variation, retexture (new materials on the same sculpt), 3D model (18 credits)",
+   "model": "generate_3d",
+   "cheap": "local TRELLIS 3D (free)"
+  }
+ ],
+ "price": "The engine prices every creation (`new` prints PRICE and the balance) and nothing paid starts before the user's OK. Only figure written down: 3D model 18 credits. Pictures not quoted.",
+ "cheap_price": "Cannot be repriced inside the engine; a monster-look picture from our own prompt on seedream_5_0_flash 2k costs 0.5; 3D free locally.",
+ "prompts": [
+  {
+   "label": "Slash command entry",
+   "source": "commands/monsters.md",
+   "text": "# Monsters\n\n`/monsters` runs the Higgsfield Monsters studio in this chat: a grey sculpt first, then real material samples\nphotographed for real. It covers \"turn me into a monster\" from the user's selfie, a creature from their own photo, a\nmonster built from body + head + legs, the studio's looks and rolls, and its robots, equipment, vehicles, objects,\nbuildings and locations; then variations, new materials and a 3D model.\n\nLoad `get_workflow_instructions({workflow: \"monsters\"})` and follow it, with the words and any selfie or photo sent\nwith the command as the user's request. A bare `/monsters` with nothing else: ask in one short line for a look, a few\nwords or a selfie, or offer a roll of the dice, and stop."
+  },
+  {
+   "label": "The flow",
+   "source": "monsters/SKILL.md",
+   "text": "1. **Intake.** Take from the message what you can: the category (creature by default), a look, a description, a\n   selfie or photo, materials, the frame. Ask only for what is missing, in one short question. A bare \"make me a\n   monster\" with a selfie is enough (the engine picks the default look); \"a monster\" with nothing else: ask for a look\n   or a few words, or offer a roll of the dice.\n2. **Plan and price (free).** Write choices.json and run `new`. Tell the person in one or two lines what will be made\n   (name, look, materials) and the price in credits, with their balance. Nothing paid starts without their OK.\n3. **Make it.** After the OK: `start`, then the loop (`next` → uploads / generation → record → `next` …) until DONE.\n4. **Result.** Show the final picture once with `show_generation_by_ids`. Offer, in one line: a variation, new\n   materials, or a 3D model (each with its own price and OK)."
+  },
+  {
+   "label": "Choices examples",
+   "source": "monsters/references/choices.md",
+   "text": "```json\n{ \"preset\": \"moss-mantis-stag\", \"selfie\": \"https://…/selfie.jpg\" }\n{ \"description\": \"a deep-sea anglerfish knight with a lantern lure and barnacle armour\", \"aspectRatio\": \"9:16\" }\n{ \"build\": { \"body\": \"Lion\", \"head\": \"Octopus\", \"legs\": \"Crab\" }, \"mood\": \"Terrifying\" }\n{ \"photo\": \"https://…/my-cat.jpg\", \"description\": \"as a towering forest guardian\" }\n{ \"kind\": \"vehicle\", \"type\": \"Motorcycle\", \"description\": \"a purple motorcycle\" }\n{ \"kind\": \"building\", \"type\": \"House\", \"description\": \"a thatched cottage\" }\n{ \"kind\": \"location\", \"preset\": \"glasshouse-ravine\", \"description\": \"at night in the rain\" }\n{ \"kind\": \"object\", \"type\": \"Lamp\", \"materials\": [\"T411\", \"T206\"] }\n{ \"kind\": \"robot\", \"roll\": true }\n```"
+  },
+  {
+   "label": "How a GENERATE step is submitted",
+   "source": "monsters/references/pictures.md",
+   "text": "1. Submit it with `generate_image_batch` with ONE request: `{ \"index\": 0, \"params\": <PARAMS> }`. PARAMS already hold\n   the model, every setting, the prompt and `medias` in order (material samples, the earlier steps' job ids, prepared\n   pictures). Copy it whole, every character of the prompt. Never add, drop or reorder anything, never add `count`\n   other than 1, never change the model."
+  }
+ ]
+}

@@ -1,6 +1,5 @@
 # distinct-six
 
-## How to use it → (team dashboard)
 
 **One concept, written as N genuinely different ads.** Meta groups ads that "look or feel alike" into one creative, so six hooks on one ad are one ticket. Six versions that differ in awareness, format, face, setting and look are six. Built 2026-10-08 on the owner's word: "six unique versions of that same concept, same brief".
 
@@ -16,4 +15,4 @@ python3 components/distinct-six/run.py runs/video-teardown/<brand>/<run> --angle
 - **Rule:** every pair is 3+ moves apart and none copies what's running (`creative-diversity/check.py`). Failures go back once for a rewrite.
 - **Prompt:** `prompts/stage4v-distinct-v1-owner.md`. Claude runs on the owner's plan (`claude -p`). Meta is never called.
 
-Page: The Distinct Six, (team page)
+Page: The Distinct Six, https://claude.ai/artifact/P2jJYwWAyHzEJqtq7aNcxk

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """One folder per email: the text, and the actual images.
 
-    python3 calendar/build_email_folders.py --brand brand-a [--out <dir>]
+    python3 calendar/build_email_folders.py --brand brand_a [--out <dir>]
 
 The indexed sends carry image URLs. A URL is not a picture — you cannot look at
 an email through a link list, and the images ARE the design. This downloads
@@ -42,7 +42,7 @@ HERE = Path(__file__).resolve().parent
 # Drive reach)). No mount -> no default; --out names one.
 _SA = DR.mount()
 # Shared Assets/runs/email-production/emails-sent since 2026-10-28 (the map: the Drive copy is the runs/ path; it was
-# Shared Assets/tools/email-production/emails-sent, moved there whole).
+# Shared Assets/components/email-production/emails-sent, moved there whole).
 DRIVE = (_SA / "runs/email-production/emails-sent") if _SA is not None else None
 
 IMG = re.compile(r"\[IMAGE(.*?)\]\s+(https?://\S+)")

@@ -12,12 +12,12 @@ people actually open with; a close asks for objections and refund reasons.
 Every row keeps its provenance, because a paid panellist and a refunding
 customer are not the same evidence.
 
-    python3 tools/language-layer/query_language.py --brand <b> --avatars
-    python3 tools/language-layer/query_language.py --brand <b> \
+    python3 components/language-layer/query_language.py --brand <b> --avatars
+    python3 components/language-layer/query_language.py --brand <b> \
         --stage hooks --profile <chain>.json
 
 ONE HOME (LL-1, 2026-09-01). This engine used to exist as two drifted copies
-— `tools/video-teardown/machine/language.py` and the copy lab's — 103
+— `components/video-teardown/machine/language.py` and the copy lab's — 103
 diff lines apart, with the render fix living only in one of them. Both are now
 thin shims over this file. The convergence was ruled: the copy lab's version
 is the base (it was the most recent; the drift was staleness), with the video
@@ -46,7 +46,7 @@ import os
 from pathlib import Path
 
 # Where the workspace sits when nobody says: `AI_WORKSPACE` if set, else the
-# checkout this file sits in (<ws>/tools/language-layer/language_layer/).
+# checkout this file sits in (<ws>/components/language-layer/language_layer/).
 # Never a home-folder guess, so the same code resolves the same tree on any
 # machine and for any person (brand-finder's `workspace()` rule, restated here
 # because this engine is stdlib-only and imports no other component). A host
@@ -180,7 +180,7 @@ def load(brand, avatar=None, root=None):
     for d in dirs:
         # The avatar's own bank, plus every sub-avatar's own folder beside its
         # card (`sub-avatars/<sub-file-stem>/language/`) — one home per
-        # sub-avatar, the owner 2026-09-18. A sub folder's rows default their
+        # sub-avatar, owner 2026-09-18. A sub folder's rows default their
         # `sub` to the folder's slug when the file does not say.
         banks = [(d / "language", None)]
         subs = d / "sub-avatars"
@@ -315,7 +315,7 @@ def query(rows, use=None, topics=None, funnel=None, speaker=None,
     Rows retired or burned by a person never come back (status is a person's call).
 
     shown  {row id: times handed to a stage before} — the exposure record
-           (the owner, 2026-10-05: "over time we have some level of variance and
+           (owner, 2026-10-05: "over time we have some level of variance and
            variety with our copywriting"). Within the same tag rank, a row
            shown fewer times comes first, so runs rotate through the bank
            instead of every run reading the same most-liked forty.
@@ -434,8 +434,11 @@ def render(rows, header=""):
 def for_stage(brand, stage, avatar=None, funnel=None, topics=None,
               limit=40, root=None, stage_use=None, widen=None, title=None,
               used=None, awareness=None, area=None, feedback_stage=None,
-              shown=None, proven_share=0.25):
+              shown=None, proven_share=0.25, moments=True, run=None):
     """The rows one stage should see. The whole point of the module.
+
+    moments: an avatar's lived moments ride along on every query, so every chain gets a
+    fresh set (experience.py, 2026-11-02).
 
     used="fresh" (2026-10-05): never-used rows first, ranked so the rows
     earlier runs were shown least come first (`shown`), plus a proven slice —
@@ -509,7 +512,11 @@ def for_stage(brand, stage, avatar=None, funnel=None, topics=None,
             "do not paraphrase them into ours. Provenance is on every row — a "
             "paid panellist and a refunding customer are not equal evidence. "
             "The id in [brackets] is how you cite a row you used.\n")
-    return render(picked, head)
+    text = render(picked, head)
+    if moments and avatar:
+        from . import experience
+        text += experience.block(brand, avatar, run, root)
+    return text
 
 
 def topics_of(brand, root=None, top=40):

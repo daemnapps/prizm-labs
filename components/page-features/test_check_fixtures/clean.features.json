@@ -1,0 +1,34 @@
+{
+ "title": "Fixture page",
+ "schema": 1,
+ "status": "draft",
+ "page": "clean.html",
+ "state_words": {
+  "wired": "the data exists",
+  "after-card": "needs a card",
+  "not-built": "no data yet"
+ },
+ "kinds": {
+  "data": {"letter": "D", "name": "Data", "means": "a value saved in a data file"},
+  "rule": {"letter": "R", "name": "Rule", "means": "the page works it out by its own rule"},
+  "media": {"letter": "M", "name": "Media", "means": "a picture, clip or voice file"},
+  "layout": {"letter": "L", "name": "Layout", "means": "arrangement, no data of its own"},
+  "action": {"letter": "A", "name": "Action", "means": "a button that runs a command"}
+ },
+ "features": [
+  {"n": 1, "name": "Saved time", "kind": "data", "state": "wired", "status": "draft",
+   "source": {"component": "fixture", "file": "data/index.json", "field": "as_of"}},
+  {"n": 2, "name": "Late field", "kind": "data", "state": "wired", "status": "draft",
+   "source": {"component": "fixture", "file": "data/runs/<run>.json", "field": "late"}},
+  {"n": 3, "name": "Schema fields", "kind": "data", "state": "wired", "status": "draft",
+   "source": {"component": "fixture", "file": "data/schema.json", "field": "box.size, rows[].cell"}},
+  {"n": 4, "name": "A rule on a missing field", "kind": "rule", "state": "wired", "status": "draft",
+   "source": {"component": "fixture", "file": "data/index.json", "field": "no_such_field (read by the page)"}},
+  {"n": 5, "name": "Item names", "kind": "data", "state": "wired", "status": "draft",
+   "source": {"component": "fixture", "file": "data/index.json", "field": "items[kind=any].name + the page's own sort"}},
+  {"n": 6, "name": "Layout", "kind": "layout", "state": "wired", "status": "draft", "source": null},
+  {"n": 7, "name": "Waits on a card", "kind": "data", "state": "after-card", "status": "draft",
+   "source": {"component": "fixture", "file": "data/index.json", "field": "later"}, "card": "ZZ-1"},
+  {"n": 8, "name": "Not built", "kind": "data", "state": "not-built", "status": "draft", "source": null}
+ ]
+}

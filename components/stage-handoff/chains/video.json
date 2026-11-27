@@ -1,0 +1,167 @@
+{
+ "_what": "The video chain is its four components, in order: video-teardown, video-writing, video-production, video-edit. Each stage is one component: the role that runs it, the component's own door (the command that switches it on), what it makes, and what a hand-off INTO it must carry, which is the previous component's output in the shape this component's door takes. Who holds a role is roles.json, not this file.",
+ "status": "draft",
+ "chain": "video",
+ "route": "ai",
+ "stages": [
+  {
+   "id": "video-teardown",
+   "name": "Video teardown",
+   "component": "components/video-teardown",
+   "role": "creative-strategist",
+   "state": "declared",
+   "activates": {
+    "skill": "video-teardown",
+    "run": "python3 components/video-teardown/machine/run.py {folder}refs/swipe.mp4 --brand {brand} --route ai --dry-run",
+    "say": "Open the hand-off {key} from {folder}. Run the video teardown on refs/swipe.mp4 for {brand}: dry run first, then the run."
+   },
+   "makes": "runs/video-teardown/_work/<label>/ (stages 0, 1, 1k, 1c, 1b, 2; run.json, elements.json, framemap/, sound-sheet, transcript), filed to runs/video-teardown/<brand>/<label>/",
+   "receives": {
+    "files": [
+     {
+      "path": "SWIPE.md",
+      "what": "The swipe: its source link, brand and why it was picked",
+      "min_bytes": 50
+     },
+     {
+      "path": "refs/swipe.mp4",
+      "what": "The swipe video",
+      "min_bytes": 10000
+     }
+    ]
+   },
+   "next": "video-writing",
+   "numbered": false
+  },
+  {
+   "id": "video-writing",
+   "name": "Video writing",
+   "component": "components/video-writing",
+   "role": "creative-strategist",
+   "state": "live",
+   "activates": {
+    "skill": "video-writing",
+    "run": "python3 components/video-writing/machine/run.py {label}",
+    "say": "Open the hand-off {key} from {folder} (the door puts teardown-run/ at runs/video-teardown/_work/{label}/), then run the video writing on {label}."
+   },
+   "makes": "stages 3 to 5 in the teardown working folder; the accepted brief filed at runs/video-writing/<brand>/<label>/deliverable/5-brief.md",
+   "receives": {
+    "files": [
+     {
+      "path": "teardown-run/run.json",
+      "what": "The teardown run's record, stages 0 to 2 done on a route",
+      "min_bytes": 200
+     },
+     {
+      "path": "teardown-run/stages/1-teardown.md",
+      "what": "The teardown",
+      "min_bytes": 500
+     },
+     {
+      "path": "teardown-run/stages/2-spec.md",
+      "what": "The replication spec",
+      "min_bytes": 500
+     }
+    ]
+   },
+   "next": "video-production",
+   "numbered": false
+  },
+  {
+   "id": "video-production",
+   "name": "Video production",
+   "component": "components/video-production",
+   "role": "video-producer",
+   "state": "live",
+   "activates": {
+    "skill": "video-production",
+    "run": "python3 components/video-production/machine/run.py start {folder}BRIEF.md --brand {brand} --format {format} --label {key} --dry-run",
+    "say": "Open the hand-off {key} from {folder}. Read START.md, then BRIEF.md. Run video production on BRIEF.md for {brand}, format {format}: dry run first, then the run, in the Video Studio. Its pack files the editor's hand-off."
+   },
+   "makes": "runs/video-production/<brand>/<label>/ (voice, stills, clips), then the edit kit: components/video-edit/maker/maker_pack.py files the video-editor hand-off at runs/handoffs/video-editor/<brand>/<brief key>/",
+   "receives": {
+    "files": [
+     {
+      "path": "BRIEF.md",
+      "what": "The writing's brief (deliverable/5-brief.md), accepted by its checks",
+      "min_bytes": 2000
+     },
+     {
+      "path": "teardown/1-teardown.md",
+      "what": "The swipe torn down: every beat production copies",
+      "min_bytes": 500
+     },
+     {
+      "path": "teardown/2-spec.md",
+      "what": "The replication spec: what must carry over",
+      "min_bytes": 500
+     },
+     {
+      "path": "teardown/FRAME-MAP.md",
+      "what": "The swipe frame by frame",
+      "min_bytes": 200
+     },
+     {
+      "path": "SWIPE.md",
+      "what": "Where the swipe video sits",
+      "min_bytes": 50
+     },
+     {
+      "path": "refs/swipe-poster.jpg",
+      "what": "The swipe's first frame",
+      "min_bytes": 1000
+     }
+    ],
+    "manifest": {
+     "writing_accepted": true,
+     "route": "ai"
+    },
+    "manifest_present": [
+     "format"
+    ]
+   },
+   "next": "video-edit",
+   "numbered": true
+  },
+  {
+   "id": "video-edit",
+   "name": "Video edit",
+   "component": "components/video-edit",
+   "role": "video-editor",
+   "state": "live",
+   "activates": {
+    "skill": "video-briefs",
+    "run": "python3 components/video-edit/machine/run.py handoff {folder}",
+    "say": "Open brief {number} in hyperframes (or: in premiere), or run the edit line on {folder}."
+   },
+   "makes": "the finished cut in the hand-off's returned/ (<brief key>-control.mp4) and the approval card in Shared Assets/meta/<brand>/1-check/video/",
+   "receives": {
+    "checker": "components/video-edit/handoff_check.py",
+    "why": "The editor's hand-off is the production's edit kit, built by components/video-edit/maker/maker_pack.py; its checks stay where they were proven (2463ac7b01)."
+   },
+   "next": null,
+   "numbered": true,
+   "built_by": "python3 components/video-edit/maker/maker_pack.py <production> [--productions <dir>] (moved out of the Video Studio 2026-11-17; the Studio's Send to maker calls it)"
+  }
+ ],
+ "every_handoff": {
+  "_what": "What every hand-off folder carries, whatever the stage. The video-edit stage keeps its own checks instead.",
+  "files": [
+   {
+    "path": "HANDOFF.json",
+    "what": "The hand-off record: chain, stage, role, brand, brief, where it came from, how to switch it on",
+    "min_bytes": 100
+   },
+   {
+    "path": "START.md",
+    "what": "One page: what this is, the line to say to your Claude, where the work goes next",
+    "min_bytes": 200
+   },
+   {
+    "path": "returned",
+    "what": "Where finished work comes back",
+    "dir": true
+   }
+  ]
+ }
+}

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""RETIRED 2026-10-27 (the owner: "make this name agnostic. and the name of the folders need to be the same for both repo
+"""RETIRED 2026-10-27 (owner: "make this name agnostic. and the name of the folders need to be the same for both repo
 and drive"; "use the working folders, retire the old names"): no machine makes a folder named after a person. Work for a
-role goes to Shared Assets/runs/handoffs/<role>/<brand>/<brief key>/ and comes back into its returned/ (tools/image-edit
+role goes to Shared Assets/runs/handoffs/<role>/<brand>/<brief key>/ and comes back into its returned/ (components/image-edit
 handoff.py and delivery.py). seed_team() and the command refuse by name and make nothing; `retired_ok=True` runs the old
 walk for its tests only. The old description follows.
 
@@ -13,7 +13,7 @@ team/people/<person>/identity.json (LD-88 (team station folders), 2026-10-23).
 
 A STATION IS A COMPONENT NAME. One that is not an existing components/<name>/
 folder is refused by name and nothing is made for it; every other folder is
-still processed. The top folder is `team`, never `people` (the team, 2026-10-23).
+still processed. The top folder is `team`, never `people` (developer, 2026-10-23).
 
 THE SURFACE
   seed_team(repo=None, svc=None, dry_run=False, find_engine=None, drive_root=None)
@@ -53,7 +53,7 @@ from pathlib import Path
 from . import reach
 
 TEAM = "team"
-RETIRED = ("seed_team is retired (the owner, 2026-10-27): no folder is named after a person. Work for a role lives at "
+RETIRED = ("seed_team is retired (owner, 2026-10-27): no folder is named after a person. Work for a role lives at "
            "Shared Assets/runs/handoffs/<role>/<brand>/<brief key>/ and comes back into its returned/.")
 
 

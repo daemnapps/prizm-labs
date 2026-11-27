@@ -1,0 +1,24 @@
+{
+  "_note": "Empty on purpose. Fill this in for your brand \u2014 the keys below are what the tools read.",
+  "_shape_from": "the same file in a live brand",
+  "_example_keys": {
+    "_what": "",
+    "_rule": "",
+    "_built": "",
+    "_covers": "",
+    "people": [
+      {
+        "id": "\u2026",
+        "name": "\u2026",
+        "age": "\u2026",
+        "reads": "\u2026",
+        "hair": "\u2026",
+        "build": "\u2026",
+        "face": "\u2026",
+        "problem": "\u2026"
+      }
+    ],
+    "_balance": "",
+    "_sub": ""
+  }
+}

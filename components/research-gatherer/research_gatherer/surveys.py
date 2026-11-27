@@ -169,7 +169,10 @@ def main(argv=None, fetch=None, labeller=None, claude=None):
     ap.add_argument("--avatar")
     ap.add_argument("--since", help="YYYY-MM-DD; default = each survey's cursor, else its `since` in language-pulls.json")
     ap.add_argument("--dry-run", action="store_true", help="pull and count; read and file nothing")
-    a = ap.parse_args(argv)
+    import importlib.util as _u, pathlib as _pl
+    _s = _u.spec_from_file_location("profile_arg", next(q for q in _pl.Path(__file__).resolve().parents if q.name == "components") / "naming" / "profile_arg.py")
+    _PA = _u.module_from_spec(_s); _s.loader.exec_module(_PA)   # --profile <avatar>[_<sub>][_<demographic>] (naming/PEOPLE.md)
+    a = ap.parse_args(_PA.expand(argv, has=('avatar',)))
     fetch = fetch or export_csv
     c = V.cfg("surveys")
     bj = V.brand_json(a.brand)

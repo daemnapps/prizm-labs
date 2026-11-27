@@ -1,0 +1,1654 @@
+[
+{
+"session": "s0000",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-08T08:52:19+00:00",
+"brand": "sample"
+},
+{
+"session": "s0018",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-09T05:34:12+00:00",
+"brand": "sample"
+},
+{
+"session": "s0018",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-09T05:35:25+00:00",
+"brand": "sample"
+},
+{
+"session": "s0023",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-03T17:29:54+00:00",
+"brand": "sample"
+},
+{
+"session": "s0023",
+"event": "purchase",
+"revenue": 86,
+"at": "2026-11-03T17:31:24+00:00",
+"brand": "sample"
+},
+{
+"session": "s0025",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-04T07:50:15+00:00",
+"brand": "sample"
+},
+{
+"session": "s0049",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-01T12:18:05+00:00",
+"brand": "sample"
+},
+{
+"session": "s0050",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-09T20:43:52+00:00",
+"brand": "sample"
+},
+{
+"session": "s0063",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-10T02:29:17+00:00",
+"brand": "sample"
+},
+{
+"session": "s0063",
+"event": "purchase",
+"revenue": 86,
+"at": "2026-11-10T02:30:33+00:00",
+"brand": "sample"
+},
+{
+"session": "s0065",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-03T17:24:03+00:00",
+"brand": "sample"
+},
+{
+"session": "s0068",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-12T08:04:13+00:00",
+"brand": "sample"
+},
+{
+"session": "s0072",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-03T11:29:18+00:00",
+"brand": "sample"
+},
+{
+"session": "s0072",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-03T11:30:36+00:00",
+"brand": "sample"
+},
+{
+"session": "s0074",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-09T19:56:51+00:00",
+"brand": "sample"
+},
+{
+"session": "s0075",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-11T19:34:46+00:00",
+"brand": "sample"
+},
+{
+"session": "s0075",
+"event": "purchase",
+"revenue": 86,
+"at": "2026-11-11T19:36:29+00:00",
+"brand": "sample"
+},
+{
+"session": "s0077",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-12T11:43:58+00:00",
+"brand": "sample"
+},
+{
+"session": "s0077",
+"event": "purchase",
+"revenue": 29,
+"at": "2026-11-12T11:45:15+00:00",
+"brand": "sample"
+},
+{
+"session": "s0079",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-04T05:30:53+00:00",
+"brand": "sample"
+},
+{
+"session": "s0083",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-05T10:53:44+00:00",
+"brand": "sample"
+},
+{
+"session": "s0087",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-09T19:06:13+00:00",
+"brand": "sample"
+},
+{
+"session": "s0098",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-09T23:53:54+00:00",
+"brand": "sample"
+},
+{
+"session": "s0101",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-09T07:12:20+00:00",
+"brand": "sample"
+},
+{
+"session": "s0101",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-09T07:14:13+00:00",
+"brand": "sample"
+},
+{
+"session": "s0102",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-04T07:41:02+00:00",
+"brand": "sample"
+},
+{
+"session": "s0103",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-05T11:47:11+00:00",
+"brand": "sample"
+},
+{
+"session": "s0115",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-04T20:09:56+00:00",
+"brand": "sample"
+},
+{
+"session": "s0133",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-04T16:22:39+00:00",
+"brand": "sample"
+},
+{
+"session": "s0142",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-01T18:30:56+00:00",
+"brand": "sample"
+},
+{
+"session": "s0142",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-01T18:32:32+00:00",
+"brand": "sample"
+},
+{
+"session": "s0145",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-07T20:59:50+00:00",
+"brand": "sample"
+},
+{
+"session": "s0146",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-06T01:29:47+00:00",
+"brand": "sample"
+},
+{
+"session": "s0148",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-10T20:14:05+00:00",
+"brand": "sample"
+},
+{
+"session": "s0150",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-03T10:06:00+00:00",
+"brand": "sample"
+},
+{
+"session": "s0150",
+"event": "purchase",
+"revenue": 86,
+"at": "2026-11-03T10:07:53+00:00",
+"brand": "sample"
+},
+{
+"session": "s0157",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-09T05:57:13+00:00",
+"brand": "sample"
+},
+{
+"session": "s0157",
+"event": "purchase",
+"revenue": 29,
+"at": "2026-11-09T05:58:37+00:00",
+"brand": "sample"
+},
+{
+"session": "s0160",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-05T11:48:06+00:00",
+"brand": "sample"
+},
+{
+"session": "s0160",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-05T11:49:39+00:00",
+"brand": "sample"
+},
+{
+"session": "s0165",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-01T18:30:49+00:00",
+"brand": "sample"
+},
+{
+"session": "s0171",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-04T22:59:08+00:00",
+"brand": "sample"
+},
+{
+"session": "s0171",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-04T23:00:05+00:00",
+"brand": "sample"
+},
+{
+"session": "s0173",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-14T03:49:52+00:00",
+"brand": "sample"
+},
+{
+"session": "s0176",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-07T06:25:58+00:00",
+"brand": "sample"
+},
+{
+"session": "s0187",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-09T04:00:53+00:00",
+"brand": "sample"
+},
+{
+"session": "s0192",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-06T07:22:01+00:00",
+"brand": "sample"
+},
+{
+"session": "s0192",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-06T07:22:45+00:00",
+"brand": "sample"
+},
+{
+"session": "s0193",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-02T08:23:10+00:00",
+"brand": "sample"
+},
+{
+"session": "s0198",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-06T07:44:02+00:00",
+"brand": "sample"
+},
+{
+"session": "s0201",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-05T19:20:06+00:00",
+"brand": "sample"
+},
+{
+"session": "s0205",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-14T22:29:14+00:00",
+"brand": "sample"
+},
+{
+"session": "s0222",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-08T01:34:51+00:00",
+"brand": "sample"
+},
+{
+"session": "s0222",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-08T01:36:16+00:00",
+"brand": "sample"
+},
+{
+"session": "s0225",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-04T12:23:49+00:00",
+"brand": "sample"
+},
+{
+"session": "s0226",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-07T02:45:02+00:00",
+"brand": "sample"
+},
+{
+"session": "s0226",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-07T02:46:55+00:00",
+"brand": "sample"
+},
+{
+"session": "s0233",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-09T08:14:57+00:00",
+"brand": "sample"
+},
+{
+"session": "s0238",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-04T13:38:00+00:00",
+"brand": "sample"
+},
+{
+"session": "s0250",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-06T06:28:00+00:00",
+"brand": "sample"
+},
+{
+"session": "s0257",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-14T07:33:47+00:00",
+"brand": "sample"
+},
+{
+"session": "s0260",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-01T23:52:00+00:00",
+"brand": "sample"
+},
+{
+"session": "s0260",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-01T23:52:47+00:00",
+"brand": "sample"
+},
+{
+"session": "s0261",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-03T02:32:56+00:00",
+"brand": "sample"
+},
+{
+"session": "s0279",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-13T21:35:01+00:00",
+"brand": "sample"
+},
+{
+"session": "s0284",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-12T16:16:06+00:00",
+"brand": "sample"
+},
+{
+"session": "s0284",
+"event": "purchase",
+"revenue": 29,
+"at": "2026-11-12T16:18:03+00:00",
+"brand": "sample"
+},
+{
+"session": "s0286",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-03T12:18:53+00:00",
+"brand": "sample"
+},
+{
+"session": "s0289",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-14T15:40:19+00:00",
+"brand": "sample"
+},
+{
+"session": "s0302",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-14T17:15:47+00:00",
+"brand": "sample"
+},
+{
+"session": "s0305",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-10T02:12:43+00:00",
+"brand": "sample"
+},
+{
+"session": "s0305",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-10T02:14:05+00:00",
+"brand": "sample"
+},
+{
+"session": "s0306",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-05T18:58:02+00:00",
+"brand": "sample"
+},
+{
+"session": "s0320",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-02T02:23:55+00:00",
+"brand": "sample"
+},
+{
+"session": "s0320",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-02T02:25:03+00:00",
+"brand": "sample"
+},
+{
+"session": "s0347",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-03T19:59:09+00:00",
+"brand": "sample"
+},
+{
+"session": "s0352",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-06T06:04:02+00:00",
+"brand": "sample"
+},
+{
+"session": "s0352",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-06T06:05:41+00:00",
+"brand": "sample"
+},
+{
+"session": "s0356",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-14T04:05:38+00:00",
+"brand": "sample"
+},
+{
+"session": "s0358",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-03T13:41:49+00:00",
+"brand": "sample"
+},
+{
+"session": "s0360",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-11T22:16:46+00:00",
+"brand": "sample"
+},
+{
+"session": "s0362",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-13T04:05:01+00:00",
+"brand": "sample"
+},
+{
+"session": "s0365",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-01T22:31:05+00:00",
+"brand": "sample"
+},
+{
+"session": "s0366",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-01T05:53:06+00:00",
+"brand": "sample"
+},
+{
+"session": "s0368",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-08T12:14:05+00:00",
+"brand": "sample"
+},
+{
+"session": "s0368",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-08T12:15:29+00:00",
+"brand": "sample"
+},
+{
+"session": "s0376",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-12T12:46:21+00:00",
+"brand": "sample"
+},
+{
+"session": "s0376",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-12T12:48:13+00:00",
+"brand": "sample"
+},
+{
+"session": "s0379",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-01T09:49:58+00:00",
+"brand": "sample"
+},
+{
+"session": "s0381",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-14T08:53:07+00:00",
+"brand": "sample"
+},
+{
+"session": "s0388",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-03T18:09:07+00:00",
+"brand": "sample"
+},
+{
+"session": "s0397",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-02T15:25:58+00:00",
+"brand": "sample"
+},
+{
+"session": "s0397",
+"event": "purchase",
+"revenue": 86,
+"at": "2026-11-02T15:26:45+00:00",
+"brand": "sample"
+},
+{
+"session": "s0398",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-01T17:37:47+00:00",
+"brand": "sample"
+},
+{
+"session": "s0400",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-01T15:30:08+00:00",
+"brand": "sample"
+},
+{
+"session": "s0400",
+"event": "purchase",
+"revenue": 86,
+"at": "2026-11-01T15:31:37+00:00",
+"brand": "sample"
+},
+{
+"session": "s0403",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-13T17:58:50+00:00",
+"brand": "sample"
+},
+{
+"session": "s0403",
+"event": "purchase",
+"revenue": 86,
+"at": "2026-11-13T17:59:56+00:00",
+"brand": "sample"
+},
+{
+"session": "s0404",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-13T05:40:57+00:00",
+"brand": "sample"
+},
+{
+"session": "s0404",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-13T05:41:59+00:00",
+"brand": "sample"
+},
+{
+"session": "s0410",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-01T23:38:10+00:00",
+"brand": "sample"
+},
+{
+"session": "s0412",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-11T00:06:03+00:00",
+"brand": "sample"
+},
+{
+"session": "s0419",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-13T09:54:14+00:00",
+"brand": "sample"
+},
+{
+"session": "s0420",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-05T18:00:44+00:00",
+"brand": "sample"
+},
+{
+"session": "s0425",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-07T20:08:02+00:00",
+"brand": "sample"
+},
+{
+"session": "s0427",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-08T19:07:51+00:00",
+"brand": "sample"
+},
+{
+"session": "s0427",
+"event": "purchase",
+"revenue": 86,
+"at": "2026-11-08T19:08:46+00:00",
+"brand": "sample"
+},
+{
+"session": "s0434",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-01T16:45:55+00:00",
+"brand": "sample"
+},
+{
+"session": "s0434",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-01T16:46:36+00:00",
+"brand": "sample"
+},
+{
+"session": "s0435",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-04T14:18:57+00:00",
+"brand": "sample"
+},
+{
+"session": "s0441",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-04T22:55:52+00:00",
+"brand": "sample"
+},
+{
+"session": "s0441",
+"event": "purchase",
+"revenue": 29,
+"at": "2026-11-04T22:57:15+00:00",
+"brand": "sample"
+},
+{
+"session": "s0444",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-02T16:39:55+00:00",
+"brand": "sample"
+},
+{
+"session": "s0448",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-05T08:36:45+00:00",
+"brand": "sample"
+},
+{
+"session": "s0448",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-05T08:38:26+00:00",
+"brand": "sample"
+},
+{
+"session": "s0452",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-10T11:12:43+00:00",
+"brand": "sample"
+},
+{
+"session": "s0452",
+"event": "purchase",
+"revenue": 29,
+"at": "2026-11-10T11:13:44+00:00",
+"brand": "sample"
+},
+{
+"session": "s0458",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-06T07:12:10+00:00",
+"brand": "sample"
+},
+{
+"session": "s0467",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-08T11:29:51+00:00",
+"brand": "sample"
+},
+{
+"session": "s0487",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-08T10:00:13+00:00",
+"brand": "sample"
+},
+{
+"session": "s0487",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-08T10:01:15+00:00",
+"brand": "sample"
+},
+{
+"session": "s0493",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-09T06:24:07+00:00",
+"brand": "sample"
+},
+{
+"session": "s0493",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-09T06:24:58+00:00",
+"brand": "sample"
+},
+{
+"session": "s0497",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-13T22:49:03+00:00",
+"brand": "sample"
+},
+{
+"session": "s0498",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-12T14:58:01+00:00",
+"brand": "sample"
+},
+{
+"session": "s0498",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-12T14:59:14+00:00",
+"brand": "sample"
+},
+{
+"session": "s0508",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-08T10:22:52+00:00",
+"brand": "sample"
+},
+{
+"session": "s0508",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-08T10:23:35+00:00",
+"brand": "sample"
+},
+{
+"session": "s0512",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-04T04:47:07+00:00",
+"brand": "sample"
+},
+{
+"session": "s0513",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-13T12:52:10+00:00",
+"brand": "sample"
+},
+{
+"session": "s0513",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-13T12:53:01+00:00",
+"brand": "sample"
+},
+{
+"session": "s0514",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-01T20:48:41+00:00",
+"brand": "sample"
+},
+{
+"session": "s0514",
+"event": "purchase",
+"revenue": 29,
+"at": "2026-11-01T20:49:41+00:00",
+"brand": "sample"
+},
+{
+"session": "s0533",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-05T11:01:09+00:00",
+"brand": "sample"
+},
+{
+"session": "s0533",
+"event": "purchase",
+"revenue": 86,
+"at": "2026-11-05T11:02:49+00:00",
+"brand": "sample"
+},
+{
+"session": "s0538",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-02T14:43:49+00:00",
+"brand": "sample"
+},
+{
+"session": "s0544",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-04T09:34:42+00:00",
+"brand": "sample"
+},
+{
+"session": "s0547",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-06T10:26:45+00:00",
+"brand": "sample"
+},
+{
+"session": "s0547",
+"event": "purchase",
+"revenue": 86,
+"at": "2026-11-06T10:27:35+00:00",
+"brand": "sample"
+},
+{
+"session": "s0548",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-12T15:42:47+00:00",
+"brand": "sample"
+},
+{
+"session": "s0553",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-10T11:31:13+00:00",
+"brand": "sample"
+},
+{
+"session": "s0560",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-13T21:02:01+00:00",
+"brand": "sample"
+},
+{
+"session": "s0567",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-08T03:30:56+00:00",
+"brand": "sample"
+},
+{
+"session": "s0567",
+"event": "purchase",
+"revenue": 29,
+"at": "2026-11-08T03:31:58+00:00",
+"brand": "sample"
+},
+{
+"session": "s0569",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-10T01:05:15+00:00",
+"brand": "sample"
+},
+{
+"session": "s0569",
+"event": "purchase",
+"revenue": 29,
+"at": "2026-11-10T01:06:11+00:00",
+"brand": "sample"
+},
+{
+"session": "s0572",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-11T00:34:47+00:00",
+"brand": "sample"
+},
+{
+"session": "s0577",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-03T14:16:02+00:00",
+"brand": "sample"
+},
+{
+"session": "s0582",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-12T10:02:02+00:00",
+"brand": "sample"
+},
+{
+"session": "s0587",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-08T17:02:41+00:00",
+"brand": "sample"
+},
+{
+"session": "s0587",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-08T17:03:58+00:00",
+"brand": "sample"
+},
+{
+"session": "s0590",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-06T15:20:03+00:00",
+"brand": "sample"
+},
+{
+"session": "s0590",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-06T15:21:48+00:00",
+"brand": "sample"
+},
+{
+"session": "s0593",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-03T03:32:06+00:00",
+"brand": "sample"
+},
+{
+"session": "s0593",
+"event": "purchase",
+"revenue": 29,
+"at": "2026-11-03T03:33:41+00:00",
+"brand": "sample"
+},
+{
+"session": "s0597",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-05T07:44:48+00:00",
+"brand": "sample"
+},
+{
+"session": "s0597",
+"event": "purchase",
+"revenue": 86,
+"at": "2026-11-05T07:45:53+00:00",
+"brand": "sample"
+},
+{
+"session": "s0602",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-12T03:47:12+00:00",
+"brand": "sample"
+},
+{
+"session": "s0605",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-06T13:51:47+00:00",
+"brand": "sample"
+},
+{
+"session": "s0605",
+"event": "purchase",
+"revenue": 86,
+"at": "2026-11-06T13:53:47+00:00",
+"brand": "sample"
+},
+{
+"session": "s0608",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-07T22:58:03+00:00",
+"brand": "sample"
+},
+{
+"session": "s0608",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-07T22:59:30+00:00",
+"brand": "sample"
+},
+{
+"session": "s0612",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-07T06:50:04+00:00",
+"brand": "sample"
+},
+{
+"session": "s0612",
+"event": "purchase",
+"revenue": 29,
+"at": "2026-11-07T06:51:55+00:00",
+"brand": "sample"
+},
+{
+"session": "s0614",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-09T13:03:56+00:00",
+"brand": "sample"
+},
+{
+"session": "s0614",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-09T13:04:47+00:00",
+"brand": "sample"
+},
+{
+"session": "s0622",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-03T04:26:02+00:00",
+"brand": "sample"
+},
+{
+"session": "s0622",
+"event": "purchase",
+"revenue": 86,
+"at": "2026-11-03T04:27:06+00:00",
+"brand": "sample"
+},
+{
+"session": "s0630",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-12T00:57:59+00:00",
+"brand": "sample"
+},
+{
+"session": "s0630",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-12T00:58:50+00:00",
+"brand": "sample"
+},
+{
+"session": "s0634",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-04T22:43:50+00:00",
+"brand": "sample"
+},
+{
+"session": "s0636",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-05T14:38:01+00:00",
+"brand": "sample"
+},
+{
+"session": "s0638",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-03T08:38:07+00:00",
+"brand": "sample"
+},
+{
+"session": "s0638",
+"event": "purchase",
+"revenue": 86,
+"at": "2026-11-03T08:40:03+00:00",
+"brand": "sample"
+},
+{
+"session": "s0648",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-04T12:00:57+00:00",
+"brand": "sample"
+},
+{
+"session": "s0665",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-11T03:43:44+00:00",
+"brand": "sample"
+},
+{
+"session": "s0665",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-11T03:44:34+00:00",
+"brand": "sample"
+},
+{
+"session": "s0666",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-11T01:12:04+00:00",
+"brand": "sample"
+},
+{
+"session": "s0666",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-11T01:13:03+00:00",
+"brand": "sample"
+},
+{
+"session": "s0667",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-13T14:12:08+00:00",
+"brand": "sample"
+},
+{
+"session": "s0683",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-06T05:57:59+00:00",
+"brand": "sample"
+},
+{
+"session": "s0683",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-06T05:59:41+00:00",
+"brand": "sample"
+},
+{
+"session": "s0696",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-03T19:43:01+00:00",
+"brand": "sample"
+},
+{
+"session": "s0698",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-08T14:29:07+00:00",
+"brand": "sample"
+},
+{
+"session": "s0703",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-07T12:08:59+00:00",
+"brand": "sample"
+},
+{
+"session": "s0703",
+"event": "purchase",
+"revenue": 86,
+"at": "2026-11-07T12:10:39+00:00",
+"brand": "sample"
+},
+{
+"session": "s0720",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-02T23:02:57+00:00",
+"brand": "sample"
+},
+{
+"session": "s0720",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-02T23:03:50+00:00",
+"brand": "sample"
+},
+{
+"session": "s0721",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-04T12:48:55+00:00",
+"brand": "sample"
+},
+{
+"session": "s0721",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-04T12:50:24+00:00",
+"brand": "sample"
+},
+{
+"session": "s0722",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-06T11:09:10+00:00",
+"brand": "sample"
+},
+{
+"session": "s0723",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-13T14:35:40+00:00",
+"brand": "sample"
+},
+{
+"session": "s0733",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-03T22:35:18+00:00",
+"brand": "sample"
+},
+{
+"session": "s0743",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-06T20:54:05+00:00",
+"brand": "sample"
+},
+{
+"session": "s0743",
+"event": "purchase",
+"revenue": 86,
+"at": "2026-11-06T20:55:58+00:00",
+"brand": "sample"
+},
+{
+"session": "s0745",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-02T15:04:09+00:00",
+"brand": "sample"
+},
+{
+"session": "s0777",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-14T01:26:59+00:00",
+"brand": "sample"
+},
+{
+"session": "s0784",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-13T06:10:48+00:00",
+"brand": "sample"
+},
+{
+"session": "s0784",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-13T06:12:28+00:00",
+"brand": "sample"
+},
+{
+"session": "s0789",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-09T09:28:01+00:00",
+"brand": "sample"
+},
+{
+"session": "s0796",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-14T12:44:51+00:00",
+"brand": "sample"
+},
+{
+"session": "s0798",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-07T11:49:46+00:00",
+"brand": "sample"
+},
+{
+"session": "s0800",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-12T18:40:58+00:00",
+"brand": "sample"
+},
+{
+"session": "s0800",
+"event": "purchase",
+"revenue": 86,
+"at": "2026-11-12T18:41:48+00:00",
+"brand": "sample"
+},
+{
+"session": "s0804",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-13T15:41:59+00:00",
+"brand": "sample"
+},
+{
+"session": "s0805",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-03T16:37:58+00:00",
+"brand": "sample"
+},
+{
+"session": "s0805",
+"event": "purchase",
+"revenue": 29,
+"at": "2026-11-03T16:38:39+00:00",
+"brand": "sample"
+},
+{
+"session": "s0806",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-06T23:11:04+00:00",
+"brand": "sample"
+},
+{
+"session": "s0808",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-13T10:27:48+00:00",
+"brand": "sample"
+},
+{
+"session": "s0808",
+"event": "purchase",
+"revenue": 86,
+"at": "2026-11-13T10:29:23+00:00",
+"brand": "sample"
+},
+{
+"session": "s0814",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-11T16:04:46+00:00",
+"brand": "sample"
+},
+{
+"session": "s0814",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-11T16:06:11+00:00",
+"brand": "sample"
+},
+{
+"session": "s0818",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-11T00:32:54+00:00",
+"brand": "sample"
+},
+{
+"session": "s0829",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-05T14:44:03+00:00",
+"brand": "sample"
+},
+{
+"session": "s0829",
+"event": "purchase",
+"revenue": 29,
+"at": "2026-11-05T14:45:18+00:00",
+"brand": "sample"
+},
+{
+"session": "s0835",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-04T23:42:58+00:00",
+"brand": "sample"
+},
+{
+"session": "s0836",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-07T07:27:10+00:00",
+"brand": "sample"
+},
+{
+"session": "s0836",
+"event": "purchase",
+"revenue": 29,
+"at": "2026-11-07T07:27:55+00:00",
+"brand": "sample"
+},
+{
+"session": "s0838",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-07T09:19:05+00:00",
+"brand": "sample"
+},
+{
+"session": "s0838",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-07T09:20:29+00:00",
+"brand": "sample"
+},
+{
+"session": "s0839",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-10T20:27:07+00:00",
+"brand": "sample"
+},
+{
+"session": "s0839",
+"event": "purchase",
+"revenue": 86,
+"at": "2026-11-10T20:28:15+00:00",
+"brand": "sample"
+},
+{
+"session": "s0842",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-11T19:46:03+00:00",
+"brand": "sample"
+},
+{
+"session": "s0847",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-05T18:09:02+00:00",
+"brand": "sample"
+},
+{
+"session": "s0849",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-11T18:19:01+00:00",
+"brand": "sample"
+},
+{
+"session": "s0853",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-01T22:56:58+00:00",
+"brand": "sample"
+},
+{
+"session": "s0854",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-04T22:52:01+00:00",
+"brand": "sample"
+},
+{
+"session": "s0860",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-03T03:10:10+00:00",
+"brand": "sample"
+},
+{
+"session": "s0864",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-07T13:47:40+00:00",
+"brand": "sample"
+},
+{
+"session": "s0865",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-12T15:08:02+00:00",
+"brand": "sample"
+},
+{
+"session": "s0865",
+"event": "purchase",
+"revenue": 29,
+"at": "2026-11-12T15:09:48+00:00",
+"brand": "sample"
+},
+{
+"session": "s0886",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-05T08:44:48+00:00",
+"brand": "sample"
+},
+{
+"session": "s0887",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-08T09:34:58+00:00",
+"brand": "sample"
+},
+{
+"session": "s0887",
+"event": "purchase",
+"revenue": 57,
+"at": "2026-11-08T09:35:55+00:00",
+"brand": "sample"
+},
+{
+"session": "s0895",
+"event": "checkout_reached",
+"revenue": 0,
+"at": "2026-11-12T04:59:17+00:00",
+"brand": "sample"
+},
+{
+"session": "s0895",
+"event": "purchase",
+"revenue": 29,
+"at": "2026-11-12T05:00:13+00:00",
+"brand": "sample"
+}
+]

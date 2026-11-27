@@ -1,6 +1,6 @@
 # The Swipe Line — every post has a lane
 
-Artifact: (private page)
+Artifact: https://claude.ai/artifact/EjRpMN7Rcx4ydgrUEW4MfZ
 Read from the live board on 2026-10-03. Mirror of the page the owner reads.
 
 The swipe board stopped being a pile and became an index: 5,278 organic posts,

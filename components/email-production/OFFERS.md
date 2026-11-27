@@ -1,7 +1,7 @@
 # The offer bank — how the machine reads it
 
 Markdown mirror of the artifact **The Offer Bank**
-((private page)).
+(https://claude.ai/code/artifact/b6ab617b-a7ed-4b76-a10c-15aea26249ac).
 Snapshot of 2026-09-10; regenerate after the bank changes.
 
 ## One bank, two questions

@@ -4,7 +4,7 @@ Everything a customer or prospect says, from any source, is taken in, labelled, 
 
 **Why it exists: to make the business better.** Every line is there to improve marketing, products, operations, customer service, customer experience and the website.
 
-Page: (private page)
+Page: https://claude.ai/artifact/PYTMNEhgM3mDaHGdTrypkX
 
 ## 1 · How it flows
 
@@ -21,7 +21,7 @@ our own copy                 THE BANK  ─────────────�
                                    └──── used lines marked "used" ◀──┘
 ```
 
-## The actual chain, step by step (real run 2026-09-29, @<brand> TikTok post #1)
+## The actual chain, step by step (real run 2026-09-29, @Brand A TikTok post #1)
 
 ### Going in: words → bank
 | # | Step | What happens | Code | Model | Result |
@@ -38,7 +38,7 @@ our own copy                 THE BANK  ─────────────�
 | 10 | Run record | filed/dropped/held, report, page with the intake prompt verbatim | comments.py:139 → runs/research/<brand>/comments-<time>/ | no | |
 | 11 | Save to the repo | A session commits and pushes (the gatherer doesn't) | by hand | no | 497b7c89c, 611 lines |
 
-Other ways in, same steps 5–9: **ownvoice** (Meta ad comments: warehouse, then Apify top 15 ads; Gorgias tickets: warehouse; since last run). 2026-09-28: <brand> 212 filed, <brand> 167. **deep** runs Reddit questions per sub-avatar, labeller only (no intake read).
+Other ways in, same steps 5–9: **ownvoice** (Meta ad comments: warehouse, then Apify top 15 ads; Gorgias tickets: warehouse; since last run). 2026-09-28: Brand A 212 filed, Brand B 167. **deep** runs Reddit questions per sub-avatar, labeller only (no intake read).
 
 ### Coming out: bank → ad
 | # | Step | What happens | Code |
@@ -58,13 +58,13 @@ Nothing puts language into the bank automatically right now. The only scheduled 
 
 | Source | Tool that pulls it | What starts it | Last run | State |
 |---|---|---|---|---|
-| Surveys (<brand> 13,405) | none; 3 Google Form sheets imported once | nothing | 2026-08-25 | no tool |
+| Surveys (Brand A 13,405) | none; 3 Google Form sheets imported once | nothing | 2026-08-25 | no tool |
 | Meta ad comments | `gather.py ownvoice` | a person asks | 2026-09-28 | tool, no trigger |
 | Organic comments | `gather.py comments --url` | a person asks | 2026-09-29 | tool, no trigger |
-| Gorgias tickets (<brand> 218) | `gather.py ownvoice` | a person asks; <brand> off | 2026-09-28 | tool, no trigger |
-| Reviews (<brand> 12, Amazon, secondhand) | none | nothing | 2026-08-25 | no tool |
+| Gorgias tickets (Brand B 218) | `gather.py ownvoice` | a person asks; Brand A off | 2026-09-28 | tool, no trigger |
+| Reviews (Brand B 12, Amazon, secondhand) | none | nothing | 2026-08-25 | no tool |
 | Reddit / forums | `gather.py deep` | was nightly 02:30, paused 2026-09-23 | 2026-09-23 (0 rows, Reddit blocked) | paused |
-| Interviews / panels (<brand> 105 + 55) | none; transcripts imported once | nothing | 2026-08-25 | no tool |
+| Interviews / panels (Brand B 105 + 55) | none; transcripts imported once | nothing | 2026-08-25 | no tool |
 
 On record: the nightly Reddit pull was switched off 2026-09-23, "no automatic Apify spend". Its last four runs never landed cleanly (three couldn't save, one blocked by Reddit).
 
@@ -75,15 +75,15 @@ Runs on the Mac mini (always on; already holds the Apify and Gemini keys under t
 | Source | Cadence | What it takes | Size |
 |---|---|---|---|
 | Surveys | daily | sheet importer: new answers since last run → labeller → bank | build, small |
-| Meta ad comments | daily | ownvoice on a schedule (<brand> free from warehouse; scrape uses Apify) | schedule, Apify spend |
+| Meta ad comments | daily | ownvoice on a schedule (Brand A free from warehouse; scrape uses Apify) | schedule, Apify spend |
 | Organic comments | daily | watch own accounts for new posts; since-last-run record | build, small, Apify spend |
-| Gorgias tickets | daily | same ownvoice run; <brand> needs its helpdesk named | schedule, one setting |
+| Gorgias tickets | daily | same ownvoice run; Brand A needs its helpdesk named | schedule, one setting |
 | Reviews | daily | puller for the store's review app (which app per brand?) | build, needs the app name |
 | Reddit / forums | nightly | turn back on after fixing the save step and the Reddit block | fix, Apify spend |
 | Interviews / panels | on arrival | transcript dropped in evidence folder → split, labelled, filed | build, small |
 | After every pull | every run | refresh the source list, save to the repo, update the bank page | build, small |
 
-Calls only the owner can make: lift "no automatic Apify spend" for scraping pulls; name <brand>'s helpdesk and each brand's review app.
+Calls only the owner can make: lift "no automatic Apify spend" for scraping pulls; name Brand A's helpdesk and each brand's review app.
 
 ## 2 · The four places
 
@@ -91,21 +91,21 @@ Calls only the owner can make: lift "no automatic Apify spend" for scraping pull
 |---|---|---|
 | **The data: the bank** | `brands/<brand>/core-avatars/<avatar>/language/` | What people said. Files by lane (`prospects`, `leads`, `customers/`, `churned/`), plus `used/` |
 | **The rules: the schema** | `brands/language-schema.md` | Lane, awareness, sophistication, internal vs external, voice, row IDs, source IDs, the used lane, repeats |
-| **The machine: the language layer** | `tools/language-layer/` | Search (every tool asks it for words), the tools, `docs/STANDARD.md` |
+| **The machine: the language layer** | `components/language-layer/` | Search (every tool asks it for words), the tools, `docs/STANDARD.md` |
 | **The output: its runs** | `runs/language-layer/` | Each brand's state (`BANK.md`, the page), rename lookups, lane-move lists, test sets |
 
 ## 3 · What's on every line
 
 | Field | What it says | Example |
 |---|---|---|
-| id | Permanent name, by the Naming Standard | `language_brand_a_fed-up-king_customer_9607` |
+| id | Permanent name, by the Naming Standard | `language_Brand A_fed-up-king_customer_9607` |
 | text | The exact words, typos and emoji intact | "2 different people 💀" |
 | lane | prospect · lead · customer · churned. A known order decides; otherwise the words do | prospect |
 | awareness | The doctrine's five levels (plus unclear) | product-aware |
 | sophistication | What they've already heard from the market | none · claim-heard · believes-none |
 | origin | Internal (our customers, our properties) or external | internal |
 | voice | The audience, or our own brand's copy | audience |
-| source | Where it came from, with a link to the exact comment, ticket or answer | `post_tiktok_brand_a_7167399325910289706` |
+| source | Where it came from, with a link to the exact comment, ticket or answer | `post_tiktok_Brand A_7167399325910289706` |
 | use · topics | What the words do and what they're about | objection · refund-reason · keyword-cta |
 | signal | Likes, and how many times the same line was said | said 41× |
 
@@ -117,7 +117,7 @@ Calls only the owner can make: lift "no automatic Apify spend" for scraping pull
 | Copywriting | close → objection · refund-reason · expectation-gap | Live: copywriter |
 | Emails | the avatar's language rules | Live: reads the rules file |
 | Landing pages, briefs, stories | sub-avatar rows · story-shaped rows | Live: lab tools |
-| Customer service | ticket · refund-reason · expectation-gap · churn-risk | <brand> tickets flowing in; no CS tool reads them yet |
+| Customer service | ticket · refund-reason · expectation-gap · churn-risk | Brand B tickets flowing in; no CS tool reads them yet |
 | Avatar development | lane × awareness counts · loudest repeats | Live: the Language Bank page |
 
 ## 5 · What already talks to it, and how
@@ -127,19 +127,19 @@ Calls only the owner can make: lift "no automatic Apify spend" for scraping pull
 | Research gatherer (`components/research-gatherer`) | writes in | deep research; `comments` (Apify: TikTok, Instagram, Facebook); `ownvoice` (Meta ad comments + Gorgias tickets). Every line is labelled and named before filing |
 | Labeller (`language-layer/tools/label.py`) | proposes | Lane, awareness, sophistication, origin and voice, read in context. Called by the gatherer; can backfill a bank — as a proposal under `runs/language-layer/`, which the gatherer's `apply` writes |
 | Bank tools (`rename_ids`, `map_sources`, `keyword_cta`) | propose | Ids, source ids + the registry, the `keyword-cta` tag — each a proposal under `runs/language-layer/`, written by `gather.py apply` |
-| Video chain (`tools/video-teardown`) | reads out | Prompts carry `?stage:avatar:funnel`. The engine returns rows tagged for that stage, filtered by awareness, unused first, widening when thin. After a brief ships, the lines it used are marked used |
-| Copywriter (`tools/copywriter`) | reads out | Same engine, with its own stage map |
+| Video chain (`components/video-teardown`) | reads out | Prompts carry `?stage:avatar:funnel`. The engine returns rows tagged for that stage, filtered by awareness, unused first, widening when thin. After a brief ships, the lines it used are marked used |
+| Copywriter (`components/copywriter`) | reads out | Same engine, with its own stage map |
 | Landing pages (lab) | reads out | Per stage, plus rows for a named sub-avatar |
 | Outlier brief (lab) | reads out | Customer words for creator briefs |
 | Story builder (lab) | reads out | Story-shaped rows, no model |
 | Marketing calendar (`components/marketing-calendar`) | reads out | The brand's avatar roster |
-| Email production (`tools/email-production`) | reads rules | The avatar's `language/rules.md`, not the rows |
+| Email production (`components/email-production`) | reads rules | The avatar's `language/rules.md`, not the rows |
 | Voice check (`components/qc-checks`) | checks | Copy was written against the right brand's language rules |
 | CS metrics (`components/cs-metrics`) | same source | Reads Gorgias ticket stats from the warehouse; doesn't read or write the bank |
 
 ## 6 · Plugging in a source: Gorgias
 
-Status: <brand> **on** (218 ticket lines in the bank). <brand> **off** (no helpdesk named).
+Status: Brand B **on** (218 ticket lines in the bank). Brand A **off** (no helpdesk named).
 
 1. **Read from:** the company data warehouse (the same Gorgias tables CS metrics reads).
 2. **Turned on by:** `"helpdesk": "gorgias"` in `brands/<brand>/operations/brand.json`. Each `ownvoice` run then pulls every ticket message since the last run.
@@ -150,7 +150,7 @@ Any other source joins the same way: a way to pull it, a source ID by the Naming
 
 ## 7 · What's in it today (counted 2026-09-29)
 
-| Source kind | <brand> | <brand> |
+| Source kind | Brand A | Brand B |
 |---|---:|---:|
 | Survey | 13,405 | 25 |
 | Post comments (ads + organic) | 1,469 | 426 |
@@ -172,7 +172,7 @@ Any other source joins the same way: a way to pull it, a source ID by the Naming
 
 The output folder is named after the machine, like every other machine's (`runs/video-teardown/`, `runs/copywriter/`). Renamed from `runs/language-bank/` on 2026-09-29.
 
-## 9 · System check (the team's fit → ready), 2026-09-29
+## 9 · System check (the developer's fit → ready), 2026-09-29
 
 Memos: `runs/system-integration/components-language-layer/`. No model calls.
 
@@ -189,19 +189,19 @@ Memos: `runs/system-integration/components-language-layer/`. No model calls.
 - Fixed: keys by name only (O6), output always under `runs/language-layer/` (O4), no brand names in code (O7), no guessed laptop paths, runs on Python 3.9, README with how to run it.
 - **O5, closed 2026-09-29:** `label.py apply`, `rename_ids.py`, `map_sources.py` (and the new `label.py origin`, `keyword_cta.py`) no longer write into `brands/`. Each writes a proposal to `runs/language-layer/<brand>/<run>/` and hands it to `components/research-gatherer/gather.py apply` — the one machine with the carve-out — which checks it and writes it. One command still does both.
 - **O10, closed 2026-09-29:** the labeller's default is `claude-sonnet-5`, the registry id (`sonnet` is its alias in `components/models/models.json`).
-- Small, the team or the team: untagged `LL-1` (language layer) and an "assumption" ownership line in the layer's CLAUDE.md (gated) — proposed text in the handoff under `runs/system-integration/components-language-layer/`.
+- Small, the developer or the designer: untagged `LL-1` (language layer) and an "assumption" ownership line in the layer's CLAUDE.md (gated) — proposed text in the handoff under `runs/system-integration/components-language-layer/`.
 
 ## Update 2026-09-29 (afternoon)
 
 - System check: **L1 PASS, L2 PASS** (memo `runs/system-integration/components-language-layer/20260929-0906Z-fit/FIT.md`). Bank clean-up tools now write a proposal under `runs/language-layer/`; `gather.py apply` (research-gatherer, the one writer allowed in `brands/`) applies it. Labeller model: claude-sonnet-5.
-- Ad comments on our own ads are internal: <brand> 212, <brand> 81.
-- IDs and source IDs 0 off standard; <brand> unlinked sources 28 → 15. keyword-cta tagged: <brand> 47 ("recipe"), <brand> 2.
-- Waiting on review: 21 hand-typed <brand> comment lines, 13 with linked twins pulled today (`runs/language-layer/<brand>/unlinked-matches-2026-09-29.md`).
-- <brand> awareness backfill running (12,053 unique lines).
+- Ad comments on our own ads are internal: Brand A 212, Brand B 81.
+- IDs and source IDs 0 off standard; Brand A unlinked sources 28 → 15. keyword-cta tagged: Brand B 47 ("recipe"), Brand A 2.
+- Waiting on review: 21 hand-typed Brand A comment lines, 13 with linked twins pulled today (`runs/language-layer/Brand A/unlinked-matches-2026-09-29.md`).
+- Brand A awareness backfill running (12,053 unique lines).
 
 ## Next: our own feedback forms (idea, not built, 2026-09-29)
 
-<brand>'s Google Forms in the email flows built most of its bank:
+Brand A's Google Forms in the email flows built most of its bank:
 
 | Form | Answers | Asked | Missing |
 |---|---|---|---|
@@ -217,10 +217,10 @@ The plan: each brand runs its own branded, interactive forms. Questions are aske
 
 | Source | Mode | Status | First run |
 |---|---|---|---|
-| Surveys | `surveys` | live (<brand>, 3 sheets) | 39 pulled, 34 filed |
-| Reviews | `reviews` | live <brand> (Junip); <brand> waiting on Judge.me token + shop domain | 18 pulled, 17 filed |
+| Surveys | `surveys` | live (Brand A, 3 sheets) | 39 pulled, 34 filed |
+| Reviews | `reviews` | live Brand A (Junip); Brand B waiting on Judge.me token + shop domain | 18 pulled, 17 filed |
 | Meta ad comments (warehouse) | `ownvoice --no-scrape` | live | nothing new |
-| Gorgias tickets | `ownvoice` | live <brand>; <brand>'s separate Gorgias account isn't synced to the warehouse (the team) | nothing new |
+| Gorgias tickets | `ownvoice` | live Brand B; Brand A's separate Gorgias account isn't synced to the warehouse (the designer) | nothing new |
 | Interviews / panels | `interviews` (drop in `language/evidence/inbox/`) | live | inbox empty |
 | Organic comments, Reddit | `comments`, `deep` | on request (Apify) | — |
 

@@ -1,8 +1,8 @@
 # The Language Index
 
-Page: (private page) · this file is its Markdown mirror; the page source is `language-index-owner.html` beside it.
+Page: https://claude.ai/artifact/86B4c6hXiJpKVfaA1wx9tS · this file is its Markdown mirror; the page source is `language-index-owner.html` beside it.
 
-When we write copy, it pulls real customer quotes from one engine (`tools/language-layer`). It is fed every morning and reads the brand's quote folders fresh on every pull.
+When we write copy, it pulls real customer quotes from one engine (`components/language-layer`). It is fed every morning and reads the brand's quote folders fresh on every pull.
 
 ## How it works
 
@@ -20,7 +20,7 @@ When we write copy, it pulls real customer quotes from one engine (`tools/langua
 - **Proven words kept in:** up to a quarter of a pull is quotes already used in an asset.
 - **Your calls stick:** retired or burned quotes never come back.
 
-## <brand>'s bank right now (9 Oct)
+## Brand B's bank right now (9 Oct)
 
 1,442 quotes: customers 448 · prospects incl. sub-avatar research 396 · creator audiences 345 · churned 176 · leads 77.
 
@@ -33,4 +33,4 @@ When we write copy, it pulls real customer quotes from one engine (`tools/langua
 
 Face dark marks quotes are in and get pulled for face copy; until labelled they rank just after labelled quotes when a stage asks by awareness.
 
-Full counts: The Language Bank, (private page)
+Full counts: The Language Bank, https://claude.ai/artifact/UJn6CxrPUpSn3xk6AmJ2No

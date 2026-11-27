@@ -4,7 +4,7 @@ real month: lab-run's --name value pairs become a words-only run_month.py
 call, and what the run made lands in $OUT minus prompt dumps (ready.md G1;
 EP-1 (email writer mini door), EP-2 (month in the repo)).
 
-    /usr/bin/python3 tools/email-production/test_lab_entry.py
+    /usr/bin/python3 components/email-production/test_lab_entry.py
 """
 import contextlib
 import io

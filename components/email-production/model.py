@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The email system's shape, as data. Read by build_system.py.
 
-Scope, set by the owner 2026-08-27: **campaigns only**, and only three things —
+Scope, set by owner 2026-08-27: **campaigns only**, and only three things —
 brand context in, a dynamic calendar, an email out. Delivery, feedback and
 flows are real and are parked on their own page, not dropped.
 
@@ -118,9 +118,9 @@ PARKED = [
 ]
 
 # What an email can be ABOUT. Four wells, each doing a different job on the
-# relationship. the owner named all four; the ordering is his emphasis.
+# relationship. owner named all four; the ordering is his emphasis.
 # ---------------------------------------------------------------------------
-# CATEGORIES — recut 2026-08-27 after the owner caught the overlap.
+# CATEGORIES — recut 2026-08-27 after owner caught the overlap.
 #
 # The first cut mixed three logics: some categories were cut by SUBJECT
 # (skin = educational), some by INTENT (promotional = asks), some by SOURCE
@@ -180,7 +180,7 @@ WELLS = [
    src="Whatever is actually true and actually happening.",
    stock="thin", detail="a real founder and a real formulator · King's Month "
                         "is the nearest thing already sent",
-   note="the owner asked whether mission is community. It is not: community is "
+   note="owner asked whether mission is community. It is not: community is "
         "made of them, this is made of us. Same reason a founder note is not "
         "an education email even when it teaches something."),
 ]
@@ -259,7 +259,7 @@ BRIEF = [
 ]
 
 # Gaps are first-class. A thin category is information, not something to pad —
-# the owner's call, 2026-08-27. Every line here is verified against disk or the
+# owner's call, 2026-08-27. Every line here is verified against disk or the
 # derived pulls; anything indicative says so.
 GAPS = [
  ("Cultural has no source at all", "verified",

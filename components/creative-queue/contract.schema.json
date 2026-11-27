@@ -1,5 +1,5 @@
 {
- "_what": "The production contract v1, QB-5 (production contract): the shape of components/<component>/adapter.json (or components/<component>/<folder>/adapter.json, a component's own adapter folder). One manifest per production component; contract.py check enforces every rule written here. Definitions, the team's (curator, told after). Spec: team/handoffs/2026-10-22-production-contract.md.",
+ "_what": "The production contract v1, QB-5 (production contract): the shape of components/<component>/adapter.json (or components/<component>/<folder>/adapter.json, a component's own adapter folder). One manifest per production component; contract.py check enforces every rule written here. Definitions, the email lead's (curator, told after). Spec: team/handoffs/2026-10-22-production-contract.md.",
  "status": "draft",
  "schema": 1,
  "fields": {

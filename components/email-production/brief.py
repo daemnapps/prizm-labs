@@ -11,13 +11,15 @@ to open anything else.
 """
 import argparse
 import json
+import shlex
 import sys
 from pathlib import Path
+import calendar_handoff as CH
 
 
 def _json_or(path, default):
     """A brand file that is not there yet reads as empty — a brand with no
-    history is a brand, not an error (Brand-B, 2026-09-09)."""
+    history is a brand, not an error (2026-09-09)."""
     try:
         return json.loads(path.read_text())
     except (FileNotFoundError, ValueError):
@@ -79,6 +81,8 @@ def offer_for(slot, brand, avatar):
     o = slot.get("offer") or "none"
     if o == "none" or not avatar or avatar in ("mixed", "none"):
         return o
+    if o in (slot.get("offer_mix") or []):
+        return o          # the brand's own mix (storefront-order, 2026-11-04): every audience, the lane rule yields
     try:
         sys.path.insert(0, str(HERE))
         import offers as OFFERS
@@ -93,7 +97,7 @@ def offer_for(slot, brand, avatar):
 def occasion_of(slot, brand):
     """The moment in words the writer can use, not the filing key.
 
-    RULED 2026-09-10 (the owner: "this literally has nothing to do with football").
+    RULED 2026-09-10 (owner: "this literally has nothing to do with football").
     A slot scheduled on `nfl-season` used to hand the chain the string
     "nfl-season" — and only to triage and the brief header at that. The brand's
     own moments file already says what the moment is, when its window runs and
@@ -182,7 +186,7 @@ def chain_command(slot, brand, avatar=None, angle=None, label=None):
         if v and v != "none":
             parts.append(f"--{flag} {v}")
     # "no offer" is a DECISION the calendar made, and the chain has to be told
-    # it — silence used to mean "pick from the whole bank" (the owner, 2026-09-10)
+    # it — silence used to mean "pick from the whole bank" (owner, 2026-09-10)
     parts.append(f"--offer {offer_for(slot, brand, av)}")
     parts.append(f"--label {label or slot['id']}")
     parts.append(f'--source-reference "{slot["id"]}: {slot.get("occasion", "")}"')
@@ -225,9 +229,24 @@ def chain_argv(slot, brand, avatar=None, angle=None, label=None, brand_root=None
         if v and v != "none":
             argv += [f"--{flag}", v]
     argv += ["--offer", offer_for(slot, brand, avatar)]
+    also = [k for k in (slot.get("offer_mix") or []) if k != slot.get("offer")]
+    if also and offer_for(slot, brand, avatar) != "none":
+        argv += ["--offer-also", ",".join(also)]         # the rest of the brand's mix, carried beside it
+    if slot.get("offer") in (slot.get("offer_mix") or []) and offer_for(slot, brand, avatar) != "none":
+        argv += ["--offer-mix"]                          # a declared mix, even of one: the lane rule yields in the chain too
+    if slot.get("deadline") and offer_for(slot, brand, avatar) != "none":
+        argv += ["--deadline", slot["deadline"]]         # the only last day this send may state (the plan's)
+        if slot.get("order_by"):
+            argv += ["--order-by", slot["order_by"]]
+    problems = CH.audience_problems(slot, copy={'body':[angle or '']}, avatar=av)
+    if problems:
+        raise CH.Held('; '.join(problems))
+    contract = CH.snapshot(slot, brand, av)
+    contract['effective_offer'] = offer_for(slot, brand, av)
+    argv += ['--calendar-slot', json.dumps(contract)]
     # who receives it — the writer reads its funnel stage from this
-    if slot.get("segment"):
-        argv += ["--segment", slot["segment"]]
+    if CH.segments(slot):
+        argv += ["--segment", CH.segments(slot)[0]]
     argv += ["--label", label or slot["id"]]
     # the send's type IS an email format (components/elements, format/email);
     # the chain checks it before any step runs and records it in run.json
@@ -279,13 +298,22 @@ def variant_runs(slot, brand):
             for v in variants]
 
 
-def build_brief(slot, brand, brand_root):
+def portable_command(argv):
+    """A saved command runs from the workspace, with no machine-local paths."""
+    return shlex.join(["/usr/bin/python3"] + [
+        arg.replace(str(WORKSPACE) + "/", "") for arg in argv[1:]])
+
+
+def build_brief(slot, brand, brand_root, run_dir=None):
     b = [f"# {slot['id']} — {slot.get('type')} · {slot.get('date')}", ""]
     b += ["The slot, fully specified. Production opens this page and nothing else.", ""]
     b += ["## The slot", ""]
+    review_note = (slot.get("_review") or {}).get("note", "")
+    if review_note:
+        b += ["## Production instructions", "", review_note, ""]
     order = ("date", "hour", "local", "segment", "avatar", "sub_avatar",
              "category", "type", "role", "occasion", "product", "offer",
-             "follows", "then")
+             "follows", "then", "deadline", "order_by", "required_lead")
     for k in order:
         v = slot.get(k)
         if k == "segment" and len(slot.get("segments") or []) > 1:
@@ -316,18 +344,26 @@ def build_brief(slot, brand, brand_root):
     b.append(f"- **then**: {then or 'nothing — self-contained'}"
              + (" (contingent — runs only if the ask stalls)" if then == "contingent" else ""))
 
-    runs = variant_runs(slot, brand)
-    b += ["", "## Produce it", ""]
-    if len(runs) > 1:
-        b.append(f"{len(runs)} variants — one email per avatar, same slot, "
-                 "each run separately and shipped as one Klaviyo A/B test:")
-        b.append("")
-    for av, angle, label in runs:
-        if len(runs) > 1:
-            b.append(f"**{av}**" + (f" — {angle}" if angle else ""))
-        b += ["```", chain_command(slot, brand, av, angle, label), "```",
-              "Then draw it:  `python3 render_email.py results/" + label
-              + f" --brand {brand}`", ""]
+    b += ["", "## Produce it", "", "Run from the workspace root.", ""]
+    if slot.get("channel") == "sms":
+        if run_dir is None:
+            raise ValueError("SMS briefs require their calendar run directory")
+        command = [sys.executable, str(HERE / "sms.py"), str(run_dir), "--only", slot["id"]]
+        b += ["```", portable_command(command), "```", "Draft only; never send or schedule.", ""]
+    else:
+        runs = variant_runs(slot, brand)
+        prefix = label_prefix(run_dir, brand) if run_dir else ""
+        for av, angle, label in runs:
+            label = prefix + label
+            if len(runs) > 1:
+                b.append(f"**{av}**" + (f" — {angle}" if angle else ""))
+            argv = chain_argv(slot, brand, av, angle, label, note=review_note)
+            if argv is None:
+                b += ["[UNFILLED: no source fits — pick a swipe before this runs.]", ""]
+                continue
+            argv[1] = str(HERE / argv[1])
+            # The same argument builder as run_month carries offer mix, review notes and the calendar contract.
+            b += ["```", portable_command(argv), "```", "Draft only; design follows writing and checks.", ""]
     return "\n".join(b)
 
 
@@ -348,6 +384,9 @@ def main():
     brand = run["brand"]
     brand_root = WORKSPACE / "brands" / brand
 
+    sys.path.insert(0, str(HERE / "machine"))
+    import reviewed_plan as RP
+    slots = RP.reviewed(run_dir, slots)
     want = set(args.slot_ids) or {s["id"] for s in slots}
     unknown = want - {s["id"] for s in slots}
     if unknown:
@@ -358,7 +397,7 @@ def main():
     for slot in slots:
         if slot["id"] not in want:
             continue
-        (out / f"{slot['id']}.md").write_text(build_brief(slot, brand, brand_root) + "\n")
+        (out / f"{slot['id']}.md").write_text(build_brief(slot, brand, brand_root, run_dir) + "\n")
         print(f"  -> briefs/{slot['id']}.md")
     print(f"done -> {out}")
 

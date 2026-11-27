@@ -6,10 +6,10 @@
     "story.md",
     "position.md"
   ],
-  "brand-identity/story.md": [
+  "story.md": [
     "story.md"
   ],
-  "brand-identity/position.md": [
+  "position.md": [
     "position.md"
   ],
   "core-avatars": [
@@ -28,17 +28,17 @@
   "ai-elements": [
     "elements"
   ],
-  "ai-elements/characters": [
+  "elements/characters": [
     "ai-cast",
     "elements/character"
   ],
-  "ai-elements/environments": [
+  "elements/environments": [
     "elements/environment"
   ],
-  "ai-elements/props": [
+  "elements/props": [
     "elements/prop"
   ],
-  "ai-elements/element-facts.json": [
+  "element-facts.json": [
     "element-facts.json"
   ],
   "content-creators": [

@@ -1,0 +1,78 @@
+{
+ "id": "photo-to-3d-model",
+ "name": "Photo to 3D Model",
+ "kind": "other",
+ "makes": "One clean, optimized textured GLB per object from a photo, sized for game, web/AR, 3D print or render, optionally rigged.",
+ "source": [
+  "photo-to-3d-model/SKILL.md",
+  "photo-to-3d-model/_files.md"
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "name": "Intake: one object, the use (default web/AR), 2 to 4 photos if available, rigging only for characters",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 2,
+   "name": "Prepare the photo (remove busy background)",
+   "model": "remove_background",
+   "cheap": "local BiRefNet matte (free)"
+  },
+  {
+   "n": 3,
+   "name": "Pick the model",
+   "model": "meshy_v7_image_to_3d / hunyuan3d_v3_image_to_3d",
+   "cheap": "local TRELLIS 3D (free)"
+  },
+  {
+   "n": 4,
+   "name": "Set the polygon-budget fields with the provider's exact names; one generate_3d per object",
+   "model": "generate_3d",
+   "cheap": "local TRELLIS 3D (free)"
+  },
+  {
+   "n": 5,
+   "name": "Optional rig and animate",
+   "model": "meshy rigging / 3d_rigging",
+   "cheap": "none cheaper; skip unless needed"
+  },
+  {
+   "n": 6,
+   "name": "Fix: remesh, retexture, or try the next model once",
+   "model": "meshy_v5_remesh / meshy_v5_retexture",
+   "cheap": "local remesh in Blender (free)"
+  },
+  {
+   "n": 7,
+   "name": "Answer: GLB, model, budget, topology, rigged?, what was invented",
+   "model": "none",
+   "cheap": null
+  }
+ ],
+ "price": "Not quoted. 3D models are not in `_prices.md`; the monsters workflow quotes 18 credits for one textured model, a rough marker only.",
+ "cheap_price": "Local TRELLIS 3D (about 400 s on this Mac, 22.8 GB) costs 0 credits.",
+ "prompts": [
+  {
+   "label": "Provider field names",
+   "source": "photo-to-3d-model/SKILL.md",
+   "text": "| Provider                | Polygon budget            | Texture                                            | PBR          | Quads                                                           |\n| ----------------------- | ------------------------- | -------------------------------------------------- | ------------ | --------------------------------------------------------------- |\n| Tripo (`tripo_*`)       | `face_limit`              | `texture: true`                                    | `pbr`        | `quad: true`                                                    |\n| Meshy (`meshy_*`)       | `target_polycount`        | `should_texture: true`                             | `enable_pbr` | `topology: \"quad\"`                                              |\n| Hunyuan (`hunyuan3d_*`) | `face_count` (min 40 000) | always textured unless `generate_type: \"Geometry\"` | `enable_pbr` | `polygon_type: \"quadrilateral\"` with `generate_type: \"LowPoly\"` |\n\nBudgets:\n\n| Use                           | Triangles                  | PBR               | Topology                      |\n| ----------------------------- | -------------------------- | ----------------- | ----------------------------- |\n| Game / real-time hero         | 10 000–30 000              | yes               | triangle                      |\n| Game prop / mobile / playable | 2 000–8 000                | no                | triangle                      |\n| Web / AR viewer (default)     | 30 000–50 000              | yes               | triangle                      |\n| 3D print                      | 200 000+ (Hunyuan 500 000) | no texture needed | triangle                      |\n| Render / archviz              | 100 000–500 000            | yes               | quad if the user will edit it |"
+  },
+  {
+   "label": "Budgets by use",
+   "source": "photo-to-3d-model/SKILL.md",
+   "text": "| Use                           | Triangles                  | PBR               | Topology                      |\n| ----------------------------- | -------------------------- | ----------------- | ----------------------------- |\n| Game / real-time hero         | 10 000–30 000              | yes               | triangle                      |\n| Game prop / mobile / playable | 2 000–8 000                | no                | triangle                      |\n| Web / AR viewer (default)     | 30 000–50 000              | yes               | triangle                      |\n| 3D print                      | 200 000+ (Hunyuan 500 000) | no texture needed | triangle                      |\n| Render / archviz              | 100 000–500 000            | yes               | quad if the user will edit it |"
+  },
+  {
+   "label": "The generate_3d call",
+   "source": "photo-to-3d-model/SKILL.md",
+   "text": "Call `generate_3d` once per object with `params: { model, medias: [{ value:\n<job_id or media_id>, role: \"image_references\" }], <the fields above> }`\n(Meshy 5 `image_to_3d` / `multi_image_to_3d` take role `image`). A local or\nattached photo goes through `media_upload` first; a web URL through\n`media_import_url`. Wait with `jobs_wait` before answering."
+  },
+  {
+   "label": "Model pick table",
+   "source": "photo-to-3d-model/SKILL.md",
+   "text": "| Need                                  | Model                      | Notes                                                                                 |\n| ------------------------------------- | -------------------------- | ------------------------------------------------------------------------------------- |\n| Default (props, products, characters) | `meshy_v7_image_to_3d`     | rig: `pose_mode: \"a-pose\"`, `enable_rigging: true`; stylized: `model_type: \"lowpoly\"` |\n| 2–4 photos of the same object         | `hunyuan3d_v3_image_to_3d` | pass all photos in `medias`                                                           |\n| Max detail for print or render        | `hunyuan3d_v3_image_to_3d` | `generate_type: \"Normal\"`, high `face_count`                                          |"
+  }
+ ]
+}

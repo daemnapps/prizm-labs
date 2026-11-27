@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Swipe</title>
 <style>
-  /* Tokens lifted from the Competitor A teardown so the live tool and the
+  /* Tokens lifted from the Brand C teardown so the live tool and the
      written teardowns read as one system. */
   :root{
     --paper:#E9ECEF;--surface:#FAFBFC;--sunk:#F1F4F7;--ink:#15181D;--ink2:#626873;
@@ -273,7 +273,7 @@ const belief = a => Number(a.belief ?? a.variants ?? 0);
 const beliefLabel = () => (state.blocks[0] && state.blocks[0].belief_label) || 'vars';
 const fmtB = v => beliefLabel() === 'spend' ? money(v) : Number(v).toLocaleString();
 
-// drive_file is stored with its full Drive prefix ("the shared drive/
+// drive_file is stored with its full Drive prefix ("Shared Assets/lab/the owner/
 // swipe-paid/<brand>/…") but /media/ is already rooted at that folder. Strip
 // the prefix rather than matching a folder name: this folder has been renamed
 // once (swipe -> swipe-paid) and a hardcoded name silently broke every image
@@ -433,7 +433,7 @@ async function openBlock(slug){
   let ads = await get(`/api/ads?brand=${encodeURIComponent(state.brand)}&block=${encodeURIComponent(slug)}&lane=${encodeURIComponent(state.lane)}`);
   ads = ads.filter(x => state.media.has(x.media_type === 'video' ? 'video' : 'static'));
   const cells = ads.map(ad => {
-    // Swiped media is a file we hold: drive_file is "the shared drive/
+    // Swiped media is a file we hold: drive_file is "Shared Assets/lab/the owner/
     // swipe-paid/<brand>/…" and /media/ is rooted above it, so the prefix goes.
     // Our own ads have no local file — the frame is Meta's hosted image and the
     // only playable copy is behind the preview link. Falling back to those is
@@ -523,8 +523,8 @@ async function renderBrand(){
   const season = A.filter(a=>a.seasonal);
   const ever = A.filter(a=>!a.seasonal).sort((x,y)=>belief(y)-belief(x));
   const ptypes = {}; P.forEach(p => ptypes[p.page_type]=(ptypes[p.page_type]||0)+1);
-  const md = t => esc(t).replace(/\*\*(.+?)\*\*/g,'<strong>$__</strong>')
-                        .replace(/`(.+?)`/g,'<code>$__</code>')
+  const md = t => esc(t).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+                        .replace(/`(.+?)`/g,'<code>$1</code>')
                         .replace(/^\s*[-*]\s+/gm,'• ').replace(/\n/g,'<br>');
   const sec = k => brief.sections && brief.sections[k] ? md(brief.sections[k]) : '<em>not written</em>';
 
@@ -591,8 +591,8 @@ const money = n => n ? '$' + Number(n).toLocaleString(undefined,{maximumFraction
 // Rendering exactly that keeps the synopsis one file, read by both the page
 // and anyone who opens the repo.
 function md(t){
-  const esc2 = x => esc(x).replace(/`([^`]+)`/g,'<code>$__</code>')
-                          .replace(/\*\*([^*]+)\*\*/g,'<strong>$__</strong>');
+  const esc2 = x => esc(x).replace(/`([^`]+)`/g,'<code>$1</code>')
+                          .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
   const out=[]; let tbl=null;
   for(const line of (t||'').split('\n')){
     const row = line.trim().startsWith('|') && line.trim().endsWith('|');

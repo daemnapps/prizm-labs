@@ -33,7 +33,7 @@ class Check(unittest.TestCase):
         self.assertEqual(contract.check(json.loads((FIX / "valid" / "adapter.json").read_text())), [])
 
     def test_the_email_adapter_passes(self):
-        code, out, _ = cli("check", "tools/email-production/adapter/adapter.json")
+        code, out, _ = cli("check", "components/email-production/adapter/adapter.json")
         self.assertEqual(code, 0, out)
 
     def test_unknown_word_fails_naming_words(self):
@@ -93,10 +93,10 @@ class Check(unittest.TestCase):
 
     def test_load_and_command(self):
         m = contract.load(FIX / "valid" / "adapter.json")
-        argv = contract.command(m, "apply", ["x", "-", "ok", "--by", "the team"])
+        argv = contract.command(m, "apply", ["x", "-", "ok", "--by", "editor"])
         self.assertEqual(argv[0], sys.executable)
         self.assertEqual(argv[1], str(REPO / "components" / "creative-queue" / "contract.py"))
-        self.assertEqual(argv[2:], ["apply", "x", "-", "ok", "--by", "the team"])
+        self.assertEqual(argv[2:], ["apply", "x", "-", "ok", "--by", "editor"])
         with self.assertRaises(ValueError):
             contract.load(FIX / "go-word" / "adapter.json")
 
@@ -128,7 +128,7 @@ class TryVerb(unittest.TestCase):
         self.assertTrue(any(p.startswith("try_words:") and "without a `try` verb" in p for p in got), got)
 
     def test_try_argv_is_checked_like_the_others(self):
-        got = contract.check(dict(self.base(), **{"try": ["lab/engineer/x.py"], "try_words": ["picture"]}))
+        got = contract.check(dict(self.base(), **{"try": ["lab/developer/x.py"], "try_words": ["picture"]}))
         self.assertTrue(any(p.startswith("try:") and "lab code" in p for p in got), got)
 
     def test_go_and_send_stay_refused_as_change_words_with_try(self):
@@ -141,17 +141,17 @@ class TryVerb(unittest.TestCase):
 
     def test_command_builds_the_try_argv_only_when_declared(self):
         m = dict(self.base(), **{"try": ["components/creative-queue/contract.py", "try"], "try_words": ["picture"]})
-        argv = contract.command(m, "try", ["x", "1", "picture", "0: warmer", "--by", "the team"])
+        argv = contract.command(m, "try", ["x", "1", "picture", "0: warmer", "--by", "editor"])
         self.assertEqual(argv[:2], [sys.executable, str(REPO / "components" / "creative-queue" / "contract.py")])
-        self.assertEqual(argv[2:], ["try", "x", "1", "picture", "0: warmer", "--by", "the team"])
+        self.assertEqual(argv[2:], ["try", "x", "1", "picture", "0: warmer", "--by", "editor"])
         with self.assertRaises(ValueError) as c:
             contract.command(self.base(), "try", [])
         self.assertIn("report, detail, apply", str(c.exception))
         self.assertEqual(contract.check(self.base()), [])                       # a manifest without try: unchanged
 
     def test_the_real_email_adapter_declares_try(self):
-        m = contract.load(REPO / "tools" / "email-production" / "adapter" / "adapter.json")
-        self.assertEqual(m["try"], ["tools/email-production/adapter/adapter.py", "try"])
+        m = contract.load(REPO / "components" / "email-production" / "adapter" / "adapter.json")
+        self.assertEqual(m["try"], ["components/email-production/adapter/adapter.py", "try"])
         self.assertEqual(m["try_words"], ["picture"])
 
 
@@ -163,7 +163,7 @@ class Find(unittest.TestCase):
 
     def test_find_in_the_repo_has_the_email_adapter_and_no_fixture(self):
         got = contract.find()
-        self.assertIn("tools/email-production/adapter/adapter.json", got)
+        self.assertIn("components/email-production/adapter/adapter.json", got)
         self.assertFalse([p for p in got if "test_qb5_fixtures" in p], got)
 
 

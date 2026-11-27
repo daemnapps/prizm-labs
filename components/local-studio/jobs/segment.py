@@ -1,5 +1,5 @@
 """SAM 2.1 video tracking on PyTorch MPS. Each --point X,Y (on frame 0) is its own object.
-Writes <out>/masks-<i>.mp4 (white = object) and <out>/overlay.mp4. Runs in tools/av/.venv."""
+Writes <out>/masks-<i>.mp4 (white = object) and <out>/overlay.mp4. Runs in components/local-studio/.venv (setup.sh)."""
 import argparse, subprocess, tempfile, time, json
 from pathlib import Path
 import numpy as np, torch

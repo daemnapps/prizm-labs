@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """local.py — the local studio. One door to every model that runs on this Mac.
 
-    python3 tools/local/local.py <job> <input> [options]
+    python3 components/local-studio/local.py <job> <input> [options]
 
 Jobs (each runs in its own environment; this file only needs the system python):
 
@@ -12,14 +12,14 @@ Jobs (each runs in its own environment; this file only needs the system python):
     stt      <audio|video> -o out(.json/.srt)             Whisper large-v3-turbo (MLX), word timestamps
     stems    <audio>  -o outdir [--model htdemucs_ft]     Demucs (PyTorch MPS)
     tts      "text"   -o out.wav [--voice am_michael]     Kokoro-82M (MLX), stock voices only
-    image    "prompt" -o out.png [-W 1024 -H 1536 --steps 4 --seed 1]   FLUX.2 klein 4B, 4-bit (MLX via mflux)
-    edit     "prompt" --ref a.jpg [--ref b.jpg] -o out.png             FLUX.2 klein 4B edit, 4-bit (MLX via mflux)
     3d       <image>  -o out.glb                         TRELLIS.2 image-to-3D (components/3d/make3d), textured GLB
     i2v      <image>  "prompt" -o out.mp4 [--seconds 4 -W 704 -H 1280] LTX-2.5 distilled, 4-bit (MLX), video + audio
     runs                                                 print the timing log
 
 Every run is timed and its peak memory recorded (macOS `time -l`), appended to
-runs/local-studio/_system/runs.jsonl (the repo's runs plane). Weights live in tools/local/models/ (never committed).
+runs/local-studio/_system/runs.jsonl (the repo's runs plane). Weights, binaries and environments live in this
+component (models/, .venv, .venv-mlx, src/ — all git-ignored), installed by setup.sh. LOCAL_STUDIO_FALLBACK may name
+an older tools folder (laid out av/, local/, 3d/): a piece missing here is used from there — a fallback, never the default.
 """
 from __future__ import annotations
 
@@ -36,19 +36,48 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 REPO = ROOT.parent.parent
-MODELS = ROOT / "models"
-AV_BIN = REPO / "tools" / "av" / "bin"
-RIFE = AV_BIN / "rife-ncnn-vulkan-20221029-macos"
+FALLBACK = Path(os.environ["LOCAL_STUDIO_FALLBACK"]).expanduser() if os.environ.get("LOCAL_STUDIO_FALLBACK") else None
+SETUP = "components/local-studio/setup.sh"
+
+sys.path.insert(0, str(ROOT.parent / "run-kit"))
+from run_kit import paths as _paths  # noqa: E402
+
+# LD-52 (venvs outside repo): models and venvs live outside the repo first, so a mini run in a fresh
+# worktree finds them — run-kit paths.models("local-studio") and paths.venv("local-studio", <requirements>),
+# both under the home folder's .upright/ by default — then beside this component, where owner's Mac has them.
+_SHARED_MODELS = _paths.models("local-studio")
+MODELS = _SHARED_MODELS if _SHARED_MODELS.is_dir() else ROOT / "models"
+
+
+def venv_dir(requirements: str, own: Path) -> Path:
+    """A venv's folder: the shared one named by `requirements` when built, else `own` beside the component."""
+    shared = _paths.venv("local-studio", ROOT / requirements)
+    return shared if (shared / "bin" / "python").exists() else own
+
+
+def found(own: Path, *old: str, probe: str = "") -> Path:
+    """Where one piece is: `own` (this component, where setup.sh installs it) when it is there; else the same piece
+    under LOCAL_STUDIO_FALLBACK/<old...> when that is set and has it; else `own`, so a missing piece is named where
+    it belongs. `probe` is the file inside the piece that proves it is installed."""
+    if (own / probe if probe else own).exists() or FALLBACK is None:
+        return own
+    alt = FALLBACK.joinpath(*old)
+    return alt if (alt / probe if probe else alt).exists() else own
+
+
+RIFE = found(MODELS / "rife-ncnn-vulkan-20221029-macos", "av", "bin", "rife-ncnn-vulkan-20221029-macos", probe="rife-ncnn-vulkan")
 ESRGAN_BIN = "realesrgan-ncnn-vulkan"
-AV_PY = (ROOT / ".venv" / "bin" / "python") if (ROOT / ".venv" / "bin" / "python").exists() else REPO / "tools" / "av" / ".venv" / "bin" / "python"      # torch 2.x + MPS, demucs, SAM-2, transformers
-MLX_BIN = ROOT / ".venv-mlx" / "bin"                                # mflux, mlx-whisper, mlx-audio
-LTX_BIN = ROOT / "src" / "ltx-2-mlx" / ".venv" / "bin" / "ltx-2-mlx"
-LTX_PACK = MODELS / "ltx-2.5-mlx-q4"
-SAM2_CKPT = (ROOT / "models" / "sam2" / "sam2.1_hiera_small.pt") if (ROOT / "models" / "sam2" / "sam2.1_hiera_small.pt").exists() else REPO / "tools" / "av" / "models" / "sam2" / "sam2.1_hiera_small.pt"
+AV_PY = found(venv_dir("requirements-torch.txt", ROOT / ".venv"), "av", ".venv", probe="bin/python") / "bin" / "python"        # torch 2.x + MPS, demucs, SAM-2, transformers
+MLX_BIN = found(venv_dir("requirements-mlx.txt", ROOT / ".venv-mlx"), "local", ".venv-mlx", probe="bin/python") / "bin"     # mflux, mlx-whisper, mlx-audio
+LTX_BIN = found(ROOT / "src" / "ltx-2-mlx", "local", "src", "ltx-2-mlx", probe=".venv/bin/ltx-2-mlx") / ".venv" / "bin" / "ltx-2-mlx"
+LTX_PACK = found(MODELS / "ltx-2.5-mlx-q4", "local", "models", "ltx-2.5-mlx-q4")
+SAM2_CKPT = found(MODELS / "sam2", "av", "models", "sam2", probe="sam2.1_hiera_small.pt") / "sam2.1_hiera_small.pt"
+HF_MLX = found(MODELS / "hf", "local", "models", "hf", probe="hub/models--mflux-community--flux2-klein-4b-mflux-q4")
+TORCH_HOME = found(MODELS / "torch", "local", "models", "torch", probe="hub/checkpoints/f7e0c4bc-ba3fe64a.th")
 RUNS = REPO / "runs" / "local-studio" / "_system" / "runs.jsonl"
 
 FLUX2_Q4 = "mflux-community/flux2-klein-4b-mflux-q4"
-SEEDVR2 = str(MODELS / "seedvr2-3b")                                   # numz/SeedVR2_comfyUI fp16 3B + VAE
+SEEDVR2 = str(found(MODELS / "seedvr2-3b", "local", "models", "seedvr2-3b", probe="seedvr2_ema_3b_fp16.safetensors"))                                   # numz/SeedVR2_comfyUI fp16 3B + VAE
 WHISPER = "mlx-community/whisper-large-v3-turbo"
 KOKORO = "mlx-community/Kokoro-82M-bf16"
 
@@ -57,13 +86,15 @@ VIDEO_EXT = {".mp4", ".mov", ".m4v", ".mkv", ".webm"}
 
 def esrgan_places() -> list:
     """Where Real-ESRGAN (ncnn) may live, in the order looked: the folder named by REALESRGAN_DIR,
-    this component's models/realesrgan, the workspace's tools/av/bin/realesrgan, then the
+    this component's models/realesrgan (setup.sh installs it there), LOCAL_STUDIO_FALLBACK's av/bin/realesrgan, then the
     realesrgan-ncnn-vulkan on PATH. Found, never hard-coded (2026-10-10: the job pointed at a
     tools/av path this repo does not have, so the first song ad was upscaled from another checkout)."""
     out = []
     if os.environ.get("REALESRGAN_DIR"):
         out.append(Path(os.environ["REALESRGAN_DIR"]).expanduser())
-    out += [MODELS / "realesrgan", AV_BIN / "realesrgan"]
+    out.append(MODELS / "realesrgan")
+    if FALLBACK is not None:
+        out.append(FALLBACK / "av" / "bin" / "realesrgan")
     on_path = shutil.which(ESRGAN_BIN)
     if on_path:
         out.append(Path(on_path).resolve().parent)
@@ -85,9 +116,9 @@ def env(shared_hf_cache: bool = False, offline: bool = True) -> dict:
     e = dict(os.environ)
     if offline:                             # weights already here: never wait on the network
         e["HF_HUB_OFFLINE"] = "1"
-    if not shared_hf_cache:                 # new weights land in tools/local/models, one folder to delete
-        e["HF_HOME"] = str(MODELS / "hf")
-    e["TORCH_HOME"] = str(MODELS / "torch")
+    if not shared_hf_cache:                 # new weights land in models/hf, one folder to delete
+        e["HF_HOME"] = str(HF_MLX)
+    e["TORCH_HOME"] = str(TORCH_HOME)
     e["HF_HUB_DISABLE_TELEMETRY"] = "1"
     e["PYTORCH_ENABLE_MPS_FALLBACK"] = "1"
     e["PATH"] = f"{MLX_BIN}:{e.get('PATH', '')}"
@@ -97,6 +128,9 @@ def env(shared_hf_cache: bool = False, offline: bool = True) -> dict:
 def run(cmd, job: str, meta: dict | None = None, cwd=None, shared_hf_cache=False) -> dict:
     """Run one step under `time -l`; log wall time + peak memory footprint."""
     cmd = [str(c) for c in cmd]
+    if os.path.isabs(cmd[0]) and not os.path.exists(cmd[0]):
+        raise SystemExit(f"[{job}] {cmd[0]} is not installed on this machine — build it with {SETUP} "
+                         f"(venvs: {_paths.venv('local-studio', ROOT / 'requirements-mlx.txt').parent}, models: {MODELS})")
     t = time.time()
     p = subprocess.run(["/usr/bin/time", "-l", *cmd], cwd=cwd, env=env(shared_hf_cache), stderr=subprocess.PIPE, text=True)
     err = p.stderr
@@ -255,19 +289,6 @@ def job_tts(a):
          "--speed", a.speed], "tts", {"tool": "Kokoro-82M bf16 (MLX)", "voice": a.voice, "chars": len(a.input)})
 
 
-def job_image(a):
-    run([MLX_BIN / "mflux-generate-flux2", "--model", FLUX2_Q4, "--base-model", "flux2-klein-4b", "--prompt", a.input,
-         "--width", a.W, "--height", a.H, "--steps", a.steps, "--seed", a.seed, "--output", a.output],
-        "image", {"tool": "FLUX.2 klein 4B q4 (mflux/MLX)", "res": f"{a.W}x{a.H}", "steps": a.steps, "images": 1})
-
-
-def job_edit(a):
-    run([MLX_BIN / "mflux-generate-flux2-edit", "--model", FLUX2_Q4, "--base-model", "flux2-klein-4b", "--prompt", a.input,
-         "--image-paths", *a.ref, "--steps", a.steps, "--seed", a.seed, "--output", a.output,
-         *(["--width", a.W, "--height", a.H] if a.W else [])],
-        "edit", {"tool": "FLUX.2 klein 4B q4 edit (mflux/MLX)", "refs": a.ref, "steps": a.steps, "images": 1})
-
-
 def job_i2v(a):
     if not (LTX_PACK / "transformer-distilled.safetensors").exists():
         raise SystemExit("i2v is not installed: the LTX-2.5 distilled 4-bit pack (~29 GB) is not on this Mac. "
@@ -319,14 +340,6 @@ def main():
 
     s = sub.add_parser("tts"); s.add_argument("input"); s.add_argument("-o", "--output", required=True)
     s.add_argument("--voice", default="am_michael"); s.add_argument("--speed", default="1.0")
-
-    s = sub.add_parser("image"); s.add_argument("input"); s.add_argument("-o", "--output", required=True)
-    s.add_argument("-W", default="1024"); s.add_argument("-H", default="1536")
-    s.add_argument("--steps", default="4"); s.add_argument("--seed", default="1")
-
-    s = sub.add_parser("edit"); s.add_argument("input"); s.add_argument("-o", "--output", required=True)
-    s.add_argument("--ref", action="append", required=True); s.add_argument("-W"); s.add_argument("-H")
-    s.add_argument("--steps", default="4"); s.add_argument("--seed", default="1")
 
     s = sub.add_parser("i2v"); s.add_argument("input"); s.add_argument("prompt"); s.add_argument("-o", "--output", required=True)
     s.add_argument("--seconds", type=float, default=4); s.add_argument("-W", default="704"); s.add_argument("-H", default="1280")

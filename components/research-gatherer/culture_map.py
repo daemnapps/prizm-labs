@@ -32,7 +32,10 @@ def main(argv=None):
     ap.add_argument("--model", help="Claude model (default: research.json ownvoice.model)")
     ap.add_argument("--prompt-out", help="write the filled prompt to this file and stop (one avatar)")
     ap.add_argument("--answer", help="check and assemble this saved model answer instead of calling the model (one avatar)")
-    a = ap.parse_args(argv)
+    import importlib.util as _u, pathlib as _pl
+    _s = _u.spec_from_file_location("profile_arg", next(q for q in _pl.Path(__file__).resolve().parents if q.name == "components") / "naming" / "profile_arg.py")
+    _PA = _u.module_from_spec(_s); _s.loader.exec_module(_PA)   # --profile <avatar>[_<sub>][_<demographic>] (naming/PEOPLE.md)
+    a = ap.parse_args(_PA.expand(argv, has=('avatar',)))
     if a.all and (a.prompt_out or a.answer):
         ap.error("--prompt-out / --answer take one --avatar")
     avatars = CM.all_avatars(a.brand) if a.all else [a.avatar]

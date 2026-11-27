@@ -186,7 +186,7 @@ class Callers(unittest.TestCase):
     """The two callers outside image-teardown use the engine, not the raw API."""
 
     def test_video_teardown_updates_its_doc_through_the_engine(self):
-        src = (WS / "tools/video-teardown/machine/run.py").read_text()
+        src = (WS / "components/video-teardown/machine/run.py").read_text()
         m = re.search(r"\ndef update_doc\(.*?(?=\ndef )", src, re.S)
         self.assertTrue(m, "run.py update_doc not found")
         body = m.group(0)

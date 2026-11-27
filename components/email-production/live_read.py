@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """What to go and find out, before a month's emails get written.
 
-    python3 live_read.py --brand brand-a --month 2026-09
-    python3 live_read.py --brand brand-a --month 2026-09 --slot sep-13
-    python3 live_read.py --brand brand-a --month 2026-09 --status
+    python3 live_read.py --brand brand_a --month 2026-09
+    python3 live_read.py --brand brand_a --month 2026-09 --slot sep-13
+    python3 live_read.py --brand brand_a --month 2026-09 --status
 
-RULED 2026-09-10 (the owner): "you could also look deeper into this event, see what
+RULED 2026-09-10 (owner): "you could also look deeper into this event, see what
 games are going on for the week too, and bait the audience to engage with it on
 top of whatever offer or concept the mail is running… this type of processing
 needs to run for EVERY email, not just this sports thing."

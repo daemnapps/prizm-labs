@@ -42,17 +42,17 @@ CHAIN = None
 # The brand template ships from THIS workspace. It used to be copied out of
 # ~/Projects/outlier, which made a shared component depend on a second repo
 # on one person's Mac; the workspace's own brands/_TEMPLATE is a superset of
-# what was there. Cut 2026-09-23 (the owner: "I don't want this in outlier or
+# what was there. Cut 2026-09-23 (owner: "I don't want this in outlier or
 # devel stuff anymore"). The guard below still checks everything that ships.
 TEMPLATE = None
 # Our own names, a person's disk and secrets: refused everywhere, always.
-OURS = re.compile(r"brand-a|brand-b|competitor-b|rosalia|"
-                  r"company|/Users/|api[_-]?key|"
+OURS = re.compile(r"brand_a|brand_b|brand_e|rosalia|"
+                  r"company|company|damondixon|/Users/|api[_-]?key|"
                   r"apify_token", re.I)
 # Competitors already shown by name on daemn.co (the full ad breakdowns under
 # /feeds/examples/). Refused in the packs, which name nobody; allowed where the
 # page itself names the competitor (My Feeds' paid tab, the examples).
-COMPETITORS = re.compile(r"competitor-a|norse\s?organics", re.I)
+COMPETITORS = re.compile(r"brand_c|norse\s?organics", re.I)
 BAD = re.compile(OURS.pattern + "|" + COMPETITORS.pattern, re.I)
 
 def guard(root, allow_competitors=False):
@@ -195,7 +195,7 @@ def record(site, built):
 def main():
     global REPO, CHAIN, TEMPLATE
     REPO = _workspace()
-    CHAIN = REPO / "tools/video-teardown"
+    CHAIN = REPO / "components/video-teardown"
     TEMPLATE = REPO / "brands" / "_TEMPLATE"
     ap = argparse.ArgumentParser()
     # Default inside the workspace, per the filing standard. Pass --site to

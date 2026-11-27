@@ -1,0 +1,116 @@
+{
+ "id": "short-drama",
+ "name": "Short Drama",
+ "kind": "video",
+ "makes": "One short-drama episode (30 s to 3 min) with talking characters from a script or idea, in one of 15 looks, with optional edit and score.",
+ "source": [
+  "commands/short-drama.md",
+  "short-drama/SKILL.md",
+  "commands/short-drama-references-script.md",
+  "commands/short-drama-references-pictures.md",
+  "commands/short-drama-references-clips.md",
+  "commands/short-drama-references-styles.md",
+  "commands/short-drama-references-auto-edit.md",
+  "commands/short-drama-references-music.md"
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "name": "Onboarding and quote",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 2,
+   "name": "Plan from script",
+   "model": "none",
+   "cheap": "Claude, free"
+  },
+  {
+   "n": 3,
+   "name": "Face and outfit pictures",
+   "model": "soul_2",
+   "cheap": "seedream_5_0_flash 2k (0.5)"
+  },
+  {
+   "n": 4,
+   "name": "Character sheets, locations, props",
+   "model": "seedream_v5_pro",
+   "cheap": "seedream_5_0_flash 2k (0.5)"
+  },
+  {
+   "n": 5,
+   "name": "Draft clips",
+   "model": "seedance_2_5",
+   "cheap": "wan3_0 480p (7.5 per 10 s)"
+  },
+  {
+   "n": 6,
+   "name": "Join film",
+   "model": "none",
+   "cheap": "ffmpeg local, free"
+  },
+  {
+   "n": 7,
+   "name": "1080p final",
+   "model": "seedance_2_5",
+   "cheap": "wan3_0 480p + local Real-ESRGAN upscale"
+  },
+  {
+   "n": 8,
+   "name": "Edit: cuts, cards, subtitles",
+   "model": "none",
+   "cheap": "free already"
+  },
+  {
+   "n": 9,
+   "name": "Score",
+   "model": "elevenlabs_music_v2",
+   "cheap": "about 8 credits per 2 min; skip it"
+  }
+ ],
+ "prompts": [
+  {
+   "label": "Face prompt",
+   "source": "commands/short-drama-references-pictures.md",
+   "text": "front-view shot, face close up of a [ADJECTIVE] [AGE] [ORIGIN], with [FACE], [IDENTITY DETAILS, ]natural skin texture, and [HAIR]. [PRONOUN] [has/have] [LOOK], wearing a simple neckline outfit (a protected person: a plain crew-neck top, shoulders covered). Head-and-shoulders, whole head and hair visible, seamless bright white studio backdrop, soft even light on both sides of [POSSESSIVE] face, neutral colour, true-to-life realism, gaze locked on the lens."
+  },
+  {
+   "label": "Outfit flat-lay",
+   "source": "commands/short-drama-references-pictures.md",
+   "text": "A top-down flat-lay photograph of one complete [men's / women's] outfit[ for a BUILD man / woman], laid out as a single dressed figure on a plain light stone-grey linen background, in a vertical 3:4 frame, like a wardrobe department continuity photograph. The outfit is [COUNT], each appearing once. The garments are laid flat and empty, layered into one standing silhouette in the centre of the frame from collar to footwear, the whole outfit inside the frame at full length with even empty space around it. [CHARACTER SENTENCE] [GARMENTS] [PALETTE]. Soft, even, neutral daylight from directly above, neutral white balance, gentle natural shadows under each item, true-to-life colour and texture: [TEXTURES], with plain inner collars, linings and insoles. Clean, crisp, high-resolution photograph."
+  },
+  {
+   "label": "Character sheet",
+   "source": "commands/short-drama-references-pictures.md",
+   "text": "the first attached reference image is the single source of truth for this [woman's / man's] face: the same facial structure, brows, eyes, nose, lips and skin tone, a full likeness match to the first attached reference image. the second attached reference image is the single source of truth for [her / his] clothes: the same garments, footwear and accessories as in the second attached reference image, with their cut, construction, materials and hardware, now worn on [her / his] body. With this exact [woman / man] in this exact outfit, create a horizontal three-panel photographic character appearance sheet on a plain neutral light-grey studio backdrop with thin white vertical separators, lit from the front by soft, even, diffused studio light, the same in all three panels and equal on both sides of the face and body: a wardrobe fitting of a real [actress / actor] in real clothes, cinematic live-action realism, natural skin texture with visible pores, subtle photographic grain. [Age and build.] [The hair sentence.] [She / He] wears [the outfit, garment by garment]. Every material reads as real [materials] with visible stitching and [its finish]. [The palette sentence.] [She / He] stands straight in a relaxed, neutral pose with natural adult proportions, the waist at the middle of the figure, arms loose at the sides; every hand is empty and relaxed. Left panel: the front of the outfit from the neck down to the footwear, natural proportions, the head above the crop, showing [the front: fit, closures, textures, wear]. Centre panel: a full-length rear view from head to footwear, showing [the back of the hair and of every garment]. Right panel: one large head-and-shoulders portrait with the whole head inside the frame and clear space above it, the same face as the first attached reference image, [the hair as styled], [what shows at the neck and shoulders], calm and neutral, eyes to the camera. Exactly one visible face across the sheet, in the right panel only. The garments, materials, colours, hardware and footwear stay identical across all three views."
+  },
+  {
+   "label": "Clip prompt order",
+   "source": "commands/short-drama-references-clips.md",
+   "text": "Write it in English, spoken lines as the script has them, each part on its own line, in this order. Paste the fixed lines word for word from the example. Hard limit: 20,000 characters; aim for 13,300 or fewer. A shot line has at most 55 words, a reference line 35, the cast line with its geography 170. Never write `@tag`, `<<<`, `[[` or ids: point to a picture only as \"image reference N\", numbered in the order attached.\n\n1. **Sound line**, fixed. With no line in the clip: `STRICT RULE: Absolutely no music, only diegetic sounds; no one speaks.` With narration it ends `…only diegetic sounds and the narrator's voice-over.`\n2. **Style line**, fixed for live action up to the colon, then the scene's light in one sentence: the one key source the location picture shows, where it is, how it falls and what it leaves dark; the grade; the air. Copy that sentence word for word into every clip of the scene. A night scene names no colour. With a `style_id`, the whole line up to the colon is that look's style line from `/short-drama/references/styles`. For a drawn style in the user's own words, replace the words before \"people and set\" with the plan's style.\n3. **Look line**, fixed, live action only.\n4. **Reference lines**, one per attached picture, in order, and then the `Continuity:` line: paste what `check.py lines plan.json <n>` prints, word for word (section 6).\n5. **Cast line** `In frame only: …`, then the geography by side and depth, ending `Eyelines never at the camera.`\n6. **Opening state**: everyone present at the first frame, each stance in one word, and their distances.\n7. **Speech budgets**, one sentence per speaker, then who never speaks: `Anna and the guards never speak in this clip.`\n8. **Intention sentences**, one per acting character, at most 30 words: what they want and the one drive they act with once they decide, from excitement, perseverance, inspiration, willpower, grit, zeal, tenacity, persistence, resilience. No other emotion.\n9. **Pace line**. Never ask for stillness, holds or pauses.\n10. **Shot lines**: `S1 0.0-2.5s · size, camera, height, movement · action`, sound events timed.\n11. **Audio**: the fixed language line with the script's own language in place of \"English\", then `S3 (2.1-4.0s) Boris to Anna, dry and clipped: \"...\"` per line, then `No speech in S1, S5.`\n12. **Restrictions**, fixed, last. When the clip shows background people, add before its last line: `- Background people never copy the face or hair of any image reference; each referenced character appears once, as themselves.`"
+  },
+  {
+   "label": "Complete clip example",
+   "source": "commands/short-drama-references-clips.md",
+   "text": "STRICT RULE: Absolutely no music, only diegetic sounds.\nRealism cinematic, real skin with pores and small marks, natural eyes, people and set lit only by this place's named sources: the tall window behind the sink, daylight falling across the counter onto the faces from one side, the hallway dark; soft contrast, muted warm palette; still, clear air.\nFramed on the rule of thirds, with a light anamorphic lens character: softly oval out-of-focus highlights in the background, and a fine 35mm film grain.\nImage reference 1 (location Kitchen): the Kitchen 100% as in the reference.\nImage reference 2 (character Mira): Mira, face, hair, body and clothes 100% as in the reference.\nImage reference 3 (character Daniel): Daniel, face, hair, body and clothes 100% as in the reference.\nImage reference 4 (prop Letter): the Letter 100% as in the reference.\nContinuity: Mira is clean and unchanged from the reference, with no stain, mark or damage; Daniel is clean and unchanged from the reference, with no stain, mark or damage.\nIn frame only: Mira and Daniel. The counter near, the window behind it. Mira at the counter's near side, screen left; Daniel at its far side, screen right, an arm's length across it. Eyelines never at the camera.\nOpening: Mira mid-stride toward the counter, the letter in her hand; Daniel standing at the sink, three steps from her.\nMira speaks aloud 2 times between 1.6s and 10.3s and never again; silent before 1.6s and from 10.3s to the end.\nDaniel speaks aloud 1 time between 3.7s and 6.0s and never again; silent before 3.7s and from 6.0s to the end.\nMira is out to make Daniel own the signature; once he admits it she presses for the whole truth, with grit.\nDaniel is out to slow her down; once the letter lands he decides to face it, with resilience.\nPace: tight and pressing; every shot opens in motion, a beat only where a line lands.\nS1 0.0-1.5s · medium_wide, from the near end of the counter looking along it, eye level, slow push-in · Mira, full length near left, strides to the counter, the letter in her hand; Daniel, middle right, turns from the sink to face her; the window behind him.\nS2 1.5-3.6s · close, cut at the collarbones, three-quarter from across the counter, slightly low, handheld · Mira plants her free hand on the counter and lifts the letter into frame; her voice begins at 1.6s; her look passing right of the lens, level; only the dark hallway behind her.\nS3 3.6-6.1s · close, cut at the collarbones, three-quarter from Mira's side, slightly high, handheld · Daniel steps in to the counter's far edge, both hands closing on it; his voice begins at 3.7s; his look passing left of the lens, level; only the window behind him.\nS4 6.1-7.6s · insert, from above the counter, high, static · Mira's hand comes in from the left and drops the letter on the counter; it lands at 6.9s and slides a hand's width right; her fingers open and lift away.\nS5 7.6-10.4s · extreme_close, brows to lips, profile from the window side, slightly low, slow push-in · Mira leans in over the counter; her voice begins at 7.7s and ends at 10.3s; her look going off the right edge, level; the dark hallway soft behind her.\nS6 10.4-13.0s · close, cut at the collarbones, from the front, slightly high, slow push-in · Daniel's eyes go down to the letter on the counter and stay there, his jaw sets, his hands flatten either side of it; only the window behind him.\nAll speech is in English. Only the words inside double quotation marks are ever spoken aloud; every voice direction and every other word of this text stays silent.\nS2 (1.6-3.5s) Mira to Daniel, a woman's voice of about 30, a low clear alto, tight and quiet: \"You signed it. Without me.\"\nS3 (3.7-6.0s) Daniel to Mira, a man's voice of about 35, a warm baritone, careful and low: \"I was going to tell you tonight.\"\nS5 (7.7-10.3s) Mira to Daniel, hard and close: \"Then tell me. Who gets the house?\"\nNo speech in S1, S4, S6.\nRestrictions:\n- No music of any kind: no score, no soundtrack, no background music, no melody, no drone, no pad, no sting, no swell.\n- No added sound effects: no whoosh, no boom, no impact hit, no riser.\n- Only diegetic sound: the characters' voices and the natural sounds of this place.\n- No words but the quoted lines, each only inside its own Audio window; outside them no one on screen speaks, whispers or mouths a word."
+  },
+  {
+   "label": "Style line realism_cinematic",
+   "source": "commands/short-drama-references-styles.md",
+   "text": "### `realism_cinematic` Higgsfield Cinematic\n\n- Picture words: Cinematic live action, natural skin and motivated lighting. Restrained warm practical lights and cool shadows.\n- Style line: `Realism cinematic, real skin with pores and small marks, natural eyes, people and set lit only by this place's named sources:`"
+  },
+  {
+   "label": "Location prompt rules",
+   "source": "commands/short-drama-references-pictures.md",
+   "text": "Write the prompt as one paragraph of Chinese prose, 350 to 600 Chinese characters, never over 650:\n\n1. Open with `电影剧照，`, then the genre's film, then the film look: how dark the frame is, how much lies in shadow, the key source and its colour.\n2. The place: kind, era, size; every `map` item with its material, colour and position; every door; the open floor.\n3. The camera: a wide establishing view at standing eye height, from where, looking which way.\n4. The place's own lights that are on.\n5. End word for word with `画面中没有任何人，没有人影。`"
+  },
+  {
+   "label": "Score cue order",
+   "source": "commands/short-drama-references-music.md",
+   "text": "One prompt per cue: `elevenlabs_music_v2` through `generate_audio_batch` (read the model first, as auto-edit.md says),\n`duration` the cue's span plus 2 seconds (rounded up; 3 to 300 seconds), `force_instrumental: true`. The prompt runs a few hundred to\na thousand characters, in this order:\n\n1. \"Instrumental film score cue, no lyrics.\";\n2. **the scene**: the event from the spotting, with its people, its place and what is done, as concretely as the script\n   and frames give it;\n3. **the key and the tempo**;\n4. **the instruments** this cue takes from the palette, and the motif by its description;\n5. **the moves in seconds of the cue**, from its hit points: what plays from when to when, \"a full hit at about N\n   seconds\", \"at N seconds everything stops\";\n6. **how it ends**: cut off dead, a hit ringing out, a held chord left unresolved, a fade to silence;\n7. three to five words of mood."
+  }
+ ],
+ "price": "Quoted per stop; about 400 credits for 2 min at 480p, 900 at 720p, 2,300 at 1080p (its own welcome figures; draft clips 360 + 1080p final 1,920 on the price sheet).",
+ "cheap_price": "about 90 credits for 2 min of clips on wan3_0 480p plus about 10 for pictures; free local upscale and edit."
+}

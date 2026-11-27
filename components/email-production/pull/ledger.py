@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Every subject line this brand has already sent, with what it did.
 
-    python3 ledger.py --brand brand-a
+    python3 ledger.py --brand brand_a
 
 Stage 5 of the email lane asks for a hook ledger and refuses to reuse ground
 that is on it. Without this file that rule is unenforceable, and the machine

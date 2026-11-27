@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """The public holidays — real dates, computed per year. Layer 1 of the
-calendar (the owner, 2026-09-02: "ground up the calendar fundamentally, fill in
+calendar (owner, 2026-09-02: "ground up the calendar fundamentally, fill in
 proper public holidays that all avatars are aware of").
 
     python3 holidays.py 2026            # every holiday that year, dated
@@ -70,9 +70,9 @@ def table(year):
         ("cyber-monday",      "Cyber Monday",          tg + _dt.timedelta(days=4), "retail", 1),
         ("cyber-week",        "Cyber Week (Thanksgiving through Cyber Monday)",
                                                        tg,                    "retail", 5),
-        ("christmas-designer",     "Christmas the team",         _dt.date(year, 12, 24), "retail", 1),
+        ("christmas-editor",     "Christmas editor",         _dt.date(year, 12, 24), "retail", 1),
         ("christmas",         "Christmas",             _dt.date(year, 12, 25), "retail", 1),
-        ("new-years-designer",     "New Year's the team",        _dt.date(year, 12, 31), "observance", 1),
+        ("new-years-editor",     "New Year's editor",        _dt.date(year, 12, 31), "observance", 1),
     ]
     out = []
     for key, name, start, kind, span in rows:

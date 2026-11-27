@@ -1,0 +1,113 @@
+{
+ "id": "drama-ads",
+ "name": "Drama Ads",
+ "kind": "video",
+ "makes": "A finished 9:16 story ad film with characters who act and talk, from a catalog card or an idea.",
+ "source": [
+  "drama-ads/SKILL.md",
+  "commands/drama-ads.md",
+  "drama-ads/references/",
+  "drama-ads/scripts/styles/",
+  "drama-ads/catalog/_cards.md"
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "name": "Intake: card, resolution, mode, plan",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 2,
+   "name": "Availability check",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 3,
+   "name": "Script",
+   "model": "none",
+   "cheap": "Claude writes it, free"
+  },
+  {
+   "n": 4,
+   "name": "Viewer plan and effects",
+   "model": "none",
+   "cheap": "Claude, free"
+  },
+  {
+   "n": 5,
+   "name": "Style master (3D/2D)",
+   "model": "gpt_image_2_6_flare",
+   "cheap": "seedream_5_0_flash 2k (0.5)"
+  },
+  {
+   "n": 6,
+   "name": "Sheets, props, locations",
+   "model": "gpt_image_2_6_flare",
+   "cheap": "seedream_5_0_flash 2k (0.5)"
+  },
+  {
+   "n": 7,
+   "name": "Clips round 1 and 2",
+   "model": "seedance_2_5",
+   "cheap": "wan3_0 480p (7.5 per 10 s)"
+  },
+  {
+   "n": 8,
+   "name": "Assembly in sandbox",
+   "model": "none",
+   "cheap": "ffmpeg local, free"
+  },
+  {
+   "n": 9,
+   "name": "Look, captions, deliver",
+   "model": "none",
+   "cheap": "Whisper + ffmpeg local, free"
+  }
+ ],
+ "prompts": [
+  {
+   "label": "Card film prompt (Bear proof)",
+   "source": "drama-ads/catalog/bear-proof.md",
+   "text": "/drama-ads\nMake a roughly 55-second deadpan storytime ad in `feature-3d`: an absurd problem the narrator quietly ends with the user's\nproduct.\n\n## The user's inputs\nThe user's message (their own text outside this prompt, and what they attach) may change any part of this film: the story, cast,\nstructure, look, sound, length or anything else. What it changes follows the user; every part it leaves alone follows this prompt.\nUse all they give as \"The user's own material\" says, over this prompt, language and length included: photos keep its label exact,\ntheir claims only, their idea or script fitted. Invent a missing product or name (never a real brand) and report it. Their\ntagline, offer or call to action follows the punchline as one line over the product; a logo stays on it.\n\n## Settings\nThis prompt is the brief for the film, not a reference video (none comes with it): make the film it describes. Its settings,\nstructure, pacing and sound replace the skill's defaults and base numbers, never its rules or checks. `feature-3d`, `storytime`,\n9:16, 50-60 seconds, narration at 160-175 words a minute; nobody speaks on screen. Captions: the style's own line.\n\n## The product in the film\nIt enters at 50% as the narrator's secret switch, named once in that line; the next says what it does. A morning-lit hero close-up\nshows its label; it stays in the payoff. A physical product replaces the old thing, a used-up one joins a routine, an app or\nservice is set up quietly or sends its person or result. No end card, tagline or hard sell follows.\n\n## Structure\n0-7%: Before the hero appears, one wide shows the problem's most absurd consequence, as line one flatly states: someone near its\nsource in outsized gear against it. 7-22%: The hero appears beside the cause; the exaggeration plays out, then becomes the hero's\nproblem. 22-50%: Two or three everyday fixes fail, each a sight gag with a count, until the hero breaks at an exact hour. 50-65%:\nThe switch. 65-74%: It works so well it raises a new comic worry. 74-94%: A chimed time phrase jumps months on to the hook's\nplace; that gear, now idle or repurposed, flips the opening exaggeration. The last line, the callback punchline, claims only the\nuser's words. 94-100%: The hero's satisfied face.\n\n## Cast\nThe hero: of the buyers' age and sex, exhausted then smug, acting with the face. The cause: someone close, oblivious, one habit\nfeeding the exaggeration.\n\n## Tone, sound and look\nDry lines of three to ten words, some fragments. A soft score runs throughout; the problem's sound, the chime and a payoff thud\nare the clips' own. Navy nights with warm amber pools of light, one honey-lit morning with floating dust.\n\n## Details you invent\nWhere the user's message gives none, invent the details that fill the parts above: names, places, props, looks, lines and jokes.\nMake each from the product, its buyers, where it is used and what goes wrong without it, not the first stock choice that comes to\nmind. The parts themselves stay as this prompt writes them unless the user's message changes them.\n"
+  },
+  {
+   "label": "Style line feature-3d",
+   "source": "drama-ads/scripts/styles/feature-3d.md",
+   "text": "3D animated feature-film look: smooth, rounded stylised characters with large expressive eyes, warm golden light, rich warm\ncolours with one or two strong accents, richly dressed real-scale sets with gently rounded forms."
+  },
+  {
+   "label": "Style block feature-3d",
+   "source": "drama-ads/scripts/styles/feature-3d.md",
+   "text": "3D animated feature-film look: smooth, rounded, stylised 3D characters with slightly oversized heads, large expressive eyes with\nbig irises and bright catchlights, full expressive brows, small soft noses, soft rounded jaws, smooth skin with a gentle warm glow\nand rosy cheeks, hair sculpted in soft flowing clumps with fine strands, rounded hands with five fingers; age shows in soft\nsculpted wrinkles and grey hair. Clothes in real fabrics with soft folds: fine knit, cotton, corduroy, wool. Sets at real scale\nwith slightly simplified, rounded forms and clean, finished surfaces: painted plaster, wood, tile, enamel, fabric. Rich, warm\ncolour: one or two strong, saturated colours from the film's facts in the clothes and the set, against warm neutrals."
+  },
+  {
+   "label": "Video words feature-3d",
+   "source": "drama-ads/scripts/styles/feature-3d.md",
+   "text": "Smooth, fluid feature-animation motion with clear, readable poses; broad, expressive facial acting: eyes and brows move a lot,\nnatural blinks, clear mouth shapes synced to every word; hair and cloth follow through softly; soft warm light with a gentle rim\nand a soft glow around bright windows, shallow depth of field with warm round highlights in the blur; a smooth, motivated camera.\nClear, close character voices over quiet room tone, no music."
+  },
+  {
+   "label": "Style master paragraph 1",
+   "source": "drama-ads/references/style-master.md",
+   "text": "1. \"A single wide film still from a <the style's medium>.\" Then the style block, word for word. It holds no light and no place:\n   the film's own place and light follow."
+  },
+  {
+   "label": "Character sheet",
+   "source": "drama-ads/references/sheet-stylized.md",
+   "text": "\"A character reference sheet of the <character as the master shows it> from the attached reference image. <He | She | It> looks\nexactly as <he | she | it> does in the attached reference image: <the character's facts, as the master drew them>. Copy the style\nof the attached reference image completely, <the style's copy words>, and draw <him | her | it> in it: <the style block>.\""
+  },
+  {
+   "label": "Prop sheet",
+   "source": "drama-ads/references/style-master.md",
+   "text": "\"A prop reference sheet of the <prop> from the attached reference image, as a prop of a <the style's medium>. It looks exactly\nlike the <prop> in the attached reference image: <the prop from its facts, every visible part named>. Copy the style of the attached\nreference image completely, <the style's copy words>, and draw it in it: <the style block>. The finish of the film rather than a\nproduct photograph. Two views side by side on a plain light-grey background: a front view at eye level and a three-quarter view from\nabove. Soft, even studio light from the front, the same in both views. One object only: take only this <prop> from the attached\nreference image, nothing of its room, its light or anything else in it. No text, labels, logos or watermarks.\""
+  },
+  {
+   "label": "Clip prompt order and fixed lines",
+   "source": "drama-ads/references/clips.md",
+   "text": "- **The order:**\n  1. the film's `style` line;\n  2. its style file's video words (`scripts/styles/<template>.md`);\n  3. the clip's action beat by beat, in literal camera terms, each beat its own paragraph opening with its seconds\n     (\"<from>-<to> s: <framing> …\"): `checks.py clip` reads only those, and a prompt without them is refused;\n  4. its dialogue (speaker, words, delivery);\n  5. its effects (`effects.json`, `plan-and-effects.md`), each named only on its owner.\n\n  In a clip where nobody speaks on screen, leave out the video words' sentences about mouths and voices."
+  }
+ ],
+ "price": "Quoted by get_drama_ads_config before each stage; about 180 credits (480p) to 900 (1080p) for a 55 s film, scaled from the 10 s quote.",
+ "cheap_price": "about 41 credits for clips on wan3_0 480p plus about 4 for pictures on seedream_5_0_flash; local upscale instead of 1080p."
+}

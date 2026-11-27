@@ -8,10 +8,10 @@ loader, `components/keys/loader.py` (env standard, 2026-10-17):
 
 ```python
 import ep_keys            # this folder's shim over the loader
-ep_keys.key("BRAND_A_NEXTCOMMERCE_ACCESS_TOKEN")
+ep_keys.key("Brand A_NEXTCOMMERCE_ACCESS_TOKEN")
 ```
 
-Every value is a `NAME=value` line in this repo's `.env`, the one key file on
+Every value is a `NAME=value` line in `~/.upright-keys.env`, the one key file on
 every person's machine. The loader reads the environment first, then that file.
 
 It is deliberately NOT called `secrets`: Python has a stdlib module by that

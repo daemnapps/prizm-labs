@@ -187,7 +187,7 @@ is paid for.</p>
 can reach Klaviyo until it is settled. Each one says what, at the bottom of its card.</p>
 <nav>{''.join(nav)}</nav>
 {''.join(cards)}
-<footer>rebuilt by tools/email-production/drafts_page.py · mirror DRAFTS.md</footer>
+<footer>rebuilt by components/email-production/drafts_page.py · mirror DRAFTS.md</footer>
 </div>"""
 page_dir = run_home(brand, f"drafts-{run.name}")      # email-production#19: out of the code folder
 page_dir.mkdir(parents=True, exist_ok=True)

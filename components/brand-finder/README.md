@@ -6,4 +6,3 @@ a library · four names, stdlib os only, no default of its own · four component
 
 Owner: the developer (assumption — mirrors `language-layer/` and `identity-training/`; the developer corrects)
 
-## How to use it → (team dashboard)

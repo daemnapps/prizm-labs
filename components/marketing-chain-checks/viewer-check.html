@@ -203,7 +203,7 @@ footer{font-size:.82rem;color:var(--muted);border-top:1px solid var(--line);padd
   </div>
   <blockquote><small>Viewer 2 · why not believe</small>every skin tool says it works but doesn't.</blockquote>
   <blockquote><small>Viewer 3 · why not believe</small>it's an ad, so of course they say it works.</blockquote>
-  <blockquote><small>Viewer 5 · the pitch line</small>If your skin doesn't transform, full refund. You keep the NOVA.</blockquote>
+  <blockquote><small>Viewer 5 · the pitch line</small>If your skin doesn't transform, full refund. You keep the FLEX.</blockquote>
   <div class="tbl"><table>
     <thead><tr><th>New question to each viewer who stopped</th><th>What a fail does</th></tr></thead>
     <tbody>
@@ -221,7 +221,7 @@ footer{font-size:.82rem;color:var(--muted);border-top:1px solid var(--line);padd
 
 
 <section>
-  <div class="eyebrow">First test · Silent Chair · <brand> glow-up feed</div>
+  <div class="eyebrow">First test · Silent Chair · Brand A glow-up feed</div>
   <div class="stats">
     <div class="stat good"><b>3 / 3</b><span>viewers stopped on our ad</span></div>
     <div class="stat"><b>3 / 27</b><span>stops on the real posts around it</span></div>
@@ -245,7 +245,7 @@ footer{font-size:.82rem;color:var(--muted);border-top:1px solid var(--line);padd
   <ul class="plain">
     <li><b>Blocks, not flags.</b> A fail goes back on its own with the viewers' words, and a fresh 5 read the rewrite. After 2 fails it holds for you. "Not for me" holds straight away, because who an ad is for is your call. You pass a held one with V.</li>
     <li><b>5 viewers, not 3.</b> With 3, the same unchanged brief failed one round and passed the next. With 5, three rounds on Silent Chair all passed: watch-time 3, 5 and 4 of 5, every viewer stopped, 100% vs 20–33% for the real posts.</li>
-    <li><b><brand> works too.</b> Gemini refuses to read the <brand> profiles at all, so those checks fall back to GPT-5.5 automatically. Every verdict says which models answered.</li>
+    <li><b>Brand B works too.</b> Gemini refuses to read the Brand B profiles at all, so those checks fall back to GPT-5.5 automatically. Every verdict says which models answered.</li>
     <li><b>Judged by who it was written for.</b> If the brief names a sub-avatar, the viewers are that sub-avatar. The feed falls back to the core avatar's feed when the sub has none.</li>
     <li><b>Nothing gets made without a pass.</b> Video production and statics drawing both ask "worth making?" first, before any credits go out. A brief that was never checked gets checked right there, which costs cents. Each pass comes with predicted numbers: hook rate against the real feed, average watch, how many reach the price, how many would tap, and second-by-second retention.</li>
     <li><b>Every round is filed in the run,</b> under viewer-check: what each viewer was sent, their answers, and a VERDICT page with their words.</li>
@@ -613,7 +613,7 @@ the top-left corner and (1000,1000) is the bottom-right of the whole frame.
 Only list what is actually there. Don&#x27;t guess at things you can&#x27;t see.
 
 Return JSON only:
-{&quot;items&quot;: [{&quot;what&quot;: &quot;face|product|text&quot;, &quot;label&quot;: &quot;&lt;a few words, e.g. &#x27;man&#x27;s face&#x27;, &#x27;NOVA device&#x27;, &#x27;headline&#x27;&gt;&quot;,
+{&quot;items&quot;: [{&quot;what&quot;: &quot;face|product|text&quot;, &quot;label&quot;: &quot;&lt;a few words, e.g. &#x27;man&#x27;s face&#x27;, &#x27;FLEX device&#x27;, &#x27;headline&#x27;&gt;&quot;,
   &quot;box&quot;: [x_min, y_min, x_max, y_max]}]}
 </pre>
   </div>
@@ -632,7 +632,7 @@ Return JSON only:
   </div>
 </section>
 
-<footer>Built 2 Oct 2026 from Andrei Lunev's GreekOut II talk and one test run on Silent Chair (<brand> · rudystylee-7680656109023071502). The test files are in components/marketing-chain-checks/trials/2026-10-02-silent-chair/. Mirror: components/marketing-chain-checks/VIEWER-CHECK.md. Code: components/marketing-chain-checks/marketing_chain_checks/viewer.py.</footer>
+<footer>Built 2 Oct 2026 from Andrei Lunev's GreekOut II talk and one test run on Silent Chair (Brand A · rudystylee-7680656109023071502). The test files are in components/marketing-chain-checks/trials/2026-10-02-silent-chair/. Mirror: components/marketing-chain-checks/VIEWER-CHECK.md. Code: components/marketing-chain-checks/marketing_chain_checks/viewer.py.</footer>
 </div>
 
 <script>
@@ -694,7 +694,7 @@ function face(c){return `<svg viewBox="0 0 22 22"><circle cx="11" cy="11" r="10"
 function buildPhones(sc){
   $("phones").innerHTML=sc.viewers.map((v,i)=>`<div class="phone"><div class="who">${face(FACES[i])}Viewer ${i+1} · ${v.when}</div>
    <div class="screen"><div class="reel" id="reel${i}">${v.feed.map(f=>`<div class="post">“${f}”</div>`).join("")}
-   <div class="post ours"><span class="tag">@<brand> · Sponsored</span><span>${sc===REAL||scenario!=="real"&&sc!==WEAK?"Barber, a neck with real bumps, the NOVA™":"Text on a white screen: “the secret routine”"}</span><span class="sec" id="sec${i}">0:00</span><div class="wbar"><i id="w${i}"></i></div></div>
+   <div class="post ours"><span class="tag">@Brand A · Sponsored</span><span>${sc===REAL||scenario!=="real"&&sc!==WEAK?"Barber, a neck with real bumps, the FLEX™":"Text on a white screen: “the secret routine”"}</span><span class="sec" id="sec${i}">0:00</span><div class="wbar"><i id="w${i}"></i></div></div>
    <div class="post">…</div><div class="post">…</div></div></div>
    <div class="bubble" id="b${i}"></div></div>`).join("");
 }

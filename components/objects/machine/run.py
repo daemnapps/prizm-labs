@@ -49,7 +49,7 @@ def cmd_make(a):
     elif MAKE3D.exists():
         sh([MAKE3D, ref, raw]); route = "local (components/3d/make3d)"
     else:
-        sys.exit("No local 3D generator yet (components/3d/make3d). Pass --mesh <glb> from the paid route, with the owner's OK.")
+        sys.exit("No local 3D generator yet (components/3d/make3d). Pass --mesh <glb> from the paid route, with owner's OK.")
     if a.prompt_file:
         shutil.copy(a.prompt_file, d / "prompt.md")
     finish(project, a.id, a.finish)

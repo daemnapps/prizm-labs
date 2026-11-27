@@ -1,0 +1,61 @@
+{
+ "_what": "THE ONE LIST of video formats the Galaxy filter, the daily picks and the makers speak in. Twelve formats; every other name the repo holds (workflow.py's 60, bank.json, the elements library, routes.json) is an alias that points here. The aliases are read, not renamed: no other list is changed. Two names that make the same ad are one format here; what differs between them is a script choice, not a format. Image ads keep the creative matrix's own image format list (dimensions / elements format.image.json).",
+ "_status": "draft",
+ "_decided": "2026-11-27, owner: 'testimonial montage and narrator montage are literally the same thing ... let's get everything really cleaned up'. Merges below are reversible: delete an alias line and the old name stands alone.",
+ "formats": {
+  "presenter": {"means": "One person talks to the camera.", "internal": true, "creators": true,
+   "aliases": ["single-presenter", "selfie-talk", "founder-origin-story", "founder-story", "founder-vsl", "expert-vsl", "vsl", "expert-consult", "expert-reaction", "expert-stitch", "sports-interview", "street-interview"],
+   "was_different": "expert-consult has several experts in turn and sports-interview is a press table; both are still one person talking to a lens at a time."},
+  "demo": {"means": "The product doing the work: hands, before and after, a step said is a step shown.", "internal": true, "creators": true,
+   "aliases": ["demonstration", "live-studio-demo", "unboxing-deal", "remedy", "body-scan-recipe", "symptom-checker", "makeover-reveal", "split-screen-comparison", "in-store-roundup", "store-tour", "tv-shopping"],
+   "was_different": "remedy starts from what people used at home; the product still does the work at the end."},
+  "montage": {"means": "A voice over a run of short shots from our footage; no one plays a character.", "internal": true, "creators": false,
+   "aliases": ["narrator-montage", "testimonial-montage", "vo-montage", "voiceover-pitch", "narrated-story", "text-over-b-roll", "text-driven-b-roll", "visual-listicle", "silent-text-pitch"],
+   "was_different": "testimonial montage uses many voices, one line each; narrator montage uses one. Same ad on the same road (our footage, no AI, the edit line). One voice or many is a script choice."},
+  "scene": {"means": "People acting out a moment in a room, talking to each other.", "internal": true, "creators": true,
+   "aliases": ["micro-drama", "comedy-skit", "dramatic-continuation", "multi-speaker-scene", "public-reaction", "grandma-explainer", "grandma-test-bench"],
+   "was_different": "micro drama, skit and continuation differ in tone, not in how they are made."},
+  "short-film": {"means": "A short wordless story, animated, no one speaks.", "internal": true, "creators": false, "aliases": ["short-movie"]},
+  "song": {"means": "The story is sung.", "internal": true, "creators": false,
+   "aliases": ["song-ad", "music-video-narrative", "character-song", "freestyle-battle"],
+   "was_different": "song ad and music video narrative both run on the same road (Singing Ads) and both are sung; the difference is the picture style."},
+  "stunt": {"means": "A visual hook first (something impossible or odd), mostly no words.", "internal": true, "creators": false,
+   "aliases": ["fooh-stunt", "vfx-stunt-hook", "pause-challenge", "stop-motion-showcase", "problem-solution-dance", "unrelated-hook-to-product", "bts-reveal"]},
+  "throwback": {"means": "A look back at the viewer's own era: old photo, home video, old commercial, old game.", "internal": true, "creators": true,
+   "aliases": ["letter-to-younger-self", "then-and-now-photo", "home-video-flashback", "classic-commercial-remake", "infomercial-throwback", "era-roll-call", "game-continue"]},
+  "reaction": {"means": "A found moment (meme, clip) with our reaction cut onto it.", "internal": true, "creators": true,
+   "aliases": ["meme", "found-clip-reaction-cut"]},
+  "text-thread": {"means": "A chat on a phone screen tells it.", "internal": true, "creators": false, "aliases": ["text-thread", "chat-prank"]},
+  "explainer": {"means": "A voice explains over drawn or animated pictures.", "internal": true, "creators": false,
+   "aliases": ["animated-explainer", "vo-explainer", "talking-object"]},
+  "series": {"means": "Three or more ads that run as one story.", "internal": true, "creators": false, "aliases": ["ad-series"]}
+ },
+ "methods": {
+  "_what": "Not formats: ways an ad gets made or remade. They never appear as a format in the daily picks.",
+  "winner-variation": "Our Ad Multiplier: new versions of a live winner (routes.json ad-multiplier).",
+  "swipe-edit": "Our swipe edit: the swipe's own footage re-cut (routes.json swipe-edit).",
+  "creator": "A creator films it (routes.json creators). In the standard this is a LANE (creators), never a format."
+ },
+ "from_on_screen": {
+  "_what": "What a proven ad's winners tag (what is on screen) means in these formats. A tag with no video format is a picture ad and goes to the images lane.",
+  "Creator talking to camera": "presenter", "Founder to camera": "presenter", "Podcast set": "presenter", "Presenter with whiteboard": "presenter",
+  "Creator using the product": "demo", "Product unboxing": "demo", "Product demo": "demo", "Product shot": "demo", "Skin close-up": "demo", "Before and after": "demo",
+  "Actor skit": "scene", "Story footage": "scene", "AI person video": "scene",
+  "Animation": "explainer", "AI cartoon character": "explainer", "Product animation": "explainer", "AI illustration": "explainer",
+  "Meme or edit": "reaction",
+  "Review or article": "", "Founder letter (static)": "", "Sale graphic": "", "Comparison graphic": "", "Product graphic": "", "AI person poster": "", "Unclear": ""
+ },
+ "lanes": {
+  "_what": "The three things that matter: video we make (internal), video a creator films (creators), picture ads (images). A lane is where an ad is made and who takes the brief, never a format.",
+  "video-internal": {"means": "Video we make: AI, our own footage, drawn in code, or the editor.", "maker": "video-writing", "door": "components/video-writing/machine/run.py <teardown run | label> --ask <ask.json>"},
+  "creators": {"means": "Video a creator films from our brief.", "maker": "creator-brief", "door": "components/briefs/creator-brief/build.py (reads the ask's person and line)"},
+  "images": {"means": "Picture ads, one round at a time.", "maker": "statics-sprint", "door": "components/image-writing/run.py <teardown run> --ask <ask.json>"}
+ },
+ "words": {
+  "_what": "Plain words for the daily page, so a repo word never reaches the owner unexplained.",
+  "take": "one attempt at a clip; the one kept is the one in the ad",
+  "swipe": "someone else's ad that already works",
+  "teardown": "an ad taken apart to see why it works",
+  "hook": "the first seconds"
+ }
+}

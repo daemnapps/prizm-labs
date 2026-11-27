@@ -5,7 +5,7 @@
     {
       "element": "format",
       "asset": "video",
-      "path": "tools/video-production/formats/bank.json",
+      "path": "components/video-production/formats/bank.json",
       "rows": "formats",
       "id": "id",
       "fields": {
@@ -24,7 +24,7 @@
     {
       "element": "format",
       "asset": "image",
-      "path": "tools/image-production/static/format-bank.json",
+      "path": "components/image-production/static/format-bank.json",
       "rows": "formats",
       "id": "key",
       "fields": {
@@ -52,7 +52,7 @@
           "state": "proposed",
           "what": "The cover names the count ('4 tips…'), then one tip per slide, numbered; the last slide is the ask or the product.",
           "why_it_works": "A number on the cover is a promise of how long it takes; each swipe pays one tip, so the whole thing gets read.",
-          "examples": "davidaistar, '4 tips to master animated ads' (instagram.com/p/DdB4l9vEePW, the owner's saves 2026-09-22); 4bu_m TikTok photo posts #glowup #skincare #acnetips (runs/intake/brand-a/2026-09-20-first/swipes.jsonl, kind carousel)"
+          "examples": "davidaistar, '4 tips to master animated ads' (instagram.com/p/DdB4l9vEePW, the owner's saves 2026-09-22); 4bu_m TikTok photo posts #glowup #skincare #acnetips (runs/intake/Brand A/2026-09-20-first/swipes.jsonl, kind carousel)"
         },
         {
           "id": "text-card-thread",
@@ -79,7 +79,7 @@
           "state": "proposed",
           "what": "Slide one is the before; the swipe reveals the after; the slides that follow are the routine that got there.",
           "why_it_works": "The reader performs the reveal herself, which is the strongest way to show change without a claim in words.",
-          "examples": "4bu_m TikTok photo posts #jawline #debloat #glowup (runs/intake/brand-a/2026-09-20-first/swipes.jsonl — 4 carousels routed to image-teardown, sequence form)"
+          "examples": "4bu_m TikTok photo posts #jawline #debloat #glowup (runs/intake/Brand A/2026-09-20-first/swipes.jsonl — 4 carousels routed to image-teardown, sequence form)"
         },
         {
           "id": "caption-joke-series",
@@ -122,7 +122,7 @@
         "needs"
       ],
       "enforced_by": "email production; the marketing calendar",
-      "note": "The seed every brand copies; a brand's own email/email-types.json may add types."
+      "note": "The seed every brand copies; a brand's own email-sms/email-types.json may add types."
     },
     {
       "element": "format",
@@ -185,7 +185,7 @@
     {
       "element": "format",
       "asset": "copy",
-      "path": "tools/copywriter/bank/formats.json",
+      "path": "components/copywriter/bank/formats.json",
       "rows": "formats",
       "id": "key",
       "fields": {
@@ -205,7 +205,7 @@
     {
       "element": "placement",
       "asset": "all",
-      "path": "tools/copywriter/bank/format-bank.json",
+      "path": "components/copywriter/bank/format-bank.json",
       "rows": "formats",
       "id": "key",
       "fields": {
@@ -266,7 +266,7 @@
     {
       "element": "style",
       "asset": "image",
-      "path": "tools/image-production/static/style-packs.json",
+      "path": "components/image-production/static/style-packs.json",
       "rows": "packs",
       "id": "@key",
       "fields": {
@@ -285,7 +285,7 @@
     {
       "element": "style",
       "asset": "video",
-      "path": "tools/video-production/styles/bank.json",
+      "path": "components/video-production/styles/bank.json",
       "rows": "styles",
       "id": "id",
       "fields": {
@@ -310,7 +310,7 @@
     {
       "element": "style",
       "asset": "caption",
-      "path": "tools/video-edit/looks/bank.json",
+      "path": "components/video-edit/looks/bank.json",
       "rows": "looks",
       "id": "id",
       "fields": {
@@ -355,7 +355,7 @@
     {
       "element": "template",
       "asset": "image",
-      "glob": "tools/image-production/static/templates/*.json",
+      "glob": "components/image-production/static/templates/*.json",
       "id": "@stem",
       "fields": {
         "name": "name",
@@ -370,7 +370,7 @@
     {
       "element": "letterform",
       "asset": "image",
-      "path": "tools/image-production/static/letterform-bank.json",
+      "path": "components/image-production/static/letterform-bank.json",
       "rows": "letterforms",
       "id": "id",
       "fields": {

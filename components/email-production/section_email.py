@@ -5,7 +5,7 @@
     python3 section_email.py <run folder> --brand <brand> --briefs <…> --pictures <dir>
     python3 section_email.py <run folder> --brand <brand> --briefs <…> --dry-run   # no model call
 
-the owner, 2026-10-08: "think about email design just like we think about landing
+owner, 2026-10-08: "think about email design just like we think about landing
 page design, because they're basically just many landing pages" — "you might as
 well build in these other sections too, so we can get some saucy emails for
 this first batch."
@@ -25,7 +25,7 @@ WHAT IT DOES
    (picture slots as {{slot}} markers for the uploader to swap for hosted URLs).
 
 Nothing is sent. This tool has no Klaviyo call; the draft is made by the
-uploader after the owner has seen the preview.
+uploader after owner has seen the preview.
 """
 import argparse
 import base64
@@ -136,7 +136,7 @@ def run_8s(email, fmt, fmt_spec, fact_text, out_dir, dry=False):
     if dry:
         print(f"  dry run: stage 8s prompt written ({len(prompt):,} chars), no model call")
         return None
-    # NO ACCOUNT IS WIRED IN (the owner, 2026-10-23): run_kit's claude_door picks the credential;
+    # NO ACCOUNT IS WIRED IN (owner, 2026-10-23): run_kit's claude_door picks the credential;
     # LD-62 (lean model calls): lean_call.door runs it lean, from a temp folder.
     if str(HERE.parent / "run-kit") not in sys.path:
         sys.path.append(str(HERE.parent / "run-kit"))
@@ -417,7 +417,7 @@ def main():
             missing.append(name)
     lk = look_for(a.brand, a.look)
     # every own link carries the tracking standard's email tags: utm_campaign = the send's
-    # label, utm_content = <label>.<section> (the owner, 2026-10-12)
+    # label, utm_content = <label>.<section> (owner, 2026-10-12)
     def tagged(doc):
         return EL.tag(doc, a.brand, run.name, run.name, None, WS)
     klaviyo_doc = tagged(render(sec, lk, kl, email, klaviyo=True))

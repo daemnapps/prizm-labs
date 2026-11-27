@@ -1,0 +1,53 @@
+{
+  "_note": "Empty on purpose. Fill this in for your brand \u2014 the shape below is what the tools read.",
+  "_shape_from": "the same file in a live brand",
+  "_example_keys": {
+    "_what": "",
+    "_ruled": "",
+    "home": {
+      "mount": "",
+      "path": "",
+      "note": ""
+    },
+    "excluded": [
+      {
+        "path": "",
+        "why": ""
+      }
+    ],
+    "not_yet_ruled": [
+      {
+        "path": "",
+        "note": ""
+      }
+    ],
+    "route_elsewhere": [
+      {
+        "path": "",
+        "to": "",
+        "note": ""
+      }
+    ],
+    "_order_of_work": [
+      ""
+    ],
+    "excluded_by_name": {
+      "_what": "",
+      "names": [
+        ""
+      ],
+      "ruled": ""
+    },
+    "live_vs_archive": {
+      "_ruled": "",
+      "live": "",
+      "archive": "",
+      "why": "",
+      "moved_2026_09_22": {
+        "live_files_left": 0,
+        "archived": 0,
+        "what": ""
+      }
+    }
+  }
+}

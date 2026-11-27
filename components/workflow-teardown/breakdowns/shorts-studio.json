@@ -1,0 +1,120 @@
+{
+ "id": "shorts-studio",
+ "name": "Shorts Studio (/shorts)",
+ "kind": "video",
+ "makes": "Makes one finished reel (vertical 9:16 by default, up to about two minutes) carried by one consistent AI presenter: script, cast, presenter takes, captions, motion design, sound and music, composed in HTML and rendered by a bundled engine.",
+ "source": [
+  "commands/shorts.md",
+  "shorts-studio/SKILL.md",
+  "shorts-studio/scripts/reels.py.md",
+  "shorts-studio/scripts/engine/render.py.md",
+  "commands/shorts-references-takes.md",
+  "commands/shorts-references-avatar.md",
+  "commands/shorts-references-media.md",
+  "commands/shorts-references-script.md",
+  "commands/shorts-references-motion.md",
+  "commands/shorts-references-composition.md",
+  "commands/shorts-references-reference.md",
+  "commands/shorts-references-art-direction.md"
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "name": "Resolve the brief",
+   "model": "none",
+   "cheap": "Claude on the plan (free)"
+  },
+  {
+   "n": 2,
+   "name": "Host and location",
+   "model": "soul_cinematic",
+   "cheap": "`seedream_5_0_flash` 2k: 0.5 credits a picture quoted, against 1.75-2.5 for 2k pictures or `gpt_image_2_6_flare` 1k low: 0.75 credits a picture quoted"
+  },
+  {
+   "n": 3,
+   "name": "Script and plan",
+   "model": "none",
+   "cheap": "Claude on the plan (free)"
+  },
+  {
+   "n": 4,
+   "name": "Cost line",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 5,
+   "name": "Generate takes",
+   "model": "seedance_2_5",
+   "cheap": "`wan3_0` 480p: 7.5 credits per 10 s quoted, against 30 for a `seedance_2_5` 480p draft (a quarter)"
+  },
+  {
+   "n": 6,
+   "name": "Draft build while jobs run",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 7,
+   "name": "Measure, music, mattes",
+   "model": "remove_background",
+   "cheap": "local BiRefNet matte (free)"
+  },
+  {
+   "n": 8,
+   "name": "Compose and render",
+   "model": "none",
+   "cheap": "already free"
+  },
+  {
+   "n": 9,
+   "name": "Review and deliver",
+   "model": "none",
+   "cheap": null
+  }
+ ],
+ "prompts": [
+  {
+   "label": "Presenter take request",
+   "source": "commands/shorts-references-takes.md",
+   "text": "generate_video_batch({\"requests\": [{\"index\": 2, \"params\": {\n  \"model\": \"seedance_2_5\", \"prompt\": \"<authored prompt>\",\n  \"duration\": 6, \"aspect_ratio\": \"<reel.json aspect_ratio; 3:4 for 4:5>\", \"resolution\": \"<reel.json resolution>\",\n  \"medias\": [{\"value\": \"<identity id>\", \"role\": \"image_references\"},\n             {\"value\": \"<location id>\", \"role\": \"image_references\"}],\n  \"mode\": \"omni_reference\", \"generate_audio\": true, \"bitrate_mode\": \"high\"\n}}]})"
+  },
+  {
+   "label": "Reference roles, cast/photo take",
+   "source": "commands/shorts-references-takes.md",
+   "text": "@Image1 defines the presenter's identity and wardrobe only. Its background and\npose are not the scene. @Image2 defines the location: its space, furniture,\nmaterials and light. It is a place, not a fixed camera position; the shot below\nsets the camera and the presenter's position in it."
+  },
+  {
+   "label": "Reference roles, supplied-video take",
+   "source": "commands/shorts-references-takes.md",
+   "text": "@Video1 is the reference of the character, voice and location. Preserve the wardrobe,\nthe location and its light. It is not a fixed camera position; the shot below sets the\ncamera and the presenter's position in that location."
+  },
+  {
+   "label": "Audio block (native speech)",
+   "source": "commands/shorts-references-takes.md",
+   "text": "Audio: Generate only the presenter's clean, close-miked speaking voice. Use reference\naudio for voice identity only. Keep the background silent. No music, score, instrumental\nbed, ambient sounds, sound effects or other voices. Do not carry over background audio\nfrom the references."
+  },
+  {
+   "label": "Shot template",
+   "source": "commands/shorts-references-takes.md",
+   "text": "SHOT — <size>: the frame runs from <its top edge> to <where its bottom edge cuts the body>; <frontal or three-quarter>, the lens <level with, above or below> <the presenter's> eyes, <with a style reference: its lens and depth of field,> <locked off, or one move with its speed>: the presenter <posture at the spot>, <action>; behind <the presenter>, <what of the location the frame holds>.\nCharacter says:\n\"<the take's dialogue>\""
+  },
+  {
+   "label": "Light block form",
+   "source": "commands/shorts-references-takes.md",
+   "text": "Light: <the setup's own light>"
+  },
+  {
+   "label": "Cast sheet prompt (4 candidates)",
+   "source": "commands/shorts-references-avatar.md",
+   "text": "A natural studio character sheet photograph of one beautiful <ADULT AGE BAND, ETHNICITY\nAND GENDER>, <THE ROLE, SUCH AS A BAKERY OWNER, OR A VIDEO PRESENTER WITHOUT ONE>, shown\ntwice side by side in two equal vertical\npanels on one seamless pure-white background. <SHORT HAIRSTYLE; THE TOP, LOWER GARMENT\nAND FOOTWEAR>.\nLeft panel: a frontal, eye-level close-up of the face, from just above the top of the\nhead down to the collarbones; the face fills most of the panel, sharp and evenly lit.\nRight panel: the same person full length, standing upright and facing the camera, the\nwhole body from head to toe with both feet flat on the floor and fully visible, arms\nresting naturally by the sides, a little space above the head and below the feet.\nThe same face, hair and outfit in both panels, a calm, neutral expression and relaxed\nposture. Subtle everyday makeup and natural skin texture. Soft, even frontal lighting.\nOnly this one presenter and the white background: no other people, no props, no\nfurniture, no text or labels. Horizontal 4:3 photograph."
+  },
+  {
+   "label": "Location image prompt",
+   "source": "commands/shorts-references-avatar.md",
+   "text": "Ultra-realistic editorial photograph of an empty <LOCATION>, in 16:9.\nAn ordinary <interior or exterior> photograph at <seated or standing> eye height,\nwith <the chosen seat, or the open floor in front of the anchor> and its surrounding\nfurnishings visible at natural proportions in one coherent view. This is a flat\nrectilinear <interior or exterior> photograph, not an HDRI, not an equirectangular\npanorama, not a 360-degree image, not a fisheye. Keep verticals straight and realistic\nfurniture proportions, with one coherent camera viewpoint.\n\n<SETTING PARAGRAPH WRITTEN FROM THE SELECTED GEOMETRY ABOVE>.\n\n<SCALE ANCHOR. Seated: for filled and empty rooms, a desk in the middle ground with open\nfloor in front of it and nothing between it and the camera, the surface completely clear,\nand behind it a chair whose back rises to the shoulder height of someone seated at that\ndesk; for a lit studio, its tabletop paragraph with that chair behind it; for a lounge,\none freestanding armchair with the room visible on both sides of it and one low table,\nno wider than the chair, in front. Standing: a clear surface at hip height that belongs\nto the place, in the middle ground with open floor in front of it and nothing between it\nand the camera, and no chair; a lit studio or a bare wall needs only its open floor.\nOutdoors: one object of known size that belongs to the place, beside the standing spot,\nwith open ground in front of it. A style reference: its own furniture>.\n\n<LIGHTING SENTENCE>. <Indoors: Wall, furniture and surface tones sit clearly lighter and\nwarmer than; outdoors or from a style reference: Surface tones separate clearly from>\n<THE HOST'S GARMENT TONE, WRITTEN AS A TONE ALONE SUCH AS \"mid-charcoal\">, so the\nshoulders separate from everything behind them. Plaster, wood, fabric and metal all\nrender as <mid tones; from a style reference, the tones of its Grade row> with visible\ntexture and gradation. Shot on a full-frame camera, 35mm rectilinear lens, f/8, a clear\nreadable environment throughout, <GRADE: professional color grade, high dynamic range,\neditorial campaign quality; from a style reference, its Look table's Grade and Texture\nrows in words>. No people, no stand-in figures, no\nhuman reflections, no mannequins, no production equipment, no text, no watermark."
+  }
+ ],
+ "price": "Quotes one estimate line before the first paid call from live pricing and the planned take count. From `_prices.md`: `seedance_2_5` 1080p omni_reference is 160 per 10 s, so a 60 s reel of six 10 s takes is about 960 credits before casting, rooms, mattes, music and materials (those not quoted). 720p or draft takes cost less.",
+ "cheap_price": "~960 -> ~45 credits for the takes of a 60 s reel"
+}

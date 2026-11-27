@@ -16,7 +16,7 @@ matter at the top of the file says what it is:
     kind: interview | panel          (default interview)
     date: 2026-09-30                 (default: a date in the file name, else undated)
     relationship: customer | unknown (default customer for an interview, unknown for a panel)
-    company: [the team, the team]           (added to company_speakers for this file)
+    company: [developer, email_lead]           (added to company_speakers for this file)
     customers: [Lynn]                (when given, ONLY these speakers are read)
     ---
 
@@ -118,7 +118,10 @@ def main(argv=None, labeller=None, claude=None):
     ap.add_argument("--brand", required=True)
     ap.add_argument("--avatar")
     ap.add_argument("--dry-run", action="store_true", help="split and count; read and file nothing")
-    a = ap.parse_args(argv)
+    import importlib.util as _u, pathlib as _pl
+    _s = _u.spec_from_file_location("profile_arg", next(q for q in _pl.Path(__file__).resolve().parents if q.name == "components") / "naming" / "profile_arg.py")
+    _PA = _u.module_from_spec(_s); _s.loader.exec_module(_PA)   # --profile <avatar>[_<sub>][_<demographic>] (naming/PEOPLE.md)
+    a = ap.parse_args(_PA.expand(argv, has=('avatar',)))
     c = V.cfg("interviews")
     bj = V.brand_json(a.brand)
     label = bj.get("label") or a.brand

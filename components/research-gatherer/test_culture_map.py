@@ -29,8 +29,8 @@ class Workspace(unittest.TestCase):
     def setUp(self):
         self.ws = Path(tempfile.mkdtemp())
         # the language layer engine is read-only code; a copy runs against the temp tree
-        src = REAL_WS / "tools" / "language-layer" / "language_layer" / "engine.py"
-        w(self.ws / "tools/language-layer/language_layer/engine.py", src.read_text())
+        src = REAL_WS / "components" / "language-layer" / "language_layer" / "engine.py"
+        w(self.ws / "components/language-layer/language_layer/engine.py", src.read_text())
         av = self.ws / "brands/b/core-avatars"
         w(av / "avatars.json", {"avatars": [{"id": "a1", "label": "Avatar one", "sub_avatars": ["s1", "s2"]},
                                             {"id": "mom", "sub_avatars": []}]})

@@ -92,7 +92,7 @@ one line on what this video is and its numbers · then **Why it works** (2 sente
 Say plainly wherever the frames do not show something — never fill a gap with an invention.
 
 Do not modify any file outside {d}/."""
-    # NO ACCOUNT IS WIRED IN (the owner, 2026-10-23): run_kit's claude_door picks the credential.
+    # NO ACCOUNT IS WIRED IN (owner, 2026-10-23): run_kit's claude_door picks the credential.
     from run_kit import claude_door      # run-kit is on the path through desklib
     r = claude_door.run(["--allowedTools", "Read", "Write"], prompt,
                         timeout=900, cwd=str(D.WS))

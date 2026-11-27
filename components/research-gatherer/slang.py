@@ -19,7 +19,10 @@ if __name__ == "__main__":
     ap.add_argument("--double", help="with --tell: the two readings a writer plays on")
     ap.add_argument("--by", help="with --tell: who told us")
     ap.add_argument("--trends", help="who to search the web for, e.g. \"young men 18-34\": today's slang joins the room's")
-    a = ap.parse_args()
+    import importlib.util as _u, pathlib as _pl
+    _s = _u.spec_from_file_location("profile_arg", next(q for q in _pl.Path(__file__).resolve().parents if q.name == "components") / "naming" / "profile_arg.py")
+    _PA = _u.module_from_spec(_s); _s.loader.exec_module(_PA)   # --profile <avatar>[_<sub>][_<demographic>] (naming/PEOPLE.md)
+    a = ap.parse_args(_PA.expand(None, has=('avatar',)))
     if a.tell:
         print(SL.tell(a.brand, a.avatar, a.tell[0], a.tell[1], a.by or "a person", a.double))
         sys.exit(0)

@@ -22,7 +22,8 @@ KEYS = re.compile(r"sk-[A-Za-z0-9_-]{20,}|AIza[0-9A-Za-z_-]{30,}|gh[pousr]_[A-Za
                   r"|apify_api_[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----|glpat-[A-Za-z0-9_-]{20,}"
                   r"|figd_[A-Za-z0-9_-]{20,}|whsec_[A-Za-z0-9]{20,}|shp(at|ss|ca)_[A-Za-z0-9]{20,}")
 EMAIL = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
-EMAIL_OK = re.compile(r"@(company(llc)?\.com|elsewhere\.com|example\.(com|org|net)|users\.noreply\.github\.com|anthropic\.com)$|^(you|name|your-email|someone|admin)@", re.I)
+EMAIL_OK = re.compile(r"@(company(llc)?\.com|elsewhere\.com|example\.(com|org|net)|users\.noreply\.github\.com|anthropic\.com)$|^(you|name|your-email|someone|admin)@"
+                      r"|\.(test|invalid|example|localhost)$", re.I)   # reserved test domains (RFC 2606) are never real
 SUPPORT = set()
 PATHS = re.compile(r"/Users/[A-Za-z0-9._-]+/|/home/[A-Za-z0-9._-]+/|[Cc]:\\Users\\")
 # Private names, stored as hashes so this public file does not spell them.

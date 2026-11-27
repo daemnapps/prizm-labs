@@ -1,0 +1,82 @@
+{
+ "id": "video-editing",
+ "name": "Video Editing (Higgsedit)",
+ "kind": "edit",
+ "makes": "Cuts supplied footage and builds file-backed motion graphics (titles, overlays, shaders, native layouts) as an editable Higgsedit project and a rendered movie.",
+ "source": [
+  "video-editing/SKILL.md",
+  "video-editing/references/assembly.md",
+  "video-editing/references/compose.md",
+  "video-editing/references/failure-modes.md",
+  "video-editing/references/caption-titling.md",
+  "video-editing/references/shot-blueprints.md"
+ ],
+ "steps": [
+  {
+   "n": 1,
+   "name": "Reserve output slot",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 2,
+   "name": "Create project",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 3,
+   "name": "Place footage and audio",
+   "model": "none",
+   "cheap": "local ffmpeg for plain cuts"
+  },
+  {
+   "n": 4,
+   "name": "Compose graphics",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 5,
+   "name": "Check frames",
+   "model": "none",
+   "cheap": null
+  },
+  {
+   "n": 6,
+   "name": "Render",
+   "model": "none",
+   "cheap": "same render, no model"
+  },
+  {
+   "n": 7,
+   "name": "Upload and confirm",
+   "model": "none",
+   "cheap": null
+  }
+ ],
+ "prompts": [
+  {
+   "label": "Whole-edit script (the canonical shape)",
+   "source": "video-editing/SKILL.md",
+   "text": "export default async ({ project }) => {\n  const p = await project({ size: \"640x360\", fps: 24 });\n  p.compose(\n    <frame width={640} height={360} padding={40}>\n      <rect\n        width={400}\n        height={80}\n        fill=\"#32acff\"\n        animate={[{ property: \"scaleX\", from: 0, to: 1, duration: 0.6 }]}\n      />\n    </frame>,\n    { dur: 2 }\n  );\n  await p.frame(1, \"renders/frame.png\");\n  await p.render(\"renders/video.mp4\");\n};"
+  },
+  {
+   "label": "Commands",
+   "source": "video-editing/SKILL.md",
+   "text": "higgsedit build edit.jsx\nhiggsedit inspect PROJECT --id CLIP_ID --at 1.2\nhiggsedit frame PROJECT 1.2 --out renders/frame.png\nhiggsedit sheet PROJECT --times 0.1,1,1.8\nhiggsedit render PROJECT --depth 10 --codec hevc --bitrate 8M --out renders/master.mp4\nhiggsedit do PROJECT VERB --help"
+  },
+  {
+   "label": "Cut, compose, render example",
+   "source": "video-editing/references/assembly.md",
+   "text": "export default async ({ project, text }) => {\n  const p = await project({ size: \"1080x1920\", fps: 30 });\n  const source = await p.add(\"media/source.mp4\");\n  p.cut(source, { from: 0, dur: 8 });\n  p.compose(text(\"Caption\", { fontSize: 64 }), { at: 1, dur: 2 });\n  await p.render(\"renders/final.mp4\", { depth: 10, codec: \"hevc\", bitrate: 8_000_000 });\n};"
+  },
+  {
+   "label": "Useful commands",
+   "source": "video-editing/references/assembly.md",
+   "text": "higgsedit probe media/source.mp4\nhiggsedit check .\nhiggsedit build edit.jsx\nhiggsedit frame . 1.5 --out renders/frame.png\nhiggsedit render . --out renders/final.mp4\nffprobe -v error -show_entries stream=codec_type renders/final.mp4"
+  }
+ ],
+ "price": "No credits: no generation model is called. Nothing in `_prices.md` applies.",
+ "cheap_price": "0 credits"
+}

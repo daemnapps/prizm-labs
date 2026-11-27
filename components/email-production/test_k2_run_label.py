@@ -4,7 +4,7 @@ home), K2 (brands write wall)): a run's label prefix comes from where the month
 lives, and the Klaviyo push finds its send at runs/marketing-calendar/<brand>/
 <YYYY-MM>/ — never at the component's old runs/ folder.
 
-    /usr/bin/python3 tools/email-production/test_k2_run_label.py
+    /usr/bin/python3 components/email-production/test_k2_run_label.py
 """
 import json
 import os

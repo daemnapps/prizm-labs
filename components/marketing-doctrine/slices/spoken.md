@@ -37,7 +37,7 @@ THE UNIT IS THE THOUGHT, NOT THE SENTENCE. A person says one thought in one brea
 
 **The test.** Read the SPOKEN paragraph aloud once. If any full stop lands inside a thought a person would finish in one breath, it is a chop: join it back with a comma or an ellipsis. If a thought ends flat where the person would lean on it, it is missing its lift.
 
-**The read the owner chose (2026-09-19, the owner: 'vo4a is way better' — the read chosen for the spot-hider avatar's voice).** stability 0.45 · similarity 0.8 · style 0.3 · speed 1.0 · speaker boost off. speaker boost OFF — it adds edge; the 'aggressive' tone the owner heard was the DESIGNED voice itself, which the voice designer rolls fresh each time with wild quality variance; the fix is a clone of a matched creator (creator-a), which the owner makes in the ElevenLabs app, then these settings on it
+**The read the owner chose (2026-09-19, the owner: 'vo4a is way better' — the read chosen for the spot-hider avatar's voice).** stability 0.45 · similarity 0.8 · style 0.3 · speed 1.0 · speaker boost off. speaker boost OFF — it adds edge; the 'aggressive' tone the owner heard was the DESIGNED voice itself, which the voice designer rolls fresh each time with wild quality variance; the fix is a clone of a matched creator (a creator-zane), which the owner makes in the ElevenLabs app, then these settings on it
 
 ## 1. Written vs spoken — the rules of spoken copy
 

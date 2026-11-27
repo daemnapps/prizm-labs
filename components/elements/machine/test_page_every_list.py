@@ -25,7 +25,7 @@ sys.path.insert(0, str(HERE))
 import elements as E  # noqa: E402
 import page as PG  # noqa: E402
 
-LABELER = E.REPO / "tools/image-teardown/tools/elements_label.py"
+LABELER = E.REPO / "components/image-teardown/tools/elements_label.py"
 
 
 def _labeler_lists():

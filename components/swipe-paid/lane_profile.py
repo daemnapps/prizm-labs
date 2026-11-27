@@ -394,8 +394,8 @@ def own_stats(source, ads, groups, lps):
                   "Discount codes run as their own destination (`/discount/MOM25`) "
                   "rather than as a line in the offer."),
         "stack": ("Where the traffic goes",
-                  "Two hosts, and they are not equivalent. `try.brand-b.com` "
-                  "serves the advertorials; `brand-b.com/catalogue` serves the "
+                  "Two hosts, and they are not equivalent. `try.brand_b.com` "
+                  "serves the advertorials; `brand_b.com/catalogue` serves the "
                   "product pages. The money goes to the first."),
         "caveat": ("Capture caveat",
                    "Spend, revenue and impressions are the sync window only — an "

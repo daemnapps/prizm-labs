@@ -158,7 +158,7 @@ def run(args, cal, out_root):
     avatars = [a["key"] for a in cal.L_avatars(brand_root)]
     lines, p = prompt_report("concepts", dict(
         today=today, month=args.month, skeleton=skeleton, anchored=anchored, cells=cells,
-        types=C.render_types(catalogue_file), products=C.render_products(brand_root),
+        types=C.planner_types(catalogue_file, brand_root), products=C.render_products(brand_root),
         offers=C.render_offers(brand_root, avatars),
         coldness=C.coldness(brand_root, catalogue),
         findings="\n".join(C.findings(brand_root)) or "(no measured sends yet)",

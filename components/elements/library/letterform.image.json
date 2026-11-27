@@ -1,7 +1,7 @@
 {
  "element": "letterform",
  "asset": "image",
- "source": "tools/image-production/static/letterform-bank.json",
+ "source": "components/image-production/static/letterform-bank.json",
  "enforced_by": "the image teardown (stage 1) — every text element carries a letterform id or none-fits with a proposed row",
  "note": null,
  "rows": [
@@ -16,7 +16,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "tools/image-production/static/letterform-bank.json",
+   "source": "components/image-production/static/letterform-bank.json",
    "extra": {
     "how_to_see_it": "The letter edge is mathematically clean at full zoom and the fill is one unbroken colour. Nothing separates the letter from its ground except the colour change."
    },
@@ -34,7 +34,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "tools/image-production/static/letterform-bank.json",
+   "source": "components/image-production/static/letterform-bank.json",
    "extra": {
     "how_to_see_it": "A second colour runs down one side of every stroke — the extrusion — consistently to the same vanishing direction across all letters."
    },
@@ -52,7 +52,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "tools/image-production/static/letterform-bank.json",
+   "source": "components/image-production/static/letterform-bank.json",
    "extra": {
     "how_to_see_it": "Every stroke has its own soft highlight and contact shadow, thickness varies where a hand would have pressed, and no two identical letters are truly identical."
    },
@@ -70,7 +70,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "tools/image-production/static/letterform-bank.json",
+   "source": "components/image-production/static/letterform-bank.json",
    "extra": {
     "how_to_see_it": "Line weight changes within a single stroke, ends taper or blot, and the baseline wanders."
    },
@@ -88,7 +88,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "tools/image-production/static/letterform-bank.json",
+   "source": "components/image-production/static/letterform-bank.json",
    "extra": {
     "how_to_see_it": "The fill is not uniform at zoom: it is made of marks. A shadow, where present, is drawn rather than rendered."
    },
@@ -106,7 +106,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "tools/image-production/static/letterform-bank.json",
+   "source": "components/image-production/static/letterform-bank.json",
    "extra": {
     "how_to_see_it": "A thin hard shadow hugs one side of each letter, edges show a cut or torn quality, and the paper's own surface catches light differently from the ground."
    },
@@ -124,7 +124,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "tools/image-production/static/letterform-bank.json",
+   "source": "components/image-production/static/letterform-bank.json",
    "extra": {
     "how_to_see_it": "The letters are legible only through highlight and shadow along their edges; sample the fill and it matches the background."
    },
@@ -142,7 +142,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "tools/image-production/static/letterform-bank.json",
+   "source": "components/image-production/static/letterform-bank.json",
    "extra": {
     "how_to_see_it": "Ink pools at stroke edges and thins in the middle, and the paper texture shows through the fill."
    },
@@ -160,7 +160,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "tools/image-production/static/letterform-bank.json",
+   "source": "components/image-production/static/letterform-bank.json",
    "extra": {
     "how_to_see_it": "The fill is a gradient that inverts partway down every stroke, and the same reflection pattern repeats across all letters."
    },
@@ -178,7 +178,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "tools/image-production/static/letterform-bank.json",
+   "source": "components/image-production/static/letterform-bank.json",
    "extra": {
     "how_to_see_it": "Stroke width is constant, the core is brighter than the edge, and the ground immediately around the letters is lit by them."
    },
@@ -196,7 +196,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "tools/image-production/static/letterform-bank.json",
+   "source": "components/image-production/static/letterform-bank.json",
    "extra": {
     "how_to_see_it": "Coverage is uneven within strokes, edges fade rather than stop, and the ground's texture breaks through."
    },
@@ -214,7 +214,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "tools/image-production/static/letterform-bank.json",
+   "source": "components/image-production/static/letterform-bank.json",
    "extra": {
     "how_to_see_it": "A hard-edged rectangle of solid colour holds the line, and the letters are the absence of that colour rather than a colour of their own."
    },
@@ -232,7 +232,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "tools/image-production/static/letterform-bank.json",
+   "source": "components/image-production/static/letterform-bank.json",
    "extra": {
     "how_to_see_it": "A uniform stroke of a second colour follows every letter's contour at constant width, regardless of what is behind it."
    },
@@ -250,7 +250,7 @@
    "examples": null,
    "evidence": null,
    "approved": false,
-   "source": "tools/image-production/static/letterform-bank.json",
+   "source": "components/image-production/static/letterform-bank.json",
    "extra": {
     "how_to_see_it": "It sits in a platform's own chrome at the platform's own size, and the typeface is a system face rather than a chosen one."
    },

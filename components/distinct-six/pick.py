@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """The swipe picker — the Distinct Six chosen from REAL swipes, never written from lists.
 
-the owner, 2026-10-08: "Where did you get those formats … everything needs to be tied
+owner, 2026-10-08: "Where did you get those formats … everything needs to be tied
 together. We do not just assume or make up anything. We need a swipe."
 
 Every version = the winner's message poured into one real swipe from the library.
@@ -13,7 +13,7 @@ ledger.db: swipe_card, element_score, variation):
   new     — never already used for this winner, and a format none of its versions use yet
   distinct— one format per pick
 
-    python3 components/distinct-six/pick.py brand-a brand-a-grandma-winner [--n 6]
+    python3 components/distinct-six/pick.py brand_b brand_b-grandma-winner [--n 6]
 
 Writes runs/distinct-six/<brand>/<winner>/picks.json — each pick in the same shape
 as the proven-to-format batch files (components/ad-variations/definitions/proven-to-format/),
@@ -22,14 +22,13 @@ Never calls Meta or a model.
 """
 import argparse
 import json
-import os
 import math
 import sqlite3
 from datetime import date
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-LEDGER = Path(os.environ.get("CREATIVE_INDEX_DB") or ROOT / "records" / "asset-ledger" / "ledger.db")
+LEDGER = ROOT / "lab" / "owner" / "asset-ledger" / "db" / "ledger.db"
 
 
 def pick(brand, winner, n=6):

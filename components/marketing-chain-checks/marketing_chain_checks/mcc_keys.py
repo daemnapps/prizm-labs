@@ -5,7 +5,7 @@ readers — `viewer.py` (`_key()` for GEMINI_API_KEY, `_openai()` for
 OPENAI_API_KEY) and `review.py` (`_key()` for GEMINI_API_KEY) — no longer
 import ~/.daemn/daemn_keys themselves, so they stop depending on the caller
 having put ~/.daemn on sys.path. They ask key(NAME), which asks
-components/keys/loader.py: the environment first, then this repo's .env (add NAME=value there; nothing else is read).
+components/keys/loader.py: the environment first, then ~/.upright-keys.env (the one key file — add NAME=value there; when it exists nothing else is read) — and only on a machine with no key file — the temporary old places.
 
 key() never raises; a missing key is None. missing() is the reader's message
 for that case — the key and where the loader looked, never a value. The loader
@@ -23,7 +23,7 @@ HERE = Path(__file__).resolve().parent
 _LOADER_PATH = next((r / "components" / "keys" / "loader.py" for r in HERE.parents
                      if (r / "components" / "keys" / "loader.py").is_file()),
                     HERE.parents[2] / "components" / "keys" / "loader.py")
-_LOADER_NAME = "company_keys_loader"
+_LOADER_NAME = "upright_keys_loader"
 
 
 def _load_loader():

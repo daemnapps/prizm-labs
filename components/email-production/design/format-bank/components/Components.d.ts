@@ -34,7 +34,7 @@ export interface FooterProps {
   text2?: string;
   /** Text content; defaults to "FAQ". */
   text3?: string;
-  /** Text content; defaults to "BRAND-A LLC, 732 S 6th St #5503, Las Vegas, NV 89101-6948". */
+  /** Text content; defaults to "brand_a LLC, 732 S 6th St #5503, Las Vegas, NV 89101-6948". */
   text4?: string;
 }
 

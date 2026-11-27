@@ -11,7 +11,7 @@ Ruling (decision log 2026-10-21, fc42a0ff4c): lean ships for the email chain
 only. No `--system-prompt` (it thinned video-writing's scene cells) and no
 `--bare` (it ignores the plan token). `--setting-sources ""` drops
 ~/.claude/settings.json and its effortLevel, so the effort is passed by hand:
-run-kit's one fixed level, run_kit/claude_flags.py EFFORT ("medium"; the team,
+run-kit's one fixed level, run_kit/claude_flags.py EFFORT ("medium"; developer,
 2026-10-21: "Yes email too", on the lead's "medium for the mini also covers
 email?"). No environment knob.
 
@@ -59,7 +59,7 @@ def run(argv, **kwargs):
 
 
 def door(args, prompt, timeout=None, **kwargs):
-    """The lean call through run_kit's claude_door — no account wired in (the owner,
+    """The lean call through run_kit's claude_door — no account wired in (owner,
     2026-10-23): `args` are the claude -p arguments without the binary or -p;
     the lean flags and the temp folder are added here, the credential picked by
     the door. Returns the CompletedProcess."""

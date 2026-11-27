@@ -3,7 +3,7 @@
 it is pointed at a run whose folder name matches no calendar slot, and the
 build never crashes on an empty segment — proven offline.
 
-    python3 tools/email-production/test_ld67_design_segment.py
+    python3 components/email-production/test_ld67_design_segment.py
 
 design/line.py and design/build.py are imported, never run (main() is not
 called). PIL is stood in only when this interpreter has none (engine.py and
@@ -34,7 +34,7 @@ except ImportError:
         setattr(PIL, _n, types.ModuleType("PIL." + _n))
         sys.modules["PIL." + _n] = getattr(PIL, _n)
     sys.modules["PIL"] = PIL
-sys.path.insert(0, str(DESIGN))    # design/ FIRST; never tools/email-production (its runner shadowed the stdlib's `email` until LD-49 (stdlib-name renames))
+sys.path.insert(0, str(DESIGN))    # design/ FIRST; never components/email-production (its runner shadowed the stdlib's `email` until LD-49 (stdlib-name renames))
 import line as LINE                # noqa: E402
 import build as BUILD              # noqa: E402
 

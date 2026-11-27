@@ -201,7 +201,7 @@ def inspect_root(out_root, component_dir, repo_root=None):
     "writes to the repo's `runs/` like every other run"), so a run landing
     there is the intended place, not a stray in a checkout — and warning on
     every correctly filed run would teach people to read past the warning
-    that matters (CR-9 (chain-runner runs home), the team 2026-10-07).
+    that matters (CR-9 (chain-runner runs home), developer 2026-10-07).
     """
     refusals = []
     warnings = []
