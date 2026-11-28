@@ -1154,9 +1154,16 @@ def ad_off(data):
                                  headers={"Content-Type": "application/json"})
     try:
         with urllib.request.urlopen(req, timeout=60) as r:
-            return json.loads(r.read().decode("utf-8"))
+            res = json.loads(r.read().decode("utf-8"))
     except Exception as e:  # noqa: BLE001 — said on the page
         raise RuntimeError("Outlier did not turn it off: %s" % e)
+    m = re.search(r"brief-(\d{3,5})", body["ad"])
+    res["logged"] = _log_change(brand=body["brand"], kind="paused", by=data.get("by") or "owner (Studio)",
+                                object={"type": "ad", "id": ",".join(map(str, body["ids"])), "name": body["ad"],
+                                        "brief": m.group(1) if m else None},
+                                before="active", after="paused", why="Turn off in the Studio, confirmed",
+                                result=res, numbers={"spend7": body["spend"]}).get("id")
+    return res
 
 
 # ---------- Sauce: the owner's own pass over the spiced script ----------
@@ -1349,6 +1356,9 @@ def targets_save(data):
     allt[brand] = cur
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(json.dumps(allt, indent=1))
+    _log_change(brand=brand, kind="rule", by=data.get("by") or "owner (Studio)", object={"type": "lines", "id": brand},
+                before=None, after={k: v for k, v in cur.items() if not k.startswith("_")},
+                why="the owner changed the brand's lines on Today (MER floor, steps, ceiling, KPI)")
     return _targets(brand)
 
 
@@ -1617,6 +1627,31 @@ def ledger(brand, days=30):
             "missing": [x for x, ok in (("Higgsfield $ per credit", per_credit), ("your tools and subscriptions", tools)) if not ok]}
 
 
+# ---------- The action log: every change to the business, one entry, every brand, scored on its return ----------
+
+def _alog():
+    spec = importlib.util.spec_from_file_location("action_log", str(WS / "components" / "action-log" / "action_log.py"))
+    m = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(m)
+    return m
+
+
+def actions(brand, kind=None, days=None, limit=300):
+    A = _alog()
+    rows = A.read(brand or None, kind or None, int(days) if days else None)[::-1][:limit]
+    return {"entries": rows, "kinds": list(A.KINDS), "verify": A.verify(), "views": A.views().get("views") or [],
+            "reads": list(A.READS)}
+
+
+def _log_change(**e):
+    """A change the Studio itself makes goes through the action log's one door; a failure to log never hides the
+    change, it is said beside it."""
+    try:
+        return _alog().append(e)
+    except Exception as err:  # noqa: BLE001
+        return {"log_error": str(err)}
+
+
 def preset(brand, avatar):
     """The drama story preset for a no-swipe film (drama_start.py preset: free, no model)."""
     r = subprocess.run([PY, str(WS / "components/video-production/machine/drama_start.py"), "preset",
@@ -1860,6 +1895,15 @@ def handle(h, method, parts, query, body):
                 return h.send(404, {"error": "no such page"})
             if api == ["feedback"] and SAFE.match(q.get("brand", "")):
                 return h.send(200, feedback_list(q["brand"], q.get("item") or None))
+            if api == ["actions"]:
+                b = q.get("brand") or None
+                if b and not SAFE.match(b):
+                    return h.send(400, {"error": "bad brand"})
+                return h.send(200, actions(b, q.get("kind"), q.get("days")))
+            if api == ["action-score"] and re.fullmatch(r"a\d{6}", q.get("id", "")):
+                A = _alog()
+                e = next((x for x in A.read() if x.get("id") == q["id"]), None)
+                return h.send(200, A.score(e)) if e else h.send(404, {"error": "no such entry"})
             if api == ["ledger"] and SAFE.match(q.get("brand", "")):
                 return h.send(200, ledger(q["brand"], int(q.get("days") or 30)))
             if api == ["ads"] and SAFE.match(q.get("brand", "")):
@@ -1954,6 +1998,8 @@ def handle(h, method, parts, query, body):
                 return h.send(200, schedule_switch(data))
             if api == ["feedback"]:
                 return h.send(200, feedback_add(data))
+            if api == ["action-view"]:
+                return h.send(200, _alog().save_view(data))
             if api == ["targets"]:
                 return h.send(200, targets_save(data))
             if api == ["hide"]:

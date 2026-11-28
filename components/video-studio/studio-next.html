@@ -580,8 +580,46 @@ async function ledgerView(){
         ${(d.missing || []).length ? `<div class="note" style="margin-top:8px;font-size:12.5px">Still to fill in: ${esc(d.missing.join(' · '))}</div>` : ''}</div></div>
     <div class="card" style="padding:0;overflow-x:auto"><table class="t"><tr><th>Brief</th><th style="text-align:right">Cost to make</th><th style="text-align:right">Credits</th><th style="text-align:right">Spend 30d</th><th style="text-align:right">Buys 30d</th><th style="text-align:right">CPA 30d</th><th></th></tr>
       ${d.briefs.map(b => `<tr><td><a href="#brief/${encodeURIComponent(b.brief)}"><b class="bn">${esc(b.brief)}</b></a></td><td class="n">${b.made_usd != null ? usd(b.made_usd) : '<span class="lbl">not on file</span>'}</td><td class="n">${b.credits ? int(b.credits) : '—'}</td><td class="n">${usd(b.spend30)}</td><td class="n">${int(b.buys30)}</td><td class="n">${b.cpa30 != null ? usd(b.cpa30) : '—'}</td><td>${b.kpi_winner ? '<span class="pill p-ready">KPI winner</span>' : b.spend_winner ? '<span class="pill p-act">spend winner</span>' : ''}</td></tr>`).join('') || '<tr><td colspan="7" class="empty">No briefs with costs or spend yet</td></tr>'}</table></div>
-    <div class="lbl" style="margin-top:10px">Cost to make counts what the runs record: writing and Higgsfield credits. Briefs made outside the chain show "not on file".</div>`;
+    <div class="lbl" style="margin-top:10px">Cost to make counts what the runs record: writing and Higgsfield credits. Briefs made outside the chain show "not on file".</div>
+    <div id="alog" style="margin-top:22px"></div>`;
   paintIcons(m);
+  actionLog();
+}
+/* ---------- The action log: every change, who made it, before → after, why, and its return at 3 / 7 / 14 days ---------- */
+const ALOG = {kind: '', days: '30', view: ''};
+const KINDW = {budget:'Budget', bid:'Bid', status:'Status', created:'Created', paused:'Paused', rule:'Rule', approved:'Approved', live:'Went live', scheduled:'Scheduled', price:'Price', offer:'Offer', handoff:'Hand-off', call:'Desk call', queue:'Queue', other:'Other'};
+const READW = {share_change:'Share of spend', spend_growth:'Spend growth', cpa_change:'CPA change', mer_change:'MER change'};
+async function actionLog(){
+  const box = $('#alog'); if (!box) return;
+  let d; try { d = await J(`/api/desk/actions?brand=${encodeURIComponent(S.brand)}&kind=${ALOG.kind}&days=${ALOG.days}`); } catch (e) { box.innerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
+  const v = (d.views || []).find(x => x.name === ALOG.view);
+  const reads = v ? v.reads : Object.keys(READW), win = v ? v.window : 7;
+  const sel = (id, opts, cur) => `<select id="${id}" style="border:1px solid var(--line-2);border-radius:8px;padding:5px 8px;font:13px var(--body);background:var(--card)">${opts.map(([k, n]) => `<option value="${k}" ${String(k) === String(cur) ? 'selected' : ''}>${n}</option>`).join('')}</select>`;
+  box.innerHTML = `<div class="ph" style="margin-bottom:10px"><h2 style="font:700 18px var(--display);margin:0">Every change, scored</h2>
+      <span class="pill ${d.verify.ok ? 'p-ready' : 'p-stop'}">${d.verify.ok ? '✓ ' + int(d.verify.entries) + ' entries, none edited' : 'chain broken at ' + esc(d.verify.id || '')}</span></div>
+    <div class="filters" style="align-items:center">${sel('akind', [['', 'Every kind'], ...d.kinds.map(k => [k, KINDW[k] || k])], ALOG.kind)}${sel('adays', [['7', 'Last 7 days'], ['14', 'Last 14 days'], ['30', 'Last 30 days'], ['90', 'Last 90 days'], ['', 'All']], ALOG.days)}
+      ${(d.views || []).map(x => `<button class="${x.name === ALOG.view ? 'on' : ''}" data-view="${esc(x.name)}">${esc(x.name)}</button>`).join('')}
+      <button data-saveview style="margin-left:auto">Save as a view</button></div>
+    <div class="card" style="padding:0;overflow-x:auto"><table class="t"><tr><th>When</th><th>Change</th><th>What</th><th>Before → after</th><th>Why</th><th>By</th><th></th></tr>
+      ${d.entries.map(e => `<tr data-e="${esc(e.id)}"><td class="n" style="text-align:left;white-space:nowrap">${esc(String(e.at).slice(5, 16).replace('T', ' '))}</td><td><span class="pill p-mute">${esc(KINDW[e.kind] || e.kind)}</span></td>
+        <td title="${esc(e.object.name || '')}">${e.object.brief ? `<b class="bn">${esc(e.object.brief)}</b> ` : ''}${esc(String(e.object.name || e.what || e.object.type).slice(0, 60))}</td>
+        <td class="n" style="text-align:left">${e.before != null || e.after != null ? `${esc(typeof e.before === 'object' && e.before ? '…' : String(e.before ?? '—'))} → ${esc(typeof e.after === 'object' && e.after ? '…' : String(e.after ?? '—'))}` : ''}</td>
+        <td style="max-width:360px">${e.said ? `<b>"${esc(e.said)}"</b> ` : ''}<span class="lbl">${esc(String(e.why || '').slice(0, 140))}</span></td><td class="lbl">${esc(String(e.by || '').slice(0, 30))}</td>
+        <td><button class="btn" data-score="${esc(e.id)}">Its return</button></td></tr>`).join('') || '<tr><td colspan="7" class="empty">No changes in this window</td></tr>'}</table></div>
+    <div class="lbl" style="margin-top:8px">One entry per change, any brand, written through one door and never edited. Brought in so far: Meta changes, desk calls, ads that went live, brief approvals, the queue.</div>`;
+  box.querySelector('#akind').onchange = e => { ALOG.kind = e.target.value; actionLog(); };
+  box.querySelector('#adays').onchange = e => { ALOG.days = e.target.value; actionLog(); };
+  box.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { const x = d.views.find(y => y.name === b.dataset.view); ALOG.view = ALOG.view === x.name ? '' : x.name; if (ALOG.view) { ALOG.kind = x.kind || ''; ALOG.days = x.days ? String(x.days) : ''; } actionLog(); });
+  box.querySelector('[data-saveview]').onclick = async () => { const name = prompt('Name this view'); if (!name) return;
+    try { await J('/api/desk/action-view', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name, brand: S.brand, kind: ALOG.kind, days: ALOG.days, window: win, reads})}); ALOG.view = name; toast('View saved'); actionLog(); } catch (e) { toast(e.message); } };
+  box.querySelectorAll('[data-score]').forEach(b => b.onclick = async () => {
+    const tr = b.closest('tr'); const nx = tr.nextElementSibling; if (nx && nx.classList.contains('scr')) { nx.remove(); return; }
+    b.disabled = true; b.textContent = 'Reading…';
+    try { const r = await J('/api/desk/action-score?id=' + encodeURIComponent(b.dataset.score));
+      const cell = (w, k) => w[k] == null ? '—' : (k === 'spend_growth' ? (w[k] > 0 ? '+' : '') + w[k] + '%' : k === 'share_change' ? (w[k] > 0 ? '+' : '') + w[k] + ' pts' : k === 'cpa_change' ? (w[k] > 0 ? '+' : '') + usd(w[k]) : (w[k] > 0 ? '+' : '') + w[k]);
+      tr.insertAdjacentHTML('afterend', `<tr class="scr"><td></td><td colspan="6"><table class="t" style="background:var(--paper)"><tr><th>Days after</th><th>Share then</th>${reads.map(k => `<th>${READW[k]}</th>`).join('')}<th>CPA then</th><th>Brand MER before → after</th></tr>
+        ${r.windows.map(w => w.reached ? `<tr ${w.days === win ? 'style="font-weight:600"' : ''}><td>${w.days}${w.new ? ' <span class="lbl">new</span>' : ''}</td><td>${w.share_after != null ? w.share_after + '%' : '—'}</td>${reads.map(k => `<td>${cell(w, k)}</td>`).join('')}<td>${w.cpa_after != null ? usd(w.cpa_after) : '—'}</td><td>${w.mer_before ?? '—'} → ${w.mer_after ?? '—'}</td></tr>` : `<tr><td>${w.days}</td><td colspan="${reads.length + 3}" class="lbl">not reached yet</td></tr>`).join('')}</table></td></tr>`); }
+    catch (e) { toast(e.message); } b.disabled = false; b.textContent = 'Its return'; });
 }
 async function today(){
   const m = $('#main');

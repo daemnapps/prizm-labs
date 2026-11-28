@@ -822,6 +822,16 @@
     "column"
    ],
    "basis": "draft"
+  },
+  {
+   "path": "components/action-log",
+   "kind": "engine",
+   "does": "Keeps one record of every change to the business, scored on its return",
+   "role": "brand-operator",
+   "workflow": "all",
+   "stage": null,
+   "steps": [],
+   "basis": "source"
   }
  ]
 }
