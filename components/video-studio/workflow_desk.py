@@ -1072,7 +1072,11 @@ def ad_off(data):
 # ---------- Sauce: the owner's own pass over the spiced script ----------
 
 def _section(text, title):
+    """One numbered part of a stage file: "## 4. TITLE" or, in older runs, "**4. TITLE**"."""
     m = re.search(r"^##\s*\d*\.?\s*" + re.escape(title) + r".*?$(.*?)(?=^##\s|\Z)", text or "", re.M | re.S | re.I)
+    if m:
+        return m.group(1).strip()
+    m = re.search(r"^\*\*\d*\.?\s*" + re.escape(title) + r"[^\n]*\*\*\s*$(.*?)(?=^\*\*\d+\.\s|\Z)", text or "", re.M | re.S | re.I)
     return m.group(1).strip() if m else ""
 
 
@@ -1091,6 +1095,31 @@ def sauce_list(brand):
     return {"scripts": out}
 
 
+_BEAT_HEAD = re.compile(r"^\s*(?:#{1,4}\s*)?\**\s*([A-Za-z][\w -]*?)\s*·\s*(?:[^·\n]{1,30}?\s*·\s*)?level\s*([^·*\n]*?)\s*(?:·\s*([^*\n]*?))?\s*\**\s*$",
+                        re.M)
+_BEAT_MARK = re.compile(r"^\s*(?:CHANGES|LINES|BEFORE|TAKE SHEET|Brackets:?|```)\s*$", re.M)
+
+
+def _beats(script):
+    """The spoken script as beats. The writing step lays a beat out as "<section> · level <n> · <register>" (in a
+    code block, in bold or as a heading), then BEFORE / SPOKEN / CHANGES / LINES; the SPOKEN words are the line."""
+    heads = list(_BEAT_HEAD.finditer(script or ""))
+    out = []
+    for k, hm in enumerate(heads):
+        body = script[hm.end():heads[k + 1].start() if k + 1 < len(heads) else len(script)]
+        sp = re.search(r"^\s*SPOKEN\s*$", body, re.M)
+        spoken = ""
+        if sp:
+            rest = body[sp.end():]
+            stop = _BEAT_MARK.search(rest)
+            spoken = (rest[:stop.start()] if stop else rest).strip()
+        if spoken.strip("() ").lower() in ("none", "cards only; no spoken words"):
+            spoken = ""
+        out.append({"section": hm.group(1).strip(), "level": hm.group(2).strip(), "register": (hm.group(3) or "").strip(),
+                    "tools": spoken})
+    return out
+
+
 def sauce_get(label):
     d = WS / "runs/video-teardown/_work" / label
     sp = d / "stages/4g-spice.md"
@@ -1098,24 +1127,56 @@ def sauce_get(label):
         return None
     spice = sp.read_text(errors="replace")
     sauce = (d / "stages/4h-sauce.md").read_text(errors="replace") if (d / "stages/4h-sauce.md").is_file() else None
-    return {"label": label, "spice": spice, "script": _section(spice, "THE SPOKEN SCRIPT") or spice,
-            "sheet": _section(spice, "THE SPICE SHEET"), "sauce": sauce,
-            "poster": "runs/video-teardown/_work/%s/poster.jpg" % label if (d / "poster.jpg").is_file() else None}
+    saved = _read(d / "stages/4h-sauce.json") or {}
+    script = _section(spice, "THE SPOKEN SCRIPT")
+    beats = _beats(script)
+    mine = {b.get("i"): b.get("text") for b in (saved.get("beats") or []) if isinstance(b, dict)}
+    for i, b in enumerate(beats):
+        b["i"] = i
+        b["mine"] = mine.get(i)
+    r = _read(d / "run.json") or {}
+    prof = r.get("selected_profile") if isinstance(r.get("selected_profile"), dict) else {}
+    cost = (r.get("writing_v2_total") or {}).get("cost_usd") if isinstance(r.get("writing_v2_total"), dict) else None
+    src = d / (r.get("source") or "source.mp4")
+    return {"label": label, "spice": spice, "script": script or spice, "beats": beats,
+            "sheet": _section(spice, "THE SPICE SHEET"), "sauce": sauce, "saved_at": saved.get("at"),
+            "poster": "runs/video-teardown/_work/%s/poster.jpg" % label if (d / "poster.jpg").is_file() else None,
+            "video": "runs/video-teardown/_work/%s/%s" % (label, src.name) if src.is_file() else None,
+            "post_url": r.get("post_url"), "profile": prof.get("name"), "avatar": prof.get("avatar"),
+            "writing_cost": cost, "owner_script": (d / "owner-script.md").is_file(),
+            "brief": (d / "stages/5-brief.md").is_file()}
 
 
-def sauce_save(label, text, by=None):
-    """The owner's sauce, saved beside the spice as stages/4h-sauce.md (the spice is never changed)."""
+def sauce_save(label, text=None, by=None, beats=None):
+    """The owner's sauce, saved beside the spice as stages/4h-sauce.md (+ .json with each beat); the spice is never
+    changed. Beats come as [{"i": n, "text": "..."}] in the script's order; plain text is still taken as a whole."""
     import datetime
     d = WS / "runs/video-teardown/_work" / label
     if not SAFE.match(label or "") or not (d / "stages/4g-spice.md").is_file():
         raise ValueError("no spiced script with that name")
+    rec = {"at": datetime.datetime.now().isoformat(timespec="seconds"), "by": by or "owner", "from": "stages/4g-spice.md"}
+    if beats:
+        tools = _beats(_section((d / "stages/4g-spice.md").read_text(errors="replace"), "THE SPOKEN SCRIPT"))
+        rows, md = [], []
+        for b in beats:
+            i = int(b.get("i", -1))
+            if not 0 <= i < len(tools):
+                raise ValueError("that beat is not in the script")
+            t = str(b.get("text") or "").strip()
+            rows.append({"i": i, "section": tools[i]["section"], "text": t, "changed": t != tools[i]["tools"]})
+            if t:
+                md.append("## %s\n\n%s\n" % (tools[i]["section"], t))
+        if not md:
+            raise ValueError("nothing written")
+        text = "\n".join(md)
+        rec.update(beats=rows, changed=sum(r["changed"] for r in rows))
     text = (text or "").strip()
     if not text:
         raise ValueError("nothing written")
     (d / "stages/4h-sauce.md").write_text(text + "\n")
-    (d / "stages/4h-sauce.json").write_text(json.dumps({"at": datetime.datetime.now().isoformat(timespec="seconds"),
-                                                        "by": by or "owner", "chars": len(text), "from": "stages/4g-spice.md"}, indent=1))
-    return {"ok": True, "path": "runs/video-teardown/_work/%s/stages/4h-sauce.md" % label}
+    rec["chars"] = len(text)
+    (d / "stages/4h-sauce.json").write_text(json.dumps(rec, indent=1))
+    return {"ok": True, "path": "runs/video-teardown/_work/%s/stages/4h-sauce.md" % label, "changed": rec.get("changed")}
 
 
 def vary_candidates(la, n=6):
@@ -1152,13 +1213,15 @@ def vary_candidates(la, n=6):
 
 def _targets(brand):
     """The owner's lines for one brand, kept on this computer only (~/.prizm/targets.json or PRIZM_TARGETS):
-    {"<brand>": {"mer": 2.5, "up": 0.10, "down": 0.05, "ceiling": 0, "bands": [1.15, 1.35]}}. Missing values stay
-    drafts so the page can say so."""
+    {"<brand>": {"mer": 2.5, "up": 0.10, "down": 0.05, "ceiling": 0, "bands": [1.15, 1.35], "kpi_cpa": 55,
+    "top_share": 0.10}}. Missing values stay drafts so the page can say so. The KPI moves with the season: the owner
+    changes it any time."""
     p = Path(os.environ.get("PRIZM_TARGETS") or Path.home() / ".prizm/targets.json")
     t = (_read(p) or {}).get(brand) if p.exists() else None
     t = t if isinstance(t, dict) else {}
     return {"mer": t.get("mer"), "up": t.get("up", 0.10), "down": t.get("down", 0.05), "ceiling": t.get("ceiling"),
-            "bands": t.get("bands") or [1.15, 1.35], "set": sorted(k for k in t if not k.startswith("_"))}
+            "bands": t.get("bands") or [1.15, 1.35], "kpi_cpa": t.get("kpi_cpa"), "top_share": t.get("top_share", 0.10),
+            "set": sorted(k for k in t if not k.startswith("_"))}
 
 
 def targets_save(data):
@@ -1183,6 +1246,8 @@ def targets_save(data):
     num("up", 0, 1)
     num("down", 0, 1)
     num("ceiling", 0, 10_000_000)
+    num("kpi_cpa", 1, 100_000)
+    num("top_share", 0.01, 0.5)
     b = data.get("bands")
     if b:
         lo, hi = float(b[0]), float(b[1])
@@ -1234,6 +1299,17 @@ def loop(brand):
         stages[k]["ads"] += 1
         stages[k]["spend"] += float((f.get("windows") or {}).get("7", {}).get("spend") or 0) if isinstance(
             (f.get("windows") or {}).get("7"), dict) else 0.0
+    # winners, the owner's rule (28 Nov 2026): spend winner = in the top share (10%) of ads by 30-day spend;
+    # KPI winner = a spend winner at or under the brand's CPA target (the desk's line when none is set)
+    ads = sorted((a for a in live_ads(brand)["ads"] if a["spend30"] > 0), key=lambda a: -a["spend30"])
+    kpi = t["kpi_cpa"] or next((a["break_even"] for a in ads if a.get("break_even")), None)
+    k = max(1, round(len(ads) * float(t["top_share"]))) if ads else 0
+    wins = [{"name": a["name"], "brief": a["brief"], "spend30": round(a["spend30"]), "buys30": a["buys30"], "cpa30": a["cpa30"],
+             "kpi": bool(kpi and a["cpa30"] is not None and a["cpa30"] <= kpi)} for a in ads[:k]]
+    tot = sum(a["spend30"] for a in ads)
+    winners_ = {"spend": len(wins), "kpi_winners": sum(w["kpi"] for w in wins), "kpi_cpa": kpi,
+                "kpi_from": "yours" if t["kpi_cpa"] else "desk line", "top_share": t["top_share"], "ads": len(ads),
+                "share_of_spend": round(sum(w["spend30"] for w in wins) / tot * 100) if tot else None, "rows": wins}
     today_ = time.strftime("%Y-%m-%d")
     promos = []
     for sf in sorted(glob.glob(str(WS / "runs/marketing-calendar" / brand / "2*" / "slots.json"))):
@@ -1250,7 +1326,7 @@ def loop(brand):
             uniq.append(dict(x, slots=sum(1 for y in promos if (y["date"], y["occasion"]) == k)))
     promos = uniq
     return {"targets": t, "line": line, "mer7": mer7, "proposal": prop, "stages": stages, "bands": [lo, hi],
-            "stages_asof": r.get("asof") if isinstance(r, dict) else None, "promos": promos[:6]}
+            "stages_asof": r.get("asof") if isinstance(r, dict) else None, "promos": promos[:6], "winners": winners_}
 
 
 def today(brand):
@@ -1567,7 +1643,7 @@ def handle(h, method, parts, query, body):
             if api == ["joining"]:
                 return h.send(200, join_update(data))
             if api == ["sauce"]:
-                return h.send(200, sauce_save(data.get("label"), data.get("text"), data.get("by")))
+                return h.send(200, sauce_save(data.get("label"), data.get("text"), data.get("by"), data.get("beats")))
             if api == ["ad-off"]:
                 return h.send(200, ad_off(data))
             if api == ["targets"]:

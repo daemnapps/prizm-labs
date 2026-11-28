@@ -132,6 +132,17 @@ main{padding:28px 24px 60px;max-width:1440px;margin:0 auto}
 .run i{width:8px;height:8px;border-radius:50%;background:var(--hue)}
 
 /* Ads */
+.sx{display:grid;gap:2px;margin-bottom:14px;border-left:4px solid var(--amber)}.sx b{font:600 14px var(--body)}.sx span{color:var(--ink-2);font-size:13.5px}
+.sgrid{display:grid;grid-template-columns:300px 1fr;gap:16px;align-items:start}
+.sv{position:sticky;top:80px;display:grid;gap:10px;padding:10px}.sv video,.sv img{width:100%;border-radius:10px;background:#000;max-height:60vh;object-fit:contain}
+.sv .facts{display:grid;gap:6px;font-size:13px}.sv .facts a{color:var(--indigo)}
+.beats{display:grid;gap:10px}
+.beat{display:grid;gap:8px}.beat .bh{display:flex;align-items:center;gap:10px}.beat .bh b{font:600 14px var(--body)}.beat .bh .pill{margin-left:auto}.beat .chg[hidden]{display:none}
+.beat .tw{display:grid;gap:2px;font-size:13px;color:var(--ink-3);background:var(--paper);border-radius:8px;padding:8px 10px}
+.beat textarea{width:100%;box-sizing:border-box;border:1px solid var(--line-2,rgba(0,0,0,.2));border-radius:10px;padding:10px 12px;font:15px/1.6 var(--body);color:var(--ink);background:var(--card);resize:vertical;overflow:hidden}
+.beat textarea:focus{outline:2px solid var(--amber);outline-offset:1px}
+.sbar{position:sticky;bottom:12px;display:flex;align-items:center;gap:10px;justify-content:flex-end}.sbar .lbl{margin-right:auto}
+@media (max-width:1100px){.sgrid{grid-template-columns:1fr}.sv{position:static}}
 .split{display:grid;grid-template-columns:300px 1fr;gap:16px;align-items:start}
 .list{padding:8px 0;max-height:calc(100vh - 170px);overflow:auto;position:sticky;top:80px}
 .list .g{padding:12px 16px 4px;display:flex;justify-content:space-between;align-items:center}
@@ -478,12 +489,12 @@ function linesForm(L){
   const f = (k, label, v, step) => `<label class="lf"><span class="lbl">${label}</span><input name="${k}" type="number" step="${step}" value="${v ?? ''}"></label>`;
   return `<details class="lines"><summary class="btn">Change the lines</summary><form id="linesF">
     ${f('mer', 'MER line', t.mer, 0.05)}${f('up', 'Raise step %', t.up != null ? Math.round(t.up * 100) : '', 1)}${f('down', 'Lower step %', t.down != null ? Math.round(t.down * 100) : '', 1)}
-    ${f('ceiling', 'Daily ceiling $', t.ceiling, 50)}${f('b0', 'Top under (freq)', b[0], 0.05)}${f('b1', 'Middle under (freq)', b[1], 0.05)}
+    ${f('ceiling', 'Daily ceiling $', t.ceiling, 50)}${f('kpi_cpa', 'KPI: CPA target $', t.kpi_cpa, 1)}${f('top_share', 'Spend winner: top %', t.top_share != null ? Math.round(t.top_share * 100) : '', 1)}${f('b0', 'Top under (freq)', b[0], 0.05)}${f('b1', 'Middle under (freq)', b[1], 0.05)}
     <button class="btn wait" type="submit">Save lines</button></form></details>`;
 }
 document.addEventListener('submit', async e => { if (e.target.id !== 'linesF') return; e.preventDefault();
   const v = Object.fromEntries(new FormData(e.target)); const n = k => v[k] === '' ? null : Number(v[k]);
-  const body = {brand: S.brand, mer: n('mer'), up: v.up === '' ? null : n('up') / 100, down: v.down === '' ? null : n('down') / 100, ceiling: n('ceiling')};
+  const body = {brand: S.brand, kpi_cpa: n('kpi_cpa'), top_share: v.top_share === '' ? null : n('top_share') / 100, mer: n('mer'), up: v.up === '' ? null : n('up') / 100, down: v.down === '' ? null : n('down') / 100, ceiling: n('ceiling')};
   if (v.b0 !== '' && v.b1 !== '') body.bands = [n('b0'), n('b1')];
   try { await J('/api/desk/targets', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)}); toast('Lines saved'); route(); } catch (err) { toast(err.message); } });
 function loopHtml(L){
@@ -543,6 +554,9 @@ async function loopView(){
   const ok = x => `<span class="ok">${esc(x)}</span>`, gap = x => `<span class="gap">${esc(x)}</span>`;
   const above = p ? p.dir === 'raise' : null;
   const N = [
+    {hue:'magenta', ic:'target', go:'#ads', name:'Winners',
+      big: L.winners ? `${L.winners.spend} spend · ${L.winners.kpi_winners} KPI` : '—',
+      lines: [L.winners ? `top ${Math.round(L.winners.top_share * 100)}% by 30-day spend (${L.winners.share_of_spend}% of spend) · KPI CPA ${usd(L.winners.kpi_cpa)} (${L.winners.kpi_from})` : ''], marks: [ok('warehouse'), gap('winners audit stopped 2 Nov')]},
     {hue:'indigo', ic:'target', go:'#today', name:'Buy to the line',
       big: p ? `${usd(p.now)} → ${usd(p.to)}` : (t.mer ? 'Not enough days' : 'No line set'),
       lines: [p ? `MER 7d ${p.mer7} vs ${p.line} · ${above ? 'raise' : 'lower'}` : 'Set the MER line on Today'], marks: [ok('daily money'), gap('go guards: proposal only')]},
@@ -1443,26 +1457,45 @@ const JOIN_TXT = [['They make their own repo', 'a private copy of Prizm, under t
 
 /* ================= SAUCE: your own pass over the spiced script, the one job that is yours ================= */
 async function sauceLane(label){
-  const h = host(); h.innerHTML = '<div class="skel">Loading scripts…</div>';
+  const h = host(); if (!h.querySelector('#sdet')) h.innerHTML = '<div class="skel">Loading scripts…</div>';
   let d; try { d = await J('/api/desk/sauce?brand=' + encodeURIComponent(S.brand)); } catch (e) { h.innerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
   const list = d.scripts || [];
   label = label || (list.find(x => !x.sauce) || list[0] || {}).label;
-  const todo = list.filter(x => !x.sauce).length;
-  h.innerHTML = `<div class="split"><div class="card list"><div class="g"><span class="pill p-wait">Ready for your sauce</span><span class="lbl">${todo}</span></div>
-      ${list.map(x => `<a class="ad ${x.label === label ? 'on' : ''}" href="#production/sauce/${encodeURIComponent(x.label)}" style="color:var(--ink)"><b>${esc(nice(x.label))}</b><span>${x.sauce ? 'sauced ' + new Date(x.sauced_at * 1000).toLocaleDateString('en-GB', {day:'numeric', month:'short'}) : 'spiced ' + new Date(x.at * 1000).toLocaleDateString('en-GB', {day:'numeric', month:'short'})}</span></a>`).join('') || '<div class="empty" style="padding:14px">No spiced scripts yet</div>'}</div>
+  const todo = list.filter(x => !x.sauce), done = list.filter(x => x.sauce);
+  const day = t => new Date(t * 1000).toLocaleDateString('en-GB', {day:'numeric', month:'short'});
+  const row = x => `<a class="ad ${x.label === label ? 'on' : ''}" href="#production/sauce/${encodeURIComponent(x.label)}" style="color:var(--ink)"><b>${esc(nice(x.label.replace(/^[a-z0-9]+-/, '')))}</b><span>${x.sauce ? 'sauced ' + day(x.sauced_at) : 'written ' + day(x.at)}</span></a>`;
+  h.innerHTML = `<div class="card sx"><b>Sauce</b><span>The tools wrote every line of the script. You rewrite the lines that need you, beat by beat. Your words are saved next to theirs; the tools' version is never changed.</span></div>
+    <div class="split"><div class="card list"><div class="g"><span class="pill p-wait">Needs your sauce</span><span class="lbl">${todo.length}</span></div>${todo.map(row).join('') || '<div class="empty" style="padding:14px">Nothing waiting</div>'}
+      ${done.length ? `<div class="g"><span class="pill p-ready">Sauced</span><span class="lbl">${done.length}</span></div>${done.map(row).join('')}` : ''}</div>
     <div class="detail" id="sdet">${label ? '<div class="skel">Opening…</div>' : '<div class="card note">Nothing to sauce yet.</div>'}</div></div>`;
   if (!label) return;
   let g; try { g = await J('/api/desk/sauce-one?label=' + encodeURIComponent(label)); } catch (e) { $('#sdet').innerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
-  $('#sdet').innerHTML = `<div class="dh"><h2>${esc(nice(label))}</h2>${g.sauce ? '<span class="pill p-ready">sauced</span>' : '<span class="pill p-wait">spiced, needs your sauce</span>'}<div class="acts"><a class="btn" href="#swipe/${encodeURIComponent(label)}">The swipe</a></div></div>
-    <div class="grid2" style="align-items:start">
-      <div class="card" style="padding:0"><div style="padding:12px 16px;border-bottom:1px solid var(--line)"><h3>${ib('sparkles', 'violet')}What the tools wrote<span class="lbl" style="margin-left:auto">spice · the spoken script</span></h3></div><div class="md" style="padding:14px 16px;max-height:calc(100vh - 300px);overflow:auto;font-size:13.5px">${md(g.script)}</div></div>
-      <div class="card" style="padding:0;position:sticky;top:80px"><div style="padding:12px 16px;border-bottom:1px solid var(--line)"><h3>${ib('pen', 'amber')}Your sauce<span class="lbl" style="margin-left:auto">saved beside the spice; the spice is never changed</span></h3></div>
-        <textarea id="sauce" style="width:100%;min-height:calc(100vh - 360px);border:0;padding:14px 16px;font:14.5px/1.65 var(--body);resize:vertical;background:var(--card);color:var(--ink)">${esc(g.sauce || g.script)}</textarea>
-        <div class="arow" style="padding:10px 16px;border-top:1px solid var(--line)"><span class="lbl" id="scount"></span><button class="btn wait" id="ssave" style="margin-left:auto"><i class="ic" data-i="check"></i>Save sauce</button></div></div></div>`;
+  const beats = g.beats || [];
+  const media = p => '/api/desk/media?path=' + encodeURIComponent(p);
+  const left = `<div class="card sv">${g.video ? `<video src="${media(g.video)}" ${g.poster ? `poster="${media(g.poster)}"` : ''} controls playsinline preload="metadata"></video>` : g.poster ? `<img src="${media(g.poster)}" alt="">` : '<div class="empty">No swipe video on file</div>'}
+      <div class="facts">${g.post_url ? `<a href="${esc(g.post_url)}" target="_blank" rel="noopener">The original post ↗</a>` : ''}
+        ${g.profile ? `<span><span class="lbl">Profile</span> ${esc(nice(g.profile))}</span>` : ''}
+        ${g.writing_cost != null ? `<span><span class="lbl">Writing cost</span> ${usd(g.writing_cost)}</span>` : ''}
+        ${g.owner_script ? `<span class="pill p-act">Your script was locked in</span>` : ''}
+        <span class="note" style="font-size:12px">The brief doesn't read your Sauce yet. That's the next fix.</span></div></div>`;
+  const beatHtml = beats.length ? beats.map(b => { const mine = b.mine != null ? b.mine : b.tools; return `<div class="card beat" data-i="${b.i}">
+      <div class="bh"><b>${esc(nice(b.section))}</b><span class="lbl">level ${esc(b.level || '—')}${b.register ? ' · ' + esc(b.register) : ''}</span><span class="pill p-act chg" ${mine !== b.tools ? '' : 'hidden'}>yours</span></div>
+      ${b.tools ? `<div class="tw"><span class="lbl">The tools wrote</span>${esc(b.tools)}</div>` : '<div class="tw"><span class="lbl">The tools wrote</span><i>no spoken words (picture only)</i></div>'}
+      <textarea rows="${Math.max(2, Math.ceil((mine || '').length / 70))}" data-tools="${esc(b.tools)}">${esc(mine || '')}</textarea></div>`; }).join('')
+    : `<div class="card beat"><div class="bh"><b>The whole script</b><span class="lbl">this older script isn't laid out beat by beat</span></div><textarea id="sauceall" rows="24">${esc(g.sauce || g.script)}</textarea></div>`;
+  $('#sdet').innerHTML = `<div class="dh"><h2>${esc(nice(label.replace(/^[a-z0-9]+-/, '')))}</h2>${g.sauce ? '<span class="pill p-ready">sauced</span>' : '<span class="pill p-wait">needs your sauce</span>'}<span class="lbl">${beats.length} beats</span></div>
+    <div class="sgrid">${left}<div class="beats">${beatHtml}
+      <div class="card arow sbar"><span class="lbl" id="scount"></span><button class="btn" id="sreset">Back to the tools' lines</button><button class="btn wait" id="ssave"><i class="ic" data-i="check"></i>Save sauce</button></div></div></div>`;
   paintIcons($('#sdet'));
-  const ta = $('#sauce'), cnt = () => $('#scount').textContent = ta.value.trim().split(/\s+/).filter(Boolean).length + ' words';
-  ta.oninput = cnt; cnt();
-  $('#ssave').onclick = async () => { const b = $('#ssave'); b.disabled = true; try { await J('/api/desk/sauce', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({label, text: ta.value})}); toast('Sauce saved'); sauceLane(label); } catch (e) { toast(e.message); b.disabled = false; } };
+  const tas = [...document.querySelectorAll('#sdet .beat textarea[data-tools]')];
+  const count = () => { const n = tas.filter(t => t.value.trim() !== t.dataset.tools.trim()).length; $('#scount').textContent = beats.length ? `${n} of ${beats.length} beats are yours` : ''; };
+  tas.forEach(t => t.oninput = () => { t.closest('.beat').querySelector('.chg').hidden = t.value.trim() === t.dataset.tools.trim(); t.style.height = 'auto'; t.style.height = t.scrollHeight + 2 + 'px'; count(); });
+  requestAnimationFrame(() => tas.forEach(t => { t.style.height = 'auto'; t.style.height = t.scrollHeight + 2 + 'px'; }));
+  count();
+  $('#sreset').onclick = () => { tas.forEach(t => { t.value = t.dataset.tools; t.oninput(); }); };
+  $('#ssave').onclick = async () => { const b = $('#ssave'); b.disabled = true;
+    const body = beats.length ? {label, beats: tas.map(t => ({i: +t.closest('.beat').dataset.i, text: t.value}))} : {label, text: $('#sauceall').value};
+    try { const r = await J('/api/desk/sauce', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)}); toast(beats.length ? `Sauce saved · ${r.changed} beats yours` : 'Sauce saved'); sauceLane(label); } catch (e) { toast(e.message); b.disabled = false; } };
 }
 
 boot();
