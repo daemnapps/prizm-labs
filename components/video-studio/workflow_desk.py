@@ -967,6 +967,32 @@ def pricing():
     return p if isinstance(p, dict) else None
 
 
+def _jobs_meter():
+    """The job-meter component and the private job list it runs (JOB_METER_LIST, default ~/.job-meter/jobs.json)."""
+    spec = importlib.util.spec_from_file_location("job_meter", str(WS / "components" / "job-meter" / "meter.py"))
+    m = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(m)
+    return m, Path(os.path.expanduser(os.environ.get("JOB_METER_LIST") or "~/.job-meter/jobs.json"))
+
+
+def schedule_list():
+    """Every scheduled job: its switch, what it does, the model, the cap and the last run."""
+    m, f = _jobs_meter()
+    if not f.is_file():
+        return {"jobs": [], "where": "", "note": "No job list on this computer yet."}
+    return m.jobs_view(str(f))
+
+
+def schedule_switch(data):
+    """The owner's on/off for one job. Turning a job on lets it run on the next scheduled run, wherever the schedule lives."""
+    m, f = _jobs_meter()
+    job = str(data.get("job") or "")
+    if not SAFE.match(job) or not f.is_file():
+        raise ValueError("no such job")
+    m.switch(str(f), job, bool(data.get("on")), by=str(data.get("by") or "owner")[:40])
+    return schedule_list()
+
+
 def bill(brand):
     """This brand's bill at the owner's prices, estimated from the last 30 days: retainer + the spend tier's % of ad
     spend (warehouse) + metered usage × (1 + surcharge)."""
@@ -1256,7 +1282,7 @@ def _targets(brand):
     p = Path(os.environ.get("PRIZM_TARGETS") or Path.home() / ".prizm/targets.json")
     t = (_read(p) or {}).get(brand) if p.exists() else None
     t = t if isinstance(t, dict) else {}
-    return {"mer": t.get("mer"), "up": t.get("up", 0.10), "down": t.get("down", 0.05), "ceiling": t.get("ceiling"),
+    return {"mer": t.get("mer"), "hold_to": t.get("hold_to", 3.0), "up": t.get("up", 0.15), "down": t.get("down", 0.10), "ceiling": t.get("ceiling"),
             "bands": t.get("bands") or [1.15, 1.35], "kpi_cpa": t.get("kpi_cpa"), "top_share": t.get("top_share", 0.10),
             "set": sorted(k for k in t if not k.startswith("_"))}
 
@@ -1280,6 +1306,7 @@ def targets_save(data):
             raise ValueError("%s must be between %s and %s" % (k, lo, hi))
         cur[k] = v
     num("mer", 0.1, 20)
+    num("hold_to", 0.1, 20)
     num("up", 0, 1)
     num("down", 0, 1)
     num("ceiling", 0, 10_000_000)
@@ -1314,16 +1341,39 @@ def loop(brand):
     w7 = line[-7:]
     s7, r7 = sum(d["spend"] for d in w7), sum(d["revenue"] for d in w7)
     mer7 = round(r7 / s7, 2) if s7 else None
+    # Pacing on MER (components/media-buying/PACING.md, owner 28 Nov 2026): store sales ÷ Meta spend, today to date.
+    # Under the floor: lower ~10% · floor to hold_to (3.0): hold · over: raise ~15-20%. Down slower than up; a
+    # proposal only. Today's hours come from the hourly read's file (it writes runs/media-buying/<brand>/mer-hourly/
+    # <date>.json); the Studio never calls Meta. Without it, the last whole day from the warehouse stands in.
+    hours, read = [], None
+    hf = _newest("runs/media-buying/%s/mer-hourly/2*.json" % brand)
+    hd = _read(hf) if hf else None
+    if isinstance(hd, dict) and hd.get("rows"):
+        hours = [{"hour": x.get("hour"), "sales": x.get("sales_to_date"), "spend": x.get("spend_to_date"),
+                  "mer": x.get("mer_to_date")} for x in hd["rows"]]
+        last = hd["rows"][-1]
+        read = {"from": "today, hour by hour", "day": Path(hf).stem, "as_of": last.get("as_of"),
+                "age_min": round((time.time() - os.path.getmtime(hf)) / 60),
+                "mer": last.get("mer_to_date"), "sales": last.get("sales_to_date"), "spend": last.get("spend_to_date")}
+    elif line:
+        d = line[-1]
+        read = {"from": "last whole day (warehouse)", "day": d["d"], "mer": d["mer"], "sales": d["revenue"], "spend": d["spend"]}
     prop = None
-    if t["mer"] and mer7 and w7:
+    if t["mer"] and read and read.get("mer") is not None and w7:
         per = s7 / len(w7)
-        up = mer7 >= t["mer"]
-        step = t["up"] if up else -t["down"]
+        m = float(read["mer"])
+        if m < t["mer"]:
+            dir_, step = "lower", -t["down"]
+        elif m <= t["hold_to"]:
+            dir_, step = "hold", 0.0
+        else:
+            dir_, step = "raise", t["up"]
         to = per * (1 + step)
-        if up and t["ceiling"]:
+        if dir_ == "raise" and t["ceiling"]:
             to = min(to, float(t["ceiling"]))
-        prop = {"dir": "raise" if up else "lower", "mer7": mer7, "line": t["mer"], "now": round(per), "to": round(to),
-                "step": step, "ceiling": t["ceiling"], "profit7": round(sum(d["profit"] for d in w7))}
+        prop = {"dir": dir_, "mer": m, "read": read, "mer7": mer7, "line": t["mer"], "hold_to": t["hold_to"],
+                "now": round(per), "to": round(to), "step": step, "ceiling": t["ceiling"],
+                "profit7": round(sum(d["profit"] for d in w7))}
     rf = _newest("runs/media-buying/%s/2*/report.json" % brand)
     r = _read(rf) if rf else None
     lo, hi = (t["bands"] + [1.15, 1.35])[:2]
@@ -1358,7 +1408,7 @@ def loop(brand):
             seen.add(k)
             uniq.append(dict(x, slots=sum(1 for y in promos if (y["date"], y["occasion"]) == k)))
     promos = uniq
-    return {"targets": t, "line": line, "mer7": mer7, "proposal": prop, "stages": stages, "bands": [lo, hi],
+    return {"targets": t, "line": line, "mer7": mer7, "proposal": prop, "hours": hours, "stages": stages, "bands": [lo, hi],
             "stages_asof": r.get("asof") if isinstance(r, dict) else None, "promos": promos[:6], "winners": winners_}
 
 
@@ -1705,6 +1755,8 @@ def handle(h, method, parts, query, body):
             if api == ["usage"] and SAFE.match(q.get("brand", "")):
                 import studio_asks as SA
                 return h.send(200, SA.usage(q["brand"]))
+            if api == ["schedule"]:                             # the scheduled jobs and their switches (job-meter)
+                return h.send(200, schedule_list())
             if len(api) == 3 and api[0] == "ask":
                 import studio_asks as SA
                 a = SA.one(api[1], api[2])
@@ -1758,6 +1810,8 @@ def handle(h, method, parts, query, body):
                 return h.send(200, sauce_save(data.get("label"), data.get("text"), data.get("by"), data.get("beats")))
             if api == ["ad-off"]:
                 return h.send(200, ad_off(data))
+            if api == ["schedule"]:                             # the owner's switch for one scheduled job
+                return h.send(200, schedule_switch(data))
             if api == ["feedback"]:
                 return h.send(200, feedback_add(data))
             if api == ["targets"]:

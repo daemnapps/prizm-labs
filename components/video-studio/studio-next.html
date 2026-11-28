@@ -478,14 +478,14 @@ function route(){
   const h = decodeURIComponent(location.hash.slice(1) || 'today');
   const i = h.indexOf('/'); const v = i < 0 ? h : h.slice(0, i);
   const alias = {brands:'settings'};
-  S.view = alias[v] || (['portfolio', 'today', 'production', 'ads', 'swipes', 'swipe', 'approve', 'research', 'skills', 'settings', 'knowledge', 'asks', 'live', 'brief', 'pages', 'creators', 'market', 'usage', 'join'].includes(v) ? v : 'today');
+  S.view = alias[v] || (['portfolio', 'today', 'production', 'ads', 'swipes', 'swipe', 'approve', 'research', 'skills', 'settings', 'knowledge', 'asks', 'live', 'brief', 'pages', 'creators', 'market', 'usage', 'schedule', 'join'].includes(v) ? v : 'today');
   S.arg = i < 0 ? null : h.slice(i + 1);
   if (S.view === 'ads' && (!S.arg || S.arg === 'kill')) S.view = 'live';
-  const TAB = {ads:'production', swipes:'production', swipe:'production', live:'ads-top', approve:'ads-top', brief:'ads-top', pages:'ads-top', skills:'settings', usage:'settings', market:'research'};
+  const TAB = {ads:'production', swipes:'production', swipe:'production', live:'ads-top', approve:'ads-top', brief:'ads-top', pages:'ads-top', skills:'settings', usage:'settings', schedule:'settings', market:'research'};
   const tab = TAB[S.view] || S.view;
   document.querySelectorAll('[data-v]').forEach(a => a.classList.toggle('on', a.dataset.v === tab));
   $('#brand').value = S.view === 'portfolio' ? '*' : S.brand;
-  ({portfolio, today, production, ads:() => production('video'), swipes:() => production('swipes'), swipe:swipeView, approve, research, skills:skillsView, settings:brandSetup, knowledge:knowledgeView, asks:asksView, live:adsLive, brief:briefView, pages:pagesView, creators:creatorsView, market:marketView, usage:usageView, join:joinView})[S.view]();
+  ({portfolio, today, production, ads:() => production('video'), swipes:() => production('swipes'), swipe:swipeView, approve, research, skills:skillsView, settings:brandSetup, knowledge:knowledgeView, asks:asksView, live:adsLive, brief:briefView, pages:pagesView, creators:creatorsView, market:marketView, usage:usageView, schedule:scheduleView, join:joinView})[S.view]();
   approveBadge();
 }
 const brandMenu = () => ((S.menu && S.menu.brands) || []).find(b => b.id === S.brand);
@@ -495,13 +495,13 @@ function linesForm(L){
   const t = L.targets || {}, b = t.bands || L.bands || [];
   const f = (k, label, v, step) => `<label class="lf"><span class="lbl">${label}</span><input name="${k}" type="number" step="${step}" value="${v ?? ''}"></label>`;
   return `<details class="lines"><summary class="btn">Change the lines</summary><form id="linesF">
-    ${f('mer', 'MER line', t.mer, 0.05)}${f('up', 'Raise step %', t.up != null ? Math.round(t.up * 100) : '', 1)}${f('down', 'Lower step %', t.down != null ? Math.round(t.down * 100) : '', 1)}
+    ${f('mer', 'MER floor', t.mer, 0.05)}${f('hold_to', 'Hold up to MER', t.hold_to, 0.05)}${f('up', 'Raise step %', t.up != null ? Math.round(t.up * 100) : '', 1)}${f('down', 'Lower step %', t.down != null ? Math.round(t.down * 100) : '', 1)}
     ${f('ceiling', 'Daily ceiling $', t.ceiling, 50)}${f('kpi_cpa', 'KPI: CPA target $', t.kpi_cpa, 1)}${f('top_share', 'Spend winner: top %', t.top_share != null ? Math.round(t.top_share * 100) : '', 1)}${f('b0', 'Top under (freq)', b[0], 0.05)}${f('b1', 'Middle under (freq)', b[1], 0.05)}
     <button class="btn wait" type="submit">Save lines</button></form></details>`;
 }
 document.addEventListener('submit', async e => { if (e.target.id !== 'linesF') return; e.preventDefault();
   const v = Object.fromEntries(new FormData(e.target)); const n = k => v[k] === '' ? null : Number(v[k]);
-  const body = {brand: S.brand, kpi_cpa: n('kpi_cpa'), top_share: v.top_share === '' ? null : n('top_share') / 100, mer: n('mer'), up: v.up === '' ? null : n('up') / 100, down: v.down === '' ? null : n('down') / 100, ceiling: n('ceiling')};
+  const body = {brand: S.brand, hold_to: n('hold_to'), kpi_cpa: n('kpi_cpa'), top_share: v.top_share === '' ? null : n('top_share') / 100, mer: n('mer'), up: v.up === '' ? null : n('up') / 100, down: v.down === '' ? null : n('down') / 100, ceiling: n('ceiling')};
   if (v.b0 !== '' && v.b1 !== '') body.bands = [n('b0'), n('b1')];
   try { await J('/api/desk/targets', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)}); toast('Lines saved'); route(); } catch (err) { toast(err.message); } });
 function loopHtml(L){
@@ -528,10 +528,11 @@ function loopHtml(L){
   const p = L.proposal;
   const prop = !t.mer ? `<div class="card prop down"><h3>${ib('target', 'amber')}No MER line yet</h3><span>Set this brand's line and the Studio proposes spend each morning.</span>${linesForm(L)}</div>`
     : !p ? `<div class="card prop"><h3>${ib('target', 'indigo')}MER line ${t.mer}</h3><div class="empty">Not enough days to judge</div>${linesForm(L)}</div>`
-    : `<div class="card prop ${p.dir === 'raise' ? 'up' : 'down'}"><h3>${ib('target', p.dir === 'raise' ? 'green' : 'amber')}${p.dir === 'raise' ? 'Raise spend' : 'Lower spend'}</h3>
-      <span class="big">${usd(p.now)} → ${usd(p.to)}<span class="lbl"> a day</span></span>
-      <span>MER 7d <b>${p.mer7}</b> vs line <b>${p.line}</b> · profit 7d <b>${usd(p.profit7)}</b></span>
-      <span class="lbl">${p.dir === 'raise' ? '+' + Math.round(p.step * 100) : Math.round(p.step * 100)}% step${(t.set || []).includes(p.dir === 'raise' ? 'up' : 'down') ? '' : ' (draft)'} · ceiling ${p.ceiling ? usd(p.ceiling) : 'not set'}</span>
+    : `<div class="card prop ${p.dir === 'raise' ? 'up' : p.dir === 'hold' ? '' : 'down'}"><h3>${ib('target', p.dir === 'raise' ? 'green' : p.dir === 'hold' ? 'indigo' : 'amber')}${p.dir === 'raise' ? 'Raise spend' : p.dir === 'hold' ? 'Hold spend' : 'Lower spend'}</h3>
+      <span class="big">${p.dir === 'hold' ? usd(p.now) : usd(p.now) + ' → ' + usd(p.to)}<span class="lbl"> a day</span></span>
+      <span>MER <b>${p.mer}</b> (${esc(p.read.from)}${p.read.as_of ? ', ' + esc(p.read.as_of) : ''}${p.read.age_min != null ? `, <b style="color:var(--${p.read.age_min > 90 ? 'coral' : 'ink-3'})">read ${p.read.age_min < 60 ? p.read.age_min + ' min' : Math.round(p.read.age_min / 60) + ' h'} ago</b>` : ''}) · floor <b>${p.line}</b> · hold to <b>${p.hold_to}</b></span>
+      <span>Sales ${usd(p.read.sales)} on ${usd(p.read.spend)} spend · profit 7d <b>${usd(p.profit7)}</b></span>
+      <span class="lbl">under ${p.line}: −${Math.round((t.down || .1) * 100)}% · ${p.line}–${p.hold_to}: hold · over ${p.hold_to}: +${Math.round((t.up || .15) * 100)}% · ceiling ${p.ceiling ? usd(p.ceiling) : 'not set'}</span>
       <span class="pill p-stop" style="justify-self:start">Proposal only: spend changes stay closed until the go guards are built</span>${linesForm(L)}</div>`;
   const st = L.stages || {}, tot = ['top', 'middle', 'bottom'].reduce((a, k) => a + ((st[k] || {}).spend || 0), 0) || 1;
   const hues = {top: 'violet', middle: 'indigo', bottom: 'green'};
@@ -543,7 +544,13 @@ function loopHtml(L){
   const pr = L.promos || [];
   const promos = `<div class="card"><h3>${ib('calendar', 'amber')}Next promos<span class="count">${pr.length}</span></h3>
     ${pr.map(x => `<div class="row"><b>${esc(dayLabel(x.date))} · ${esc(nice(x.occasion || x.category || ''))}</b><span>${esc(nice(x.offer || x.product || ''))} · ${int(x.slots)} slots</span></div>`).join('') || '<div class="empty">Nothing on the calendar ahead</div>'}</div>`;
-  return `<div class="loop"><div class="card chart"><h3>${ib('chart', 'green')}Sales, spend, margin · MER vs ${t.mer || 'no line'}</h3>${chart}
+  const hrs = L.hours || [];
+  if (hrs.length > 1) { const W = 600, H = 170, P = 6, n = hrs.length, mx = Math.max(1, ...hrs.map(h => Math.max(h.sales || 0, h.spend || 0)));
+    const x = i => P + i * (W - 2 * P) / (n - 1), y = v => H - P - (v || 0) / mx * (H - 2 * P), pth = k => hrs.map((h, i) => (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(h[k]).toFixed(1)).join('');
+    const mm = Math.max(t.hold_to || 3, ...hrs.map(h => h.mer || 0)) * 1.15, ym = v => 88 - (v || 0) / mm * 84;
+    chart = `<span class="lbl">Today, to date, hour by hour</span><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="width:100%;height:150px"><path d="${pth('sales')}" fill="none" stroke="var(--green)" stroke-width="2" vector-effect="non-scaling-stroke"/><path d="${pth('spend')}" fill="none" stroke="var(--indigo)" stroke-width="2" vector-effect="non-scaling-stroke"/>${hrs.map((h, i) => `<rect x="${(x(i) - 8).toFixed(1)}" y="0" width="16" height="${H}" fill="transparent"><title>${esc(h.hour)} · sales ${usd(h.sales)} · spend ${usd(h.spend)} · MER ${h.mer ?? '—'}</title></rect>`).join('')}</svg>
+      <svg viewBox="0 0 ${W} 90" preserveAspectRatio="none" style="width:100%;height:70px">${t.mer ? `<line x1="0" x2="${W}" y1="${ym(t.mer).toFixed(1)}" y2="${ym(t.mer).toFixed(1)}" stroke="var(--coral)" stroke-dasharray="5 4" vector-effect="non-scaling-stroke"/>` : ''}<line x1="0" x2="${W}" y1="${ym(t.hold_to || 3).toFixed(1)}" y2="${ym(t.hold_to || 3).toFixed(1)}" stroke="var(--green)" stroke-dasharray="2 4" vector-effect="non-scaling-stroke"/><path d="${hrs.map((h, i) => (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + ym(h.mer).toFixed(1)).join('')}" fill="none" stroke="var(--violet)" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>` + `<span class="lbl" style="margin-top:8px">Last 30 days</span>` + chart; }
+  return `<div class="loop"><div class="card chart"><h3>${ib('chart', 'green')}Spend, sales, MER · floor ${t.mer || 'not set'}${t.hold_to ? ' · hold to ' + t.hold_to : ''}</h3>${chart}
       <div class="key"><span style="--hue:var(--green)"><i></i>Sales</span><span style="--hue:var(--indigo)"><i></i>Spend</span><span style="--hue:var(--cyan)"><i></i>Margin</span><span style="--hue:var(--violet)"><i></i>MER</span><span style="--hue:var(--coral)"><i></i>Line ${t.mer || ''}</span></div></div>${prop}</div>
 `;
 }
@@ -632,7 +639,7 @@ const host = () => $('#sub') || $('#main');
 const tabBar = (items, cur) => `<div class="lanes">${items.map(([id, name, ic, hue, href, badge]) => `<a href="${href}" class="${id === cur ? 'on' : ''}" style="--hue:var(--${hue})"><i class="ic">${icon(ic)}</i>${name}${badge ? `<b class="nb">${badge}</b>` : ''}</a>`).join('')}</div>`;
 const adsTabs = cur => tabBar([['approve', 'To approve', 'send', 'amber', '#approve', S.waiting || ''], ['live', 'Live', 'target', 'indigo', '#ads'], ['pages', 'Pages', 'link', 'green', '#pages']], cur);
 const resTabs = cur => tabBar([['brand', 'This brand', 'search', 'violet', '#research'], ['market', 'Market', 'target', 'green', '#market']], cur);
-const setTabs = cur => tabBar([['brand', 'Brand setup', 'shield', 'indigo', '#settings'], ['skills', 'Skills', 'sparkles', 'violet', '#skills'], ['usage', 'Usage', 'zap', 'amber', '#usage']], cur);
+const setTabs = cur => tabBar([['brand', 'Brand setup', 'shield', 'indigo', '#settings'], ['skills', 'Skills', 'sparkles', 'violet', '#skills'], ['usage', 'Usage', 'zap', 'amber', '#usage'], ['schedule', 'Jobs', 'calendar', 'indigo', '#schedule']], cur);
 const blabel = b => (S.labels && S.labels[b] && S.labels[b] !== b) ? S.labels[b] : String(b).replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase());
 document.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.dataset && e.target.dataset.ad) location.hash = 'ads/' + encodeURIComponent(e.target.dataset.ad); });
 function setStep(a, s){ history.replaceState(null, '', '#ads/' + encodeURIComponent(a.id + '|' + s)); S.arg = a.id + '|' + s; openAd = S.arg; }
@@ -1495,6 +1502,20 @@ async function usageView(){
   const billCard = bl && bl.ok ? `<div class="card" style="margin-bottom:16px;border-color:color-mix(in srgb,var(--amber) 45%,transparent)"><h3>${ib('zap', 'amber')}This brand's bill at your prices<span class="count" style="--hue:var(--ink)">${usd(bl.total, 2)}</span></h3><table class="t" style="margin-top:10px">${bl.lines.map(l => `<tr><td>${esc(l.what)}</td><td class="n">${usd(l.amount, 2)}</td></tr>`).join('')}</table><span class="lbl">estimate from the last 30 days · prices set ${esc(bl.set || '')} · margin on usage ${usd(bl.margin_on_usage, 2)}</span></div>` : '';
   m.querySelector('.skel').outerHTML = billCard + `<div class="card" style="margin-bottom:16px"><div class="nums"><div><span class="lbl">Claude cost, all jobs</span><b>${usd(d.total, 2)}</b></div><div><span class="lbl">Jobs metered</span><b>${int(d.jobs)}</b></div></div><span class="lbl">${esc(d.basis)}</span></div>
     <div class="grid2" style="margin-bottom:16px">${tbl('By month', d.by_month, 'Month')}${tbl('By kind of job', d.by_kind, 'Job')}</div>${tbl('By brief', d.by_brief, 'Brief')}`;
+}
+
+
+/* ================= JOBS: the scheduled jobs, one switch each (job-meter). Off until the owner turns one on ================= */
+async function scheduleView(){
+  const m = $('#main');
+  m.innerHTML = `<div class="ph"><h1>Settings</h1></div>${setTabs('schedule')}<div class="skel">Loading…</div>`;
+  let d; try { d = await J('/api/desk/schedule'); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
+  if (S.view !== 'schedule') return;
+  const on = d.jobs.filter(j => j.on).length;
+  const last = j => !j.last_status ? 'never run' : j.last_status + (j.last_at ? ' · ' + String(j.last_at).slice(5, 16).replace('T', ' ') : '');
+  m.querySelector('.skel').outerHTML = `<div class="card" style="margin-bottom:16px"><div class="nums"><div><span class="lbl">Jobs on</span><b>${int(on)} of ${int(d.jobs.length)}</b></div><div><span class="lbl">Where they run</span><b style="font-size:15px">${esc(d.where || 'not set')}</b></div><div><span class="lbl">Spent, last 30 days</span><b>${usd(d.spent_usd || 0, 2)}</b></div></div><span class="lbl">A job you turn on runs at the next scheduled run (${esc(d.at || 'nightly')}). Paid jobs stop at their cap.</span></div>
+    <div class="card" style="padding:0"><table class="t"><tr><th>Job</th><th>Model</th><th style="text-align:right">Cap a night</th><th>Last run</th><th style="text-align:right">On</th></tr>${d.jobs.map(j => `<tr><td><b>${esc(j.job)}</b><div class="lbl">${esc(j.what || '')}${j.brands && j.brands.length ? ' · ' + esc(j.brands.join(', ')) : ''}</div></td><td>${esc(j.model || 'none')}</td><td class="n">${j.cap_usd == null ? 'free' : usd(j.cap_usd, 0)}</td><td><span class="lbl">${esc(last(j))}</span></td><td class="n"><label style="display:inline-flex;gap:6px;align-items:center;cursor:pointer"><input type="checkbox" id="sched-${esc(j.job)}" data-sched="${esc(j.job)}" ${j.on ? 'checked' : ''}><span>${j.on ? 'On' : 'Off'}</span></label></td></tr>`).join('') || `<tr><td colspan="5" class="empty">${esc(d.note || 'No jobs yet')}</td></tr>`}</table></div>`;
+  m.querySelectorAll('[data-sched]').forEach(c => c.onchange = () => J('/api/desk/schedule', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({job: c.dataset.sched, on: c.checked, by: 'owner'})}).then(() => { toast(c.dataset.sched + (c.checked ? ' is on' : ' is off')); scheduleView(); }).catch(e => { c.checked = !c.checked; toast(e.message); }));
 }
 
 
