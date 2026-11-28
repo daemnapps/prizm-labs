@@ -78,6 +78,26 @@ main{padding:28px 24px 60px;max-width:1440px;margin:0 auto}
 .skel{color:var(--ink-3);padding:30px 0;text-align:center;font:12px var(--mono)}
 
 /* Today */
+.seg{display:inline-flex;margin-left:auto;border:1px solid var(--line-2,rgba(0,0,0,.2));border-radius:999px;padding:2px;background:var(--card,#fff)}
+.seg a{font:500 12px var(--body);padding:5px 12px;border-radius:999px;color:var(--ink-2);text-decoration:none}.seg a.on{background:var(--ink);color:var(--paper)}
+.cv{position:relative;height:calc(100vh - 150px);min-height:560px;border:1px solid var(--line);border-radius:16px;overflow:hidden;cursor:grab;
+  background:var(--card,#fff) radial-gradient(circle,rgba(23,21,18,.09) 1px,transparent 1.2px) 0 0/22px 22px}
+.cv.drag{cursor:grabbing}
+.cv .stage{position:absolute;left:0;top:0;width:1200px;height:860px;transform-origin:0 0}
+.cv svg.wires{position:absolute;inset:0;width:1200px;height:860px;overflow:visible;pointer-events:none}
+.nd{position:absolute;width:250px;transform:translate(-50%,-50%);background:var(--card,#fff);border:1px solid var(--line);border-top:4px solid var(--hue);border-radius:14px;
+  padding:12px 14px;display:grid;gap:6px;box-shadow:0 1px 2px rgba(23,21,18,.06),0 8px 24px -12px rgba(23,21,18,.18);cursor:pointer;text-decoration:none;color:inherit}
+.nd:hover{border-color:var(--hue)}
+.nd .h{display:flex;align-items:center;gap:8px}.nd .h b{font:600 14px var(--body)}.nd .h .k{margin-left:auto;font:600 11px var(--mono);color:var(--hue)}
+.nd .big{font:700 22px var(--display);letter-spacing:-.02em}
+.nd .ln{font-size:12.5px;color:var(--ink-2)}
+.nd .gap{font:500 11px var(--mono);color:var(--amber)}.nd .gap::before{content:"✗ "}
+.nd .ok{font:500 11px var(--mono);color:var(--green)}.nd .ok::before{content:"✓ "}
+.hub{position:absolute;width:300px;transform:translate(-50%,-50%);text-align:center;display:grid;gap:4px;justify-items:center}
+.hub .mer{font:800 56px var(--display);letter-spacing:-.04em;line-height:1}
+.hub .ring{width:250px;height:250px;border-radius:50%;display:grid;place-items:center;align-content:center;gap:4px;background:var(--paper);border:1px solid var(--line)}
+.cvctl{position:absolute;right:12px;bottom:12px;display:flex;gap:6px}
+.cvctl button{width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:var(--card,#fff);font:600 16px var(--body);cursor:pointer}
 .loop{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:16px}
 .loop .chart svg{width:100%;height:170px;display:block}
 .loop .key{display:flex;gap:14px;flex-wrap:wrap;font:500 11.5px var(--mono);color:var(--ink-3)}
@@ -440,14 +460,14 @@ function route(){
   const h = decodeURIComponent(location.hash.slice(1) || 'today');
   const i = h.indexOf('/'); const v = i < 0 ? h : h.slice(0, i);
   const alias = {brands:'settings'};
-  S.view = alias[v] || (['portfolio', 'today', 'production', 'ads', 'swipes', 'swipe', 'approve', 'research', 'skills', 'settings', 'knowledge', 'asks', 'live', 'brief', 'pages', 'creators', 'market', 'usage', 'join'].includes(v) ? v : 'today');
+  S.view = alias[v] || (['portfolio', 'today', 'production', 'ads', 'swipes', 'swipe', 'approve', 'research', 'skills', 'settings', 'knowledge', 'asks', 'live', 'brief', 'pages', 'creators', 'market', 'usage', 'join', 'loop'].includes(v) ? v : 'today');
   S.arg = i < 0 ? null : h.slice(i + 1);
   if (S.view === 'ads' && (!S.arg || S.arg === 'kill')) S.view = 'live';
-  const TAB = {ads:'production', swipes:'production', swipe:'production', live:'ads-top', approve:'ads-top', brief:'ads-top', pages:'ads-top', skills:'settings', usage:'settings', market:'research'};
+  const TAB = {ads:'production', swipes:'production', swipe:'production', live:'ads-top', approve:'ads-top', brief:'ads-top', pages:'ads-top', skills:'settings', usage:'settings', market:'research', loop:'today'};
   const tab = TAB[S.view] || S.view;
   document.querySelectorAll('[data-v]').forEach(a => a.classList.toggle('on', a.dataset.v === tab));
   $('#brand').value = S.view === 'portfolio' ? '*' : S.brand;
-  ({portfolio, today, production, ads:() => production('video'), swipes:() => production('swipes'), swipe:swipeView, approve, research, skills:skillsView, settings:brandSetup, knowledge:knowledgeView, asks:asksView, live:adsLive, brief:briefView, pages:pagesView, creators:creatorsView, market:marketView, usage:usageView, join:joinView})[S.view]();
+  ({portfolio, today, production, ads:() => production('video'), swipes:() => production('swipes'), swipe:swipeView, approve, research, skills:skillsView, settings:brandSetup, knowledge:knowledgeView, asks:asksView, live:adsLive, brief:briefView, pages:pagesView, creators:creatorsView, market:marketView, usage:usageView, join:joinView, loop:loopView})[S.view]();
   approveBadge();
 }
 const brandMenu = () => ((S.menu && S.menu.brands) || []).find(b => b.id === S.brand);
@@ -509,9 +529,72 @@ function loopHtml(L){
       <div class="key"><span style="--hue:var(--green)"><i></i>Sales</span><span style="--hue:var(--indigo)"><i></i>Spend</span><span style="--hue:var(--cyan)"><i></i>Margin</span><span style="--hue:var(--violet)"><i></i>MER</span><span style="--hue:var(--coral)"><i></i>Line ${t.mer || ''}</span></div></div>${prop}</div>
     <div class="grid2" style="margin-bottom:16px">${stage}${promos}</div>`;
 }
+/* ================= LOOP CANVAS: the six steps of the business loop, live, on one board ================= */
+async function loopView(){
+  const m = $('#main');
+  const head = `<div class="ph"><h1>The loop</h1><span class="sub">${esc(blabel(S.brand))} · each step, live</span><span class="seg"><a class="on" href="#loop">Canvas</a><a href="#today">Cards</a></span></div>`;
+  if (!m.querySelector('.cv')) m.innerHTML = head + '<div class="skel">Reading the numbers…</div>';
+  let d; try { d = await J('/api/desk/today?brand=' + encodeURIComponent(S.brand)); } catch (e) { m.innerHTML = head + `<div class="note stop">${esc(e.message)}</div>`; return; }
+  if (S.view !== 'loop') return;
+  const L = d.loop || {}, t = L.targets || {}, p = L.proposal, st = L.stages || {};
+  const tot = ['top', 'middle', 'bottom'].reduce((a, k) => a + ((st[k] || {}).spend || 0), 0) || 1;
+  const thin = ['top', 'middle', 'bottom'].sort((a, b) => ((st[a] || {}).spend || 0) - ((st[b] || {}).spend || 0))[0];
+  const nx = (d.research || {}).next || {}, pr = L.promos || [], win = d.winners || [];
+  const ok = x => `<span class="ok">${esc(x)}</span>`, gap = x => `<span class="gap">${esc(x)}</span>`;
+  const above = p ? p.dir === 'raise' : null;
+  const N = [
+    {hue:'indigo', ic:'target', go:'#today', name:'Buy to the line',
+      big: p ? `${usd(p.now)} → ${usd(p.to)}` : (t.mer ? 'Not enough days' : 'No line set'),
+      lines: [p ? `MER 7d ${p.mer7} vs ${p.line} · ${above ? 'raise' : 'lower'}` : 'Set the MER line on Today'], marks: [ok('daily money'), gap('go guards: proposal only')]},
+    {hue:'green', ic:'loop', go:'#ads', name:'Which ad drives it',
+      big: `${(d.vary || []).length} to vary · ${(d.off || []).length} off`,
+      lines: [`${int(d.low_roas)} on the kill list (under 0.5 ROAS)`], marks: [ok('desk calls'), gap('variations start on a click')]},
+    {hue:'violet', ic:'layers', go:'#today', name:'Funnel by frequency',
+      big: `${Math.round(((st[thin] || {}).spend || 0) / tot * 100)}% ${thin}`,
+      lines: ['top ' + usd((st.top || {}).spend || 0) + ' · mid ' + usd((st.middle || {}).spend || 0) + ' · bottom ' + usd((st.bottom || {}).spend || 0)],
+      marks: [(t.set || []).includes('bands') ? ok('your bands') : gap('draft bands'), gap('briefs for the thin stage')]},
+    {hue:'amber', ic:'calendar', go:'#today', name:'Calendar drives promos',
+      big: pr[0] ? `${dayLabel(pr[0].date)} · ${nice(pr[0].occasion || '')}` : 'Nothing ahead',
+      lines: [pr.length ? pr.length + ' promo windows ahead' : 'No calendar for this brand'], marks: [ok('marketing calendar'), gap('promo briefs on their own')]},
+    {hue:'cyan', ic:'search', go:'#research', name:'Research + swipes',
+      big: `${(nx.angles || []).length} ${(nx.angles || []).length === 1 ? 'angle' : 'angles'} to make`,
+      lines: ['My Feeds, swipes, market radar'], marks: [ok('research rounds'), gap('own budget + schedule')]},
+    {hue:'coral', ic:'film', go:'#production', name:'Baseline: old winners',
+      big: `${win.length} winners`,
+      lines: [`${win.filter(w => !w.varied).length} not re-made yet`], marks: [ok('Sauce on every script'), gap('weekly run per brand')]},
+  ];
+  const W = 1200, H = 860, cx = W / 2, cy = H / 2, rx = 440, ry = 300;
+  const pos = N.map((_, i) => { const a = -Math.PI / 2 + i * 2 * Math.PI / N.length; return [cx + rx * Math.cos(a), cy + ry * Math.sin(a)]; });
+  const wires = pos.map((a, i) => { const b = pos[(i + 1) % pos.length];
+    const mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2, k = 0.22, qx = mx + (mx - cx) * k, qy = my + (my - cy) * k;
+    return `<path d="M${a[0]} ${a[1]} Q${qx} ${qy} ${b[0]} ${b[1]}" fill="none" stroke="var(--${N[i].hue})" stroke-width="2.5" stroke-dasharray="7 6" marker-end="url(#ah${i})" opacity=".75"/>
+      <marker id="ah${i}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--${N[i].hue})"/></marker>`; }).join('');
+  const nodes = N.map((n, i) => `<a class="nd" href="${n.go}" style="left:${pos[i][0]}px;top:${pos[i][1]}px;--hue:var(--${n.hue})">
+      <div class="h">${ib(n.ic, n.hue)}<b>${esc(n.name)}</b><span class="k">${i + 1}</span></div>
+      <span class="big">${esc(n.big)}</span>${n.lines.map(l => `<span class="ln">${esc(l)}</span>`).join('')}${n.marks.join('')}</a>`).join('');
+  const mer = L.mer7;
+  const hub = `<div class="hub" style="left:${cx}px;top:${cy}px"><div class="ring">
+      <span class="lbl">MER 7 days</span><span class="mer" style="color:var(--${mer == null ? 'ink-3' : t.mer && mer >= t.mer ? 'green' : 'coral'})">${mer ?? '—'}</span>
+      <span class="lbl">line ${t.mer ?? 'not set'}</span><b>${p ? usd(p.profit7) + ' profit 7d' : ''}</b></div></div>`;
+  m.innerHTML = head + `<div class="cv" id="cv"><div class="stage" id="stg"><svg class="wires" viewBox="0 0 ${W} ${H}">${wires}</svg>${hub}${nodes}</div>
+    <div class="cvctl"><button data-z="-1" title="Zoom out">−</button><button data-z="0" title="Fit">⤢</button><button data-z="1" title="Zoom in">+</button></div></div>`;
+  paintIcons(m);
+  const cv = $('#cv'), stg = $('#stg');
+  let z = 1, x = 0, y = 0;
+  const fit = () => { const r = cv.getBoundingClientRect(); z = Math.min(r.width / W, r.height / H) * 0.98; x = (r.width - W * z) / 2; y = (r.height - H * z) / 2; draw(); };
+  const draw = () => stg.style.transform = `translate(${x}px,${y}px) scale(${z})`;
+  fit();
+  cv.onwheel = e => { e.preventDefault(); const r = cv.getBoundingClientRect(), px = e.clientX - r.left, py = e.clientY - r.top, nz = Math.min(2.5, Math.max(0.3, z * (e.deltaY < 0 ? 1.1 : 0.9))); x = px - (px - x) * nz / z; y = py - (py - y) * nz / z; z = nz; draw(); };
+  let dr = null, moved = false;
+  cv.onpointerdown = e => { if (e.target.closest('.cvctl')) return; dr = [e.clientX - x, e.clientY - y]; moved = false; };
+  window.onpointermove = e => { if (!dr) return; if (!moved && Math.hypot(e.clientX - dr[0] - x, e.clientY - dr[1] - y) < 4) return; moved = true; cv.classList.add('drag'); x = e.clientX - dr[0]; y = e.clientY - dr[1]; draw(); };
+  window.onpointerup = () => { dr = null; cv.classList.remove('drag'); };
+  cv.addEventListener('click', e => { if (moved) { e.preventDefault(); moved = false; } }, true);
+  cv.querySelectorAll('[data-z]').forEach(b => b.onclick = () => { const k = +b.dataset.z; if (!k) return fit(); const r = cv.getBoundingClientRect(), px = r.width / 2, py = r.height / 2, nz = Math.min(2.5, Math.max(0.3, z * (k > 0 ? 1.2 : 1 / 1.2))); x = px - (px - x) * nz / z; y = py - (py - y) * nz / z; z = nz; draw(); });
+}
 async function today(){
   const m = $('#main');
-  const head = `<div class="ph"><h1>Today</h1><span class="sub">${new Date().toLocaleDateString('en-GB', {weekday:'long', day:'numeric', month:'long'})}</span>`;
+  const head = `<div class="ph"><h1>Today</h1><span class="sub">${new Date().toLocaleDateString('en-GB', {weekday:'long', day:'numeric', month:'long'})}</span><span class="seg"><a href="#loop">Canvas</a><a class="on" href="#today">Cards</a></span>`;
   if (!m.querySelector('.money')) m.innerHTML = head + `</div><div class="skel">Reading the numbers…</div>`;
   let d; try { d = await J('/api/desk/today?brand=' + encodeURIComponent(S.brand)); } catch (e) { m.innerHTML = head + `</div><div class="note stop">${esc(e.message)}</div>`; return; }
   if (S.view !== 'today') return;
