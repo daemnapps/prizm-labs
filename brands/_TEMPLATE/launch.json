@@ -124,15 +124,39 @@
      "id": "position",
      "name": "Position, from the research",
      "status": "ready",
-     "tool": "position.md template + components/marketing-doctrine/lint_position.py",
-     "fills": "position.md"
+     "tool": "position.md template + components/marketing-doctrine/lint_position.py; skills-library brand-from-zero stage 2 (brand-positioning)",
+     "fills": "position.md",
+     "owner_click": "picks a positioning territory"
     },
     {
-     "id": "story",
-     "name": "Story and tellers, from the research",
+     "id": "name",
+     "name": "Brand name, with domain and trademark check",
      "status": "ready",
-     "tool": "story.md template",
-     "fills": "story.md"
+     "tool": "skills-library brand-from-zero stage 3 (brand-ideation)",
+     "fills": "operations/brand.json",
+     "owner_click": "picks the name"
+    },
+    {
+     "id": "message",
+     "name": "Message and voice",
+     "status": "ready",
+     "tool": "skills-library brand-from-zero stage 4 (brand-messaging, brand-voice)",
+     "fills": "story.md, strategy/core-message.json"
+    },
+    {
+     "id": "identity",
+     "name": "Visual identity: logo, palette, type",
+     "status": "ready",
+     "tool": "skills-library brand-from-zero stage 5; Higgsfield brand-asset-creation",
+     "fills": "identity/",
+     "owner_click": "picks a direction"
+    },
+    {
+     "id": "design-system",
+     "name": "Design system: tokens, components, style guide",
+     "status": "ready",
+     "tool": "skills-library brand-from-zero stage 6; design-system skill (catalog); Design System artifact",
+     "fills": "identity/"
     },
     {
      "id": "angles",
@@ -140,18 +164,6 @@
      "status": "ready",
      "tool": "skill creative-strategist",
      "fills": "strategy/angles.json"
-    },
-    {
-     "id": "name",
-     "name": "Brand name",
-     "status": "gap",
-     "tool": "none in this repo (the naming skill names ad deliveries)"
-    },
-    {
-     "id": "design-system",
-     "name": "Design system: logo, colours, fonts, components",
-     "status": "gap",
-     "tool": "none in this repo"
     }
    ]
   },
@@ -163,21 +175,30 @@
      "id": "offer",
      "name": "The offer sheet, inside the owner's margin envelope",
      "status": "ready",
-     "tool": "components/offer-workspaces/offer/scripts/offer.py",
+     "tool": "components/offer-workspaces/offer/scripts/offer.py; skills-library pricing, offers",
      "fills": "offers/<offer-id>/",
      "owner_click": "sets the margin envelope"
     },
     {
      "id": "supplier",
-     "name": "Finding and choosing a supplier",
-     "status": "gap",
-     "tool": "none in this repo"
+     "name": "Find and compare suppliers",
+     "status": "ready",
+     "tool": "Apify (scraping, per the tool map) for supplier listings; vendor-evaluation skill (catalog) to compare",
+     "fills": "products/<product>/suppliers.md",
+     "owner_click": "any message to a supplier"
+    },
+    {
+     "id": "packaging",
+     "name": "Label and packaging mockups",
+     "status": "ready",
+     "tool": "skills-library brand-from-zero stage 7 (Higgsfield product renders, canvas-design)",
+     "fills": "products/<product>/label/"
     },
     {
      "id": "store",
      "name": "Store on Next Commerce (29 Next), one shot",
      "status": "ready",
-     "tool": "skills next-theme-design, next-theme-dev, next-campaigns-setup (installed on this Mac from Next Commerce; not in this repo yet)",
+     "tool": "skills next-theme-design, next-theme-dev, next-campaigns-setup (installed on this Mac, not in the Prizm repo)",
      "owner_click": "the store account and its keys"
     }
    ]
@@ -211,6 +232,18 @@
      "tool": "skill teardown-page; components page-teardown, page-writing, page-production, product-page"
     },
     {
+     "id": "copy",
+     "name": "Copy: teardown \u2192 writing",
+     "status": "ready",
+     "tool": "skills teardown-copy, copywriter"
+    },
+    {
+     "id": "email",
+     "name": "Email: teardown \u2192 production",
+     "status": "ready",
+     "tool": "skills teardown-email, email-production, email-design"
+    },
+    {
      "id": "keys",
      "name": "Keys and accounts",
      "status": "ready",
@@ -225,5 +258,6 @@
     }
    ]
   }
- ]
+ ],
+ "_sources": "Prizm skills and components; Prizm skills-library (recipes/brand-from-zero.md, recipes/tool-map.md, catalog.json via tools/find.py); Next Commerce skills installed on this Mac; the team workspace's established skills, read and run in place, never written to."
 }
