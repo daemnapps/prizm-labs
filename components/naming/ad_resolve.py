@@ -4,7 +4,9 @@
 An ad's name is the join key between spend and the work behind it (CONVENTION.md). Most live ads carry the short
 form `brand_product_brief_batch_funnel` and read straight off the name. Three kinds do not, and each is tied here:
 
-  extra field   `…_brief-0318_batch-…_funnel_p-awnm`   the short form with a field after the funnel; read as usual
+  extra field   `…_brief-0318_batch-…_funnel_p-<tag>`  the short form with a field after the funnel (a Facebook
+                                                         Page's tag, added 21-28 Nov 2026); read as usual. The Page
+                                                         an ad runs from is meta-upload/page_index.py's job
   creator ad    `<Creator>_<product>_<date>_trybe=<id>`  the creator-program id; tied to its creator through the
                                                          newest creator-program read, else the name's first part
   legacy name   `IG Story Images - <page> - Copy`        made before the register; tied through the brand's small

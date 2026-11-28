@@ -340,7 +340,8 @@ def move_card(folder, campaign, by, m=None, log=print):
         for x in made:
             f.write(json.dumps({"ad_name": card["ad_name"], "meta_ad_name": x["meta_ad_name"], "ad_id": x["ad_id"],
                                 "brand": card["brand"], "lane": card.get("lane"), "at": at,
-                                "campaign": campaign, "copied_from": x["copied_from"]}) + "\n")
+                                "campaign": campaign, "copied_from": x["copied_from"],
+                                "fb_page": x.get("fb_page"), "fb_page_name": x.get("fb_page_name")}) + "\n")
     return card
 
 
@@ -646,15 +647,17 @@ def go(folder, p, approval, m=None, state_f=None, log=print, runs_root=None):
             keep("ad_sets", k, sid)
 
     for i, ad in enumerate(p["ads"], 1):
-        if ad["meta_ad_name"] in st["ads"]:
+        if ad_key(ad) in st["ads"]:
             continue
         sid = st["ad_sets"][f"{ad['campaign']}|{ad['ad_set']}"]
         # the ads list is read only when the last run stopped half way through THIS ad (its media went
         # up, no ad id came back) — the one case where the ad may exist without its id on file
-        if resumed and any(f in st["media"] for f in ad["media"]):
+        twins = [a for a in p["ads"] if a["meta_ad_name"] == ad["meta_ad_name"] and a["ad_set"] == ad["ad_set"]
+                 and a["campaign"] == ad["campaign"]]
+        if resumed and len(twins) == 1 and any(f in st["media"] for f in ad["media"]):   # by name only when one Page
             have = find("ads", ad["meta_ad_name"], sid)
             if have:
-                st["ads"][ad["meta_ad_name"]] = have
+                st["ads"][ad_key(ad)] = have
                 save()
                 continue
         # send every file first, then wait for all the videos at once (one status read for all), thumbnails after
@@ -676,9 +679,9 @@ def go(folder, p, approval, m=None, state_f=None, log=print, runs_root=None):
                 save()
         ad_body = (carousel_ad if ad.get("format") == "carousel" else flexible_ad)(ad, b, st, m)
         ad_body.update(name=ad["meta_ad_name"], adset_id=sid, status=status)
-        st["ads"][ad["meta_ad_name"]] = m.post(f"{acct}/ads", **ad_body)["id"]
+        st["ads"][ad_key(ad)] = m.post(f"{acct}/ads", **ad_body)["id"]
         save()
-        log(f"  {i}/{len(p['ads'])}  {ad['meta_ad_name']} -> {st['ads'][ad['meta_ad_name']]}")
+        log(f"  {i}/{len(p['ads'])}  {ad['meta_ad_name']}{' (' + str(ad.get('fb_page_name') or ad.get('fb_page')) + ')' if ad_key(ad) != ad['meta_ad_name'] else ''} -> {st['ads'][ad_key(ad)]}")
     if status == "ACTIVE":
         switch_on(m, p, st, log)
         save()
@@ -803,21 +806,27 @@ def card_plan(folder, card):
                "bodies": [_plain(x) for x in (w.get("primary") or [])][:MAX_TEXTS],
                "titles": [_plain(x) for x in (w.get("headlines") or [])][:MAX_TEXTS],
                "descriptions": [_plain(x) for x in (w.get("descriptions") or [])][:MAX_TEXTS], "cta": b.cta}
-        # THE PAGE PICK (owner 2026-11-21): the card runs once per picked Facebook Page (`fb_pages`, ids from the
-        # account file's `fb_pages`); a Page other than the brand's own adds `_p-<tag>` to the ad name so results read apart
+        # THE PAGE PICK (2026-11-21): the card runs once per picked Facebook Page (`fb_pages`, ids from the account
+        # file's `fb_pages`). The Page is NOT in the ad name (2026-11-28): the name says the brief, batch and funnel;
+        # which Page an ad runs from is recorded with its ad id (card meta, live.jsonl) and read by page_index.py.
+        # Inside one upload each Page's ad is told apart by its key (name@page), never by renaming the ad.
         known = {str(x["id"]): x for x in b.fb_pages}
         for fp in [str(x) for x in (card.get("fb_pages") or [])] or [str(b.page_id)]:
             r2, why2 = dict(row), list(ad_why)
             if fp not in known:
                 why2.append(f"Facebook Page {fp} is not on the brand's account file (fb_pages)")
-            elif fp != str(b.page_id):
-                r2["meta_ad_name"] = f"{meta_name}_p-{known[fp].get('tag') or fp[-4:]}"
+            r2["key"] = meta_name if fp == str(b.page_id) else f"{meta_name}@{fp}"
             r2["fb_page"] = fp
             r2["fb_page_name"] = (known.get(fp) or {}).get("name")
             _add(out, r2, why2)
     if not card.get("pages"):
         out["held"].append({"meta_ad_name": card.get("ad_name"), "why": ["no landing page on the card"]})
     return out
+
+
+def ad_key(a):
+    """One ad inside an upload: its name, plus @<Page id> when it runs from a Page other than the brand's own."""
+    return a.get("key") or a["meta_ad_name"]
 
 
 def _plain(t):
@@ -864,7 +873,8 @@ def upload_card(folder, m=None, log=print):
         C.save(folder, card)
         raise
     at = datetime.now().isoformat(timespec="seconds")
-    card["meta"] = [{"link_id": a["link_id"], "meta_ad_name": a["meta_ad_name"], "ad_id": st["ads"][a["meta_ad_name"]],
+    card["meta"] = [{"link_id": a["link_id"], "meta_ad_name": a["meta_ad_name"], "ad_id": st["ads"][ad_key(a)],
+                     "fb_page": a.get("fb_page"), "fb_page_name": a.get("fb_page_name"),
                      "campaign": a["campaign"], "campaign_id": st["campaigns"].get(a["campaign"]),
                      "ad_set": a["ad_set"], "ad_set_id": st["ad_sets"].get(f"{a['campaign']}|{a['ad_set']}"),
                      "status": "ACTIVE" if ap.get("start") == "ACTIVE" else "PAUSED",
@@ -879,7 +889,8 @@ def upload_card(folder, m=None, log=print):
     with (LIVE or _C.root() / "live.jsonl").open("a") as f:
         for r in card["meta"]:
             f.write(json.dumps({"ad_name": card["ad_name"], "meta_ad_name": r["meta_ad_name"], "ad_id": r["ad_id"],
-                                "brand": card["brand"], "lane": card.get("lane"), "at": at}) + "\n")
+                                "brand": card["brand"], "lane": card.get("lane"), "at": at,
+                                "fb_page": r.get("fb_page"), "fb_page_name": r.get("fb_page_name")}) + "\n")
     pace.card_done(card["brand"], card["ad_name"])
     new = C.move(folder, "3-live")
     return new, card
@@ -901,7 +912,7 @@ def write_back(folder, p, st, runs_root=None):
     records each as live_meta_<id> in the hand-off ledger."""
     folder = Path(folder).resolve()
     rows = [{"ad_name": a["meta_ad_name"], "unit": a["unit"], "old_name": a["old_name"],
-             "channel": "meta", "platform_id": st["ads"].get(a["meta_ad_name"])} for a in p["ads"]]
+             "channel": "meta", "platform_id": st["ads"].get(ad_key(a))} for a in p["ads"]]
     text = json.dumps(rows, indent=1) + "\n"
     (folder / "returned" / "live-ids.json").write_text(text)
     home = upload_home(p["brand"], p.get("handoff") or folder.name, runs_root)

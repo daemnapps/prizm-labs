@@ -1434,6 +1434,9 @@ async function adsLive(){
   if (S.view !== 'live') return;
   if (!d.ads.length) { m.querySelector('.skel').outerHTML = '<div class="card note">No live ad numbers on file for this brand yet.</div>'; return; }
   $('#adsub').textContent = `${d.ads.length} ads spent in 30 days · to ${dayLabel((d.money || {}).through)}${d.calls_asof ? ' · calls ' + dayLabel(d.calls_asof) : ''}`;
+  if ((d.pages || []).length > 1) { const pe = document.createElement('div'); pe.className = 'lbl'; pe.style.margin = '0 0 10px';
+    pe.innerHTML = 'Spend by Facebook Page, 30 days: ' + d.pages.map(p => `<b>${esc(p.fb_page_name || p.fb_page || 'unknown')}</b> $${Math.round(p.spend30).toLocaleString('en-US')} · ${Math.round(p.buys30)} buys · ${p.ads} ads`).join(' &nbsp;|&nbsp; ');
+    const lp = $('#adloop'); if (lp) lp.before(pe); }
   const prods = S.prods || (S.prods = (await J('/api/productions').catch(() => ({productions: []}))).productions);
   const prodOf = n => prods.find(x => (x.key || '').endsWith('brief-' + n));
   const camp = c => String(c || 'no campaign').replace(/^campaign_[^_]+_/, '').replace(/_/g, ' ');

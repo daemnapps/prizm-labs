@@ -1,5 +1,5 @@
 diff --git a/components/naming/names.py b/components/naming/names.py
-index fbd232d5..999b26ef 100644
+index fbd232d5..5949db9a 100644
 --- a/components/naming/names.py
 +++ b/components/naming/names.py
 @@ -514,7 +514,7 @@ def _form(stem):
@@ -22,15 +22,16 @@ index fbd232d5..999b26ef 100644
      if len(parts) not in (13, 14) or not all(ok.match(p) for p in parts):
          return None
      d = dict(zip(FIELDS, parts))
-@@ -593,11 +593,16 @@ def short_meta(unit, funnel):
+@@ -593,11 +593,17 @@ def short_meta(unit, funnel):
  
  
  def parse_short(s):
 -    """brand_product_brief_batch[_asset-NN | _funnel] -> dict, or None."""
 +    """brand_product_brief_batch[_asset-NN | _funnel[_extra...]] -> dict, or None.
 +
-+    A Meta ad name sometimes carries extra fields after the funnel (`…_icon-flex-simple_p-awnm`, a page tag added
-+    at launch). They are tolerated and kept in `extra`; the brief, batch and funnel read as usual."""
++    Some live Meta ad names carry extra fields after the funnel (`…_icon-flex-simple_p-<tag>`: the uploader added the
++    Facebook Page's tag from 21 to 28 Nov 2026; the Page is no longer put in the name). They are tolerated and kept
++    in `extra`; the brief, batch and funnel read as usual. Which Page an ad runs from: meta-upload/page_index.py."""
      stem = Path(str(s)).stem if "." in str(s) else str(s)
      parts = stem.split(SEP)
 -    if len(parts) not in (4, 5) or not all(SLUG.match(p) for p in parts):
@@ -41,7 +42,7 @@ index fbd232d5..999b26ef 100644
      brand, product, brief, batch = parts[:4]
      # a brand's own code in the brief slot (`brief-prizm-0001`, an ad made before the register) reads as the
      # brief it was filed under (brief-aliases.json `brand_aliases`); the name itself is never rewritten
-@@ -608,7 +613,9 @@ def parse_short(s):
+@@ -608,7 +614,9 @@ def parse_short(s):
           "batch": batch, "asset": None, "funnel": None,
           "ad_name": SEP.join(parts[:4]), "brief_id": ba[1] if ba else brief, "batch_id": batch,
           **({"brief_as_named": brief} if ba else {})}

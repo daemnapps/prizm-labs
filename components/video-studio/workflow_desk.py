@@ -645,6 +645,18 @@ def ad_ties(brand, ad_names):
     return out
 
 
+def ad_pages(brand, ads):
+    """Which Facebook Page each ad runs from, and spend per Page (components/meta-upload/page_index.py: the upload
+    record, else an older name's Page tag, else the brand's own Page). The Page is never read off the brief."""
+    try:
+        spec = importlib.util.spec_from_file_location("page_index", str(WS / "components/meta-upload/page_index.py"))
+        PI = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(PI)
+        return PI.index(brand, ads), PI.spend(brand, ads)
+    except Exception:                                   # noqa: BLE001  no page index here: no Page column
+        return {}, []
+
+
 def creator_key(name):
     """A creator ad's creator, from its name (the part before the first `_`, e.g. `Sofiaand Stefan_FLEX…_trybe=…`)."""
     return re.sub(r"([a-z])([A-Z])", r"\1 \2", re.split(r"_|\s+-\s+", name or "")[0]).strip()
@@ -764,6 +776,7 @@ def live_ads(brand):
     r = _read(rf) if rf else None
     calls = {str(f.get("id")): f for f in (r.get("flags") or [])} if isinstance(r, dict) else {}
     tie = ad_ties(brand, [a.get("ad_name") for a in (w.get("ads") or [])] if isinstance(w, dict) else [])
+    pages, by_page = ad_pages(brand, (w.get("ads") or []) if isinstance(w, dict) else [])
     num = lambda v: float(v) if v not in (None, "") else 0.0
     rows = []
     for a in (w.get("ads") or []) if isinstance(w, dict) else []:
@@ -773,6 +786,7 @@ def live_ads(brand):
         s3 = num(a.get("spend3"))
         rows.append({"id": a.get("ad_id"), "name": a.get("ad_name"), "brief": t.get("brief"),
                      "creator": t.get("creator"), "legacy": t.get("legacy"), "tied_by": t.get("via"),
+                     "fb_page": (pages.get(str(a.get("ad_id"))) or {}).get("fb_page_name"),
                      "campaign": a.get("campaign"), "spend3": s3, "active": s3 > 0, "spend7": s7, "buys7": b7, "cpa7": round(s7 / b7, 2) if b7 else None,
                      "spend30": s30, "buys30": b30, "value30": num(a.get("value30")), "value7": num(a.get("value7")),
                      "roas7": round(num(a.get("value7")) / s7, 2) if s7 else None,
@@ -801,7 +815,7 @@ def live_ads(brand):
         if b.get("number"):
             briefs[str(b["number"])] = {"angle": (b.get("angle") or "").replace("-", " "), "lanes": b.get("lanes") or [],
                                         "avatar": b.get("avatar"), "product": b.get("product")}
-    return {"ads": rows, "winrule": winrule, "money": money, "briefs": briefs, "calls_asof": r.get("asof") if isinstance(r, dict) else None,
+    return {"ads": rows, "pages": by_page, "winrule": winrule, "money": money, "briefs": briefs, "calls_asof": r.get("asof") if isinstance(r, dict) else None,
             "rule": ((r or {}).get("rule") or {}).get("_what") if isinstance(r, dict) and isinstance(r.get("rule"), dict) else None,
             "from": str(Path(wf).relative_to(WS)) if wf else None}
 

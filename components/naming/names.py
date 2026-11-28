@@ -595,8 +595,9 @@ def short_meta(unit, funnel):
 def parse_short(s):
     """brand_product_brief_batch[_asset-NN | _funnel[_extra...]] -> dict, or None.
 
-    A Meta ad name sometimes carries extra fields after the funnel (`…_icon-flex-simple_p-awnm`, a page tag added
-    at launch). They are tolerated and kept in `extra`; the brief, batch and funnel read as usual."""
+    Some live Meta ad names carry extra fields after the funnel (`…_icon-flex-simple_p-<tag>`: the uploader added the
+    Facebook Page's tag from 21 to 28 Nov 2026; the Page is no longer put in the name). They are tolerated and kept
+    in `extra`; the brief, batch and funnel read as usual. Which Page an ad runs from: meta-upload/page_index.py."""
     stem = Path(str(s)).stem if "." in str(s) else str(s)
     parts = stem.split(SEP)
     if len(parts) < 4 or not all(SLUG.match(p) for p in parts):
