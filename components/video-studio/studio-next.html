@@ -529,7 +529,7 @@ function loopHtml(L){
   const prop = !t.mer ? `<div class="card prop down"><h3>${ib('target', 'amber')}No MER line yet</h3><span>Set this brand's line and the Studio proposes spend each morning.</span>${linesForm(L)}</div>`
     : !p ? `<div class="card prop"><h3>${ib('target', 'indigo')}MER line ${t.mer}</h3><div class="empty">Not enough days to judge</div>${linesForm(L)}</div>`
     : `<div class="card prop ${p.dir === 'raise' ? 'up' : p.dir === 'hold' ? '' : 'down'}"><h3>${ib('target', p.dir === 'raise' ? 'green' : p.dir === 'hold' ? 'indigo' : 'amber')}${p.dir === 'raise' ? 'Raise spend' : p.dir === 'hold' ? 'Hold spend' : 'Lower spend'}</h3>
-      <span class="big">${p.dir === 'hold' ? usd(p.now) : usd(p.now) + ' → ' + usd(p.to)}<span class="lbl"> a day</span></span>
+      <span class="big">${p.dir === 'hold' ? usd(p.now) : usd(p.now) + ' → ' + usd(p.to)}<span class="lbl"> a day · ${esc(p.base || '')}</span></span>
       <span>MER <b>${p.mer}</b> (${esc(p.read.from)}${p.read.as_of ? ', ' + esc(p.read.as_of) : ''}${p.read.age_min != null ? `, <b style="color:var(--${p.read.age_min > 90 ? 'coral' : 'ink-3'})">read ${p.read.age_min < 60 ? p.read.age_min + ' min' : Math.round(p.read.age_min / 60) + ' h'} ago</b>` : ''}) · floor <b>${p.line}</b> · hold to <b>${p.hold_to}</b></span>
       <span>Sales ${usd(p.read.sales)} on ${usd(p.read.spend)} spend · profit 7d <b>${usd(p.profit7)}</b></span>
       <span class="lbl">under ${p.line}: −${Math.round((t.down || .1) * 100)}% · ${p.line}–${p.hold_to}: hold · over ${p.hold_to}: +${Math.round((t.up || .15) * 100)}% · ceiling ${p.ceiling ? usd(p.ceiling) : 'not set'}</span>

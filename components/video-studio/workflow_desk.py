@@ -1354,13 +1354,16 @@ def loop(brand):
         last = hd["rows"][-1]
         read = {"from": "today, hour by hour", "day": Path(hf).stem, "as_of": last.get("as_of"),
                 "age_min": round((time.time() - os.path.getmtime(hf)) / 60),
-                "mer": last.get("mer_to_date"), "sales": last.get("sales_to_date"), "spend": last.get("spend_to_date")}
+                "mer": last.get("mer_to_date"), "sales": last.get("sales_to_date"), "spend": last.get("spend_to_date"),
+                "budget": hd.get("budget"), "budget_as_of": hd.get("budget_as_of"), "budgets": hd.get("budgets") or []}
     elif line:
         d = line[-1]
         read = {"from": "last whole day (warehouse)", "day": d["d"], "mer": d["mer"], "sales": d["revenue"], "spend": d["spend"]}
     prop = None
-    if t["mer"] and read and read.get("mer") is not None and w7:
-        per = s7 / len(w7)
+    if t["mer"] and read and read.get("mer") is not None and (w7 or read.get("budget")):
+        # pace from the live main budget the hourly file carries (bid-cap ceilings left out); the 7-day average
+        # spend a day only stands in when the file has none
+        per = float(read["budget"]) if read.get("budget") else s7 / len(w7)
         m = float(read["mer"])
         if m < t["mer"]:
             dir_, step = "lower", -t["down"]
@@ -1371,7 +1374,7 @@ def loop(brand):
         to = per * (1 + step)
         if dir_ == "raise" and t["ceiling"]:
             to = min(to, float(t["ceiling"]))
-        prop = {"dir": dir_, "mer": m, "read": read, "mer7": mer7, "line": t["mer"], "hold_to": t["hold_to"],
+        prop = {"dir": dir_, "base": "main budget" if read.get("budget") else "7-day average spend a day", "mer": m, "read": read, "mer7": mer7, "line": t["mer"], "hold_to": t["hold_to"],
                 "now": round(per), "to": round(to), "step": step, "ceiling": t["ceiling"],
                 "profit7": round(sum(d["profit"] for d in w7))}
     rf = _newest("runs/media-buying/%s/2*/report.json" % brand)
