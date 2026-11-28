@@ -117,7 +117,7 @@ no house style here to conform to.
 > ```
 > CAMPAIGN   US | FLEX™ | ICON | Fed-Up King
 > AD SET       Forty-Year Shaver | Ray | Razor Bumps | 260911
-> AD             <the 13-field ad name>
+> AD             <brand_product_brief_batch_funnel>
 > ```
 >
 > A different account, same flow, its own convention:
@@ -145,14 +145,17 @@ That date is not decoration. `Culture Integration` already holds 115 ads,
 Without a new ad set per drop, those themes are closed.
 
 **Ad — which exact picture?**
-The 13-field name, unchanged, specified in `../image-production/PIPELINE.md`.
-It carries the talent, the angle, the concept, the format and the batch, and it
-is the join back to the picture that earned the spend. The sub-avatar comes off
+The short name `brand_product_brief_batch_funnel`, specified in
+`../naming/CONVENTION.md` (`names.short_meta`). It carries the brief number and
+the batch; the talent, angle, concept and format live in the brief, looked up by
+that number. It is the join back to the work that earned the spend. Old ads
+named in the 13-part form still parse; creator-program ads and legacy names tie
+to their creator or brief through `../naming/ad_resolve.py`. The sub-avatar comes off
 the talent through the brand's own casting roster, and is
 also written straight into `utm_term` on every link.
 
 Whatever separates the campaign and ad-set fields, it is not a hyphen: the
-13-field ad name owns those.
+ad name owns those.
 
 `naming.py` owns all of this in code. `build.py` calls it; nothing types these
 names by hand.

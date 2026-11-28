@@ -161,8 +161,8 @@ def claude(text):
 
 def moves(v):
     p = v.get("piece", {})
-    return {"who": p.get("sub") if p.get("sub") not in (None, "", "none") else p.get("avatar"),
-            "awareness": p.get("awareness"), "argument": p.get("angle"), "format": p.get("format"),
+    return {"profile": p.get("sub") if p.get("sub") not in (None, "", "none") else p.get("avatar"),
+            "awareness": p.get("awareness"), "angle": p.get("angle"), "format": p.get("format"),
             "face": p.get("face") or "none", "setting": p.get("setting"), "look": p.get("style_id")}
 
 

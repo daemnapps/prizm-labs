@@ -11,11 +11,11 @@ W = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(W / "components" / "creative-diversity"))
 import creative_matrix as X  # noqa: E402
 
-V = {"awareness": ["problem-aware", "solution-aware"], "argument": ["a1", "a2"], "format": ["f1", "f2", "f3", "f4"], "face": ["none", "male/25-34/black"], "setting": ["s1", "s2", "s3"], "look": ["l1", "l2"], "_text": {"argument": "- `a1`: x\n- `a2`: y", "setting": "- `s1`: x\n- `s2`: y\n- `s3`: z"}}
+V = {"awareness": ["problem-aware", "solution-aware"], "angle": ["a1", "a2"], "format": ["f1", "f2", "f3", "f4"], "face": ["none", "male/25-34/black"], "setting": ["s1", "s2", "s3"], "look": ["l1", "l2"], "_text": {"angle": "- `a1`: x\n- `a2`: y", "setting": "- `s1`: x\n- `s2`: y\n- `s3`: z"}}
 
 
 def row(i, **k):
-    return {"id": i, "moves": dict({"who": "p", "awareness": "problem-aware", "argument": "a1", "format": "f1", "face": "none", "setting": "s1", "look": "l1"}, **k)}
+    return {"id": i, "moves": dict({"profile": "p", "awareness": "problem-aware", "angle": "a1", "format": "f1", "face": "none", "setting": "s1", "look": "l1"}, **k)}
 
 
 class Matrix(unittest.TestCase):
@@ -32,11 +32,11 @@ class Matrix(unittest.TestCase):
         self.t.cleanup()
 
     def test_three_apart_is_not_enough_when_nothing_seen_moved(self):
-        self.assertTrue(X.problems([row("a"), row("b", awareness="solution-aware", argument="a2", who="q")]))
-        self.assertFalse(X.problems([row("a"), row("b", argument="a2", format="f2", setting="s2")]))
+        self.assertTrue(X.problems([row("a"), row("b", awareness="solution-aware", angle="a2", profile="q")]))
+        self.assertFalse(X.problems([row("a"), row("b", angle="a2", format="f2", setting="s2")]))
 
     def test_one_look_never_fills_the_batch(self):
-        rows = [row("a"), row("b", format="f2", setting="s2", face="male/25-34/black"), row("c", format="f3", setting="s3", argument="a2"), row("d", format="f4", awareness="solution-aware", setting="s9", who="q")]
+        rows = [row("a"), row("b", format="f2", setting="s2", face="male/25-34/black"), row("c", format="f3", setting="s3", angle="a2"), row("d", format="f4", awareness="solution-aware", setting="s9", profile="q")]
         self.assertTrue(any("fills" in b for b in X.problems(rows)))
 
     def test_off_list_is_refused_and_outside_counts(self):
@@ -45,7 +45,7 @@ class Matrix(unittest.TestCase):
 
     def test_a_grid_that_breaks_a_rule_is_sent_back_then_passes_and_locks(self):
         asked = []
-        good = [dict(row("x")["moves"]), dict(row("y", argument="a2", format="f2", setting="s2")["moves"])]
+        good = [dict(row("x")["moves"]), dict(row("y", angle="a2", format="f2", setting="s2")["moves"])]
         answers = [[good[0], dict(good[0])], good]
 
         def ask(p):
@@ -75,7 +75,7 @@ class Matrix(unittest.TestCase):
         for b in sorted(p.name for p in (W / "brands").iterdir() if (p / "strategy" / "settings.json").is_file()):
             for k in X.KINDS:
                 v = X.values(b, k)
-                for c in ("awareness", "argument", "format", "setting", "look"):
+                for c in ("awareness", "angle", "format", "setting", "look"):
                     self.assertGreater(len(v[c]), 3 if c != "look" else 1, (b, k, c))
         for m in self.m[2:3]:
             m.start()

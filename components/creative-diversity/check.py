@@ -3,7 +3,7 @@
 
 Brief mode (before anything is made) — give its moves:
     python3 components/creative-diversity/check.py brand_b \
-        who=face-dark-marks awareness=unaware argument=grandmas-recipe \
+        profile=face-dark-marks awareness=unaware angle=grandmas-recipe \
         format=micro-drama face=female/45-54/southeast-asian setting=kitchen look=phone-ugc
 
 Batch mode (several ads being planned together): are they different from each other?
@@ -35,12 +35,15 @@ def library(brand):
     days = sorted(p.name for p in base.iterdir() if (p / "matrix.json").exists()) if base.exists() else []
     if not days:
         return None, None
-    return json.loads((base / days[-1] / "matrix.json").read_text()), days[-1]
+    mx = json.loads((base / days[-1] / "matrix.json").read_text())
+    M.norm_items(mx.get("items"))                        # a library read before 26 Nov says who / argument
+    return mx, days[-1]
 
 
 def score(brand, moves):
     """{moves} -> nearest live creative, how many moves apart, the verdict, and the gap it fills."""
     mx, day = library(brand)
+    moves = M.norm(moves)
     if not mx:
         return {"verdict": "unscored", "why": f"no library read for {brand} yet (pull · tag · matrix)"}
     best = None
@@ -55,8 +58,8 @@ def score(brand, moves):
     fills = []
     if lv and mx["spread"].get(lv) and mx["spread"][lv]["have"] < mx["spread"][lv]["target"]:
         fills.append(f"{lv} is under target ({mx['spread'][lv]['have']:.0%} vs {mx['spread'][lv]['target']:.0%})")
-    who = moves.get("who")
-    if who and not any(i["moves"].get("who") == who for i in mx["items"]):
+    who = moves.get("profile")
+    if who and not any(i["moves"].get("profile") == who for i in mx["items"]):
         fills.append(f"nothing running for {who}")
     setting = moves.get("setting")
     if setting and not any(i["moves"].get("setting") == setting for i in mx["items"]):
@@ -140,6 +143,7 @@ def record_brief(brand, brief, moves, force=False):
     row = next((b for b in reg["briefs"] if b.get("brief") == brief or brief in (b.get("aliases") or [])), None)
     if row is None:
         sys.exit(f"{brief} is not in {f.relative_to(ROOT)} — open the brief first")
+    moves = M.norm(moves)
     s = score(brand, moves)
     if s["verdict"] == "variation" and not force:
         print(json.dumps({k: v for k, v in s.items() if k != "moves"}, indent=1))
@@ -156,9 +160,9 @@ def record_brief(brand, brief, moves, force=False):
 if __name__ == "__main__":
     a = sys.argv[1:]
     if a and a[0] == "--brief":
-        # check.py --brief <brand> <brief-id> who=… awareness=… argument=… format=… face=… setting=… look=…
+        # check.py --brief <brand> <brief-id> profile=… awareness=… angle=… format=… face=… setting=… look=…
         brand, brief = a[1], a[2]
-        pairs = dict(x.split("=", 1) for x in a[3:] if "=" in x)
+        pairs = M.norm(dict(x.split("=", 1) for x in a[3:] if "=" in x))
         missing = [k for k in M.BIG if not pairs.get(k)]
         if missing:
             sys.exit(f"a brief declares all 7 moves — missing: {', '.join(missing)}")
@@ -166,12 +170,12 @@ if __name__ == "__main__":
         print(f"{brief}: {s['verdict']} — {s['moves_apart']} moves from the nearest running creative; "
               f"fills: {'; '.join(s['fills']) or 'no open gap'}")
     elif a and a[0] == "--batch":
-        # check.py --batch <brand> <file>   the file: [{"id": "...", "moves": {who, awareness, argument, format, face, setting, look}}]
-        r = batch(a[1], json.loads(Path(a[2]).read_text()))
+        # check.py --batch <brand> <file>   the file: [{"id": "...", "moves": {profile, awareness, angle, format, face, setting, look}}]
+        r = batch(a[1], M.norm_items(json.loads(Path(a[2]).read_text())))
         print(json.dumps(r, indent=1))
         sys.exit(0 if r["passes"] else 1)
     elif a and a[0] == "--card":
         print(json.dumps({k: v for k, v in (score_card(a[1]) or {}).items() if k != "tag"}, indent=1))
     else:
-        brand, pairs = a[0], dict(x.split("=", 1) for x in a[1:])
+        brand, pairs = a[0], M.norm(dict(x.split("=", 1) for x in a[1:]))
         print(json.dumps(score(brand, {k: pairs.get(k) for k in M.BIG}), indent=1))

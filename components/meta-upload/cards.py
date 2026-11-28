@@ -245,6 +245,7 @@ LABELS = {
     "new_footage": "New footage (not already live)",
     "diversity": "A new creative to Meta (3+ moves)",
     "made_by_tool": "Pictures made by the image production tool",
+    "stage_check": "Stage-check ran and passed",
     # the cover rule (cover_rule.py): a waiting video card is held until each passes
     "cover_each": "A cover for every video",
     "cover_swipe": "Each cover names the swipe it follows",
@@ -523,6 +524,16 @@ def checks(folder, card, online=True, meta=None):
             out.update(CR.checks(folder, card, lane, w["state"]))
         except Exception as e:  # noqa: BLE001 — a check that cannot run says so, red
             put("cover_each", False, f"the check could not run: {e}")
+
+    # The stage-check gate (stage_gate.py): a waiting or approved card's brief must have a stage-check run that passed
+    # every step before the card, and ran after the card was filed. Never ran, failed or stale: red, by name.
+    if w["state"] in ("1-check", "2-approved"):
+        try:
+            import stage_gate as SG
+            g = SG.check(dict(card, brand=card.get("brand") or w["brand"]))
+            put("stage_check", g["ok"], g["why"])
+        except Exception as e:  # noqa: BLE001 — a check that cannot run says so, red
+            put("stage_check", False, f"the check could not run: {e}")
 
     # Page cap — asked of Meta only at Approve (online), at most once an hour per brand (page_ads)
     if online:

@@ -159,7 +159,13 @@
    {
     "from": "components/naming",
     "to": "components/naming",
-    "replace": true
+    "replace": true,
+    "keep": [
+     "components/naming/(ad_resolve\\.py|test_ad_resolve\\.py)$"
+    ],
+    "patches": [
+     "components/chain-mirror/patches/naming-ad-resolve.patch"
+    ]
    },
    {
     "from": "components/asset-index",
@@ -206,7 +212,13 @@
    {
     "from": "components/meta-upload",
     "to": "components/meta-upload",
-    "replace": true
+    "replace": true,
+    "keep": [
+     "components/meta-upload/(stage_gate\\.py|tests/test_stage_gate\\.py)$"
+    ],
+    "patches": [
+     "components/chain-mirror/patches/meta-upload-stage-gate.patch"
+    ]
    },
    {
     "from": "platform/data/kinds",
@@ -288,7 +300,13 @@
    {
     "from": "components/creative-diversity",
     "to": "components/creative-diversity",
-    "replace": true
+    "replace": true,
+    "keep": [
+     "components/creative-diversity/tests/test_words\\.py$"
+    ],
+    "patches": [
+     "components/chain-mirror/patches/creative-diversity-words.patch"
+    ]
    },
    {
     "from": "components/creative-queue",
@@ -303,7 +321,10 @@
    {
     "from": "components/distinct-six",
     "to": "components/distinct-six",
-    "replace": true
+    "replace": true,
+    "patches": [
+     "components/chain-mirror/patches/distinct-six-words.patch"
+    ]
    },
    {
     "from": "components/editor-skills",

@@ -1,0 +1,8 @@
+{
+ "_about": "Live ads named before the register, tied to the brief or creator behind them. 'match' is the ad name before its first ' - ' (the page and '- Copy' after it are ignored). Each entry gives a brief (with its product), a creator, or 'legacy' (ads made before the register with no brief filed yet, counted together under that label). Read by components/naming/ad_resolve.py.",
+ "aliases": [
+  {"match": "<old ad name, before the first ' - '>", "brief": "brief-0000", "product": "<catalog id>"},
+  {"match": "<old creator ad name>", "creator": "<creator's name>"},
+  {"match": "<old ad group name>", "legacy": "<label to count them under>"}
+ ]
+}

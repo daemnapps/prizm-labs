@@ -25,7 +25,7 @@ Every rule in `dimensions.json` traces to a line here. **Meta's own words only**
 | **variations of the same creative** | ads that "look or feel alike" — grouped | duplicate |
 | **creative similarity** | "when ad images are visually too alike, even if technically different assets" | — |
 | **creative fatigue / creative limited** | overexposure of one image/video (see thresholds above) | burnt out |
-| **persona · use case · motivation** | who it's for and why ("emotional appeal" vs "product features") | avatar · sub-avatar · desire |
+| **persona · use case · motivation** | who it's for and why ("emotional appeal" vs "product features") | profile (the person) · desire |
 | **flexible ad · assets** | one ad, up to 10 images/videos; Meta picks the mix per person ([help](https://www.facebook.com/business/help/835561738423867)) | ad unit |
 | **hook** | "the text, visual, and audio components that grab and hold attention in the first few seconds" — value promise · statement of intent · question/invitation ([source](https://www.facebook.com/business/news/the-science-of-the-hook-how-to-supercharge-your-reels-performance)) | hook |
 | **partnership ad** | an ad run with a creator's handle | creator ad |
@@ -52,7 +52,7 @@ Every rule in `dimensions.json` traces to a line here. **Meta's own words only**
 
 ## 5. The rule this produces (in `dimensions.json`)
 
-- **Meta's dimensions → our moves:** persona/use case → who · message → angle + awareness · storyline → format/structure · look and feel → face + setting + style · format → media.
+- **Meta's dimensions → our moves:** persona/use case → profile · message → angle + awareness · storyline → format/structure · look and feel → face + setting + style · format → media.
 - **New creative = 3+ moves from the nearest live creative.** *The threshold is ours, not Meta's* — Meta publishes none. Calibrate against the tagged library.
 - **Portfolio per ad set (Meta's numbers):** an image + a video + a 9:16 video with audio; ≥20% of assets 9:16 with audio; fewer ads, each a flexible ad with up to 10 diverse assets; no image/video already shown on the Page; music or voiceover on every Reel; key messages in the safe zone; creators via partnership ads.
 - **Iteration** (hook text, caption, CTA, music swap) is allowed only *inside* a creative that already counts as new.

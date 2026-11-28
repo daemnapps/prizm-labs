@@ -1,0 +1,126 @@
+diff --git a/components/meta-upload/BULK-IMPORT.md b/components/meta-upload/BULK-IMPORT.md
+index f3bae2d8..c1793330 100644
+--- a/components/meta-upload/BULK-IMPORT.md
++++ b/components/meta-upload/BULK-IMPORT.md
+@@ -75,7 +75,7 @@ So: one CBO campaign, one ad set per sub-avatar, the ads inside each.
+ | column | holds |
+ |---|---|
+ | Ad ID | *(blank)* |
+-| Ad Name | the 13-field name + the picture, so spend joins back to the record |
++| Ad Name | the short name `brand_product_brief_batch_funnel`, so spend joins back to the brief |
+ | Ad Status | `PAUSED` |
+ | Title | **the headline** |
+ | Body | **the primary text** |
+@@ -154,7 +154,7 @@ Anything failing a check is listed with its reason, never dropped silently.
+ 
+ ## Reading spend back
+ 
+-`URL Tags` carries `utm_content=<the full 13-field ad name>` and
++`URL Tags` carries `utm_content=<the full ad name>` and
+ `utm_term=<sub-avatar>`, so the funnel's own analytics can join a session to
+ the exact picture. Meta's own report joins on `Ad Name`, which is the same
+ string. Drop the last field of either and you have the ad unit.
+diff --git a/components/meta-upload/STRUCTURE.md b/components/meta-upload/STRUCTURE.md
+index f2e2f2dd..f033f78b 100644
+--- a/components/meta-upload/STRUCTURE.md
++++ b/components/meta-upload/STRUCTURE.md
+@@ -117,7 +117,7 @@ no house style here to conform to.
+ > ```
+ > CAMPAIGN   US | FLEX™ | ICON | Fed-Up King
+ > AD SET       Forty-Year Shaver | Ray | Razor Bumps | 260911
+-> AD             <the 13-field ad name>
++> AD             <brand_product_brief_batch_funnel>
+ > ```
+ >
+ > A different account, same flow, its own convention:
+@@ -145,14 +145,17 @@ That date is not decoration. `Culture Integration` already holds 115 ads,
+ Without a new ad set per drop, those themes are closed.
+ 
+ **Ad — which exact picture?**
+-The 13-field name, unchanged, specified in `../image-production/PIPELINE.md`.
+-It carries the talent, the angle, the concept, the format and the batch, and it
+-is the join back to the picture that earned the spend. The sub-avatar comes off
++The short name `brand_product_brief_batch_funnel`, specified in
++`../naming/CONVENTION.md` (`names.short_meta`). It carries the brief number and
++the batch; the talent, angle, concept and format live in the brief, looked up by
++that number. It is the join back to the work that earned the spend. Old ads
++named in the 13-part form still parse; creator-program ads and legacy names tie
++to their creator or brief through `../naming/ad_resolve.py`. The sub-avatar comes off
+ the talent through the brand's own casting roster, and is
+ also written straight into `utm_term` on every link.
+ 
+ Whatever separates the campaign and ad-set fields, it is not a hyphen: the
+-13-field ad name owns those.
++ad name owns those.
+ 
+ `naming.py` owns all of this in code. `build.py` calls it; nothing types these
+ names by hand.
+diff --git a/components/meta-upload/cards.py b/components/meta-upload/cards.py
+index 867b37e0..44771d42 100644
+--- a/components/meta-upload/cards.py
++++ b/components/meta-upload/cards.py
+@@ -245,6 +245,7 @@ LABELS = {
+     "new_footage": "New footage (not already live)",
+     "diversity": "A new creative to Meta (3+ moves)",
+     "made_by_tool": "Pictures made by the image production tool",
++    "stage_check": "Stage-check ran and passed",
+     # the cover rule (cover_rule.py): a waiting video card is held until each passes
+     "cover_each": "A cover for every video",
+     "cover_swipe": "Each cover names the swipe it follows",
+@@ -524,6 +525,16 @@ def checks(folder, card, online=True, meta=None):
+         except Exception as e:  # noqa: BLE001 — a check that cannot run says so, red
+             put("cover_each", False, f"the check could not run: {e}")
+ 
++    # The stage-check gate (stage_gate.py): a waiting or approved card's brief must have a stage-check run that passed
++    # every step before the card, and ran after the card was filed. Never ran, failed or stale: red, by name.
++    if w["state"] in ("1-check", "2-approved"):
++        try:
++            import stage_gate as SG
++            g = SG.check(dict(card, brand=card.get("brand") or w["brand"]))
++            put("stage_check", g["ok"], g["why"])
++        except Exception as e:  # noqa: BLE001 — a check that cannot run says so, red
++            put("stage_check", False, f"the check could not run: {e}")
++
+     # Page cap — asked of Meta only at Approve (online), at most once an hour per brand (page_ads)
+     if online:
+         c = page_ads(card.get("brand") or w["brand"], meta)
+diff --git a/components/meta-upload/naming.py b/components/meta-upload/naming.py
+index 5a1b2316..f6b65ea4 100644
+--- a/components/meta-upload/naming.py
++++ b/components/meta-upload/naming.py
+@@ -22,7 +22,7 @@ A brand's own words — which market, which product, how it spells its slugs
+ 
+     MARKET | PRODUCT | FUNNEL | Lane            <- the campaign
+       Avatar | Man | Promise | YYMMDD           <- the ad set
+-        <the 13-field ad name>                  <- the ad
++        <brand_product_brief_batch_funnel>      <- the ad (the short name)
+ 
+ The campaign persists for months — it is the thing whose CPA is compared
+ month over month, so nothing dated or creative-specific goes in it. The drop
+@@ -30,8 +30,9 @@ date on the ad set is owner's rule (2026-09-11): "Every time we run a new
+ batch of creatives, we need to create a new ad set to put that batch of
+ creatives in." It is also forced — `Culture Integration` already holds 115
+ ads, `Content Creator` 62 and `Problem Solution` 60, so those themes cannot
+-take another ad without a new ad set under them. The ad name is the 13-field
+-spec and is not this module's business — it arrives already named.
++take another ad without a new ad set under them. The ad name is the short form
++`brand_product_brief_batch_funnel` (../naming/CONVENTION.md, `names.short_meta`)
++and is not this module's business — it arrives already named.
+ 
+ Pipes separate the fields because that is what the account already uses, and
+ because the ad name owns hyphens.
+diff --git a/components/meta-upload/upload.py b/components/meta-upload/upload.py
+index 4a9f8aaa..a67761f1 100644
+--- a/components/meta-upload/upload.py
++++ b/components/meta-upload/upload.py
+@@ -849,6 +849,10 @@ def upload_card(folder, m=None, log=print):
+                          "(only the approval page writes one).")
+     if C.where(folder)["state"] != "2-approved":
+         raise SystemExit(f"REFUSED: the card is in {C.where(folder)['state']}, not 2-approved.")
++    import stage_gate as SG                       # the last gate before Meta: stage-check ran on this brief and passed
++    g = SG.check(dict(card, brand=card.get("brand") or C.where(folder)["brand"]))
++    if not g["ok"]:
++        raise SystemExit("REFUSED: " + g["why"])
+     p = card_plan(folder, card)
+     if p["held"]:
+         raise SystemExit("held: " + "; ".join(w for h in p["held"] for w in h["why"]))

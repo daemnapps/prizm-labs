@@ -6,12 +6,12 @@
     creative_matrix.py lock  <brand> <batch>            every row goes on the plan (creative_plan.py), so no other batch takes it
     creative_matrix.py cell  <brand> <batch> <row> <run folder>     the row rides with the run; its writers are handed it
     creative_matrix.py swipes <brand> <batch> <row>     every swipe we have whose own format is the row's
-    creative_matrix.py back  <brand> <row id> who=… …   what was really made, against its row
+    creative_matrix.py back  <brand> <row id> profile=… …   what was really made, against its row
     creative_matrix.py show  <brand> <batch> [--html F]
 
     people -> grid -> check -> make -> read back -> file
 
-A row is one picture or cut; a headline version is not a row. Seven columns: what is said (person, awareness, angle) and
+A row is one picture or cut; a headline version is not a row. Seven columns: what is said (profile, awareness, angle) and
 what is seen (format, face, setting, look). Every value is from a list; the rules are in dimensions.json `matrix` and are
 checked by code. A model only picks among the open values for a person, with the fact of theirs it stands on. The record
 is runs/creative-diversity/<brand>/batches/<batch>.json. Nothing calls Meta.
@@ -45,9 +45,9 @@ def values(brand, kind="image"):
     ids = lambda t: re.findall(r"`([^`]+)`", t)                                                            # noqa: E731
     fm, st = KINDS[kind]
     formats = ids(L[fm]) + (ids(L["VIDEO_STRUCTURES"]) if kind == "video" else [])
-    return {"awareness": ids(L["AWARENESS"]), "argument": ids(L["ANGLES"]), "format": formats, "setting": ids(L["SETTINGS"]), "look": ids(L[st]),
+    return {"awareness": ids(L["AWARENESS"]), "angle": ids(L["ANGLES"]), "format": formats, "setting": ids(L["SETTINGS"]), "look": ids(L[st]),
             "face": ["none"] + ["%s/%s/%s" % (g, a, e) for g in ("male", "female") for a in AGES for e in ETH],
-            "_text": {"argument": L["ANGLES"], "setting": L["SETTINGS"]}}
+            "_text": {"angle": L["ANGLES"], "setting": L["SETTINGS"]}}
 
 
 def apart(a, b):
@@ -143,9 +143,9 @@ def fill(brand, people, kind="image", have=(), ask=None, tries=4, pin=None):
     out = outside_of(brand, mine=set(have))
     num = lambda k: " · ".join("`%s` %d" % (v, c[k][v]) for v in sorted(vals[k], key=lambda v: c[k][v]))   # noqa: E731
     text = lambda k: "\n".join("%s (%d)" % (l, c[k][re.findall(r"`([^`]+)`", l)[0]]) if "`" in l else l for l in vals["_text"][k].splitlines())   # noqa: E731
-    near = "\n".join("- " + PL.short(m) for n, m in out if m.get("who") in {p for p, _ in people})[:3000] or "none"
+    near = "\n".join("- " + PL.short(m) for n, m in out if m.get("profile") in {p for p, _ in people})[:3000] or "none"
     base = (HERE / "prompts" / "matrix-fill-v1.md").read_text()
-    for k, v in {"people": "\n".join(person_text(brand, p) for p, _ in people), "awareness": num("awareness"), "angles": text("argument"), "formats": num("format"), "settings": text("setting"),
+    for k, v in {"people": "\n".join(person_text(brand, p) for p, _ in people), "awareness": num("awareness"), "angles": text("angle"), "formats": num("format"), "settings": text("setting"),
                  "looks": num("look"), "fixed": "In this batch:\n" + ("\n".join("- " + PL.short(f["moves"]) for f in fixed) or "none") + "\n\nAlready out for these people:\n" + near,
                  "want": "; ".join("%d rows for `%s`" % (n, p) for p, n in people)}.items():
         base = base.replace("{" + k + "}", v)
@@ -158,10 +158,11 @@ def fill(brand, people, kind="image", have=(), ask=None, tries=4, pin=None):
         got = json.loads(m.group(1) if m else raw[raw.index("{"):raw.rindex("}") + 1])["rows"]
         n, rows = Counter(), []
         for g in got:
-            w = re.sub(r"^sub-\d+-", "", g.get("who", ""))
+            g = PL.M.norm(g)                                         # a model answering in the old words still reads
+            w = re.sub(r"^sub-\d+-", "", g.get("profile", ""))
             w = people[0][0] if len(people) == 1 else w              # one person asked for is the person, whatever it is called back
             n[w] += 1
-            rows.append({"id": "%s-%d" % (w, n[w] + sum(1 for f in fixed if f["moves"].get("who") == w)), "moves": dict({k: g.get(k) for k in COLS}, who=w), "picture": g.get("picture", ""), "fact": g.get("fact", "")})
+            rows.append({"id": "%s-%d" % (w, n[w] + sum(1 for f in fixed if f["moves"].get("profile") == w)), "moves": dict({k: g.get(k) for k in COLS}, profile=w), "picture": g.get("picture", ""), "fact": g.get("fact", "")})
         for r in rows:
             r["moves"].update(pin or {})
         bad = problems(fixed + rows, {k: v for k, v in vals.items() if k not in (pin or {})}, out) + ["%d rows asked for %s, %d given" % (k, p, n[p]) for p, k in people if n[p] != k]
@@ -214,9 +215,9 @@ def family_map(brand, winner, people):
             aw = {"doubt": "solution-aware" if p["point"] in ("does it work", "for me") else "product-aware"}.get(p["kind"],
                                                                                                                  s.get("awareness_lead") or base["awareness"])
             rows.append({"id": "%s-%s-%d" % (winner.replace(brand + "-batch-", ""), sub, i), "family": winner,
-                         "moves": dict(base, who=sub, awareness=aw, face="?", setting="?", look="?"),
+                         "moves": dict(base, profile=sub, awareness=aw, face="?", setting="?", look="?"),
                          "point": p, "made": False})
-    out = {"brand": brand, "winner": winner, "concept": {k: base[k] for k in ("argument", "format")}, "people": list(people),
+    out = {"brand": brand, "winner": winner, "concept": {k: base[k] for k in ("angle", "format")}, "people": list(people),
            "made": date.today().isoformat(), "rows": rows,
            "what": "every variation this winner can have: one person, one point in that person's own profile, its real lines"}
     f = PL.file(brand).parent / "families" / (winner + ".json")
@@ -266,13 +267,13 @@ def family(brand, winner, people, kind="image", ask=None):
     led = PL.ledger(brand)
     if winner not in led:
         raise SystemExit("no row %s on the plan for %s" % (winner, brand))
-    pin = {k: led[winner]["moves"][k] for k in ("argument", "format")}
+    pin = {k: led[winner]["moves"][k] for k in ("angle", "format")}
     rows, bad = fill(brand, people, kind, have=[winner], ask=ask, pin=pin)
     W = _who()
     for r in rows:
         if r.get("fixed"):
             continue
-        sub = r["moves"]["who"]
+        sub = r["moves"]["profile"]
         try:
             a = avatar_of(brand, sub)
             bank, ids = W.his_rows(brand, a, "" if sub == a else sub, n=6)
@@ -296,7 +297,9 @@ def save(brand, batch, rows, kind, bad):
 
 
 def load(brand, batch):
-    return json.loads(file(brand, batch).read_text())
+    d = json.loads(file(brand, batch).read_text())
+    PL.M.norm_items(d.get("rows"))                            # a grid saved before 26 Nov says who / argument
+    return d
 
 
 def lock(brand, batch):
@@ -312,7 +315,7 @@ def lock(brand, batch):
 
 def cell_text(r):
     m = r["moves"]
-    return ("**This ad's row on the creative matrix (fixed; write inside it):**\n\n| Person | Awareness | Angle | Format | Face | Setting | Look |\n|---|---|---|---|---|---|---|\n| %s |\n\nWhat is seen: %s" % (
+    return ("**This ad's row on the creative matrix (fixed; write inside it):**\n\n| Profile | Awareness | Angle | Format | Face | Setting | Look |\n|---|---|---|---|---|---|---|\n| %s |\n\nWhat is seen: %s" % (
         " | ".join(str(m[k]) for k in COLS), r.get("picture") or "as the row says"))
 
 
@@ -328,15 +331,19 @@ def cell(brand, batch, row, run):
 
 def back(planned, made):
     """(columns that came out as planned, [(column, planned, made)])"""
+    planned, made = PL.M.norm(planned), PL.M.norm(made)
     off = [(k, planned[k], made.get(k)) for k in COLS if made.get(k) not in (None, "", "unclear") and made.get(k) != planned[k]]
     return len(COLS) - len(off), off
 
 
 def row_of(run):
     try:
-        return json.loads((Path(run) / "matrix-cell.json").read_text())
+        r = json.loads((Path(run) / "matrix-cell.json").read_text())
     except (OSError, ValueError):
         return {}
+    if isinstance(r, dict) and isinstance(r.get("moves"), dict):
+        r["moves"] = PL.M.norm(r["moves"])                    # a cell written before 26 Nov says who / argument
+    return r
 
 
 def start(run, brand, person, kind="image", pin=None, ask=None, say=print):
@@ -398,7 +405,7 @@ def swipes(brand, fmt, kind="image"):
 
 
 def table(d):
-    out = ["# Creative matrix: " + d["batch"], "", "%s. %d rows." % ("Passes" if d["passes"] else "Does not pass", len(d["rows"])), "", "| Row | Person | Awareness | Angle | Format | Face | Setting | Look | What is seen |", "|---|---|---|---|---|---|---|---|---|"]
+    out = ["# Creative matrix: " + d["batch"], "", "%s. %d rows." % ("Passes" if d["passes"] else "Does not pass", len(d["rows"])), "", "| Row | Profile | Awareness | Angle | Format | Face | Setting | Look | What is seen |", "|---|---|---|---|---|---|---|---|---|"]
     out += ["| %s | %s | %s |" % (r["id"], " | ".join(str(r["moves"].get(k)) for k in COLS), r.get("picture") or "") for r in d["rows"]]
     return "\n".join(out + [""] + ["- " + b for b in d["problems"]]) + "\n"
 

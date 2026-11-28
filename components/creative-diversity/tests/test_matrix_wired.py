@@ -40,7 +40,7 @@ class Wired(unittest.TestCase):
         X.lock("acme", "b")
         X.cell("acme", "b", "p-1", self.run_)
         self.assertEqual(X.start(self.run_, "acme", "p", pin={"format": "f2"}, say=lambda m: None)["moves"]["format"], "f2")
-        X.PL.claim("acme", "other", dict(row("y")["moves"], format="f4", argument="a2"))
+        X.PL.claim("acme", "other", dict(row("y")["moves"], format="f4", angle="a2"))
         with self.assertRaises(ValueError):
             X.start(self.run_, "acme", "p", pin={"format": "f4"}, say=lambda m: None)
 

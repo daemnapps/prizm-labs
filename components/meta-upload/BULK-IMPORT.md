@@ -75,7 +75,7 @@ So: one CBO campaign, one ad set per sub-avatar, the ads inside each.
 | column | holds |
 |---|---|
 | Ad ID | *(blank)* |
-| Ad Name | the 13-field name + the picture, so spend joins back to the record |
+| Ad Name | the short name `brand_product_brief_batch_funnel`, so spend joins back to the brief |
 | Ad Status | `PAUSED` |
 | Title | **the headline** |
 | Body | **the primary text** |
@@ -154,7 +154,7 @@ Anything failing a check is listed with its reason, never dropped silently.
 
 ## Reading spend back
 
-`URL Tags` carries `utm_content=<the full 13-field ad name>` and
+`URL Tags` carries `utm_content=<the full ad name>` and
 `utm_term=<sub-avatar>`, so the funnel's own analytics can join a session to
 the exact picture. Meta's own report joins on `Ad Name`, which is the same
 string. Drop the last field of either and you have the ad unit.

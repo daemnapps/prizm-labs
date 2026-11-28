@@ -10,7 +10,7 @@ W = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(W / "components" / "creative-diversity"))
 import creative_plan as PL  # noqa: E402
 
-A = {"who": "p1", "awareness": "problem-aware", "argument": "a1", "format": "list", "face": "f1", "setting": "s1", "look": "l1"}
+A = {"profile": "p1", "awareness": "problem-aware", "angle": "a1", "format": "list", "face": "f1", "setting": "s1", "look": "l1"}
 
 
 class Plan(unittest.TestCase):
@@ -30,7 +30,7 @@ class Plan(unittest.TestCase):
         self.assertEqual(PL.claim("acme", "b", dict(A, setting="s2"))["verdict"], "same")
         self.assertNotIn("b", PL.ledger("acme"))
         self.assertEqual(PL.claim("acme", "c", dict(A, setting="s2", look="l2"))["verdict"], "close")
-        self.assertEqual(PL.claim("acme", "d", dict(A, who="p2", argument="a2", face="f2"))["verdict"], "new")
+        self.assertEqual(PL.claim("acme", "d", dict(A, profile="p2", angle="a2", face="f2"))["verdict"], "new")
 
     def test_the_same_ad_may_claim_again_and_a_dropped_one_frees_its_place(self):
         PL.claim("acme", "a", A)
@@ -40,7 +40,7 @@ class Plan(unittest.TestCase):
         self.assertEqual(PL.claim("acme", "b", A)["verdict"], "new")
 
     def test_an_ad_we_know_little_about_is_never_called_the_same(self):
-        PL.claim("acme", "a", {k: ("unclear" if k not in ("who", "awareness") else v) for k, v in A.items()})
+        PL.claim("acme", "a", {k: ("unclear" if k not in ("profile", "awareness") else v) for k, v in A.items()})
         self.assertEqual(PL.claim("acme", "b", A)["verdict"], "new")
 
     def test_running_ads_count(self):
@@ -56,8 +56,8 @@ class Plan(unittest.TestCase):
             self.assertIn(x, b)
 
     def test_a_runs_own_decisions_win(self):
-        m = PL.known(dict(A, who="unclear", face="male/25-34/white"), {"sub": "sub-02-bald", "awareness": "unaware", "demographic": "male-35-44-black"})
-        self.assertEqual((m["who"], m["awareness"], m["face"]), ("bald", "unaware", "male/35-44/black"))
+        m = PL.known(dict(A, profile="unclear", face="male/25-34/white"), {"sub": "sub-02-bald", "awareness": "unaware", "demographic": "male-35-44-black"})
+        self.assertEqual((m["profile"], m["awareness"], m["face"]), ("bald", "unaware", "male/35-44/black"))
         self.assertEqual(PL.known(dict(A, face="none"), {"demographic": "m/25-34/black"})["face"], "none")
         self.assertEqual(PL.known({}, {"demographic": "f/55-64/white"})["face"], "female/55-64/white")
 

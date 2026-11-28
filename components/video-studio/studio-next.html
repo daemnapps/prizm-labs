@@ -1400,8 +1400,8 @@ async function adsLive(){
   const prodOf = n => prods.find(x => (x.key || '').endsWith('brief-' + n));
   const camp = c => String(c || 'no campaign').replace(/^campaign_[^_]+_/, '').replace(/_/g, ' ');
   const creatorOf = n => String(n || '').split(/_|\s+-\s+/)[0].replace(/([a-z])([A-Z])/g, '$1 $2').trim();
-  const cat = a => a.brief ? 'brief' : /trybe=/i.test(a.name || '') ? 'creator' : 'other';
-  const keyOf = a => ({brief: a.brief, creator: creatorOf(a.name), other: camp(a.campaign)})[cat(a)];
+  const cat = a => a.brief ? 'brief' : (a.creator || /trybe=/i.test(a.name || '')) ? 'creator' : 'other';
+  const keyOf = a => ({brief: a.brief, creator: a.creator || creatorOf(a.name), other: a.legacy || camp(a.campaign)})[cat(a)];
   const CATS = [['brief', 'Briefs', 'film', 'cyan'], ['creator', 'Creators', 'user', 'magenta'], ['other', 'Not briefed', 'list', 'ink-3']];
   const sum = (rs, k) => rs.reduce((t, r) => t + (r[k] || 0), 0);
   const stats = rs => ({sw: rs.filter(r => r.spend_winner).length, kw: rs.filter(r => r.kpi_winner).length, n: rs.length, s7: sum(rs, 'spend7'), b7: sum(rs, 'buys7'), s30: sum(rs, 'spend30'), b30: sum(rs, 'buys30'), v30: sum(rs, 'value30'),

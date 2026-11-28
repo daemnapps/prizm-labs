@@ -514,7 +514,7 @@ def _form(stem):
 
 def parse_any(s):
     """Any form -> one dict. 13 values is an ad unit, 14 is an asset. The
-    short form (4 or 5 values, see parse_short) is read too. Anything else
+    short form (4 or 5 values, plus any extra fields after the funnel; see parse_short) is read too. Anything else
     is not ours (None).
 
     The dict carries every AD_FIELD as written, plus:
@@ -535,8 +535,8 @@ def parse_any(s):
     form = _form(stem)
     sep, ok = (SEP, SLUG) if form == "new" else (OLD_SEP, OLD_SLUG)
     parts = stem.split(sep)
-    if form == "new" and len(parts) in (4, 5):
-        return parse_short(stem)
+    if form == "new" and 4 <= len(parts) <= 12:
+        return parse_short(stem)              # short form, with any extra fields after the funnel (`_p-awnm`)
     if len(parts) not in (13, 14) or not all(ok.match(p) for p in parts):
         return None
     d = dict(zip(FIELDS, parts))
@@ -593,11 +593,16 @@ def short_meta(unit, funnel):
 
 
 def parse_short(s):
-    """brand_product_brief_batch[_asset-NN | _funnel] -> dict, or None."""
+    """brand_product_brief_batch[_asset-NN | _funnel[_extra...]] -> dict, or None.
+
+    A Meta ad name sometimes carries extra fields after the funnel (`…_icon-flex-simple_p-awnm`, a page tag added
+    at launch). They are tolerated and kept in `extra`; the brief, batch and funnel read as usual."""
     stem = Path(str(s)).stem if "." in str(s) else str(s)
     parts = stem.split(SEP)
-    if len(parts) not in (4, 5) or not all(SLUG.match(p) for p in parts):
+    if len(parts) < 4 or not all(SLUG.match(p) for p in parts):
         return None
+    if len(parts) > 5 and ASSET_NEW.match(parts[4]):
+        return None                                   # a file name ends at its asset; nothing follows it
     brand, product, brief, batch = parts[:4]
     # a brand's own code in the brief slot (`brief-prizm-0001`, an ad made before the register) reads as the
     # brief it was filed under (brief-aliases.json `brand_aliases`); the name itself is never rewritten
@@ -608,7 +613,9 @@ def parse_short(s):
          "batch": batch, "asset": None, "funnel": None,
          "ad_name": SEP.join(parts[:4]), "brief_id": ba[1] if ba else brief, "batch_id": batch,
          **({"brief_as_named": brief} if ba else {})}
-    if len(parts) == 5:
+    if len(parts) > 5:
+        d["funnel"], d["extra"] = parts[4], parts[5:]
+    elif len(parts) == 5:
         if ASSET_NEW.match(parts[4]):
             d["asset"] = d["asset_id"] = parts[4]
         else:

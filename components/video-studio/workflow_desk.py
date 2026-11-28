@@ -620,13 +620,38 @@ def email(brand, label):
             "stages": writing_stages(d, "components/email-production")}
 
 
+def ad_ties(brand, ad_names):
+    """Each ad name -> the brief or creator behind it (components/naming/ad_resolve.py): the short name's brief, a
+    creator ad's creator by its creator-program id, a legacy name through brands/<brand>/meta/ad-aliases.json."""
+    try:
+        if str(WS / "components/naming") not in sys.path:
+            sys.path.insert(0, str(WS / "components/naming"))
+        import ad_resolve as AR
+    except Exception:                                    # naming not there: the brief number in the name still reads
+        AR = None
+    al = (_read(WS / "brands" / brand / "meta/ad-aliases.json") or {}).get("aliases") or []
+    tc = {}
+    for f in sorted(glob.glob(str(WS / "runs/winners" / brand / "creators/*/trybe.json"))):
+        for row in (_read(f) or {}).get("rows") or []:
+            if isinstance(row, dict) and row.get("trybe_id") and row.get("creator"):
+                tc[str(row["trybe_id"]).lower()] = row["creator"]
+    out = {}
+    for n in ad_names:
+        if AR:
+            out[n] = AR.resolve(brand, n, [a for a in al if isinstance(a, dict) and a.get("match")], tc)
+            continue
+        m = re.search(r"brief-(\d{4})", n or "")
+        out[n] = {"brief": m.group(1) if m else None, "via": "name" if m else None}
+    return out
+
+
 def creator_key(name):
     """A creator ad's creator, from its name (the part before the first `_`, e.g. `Sofiaand Stefan_FLEX…_trybe=…`)."""
     return re.sub(r"([a-z])([A-Z])", r"\1 \2", re.split(r"_|\s+-\s+", name or "")[0]).strip()
 
 
 def creators_live(brand):
-    """Every creator whose ads spent in 30 days (ads tagged trybe=), with live numbers from the warehouse copy, their
+    """Every creator whose ads spent in 30 days (creator-program ads, and legacy names the brand ties to a creator), with live numbers from the warehouse copy, their
     ads, their Trybe submissions and their profile when we keep one."""
     la = live_ads(brand)
     base = creators(brand)
@@ -634,9 +659,9 @@ def creators_live(brand):
     prof = {p["handle"].lower(): p for p in base.get("profiles") or []}
     out = {}
     for a in la["ads"]:
-        if not re.search(r"trybe=", a["name"] or "", re.I):
+        if not a.get("creator"):
             continue
-        k = creator_key(a["name"])
+        k = a["creator"]
         g = out.setdefault(k, {"creator": k, "ads": [], "active": False})
         g["ads"].append(a)
         g["active"] = g["active"] or a["active"]
@@ -738,14 +763,16 @@ def live_ads(brand):
     w = _read(wf) if wf else None
     r = _read(rf) if rf else None
     calls = {str(f.get("id")): f for f in (r.get("flags") or [])} if isinstance(r, dict) else {}
+    tie = ad_ties(brand, [a.get("ad_name") for a in (w.get("ads") or [])] if isinstance(w, dict) else [])
     num = lambda v: float(v) if v not in (None, "") else 0.0
     rows = []
     for a in (w.get("ads") or []) if isinstance(w, dict) else []:
         c = calls.get(str(a.get("ad_id"))) or {}
-        m = re.search(r"brief-(\d{4})", a.get("ad_name") or "")
+        t = tie.get(a.get("ad_name")) or {}
         s7, b7, s30, b30 = num(a.get("spend7")), num(a.get("buys7")), num(a.get("spend30")), num(a.get("buys30"))
         s3 = num(a.get("spend3"))
-        rows.append({"id": a.get("ad_id"), "name": a.get("ad_name"), "brief": m.group(1) if m else None,
+        rows.append({"id": a.get("ad_id"), "name": a.get("ad_name"), "brief": t.get("brief"),
+                     "creator": t.get("creator"), "legacy": t.get("legacy"), "tied_by": t.get("via"),
                      "campaign": a.get("campaign"), "spend3": s3, "active": s3 > 0, "spend7": s7, "buys7": b7, "cpa7": round(s7 / b7, 2) if b7 else None,
                      "spend30": s30, "buys30": b30, "value30": num(a.get("value30")), "value7": num(a.get("value7")),
                      "roas7": round(num(a.get("value7")) / s7, 2) if s7 else None,
@@ -1249,8 +1276,8 @@ def vary_candidates(la, n=6):
     for a in la["ads"]:
         if a["brief"]:
             k = ("brief", a["brief"])
-        elif re.search(r"trybe=", a["name"] or "", re.I):
-            k = ("creator", re.split(r"_|\s+-\s+", a["name"])[0])
+        elif a.get("creator"):
+            k = ("creator", a["creator"])
         else:
             continue
         groups.setdefault(k, []).append(a)

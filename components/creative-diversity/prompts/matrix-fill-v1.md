@@ -9,7 +9,7 @@ Each row is for the person named. Read the person: every cell has to be somethin
 ## The values (a number is how often it is already used; take the unused ones that fit)
 
 **awareness:** {awareness}
-**argument** (the angle):
+**angle**:
 {angles}
 **format:** {formats}
 **setting:**
@@ -25,11 +25,11 @@ Each row is for the person named. Read the person: every cell has to be somethin
 
 - Any two rows, yours and the fixed ones, differ on at least 3 of the 7 columns, and on at least 2 of format, face, setting, look.
 - No format, face, setting or look fills more than half of the rows.
-- Rows for the same person share `who`, so they have to part on what is seen and on the argument or awareness.
-- The setting has to be able to hold the format, and the format has to be able to carry the argument. A row nobody could picture is wrong.
+- Rows for the same person share `profile`, so they have to part on what is seen and on the angle or awareness.
+- The setting has to be able to hold the format, and the format has to be able to carry the angle. A row nobody could picture is wrong.
 
 Fill: {want}
 
 Answer with one JSON object in a ```json fence:
-{"rows":[{"who":"","awareness":"","argument":"","format":"","face":"","setting":"","look":"","picture":"what is seen, one plain sentence","fact":"the person's own fact this comes from"}]}
+{"rows":[{"profile":"","awareness":"","angle":"","format":"","face":"","setting":"","look":"","picture":"what is seen, one plain sentence","fact":"the person's own fact this comes from"}]}
 {note}

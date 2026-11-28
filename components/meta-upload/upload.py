@@ -849,6 +849,10 @@ def upload_card(folder, m=None, log=print):
                          "(only the approval page writes one).")
     if C.where(folder)["state"] != "2-approved":
         raise SystemExit(f"REFUSED: the card is in {C.where(folder)['state']}, not 2-approved.")
+    import stage_gate as SG                       # the last gate before Meta: stage-check ran on this brief and passed
+    g = SG.check(dict(card, brand=card.get("brand") or C.where(folder)["brand"]))
+    if not g["ok"]:
+        raise SystemExit("REFUSED: " + g["why"])
     p = card_plan(folder, card)
     if p["held"]:
         raise SystemExit("held: " + "; ".join(w for h in p["held"] for w in h["why"]))

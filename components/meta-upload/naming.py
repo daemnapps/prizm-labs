@@ -22,7 +22,7 @@ A brand's own words — which market, which product, how it spells its slugs
 
     MARKET | PRODUCT | FUNNEL | Lane            <- the campaign
       Avatar | Man | Promise | YYMMDD           <- the ad set
-        <the 13-field ad name>                  <- the ad
+        <brand_product_brief_batch_funnel>      <- the ad (the short name)
 
 The campaign persists for months — it is the thing whose CPA is compared
 month over month, so nothing dated or creative-specific goes in it. The drop
@@ -30,8 +30,9 @@ date on the ad set is owner's rule (2026-09-11): "Every time we run a new
 batch of creatives, we need to create a new ad set to put that batch of
 creatives in." It is also forced — `Culture Integration` already holds 115
 ads, `Content Creator` 62 and `Problem Solution` 60, so those themes cannot
-take another ad without a new ad set under them. The ad name is the 13-field
-spec and is not this module's business — it arrives already named.
+take another ad without a new ad set under them. The ad name is the short form
+`brand_product_brief_batch_funnel` (../naming/CONVENTION.md, `names.short_meta`)
+and is not this module's business — it arrives already named.
 
 Pipes separate the fields because that is what the account already uses, and
 because the ad name owns hyphens.

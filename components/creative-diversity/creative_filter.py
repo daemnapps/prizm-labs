@@ -152,13 +152,13 @@ def _outside(brand):
     except Exception:                                        # noqa: BLE001  no library read yet
         live, day = [], None
     for a, m in live:
-        out.append({"where": "running (library %s)" % day, "name": a, "person": m.get("who"), "awareness": m.get("awareness"), "message": _msg(m.get("argument")),
+        out.append({"where": "running (library %s)" % day, "name": a, "person": m.get("profile"), "awareness": m.get("awareness"), "message": _msg(m.get("angle")),
                     "storyline": story_of(m.get("format"))[0], "setting": m.get("setting"), "media": "image" if a.startswith("image") else "video"})
     for k, r in PL.ledger(brand).items():
         if r.get("state") == "dropped":
             continue
         m = r.get("made") or r["moves"]
-        out.append({"where": "planned (%s)" % r.get("state"), "name": k, "person": m.get("who"), "awareness": m.get("awareness"), "message": _msg(m.get("argument")),
+        out.append({"where": "planned (%s)" % r.get("state"), "name": k, "person": m.get("profile"), "awareness": m.get("awareness"), "message": _msg(m.get("angle")),
                     "storyline": story_of(m.get("format"))[0], "setting": m.get("setting"), "media": story_of(m.get("format"))[1]})
     hooks = _card_hooks(brand)
     try:

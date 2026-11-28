@@ -2,8 +2,8 @@
 """The plan: every ad being made, in one list per brand, so nothing is written or pictured that Meta would group with
 another ad. Every chain goes through here; no brand is named here and nothing calls Meta.
 
-    creative_plan.py board <brand> [--who <sub-avatar>]                       what is taken, and what is still open, for one person
-    creative_plan.py claim <brand> <id> who=… awareness=… argument=… format=… face=… setting=… look=…
+    creative_plan.py board <brand> [--profile <profile>]                       what is taken, and what is still open, for one person
+    creative_plan.py claim <brand> <id> profile=… awareness=… angle=… format=… face=… setting=… look=…
     creative_plan.py tie   <brand> <id> <brief>      creative_plan.py mark <brand> <id> filed|live|dropped      creative_plan.py list <brand>
 
 `claim` compares the seven moves (dimensions.json) with every ad running (the saved library) and every ad planned, filed
@@ -46,7 +46,7 @@ def _own(name):
 
 K, M = _own("check"), _own("matrix")
 
-NAMES = {"who": "person", "awareness": "awareness", "argument": "angle", "format": "format", "face": "face", "setting": "setting", "look": "look"}
+NAMES = {"profile": "profile", "awareness": "awareness", "angle": "angle", "format": "format", "face": "face", "setting": "setting", "look": "look"}
 STATES = ("planned", "filed", "live", "dropped")
 
 
@@ -56,9 +56,11 @@ def file(brand):
 
 def ledger(brand):
     try:
-        return json.loads(file(brand).read_text())["ads"]
+        ads = json.loads(file(brand).read_text())["ads"]
     except (OSError, ValueError, KeyError):
         return {}
+    M.norm_items(ads.values() if isinstance(ads, dict) else [])     # a plan written before 26 Nov says who / argument
+    return ads
 
 
 class _Locked:
@@ -114,6 +116,7 @@ def why(v):
 
 def claim(brand, ident, moves, by="", brief=None, force=False):
     """Add one ad to the plan. The verdict; a `same` one is not added (raise nothing: the caller's gate decides)."""
+    moves = M.norm(moves)
     miss = [k for k in M.BIG if not moves.get(k)]
     if miss:
         raise ValueError("an ad declares all 7 moves; missing: " + ", ".join(miss))
@@ -144,6 +147,7 @@ def mark(brand, name, state):
 
 def made(brand, name, moves):
     """What was really made, read off the finished picture: later ads are compared with this, not with the plan."""
+    moves = M.norm(moves)
     with _Locked(brand) as l:
         for k, r in l.ads.items():
             if name in (k, r.get("brief")):
@@ -163,10 +167,10 @@ def board(brand, who="", avatar_subs=(), most=14):
     if not rows:
         return ""
     clean = re.sub(r"^sub-\d+-", "", who or "")
-    mine = [x for x in rows if re.sub(r"^sub-\d+-", "", str(x[1].get("who"))) == clean] if clean else []
+    mine = [x for x in rows if re.sub(r"^sub-\d+-", "", str(x[1].get("profile"))) == clean] if clean else []
     planned = [x for x in rows if x[2] != "running" and x not in mine]
     out = ["", "**Different from every other ad (Meta groups ads that look or feel alike):**", "",
-           "This ad must differ from each one below on at least 3 of: person, awareness, angle, format, face, setting, look. Rewording a headline is not a difference. Change what is SEEN first."]
+           "This ad must differ from each one below on at least 3 of: profile, awareness, angle, format, face, setting, look. Rewording a headline is not a difference. Change what is SEEN first."]
     for title, xs in (("Taken for this person", mine), ("Being made now for others", planned)):
         if xs:
             seen, keep = set(), []
@@ -175,7 +179,7 @@ def board(brand, who="", avatar_subs=(), most=14):
                 if s not in seen:
                     seen.add(s)
                     keep.append("- (%s) %s" % (st, s))
-            out += ["", title + " (person · awareness · angle · format · face · setting · look):"] + keep[:most]
+            out += ["", title + " (profile · awareness · angle · format · face · setting · look):"] + keep[:most]
     top = {k: {} for k in ("format", "setting", "look")}
     for _, m, _st in rows:
         for k in top:
@@ -189,7 +193,7 @@ def known(text_moves, aim=None):
     """The seven moves, where the run's own decisions win over what was read off the words."""
     a, m = aim or {}, dict(text_moves or {})
     if a.get("sub") or a.get("avatar"):
-        m["who"] = re.sub(r"^sub-\d+-", "", a.get("sub") or a.get("avatar"))
+        m["profile"] = re.sub(r"^sub-\d+-", "", a.get("sub") or a.get("avatar"))
     if a.get("awareness"):
         m["awareness"] = a["awareness"]
     if a.get("demographic"):
@@ -222,7 +226,8 @@ def main(argv=None):
         return 2
     do, brand = a[0], a[1]
     if do == "board":
-        print(board(brand, a[a.index("--who") + 1] if "--who" in a else "") or "nothing taken yet")
+        flag = "--profile" if "--profile" in a else "--who"            # --who: the old word, still read
+        print(board(brand, a[a.index(flag) + 1] if flag in a else "") or "nothing taken yet")
     elif do == "claim":
         v = claim(brand, a[2], dict(x.split("=", 1) for x in a[3:] if "=" in x), force="--force" in a)
         print("%s: %s" % (v["verdict"], why(v)))

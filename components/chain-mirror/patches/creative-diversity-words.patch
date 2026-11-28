@@ -1,0 +1,625 @@
+diff --git a/components/creative-diversity/META.md b/components/creative-diversity/META.md
+index 48d06e2a..6c389e73 100644
+--- a/components/creative-diversity/META.md
++++ b/components/creative-diversity/META.md
+@@ -25,7 +25,7 @@ Every rule in `dimensions.json` traces to a line here. **Meta's own words only**
+ | **variations of the same creative** | ads that "look or feel alike" — grouped | duplicate |
+ | **creative similarity** | "when ad images are visually too alike, even if technically different assets" | — |
+ | **creative fatigue / creative limited** | overexposure of one image/video (see thresholds above) | burnt out |
+-| **persona · use case · motivation** | who it's for and why ("emotional appeal" vs "product features") | avatar · sub-avatar · desire |
++| **persona · use case · motivation** | who it's for and why ("emotional appeal" vs "product features") | profile (the person) · desire |
+ | **flexible ad · assets** | one ad, up to 10 images/videos; Meta picks the mix per person ([help](https://www.facebook.com/business/help/835561738423867)) | ad unit |
+ | **hook** | "the text, visual, and audio components that grab and hold attention in the first few seconds" — value promise · statement of intent · question/invitation ([source](https://www.facebook.com/business/news/the-science-of-the-hook-how-to-supercharge-your-reels-performance)) | hook |
+ | **partnership ad** | an ad run with a creator's handle | creator ad |
+@@ -52,7 +52,7 @@ Every rule in `dimensions.json` traces to a line here. **Meta's own words only**
+ 
+ ## 5. The rule this produces (in `dimensions.json`)
+ 
+-- **Meta's dimensions → our moves:** persona/use case → who · message → angle + awareness · storyline → format/structure · look and feel → face + setting + style · format → media.
++- **Meta's dimensions → our moves:** persona/use case → profile · message → angle + awareness · storyline → format/structure · look and feel → face + setting + style · format → media.
+ - **New creative = 3+ moves from the nearest live creative.** *The threshold is ours, not Meta's* — Meta publishes none. Calibrate against the tagged library.
+ - **Portfolio per ad set (Meta's numbers):** an image + a video + a 9:16 video with audio; ≥20% of assets 9:16 with audio; fewer ads, each a flexible ad with up to 10 diverse assets; no image/video already shown on the Page; music or voiceover on every Reel; key messages in the safe zone; creators via partnership ads.
+ - **Iteration** (hook text, caption, CTA, music swap) is allowed only *inside* a creative that already counts as new.
+diff --git a/components/creative-diversity/check.py b/components/creative-diversity/check.py
+index fff1941c..8b909bfc 100644
+--- a/components/creative-diversity/check.py
++++ b/components/creative-diversity/check.py
+@@ -3,7 +3,7 @@
+ 
+ Brief mode (before anything is made) — give its moves:
+     python3 components/creative-diversity/check.py brand_b \
+-        who=face-dark-marks awareness=unaware argument=grandmas-recipe \
++        profile=face-dark-marks awareness=unaware angle=grandmas-recipe \
+         format=micro-drama face=female/45-54/southeast-asian setting=kitchen look=phone-ugc
+ 
+ Batch mode (several ads being planned together): are they different from each other?
+@@ -35,12 +35,15 @@ def library(brand):
+     days = sorted(p.name for p in base.iterdir() if (p / "matrix.json").exists()) if base.exists() else []
+     if not days:
+         return None, None
+-    return json.loads((base / days[-1] / "matrix.json").read_text()), days[-1]
++    mx = json.loads((base / days[-1] / "matrix.json").read_text())
++    M.norm_items(mx.get("items"))                        # a library read before 26 Nov says who / argument
++    return mx, days[-1]
+ 
+ 
+ def score(brand, moves):
+     """{moves} -> nearest live creative, how many moves apart, the verdict, and the gap it fills."""
+     mx, day = library(brand)
++    moves = M.norm(moves)
+     if not mx:
+         return {"verdict": "unscored", "why": f"no library read for {brand} yet (pull · tag · matrix)"}
+     best = None
+@@ -55,8 +58,8 @@ def score(brand, moves):
+     fills = []
+     if lv and mx["spread"].get(lv) and mx["spread"][lv]["have"] < mx["spread"][lv]["target"]:
+         fills.append(f"{lv} is under target ({mx['spread'][lv]['have']:.0%} vs {mx['spread'][lv]['target']:.0%})")
+-    who = moves.get("who")
+-    if who and not any(i["moves"].get("who") == who for i in mx["items"]):
++    who = moves.get("profile")
++    if who and not any(i["moves"].get("profile") == who for i in mx["items"]):
+         fills.append(f"nothing running for {who}")
+     setting = moves.get("setting")
+     if setting and not any(i["moves"].get("setting") == setting for i in mx["items"]):
+@@ -140,6 +143,7 @@ def record_brief(brand, brief, moves, force=False):
+     row = next((b for b in reg["briefs"] if b.get("brief") == brief or brief in (b.get("aliases") or [])), None)
+     if row is None:
+         sys.exit(f"{brief} is not in {f.relative_to(ROOT)} — open the brief first")
++    moves = M.norm(moves)
+     s = score(brand, moves)
+     if s["verdict"] == "variation" and not force:
+         print(json.dumps({k: v for k, v in s.items() if k != "moves"}, indent=1))
+@@ -156,9 +160,9 @@ def record_brief(brand, brief, moves, force=False):
+ if __name__ == "__main__":
+     a = sys.argv[1:]
+     if a and a[0] == "--brief":
+-        # check.py --brief <brand> <brief-id> who=… awareness=… argument=… format=… face=… setting=… look=…
++        # check.py --brief <brand> <brief-id> profile=… awareness=… angle=… format=… face=… setting=… look=…
+         brand, brief = a[1], a[2]
+-        pairs = dict(x.split("=", 1) for x in a[3:] if "=" in x)
++        pairs = M.norm(dict(x.split("=", 1) for x in a[3:] if "=" in x))
+         missing = [k for k in M.BIG if not pairs.get(k)]
+         if missing:
+             sys.exit(f"a brief declares all 7 moves — missing: {', '.join(missing)}")
+@@ -166,12 +170,12 @@ if __name__ == "__main__":
+         print(f"{brief}: {s['verdict']} — {s['moves_apart']} moves from the nearest running creative; "
+               f"fills: {'; '.join(s['fills']) or 'no open gap'}")
+     elif a and a[0] == "--batch":
+-        # check.py --batch <brand> <file>   the file: [{"id": "...", "moves": {who, awareness, argument, format, face, setting, look}}]
+-        r = batch(a[1], json.loads(Path(a[2]).read_text()))
++        # check.py --batch <brand> <file>   the file: [{"id": "...", "moves": {profile, awareness, angle, format, face, setting, look}}]
++        r = batch(a[1], M.norm_items(json.loads(Path(a[2]).read_text())))
+         print(json.dumps(r, indent=1))
+         sys.exit(0 if r["passes"] else 1)
+     elif a and a[0] == "--card":
+         print(json.dumps({k: v for k, v in (score_card(a[1]) or {}).items() if k != "tag"}, indent=1))
+     else:
+-        brand, pairs = a[0], dict(x.split("=", 1) for x in a[1:])
++        brand, pairs = a[0], M.norm(dict(x.split("=", 1) for x in a[1:]))
+         print(json.dumps(score(brand, {k: pairs.get(k) for k in M.BIG}), indent=1))
+diff --git a/components/creative-diversity/creative_filter.py b/components/creative-diversity/creative_filter.py
+index d48de9e2..67d9c66a 100644
+--- a/components/creative-diversity/creative_filter.py
++++ b/components/creative-diversity/creative_filter.py
+@@ -152,13 +152,13 @@ def _outside(brand):
+     except Exception:                                        # noqa: BLE001  no library read yet
+         live, day = [], None
+     for a, m in live:
+-        out.append({"where": "running (library %s)" % day, "name": a, "person": m.get("who"), "awareness": m.get("awareness"), "message": _msg(m.get("argument")),
++        out.append({"where": "running (library %s)" % day, "name": a, "person": m.get("profile"), "awareness": m.get("awareness"), "message": _msg(m.get("angle")),
+                     "storyline": story_of(m.get("format"))[0], "setting": m.get("setting"), "media": "image" if a.startswith("image") else "video"})
+     for k, r in PL.ledger(brand).items():
+         if r.get("state") == "dropped":
+             continue
+         m = r.get("made") or r["moves"]
+-        out.append({"where": "planned (%s)" % r.get("state"), "name": k, "person": m.get("who"), "awareness": m.get("awareness"), "message": _msg(m.get("argument")),
++        out.append({"where": "planned (%s)" % r.get("state"), "name": k, "person": m.get("profile"), "awareness": m.get("awareness"), "message": _msg(m.get("angle")),
+                     "storyline": story_of(m.get("format"))[0], "setting": m.get("setting"), "media": story_of(m.get("format"))[1]})
+     hooks = _card_hooks(brand)
+     try:
+diff --git a/components/creative-diversity/creative_matrix.py b/components/creative-diversity/creative_matrix.py
+index 873ec7a1..ef6297de 100644
+--- a/components/creative-diversity/creative_matrix.py
++++ b/components/creative-diversity/creative_matrix.py
+@@ -6,12 +6,12 @@
+     creative_matrix.py lock  <brand> <batch>            every row goes on the plan (creative_plan.py), so no other batch takes it
+     creative_matrix.py cell  <brand> <batch> <row> <run folder>     the row rides with the run; its writers are handed it
+     creative_matrix.py swipes <brand> <batch> <row>     every swipe we have whose own format is the row's
+-    creative_matrix.py back  <brand> <row id> who=… …   what was really made, against its row
++    creative_matrix.py back  <brand> <row id> profile=… …   what was really made, against its row
+     creative_matrix.py show  <brand> <batch> [--html F]
+ 
+     people -> grid -> check -> make -> read back -> file
+ 
+-A row is one picture or cut; a headline version is not a row. Seven columns: what is said (person, awareness, angle) and
++A row is one picture or cut; a headline version is not a row. Seven columns: what is said (profile, awareness, angle) and
+ what is seen (format, face, setting, look). Every value is from a list; the rules are in dimensions.json `matrix` and are
+ checked by code. A model only picks among the open values for a person, with the fact of theirs it stands on. The record
+ is runs/creative-diversity/<brand>/batches/<batch>.json. Nothing calls Meta.
+@@ -45,9 +45,9 @@ def values(brand, kind="image"):
+     ids = lambda t: re.findall(r"`([^`]+)`", t)                                                            # noqa: E731
+     fm, st = KINDS[kind]
+     formats = ids(L[fm]) + (ids(L["VIDEO_STRUCTURES"]) if kind == "video" else [])
+-    return {"awareness": ids(L["AWARENESS"]), "argument": ids(L["ANGLES"]), "format": formats, "setting": ids(L["SETTINGS"]), "look": ids(L[st]),
++    return {"awareness": ids(L["AWARENESS"]), "angle": ids(L["ANGLES"]), "format": formats, "setting": ids(L["SETTINGS"]), "look": ids(L[st]),
+             "face": ["none"] + ["%s/%s/%s" % (g, a, e) for g in ("male", "female") for a in AGES for e in ETH],
+-            "_text": {"argument": L["ANGLES"], "setting": L["SETTINGS"]}}
++            "_text": {"angle": L["ANGLES"], "setting": L["SETTINGS"]}}
+ 
+ 
+ def apart(a, b):
+@@ -143,9 +143,9 @@ def fill(brand, people, kind="image", have=(), ask=None, tries=4, pin=None):
+     out = outside_of(brand, mine=set(have))
+     num = lambda k: " · ".join("`%s` %d" % (v, c[k][v]) for v in sorted(vals[k], key=lambda v: c[k][v]))   # noqa: E731
+     text = lambda k: "\n".join("%s (%d)" % (l, c[k][re.findall(r"`([^`]+)`", l)[0]]) if "`" in l else l for l in vals["_text"][k].splitlines())   # noqa: E731
+-    near = "\n".join("- " + PL.short(m) for n, m in out if m.get("who") in {p for p, _ in people})[:3000] or "none"
++    near = "\n".join("- " + PL.short(m) for n, m in out if m.get("profile") in {p for p, _ in people})[:3000] or "none"
+     base = (HERE / "prompts" / "matrix-fill-v1.md").read_text()
+-    for k, v in {"people": "\n".join(person_text(brand, p) for p, _ in people), "awareness": num("awareness"), "angles": text("argument"), "formats": num("format"), "settings": text("setting"),
++    for k, v in {"people": "\n".join(person_text(brand, p) for p, _ in people), "awareness": num("awareness"), "angles": text("angle"), "formats": num("format"), "settings": text("setting"),
+                  "looks": num("look"), "fixed": "In this batch:\n" + ("\n".join("- " + PL.short(f["moves"]) for f in fixed) or "none") + "\n\nAlready out for these people:\n" + near,
+                  "want": "; ".join("%d rows for `%s`" % (n, p) for p, n in people)}.items():
+         base = base.replace("{" + k + "}", v)
+@@ -158,10 +158,11 @@ def fill(brand, people, kind="image", have=(), ask=None, tries=4, pin=None):
+         got = json.loads(m.group(1) if m else raw[raw.index("{"):raw.rindex("}") + 1])["rows"]
+         n, rows = Counter(), []
+         for g in got:
+-            w = re.sub(r"^sub-\d+-", "", g.get("who", ""))
++            g = PL.M.norm(g)                                         # a model answering in the old words still reads
++            w = re.sub(r"^sub-\d+-", "", g.get("profile", ""))
+             w = people[0][0] if len(people) == 1 else w              # one person asked for is the person, whatever it is called back
+             n[w] += 1
+-            rows.append({"id": "%s-%d" % (w, n[w] + sum(1 for f in fixed if f["moves"].get("who") == w)), "moves": dict({k: g.get(k) for k in COLS}, who=w), "picture": g.get("picture", ""), "fact": g.get("fact", "")})
++            rows.append({"id": "%s-%d" % (w, n[w] + sum(1 for f in fixed if f["moves"].get("profile") == w)), "moves": dict({k: g.get(k) for k in COLS}, profile=w), "picture": g.get("picture", ""), "fact": g.get("fact", "")})
+         for r in rows:
+             r["moves"].update(pin or {})
+         bad = problems(fixed + rows, {k: v for k, v in vals.items() if k not in (pin or {})}, out) + ["%d rows asked for %s, %d given" % (k, p, n[p]) for p, k in people if n[p] != k]
+@@ -214,9 +215,9 @@ def family_map(brand, winner, people):
+             aw = {"doubt": "solution-aware" if p["point"] in ("does it work", "for me") else "product-aware"}.get(p["kind"],
+                                                                                                                  s.get("awareness_lead") or base["awareness"])
+             rows.append({"id": "%s-%s-%d" % (winner.replace(brand + "-batch-", ""), sub, i), "family": winner,
+-                         "moves": dict(base, who=sub, awareness=aw, face="?", setting="?", look="?"),
++                         "moves": dict(base, profile=sub, awareness=aw, face="?", setting="?", look="?"),
+                          "point": p, "made": False})
+-    out = {"brand": brand, "winner": winner, "concept": {k: base[k] for k in ("argument", "format")}, "people": list(people),
++    out = {"brand": brand, "winner": winner, "concept": {k: base[k] for k in ("angle", "format")}, "people": list(people),
+            "made": date.today().isoformat(), "rows": rows,
+            "what": "every variation this winner can have: one person, one point in that person's own profile, its real lines"}
+     f = PL.file(brand).parent / "families" / (winner + ".json")
+@@ -266,13 +267,13 @@ def family(brand, winner, people, kind="image", ask=None):
+     led = PL.ledger(brand)
+     if winner not in led:
+         raise SystemExit("no row %s on the plan for %s" % (winner, brand))
+-    pin = {k: led[winner]["moves"][k] for k in ("argument", "format")}
++    pin = {k: led[winner]["moves"][k] for k in ("angle", "format")}
+     rows, bad = fill(brand, people, kind, have=[winner], ask=ask, pin=pin)
+     W = _who()
+     for r in rows:
+         if r.get("fixed"):
+             continue
+-        sub = r["moves"]["who"]
++        sub = r["moves"]["profile"]
+         try:
+             a = avatar_of(brand, sub)
+             bank, ids = W.his_rows(brand, a, "" if sub == a else sub, n=6)
+@@ -296,7 +297,9 @@ def save(brand, batch, rows, kind, bad):
+ 
+ 
+ def load(brand, batch):
+-    return json.loads(file(brand, batch).read_text())
++    d = json.loads(file(brand, batch).read_text())
++    PL.M.norm_items(d.get("rows"))                            # a grid saved before 26 Nov says who / argument
++    return d
+ 
+ 
+ def lock(brand, batch):
+@@ -312,7 +315,7 @@ def lock(brand, batch):
+ 
+ def cell_text(r):
+     m = r["moves"]
+-    return ("**This ad's row on the creative matrix (fixed; write inside it):**\n\n| Person | Awareness | Angle | Format | Face | Setting | Look |\n|---|---|---|---|---|---|---|\n| %s |\n\nWhat is seen: %s" % (
++    return ("**This ad's row on the creative matrix (fixed; write inside it):**\n\n| Profile | Awareness | Angle | Format | Face | Setting | Look |\n|---|---|---|---|---|---|---|\n| %s |\n\nWhat is seen: %s" % (
+         " | ".join(str(m[k]) for k in COLS), r.get("picture") or "as the row says"))
+ 
+ 
+@@ -328,15 +331,19 @@ def cell(brand, batch, row, run):
+ 
+ def back(planned, made):
+     """(columns that came out as planned, [(column, planned, made)])"""
++    planned, made = PL.M.norm(planned), PL.M.norm(made)
+     off = [(k, planned[k], made.get(k)) for k in COLS if made.get(k) not in (None, "", "unclear") and made.get(k) != planned[k]]
+     return len(COLS) - len(off), off
+ 
+ 
+ def row_of(run):
+     try:
+-        return json.loads((Path(run) / "matrix-cell.json").read_text())
++        r = json.loads((Path(run) / "matrix-cell.json").read_text())
+     except (OSError, ValueError):
+         return {}
++    if isinstance(r, dict) and isinstance(r.get("moves"), dict):
++        r["moves"] = PL.M.norm(r["moves"])                    # a cell written before 26 Nov says who / argument
++    return r
+ 
+ 
+ def start(run, brand, person, kind="image", pin=None, ask=None, say=print):
+@@ -398,7 +405,7 @@ def swipes(brand, fmt, kind="image"):
+ 
+ 
+ def table(d):
+-    out = ["# Creative matrix: " + d["batch"], "", "%s. %d rows." % ("Passes" if d["passes"] else "Does not pass", len(d["rows"])), "", "| Row | Person | Awareness | Angle | Format | Face | Setting | Look | What is seen |", "|---|---|---|---|---|---|---|---|---|"]
++    out = ["# Creative matrix: " + d["batch"], "", "%s. %d rows." % ("Passes" if d["passes"] else "Does not pass", len(d["rows"])), "", "| Row | Profile | Awareness | Angle | Format | Face | Setting | Look | What is seen |", "|---|---|---|---|---|---|---|---|---|"]
+     out += ["| %s | %s | %s |" % (r["id"], " | ".join(str(r["moves"].get(k)) for k in COLS), r.get("picture") or "") for r in d["rows"]]
+     return "\n".join(out + [""] + ["- " + b for b in d["problems"]]) + "\n"
+ 
+diff --git a/components/creative-diversity/creative_plan.py b/components/creative-diversity/creative_plan.py
+index a95e47f9..6986c3bd 100644
+--- a/components/creative-diversity/creative_plan.py
++++ b/components/creative-diversity/creative_plan.py
+@@ -2,8 +2,8 @@
+ """The plan: every ad being made, in one list per brand, so nothing is written or pictured that Meta would group with
+ another ad. Every chain goes through here; no brand is named here and nothing calls Meta.
+ 
+-    creative_plan.py board <brand> [--who <sub-avatar>]                       what is taken, and what is still open, for one person
+-    creative_plan.py claim <brand> <id> who=… awareness=… argument=… format=… face=… setting=… look=…
++    creative_plan.py board <brand> [--profile <profile>]                       what is taken, and what is still open, for one person
++    creative_plan.py claim <brand> <id> profile=… awareness=… angle=… format=… face=… setting=… look=…
+     creative_plan.py tie   <brand> <id> <brief>      creative_plan.py mark <brand> <id> filed|live|dropped      creative_plan.py list <brand>
+ 
+ `claim` compares the seven moves (dimensions.json) with every ad running (the saved library) and every ad planned, filed
+@@ -46,7 +46,7 @@ def _own(name):
+ 
+ K, M = _own("check"), _own("matrix")
+ 
+-NAMES = {"who": "person", "awareness": "awareness", "argument": "angle", "format": "format", "face": "face", "setting": "setting", "look": "look"}
++NAMES = {"profile": "profile", "awareness": "awareness", "angle": "angle", "format": "format", "face": "face", "setting": "setting", "look": "look"}
+ STATES = ("planned", "filed", "live", "dropped")
+ 
+ 
+@@ -56,9 +56,11 @@ def file(brand):
+ 
+ def ledger(brand):
+     try:
+-        return json.loads(file(brand).read_text())["ads"]
++        ads = json.loads(file(brand).read_text())["ads"]
+     except (OSError, ValueError, KeyError):
+         return {}
++    M.norm_items(ads.values() if isinstance(ads, dict) else [])     # a plan written before 26 Nov says who / argument
++    return ads
+ 
+ 
+ class _Locked:
+@@ -114,6 +116,7 @@ def why(v):
+ 
+ def claim(brand, ident, moves, by="", brief=None, force=False):
+     """Add one ad to the plan. The verdict; a `same` one is not added (raise nothing: the caller's gate decides)."""
++    moves = M.norm(moves)
+     miss = [k for k in M.BIG if not moves.get(k)]
+     if miss:
+         raise ValueError("an ad declares all 7 moves; missing: " + ", ".join(miss))
+@@ -144,6 +147,7 @@ def mark(brand, name, state):
+ 
+ def made(brand, name, moves):
+     """What was really made, read off the finished picture: later ads are compared with this, not with the plan."""
++    moves = M.norm(moves)
+     with _Locked(brand) as l:
+         for k, r in l.ads.items():
+             if name in (k, r.get("brief")):
+@@ -163,10 +167,10 @@ def board(brand, who="", avatar_subs=(), most=14):
+     if not rows:
+         return ""
+     clean = re.sub(r"^sub-\d+-", "", who or "")
+-    mine = [x for x in rows if re.sub(r"^sub-\d+-", "", str(x[1].get("who"))) == clean] if clean else []
++    mine = [x for x in rows if re.sub(r"^sub-\d+-", "", str(x[1].get("profile"))) == clean] if clean else []
+     planned = [x for x in rows if x[2] != "running" and x not in mine]
+     out = ["", "**Different from every other ad (Meta groups ads that look or feel alike):**", "",
+-           "This ad must differ from each one below on at least 3 of: person, awareness, angle, format, face, setting, look. Rewording a headline is not a difference. Change what is SEEN first."]
++           "This ad must differ from each one below on at least 3 of: profile, awareness, angle, format, face, setting, look. Rewording a headline is not a difference. Change what is SEEN first."]
+     for title, xs in (("Taken for this person", mine), ("Being made now for others", planned)):
+         if xs:
+             seen, keep = set(), []
+@@ -175,7 +179,7 @@ def board(brand, who="", avatar_subs=(), most=14):
+                 if s not in seen:
+                     seen.add(s)
+                     keep.append("- (%s) %s" % (st, s))
+-            out += ["", title + " (person · awareness · angle · format · face · setting · look):"] + keep[:most]
++            out += ["", title + " (profile · awareness · angle · format · face · setting · look):"] + keep[:most]
+     top = {k: {} for k in ("format", "setting", "look")}
+     for _, m, _st in rows:
+         for k in top:
+@@ -189,7 +193,7 @@ def known(text_moves, aim=None):
+     """The seven moves, where the run's own decisions win over what was read off the words."""
+     a, m = aim or {}, dict(text_moves or {})
+     if a.get("sub") or a.get("avatar"):
+-        m["who"] = re.sub(r"^sub-\d+-", "", a.get("sub") or a.get("avatar"))
++        m["profile"] = re.sub(r"^sub-\d+-", "", a.get("sub") or a.get("avatar"))
+     if a.get("awareness"):
+         m["awareness"] = a["awareness"]
+     if a.get("demographic"):
+@@ -222,7 +226,8 @@ def main(argv=None):
+         return 2
+     do, brand = a[0], a[1]
+     if do == "board":
+-        print(board(brand, a[a.index("--who") + 1] if "--who" in a else "") or "nothing taken yet")
++        flag = "--profile" if "--profile" in a else "--who"            # --who: the old word, still read
++        print(board(brand, a[a.index(flag) + 1] if flag in a else "") or "nothing taken yet")
+     elif do == "claim":
+         v = claim(brand, a[2], dict(x.split("=", 1) for x in a[3:] if "=" in x), force="--force" in a)
+         print("%s: %s" % (v["verdict"], why(v)))
+diff --git a/components/creative-diversity/dimensions.json b/components/creative-diversity/dimensions.json
+index 6fbfe1c7..b17c5757 100644
+--- a/components/creative-diversity/dimensions.json
++++ b/components/creative-diversity/dimensions.json
+@@ -44,10 +44,11 @@
+   },
+   "big": [
+     {
+-      "id": "who",
++      "id": "profile",
++      "was": "who",
+       "meta": "persona / use case / motivation",
+-      "name": "Persona (sub-avatar + desire)",
+-      "values": "brands/<brand>/core-avatars/avatars.json → sub_avatars (desire from each sub-avatar card)",
++      "name": "Profile (the person and their desire)",
++      "values": "the brand's profiles, through components/profiles (profiles.py load); a profile is <avatar>[_<sub>][_<demographic>]",
+       "read_as": "sub_avatar"
+     },
+     {
+@@ -58,7 +59,8 @@
+       "read_as": "awareness"
+     },
+     {
+-      "id": "argument",
++      "id": "angle",
++      "was": "argument",
+       "meta": "message",
+       "name": "Angle",
+       "values": "brands/<brand>/strategy/angles.json (active rows)",
+@@ -181,9 +183,9 @@
+   "matrix": {
+     "_what": "THE CREATIVE MATRIX. Every batch, whatever its format, is this grid first: one row per picture or cut, one cell per column, every value from a list. Nothing is made until the grid passes; what is made is read back against its row.",
+     "said": [
+-      "who",
++      "profile",
+       "awareness",
+-      "argument"
++      "angle"
+     ],
+     "seen": [
+       "format",
+@@ -225,5 +227,6 @@
+       "read back",
+       "file"
+     ]
+-  }
++  },
++  "_words": "The system's words (26 Nov 2026): the person a creative is for is its profile, its message is its angle. Run files written before then say who and argument; matrix.norm() reads them as profile and angle."
+ }
+diff --git a/components/creative-diversity/matrix.py b/components/creative-diversity/matrix.py
+index fecf9a2e..f3c03164 100644
+--- a/components/creative-diversity/matrix.py
++++ b/components/creative-diversity/matrix.py
+@@ -15,7 +15,30 @@ from pathlib import Path
+ ROOT = Path(__file__).resolve().parents[2]
+ HERE = Path(__file__).resolve().parent
+ LEVELS = ["unaware", "problem-aware", "solution-aware", "product-aware", "most-aware"]
+-BIG = ["who", "awareness", "argument", "format", "face", "setting", "look"]
++BIG = ["profile", "awareness", "angle", "format", "face", "setting", "look"]
++# The system's words (26 Nov 2026): the person a creative is for is its PROFILE, its message is its ANGLE. Run files
++# written before then say `who` and `argument`; every reader goes through norm(), so they still read.
++OLD_WORDS = {"who": "profile", "argument": "angle"}
++
++
++def norm(m):
++    """A moves dict in the system's words: an old `who` / `argument` reads as `profile` / `angle` (the new word wins
++    when both are there). Anything that is not a dict comes back as it is."""
++    if not isinstance(m, dict) or not any(k in m for k in OLD_WORDS):
++        return m
++    out = {OLD_WORDS.get(k, k): v for k, v in m.items() if k not in OLD_WORDS.values()}
++    out.update({k: v for k, v in m.items() if k in OLD_WORDS.values()})
++    return out
++
++
++def norm_items(items):
++    """[{"moves": …, "made": …}] with every moves dict in the system's words (in place, and returned)."""
++    for i in items or []:
++        if isinstance(i, dict):
++            for k in ("moves", "made", "nearest_is"):
++                if isinstance(i.get(k), dict):
++                    i[k] = norm(i[k])
++    return items
+ FORMAT_FAMILY = {"video-format": "video", "video-structure": "video",
+                  "image-format": "image", "carousel-format": "carousel"}
+ 
+@@ -28,14 +51,15 @@ def face_of(t):
+ 
+ 
+ def moves(t):
+-    return {"who": t.get("sub_avatar"), "awareness": t.get("awareness"),
+-            "argument": t.get("angle"), "format": t.get("format"),
++    return {"profile": t.get("sub_avatar"), "awareness": t.get("awareness"),
++            "angle": t.get("angle"), "format": t.get("format"),
+             "face": face_of(t), "setting": t.get("setting"), "look": t.get("style")}
+ 
+ 
+ def distance(a, b):
+     """How many big moves differ. Unclear on either side is not counted as a move."""
+     d, diff = 0, []
++    a, b = norm(a), norm(b)
+     for k in BIG:
+         x, y = a.get(k), b.get(k)
+         if x in (None, "", "unclear") or y in (None, "", "unclear"):
+@@ -156,7 +180,7 @@ def build(brand, day=None):
+     avatars_out = {}
+     for a in av:
+         mine = [i for i in items if i["avatar"] == a["id"]]
+-        subs_used = Counter(i["moves"]["who"] for i in mine)
++        subs_used = Counter(i["moves"]["profile"] for i in mine)
+         gaps = []
+         for lv in LEVELS:
+             if not any(i["moves"]["awareness"] == lv for i in mine):
+@@ -173,7 +197,7 @@ def build(brand, day=None):
+             "formats": dict(Counter(i["moves"]["format"] for i in mine).most_common()),
+             "settings": dict(Counter(i["moves"]["setting"] for i in mine).most_common()),
+             "faces": dict(Counter(i["moves"]["face"] for i in mine).most_common()),
+-            "angles": dict(Counter(i["moves"]["argument"] for i in mine).most_common()),
++            "angles": dict(Counter(i["moves"]["angle"] for i in mine).most_common()),
+             "variations_of_same_creative": sum(1 for i in mine if i["verdict"] == "variation"),
+             "gaps": gaps, "settings_never_used": unused,
+         }
+diff --git a/components/creative-diversity/prompts/matrix-fill-v1.md b/components/creative-diversity/prompts/matrix-fill-v1.md
+index c498bdf3..914c2e9a 100644
+--- a/components/creative-diversity/prompts/matrix-fill-v1.md
++++ b/components/creative-diversity/prompts/matrix-fill-v1.md
+@@ -9,7 +9,7 @@ Each row is for the person named. Read the person: every cell has to be somethin
+ ## The values (a number is how often it is already used; take the unused ones that fit)
+ 
+ **awareness:** {awareness}
+-**argument** (the angle):
++**angle**:
+ {angles}
+ **format:** {formats}
+ **setting:**
+@@ -25,11 +25,11 @@ Each row is for the person named. Read the person: every cell has to be somethin
+ 
+ - Any two rows, yours and the fixed ones, differ on at least 3 of the 7 columns, and on at least 2 of format, face, setting, look.
+ - No format, face, setting or look fills more than half of the rows.
+-- Rows for the same person share `who`, so they have to part on what is seen and on the argument or awareness.
+-- The setting has to be able to hold the format, and the format has to be able to carry the argument. A row nobody could picture is wrong.
++- Rows for the same person share `profile`, so they have to part on what is seen and on the angle or awareness.
++- The setting has to be able to hold the format, and the format has to be able to carry the angle. A row nobody could picture is wrong.
+ 
+ Fill: {want}
+ 
+ Answer with one JSON object in a ```json fence:
+-{"rows":[{"who":"","awareness":"","argument":"","format":"","face":"","setting":"","look":"","picture":"what is seen, one plain sentence","fact":"the person's own fact this comes from"}]}
++{"rows":[{"profile":"","awareness":"","angle":"","format":"","face":"","setting":"","look":"","picture":"what is seen, one plain sentence","fact":"the person's own fact this comes from"}]}
+ {note}
+diff --git a/components/creative-diversity/tests/test_batch.py b/components/creative-diversity/tests/test_batch.py
+index a3cde638..1d3f9eff 100644
+--- a/components/creative-diversity/tests/test_batch.py
++++ b/components/creative-diversity/tests/test_batch.py
+@@ -7,7 +7,7 @@ from unittest import mock
+ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+ import check  # noqa: E402
+ 
+-A = {"who": "p1", "awareness": "problem-aware", "argument": "a1", "format": "list", "face": "f1", "setting": "s1", "look": "l1"}
++A = {"profile": "p1", "awareness": "problem-aware", "angle": "a1", "format": "list", "face": "f1", "setting": "s1", "look": "l1"}
+ 
+ 
+ class Batch(unittest.TestCase):
+@@ -21,7 +21,7 @@ class Batch(unittest.TestCase):
+         self.assertEqual(r["same"][0]["ads"], ["a", "b"])
+ 
+     def test_three_moves_apart_passes(self):
+-        self.assertTrue(self.go({"id": "a", "moves": A}, {"id": "b", "moves": dict(A, who="p2", argument="a2", look="l2")})["passes"])
++        self.assertTrue(self.go({"id": "a", "moves": A}, {"id": "b", "moves": dict(A, profile="p2", angle="a2", look="l2")})["passes"])
+ 
+     def test_every_move_is_named(self):
+         with self.assertRaises(SystemExit):
+diff --git a/components/creative-diversity/tests/test_matrix.py b/components/creative-diversity/tests/test_matrix.py
+index 0c33e26c..49a1ef43 100644
+--- a/components/creative-diversity/tests/test_matrix.py
++++ b/components/creative-diversity/tests/test_matrix.py
+@@ -11,11 +11,11 @@ W = Path(__file__).resolve().parents[3]
+ sys.path.insert(0, str(W / "components" / "creative-diversity"))
+ import creative_matrix as X  # noqa: E402
+ 
+-V = {"awareness": ["problem-aware", "solution-aware"], "argument": ["a1", "a2"], "format": ["f1", "f2", "f3", "f4"], "face": ["none", "male/25-34/black"], "setting": ["s1", "s2", "s3"], "look": ["l1", "l2"], "_text": {"argument": "- `a1`: x\n- `a2`: y", "setting": "- `s1`: x\n- `s2`: y\n- `s3`: z"}}
++V = {"awareness": ["problem-aware", "solution-aware"], "angle": ["a1", "a2"], "format": ["f1", "f2", "f3", "f4"], "face": ["none", "male/25-34/black"], "setting": ["s1", "s2", "s3"], "look": ["l1", "l2"], "_text": {"angle": "- `a1`: x\n- `a2`: y", "setting": "- `s1`: x\n- `s2`: y\n- `s3`: z"}}
+ 
+ 
+ def row(i, **k):
+-    return {"id": i, "moves": dict({"who": "p", "awareness": "problem-aware", "argument": "a1", "format": "f1", "face": "none", "setting": "s1", "look": "l1"}, **k)}
++    return {"id": i, "moves": dict({"profile": "p", "awareness": "problem-aware", "angle": "a1", "format": "f1", "face": "none", "setting": "s1", "look": "l1"}, **k)}
+ 
+ 
+ class Matrix(unittest.TestCase):
+@@ -32,11 +32,11 @@ class Matrix(unittest.TestCase):
+         self.t.cleanup()
+ 
+     def test_three_apart_is_not_enough_when_nothing_seen_moved(self):
+-        self.assertTrue(X.problems([row("a"), row("b", awareness="solution-aware", argument="a2", who="q")]))
+-        self.assertFalse(X.problems([row("a"), row("b", argument="a2", format="f2", setting="s2")]))
++        self.assertTrue(X.problems([row("a"), row("b", awareness="solution-aware", angle="a2", profile="q")]))
++        self.assertFalse(X.problems([row("a"), row("b", angle="a2", format="f2", setting="s2")]))
+ 
+     def test_one_look_never_fills_the_batch(self):
+-        rows = [row("a"), row("b", format="f2", setting="s2", face="male/25-34/black"), row("c", format="f3", setting="s3", argument="a2"), row("d", format="f4", awareness="solution-aware", setting="s9", who="q")]
++        rows = [row("a"), row("b", format="f2", setting="s2", face="male/25-34/black"), row("c", format="f3", setting="s3", angle="a2"), row("d", format="f4", awareness="solution-aware", setting="s9", profile="q")]
+         self.assertTrue(any("fills" in b for b in X.problems(rows)))
+ 
+     def test_off_list_is_refused_and_outside_counts(self):
+@@ -45,7 +45,7 @@ class Matrix(unittest.TestCase):
+ 
+     def test_a_grid_that_breaks_a_rule_is_sent_back_then_passes_and_locks(self):
+         asked = []
+-        good = [dict(row("x")["moves"]), dict(row("y", argument="a2", format="f2", setting="s2")["moves"])]
++        good = [dict(row("x")["moves"]), dict(row("y", angle="a2", format="f2", setting="s2")["moves"])]
+         answers = [[good[0], dict(good[0])], good]
+ 
+         def ask(p):
+@@ -75,7 +75,7 @@ class Matrix(unittest.TestCase):
+         for b in sorted(p.name for p in (W / "brands").iterdir() if (p / "strategy" / "settings.json").is_file()):
+             for k in X.KINDS:
+                 v = X.values(b, k)
+-                for c in ("awareness", "argument", "format", "setting", "look"):
++                for c in ("awareness", "angle", "format", "setting", "look"):
+                     self.assertGreater(len(v[c]), 3 if c != "look" else 1, (b, k, c))
+         for m in self.m[2:3]:
+             m.start()
+diff --git a/components/creative-diversity/tests/test_matrix_wired.py b/components/creative-diversity/tests/test_matrix_wired.py
+index 4054d68a..90963201 100644
+--- a/components/creative-diversity/tests/test_matrix_wired.py
++++ b/components/creative-diversity/tests/test_matrix_wired.py
+@@ -40,7 +40,7 @@ class Wired(unittest.TestCase):
+         X.lock("acme", "b")
+         X.cell("acme", "b", "p-1", self.run_)
+         self.assertEqual(X.start(self.run_, "acme", "p", pin={"format": "f2"}, say=lambda m: None)["moves"]["format"], "f2")
+-        X.PL.claim("acme", "other", dict(row("y")["moves"], format="f4", argument="a2"))
++        X.PL.claim("acme", "other", dict(row("y")["moves"], format="f4", angle="a2"))
+         with self.assertRaises(ValueError):
+             X.start(self.run_, "acme", "p", pin={"format": "f4"}, say=lambda m: None)
+ 
+diff --git a/components/creative-diversity/tests/test_plan.py b/components/creative-diversity/tests/test_plan.py
+index f6a3f85e..2639b285 100644
+--- a/components/creative-diversity/tests/test_plan.py
++++ b/components/creative-diversity/tests/test_plan.py
+@@ -10,7 +10,7 @@ W = Path(__file__).resolve().parents[3]
+ sys.path.insert(0, str(W / "components" / "creative-diversity"))
+ import creative_plan as PL  # noqa: E402
+ 
+-A = {"who": "p1", "awareness": "problem-aware", "argument": "a1", "format": "list", "face": "f1", "setting": "s1", "look": "l1"}
++A = {"profile": "p1", "awareness": "problem-aware", "angle": "a1", "format": "list", "face": "f1", "setting": "s1", "look": "l1"}
+ 
+ 
+ class Plan(unittest.TestCase):
+@@ -30,7 +30,7 @@ class Plan(unittest.TestCase):
+         self.assertEqual(PL.claim("acme", "b", dict(A, setting="s2"))["verdict"], "same")
+         self.assertNotIn("b", PL.ledger("acme"))
+         self.assertEqual(PL.claim("acme", "c", dict(A, setting="s2", look="l2"))["verdict"], "close")
+-        self.assertEqual(PL.claim("acme", "d", dict(A, who="p2", argument="a2", face="f2"))["verdict"], "new")
++        self.assertEqual(PL.claim("acme", "d", dict(A, profile="p2", angle="a2", face="f2"))["verdict"], "new")
+ 
+     def test_the_same_ad_may_claim_again_and_a_dropped_one_frees_its_place(self):
+         PL.claim("acme", "a", A)
+@@ -40,7 +40,7 @@ class Plan(unittest.TestCase):
+         self.assertEqual(PL.claim("acme", "b", A)["verdict"], "new")
+ 
+     def test_an_ad_we_know_little_about_is_never_called_the_same(self):
+-        PL.claim("acme", "a", {k: ("unclear" if k not in ("who", "awareness") else v) for k, v in A.items()})
++        PL.claim("acme", "a", {k: ("unclear" if k not in ("profile", "awareness") else v) for k, v in A.items()})
+         self.assertEqual(PL.claim("acme", "b", A)["verdict"], "new")
+ 
+     def test_running_ads_count(self):
+@@ -56,8 +56,8 @@ class Plan(unittest.TestCase):
+             self.assertIn(x, b)
+ 
+     def test_a_runs_own_decisions_win(self):
+-        m = PL.known(dict(A, who="unclear", face="male/25-34/white"), {"sub": "sub-02-bald", "awareness": "unaware", "demographic": "male-35-44-black"})
+-        self.assertEqual((m["who"], m["awareness"], m["face"]), ("bald", "unaware", "male/35-44/black"))
++        m = PL.known(dict(A, profile="unclear", face="male/25-34/white"), {"sub": "sub-02-bald", "awareness": "unaware", "demographic": "male-35-44-black"})
++        self.assertEqual((m["profile"], m["awareness"], m["face"]), ("bald", "unaware", "male/35-44/black"))
+         self.assertEqual(PL.known(dict(A, face="none"), {"demographic": "m/25-34/black"})["face"], "none")
+         self.assertEqual(PL.known({}, {"demographic": "f/55-64/white"})["face"], "female/55-64/white")
+ 

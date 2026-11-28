@@ -44,10 +44,11 @@
   },
   "big": [
     {
-      "id": "who",
+      "id": "profile",
+      "was": "who",
       "meta": "persona / use case / motivation",
-      "name": "Persona (sub-avatar + desire)",
-      "values": "brands/<brand>/core-avatars/avatars.json → sub_avatars (desire from each sub-avatar card)",
+      "name": "Profile (the person and their desire)",
+      "values": "the brand's profiles, through components/profiles (profiles.py load); a profile is <avatar>[_<sub>][_<demographic>]",
       "read_as": "sub_avatar"
     },
     {
@@ -58,7 +59,8 @@
       "read_as": "awareness"
     },
     {
-      "id": "argument",
+      "id": "angle",
+      "was": "argument",
       "meta": "message",
       "name": "Angle",
       "values": "brands/<brand>/strategy/angles.json (active rows)",
@@ -181,9 +183,9 @@
   "matrix": {
     "_what": "THE CREATIVE MATRIX. Every batch, whatever its format, is this grid first: one row per picture or cut, one cell per column, every value from a list. Nothing is made until the grid passes; what is made is read back against its row.",
     "said": [
-      "who",
+      "profile",
       "awareness",
-      "argument"
+      "angle"
     ],
     "seen": [
       "format",
@@ -225,5 +227,6 @@
       "read back",
       "file"
     ]
-  }
+  },
+  "_words": "The system's words (26 Nov 2026): the person a creative is for is its profile, its message is its angle. Run files written before then say who and argument; matrix.norm() reads them as profile and angle."
 }

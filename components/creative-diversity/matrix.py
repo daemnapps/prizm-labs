@@ -15,7 +15,30 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
 LEVELS = ["unaware", "problem-aware", "solution-aware", "product-aware", "most-aware"]
-BIG = ["who", "awareness", "argument", "format", "face", "setting", "look"]
+BIG = ["profile", "awareness", "angle", "format", "face", "setting", "look"]
+# The system's words (26 Nov 2026): the person a creative is for is its PROFILE, its message is its ANGLE. Run files
+# written before then say `who` and `argument`; every reader goes through norm(), so they still read.
+OLD_WORDS = {"who": "profile", "argument": "angle"}
+
+
+def norm(m):
+    """A moves dict in the system's words: an old `who` / `argument` reads as `profile` / `angle` (the new word wins
+    when both are there). Anything that is not a dict comes back as it is."""
+    if not isinstance(m, dict) or not any(k in m for k in OLD_WORDS):
+        return m
+    out = {OLD_WORDS.get(k, k): v for k, v in m.items() if k not in OLD_WORDS.values()}
+    out.update({k: v for k, v in m.items() if k in OLD_WORDS.values()})
+    return out
+
+
+def norm_items(items):
+    """[{"moves": …, "made": …}] with every moves dict in the system's words (in place, and returned)."""
+    for i in items or []:
+        if isinstance(i, dict):
+            for k in ("moves", "made", "nearest_is"):
+                if isinstance(i.get(k), dict):
+                    i[k] = norm(i[k])
+    return items
 FORMAT_FAMILY = {"video-format": "video", "video-structure": "video",
                  "image-format": "image", "carousel-format": "carousel"}
 
@@ -28,14 +51,15 @@ def face_of(t):
 
 
 def moves(t):
-    return {"who": t.get("sub_avatar"), "awareness": t.get("awareness"),
-            "argument": t.get("angle"), "format": t.get("format"),
+    return {"profile": t.get("sub_avatar"), "awareness": t.get("awareness"),
+            "angle": t.get("angle"), "format": t.get("format"),
             "face": face_of(t), "setting": t.get("setting"), "look": t.get("style")}
 
 
 def distance(a, b):
     """How many big moves differ. Unclear on either side is not counted as a move."""
     d, diff = 0, []
+    a, b = norm(a), norm(b)
     for k in BIG:
         x, y = a.get(k), b.get(k)
         if x in (None, "", "unclear") or y in (None, "", "unclear"):
@@ -156,7 +180,7 @@ def build(brand, day=None):
     avatars_out = {}
     for a in av:
         mine = [i for i in items if i["avatar"] == a["id"]]
-        subs_used = Counter(i["moves"]["who"] for i in mine)
+        subs_used = Counter(i["moves"]["profile"] for i in mine)
         gaps = []
         for lv in LEVELS:
             if not any(i["moves"]["awareness"] == lv for i in mine):
@@ -173,7 +197,7 @@ def build(brand, day=None):
             "formats": dict(Counter(i["moves"]["format"] for i in mine).most_common()),
             "settings": dict(Counter(i["moves"]["setting"] for i in mine).most_common()),
             "faces": dict(Counter(i["moves"]["face"] for i in mine).most_common()),
-            "angles": dict(Counter(i["moves"]["argument"] for i in mine).most_common()),
+            "angles": dict(Counter(i["moves"]["angle"] for i in mine).most_common()),
             "variations_of_same_creative": sum(1 for i in mine if i["verdict"] == "variation"),
             "gaps": gaps, "settings_never_used": unused,
         }
