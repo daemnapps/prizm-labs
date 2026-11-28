@@ -134,6 +134,24 @@ The brand owns its own repository and its own data; we only get access. Read too
 runs/studio-feedback/{brand}/feedback.jsonl; "use <id>" puts a ready revision in place). Run
 `python3 components/revision/revise.py ask --brand {brand} --input "{input}"` and follow
 .claude/skills/revision/SKILL.md. In the result: what changed, before and after, tied to his words."""},
+    "flywheel": {
+        "name": "Start {input}",
+        "here": True,                    # the owner's own button on Today: runs on this computer, not handed off
+        "prompt": """Brand: {brand}. Job: start this proposal from the morning read: "{input}".
+
+The input starts with the date and the proposal id (YYYY-MM-DD Pn). Read that row in
+runs/flywheel/{brand}/<date>/proposals.json: its kind, its numbers, `do` and `cmd`. Then do only that, dry:
+- variations: follow .claude/skills/ad-variations/SKILL.md; find the winner's teardown (its brief in
+  runs/meta-upload/{brand}/ADS-INDEX.json) and run the plan with --dry-run. Nothing made, nothing spent.
+- matrix: when `matrix` is empty, fill the winner's 7 cells (who, awareness, argument, format, face, setting, look)
+  from the lists (components/creative-diversity/dimensions.json names them) by reading the ad's own pictures
+  (Shared Assets folder in the ADS-INDEX card); then `python3 components/flywheel/flywheel.py column --brand {brand}
+  <cells>` picks the column. Write the one new matrix row: the winner's cells with that column moved to a value on the
+  list (prefer `least_used`). Do not file it on the plan and do not write a brief.
+- promo: run the row's cmd (pack.py hand … --dry-run, or build when there is no pack yet). Never approve the offer words.
+- re-make: find the ad's teardown (runs/video-teardown/{brand}/) and run ad-variations plan --n 1 --dry-run.
+Stop at the quote: if a step would spend, write its price and stop. In the result: the proposal's numbers (as given),
+what was run, and where its output is.""" },
     "connect": {
         "name": "Look at {input}",
         "prompt": """Job: say what this GitHub repository is, read-only: {input}
@@ -152,6 +170,7 @@ NEXT = {
     "swipe": ["Claude saves and tears it down", "It lands in Swipes", "Make an ad from it"],
     "setup": ["Claude fills the item as a draft", "You: confirm in Settings"],
     "connect": ["Claude reads the repository", "You: decide to connect it"],
+    "flywheel": ["Claude runs the proposal, dry", "You: read what came back", "Make it (stops at the price)"],
     "market": ["Claude plans the read (free)", "You: go on the credits", "New products on the radar"],
     "_handed": ["Handed off", "They run it on their own Claude", "The result comes back here"],
     "revise": ["The revision reads your note and makes only those changes", "You: Use this", "The chain carries on from it"],
@@ -204,6 +223,7 @@ ABOUT = {
     "onboard": ("setup", "Checks access to a new brand and reads its folder, then writes the list of what to ask them for."),
     "revise": ("video", "Reads your feedback on this piece and makes only the changes you asked for. You see before and after, then Use this."),
     "connect": ("setup", "Reads a repository and says what's in it and whether to connect it."),
+    "flywheel": ("video", "Runs one of this morning's proposals as a dry run: variations, the next matrix column, a promo pack or a re-make. Nothing is made or spent."),
 }
 LANE_NAMES = {"research": "Research", "copy": "Copy", "video": "Video", "feed": "Feed", "setup": "Setup"}
 MODEL = os.environ.get("PRIZM_ASK_MODEL", "claude-sonnet-5-5")
@@ -281,7 +301,7 @@ def create(kind, brand, text, by=None, to=None):
     rec = {"id": aid, "brand": brand, "kind": kind, "input": text, "name": KINDS[kind]["name"].format(input=text),
            "state": "queued", "asked": now(), "by": by, "dir": str(d.relative_to(WS))}
     _write(d / "ask.json", rec)
-    return hand(rec, to or ("here" if brand == "_portfolio" or KINDS[kind].get("cmd") else default_hand(brand)))
+    return hand(rec, to or ("here" if brand == "_portfolio" or KINDS[kind].get("cmd") or KINDS[kind].get("here") else default_hand(brand)))
 
 
 def listing(brand=None, limit=40, dupes=False):

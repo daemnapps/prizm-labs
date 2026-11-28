@@ -808,6 +808,20 @@
     "hand"
    ],
    "basis": "draft"
+  },
+  {
+   "path": "components/flywheel",
+   "kind": "tool",
+   "does": "Joins the read to the plan: each morning the numbers become brief proposals (variations of a fatigued KPI winner, the next matrix column for a spend winner, the promo pack, a re-make of an old winner), each with its numbers and nothing that spends",
+   "role": "growth-strategist",
+   "workflow": "all",
+   "stage": "plan",
+   "steps": [
+    "run",
+    "show",
+    "column"
+   ],
+   "basis": "draft"
   }
  ]
 }

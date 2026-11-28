@@ -162,3 +162,9 @@ class Asks(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+def test_flywheel_kind_runs_here_on_the_middle_model():
+    import studio_asks as SA
+    assert SA.KINDS["flywheel"].get("here") and "flywheel" in SA.ABOUT and "flywheel" in SA.NEXT
+    assert "sonnet" in SA.MODEL and "dry" in SA.KINDS["flywheel"]["prompt"]

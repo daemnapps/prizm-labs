@@ -1415,11 +1415,22 @@ def loop(brand):
             "stages_asof": r.get("asof") if isinstance(r, dict) else None, "promos": promos[:6], "winners": winners_}
 
 
+def _proposals(brand):
+    """This morning's brief proposals (components/flywheel: the read joined to the plan), or None."""
+    try:
+        spec = importlib.util.spec_from_file_location("flywheel_desk", str(HERE.parent / "flywheel" / "flywheel.py"))
+        m = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(m)
+        return m.latest(brand, WS)
+    except Exception:  # noqa: BLE001  no proposals yet: the card shows the variations list
+        return None
+
+
 def today(brand):
     la = live_ads(brand)
     return {"loop": loop(brand), "money": money(), "winners": winners(brand), "research": research(brand), "now": la["money"],
             "off": [a for a in la["ads"] if a["call"] == "off"], "calls": [a for a in la["ads"] if a["call"] not in (None, "too_early", "keep", "off")],
-            "calls_asof": la["calls_asof"], "vary": vary_candidates(la),
+            "calls_asof": la["calls_asof"], "vary": vary_candidates(la), "proposals": _proposals(brand),
             "low_roas": sum(1 for a in la["ads"] if a["active"] and a["spend7"] >= 50 and (a["roas7"] or 0) < 0.5
                             and not (a["buys7"] > 0 and not a["value7"]))}
 
