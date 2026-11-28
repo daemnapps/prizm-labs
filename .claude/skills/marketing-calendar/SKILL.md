@@ -44,6 +44,19 @@ The brand's own record under `brands/<brand>/` (segments, moments, avatars, offe
 8. **One send a day; the only thing ever refused is an exact duplicate.** No send budget exists.
 9. **Every write goes under `--out`** (default `runs/marketing-calendar/`).
 
+## Then the promo pack (every real run)
+
+When a month has been planned (a real run, or the person says the month is approved), start the promo pack for it:
+
+```
+python3 components/promo-pack/machine/pack.py tick --brand <brand> --month <YYYY-MM>
+```
+
+   Add `--stock <file>` when a stock read is on hand (`components/promo-pack/skills/stock-check.md`).
+- It builds one pack per promotion touching the month (the offer bank's promo-calendar rows). A month with no promotion builds nothing.
+- It hands nothing off until the owner has approved the pack's offer words; once he has, the next run starts every hand-off and says `loaded` when all are in.
+- Report in one line: the packs built, and whether each waits on the owner's approval, is loading, or is loaded. The pack is `runs/promo-pack/<brand>/<moment>/PACK.md`.
+
 ## What cannot be done from one command by a person
 
 The review step (approve, needs work, cut, per send) is a person's act on `review.json`; the component's own review board is a local page started by a separate command, and this skill does not use it. If the person wants a slot changed, tell them to say which one and what to change; do not edit `review.json` for them without being asked. Also: no single command both plans and writes the emails; writing is `email-production`.

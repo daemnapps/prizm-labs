@@ -6,6 +6,11 @@
     python3 components/promo-pack/machine/pack.py approve --brand <brand> --moment <name> --by <who> --said "<words>"
     python3 components/promo-pack/machine/pack.py hand   --brand <brand> --moment <name> [--only static,video,sms] [--dry-run]
     python3 components/promo-pack/machine/pack.py status --brand <brand> --moment <name>
+    python3 components/promo-pack/machine/pack.py tick   [--brand <brand>] [--lead-days 14] [--stock <runway.json>]
+
+`tick` is the trigger, run when a month's calendar is planned (marketing-calendar's skill runs it with --month):
+it builds the pack for every promotion touching that month, and once the owner has approved the words it hands
+everything off and says when the pack is loaded. With no --month it takes promotions within --lead-days.
 
 Reads the brand's offer bank (brands/<brand>/products/offer-bank.md: the promo-calendar row for the month and every
 line the bank lets creative use word for word), the month's calendar (runs/marketing-calendar/<brand>/<YYYY-MM>/
@@ -197,9 +202,23 @@ def email_snapshot(slot, brand, base):
         return {"state": "held", "why": str(ex)}
 
 
-def written(brand, slot_id, channel, words, dropped, base):
+def gifts_by_offer(words, titles):
+    """Each offer's free gift, from lines shaped '<offer> + Free <gift>': offer key -> [gift]."""
+    out = {}
+    for w in words:
+        m = re.match(r"^(.+?)\s*\+\s*free\s+(.+)$", w["line"], re.I)
+        if not m:
+            continue
+        for key, title in titles.items():
+            if plain(m.group(1)) and plain(m.group(1)) in plain(title):
+                out.setdefault(key, []).append(m.group(2).strip())
+    return out
+
+
+def written(brand, slot_id, channel, words, dropped, base, gifts=()):
     """Whether email-production has already written this send, and any line in it the window does not allow:
-    a funnel-only line in an email or text, or a line the bank has retired."""
+    a funnel-only line in an email or text, a line the bank has retired, or a selling send that never names its
+    offer's free gift."""
     home = base / "runs" / "email-production" / brand
     if not slot_id or not home.is_dir():
         return {"state": "not written"}
@@ -211,6 +230,8 @@ def written(brand, slot_id, channel, words, dropped, base):
     funnel_only = [w["line"] for w in words if set(w["surfaces"]) <= {"funnel", "ads"}]
     flags = ["funnel line in a %s: %s" % (channel, l) for l in funnel_only if plain(l) in text]
     flags += ["retired line: %s" % d["line"] for d in dropped if d["why"].startswith("retired") and plain(d["line"]) in text]
+    flags += ["never names the free gift: %s" % g for g in gifts
+              if " ".join(plain(g).split()[-2:]) not in text]
     return {"state": "written", "versions": len(files), "flags": flags}
 
 
@@ -331,6 +352,7 @@ def build(brand, month, moment=None, stock=None, n_videos=5, n_statics=5, base=N
     named = " ".join([row["promo"]] + [w["line"] for w in words])
     products = [t for k, t in titles.items() if plain(t) and plain(t) in plain(named)]
     lead_key = next((w["section"] for w in store_words if w["section"] in titles), None)
+    gifts = gifts_by_offer(words, titles)
     stock_info = stock_read(stock, products, end)
 
     offer = {"row": row, "lead_line": lead, "words": words, "dropped": dropped, "order_by": order_by,
@@ -346,9 +368,11 @@ def build(brand, month, moment=None, stock=None, n_videos=5, n_statics=5, base=N
     avatar = avatar[0][0] if avatar else "core"
     handoffs = []
     for h in DEFS["handoffs"]:
+        door = h["door"] if h["door"] and (not h["door"].get("requires")
+                                           or (base / h["door"]["requires"]).is_file()) else None
         item = {"id": h["id"], "workflow": h["workflow"], "type": h["type"], "role": h["role"], "makes": h["makes"],
-                "door": h["door"], "gap": h.get("gap") if not h["door"] else None,
-                "note": h.get("gap") if h["door"] else None}
+                "door": door, "gap": h.get("gap") if not door else None,
+                "note": h.get("gap") if door and h["id"] == "video" else None}
         if h["id"] in ("email", "sms"):
             sends = sorted((s for s in win if (s.get("channel") or "email") == h["id"]),
                            key=lambda s: (s["date"], s.get("hour") or 0))
@@ -363,7 +387,8 @@ def build(brand, month, moment=None, stock=None, n_videos=5, n_statics=5, base=N
                      "type": s.get("type"), "ready_by": due.isoformat()}
                 if h["id"] == "email":
                     r["check"] = email_snapshot(s, brand, base)
-                r["written"] = written(brand, s.get("id"), h["id"], words, dropped, base)
+                r["written"] = written(brand, s.get("id"), h["id"], words, dropped, base,
+                                       gifts.get(s.get("offer") or "", []))
                 rows_.append(r)
             after = [s.get("id") for s in cal if (s.get("channel") or "email") == h["id"]
                      and not in_window(s, start, end) and (s.get("date") or "") > end.isoformat()]
@@ -373,7 +398,7 @@ def build(brand, month, moment=None, stock=None, n_videos=5, n_statics=5, base=N
                         not_in_bank=unknown, after_window=after,
                         calendar="runs/marketing-calendar/%s/%s/slots.json" % (brand, month))
             item["args"] = {"run": "runs/marketing-calendar/%s/%s" % (brand, month),
-                            "slots": ",".join(r["id"] for r in rows_ if r["id"])}
+                            "slots": ",".join(r["id"] for r in rows_ if r["id"] and r["written"]["state"] != "written")}
         elif h["id"] == "video":
             picked = winners(brand, "video", n_videos, start, base)
             item.update(briefs=len(picked), winners=picked, ready_by=ready_open, dates=[row["start"]],
@@ -388,7 +413,7 @@ def build(brand, month, moment=None, stock=None, n_videos=5, n_statics=5, base=N
                         args={"label": label, "product": lead_key or "", "avatar": avatar})
         elif h["id"] == "store":
             item.update(briefs=1, ready_by=ready_preview, dates=[row["start"], row["end"]],
-                        words=[w["line"] for w in store_words])
+                        words=[w["line"] for w in store_words], args={"moment": moment, "year": str(start.year)})
         elif h["id"] == "funnel":
             item.update(briefs=len({w["section"] for w in funnel_words}) or 0, ready_by=ready_preview,
                         dates=[row["start"], row["end"]], words=[w["line"] for w in funnel_words])
@@ -429,10 +454,12 @@ def approval_state(out, pack):
     return dict(a, state="approved")
 
 
-def approve(brand, moment, by, said, base=None):
+def approve(brand, moment, by, said, drafts=False, base=None):
+    """The owner's approval of the offer words. `drafts` adds his go on the doors that only write drafts
+    (email and text copy): usage is spent, nothing is sent, uploaded or published."""
     out = pack_dir(brand, moment, base)
     pack = load(out)
-    a = {"by": by, "said": said, "fingerprint": pack["offer"]["fingerprint"],
+    a = {"by": by, "said": said, "drafts": bool(drafts), "fingerprint": pack["offer"]["fingerprint"],
          "lead_line": pack["offer"]["lead_line"], "at": dt.datetime.now().isoformat(timespec="seconds")}
     (out / "approval.json").write_text(json.dumps(a, indent=1, ensure_ascii=False))
     pack["approval"] = dict(a, state="approved")
@@ -465,16 +492,23 @@ def campaign_plan(pack):
     return "\n".join(lines) + "\n"
 
 
-def hand(brand, moment, only=None, dry_run=False, base=None, runner=None):
+DONE = ("handed", "loaded")
+
+
+def hand(brand, moment, only=None, dry_run=False, base=None, runner=None, now=None):
     """Hand every wired workflow its part of the pack. Refused until the owner has approved these exact words.
-    Doors that spend nothing are run; doors that spend are written into the hand-off for the role's holder."""
+    Doors that spend nothing are run. Doors that only write drafts run when the approval also says go on drafts,
+    and only for what is not written yet. Every other spending door is written into the hand-off for the role's
+    holder. A hand-off already handed for these exact words is not run again."""
     base = base or root()
+    now = now or dt.datetime.now()
     out = pack_dir(brand, moment, base)
     pack = load(out)
     state = approval_state(out, pack)
     if state["state"] != "approved":
         raise SystemExit("held: the owner has not approved the offer words for %s (%s). Nothing was handed off."
                          % (moment, state["state"]))
+    fp = pack["offer"]["fingerprint"]
     runner = runner or (lambda argv: subprocess.run(argv, cwd=base, capture_output=True, text=True))
     done = []
     for h in pack["handoffs"]:
@@ -482,26 +516,45 @@ def hand(brand, moment, only=None, dry_run=False, base=None, runner=None):
             continue
         d = out / "handoffs" / h["id"]
         d.mkdir(parents=True, exist_ok=True)
-        rec = {"id": h["id"], "workflow": h["workflow"], "role": h["role"], "at": dt.datetime.now().isoformat(
-            timespec="seconds"), "runs": []}
-        if not h["door"]:
+        f = d / "handoff.json"
+        prior = json.loads(f.read_text()) if f.is_file() else {}
+        args = dict(h.get("args") or {}, brand=brand)
+        if prior.get("fingerprint") == fp and prior.get("state", "").split(":")[0] in DONE \
+                and not (h["id"] in ("email", "sms") and args.get("slots")):
+            done.append(prior)
+            continue
+        if prior.get("fingerprint") == fp and prior.get("state") == "running" and prior.get("at", "") > \
+                (now - dt.timedelta(hours=20)).isoformat(timespec="seconds"):
+            done.append(prior)
+            continue
+        rec = {"id": h["id"], "workflow": h["workflow"], "role": h["role"], "fingerprint": fp,
+               "at": now.isoformat(timespec="seconds"), "runs": []}
+        door = h["door"]
+        if not door:
             rec["state"] = "gap"
             rec["why"] = h["gap"]
         else:
-            door = h["door"]
-            args = dict(h.get("args") or {}, brand=brand)
             if h["id"] == "video":
                 (base / args["plan_file"]).parent.mkdir(parents=True, exist_ok=True)
                 (base / args["plan_file"]).write_text(campaign_plan(pack))
                 cmds = [fill(door["argv"], dict(args, ad_id=w["ad_id"], label="%s-%s" % (args["label"], w["ad_id"])))
                         for w in h.get("winners") or [] if w.get("ad_id")]
+            elif h["id"] in ("email", "sms") and not args.get("slots"):
+                cmds = []
             else:
                 cmds = [fill(door["argv"], args)]
             rec["commands"] = [" ".join(c) for c in cmds]
-            if door["spends"] or dry_run:
-                rec["state"] = "written: the role's holder runs it under the workflow's own gates" \
-                    if door["spends"] else "dry run: nothing run"
+            allowed = not door["spends"] or (door.get("drafts_only") and state.get("drafts"))
+            if not cmds:
+                rec["state"] = "loaded: everything is written"
+            elif dry_run:
+                rec["state"] = "dry run: nothing run"
+            elif not allowed:
+                rec["state"] = "waiting: the owner's go on drafts" if door.get("drafts_only") else \
+                    "written: the role's holder runs it under the workflow's own gates"
             else:
+                if door["spends"]:
+                    f.write_text(json.dumps(dict(rec, state="running"), indent=1, ensure_ascii=False))
                 for c in cmds:
                     r = runner(c)
                     rec["runs"].append({"command": " ".join(c), "code": r.returncode,
@@ -509,9 +562,74 @@ def hand(brand, moment, only=None, dry_run=False, base=None, runner=None):
                 rec["state"] = "handed" if all(x["code"] == 0 for x in rec["runs"]) else "failed"
                 if h["id"] == "static" and rec["state"] == "handed":
                     rec["sprint"] = fill_sprint(pack, base, args["label"])
-        (d / "handoff.json").write_text(json.dumps(rec, indent=1, ensure_ascii=False))
+        f.write_text(json.dumps(rec, indent=1, ensure_ascii=False))
         done.append(rec)
     return done
+
+
+def loaded(pack, out):
+    """Where every hand-off stands, and whether the pack is loaded: nothing waiting, running or failed.
+    Gaps do not hold it; they stay listed."""
+    rows = []
+    for h in pack["handoffs"]:
+        f = out / "handoffs" / h["id"] / "handoff.json"
+        rec = json.loads(f.read_text()) if f.is_file() else {}
+        st = rec.get("state", "not handed") if rec.get("fingerprint", pack["offer"]["fingerprint"]) == \
+            pack["offer"]["fingerprint"] else "not handed"
+        rows.append({"id": h["id"], "state": st})
+    held = [r for r in rows if r["state"].split(":")[0] not in DONE + ("gap",)]
+    return {"loaded": not held, "handoffs": rows, "held": [r["id"] for r in held]}
+
+
+# ---------------------------------------------------------------------------------------------- the trigger --
+def due(brand, today, lead_days, base):
+    """The promo-calendar rows that are close: from `lead_days` before they open until they close."""
+    try:
+        rows = promo_rows(bank_text(brand, base))
+    except SystemExit:
+        return []
+    return [r for r in rows if (dt.date.fromisoformat(r["start"]) - dt.timedelta(days=lead_days)) <= today
+            <= dt.date.fromisoformat(r["end"])]
+
+
+def tick(brands=None, lead_days=14, stock=None, base=None, today=None, runner=None, month=None):
+    """The trigger: run when a month's calendar is planned (`month`), or with no month for every promotion within
+    `lead_days` of opening. Builds the pack from the newest bank, calendar, winners and stock; once the owner has
+    approved the words, hands it off; says when it is loaded.
+    Writes runs/promo-pack/<brand>/<moment>/status.json and one line per pack to runs/promo-pack/tick.log."""
+    base = base or root()
+    today = today or dt.date.today()
+    brands = brands or sorted(p.name for p in (base / "brands").iterdir()
+                              if p.is_dir() and not p.name.startswith("_")
+                              and (p / "products" / "offer-bank.md").is_file())
+    report = []
+    for brand in brands:
+        rows = due(brand, today, lead_days, base) if not month else [
+            r for r in promo_rows(bank_text(brand, base)) if r["start"][:7] <= month <= r["end"][:7]]
+        for row in rows:
+            try:
+                pack, out = build(brand, month or row["start"][:7], stock=stock, base=base, today=today)
+            except SystemExit as ex:
+                report.append({"brand": brand, "window": row["start"], "state": "held", "why": str(ex)})
+                continue
+            st = {"brand": brand, "moment": pack["moment"], "window": pack["window"],
+                  "words": pack["approval"]["state"], "blockers": len(pack["stock"]["blockers"]),
+                  "at": dt.datetime.now().isoformat(timespec="seconds")}
+            if pack["approval"]["state"] == "approved":
+                hand(brand, pack["moment"], base=base, runner=runner)
+                st.update(loaded(pack, out))
+                st["state"] = "loaded" if st["loaded"] else "loading"
+            else:
+                st["state"] = "waiting on the owner's approval of the offer words"
+            (out / "status.json").write_text(json.dumps(st, indent=1, ensure_ascii=False))
+            report.append(st)
+    log = base / "runs" / "promo-pack" / "tick.log"
+    log.parent.mkdir(parents=True, exist_ok=True)
+    with log.open("a") as fh:
+        for r in report:
+            fh.write("%s  %s  %s  %s\n" % (dt.datetime.now().isoformat(timespec="seconds"), r["brand"],
+                                            r.get("moment", r.get("window")), r["state"]))
+    return report
 
 
 def fill_sprint(pack, base, label):
@@ -595,6 +713,11 @@ def main():
     b.add_argument("--stock")
     b.add_argument("--videos", type=int, default=5)
     b.add_argument("--statics", type=int, default=5)
+    t = s.add_parser("tick")
+    t.add_argument("--brand", action="append")
+    t.add_argument("--lead-days", type=int, default=14)
+    t.add_argument("--month", help="the month just planned on the calendar: every promotion touching it")
+    t.add_argument("--stock")
     for k in ("approve", "hand", "status"):
         q = s.add_parser(k)
         q.add_argument("--brand", required=True)
@@ -602,6 +725,7 @@ def main():
         if k == "approve":
             q.add_argument("--by", required=True)
             q.add_argument("--said", required=True)
+            q.add_argument("--drafts", action="store_true", help="also go on the doors that only write drafts")
         if k == "hand":
             q.add_argument("--only")
             q.add_argument("--dry-run", action="store_true")
@@ -612,17 +736,22 @@ def main():
         print("offer words: %s · hand-offs: %d · gaps: %d · stock blockers: %d"
               % (pack["approval"]["state"], len(pack["handoffs"]), len(pack["gaps"]), len(pack["stock"]["blockers"])))
     elif a.do == "approve":
-        pack = approve(a.brand, a.moment, a.by, a.said)
+        pack = approve(a.brand, a.moment, a.by, a.said, a.drafts)
         print("approved: %s" % pack["offer"]["lead_line"])
+    elif a.do == "tick":
+        for r in tick(a.brand, a.lead_days, a.stock, month=a.month):
+            print("%-10s %-14s %s" % (r["brand"], r.get("moment", r.get("window")), r["state"]))
     elif a.do == "hand":
         for r in hand(a.brand, a.moment, a.only.split(",") if a.only else None, a.dry_run):
             print("%-7s %s" % (r["id"], r["state"]))
     else:
         pack = load(pack_dir(a.brand, a.moment))
-        print("offer words: %s" % approval_state(pack_dir(a.brand, a.moment), pack)["state"])
-        for h in pack["handoffs"]:
-            f = pack_dir(a.brand, a.moment) / "handoffs" / h["id"] / "handoff.json"
-            print("%-7s %s" % (h["id"], json.loads(f.read_text())["state"] if f.is_file() else "not handed"))
+        out = pack_dir(a.brand, a.moment)
+        print("offer words: %s" % approval_state(out, pack)["state"])
+        st = loaded(pack, out)
+        for r in st["handoffs"]:
+            print("%-7s %s" % (r["id"], r["state"]))
+        print("loaded" if st["loaded"] else "loading: %s" % ", ".join(st["held"]))
 
 
 if __name__ == "__main__":

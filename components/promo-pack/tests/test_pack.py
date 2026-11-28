@@ -86,6 +86,15 @@ STOCK = [
     {"sku": "other", "name": "Something else", "available": 1, "per_day": 1, "runs_out": "2026-12-02", "status": "LATE"}]
 
 
+DOORS = ["components/ad-variations/machine/run.py", "components/ad-variations/machine/natural_statics.py",
+         "components/email-production/run_month.py", "components/email-production/sms.py",
+         "components/storefront-promo-edit/machine/storefront_promo_edit.py"]
+
+
+class R:
+    returncode, stdout, stderr = 0, "ok", ""
+
+
 class PackTest(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
@@ -100,6 +109,9 @@ class PackTest(unittest.TestCase):
         w.mkdir(parents=True)
         (w / "email.json").write_text(json.dumps({"body": ["Glow Set. Serum starting at $15 today."]}))
         (b / "stock.json").write_text(json.dumps(STOCK))
+        for door in DOORS:                                  # the target components this checkout has
+            (b / door).parent.mkdir(parents=True, exist_ok=True)
+            (b / door).write_text("")
         self.base = b
         self.pack, self.out = P.build("brand-a", "2026-12", stock=str(b / "stock.json"), base=b,
                                       today=date(2026, 11, 28))
@@ -132,8 +144,9 @@ class PackTest(unittest.TestCase):
         ids = [h["id"] for h in self.pack["handoffs"]]
         self.assertEqual(ids, ["video", "static", "email", "sms", "store", "funnel"])
         gaps = {g["handoff"] for g in self.pack["gaps"]}
-        self.assertTrue({"store", "funnel", "stock"} <= gaps)
-        self.assertIsNone(self.h("store")["door"])
+        self.assertTrue({"funnel", "stock"} <= gaps)
+        self.assertNotIn("store", gaps)
+        self.assertIsNone(self.h("funnel")["door"])
         self.assertEqual(self.h("funnel")["words"], ["Serum starting at $15"])
 
     def test_email_and_sms_dates_come_from_the_calendar(self):
@@ -143,12 +156,13 @@ class PackTest(unittest.TestCase):
         self.assertEqual(e["after_window"], ["dec-05"])
         self.assertEqual(s["briefs"], 1)
         self.assertEqual(e["sends"][0]["ready_by"], "2026-11-30")
-        self.assertEqual(e["args"]["slots"], "dec-01,dec-02,dec-03")
+        self.assertEqual(e["args"]["slots"], "dec-02,dec-03")          # dec-01 is already written
 
     def test_a_funnel_line_in_a_written_email_is_flagged(self):
         first = self.h("email")["sends"][0]["written"]
         self.assertEqual(first["state"], "written")
-        self.assertEqual(first["flags"], ["funnel line in a email: Serum starting at $15"])
+        self.assertEqual(first["flags"], ["funnel line in a email: Serum starting at $15",
+                                          "never names the free gift: Travel Case"])
         self.assertEqual(self.h("email")["sends"][1]["written"]["state"], "not written")
 
     def test_winners_ranked_by_spend(self):
@@ -185,37 +199,70 @@ class PackTest(unittest.TestCase):
         with self.assertRaises(SystemExit):
             P.hand("brand-a", "holidays", base=self.base, runner=lambda a: None)
 
-    def test_after_approval_free_doors_run_and_spending_doors_are_written(self):
-        P.approve("brand-a", "holidays", "the owner", "yes", base=self.base)
-        ran = []
-
-        class R:
-            returncode, stdout, stderr = 0, "ok", ""
-
-        def runner(argv):
+    def runner(self, ran):
+        def run(argv):
             ran.append(argv)
             if "natural_statics.py" in argv[1]:       # what the real door writes
                 d = self.base / "runs/ad-variations/brand-a" / argv[argv.index("--label") + 1]
-                d.mkdir(parents=True)
+                d.mkdir(parents=True, exist_ok=True)
                 (d / "sprint.json").write_text(json.dumps({"offer": "", "moment": "", "until": "", "never": []}))
             return R()
+        return run
 
-        done = {r["id"]: r for r in P.hand("brand-a", "holidays", base=self.base, runner=runner)}
-        self.assertEqual(done["email"]["state"].split(":")[0], "written")
-        self.assertEqual(done["store"]["state"], "gap")
-        self.assertEqual(done["static"]["state"], "handed")
-        self.assertEqual(done["video"]["state"], "handed")
+    def test_a_door_missing_from_this_checkout_is_a_gap(self):
+        (self.base / DOORS[-1]).unlink()
+        pack, _ = P.build("brand-a", "2026-12", base=self.base)
+        store = next(h for h in pack["handoffs"] if h["id"] == "store")
+        self.assertIsNone(store["door"])
+        self.assertIn("store", {g["handoff"] for g in pack["gaps"]})
+
+    def test_after_approval_free_doors_run_and_drafts_wait_for_their_go(self):
+        P.approve("brand-a", "holidays", "the owner", "yes", base=self.base)
+        ran = []
+        done = {r["id"]: r for r in P.hand("brand-a", "holidays", base=self.base, runner=self.runner(ran))}
+        self.assertEqual(done["funnel"]["state"], "gap")
+        for k in ("static", "video", "store"):
+            self.assertEqual(done[k]["state"], "handed", k)
+        self.assertTrue(done["email"]["state"].startswith("waiting"))
+        self.assertTrue(done["sms"]["state"].startswith("waiting"))
         self.assertEqual(len([a for a in ran if "run.py" in a[1]]), 2)                  # one plan per winner
-        self.assertTrue(any("sms.py" in a[1] and "--dry-run" in a for a in ran))
-        self.assertFalse(any("run_month.py" in a[1] for a in ran))                     # spends: never run here
+        self.assertFalse(any("run_month.py" in a[1] or "sms.py" in a[1] for a in ran))
         sp = json.loads((self.base / "runs/ad-variations/brand-a/holidays-2026-promo-pack/sprint.json").read_text())
         self.assertEqual(sp["offer"], "Glow Set + Free Travel Case")
         self.assertEqual(sp["until"], "2026-12-24")
         self.assertEqual(sp["never"], ["Free Travel Pouch"])
         plan = (self.base / "runs/promo-pack/brand-a/holidays/handoffs/video/campaign-plan.md").read_text()
         self.assertIn("Glow Set + Free Travel Case", plan)
-        self.assertTrue((self.out / "handoffs/video/handoff.json").is_file())
+        self.assertFalse(P.loaded(P.load(self.out), self.out)["loaded"])
+        again = []
+        P.hand("brand-a", "holidays", base=self.base, runner=self.runner(again))
+        self.assertEqual(again, [])                                                     # nothing runs twice
 
+    def test_the_go_on_drafts_writes_only_what_is_missing(self):
+        P.approve("brand-a", "holidays", "the owner", "yes", drafts=True, base=self.base)
+        ran = []
+        P.hand("brand-a", "holidays", base=self.base, runner=self.runner(ran))
+        email = [a for a in ran if "run_month.py" in a[1]]
+        self.assertEqual(len(email), 1)
+        self.assertEqual(email[0][email[0].index("--only") + 1], "dec-02,dec-03")
+        self.assertTrue(any("sms.py" in a[1] and "--dry-run" not in a for a in ran))
+        self.assertTrue(P.loaded(P.load(self.out), self.out)["loaded"])
+
+    def test_tick_builds_the_pack_when_the_promotion_is_close(self):
+        self.assertEqual(P.tick(["brand-a"], 14, base=self.base, today=date(2026, 11, 1)), [])
+        r = P.tick(["brand-a"], 14, base=self.base, today=date(2026, 11, 20))
+        dec = [x for x in r if x.get("moment") == "holidays"]
+        self.assertEqual(dec[0]["state"], "waiting on the owner's approval of the offer words")
+        P.approve("brand-a", "holidays", "the owner", "yes", drafts=True, base=self.base)
+        r = P.tick(["brand-a"], 14, base=self.base, today=date(2026, 11, 20), runner=self.runner([]))
+        dec = [x for x in r if x.get("moment") == "holidays"][0]
+        self.assertEqual(dec["state"], "loaded")
+        self.assertTrue((self.out / "status.json").is_file())
+        self.assertTrue((self.base / "runs/promo-pack/tick.log").is_file())
+
+    def test_tick_for_a_planned_month_takes_every_promotion_in_it(self):
+        r = P.tick(["brand-a"], base=self.base, today=date(2026, 10, 1), month="2026-12")
+        self.assertEqual([x.get("moment") for x in r], ["holidays"])
 
 if __name__ == "__main__":
     unittest.main()

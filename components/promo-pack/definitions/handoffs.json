@@ -1,5 +1,5 @@
 {
- "about": "The hand-offs a promo pack makes: one per workflow the offer has to reach. Each names its workflow (components/WORKFLOWS.md, The named workflows), the role that takes it, the calendar it reads its dates from, and its door: the command that starts the target component. `spends: false` doors are run by `pack.py hand` once the owner has approved the offer words; `spends: true` doors are written into the hand-off for the role's holder to run under that workflow's own gates. A hand-off with no door is a gap, listed on every pack.",
+ "about": "The hand-offs a promo pack makes: one per workflow the offer has to reach. Each names its workflow (components/WORKFLOWS.md, The named workflows), the role that takes it, the calendar it reads its dates from, and its door: the command that starts the target component. A door whose `requires` file is missing in this checkout is a gap. `spends: false` doors run once the owner has approved the offer words. `drafts_only: true` doors spend usage but only write drafts (nothing sent, uploaded or published): they run when the owner's approval also says go on drafts. Every other spending door is written into the hand-off for the role's holder. A hand-off with no door is a gap, listed on every pack.",
  "status": "draft",
  "handoffs": [
   {
@@ -11,10 +11,23 @@
    "count": "top video winners in runs/winners/<brand>/bank.json (default 5)",
    "ready_by": "the day before the window opens: filed for the owner's approval page",
    "door": {
-    "argv": ["python3", "components/ad-variations/machine/run.py", "plan", "{ad_id}", "--brand", "{brand}", "--plan", "{plan_file}", "--label", "{label}", "--dry-run"],
+    "argv": [
+     "python3",
+     "components/ad-variations/machine/run.py",
+     "plan",
+     "{ad_id}",
+     "--brand",
+     "{brand}",
+     "--plan",
+     "{plan_file}",
+     "--label",
+     "{label}",
+     "--dry-run"
+    ],
     "spends": false,
     "per": "winner",
-    "reads": "the hand-off's campaign-plan.md through ad-variations' --plan"
+    "reads": "the hand-off's campaign-plan.md through ad-variations' --plan",
+    "requires": "components/ad-variations/machine/run.py"
    },
    "gap": "ad-variations has no lever that sets an offer ending by itself; the ending is carried to its planner as the campaign plan"
   },
@@ -27,10 +40,23 @@
    "count": "top image winners in runs/winners/<brand>/bank.json (default 5)",
    "ready_by": "the day before the window opens: filed for the owner's approval page",
    "door": {
-    "argv": ["python3", "components/ad-variations/machine/natural_statics.py", "start", "--brand", "{brand}", "--product", "{product}", "--avatar", "{avatar}", "--label", "{label}"],
+    "argv": [
+     "python3",
+     "components/ad-variations/machine/natural_statics.py",
+     "start",
+     "--brand",
+     "{brand}",
+     "--product",
+     "{product}",
+     "--avatar",
+     "{avatar}",
+     "--label",
+     "{label}"
+    ],
     "spends": false,
     "per": "pack",
-    "then": "the pack fills the sprint's offer, moment, until and never from the approved words"
+    "then": "the pack fills the sprint's offer, moment, until and never from the approved words",
+    "requires": "components/ad-variations/machine/natural_statics.py"
    }
   },
   {
@@ -42,10 +68,19 @@
    "count": "the calendar's email sends inside the window",
    "ready_by": "one working day before each send",
    "door": {
-    "argv": ["python3", "components/email-production/run_month.py", "{run}", "--only", "{slots}"],
+    "argv": [
+     "python3",
+     "components/email-production/run_month.py",
+     "{run}",
+     "--only",
+     "{slots}"
+    ],
     "spends": true,
-    "per": "pack",
-    "reads": "the calendar's own hand-off (components/marketing-calendar/handoff.json) and email-production's calendar_handoff snapshot per send"
+    "per": "unwritten sends",
+    "reads": "the calendar's own hand-off (components/marketing-calendar/handoff.json) and email-production's calendar_handoff snapshot per send",
+    "requires": "components/email-production/run_month.py",
+    "drafts_only": true,
+    "then": "only the sends email-production has not written yet; design, upload and scheduling stay with the Email campaign workflow"
    }
   },
   {
@@ -57,10 +92,18 @@
    "count": "the calendar's sms sends inside the window",
    "ready_by": "one working day before each send",
    "door": {
-    "argv": ["python3", "components/email-production/sms.py", "{run}", "--only", "{slots}", "--dry-run"],
-    "spends": false,
-    "per": "pack",
-    "then": "the writing run itself (the same command without --dry-run) spends, and is the role holder's"
+    "argv": [
+     "python3",
+     "components/email-production/sms.py",
+     "{run}",
+     "--only",
+     "{slots}"
+    ],
+    "spends": true,
+    "drafts_only": true,
+    "per": "unwritten sends",
+    "requires": "components/email-production/sms.py",
+    "then": "writes the texts as drafts; a person approves and sends"
    }
   },
   {
@@ -71,8 +114,24 @@
    "makes": "The promo on the store: top bar, offer box, gift row, pop-up",
    "count": "one store switch",
    "ready_by": "on preview two days before the window opens; going live is the owner's call",
-   "door": null,
-   "gap": "storefront-promo-edit is not in the toolkit yet; the store words and dates are filed here for the page builder"
+   "door": {
+    "argv": [
+     "python3",
+     "components/storefront-promo-edit/machine/storefront_promo_edit.py",
+     "plan",
+     "--brand",
+     "{brand}",
+     "--moment",
+     "{moment}",
+     "--year",
+     "{year}"
+    ],
+    "spends": false,
+    "per": "pack",
+    "requires": "components/storefront-promo-edit/machine/storefront_promo_edit.py",
+    "reads": "the live store, read only: what each store piece shows now and what the promo would set; apply is the owner's go in that workflow"
+   },
+   "gap": "storefront-promo-edit is not in this checkout; the store words and dates are filed here for the page builder"
   },
   {
    "id": "funnel",
@@ -83,13 +142,17 @@
    "count": "one change per funnel",
    "ready_by": "on a branch two days before the window opens; merging is the owner's call",
    "door": null,
-   "gap": "no funnel component has a door; the funnel lines are filed here for the page builder"
+   "gap": "no funnel component has a door; the funnel lines are filed here for the page builder, and the funnel's own banner and price lines are checked by hand against them"
   }
  ],
  "stock": {
   "role": "brand-operator",
   "reads": "a stock runway read (one row per item: sku, name, available, backup, per_day, runs_out, reorder_by, status), given with --stock",
-  "flags": ["LATE", "ORDER THIS WEEK", "runs out inside the window"],
+  "flags": [
+   "LATE",
+   "ORDER THIS WEEK",
+   "runs out inside the window"
+  ],
   "gap": "stock-runway is not in the toolkit yet; its read is handed to the pack as a file"
  }
 }

@@ -17,6 +17,7 @@ Stage: **plan**, the stage between reading the numbers and feeding the workflows
 | "the offer words are approved" (the owner, only) | `pack.py approve --brand <brand> --moment <moment> --by <who> --said "<his words>"` |
 | "hand the pack off" | `pack.py hand --brand <brand> --moment <moment> [--only static,video,sms]` |
 | "where is the promo pack" | `pack.py status --brand <brand> --moment <moment>` |
+| the month's calendar is planned (marketing-calendar runs it) | `pack.py tick --brand <brand> --month <YYYY-MM>`: builds every pack touching the month; once the words are approved, hands off and says `loaded` |
 
 Skills inside the component, one job each: `skills/stock-check.md` (the stock read every pack needs) and
 `skills/switch-list.md` (every place the old offer still lives).
@@ -27,7 +28,8 @@ Skills inside the component, one job each: `skills/stock-check.md` (the stock re
   an approval matches the pack's current words, and an approval goes stale the moment the bank's words change.
 - **Going live, sending and spending stay calls inside each workflow.** `hand` runs only doors marked
   `spends: false` (`definitions/handoffs.json`); a door that spends is written into the hand-off for the role's
-  holder to run under that workflow's own gates. A hand-off with no door is a gap and is listed on every pack.
+  holder to run under that workflow's own gates, except doors that only write drafts (email and text copy), which
+  run when the owner's approval also says go on drafts (`approve --drafts`). A hand-off with no door is a gap and is listed on every pack.
 
 ## What it reads
 
@@ -38,7 +40,8 @@ Skills inside the component, one job each: `skills/stock-check.md` (the stock re
 - `runs/marketing-calendar/<brand>/<YYYY-MM>/slots.json`: the sends inside the window, their dates, offers,
   order-by date and the moment (`occasion` of the window's sale sends, unless `--moment` is given).
 - email-production's `calendar_handoff.snapshot` per send (its own hand-off check), and what email-production has
-  already written under `runs/email-production/<brand>/`: a funnel-only or retired line in a written send is flagged.
+  already written under `runs/email-production/<brand>/`: a funnel-only or retired line, or a selling send that never
+  names its offer's free gift (`<offer> + Free <gift>` lines), is flagged.
 - `runs/winners/<brand>/bank.json`: the top video and image winners by spend in their latest audit.
 - A stock runway read given with `--stock` (rows: sku, name, available, backup, per_day, runs_out, reorder_by,
   status). Items the offer names or gives away that are `LATE`, `ORDER THIS WEEK` or run out inside the window are
@@ -61,14 +64,14 @@ Skills inside the component, one job each: `skills/stock-check.md` (the stock re
 |---|---|---|---|---|
 | video | Winner variation workflow | video-editor | `ad-variations/machine/run.py plan <ad> --plan <campaign plan> --dry-run`, one per winner | yes |
 | static | Winner variation workflow | graphic-designer | `ad-variations/machine/natural_statics.py start` | yes |
-| email | Email campaign workflow | retention-strategist | `email-production/run_month.py <run> --only <sends>` | no: it spends |
-| sms | Email campaign workflow | retention-strategist | `email-production/sms.py <run> --only <sends> --dry-run` | yes |
-| store | Store promo workflow | page-builder | none | gap |
+| email | Email campaign workflow | retention-strategist | `email-production/run_month.py <run> --only <unwritten sends>` | on the owner's go on drafts (`approve --drafts`) |
+| sms | Email campaign workflow | retention-strategist | `email-production/sms.py <run> --only <unwritten sends>` | on the owner's go on drafts |
+| store | Store promo workflow | page-builder | `storefront-promo-edit/machine/storefront_promo_edit.py plan` where that component is in the checkout | yes (read only) |
 | funnel | Funnel offer workflow | page-builder | none | gap |
 
 ## Gaps (listed on every pack)
 
-- Store promo workflow: `storefront-promo-edit` is not in the toolkit yet.
+- Store promo workflow: `storefront-promo-edit` is not in the toolkit yet (the team workspace has it; the door is used where it exists).
 - Funnel offer workflow: no funnel component has a door.
 - Video: ad-variations has no lever for an offer ending alone; the ending goes to its planner as the campaign plan.
 - Stock: `stock-runway` is not in the toolkit yet; its read is handed to the pack as a file.
