@@ -82,6 +82,8 @@ main{padding:28px 24px 60px;max-width:1440px;margin:0 auto}
 .loop .chart svg{width:100%;height:170px;display:block}
 .loop .key{display:flex;gap:14px;flex-wrap:wrap;font:500 11.5px var(--mono);color:var(--ink-3)}
 .loop .key i{display:inline-block;width:10px;height:3px;border-radius:2px;background:var(--hue);margin-right:5px;vertical-align:middle}
+.lines summary{list-style:none;justify-self:start;display:inline-flex;margin-top:4px}.lines summary::-webkit-details-marker{display:none}
+.lines form{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.lines .lf{display:grid;gap:2px}.lines input{font:500 14px var(--mono);padding:6px 8px;border:1px solid var(--line-2,rgba(0,0,0,.2));border-radius:8px;background:var(--paper,#fff);width:100%;box-sizing:border-box}.lines button{grid-column:1/-1;justify-self:start}
 .prop{display:grid;gap:8px;align-content:start}
 .prop .big{font:700 26px var(--display);letter-spacing:-.02em}
 .prop.up{border-color:color-mix(in srgb,var(--green) 45%,transparent)}.prop.down{border-color:color-mix(in srgb,var(--amber) 55%,transparent)}
@@ -451,6 +453,19 @@ function route(){
 const brandMenu = () => ((S.menu && S.menu.brands) || []).find(b => b.id === S.brand);
 
 /* ================= TODAY ================= */
+function linesForm(L){
+  const t = L.targets || {}, b = t.bands || L.bands || [];
+  const f = (k, label, v, step) => `<label class="lf"><span class="lbl">${label}</span><input name="${k}" type="number" step="${step}" value="${v ?? ''}"></label>`;
+  return `<details class="lines"><summary class="btn">Change the lines</summary><form id="linesF">
+    ${f('mer', 'MER line', t.mer, 0.05)}${f('up', 'Raise step %', t.up != null ? Math.round(t.up * 100) : '', 1)}${f('down', 'Lower step %', t.down != null ? Math.round(t.down * 100) : '', 1)}
+    ${f('ceiling', 'Daily ceiling $', t.ceiling, 50)}${f('b0', 'Top under (freq)', b[0], 0.05)}${f('b1', 'Middle under (freq)', b[1], 0.05)}
+    <button class="btn wait" type="submit">Save lines</button></form></details>`;
+}
+document.addEventListener('submit', async e => { if (e.target.id !== 'linesF') return; e.preventDefault();
+  const v = Object.fromEntries(new FormData(e.target)); const n = k => v[k] === '' ? null : Number(v[k]);
+  const body = {brand: S.brand, mer: n('mer'), up: v.up === '' ? null : n('up') / 100, down: v.down === '' ? null : n('down') / 100, ceiling: n('ceiling')};
+  if (v.b0 !== '' && v.b1 !== '') body.bands = [n('b0'), n('b1')];
+  try { await J('/api/desk/targets', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)}); toast('Lines saved'); route(); } catch (err) { toast(err.message); } });
 function loopHtml(L){
   if (!L) return '';
   const line = L.line || [], t = L.targets || {};
@@ -473,13 +488,13 @@ function loopHtml(L){
       <path d="${line.map((d, i) => (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + (ym(d.mer || 0) * 90 / H).toFixed(1)).join('')}" fill="none" stroke="var(--violet)" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>`;
   }
   const p = L.proposal;
-  const prop = !t.mer ? `<div class="card prop down"><h3>${ib('target', 'amber')}No MER line yet</h3><span>Set this brand's line and the Studio proposes spend each morning.</span></div>`
-    : !p ? `<div class="card prop"><h3>${ib('target', 'indigo')}MER line ${t.mer}</h3><div class="empty">Not enough days to judge</div></div>`
+  const prop = !t.mer ? `<div class="card prop down"><h3>${ib('target', 'amber')}No MER line yet</h3><span>Set this brand's line and the Studio proposes spend each morning.</span>${linesForm(L)}</div>`
+    : !p ? `<div class="card prop"><h3>${ib('target', 'indigo')}MER line ${t.mer}</h3><div class="empty">Not enough days to judge</div>${linesForm(L)}</div>`
     : `<div class="card prop ${p.dir === 'raise' ? 'up' : 'down'}"><h3>${ib('target', p.dir === 'raise' ? 'green' : 'amber')}${p.dir === 'raise' ? 'Raise spend' : 'Lower spend'}</h3>
       <span class="big">${usd(p.now)} → ${usd(p.to)}<span class="lbl"> a day</span></span>
       <span>MER 7d <b>${p.mer7}</b> vs line <b>${p.line}</b> · profit 7d <b>${usd(p.profit7)}</b></span>
       <span class="lbl">${p.dir === 'raise' ? '+' + Math.round(p.step * 100) : Math.round(p.step * 100)}% step${(t.set || []).includes(p.dir === 'raise' ? 'up' : 'down') ? '' : ' (draft)'} · ceiling ${p.ceiling ? usd(p.ceiling) : 'not set'}</span>
-      <span class="pill p-stop" style="justify-self:start">Proposal only: spend changes stay closed until the go guards are built</span></div>`;
+      <span class="pill p-stop" style="justify-self:start">Proposal only: spend changes stay closed until the go guards are built</span>${linesForm(L)}</div>`;
   const st = L.stages || {}, tot = ['top', 'middle', 'bottom'].reduce((a, k) => a + ((st[k] || {}).spend || 0), 0) || 1;
   const hues = {top: 'violet', middle: 'indigo', bottom: 'green'};
   const thin = ['top', 'middle', 'bottom'].sort((a, b) => ((st[a] || {}).spend || 0) - ((st[b] || {}).spend || 0))[0];

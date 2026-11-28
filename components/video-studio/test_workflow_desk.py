@@ -3,6 +3,7 @@
 Nothing here runs a real command: the jobs the desk would start are captured, and the runner's read-only pass is faked.
 """
 import json
+import os
 import tempfile
 import threading
 import unittest
@@ -264,3 +265,17 @@ class Desk(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TargetsTest(unittest.TestCase):
+    def test_lines_save_and_refuse(self):
+        import tempfile
+        os.environ["PRIZM_TARGETS"] = os.path.join(tempfile.mkdtemp(), "t.json")
+        try:
+            t = WD.targets_save({"brand": "acme", "mer": 2.5, "down": 0.05, "bands": [1.1, 1.3]})
+            self.assertEqual((t["mer"], t["bands"]), (2.5, [1.1, 1.3]))
+            self.assertIn("mer", t["set"])
+            with self.assertRaises(ValueError):
+                WD.targets_save({"brand": "acme", "bands": [1.5, 1.2]})
+        finally:
+            os.environ.pop("PRIZM_TARGETS")

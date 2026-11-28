@@ -1161,6 +1161,41 @@ def _targets(brand):
             "bands": t.get("bands") or [1.15, 1.35], "set": sorted(k for k in t if not k.startswith("_"))}
 
 
+def targets_save(data):
+    """The operator's lines for one brand, changed any time from Today: MER line, raise and lower steps, the daily
+    ceiling, the frequency bands. Kept on this computer only (never in the repo)."""
+    brand = data.get("brand")
+    if not SAFE.match(brand or ""):
+        raise ValueError("bad brand")
+    p = Path(os.environ.get("PRIZM_TARGETS") or Path.home() / ".prizm/targets.json")
+    allt = (_read(p) or {}) if p.exists() else {}
+    cur = dict(allt.get(brand) or {})
+
+    def num(k, lo, hi):
+        v = data.get(k)
+        if v in (None, ""):
+            return
+        v = float(v)
+        if not lo <= v <= hi:
+            raise ValueError("%s must be between %s and %s" % (k, lo, hi))
+        cur[k] = v
+    num("mer", 0.1, 20)
+    num("up", 0, 1)
+    num("down", 0, 1)
+    num("ceiling", 0, 10_000_000)
+    b = data.get("bands")
+    if b:
+        lo, hi = float(b[0]), float(b[1])
+        if not 0 < lo < hi < 20:
+            raise ValueError("bands: top under middle, both above 0")
+        cur["bands"] = [lo, hi]
+    cur["_changed"] = time.strftime("%Y-%m-%d %H:%M")
+    allt[brand] = cur
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps(allt, indent=1))
+    return _targets(brand)
+
+
 def loop(brand):
     """The morning loop for one brand: the money line against the owner's MER line, the spend proposal it implies
     (a proposal only: spend never moves from here), the funnel stage of each live ad by its 7-day frequency, and
@@ -1535,6 +1570,8 @@ def handle(h, method, parts, query, body):
                 return h.send(200, sauce_save(data.get("label"), data.get("text"), data.get("by")))
             if api == ["ad-off"]:
                 return h.send(200, ad_off(data))
+            if api == ["targets"]:
+                return h.send(200, targets_save(data))
             if api == ["hide"]:
                 return h.send(200, hide(data.get("brand"), data.get("item"), data.get("on", True) is not False))
             if api == ["taste"]:                                # the owner's "Use this" / "Discard" on a taste draft
