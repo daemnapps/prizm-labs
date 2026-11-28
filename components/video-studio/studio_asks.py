@@ -181,6 +181,24 @@ def _write(p, data):
     os.replace(tmp, p)
 
 
+# What each job does, in one plain line; the work it belongs to; the model it runs on (components/job-meter/
+# model-map.json: background asks take the middle tier, never the owner's top tier). The owner, 28 Nov 2026: "the
+# instructions need to be clear about everything and all these different jobs ... categories ... the models".
+ABOUT = {
+    "tune": ("copy", "Reads this brand's top 10 winners and its customers' words, and drafts a sharper taste file. You keep it or bin it."),
+    "deeper": ("research", "Finds the customers' exact words, the desire and the objection under this angle, which winners used it and the formats that fit. You get 3 concepts to pick from."),
+    "make": ("video", "Sets the picked ads up in production. It stops at the price for your go."),
+    "swipe": ("feed", "Saves the post you pasted and tears it down. It lands in Swipes, ready to make an ad from."),
+    "variations": ("video", "Plans versions of this winner (new hooks, openings, endings). You pick which ones get made."),
+    "setup": ("setup", "Fills one brand setup item as a draft from what's already on file. You confirm it in Settings."),
+    "market": ("research", "Plans a read of the market for this category. Spends credits only on your go."),
+    "onboard": ("setup", "Checks access to a new brand and reads its folder, then writes the list of what to ask them for."),
+    "connect": ("setup", "Reads a repository and says what's in it and whether to connect it."),
+}
+LANE_NAMES = {"research": "Research", "copy": "Copy", "video": "Video", "feed": "Feed", "setup": "Setup"}
+MODEL = os.environ.get("PRIZM_ASK_MODEL", "claude-sonnet-5-5")
+
+
 def default_hand(brand):
     """Who runs a job by default: a brand that keeps its folder in its own repository runs its own heavy jobs (its
     owner's Claude); every other brand's jobs go to the team. The owner's own Claude runs a job only when asked."""
@@ -242,6 +260,10 @@ def create(kind, brand, text, by=None, to=None):
     if kind == "swipe" and not re.match(r"https?://", text):
         raise ValueError("paste the post's link")
     brand = "_portfolio" if kind in ("connect", "onboard") or not brand else brand
+    for r in listing(brand, limit=200, dupes=True):         # the same job already waiting or running: no duplicate
+        if r.get("kind") == kind and (r.get("input") or "").strip().lower() == text.lower() and \
+                r.get("state") not in ("done", "failed", "stopped"):
+            return dict(r, duplicate=True)
     aid = datetime.datetime.now().strftime("%Y%m%d-%H%M%S-") + uuid.uuid4().hex[:4]
     d = root() / brand / aid
     rec = {"id": aid, "brand": brand, "kind": kind, "input": text, "name": KINDS[kind]["name"].format(input=text),
@@ -250,13 +272,20 @@ def create(kind, brand, text, by=None, to=None):
     return hand(rec, to or ("here" if brand == "_portfolio" else default_hand(brand)))
 
 
-def listing(brand=None, limit=40):
-    out = []
+def listing(brand=None, limit=40, dupes=False):
+    """Newest first. The same job asked twice shows once (the newest); dupes=True keeps them all."""
+    out, seen = [], set()
     base = root() / brand if brand else root()
     for f in sorted(base.glob("*/ask.json") if brand else base.glob("*/*/ask.json"), reverse=True)[:limit]:
         r = _read(f)
         if isinstance(r, dict):
             r["result"] = (f.parent / "result.md").is_file()
+            key = (r.get("brand"), r.get("kind"), (r.get("input") or "").strip().lower())
+            if key in seen and not dupes:
+                continue
+            seen.add(key)
+            lane, what = ABOUT.get(r.get("kind"), ("other", ""))
+            r.update(lane=LANE_NAMES.get(lane, lane), what=what, model=r.get("model") or MODEL)
             out.append(r)
     return out
 
@@ -273,6 +302,8 @@ def one(brand, aid):
         r["result"] = p.read_text(errors="replace")[-200_000:]
     r["steps"] = steps(d)
     r["next"] = NEXT.get(r.get("kind"), [])
+    lane, what = ABOUT.get(r.get("kind"), ("other", ""))
+    r.update(lane=LANE_NAMES.get(lane, lane), what=what, model=r.get("model") or MODEL)
     if r.get("kind") == "tune":
         draft = _bdir(brand) / "variables" / (r["input"] + ".draft.md")
         live = _bdir(brand) / "variables" / (r["input"] + ".md")
@@ -445,7 +476,7 @@ def run_one(rec, runner=None):
             dirs += [str(r) for r in WD.brand_roots()]
         except Exception:  # noqa: BLE001
             pass
-        cmd = ["claude", "-p", prompt_for(rec), "--output-format", "stream-json", "--verbose",
+        cmd = ["claude", "-p", prompt_for(rec), "--model", MODEL, "--output-format", "stream-json", "--verbose",
                "--add-dir", *dirs, "--allowedTools", *TOOLS]
         wrapper = 'cd "$1" && shift && "$@" > "$OUT/run.log" 2>&1; echo $? > "$OUT/exit.txt"'
         try:

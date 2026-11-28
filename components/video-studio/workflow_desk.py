@@ -752,6 +752,16 @@ def live_ads(brand):
                      "cpa30": round(s30 / b30, 2) if b30 else None, "first_seen": a.get("first_seen"),
                      "call": c.get("action"), "why": c.get("why"), "break_even": c.get("break_even")})
     rows.sort(key=lambda x: -x["spend7"])
+    # the owner's winner rule (28 Nov 2026): spend winner = in the top share of ads by 30-day spend; KPI winner = a spend
+    # winner at or under the brand's CPA target (the desk's line until one is set). Both are set per brand on Today.
+    t = _targets(brand)
+    spent = sorted((r for r in rows if r["spend30"] > 0), key=lambda r: -r["spend30"])
+    kpi = t["kpi_cpa"] or next((r["break_even"] for r in rows if r.get("break_even")), None)
+    top = {id(r) for r in spent[:max(1, round(len(spent) * float(t["top_share"])))]} if spent else set()
+    for r in rows:
+        r["spend_winner"] = id(r) in top
+        r["kpi_winner"] = r["spend_winner"] and bool(kpi and r["cpa30"] is not None and r["cpa30"] <= kpi)
+    winrule = {"top_share": t["top_share"], "kpi_cpa": kpi, "kpi_from": "yours" if t["kpi_cpa"] else "desk line"}
     money = None
     if isinstance(w, dict):
         o = w.get("orders") or {}
@@ -764,7 +774,7 @@ def live_ads(brand):
         if b.get("number"):
             briefs[str(b["number"])] = {"angle": (b.get("angle") or "").replace("-", " "), "lanes": b.get("lanes") or [],
                                         "avatar": b.get("avatar"), "product": b.get("product")}
-    return {"ads": rows, "money": money, "briefs": briefs, "calls_asof": r.get("asof") if isinstance(r, dict) else None,
+    return {"ads": rows, "winrule": winrule, "money": money, "briefs": briefs, "calls_asof": r.get("asof") if isinstance(r, dict) else None,
             "rule": ((r or {}).get("rule") or {}).get("_what") if isinstance(r, dict) and isinstance(r.get("rule"), dict) else None,
             "from": str(Path(wf).relative_to(WS)) if wf else None}
 
@@ -866,12 +876,39 @@ def pages(brand):
             g["briefs"].add(a["brief"])
         for k in ("spend7", "buys7", "spend30", "buys30", "value30"):
             g[k] += a[k]
-    rows = []
+    # A page here is a landing page URL (the owner, 28 Nov 2026), never the Facebook page an ad runs from. The ad name
+    # carries the link's short name; the meta-upload directory maps each link to its URL, so names that point at the
+    # same URL are one page.
+    links = ((_read(WS / "runs/meta-upload" / brand / "directory.json") or {}).get("pages") or [])
+
+    def url_of(seg):
+        seg = re.sub(r"_p-[a-z0-9]+$", "", seg)
+        for l in links:
+            lid = re.sub(r"^link_[^_]+_", "", l.get("link_id") or "").replace("_", "-")
+            last = (l.get("url") or "").rstrip("/").rsplit("/", 1)[-1]
+            if seg == lid or (last and seg.endswith(last)):
+                return l
+        return None
+    byurl = {}
     for g in by.values():
+        l = url_of(g["page"]) or {}
+        u = l.get("url") or g["page"]
+        x = byurl.setdefault(u, {"url": l.get("url"), "page": u, "names": [], "status": l.get("status"), "funnel": l.get("funnel"),
+                                 "ads": 0, "briefs": set(), "spend7": 0.0, "buys7": 0.0, "spend30": 0.0, "buys30": 0.0,
+                                 "value30": 0.0, "active": False})
+        x["names"].append(g["page"])
+        x["ads"] += g["ads"]
+        x["active"] = x["active"] or g["active"]
+        x["briefs"] |= g["briefs"]
+        for k in ("spend7", "buys7", "spend30", "buys30", "value30"):
+            x[k] += g[k]
+    rows = []
+    for g in byurl.values():
         g["briefs"] = sorted(g["briefs"])
         rows.append(g)
     rows.sort(key=lambda g: -g["spend30"])
-    return {"funnels": funnels, "pages": rows}
+    return {"funnels": funnels, "pages": rows,
+            "unused": [l for l in links if l.get("url") not in byurl and l.get("status") == "live"]}
 
 
 def hidden(brand):
@@ -1299,17 +1336,13 @@ def loop(brand):
         stages[k]["ads"] += 1
         stages[k]["spend"] += float((f.get("windows") or {}).get("7", {}).get("spend") or 0) if isinstance(
             (f.get("windows") or {}).get("7"), dict) else 0.0
-    # winners, the owner's rule (28 Nov 2026): spend winner = in the top share (10%) of ads by 30-day spend;
-    # KPI winner = a spend winner at or under the brand's CPA target (the desk's line when none is set)
-    ads = sorted((a for a in live_ads(brand)["ads"] if a["spend30"] > 0), key=lambda a: -a["spend30"])
-    kpi = t["kpi_cpa"] or next((a["break_even"] for a in ads if a.get("break_even")), None)
-    k = max(1, round(len(ads) * float(t["top_share"]))) if ads else 0
+    la_ = live_ads(brand)
+    ads = sorted((a for a in la_["ads"] if a["spend30"] > 0), key=lambda a: -a["spend30"])
     wins = [{"name": a["name"], "brief": a["brief"], "spend30": round(a["spend30"]), "buys30": a["buys30"], "cpa30": a["cpa30"],
-             "kpi": bool(kpi and a["cpa30"] is not None and a["cpa30"] <= kpi)} for a in ads[:k]]
+             "kpi": a["kpi_winner"]} for a in ads if a["spend_winner"]]
     tot = sum(a["spend30"] for a in ads)
-    winners_ = {"spend": len(wins), "kpi_winners": sum(w["kpi"] for w in wins), "kpi_cpa": kpi,
-                "kpi_from": "yours" if t["kpi_cpa"] else "desk line", "top_share": t["top_share"], "ads": len(ads),
-                "share_of_spend": round(sum(w["spend30"] for w in wins) / tot * 100) if tot else None, "rows": wins}
+    winners_ = dict(la_["winrule"], spend=len(wins), kpi_winners=sum(w["kpi"] for w in wins), ads=len(ads),
+                    share_of_spend=round(sum(w["spend30"] for w in wins) / tot * 100) if tot else None, rows=wins)
     today_ = time.strftime("%Y-%m-%d")
     promos = []
     for sf in sorted(glob.glob(str(WS / "runs/marketing-calendar" / brand / "2*" / "slots.json"))):
@@ -1336,6 +1369,64 @@ def today(brand):
             "calls_asof": la["calls_asof"], "vary": vary_candidates(la),
             "low_roas": sum(1 for a in la["ads"] if a["active"] and a["spend7"] >= 50 and (a["roas7"] or 0) < 0.5
                             and not (a["buys7"] > 0 and not a["value7"]))}
+
+
+# ---------- Feedback: the owner's notes on one piece (replaces the Sauce lane, 28 Nov 2026) ----------
+# Per piece, in one place: typed words (general or exact) and/or the owner's newest Tella recording. The revision
+# step reads the notes marked new and makes only those shifts; it never reruns the whole chain.
+
+def _fb_file(brand):
+    return WS / "runs/studio-feedback" / brand / "feedback.jsonl"
+
+
+def feedback_list(brand, item=None):
+    f = _fb_file(brand)
+    rows = []
+    if f.is_file():
+        for line in f.read_text(errors="replace").splitlines():
+            try:
+                r = json.loads(line)
+            except ValueError:
+                continue
+            if item is None or r.get("item") == item:
+                rows.append(r)
+    return {"notes": rows[::-1]}
+
+
+def feedback_add(data):
+    """One note on one piece: typed words and/or the owner's newest Tella recording (pulled here, words only)."""
+    import datetime
+    brand, item = data.get("brand"), str(data.get("item") or "")
+    if not SAFE.match(brand or "") or not item or len(item) > 300:
+        raise ValueError("pick a piece first")
+    text = str(data.get("text") or "").strip()[:20000]
+    rec = {"id": uuid.uuid4().hex[:10], "at": datetime.datetime.now().isoformat(timespec="seconds"), "brand": brand,
+           "item": item, "kind": str(data.get("kind") or "")[:20], "title": str(data.get("title") or "")[:200],
+           "text": text, "state": "new"}
+    if data.get("tella"):
+        pull = Path(os.environ.get("PRIZM_TELLA_PULL") or Path.home() / ".claude/skills/tella-pull/scripts/pull.py")
+        if not pull.is_file():
+            raise ValueError("the Tella pull isn't set up on this computer")
+        r = subprocess.run([sys.executable, str(pull), "--brand", brand, "--no-video"], capture_output=True, text=True,
+                           timeout=240)
+        first = (r.stdout or "").splitlines()[0] if r.stdout else ""
+        m = re.search(r"→\s*(\S.*?)\s*$", first)
+        if r.returncode or not m:
+            raise ValueError("the Tella pull did not finish: " + ((r.stderr or r.stdout or "").strip()[-200:] or "no answer"))
+        folder = Path(m.group(1).strip())
+        meta = _read(folder / "run.json") or {}
+        rec["tella"] = {"title": first.split("·")[0].strip(), "folder": str(folder),
+                        "url": meta.get("url") or meta.get("view_url")}
+        tr = folder / "transcript.md"
+        if tr.is_file():
+            rec["tella"]["words"] = len(tr.read_text(errors="replace").split())
+    if not rec["text"] and not rec.get("tella"):
+        raise ValueError("write a note or attach a recording")
+    f = _fb_file(brand)
+    f.parent.mkdir(parents=True, exist_ok=True)
+    with open(f, "a") as out:
+        out.write(json.dumps(rec) + "\n")
+    return rec
 
 
 def preset(brand, avatar):
@@ -1560,6 +1651,8 @@ def handle(h, method, parts, query, body):
                 if p and p.is_file() and p.suffix.lower() == ".html" and "email-production" in p.parts:
                     return h.send(200, p.read_bytes(), "text/html; charset=utf-8")
                 return h.send(404, {"error": "no such page"})
+            if api == ["feedback"] and SAFE.match(q.get("brand", "")):
+                return h.send(200, feedback_list(q["brand"], q.get("item") or None))
             if api == ["ads"] and SAFE.match(q.get("brand", "")):
                 return h.send(200, live_ads(q["brand"]))
             if api == ["brief"] and SAFE.match(q.get("brand", "")) and re.fullmatch(r"\d{3,5}", q.get("n", "")):
@@ -1646,6 +1739,8 @@ def handle(h, method, parts, query, body):
                 return h.send(200, sauce_save(data.get("label"), data.get("text"), data.get("by"), data.get("beats")))
             if api == ["ad-off"]:
                 return h.send(200, ad_off(data))
+            if api == ["feedback"]:
+                return h.send(200, feedback_add(data))
             if api == ["targets"]:
                 return h.send(200, targets_save(data))
             if api == ["hide"]:

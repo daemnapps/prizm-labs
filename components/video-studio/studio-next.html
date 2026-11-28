@@ -132,6 +132,9 @@ main{padding:28px 24px 60px;max-width:1440px;margin:0 auto}
 .run i{width:8px;height:8px;border-radius:50%;background:var(--hue)}
 
 /* Ads */
+.fbk{display:grid;gap:8px;margin-bottom:14px;border-left:4px solid var(--amber)}.fbh{display:flex;align-items:center;gap:8px}.fbh b{font:600 14px var(--body)}.fbh .lbl{margin-left:auto}
+.fbk textarea{width:100%;box-sizing:border-box;border:1px solid var(--line-2,rgba(0,0,0,.2));border-radius:10px;padding:10px 12px;font:14.5px/1.55 var(--body);resize:vertical;background:var(--card);color:var(--ink)}
+.fbl{display:grid;gap:6px}.fbn{display:grid;gap:2px;font-size:13px;border-top:1px solid var(--line);padding-top:6px}
 .sx{display:grid;gap:2px;margin-bottom:14px;border-left:4px solid var(--amber)}.sx b{font:600 14px var(--body)}.sx span{color:var(--ink-2);font-size:13.5px}
 .sgrid{display:grid;grid-template-columns:300px 1fr;gap:16px;align-items:start}
 .sv{position:sticky;top:80px;display:grid;gap:10px;padding:10px}.sv video,.sv img{width:100%;border-radius:10px;background:#000;max-height:60vh;object-fit:contain}
@@ -471,14 +474,14 @@ function route(){
   const h = decodeURIComponent(location.hash.slice(1) || 'today');
   const i = h.indexOf('/'); const v = i < 0 ? h : h.slice(0, i);
   const alias = {brands:'settings'};
-  S.view = alias[v] || (['portfolio', 'today', 'production', 'ads', 'swipes', 'swipe', 'approve', 'research', 'skills', 'settings', 'knowledge', 'asks', 'live', 'brief', 'pages', 'creators', 'market', 'usage', 'join', 'loop'].includes(v) ? v : 'today');
+  S.view = alias[v] || (['portfolio', 'today', 'production', 'ads', 'swipes', 'swipe', 'approve', 'research', 'skills', 'settings', 'knowledge', 'asks', 'live', 'brief', 'pages', 'creators', 'market', 'usage', 'join'].includes(v) ? v : 'today');
   S.arg = i < 0 ? null : h.slice(i + 1);
   if (S.view === 'ads' && (!S.arg || S.arg === 'kill')) S.view = 'live';
-  const TAB = {ads:'production', swipes:'production', swipe:'production', live:'ads-top', approve:'ads-top', brief:'ads-top', pages:'ads-top', skills:'settings', usage:'settings', market:'research', loop:'today'};
+  const TAB = {ads:'production', swipes:'production', swipe:'production', live:'ads-top', approve:'ads-top', brief:'ads-top', pages:'ads-top', skills:'settings', usage:'settings', market:'research'};
   const tab = TAB[S.view] || S.view;
   document.querySelectorAll('[data-v]').forEach(a => a.classList.toggle('on', a.dataset.v === tab));
   $('#brand').value = S.view === 'portfolio' ? '*' : S.brand;
-  ({portfolio, today, production, ads:() => production('video'), swipes:() => production('swipes'), swipe:swipeView, approve, research, skills:skillsView, settings:brandSetup, knowledge:knowledgeView, asks:asksView, live:adsLive, brief:briefView, pages:pagesView, creators:creatorsView, market:marketView, usage:usageView, join:joinView, loop:loopView})[S.view]();
+  ({portfolio, today, production, ads:() => production('video'), swipes:() => production('swipes'), swipe:swipeView, approve, research, skills:skillsView, settings:brandSetup, knowledge:knowledgeView, asks:asksView, live:adsLive, brief:briefView, pages:pagesView, creators:creatorsView, market:marketView, usage:usageView, join:joinView})[S.view]();
   approveBadge();
 }
 const brandMenu = () => ((S.menu && S.menu.brands) || []).find(b => b.id === S.brand);
@@ -538,77 +541,11 @@ function loopHtml(L){
     ${pr.map(x => `<div class="row"><b>${esc(dayLabel(x.date))} · ${esc(nice(x.occasion || x.category || ''))}</b><span>${esc(nice(x.offer || x.product || ''))} · ${int(x.slots)} slots</span></div>`).join('') || '<div class="empty">Nothing on the calendar ahead</div>'}</div>`;
   return `<div class="loop"><div class="card chart"><h3>${ib('chart', 'green')}Sales, spend, margin · MER vs ${t.mer || 'no line'}</h3>${chart}
       <div class="key"><span style="--hue:var(--green)"><i></i>Sales</span><span style="--hue:var(--indigo)"><i></i>Spend</span><span style="--hue:var(--cyan)"><i></i>Margin</span><span style="--hue:var(--violet)"><i></i>MER</span><span style="--hue:var(--coral)"><i></i>Line ${t.mer || ''}</span></div></div>${prop}</div>
-    <div class="grid2" style="margin-bottom:16px">${stage}${promos}</div>`;
-}
-/* ================= LOOP CANVAS: the six steps of the business loop, live, on one board ================= */
-async function loopView(){
-  const m = $('#main');
-  const head = `<div class="ph"><h1>The loop</h1><span class="sub">${esc(blabel(S.brand))} · each step, live</span><span class="seg"><a class="on" href="#loop">Canvas</a><a href="#today">Cards</a></span></div>`;
-  if (!m.querySelector('.cv')) m.innerHTML = head + '<div class="skel">Reading the numbers…</div>';
-  let d; try { d = await J('/api/desk/today?brand=' + encodeURIComponent(S.brand)); } catch (e) { m.innerHTML = head + `<div class="note stop">${esc(e.message)}</div>`; return; }
-  if (S.view !== 'loop') return;
-  const L = d.loop || {}, t = L.targets || {}, p = L.proposal, st = L.stages || {};
-  const tot = ['top', 'middle', 'bottom'].reduce((a, k) => a + ((st[k] || {}).spend || 0), 0) || 1;
-  const thin = ['top', 'middle', 'bottom'].sort((a, b) => ((st[a] || {}).spend || 0) - ((st[b] || {}).spend || 0))[0];
-  const nx = (d.research || {}).next || {}, pr = L.promos || [], win = d.winners || [];
-  const ok = x => `<span class="ok">${esc(x)}</span>`, gap = x => `<span class="gap">${esc(x)}</span>`;
-  const above = p ? p.dir === 'raise' : null;
-  const N = [
-    {hue:'magenta', ic:'target', go:'#ads', name:'Winners',
-      big: L.winners ? `${L.winners.spend} spend · ${L.winners.kpi_winners} KPI` : '—',
-      lines: [L.winners ? `top ${Math.round(L.winners.top_share * 100)}% by 30-day spend (${L.winners.share_of_spend}% of spend) · KPI CPA ${usd(L.winners.kpi_cpa)} (${L.winners.kpi_from})` : ''], marks: [ok('warehouse'), gap('winners audit stopped 2 Nov')]},
-    {hue:'indigo', ic:'target', go:'#today', name:'Buy to the line',
-      big: p ? `${usd(p.now)} → ${usd(p.to)}` : (t.mer ? 'Not enough days' : 'No line set'),
-      lines: [p ? `MER 7d ${p.mer7} vs ${p.line} · ${above ? 'raise' : 'lower'}` : 'Set the MER line on Today'], marks: [ok('daily money'), gap('go guards: proposal only')]},
-    {hue:'green', ic:'loop', go:'#ads', name:'Which ad drives it',
-      big: `${(d.vary || []).length} to vary · ${(d.off || []).length} off`,
-      lines: [`${int(d.low_roas)} on the kill list (under 0.5 ROAS)`], marks: [ok('desk calls'), gap('variations start on a click')]},
-    {hue:'violet', ic:'layers', go:'#today', name:'Funnel by frequency',
-      big: `${Math.round(((st[thin] || {}).spend || 0) / tot * 100)}% ${thin}`,
-      lines: ['top ' + usd((st.top || {}).spend || 0) + ' · mid ' + usd((st.middle || {}).spend || 0) + ' · bottom ' + usd((st.bottom || {}).spend || 0)],
-      marks: [(t.set || []).includes('bands') ? ok('your bands') : gap('draft bands'), gap('briefs for the thin stage')]},
-    {hue:'amber', ic:'calendar', go:'#today', name:'Calendar drives promos',
-      big: pr[0] ? `${dayLabel(pr[0].date)} · ${nice(pr[0].occasion || '')}` : 'Nothing ahead',
-      lines: [pr.length ? pr.length + ' promo windows ahead' : 'No calendar for this brand'], marks: [ok('marketing calendar'), gap('promo briefs on their own')]},
-    {hue:'cyan', ic:'search', go:'#research', name:'Research + swipes',
-      big: `${(nx.angles || []).length} ${(nx.angles || []).length === 1 ? 'angle' : 'angles'} to make`,
-      lines: ['My Feeds, swipes, market radar'], marks: [ok('research rounds'), gap('own budget + schedule')]},
-    {hue:'coral', ic:'film', go:'#production', name:'Baseline: old winners',
-      big: `${win.length} winners`,
-      lines: [`${win.filter(w => !w.varied).length} not re-made yet`], marks: [ok('Sauce on every script'), gap('weekly run per brand')]},
-  ];
-  const W = 1200, H = 860, cx = W / 2, cy = H / 2, rx = 440, ry = 300;
-  const pos = N.map((_, i) => { const a = -Math.PI / 2 + i * 2 * Math.PI / N.length; return [cx + rx * Math.cos(a), cy + ry * Math.sin(a)]; });
-  const wires = pos.map((a, i) => { const b = pos[(i + 1) % pos.length];
-    const mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2, k = 0.22, qx = mx + (mx - cx) * k, qy = my + (my - cy) * k;
-    return `<path d="M${a[0]} ${a[1]} Q${qx} ${qy} ${b[0]} ${b[1]}" fill="none" stroke="var(--${N[i].hue})" stroke-width="2.5" stroke-dasharray="7 6" marker-end="url(#ah${i})" opacity=".75"/>
-      <marker id="ah${i}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--${N[i].hue})"/></marker>`; }).join('');
-  const nodes = N.map((n, i) => `<a class="nd" href="${n.go}" style="left:${pos[i][0]}px;top:${pos[i][1]}px;--hue:var(--${n.hue})">
-      <div class="h">${ib(n.ic, n.hue)}<b>${esc(n.name)}</b><span class="k">${i + 1}</span></div>
-      <span class="big">${esc(n.big)}</span>${n.lines.map(l => `<span class="ln">${esc(l)}</span>`).join('')}${n.marks.join('')}</a>`).join('');
-  const mer = L.mer7;
-  const hub = `<div class="hub" style="left:${cx}px;top:${cy}px"><div class="ring">
-      <span class="lbl">MER 7 days</span><span class="mer" style="color:var(--${mer == null ? 'ink-3' : t.mer && mer >= t.mer ? 'green' : 'coral'})">${mer ?? '—'}</span>
-      <span class="lbl">line ${t.mer ?? 'not set'}</span><b>${p ? usd(p.profit7) + ' profit 7d' : ''}</b></div></div>`;
-  m.innerHTML = head + `<div class="cv" id="cv"><div class="stage" id="stg"><svg class="wires" viewBox="0 0 ${W} ${H}">${wires}</svg>${hub}${nodes}</div>
-    <div class="cvctl"><button data-z="-1" title="Zoom out">−</button><button data-z="0" title="Fit">⤢</button><button data-z="1" title="Zoom in">+</button></div></div>`;
-  paintIcons(m);
-  const cv = $('#cv'), stg = $('#stg');
-  let z = 1, x = 0, y = 0;
-  const fit = () => { const r = cv.getBoundingClientRect(); z = Math.min(r.width / W, r.height / H) * 0.98; x = (r.width - W * z) / 2; y = (r.height - H * z) / 2; draw(); };
-  const draw = () => stg.style.transform = `translate(${x}px,${y}px) scale(${z})`;
-  fit();
-  cv.onwheel = e => { e.preventDefault(); const r = cv.getBoundingClientRect(), px = e.clientX - r.left, py = e.clientY - r.top, nz = Math.min(2.5, Math.max(0.3, z * (e.deltaY < 0 ? 1.1 : 0.9))); x = px - (px - x) * nz / z; y = py - (py - y) * nz / z; z = nz; draw(); };
-  let dr = null, moved = false;
-  cv.onpointerdown = e => { if (e.target.closest('.cvctl')) return; dr = [e.clientX - x, e.clientY - y]; moved = false; };
-  window.onpointermove = e => { if (!dr) return; if (!moved && Math.hypot(e.clientX - dr[0] - x, e.clientY - dr[1] - y) < 4) return; moved = true; cv.classList.add('drag'); x = e.clientX - dr[0]; y = e.clientY - dr[1]; draw(); };
-  window.onpointerup = () => { dr = null; cv.classList.remove('drag'); };
-  cv.addEventListener('click', e => { if (moved) { e.preventDefault(); moved = false; } }, true);
-  cv.querySelectorAll('[data-z]').forEach(b => b.onclick = () => { const k = +b.dataset.z; if (!k) return fit(); const r = cv.getBoundingClientRect(), px = r.width / 2, py = r.height / 2, nz = Math.min(2.5, Math.max(0.3, z * (k > 0 ? 1.2 : 1 / 1.2))); x = px - (px - x) * nz / z; y = py - (py - y) * nz / z; z = nz; draw(); });
+`;
 }
 async function today(){
   const m = $('#main');
-  const head = `<div class="ph"><h1>Today</h1><span class="sub">${new Date().toLocaleDateString('en-GB', {weekday:'long', day:'numeric', month:'long'})}</span><span class="seg"><a href="#loop">Canvas</a><a class="on" href="#today">Cards</a></span>`;
+  const head = `<div class="ph"><h1>Today</h1><span class="sub">${new Date().toLocaleDateString('en-GB', {weekday:'long', day:'numeric', month:'long'})}</span>`;
   if (!m.querySelector('.money')) m.innerHTML = head + `</div><div class="skel">Reading the numbers…</div>`;
   let d; try { d = await J('/api/desk/today?brand=' + encodeURIComponent(S.brand)); } catch (e) { m.innerHTML = head + `</div><div class="note stop">${esc(e.message)}</div>`; return; }
   if (S.view !== 'today') return;
@@ -626,7 +563,7 @@ async function today(){
   const rr = rounds.find(r => r.worlds && r.worlds.length);
   const resCount = (nx.angles || []).length + (rr ? 1 : 0);
   m.innerHTML = head + `${days != null && days > 2 ? `<span class="pill p-stop"><i class="ic" data-i="alert"></i>Numbers stop ${esc(dayLabel(nowDay))} · ${days} days old</span>` : ''}</div>
-    ${loopHtml(d.loop)}${mon2.ok ? `<div class="money">${moneyCards}</div>` : `<div class="note stop" style="margin-bottom:16px">${esc(mon2.why)}</div>`}
+    ${mon2.ok ? `<div class="money">${moneyCards}</div>` : `<div class="note stop" style="margin-bottom:16px">${esc(mon2.why)}</div>`}
     <div class="grid4">
       <div class="card dcol" style="--hue:var(--amber)"><h3>${ib('send', 'amber')}Launch<span class="count">${waiting ?? '—'}</span></h3>
         ${waiting ? `<a class="btn wait" href="#approve">Review ${waiting} ${waiting === 1 ? 'ad' : 'ads'}</a>` : `<div class="empty">Nothing waiting for your approval</div>`}</div>
@@ -699,6 +636,25 @@ const stepsBar = (steps, cur) => `<div class="steps">${steps.map(s => `<button c
 
 /* a production: Swipe · Script · Shots · Edit · Versions · Approve */
 const PROD = [['swipe', 'Swipe'], ['script', 'Script'], ['shots', 'Shots'], ['edit', 'Edit'], ['versions', 'Versions'], ['approve', 'Approve']];
+/* ---------- Feedback on one piece (this is the Sauce): typed or a Tella, general or exact words ---------- */
+function fbCard(kind, item, title){
+  const id = 'fb' + Math.random().toString(36).slice(2, 8);
+  setTimeout(() => fbLoad(id, kind, item, title), 0);
+  return `<div class="card fbk" id="${id}"><div class="fbh">${ib('pen', 'amber')}<b>Your feedback</b><span class="lbl">general or exact words · the revision makes only these changes</span></div>
+    <textarea rows="3" placeholder=""></textarea>
+    <div class="arow"><button class="btn" data-tella>Attach my newest Tella</button><button class="btn wait" data-save style="margin-left:auto">Save feedback</button></div><div class="fbl"></div></div>`;
+}
+async function fbLoad(id, kind, item, title){
+  const box = document.getElementById(id); if (!box) return;
+  const list = async () => { try { const r = await J(`/api/desk/feedback?brand=${encodeURIComponent(S.brand)}&item=${encodeURIComponent(item)}`, {keep:true});
+    box.querySelector('.fbl').innerHTML = (r.notes || []).map(n => `<div class="fbn"><span class="lbl">${esc(new Date(n.at).toLocaleString('en-GB', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'}))} · ${n.state === 'new' ? 'waiting for the revision' : esc(n.state)}</span>${n.text ? `<span>${esc(n.text)}</span>` : ''}${n.tella ? `<span class="pill p-act">Tella · ${esc(n.tella.title)}${n.tella.words ? ' · ' + int(n.tella.words) + ' words' : ''}</span>` : ''}</div>`).join(''); } catch {} };
+  const send = async (tella, btn) => { const ta = box.querySelector('textarea'); btn.disabled = true; const was = btn.textContent; if (tella) btn.textContent = 'Pulling your Tella…';
+    try { await J('/api/desk/feedback', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({brand: S.brand, item, kind, title, text: ta.value, tella})}); ta.value = ''; toast(tella ? 'Tella attached' : 'Feedback saved'); list(); }
+    catch (e) { toast(e.message); } btn.disabled = false; btn.textContent = was; };
+  box.querySelector('[data-save]').onclick = e => send(false, e.currentTarget);
+  box.querySelector('[data-tella]').onclick = e => send(true, e.currentTarget);
+  paintIcons(box); list();
+}
 async function openProd(a, step){
   const det = $('#detail');
   if (!a.n) { det.innerHTML = `<div class="dh"><h2>${esc(a.title)}</h2><span class="pill p-swipe">idea</span></div><div class="card note">No production yet. Its swipe and teardown are on the board. <a href="/board/" target="_blank" rel="noopener">Open the board</a></div>`; return; }
@@ -706,7 +662,7 @@ async function openProd(a, step){
   step = step || (/live|editor/.test(st) ? 'versions' : 'shots');
   det.innerHTML = `<div class="dh"><h2>${esc(a.title)}</h2><span class="pill p-mute">${esc(a.n)}</span><span class="pill ${/live|meta/.test(st) ? 'p-ready' : /editor/.test(st) ? 'p-brief' : 'p-video'}">${esc((a.stage || {}).name || '')}</span>
       <div class="acts"><button class="btn" data-goto="edit"><i class="ic" data-i="scissors"></i>Edit in HyperFrames</button></div></div>
-    ${stepsBar(PROD.map(([id, name]) => ({id, name})), step)}<div class="work"><div id="stage"><div class="skel">Loading…</div></div><aside class="card insp" id="insp"></aside></div>`;
+    ${fbCard('video', a.id, a.title)}${stepsBar(PROD.map(([id, name]) => ({id, name})), step)}<div class="work"><div id="stage"><div class="skel">Loading…</div></div><aside class="card insp" id="insp"></aside></div>`;
   paintIcons(det);
   det.querySelectorAll('[data-step],[data-goto]').forEach(b => b.onclick = () => { const s = b.dataset.step || b.dataset.goto; setStep(a, s); openProd(a, s); });
   if (!S.prods) S.prods = (await J('/api/productions').catch(() => ({productions: []}))).productions;
@@ -802,7 +758,7 @@ async function openLine(a, step){
   const st = p.stations || []; const nowPh = p.now ? PHASE(p.now) : null;
   const phases = LINE.map(([id, name]) => { const ss = st.filter(s => PHASE(s.id) === id); return {id, name, ss, cls: (ss.length && ss.every(s => s.status === 'done') ? 'done' : id === nowPh ? 'now' : '') + (id === 'price' ? ' price' : '')}; });
   step = step || nowPh || 'swipe';
-  det.innerHTML = dh + stepsBar(phases, step) + `<div class="work"><div id="stage"></div><aside class="card insp" id="insp"></aside></div>`;
+  det.innerHTML = dh + fbCard('video', 'w:' + a.label, a.title) + stepsBar(phases, step) + `<div class="work"><div id="stage"></div><aside class="card insp" id="insp"></aside></div>`;
   det.querySelectorAll('[data-step]').forEach(b => b.onclick = () => { setStep(a, b.dataset.step); openLine(a, b.dataset.step); });
   const ph = phases.find(x => x.id === step) || phases[0];
   if ((step === 'swipe' || step === 'script') && (p.values || {}).teardown) return teardownInAd(a, step);
@@ -893,7 +849,7 @@ async function swipeView(){
   m.innerHTML = `<div class="ph"><a class="btn" href="#production/swipes">← Swipes</a><h1>${esc(nice(label))}</h1><div class="acts"><a class="btn go" href="#production/new/${encodeURIComponent(label)}"><i class="ic" data-i="plus"></i>Make an ad from this</a></div></div><div class="skel">Opening the teardown…</div>`;
   paintIcons(m);
   let sw; try { sw = S.swipes[label] || (S.swipes[label] = await J('/api/desk/swipe?label=' + encodeURIComponent(label))); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
-  m.querySelector('.skel').outerHTML = `<div class="sw3"><div class="card swv">${sw.video ? `<video controls preload="metadata" src="${media(sw.video)}" ${sw.poster ? `poster="${media(sw.poster)}"` : ''}></video>` : (sw.poster ? `<img src="${media(sw.poster)}" alt="">` : '')}<dl class="kv"><dt>Format</dt><dd>${esc(sw.format || '—')}</dd><dt>Lane</dt><dd>${esc(sw.lane || '—')}</dd><dt>Product</dt><dd>${esc(sw.product || '—')}</dd><dt>Avatar</dt><dd>${esc(sw.avatar || '—')}</dd><dt>Post</dt><dd>${sw.post_url ? `<a href="${esc(sw.post_url)}" target="_blank" rel="noopener">open</a>` : '—'}</dd></dl></div><div id="stage"></div><aside class="card insp" id="insp"></aside></div>`;
+  m.querySelector('.skel').outerHTML = fbCard('teardown', 't:' + label, nice(label)) + `<div class="sw3"><div class="card swv">${sw.video ? `<video controls preload="metadata" src="${media(sw.video)}" ${sw.poster ? `poster="${media(sw.poster)}"` : ''}></video>` : (sw.poster ? `<img src="${media(sw.poster)}" alt="">` : '')}<dl class="kv"><dt>Format</dt><dd>${esc(sw.format || '—')}</dd><dt>Lane</dt><dd>${esc(sw.lane || '—')}</dd><dt>Product</dt><dd>${esc(sw.product || '—')}</dd><dt>Avatar</dt><dd>${esc(sw.avatar || '—')}</dd><dt>Post</dt><dd>${sw.post_url ? `<a href="${esc(sw.post_url)}" target="_blank" rel="noopener">open</a>` : '—'}</dd></dl></div><div id="stage"></div><aside class="card insp" id="insp"></aside></div>`;
   chainView($('#stage'), $('#insp'), sw, sw.stages, false);
 }
 
@@ -1010,10 +966,10 @@ async function portfolio(){
 }
 
 /* ================= PRODUCTION (one place: video, static, email, swipes, new ad) ================= */
-const LANES = [['sauce', 'Sauce', 'pen', 'amber'], ['video', 'Video', 'video', 'cyan'], ['static', 'Static', 'image', 'violet'], ['email', 'Email', 'mail', 'magenta'], ['swipes', 'Swipes', 'bookmark', 'violet']];
+const LANES = [['video', 'Video', 'video', 'cyan'], ['static', 'Static', 'image', 'violet'], ['email', 'Email', 'mail', 'magenta'], ['swipes', 'Swipes', 'bookmark', 'violet']];
 function production(lane){
   const parts = (S.arg || '').split('/');
-  lane = lane || parts[0] || 'sauce';
+  lane = lane || parts[0] || 'video';
   const m = $('#main');
   if (!m.querySelector('#sub') || m.dataset.lane !== lane) {
     m.dataset.lane = lane;
@@ -1027,7 +983,6 @@ function production(lane){
   if (lane === 'static') return staticLane();
   if (lane === 'email') return emailLane(parts[1]);
   if (lane === 'creators') return creatorsLane();
-  if (lane === 'sauce') return sauceLane(parts.slice(1).join('/'));
   if (lane === 'new') return newAd(parts.slice(1).join('/'));
 }
 async function staticLane(){
@@ -1043,7 +998,7 @@ async function emailLane(label){
   if (label) {
     h.innerHTML = '<div class="skel">Opening the email…</div>';
     let e; try { e = await J(`/api/desk/email?brand=${encodeURIComponent(S.brand)}&label=${encodeURIComponent(label)}`); } catch (err) { h.innerHTML = `<div class="note stop">${esc(err.message)}</div>`; return; }
-    h.innerHTML = `<div class="ph" style="margin-bottom:14px"><a class="btn" href="#production/email">← Emails</a><b style="font:600 16px var(--display)">${esc(nice(label))}</b><span class="pill p-brief">${esc(e.format || '')}</span></div>
+    h.innerHTML = `<div class="ph" style="margin-bottom:14px"><a class="btn" href="#production/email">← Emails</a><b style="font:600 16px var(--display)">${esc(nice(label))}</b><span class="pill p-brief">${esc(e.format || '')}</span></div>${fbCard('email', 'e:' + label, nice(label))}
       <div class="sw3"><div class="card swv" style="padding:0">${e.preview ? `<iframe src="/api/desk/page?path=${encodeURIComponent(e.preview)}" title="The email" style="width:100%;height:620px;border:0;background:#fff"></iframe>` : '<div class="note">No preview built yet</div>'}</div><div id="stage"></div><aside class="card insp" id="insp"></aside></div>`;
     chainView($('#stage'), $('#insp'), {label}, e.stages, false);
     return;
@@ -1109,6 +1064,7 @@ async function skillsView(){
 async function ask(kind, input, brand){
   try {
     const r = await J('/api/desk/ask', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({kind, input, brand: brand === undefined ? S.brand : brand, by: store.get('st.by') || ''})});
+    if (r.duplicate) { toast('Already in Jobs · ' + r.name); return r; }
     toast(r.state === 'handed' ? 'Handed to ' + (HANDTO[r.to] || r.to) + ' · ' + r.name : 'On it · ' + r.name); asksBadge(); return r;
   } catch (e) { toast(e.message); return null; }
 }
@@ -1128,7 +1084,9 @@ async function asksView(){
   if (brand && id) return askOne(brand, id);
   m.innerHTML = `<div class="ph"><h1>Jobs</h1></div><div class="card note" style="margin-bottom:16px">Each job is Claude doing one thing you pressed a button for (Plan, Go deeper, Tune, Add a swipe, Make these), in the background. Not a new session, nothing to manage. When one needs you it says <b>ready</b>: open it, read it, press the next button.</div><div class="skel">Loading…</div>`;
   let r; try { const [x, y] = await Promise.all([J('/api/desk/asks?brand=' + encodeURIComponent(S.brand)), J('/api/desk/asks?brand=_portfolio')]); r = {asks: [...x.asks, ...y.asks].sort((p, q) => String(q.asked).localeCompare(String(p.asked)))}; } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
-  m.querySelector('.skel').outerHTML = r.asks.length ? `<div class="card" style="padding:0">${r.asks.map(a => { const [w, c] = ASKSTATE[a.state] || [a.state, 'mute']; return `<a class="sk" href="#asks/${encodeURIComponent(a.brand)}/${encodeURIComponent(a.id)}" style="color:var(--ink)"><b>${esc(a.name)}</b><span class="j">${esc(a.brand === '_portfolio' ? 'All brands' : blabel(a.brand))} · asked ${esc((a.asked || '').replace('T', ' ').slice(0, 16))}</span><span class="tags"><span class="pill p-${c}">${w}</span></span></a>`; }).join('')}</div>` : `<div class="card note">Nothing handed off yet. Tune, Go deeper, Plan variations, Add a swipe and Fill buttons land here.</div>`;
+  const row = a => { const [w, c] = ASKSTATE[a.state] || [a.state, 'mute']; return `<a class="sk" href="#asks/${encodeURIComponent(a.brand)}/${encodeURIComponent(a.id)}" style="color:var(--ink)"><b>${esc(a.name)}</b>${a.what ? `<span class="j" style="color:var(--ink-2)">${esc(a.what)}</span>` : ''}<span class="j">${esc(a.brand === '_portfolio' ? 'All brands' : blabel(a.brand))} · asked ${esc((a.asked || '').replace('T', ' ').slice(0, 16))}</span><span class="tags"><span class="pill p-${c}">${w}</span></span></a>`; };
+  const lanes = [...new Set(r.asks.map(a => a.lane || 'Other'))];
+  m.querySelector('.skel').outerHTML = r.asks.length ? lanes.map(l => { const rs = r.asks.filter(a => (a.lane || 'Other') === l); return `<div class="g" style="margin:14px 0 8px"><span class="pill p-mute">${esc(l)}</span><span class="lbl">${rs.length}</span></div><div class="card" style="padding:0">${rs.map(row).join('')}</div>`; }).join('') : `<div class="card note">No jobs yet.</div>`;
 }
 async function askOne(brand, id){
   const m = $('#main');
@@ -1138,6 +1096,7 @@ async function askOne(brand, id){
   $('#aname').textContent = a.name; $('#astate').innerHTML = `<span class="pill p-${c}">${w}</span>`;
   let h = '';
   const stage = a.state === 'done' ? 1 : 0;
+  if (a.what) h += `<div class="card" style="margin-bottom:12px;display:grid;gap:4px"><span class="lbl">What this job does · ${esc(a.lane || '')} · runs on ${esc(String(a.model || '').replace('claude-', '').replace(/-\d.*$/, ''))}</span><span>${esc(a.what)}</span></div>`;
   if ((a.next || []).length) h += `<div class="flow">${a.next.map((x, i) => `<span class="${i < stage ? 'done' : i === stage ? 'now' : ''}">${esc(x)}</span>`).join('<i>→</i>')}</div>`;
   const mins = t => t ? Math.max(0, Math.round((Date.now() - new Date(t)) / 60000)) : null;
   if (a.state === 'handed') h += `<div class="card" style="margin-bottom:16px;display:grid;gap:10px"><h3>${ib('send', 'indigo')}Handed to ${esc(HANDTO[a.to] || a.to)}</h3><div style="color:var(--ink-2);font-size:13.5px">${a.to === 'owner' ? 'It sits in their own repository as a note for their Claude to pick up. It runs on their usage, not yours.' : 'It sits in the team\'s list for whoever runs jobs. It runs on their usage, not yours.'} The result lands here when it is done.</div>
@@ -1267,7 +1226,8 @@ const CALL = {off:['off', 'stop'], keep:['keep', 'ready'], budget_up:['budget up
 let adsSort = store.get('st.adsort') || 'spend7';
 async function adsLive(){
   const m = $('#main');
-  m.innerHTML = `<div class="ph"><h1>Ads</h1><span class="sub" id="adsub">live numbers by brief · from the warehouse, never Meta</span></div>${adsTabs('live')}<div class="skel">Loading…</div>`;
+  m.innerHTML = `<div class="ph"><h1>Ads</h1><span class="sub" id="adsub">live numbers by brief · from the warehouse, never Meta</span></div>${adsTabs('live')}<div id="adloop"></div><div class="skel">Loading…</div>`;
+  J('/api/desk/today?brand=' + encodeURIComponent(S.brand)).then(t => { const el = $('#adloop'); if (el && S.view === 'live') { el.innerHTML = loopHtml(t.loop); paintIcons(el); } }).catch(() => {});
   let d; try { d = await J('/api/desk/ads?brand=' + encodeURIComponent(S.brand)); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
   if (S.view !== 'live') return;
   if (!d.ads.length) { m.querySelector('.skel').outerHTML = '<div class="card note">No live ad numbers on file for this brand yet.</div>'; return; }
@@ -1280,8 +1240,9 @@ async function adsLive(){
   const keyOf = a => ({brief: a.brief, creator: creatorOf(a.name), other: camp(a.campaign)})[cat(a)];
   const CATS = [['brief', 'Briefs', 'film', 'cyan'], ['creator', 'Creators', 'user', 'magenta'], ['other', 'Not briefed', 'list', 'ink-3']];
   const sum = (rs, k) => rs.reduce((t, r) => t + (r[k] || 0), 0);
-  const stats = rs => ({n: rs.length, s7: sum(rs, 'spend7'), b7: sum(rs, 'buys7'), s30: sum(rs, 'spend30'), b30: sum(rs, 'buys30'), v30: sum(rs, 'value30'),
+  const stats = rs => ({sw: rs.filter(r => r.spend_winner).length, kw: rs.filter(r => r.kpi_winner).length, n: rs.length, s7: sum(rs, 'spend7'), b7: sum(rs, 'buys7'), s30: sum(rs, 'spend30'), b30: sum(rs, 'buys30'), v30: sum(rs, 'value30'),
     off: rs.filter(r => r.call === 'off').length, act: rs.filter(r => r.call && !['too_early', 'keep', 'off'].includes(r.call)).length});
+  let onlyWin = false;
   let curCat = store.get('st.adcat') || 'brief', open = new Set(), onlyCalls = false, focus = null, onlyActive = store.get('st.adact') !== false;
   let kill = S.arg === 'kill', kMin = store.get('st.kmin') ?? 50, kRoas = store.get('st.kroas') ?? 0.5, offDone = new Set();
   const killList = () => d.ads.filter(a => a.active && a.spend7 >= kMin && (a.roas7 ?? 0) < kRoas && !(a.buys7 > 0 && !a.value7)).sort((x, y) => y.spend7 - x.spend7);
@@ -1312,7 +1273,7 @@ async function adsLive(){
     const pool = onlyActive ? d.ads.filter(a => a.active) : d.ads;
     const byCat = Object.fromEntries(CATS.map(([c]) => [c, pool.filter(a => cat(a) === c)]));
     const groups = {};
-    for (const a of byCat[curCat]) { if (onlyCalls && (!a.call || ['too_early', 'keep'].includes(a.call))) continue; (groups[keyOf(a)] = groups[keyOf(a)] || []).push(a); }
+    for (const a of byCat[curCat]) { if (onlyWin && !a.spend_winner) continue; if (onlyCalls && (!a.call || ['too_early', 'keep'].includes(a.call))) continue; (groups[keyOf(a)] = groups[keyOf(a)] || []).push(a); }
     const rows = Object.entries(groups).map(([k, rs]) => ({k, rs, ...stats(rs)}));
     const sorts = {spend7: r => -r.s7, buys30: r => -r.b30, cpa7: r => (r.b7 ? r.s7 / r.b7 : 1e9)};
     rows.sort((x, y) => sorts[adsSort](x) - sorts[adsSort](y));
@@ -1321,15 +1282,17 @@ async function adsLive(){
       <div class="grid4" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px">${CATS.map(([c, name, ic, hue]) => { const t = stats(byCat[c]); return `<button class="card catc ${c === curCat ? 'on' : ''}" data-cat="${c}" style="--hue:var(--${hue})"><h3>${ib(ic, hue)}${name}<span class="count">${t.n} ads</span></h3>
         <div class="stats"><div><span class="lbl">Spend 7d</span><b>${usd(t.s7)}</b></div><div><span class="lbl">Buys 7d</span><b>${int(t.b7)}</b></div><div><span class="lbl">CPA 7d</span><b>${cpa(t.s7, t.b7)}</b></div></div>
         <div class="arow">${t.off ? `<span class="pill p-stop">${t.off} to turn off</span>` : ''}${t.act ? `<span class="pill p-act">${t.act} other calls</span>` : ''}${!t.off && !t.act ? '<span class="lbl">no calls from the desk</span>' : ''}</div></button>`; }).join('')}</div>
-      <div class="filters">${[['spend7', 'Most spend 7d'], ['buys30', 'Most buys 30d'], ['cpa7', 'Lowest CPA 7d']].map(([k, n]) => `<button class="${k === adsSort ? 'on' : ''}" data-srt="${k}">${n}</button>`).join('')}<button data-kill style="margin-left:auto;border-color:var(--coral);color:var(--coral)">Kill list · ${killList().length}</button><button class="${onlyActive ? 'on' : ''}" data-act>Active only</button><button class="${onlyCalls ? 'on' : ''}" data-only>Only the desk's calls</button></div>
+      <div class="filters">${[['spend7', 'Most spend 7d'], ['buys30', 'Most buys 30d'], ['cpa7', 'Lowest CPA 7d']].map(([k, n]) => `<button class="${k === adsSort ? 'on' : ''}" data-srt="${k}">${n}</button>`).join('')}<button class="${onlyWin ? 'on' : ''}" data-win>Winners · ${d.ads.filter(a => a.spend_winner).length} spend · ${d.ads.filter(a => a.kpi_winner).length} KPI</button><button data-kill style="margin-left:auto;border-color:var(--coral);color:var(--coral)">Kill list · ${killList().length}</button><button class="${onlyActive ? 'on' : ''}" data-act>Active only</button><button class="${onlyCalls ? 'on' : ''}" data-only>Only the desk's calls</button></div>
       <div class="card" style="padding:0;overflow-x:auto"><table class="t"><tr><th>${curCat === 'brief' ? 'Brief' : curCat === 'creator' ? 'Creator' : 'Campaign'}</th><th style="text-align:right">Spend 7d</th><th style="text-align:right">Buys 7d</th><th style="text-align:right">CPA 7d</th><th style="text-align:right">Spend 30d</th><th style="text-align:right">ROAS 30d</th><th></th></tr>
-      ${rows.map(r => { const isOpen = open.has(r.k); return `<tr class="grp" data-g="${esc(r.k)}"><td><span class="chev">${isOpen ? '▾' : '▸'}</span> <b>${title(r)}</b>${r.off ? ' <span class="pill p-stop">off</span>' : ''}</td><td class="n">${usd(r.s7)}</td><td class="n">${int(r.b7)}</td><td class="n">${cpa(r.s7, r.b7)}</td><td class="n">${usd(r.s30)}</td><td class="n">${r.s30 ? (r.v30 / r.s30).toFixed(2) : '—'}</td><td style="white-space:nowrap;text-align:right">${curCat === 'brief' ? `<a class="btn" href="#brief/${encodeURIComponent(r.k)}">Open</a> ` : ''}<button class="btn" data-ask="variations" data-input="${esc((curCat === 'brief' ? 'brief ' : curCat === 'creator' ? 'creator ' : 'campaign ') + r.k + ' · ' + r.rs[0].name)}">Make more</button></td></tr>` +
+      ${rows.map(r => { const isOpen = open.has(r.k); return `<tr class="grp" data-g="${esc(r.k)}"><td><span class="chev">${isOpen ? '▾' : '▸'}</span> <b>${title(r)}</b>${r.kw ? ' <span class="pill p-ready">KPI winner</span>' : r.sw ? ' <span class="pill p-act">spend winner</span>' : ''}${r.off ? ' <span class="pill p-stop">off</span>' : ''}</td><td class="n">${usd(r.s7)}</td><td class="n">${int(r.b7)}</td><td class="n">${cpa(r.s7, r.b7)}</td><td class="n">${usd(r.s30)}</td><td class="n">${r.s30 ? (r.v30 / r.s30).toFixed(2) : '—'}</td><td style="white-space:nowrap;text-align:right">${curCat === 'brief' ? `<a class="btn" href="#brief/${encodeURIComponent(r.k)}">Open</a> ` : ''}<button class="btn" data-ask="variations" data-input="${esc((curCat === 'brief' ? 'brief ' : curCat === 'creator' ? 'creator ' : 'campaign ') + r.k + ' · ' + r.rs[0].name)}">Make more</button></td></tr>` +
         (isOpen ? r.rs.map(a => { const [cw, cc] = CALL[a.call] || [a.call || '', 'mute']; return `<tr class="sub"><td title="${esc(a.name)}">${esc((a.name || '').replace(/^.*?brief-\d{4}_?/, '') || a.name)}${a.active ? '' : ' <span class="lbl">· no spend in 3 days</span>'}</td><td class="n">${usd(a.spend7)}</td><td class="n">${int(a.buys7)}</td><td class="n" style="color:var(--${a.break_even && a.cpa7 > a.break_even ? 'coral' : 'ink'})">${a.cpa7 != null ? usd(a.cpa7) : '—'}</td><td class="n">${usd(a.spend30)}</td><td class="n">${a.spend30 ? (a.value30 / a.spend30).toFixed(2) : '—'}</td><td style="text-align:right">${a.call ? `<span class="pill p-${cc}" title="${esc(a.why || '')}">${esc(cw)}</span>` : ''}</td></tr>`; }).join('') : ''); }).join('') || '<tr><td colspan="7" class="empty">Nothing here</td></tr>'}</table></div>
-      ${d.rule ? `<div class="lbl" style="margin-top:10px">Desk rule: ${esc(d.rule)}</div>` : ''}</div>`);
+      ${d.winrule ? `<div class="lbl" style="margin-top:10px">Spend winner: top ${Math.round(d.winrule.top_share * 100)}% of ads by 30-day spend · KPI winner: also at or under ${usd(d.winrule.kpi_cpa)} CPA (${d.winrule.kpi_from === 'yours' ? 'your target' : 'the desk line'}) · change both under Change the lines, above</div>` : ''}
+      ${d.rule ? `<div class="lbl" style="margin-top:4px">Desk rule: ${esc(d.rule)}</div>` : ''}</div>`);
     paintIcons(m);
     m.querySelectorAll('[data-cat]').forEach(b => b.onclick = () => { curCat = b.dataset.cat; store.set('st.adcat', curCat); open = new Set(); draw(); });
     m.querySelectorAll('[data-srt]').forEach(b => b.onclick = () => { adsSort = b.dataset.srt; store.set('st.adsort', adsSort); draw(); });
     m.querySelector('[data-only]').onclick = () => { onlyCalls = !onlyCalls; draw(); };
+    m.querySelector('[data-win]').onclick = () => { onlyWin = !onlyWin; draw(); };
     m.querySelector('[data-kill]').onclick = () => { kill = true; history.replaceState(null, '', '#ads/kill'); drawKill(); };
     m.querySelector('[data-act]').onclick = () => { onlyActive = !onlyActive; store.set('st.adact', onlyActive); draw(); };
     if (focus) { const tr = [...m.querySelectorAll('tr.grp')].find(x => x.dataset.g === focus); if (tr) { tr.classList.add('lit'); tr.scrollIntoView({block: 'center'}); } focus = null; }
@@ -1365,9 +1328,10 @@ async function pagesView(){
   m.innerHTML = `<div class="ph"><h1>Ads</h1></div>${adsTabs('pages')}<div class="skel">Loading…</div>`;
   let d; try { d = await J('/api/desk/pages?brand=' + encodeURIComponent(S.brand)); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
   const ro = (v, s) => s ? (v / s).toFixed(2) : '—';
-  m.querySelector('.skel').outerHTML = `<div class="card" style="padding:0;margin-bottom:16px;overflow-x:auto"><table class="t"><tr><th>Page ads point at</th><th style="text-align:right">Spend 7d</th><th style="text-align:right">Buys 7d</th><th style="text-align:right">CPA 7d</th><th style="text-align:right">Spend 30d</th><th style="text-align:right">ROAS 30d</th><th>Briefs</th></tr>
-      ${d.pages.map(p => `<tr><td><b>${esc(p.page)}</b>${p.active ? ' <span class="pill p-ready">active</span>' : ' <span class="pill p-mute">not spending</span>'}</td><td class="n">${usd(p.spend7)}</td><td class="n">${int(p.buys7)}</td><td class="n">${p.buys7 ? usd(p.spend7 / p.buys7) : '—'}</td><td class="n">${usd(p.spend30)}</td><td class="n">${ro(p.value30, p.spend30)}</td><td style="font:11.5px var(--mono);color:var(--ink-3)">${p.briefs.slice(0, 8).map(b => `<a href="#brief/${encodeURIComponent(b)}">${esc(b)}</a>`).join(' ')}${p.briefs.length > 8 ? ' +' + (p.briefs.length - 8) : ''}</td></tr>`).join('') || '<tr><td colspan="7" class="empty">No live ad names a page yet</td></tr>'}</table></div>
+  m.querySelector('.skel').outerHTML = `<div class="card" style="padding:0;margin-bottom:16px;overflow-x:auto"><table class="t"><tr><th>Landing page (URL)</th><th style="text-align:right">Spend 7d</th><th style="text-align:right">Buys 7d</th><th style="text-align:right">CPA 7d</th><th style="text-align:right">Spend 30d</th><th style="text-align:right">ROAS 30d</th><th>Briefs</th></tr>
+      ${d.pages.map(p => `<tr><td>${p.url ? `<a href="${esc(p.url)}" target="_blank" rel="noopener"><b>${esc(p.url.replace(/^https?:\/\//, ''))}</b></a>` : `<b>${esc(p.page)}</b> <span class="lbl">no URL on file</span>`}${(p.names || []).length > 1 ? `<div class="lbl">ad names: ${esc(p.names.join(', '))}</div>` : ''}${p.active ? ' <span class="pill p-ready">active</span>' : ' <span class="pill p-mute">not spending</span>'}</td><td class="n">${usd(p.spend7)}</td><td class="n">${int(p.buys7)}</td><td class="n">${p.buys7 ? usd(p.spend7 / p.buys7) : '—'}</td><td class="n">${usd(p.spend30)}</td><td class="n">${ro(p.value30, p.spend30)}</td><td style="font:11.5px var(--mono);color:var(--ink-3)">${p.briefs.slice(0, 8).map(b => `<a href="#brief/${encodeURIComponent(b)}">${esc(b)}</a>`).join(' ')}${p.briefs.length > 8 ? ' +' + (p.briefs.length - 8) : ''}</td></tr>`).join('') || '<tr><td colspan="7" class="empty">No live ad names a page yet</td></tr>'}</table></div>
     <div class="card" style="padding:0"><div style="padding:14px 16px;border-bottom:1px solid var(--line)"><h3>${ib('layers', 'green')}Funnels<span class="count" style="--hue:var(--ink-3)">${d.funnels.length}</span></h3></div>${d.funnels.map(f => `<div class="sk"><b>${esc(f.name || f.id)}</b><span class="j">${f.url ? `<a href="${esc(f.url)}" target="_blank" rel="noopener">${esc(f.url)}</a>` : ''} · ${int(f.pages)} pages · ${esc(f.product || '')}</span><span class="tags"><span class="pill ${f.status === 'off' ? 'p-mute' : 'p-ready'}">${esc(f.status || '')}</span></span></div>`).join('') || '<div class="empty" style="padding:14px">No funnel list for this brand yet</div>'}</div>`;
+  m.querySelector('.card').insertAdjacentHTML('beforebegin', `<div class="lbl" style="margin-bottom:10px">A page is the URL an ad sends people to, not the Facebook page the ad runs from.${(d.unused || []).length ? ` Live but no ad pointing at it: ${d.unused.map(u => esc(u.url.replace(/^https?:\/\//, ''))).join(' · ')}` : ''}</div>`);
   paintIcons(m);
 }
 
