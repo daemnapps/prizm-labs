@@ -376,7 +376,8 @@ def brands():
         op = _read(d / "operations/brand.json")
         lab = op.get("label") if isinstance(op, dict) else None
         out.append({"id": d.name, "label": lab if lab and "<" not in lab else d.name,
-                    "avatars": av, "products": pr, "winner": (d / "winner.json").is_file()})
+                    "avatars": av, "products": pr, "winner": (d / "winner.json").is_file(),
+                    "live": bool(glob.glob(str(WS / "runs/funnel-tracking" / d.name / "2*/warehouse.json")))})
     return out
 
 

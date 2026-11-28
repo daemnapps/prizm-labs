@@ -410,7 +410,7 @@ const S = { brand: store.get('st.brand') || '', menu: store.get('st.menu'), piec
 async function boot(){
   let bl = []; try { bl = (await J('/api/desk/brands', {keep:true})).brands; } catch {}
   S.labels = Object.fromEntries(bl.map(b => [b.id, b.label || b.id])); let bs = bl.map(b => b.id);
-  if (!bs.includes(S.brand)) S.brand = bs[0] || '';
+  if (!bs.includes(S.brand)) S.brand = (bl.find(b => b.live) || {}).id || bs[0] || '';
   $('#brand').innerHTML = `<option value="*">All brands</option>` + bs.map(b => `<option value="${esc(b)}" ${b === S.brand ? 'selected' : ''}>${esc(blabel(b))}</option>`).join('');
   paintIcons();
   J('/api/desk/pieces', {keep:true}).then(r => { S.pieces = r.pieces || []; if (S.view === 'ads' || S.view === 'today') route(); }).catch(() => {});
