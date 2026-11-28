@@ -78,6 +78,18 @@ main{padding:28px 24px 60px;max-width:1440px;margin:0 auto}
 .skel{color:var(--ink-3);padding:30px 0;text-align:center;font:12px var(--mono)}
 
 /* Today */
+.loop{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:16px}
+.loop .chart svg{width:100%;height:170px;display:block}
+.loop .key{display:flex;gap:14px;flex-wrap:wrap;font:500 11.5px var(--mono);color:var(--ink-3)}
+.loop .key i{display:inline-block;width:10px;height:3px;border-radius:2px;background:var(--hue);margin-right:5px;vertical-align:middle}
+.prop{display:grid;gap:8px;align-content:start}
+.prop .big{font:700 26px var(--display);letter-spacing:-.02em}
+.prop.up{border-color:color-mix(in srgb,var(--green) 45%,transparent)}.prop.down{border-color:color-mix(in srgb,var(--amber) 55%,transparent)}
+.stg{display:flex;height:14px;border-radius:7px;overflow:hidden;margin:6px 0}
+.stg span{background:var(--hue)}
+.stgk{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stgk div{display:grid;gap:1px}.stgk b{font:600 18px var(--body)}
+@media (max-width:860px){.loop{grid-template-columns:1fr}}
 .money{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
 .mcard{display:grid;grid-template-columns:1fr 190px;gap:12px 18px;align-items:end}
 .mcard .top{grid-column:1/-1;display:flex;align-items:center;gap:10px}
@@ -355,6 +367,8 @@ const I = {
   mail:'<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/>',
   link:'<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>',
   book:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15zM6.5 22H20v-5"/>',
+  calendar:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+  chart:'<path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 6-6"/>',
   layers:'<path d="m12 2 10 5-10 5L2 7z"/><path d="m2 17 10 5 10-5M2 12l10 5 10-5"/>',
   shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
   alert:'<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/>',
@@ -437,6 +451,49 @@ function route(){
 const brandMenu = () => ((S.menu && S.menu.brands) || []).find(b => b.id === S.brand);
 
 /* ================= TODAY ================= */
+function loopHtml(L){
+  if (!L) return '';
+  const line = L.line || [], t = L.targets || {};
+  let chart = '<div class="empty">No daily money on file for this brand yet</div>';
+  if (line.length > 2) {
+    const W = 600, H = 170, P = 6, n = line.length;
+    const mx = Math.max(1, ...line.map(d => Math.max(d.revenue, d.spend, d.contribution)));
+    const x = i => P + i * (W - 2 * P) / (n - 1), y = v => H - P - v / mx * (H - 2 * P);
+    const path = k => line.map((d, i) => (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(d[k]).toFixed(1)).join('');
+    const mers = line.map(d => d.mer || 0), mm = Math.max(t.mer || 0, ...mers) * 1.15 || 1;
+    const ym = v => H - P - v / mm * (H - 2 * P);
+    const mpath = line.map((d, i) => (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + ym(d.mer || 0).toFixed(1)).join('');
+    chart = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Sales, spend and margin by day">
+      <path d="${path('revenue')}" fill="none" stroke="var(--green)" stroke-width="2" vector-effect="non-scaling-stroke"/>
+      <path d="${path('contribution')}" fill="none" stroke="var(--cyan)" stroke-width="2" vector-effect="non-scaling-stroke"/>
+      <path d="${path('spend')}" fill="none" stroke="var(--indigo)" stroke-width="2" vector-effect="non-scaling-stroke"/>
+      ${line.map((d, i) => `<rect x="${(x(i) - 6).toFixed(1)}" y="0" width="12" height="${H}" fill="transparent"><title>${esc(dayLabel(d.d))} · sales ${usd(d.revenue)} · spend ${usd(d.spend)} · margin ${usd(d.contribution)} · MER ${d.mer ?? '—'}</title></rect>`).join('')}</svg>
+      <svg viewBox="0 0 ${W} 90" preserveAspectRatio="none" role="img" aria-label="MER by day against the line" style="height:80px;margin-top:8px">
+      ${t.mer ? `<line x1="0" x2="${W}" y1="${(ym(t.mer) * 90 / H).toFixed(1)}" y2="${(ym(t.mer) * 90 / H).toFixed(1)}" stroke="var(--coral)" stroke-dasharray="5 4" vector-effect="non-scaling-stroke"/>` : ''}
+      <path d="${line.map((d, i) => (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + (ym(d.mer || 0) * 90 / H).toFixed(1)).join('')}" fill="none" stroke="var(--violet)" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>`;
+  }
+  const p = L.proposal;
+  const prop = !t.mer ? `<div class="card prop down"><h3>${ib('target', 'amber')}No MER line yet</h3><span>Set this brand's line and the Studio proposes spend each morning.</span></div>`
+    : !p ? `<div class="card prop"><h3>${ib('target', 'indigo')}MER line ${t.mer}</h3><div class="empty">Not enough days to judge</div></div>`
+    : `<div class="card prop ${p.dir === 'raise' ? 'up' : 'down'}"><h3>${ib('target', p.dir === 'raise' ? 'green' : 'amber')}${p.dir === 'raise' ? 'Raise spend' : 'Lower spend'}</h3>
+      <span class="big">${usd(p.now)} → ${usd(p.to)}<span class="lbl"> a day</span></span>
+      <span>MER 7d <b>${p.mer7}</b> vs line <b>${p.line}</b> · profit 7d <b>${usd(p.profit7)}</b></span>
+      <span class="lbl">${p.dir === 'raise' ? '+' + Math.round(p.step * 100) : Math.round(p.step * 100)}% step${(t.set || []).includes(p.dir === 'raise' ? 'up' : 'down') ? '' : ' (draft)'} · ceiling ${p.ceiling ? usd(p.ceiling) : 'not set'}</span>
+      <span class="pill p-stop" style="justify-self:start">Proposal only: spend changes stay closed until the go guards are built</span></div>`;
+  const st = L.stages || {}, tot = ['top', 'middle', 'bottom'].reduce((a, k) => a + ((st[k] || {}).spend || 0), 0) || 1;
+  const hues = {top: 'violet', middle: 'indigo', bottom: 'green'};
+  const thin = ['top', 'middle', 'bottom'].sort((a, b) => ((st[a] || {}).spend || 0) - ((st[b] || {}).spend || 0))[0];
+  const stage = `<div class="card"><h3>${ib('layers', 'violet')}Funnel by frequency</h3>
+    <div class="stg">${['top', 'middle', 'bottom'].map(k => `<span style="--hue:var(--${hues[k]});width:${((st[k] || {}).spend || 0) / tot * 100}%" title="${k}"></span>`).join('')}</div>
+    <div class="stgk">${['top', 'middle', 'bottom'].map(k => `<div style="color:var(--${hues[k]})"><span class="lbl">${k[0].toUpperCase() + k.slice(1)}${k === thin ? ' · thin' : ''}</span><b style="color:var(--ink)">${usd((st[k] || {}).spend || 0)}</b><span class="lbl">${int((st[k] || {}).ads || 0)} ads</span></div>`).join('')}</div>
+    <span class="lbl">7-day frequency under ${L.bands[0]} top · under ${L.bands[1]} middle · above bottom${(t.set || []).includes('bands') ? '' : ' (draft bands)'}</span></div>`;
+  const pr = L.promos || [];
+  const promos = `<div class="card"><h3>${ib('calendar', 'amber')}Next promos<span class="count">${pr.length}</span></h3>
+    ${pr.map(x => `<div class="row"><b>${esc(dayLabel(x.date))} · ${esc(nice(x.occasion || x.category || ''))}</b><span>${esc(nice(x.offer || x.product || ''))} · ${int(x.slots)} slots</span></div>`).join('') || '<div class="empty">Nothing on the calendar ahead</div>'}</div>`;
+  return `<div class="loop"><div class="card chart"><h3>${ib('chart', 'green')}Sales, spend, margin · MER vs ${t.mer || 'no line'}</h3>${chart}
+      <div class="key"><span style="--hue:var(--green)"><i></i>Sales</span><span style="--hue:var(--indigo)"><i></i>Spend</span><span style="--hue:var(--cyan)"><i></i>Margin</span><span style="--hue:var(--violet)"><i></i>MER</span><span style="--hue:var(--coral)"><i></i>Line ${t.mer || ''}</span></div></div>${prop}</div>
+    <div class="grid2" style="margin-bottom:16px">${stage}${promos}</div>`;
+}
 async function today(){
   const m = $('#main');
   const head = `<div class="ph"><h1>Today</h1><span class="sub">${new Date().toLocaleDateString('en-GB', {weekday:'long', day:'numeric', month:'long'})}</span>`;
@@ -457,7 +514,7 @@ async function today(){
   const rr = rounds.find(r => r.worlds && r.worlds.length);
   const resCount = (nx.angles || []).length + (rr ? 1 : 0);
   m.innerHTML = head + `${days != null && days > 2 ? `<span class="pill p-stop"><i class="ic" data-i="alert"></i>Numbers stop ${esc(dayLabel(nowDay))} · ${days} days old</span>` : ''}</div>
-    ${mon2.ok ? `<div class="money">${moneyCards}</div>` : `<div class="note stop" style="margin-bottom:16px">${esc(mon2.why)}</div>`}
+    ${loopHtml(d.loop)}${mon2.ok ? `<div class="money">${moneyCards}</div>` : `<div class="note stop" style="margin-bottom:16px">${esc(mon2.why)}</div>`}
     <div class="grid4">
       <div class="card dcol" style="--hue:var(--amber)"><h3>${ib('send', 'amber')}Launch<span class="count">${waiting ?? '—'}</span></h3>
         ${waiting ? `<a class="btn wait" href="#approve">Review ${waiting} ${waiting === 1 ? 'ad' : 'ads'}</a>` : `<div class="empty">Nothing waiting for your approval</div>`}</div>

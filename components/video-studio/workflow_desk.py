@@ -1150,9 +1150,77 @@ def vary_candidates(la, n=6):
     return out[:n]
 
 
+def _targets(brand):
+    """The owner's lines for one brand, kept on this computer only (~/.prizm/targets.json or PRIZM_TARGETS):
+    {"<brand>": {"mer": 2.5, "up": 0.10, "down": 0.05, "ceiling": 0, "bands": [1.15, 1.35]}}. Missing values stay
+    drafts so the page can say so."""
+    p = Path(os.environ.get("PRIZM_TARGETS") or Path.home() / ".prizm/targets.json")
+    t = (_read(p) or {}).get(brand) if p.exists() else None
+    t = t if isinstance(t, dict) else {}
+    return {"mer": t.get("mer"), "up": t.get("up", 0.10), "down": t.get("down", 0.05), "ceiling": t.get("ceiling"),
+            "bands": t.get("bands") or [1.15, 1.35], "set": sorted(k for k in t if not k.startswith("_"))}
+
+
+def loop(brand):
+    """The morning loop for one brand: the money line against the owner's MER line, the spend proposal it implies
+    (a proposal only: spend never moves from here), the funnel stage of each live ad by its 7-day frequency, and
+    the next promo windows from the marketing calendar."""
+    t = _targets(brand)
+    g = _growth()
+    days = [d for d in (((g or {}).get("brands") or {}).get(brand) or {}).get("daily") or [] if isinstance(d, dict)]
+    while days and not days[-1].get("spend"):  # the newest day has no spend yet: not a whole day
+        days = days[:-1]
+    days = days[-30:]
+    line = [{"d": d["d"], "revenue": d.get("revenue") or 0, "spend": d.get("spend") or 0,
+             "contribution": d.get("contribution") or 0, "profit": d.get("profit") or 0,
+             "mer": round((d.get("revenue") or 0) / d["spend"], 2) if d.get("spend") else None} for d in days]
+    w7 = line[-7:]
+    s7, r7 = sum(d["spend"] for d in w7), sum(d["revenue"] for d in w7)
+    mer7 = round(r7 / s7, 2) if s7 else None
+    prop = None
+    if t["mer"] and mer7 and w7:
+        per = s7 / len(w7)
+        up = mer7 >= t["mer"]
+        step = t["up"] if up else -t["down"]
+        to = per * (1 + step)
+        if up and t["ceiling"]:
+            to = min(to, float(t["ceiling"]))
+        prop = {"dir": "raise" if up else "lower", "mer7": mer7, "line": t["mer"], "now": round(per), "to": round(to),
+                "step": step, "ceiling": t["ceiling"], "profit7": round(sum(d["profit"] for d in w7))}
+    rf = _newest("runs/media-buying/%s/2*/report.json" % brand)
+    r = _read(rf) if rf else None
+    lo, hi = (t["bands"] + [1.15, 1.35])[:2]
+    stages = {k: {"ads": 0, "spend": 0.0} for k in ("top", "middle", "bottom")}
+    for f in (r.get("flags") or []) if isinstance(r, dict) else []:
+        fq = f.get("freq7")
+        if not fq or f.get("action") == "off":
+            continue
+        k = "top" if fq < lo else "middle" if fq < hi else "bottom"
+        stages[k]["ads"] += 1
+        stages[k]["spend"] += float((f.get("windows") or {}).get("7", {}).get("spend") or 0) if isinstance(
+            (f.get("windows") or {}).get("7"), dict) else 0.0
+    today_ = time.strftime("%Y-%m-%d")
+    promos = []
+    for sf in sorted(glob.glob(str(WS / "runs/marketing-calendar" / brand / "2*" / "slots.json"))):
+        for sl in _read(sf) or []:
+            if isinstance(sl, dict) and str(sl.get("date") or "") >= today_:
+                promos.append({"date": sl.get("date"), "occasion": sl.get("occasion"), "offer": sl.get("offer"),
+                               "product": sl.get("product"), "category": sl.get("category"), "segment": sl.get("segment")})
+    promos.sort(key=lambda x: str(x["date"]))
+    seen, uniq = set(), []
+    for x in promos:  # one row per day and occasion: the calendar holds one slot per segment and channel
+        k = (x["date"], x["occasion"])
+        if k not in seen:
+            seen.add(k)
+            uniq.append(dict(x, slots=sum(1 for y in promos if (y["date"], y["occasion"]) == k)))
+    promos = uniq
+    return {"targets": t, "line": line, "mer7": mer7, "proposal": prop, "stages": stages, "bands": [lo, hi],
+            "stages_asof": r.get("asof") if isinstance(r, dict) else None, "promos": promos[:6]}
+
+
 def today(brand):
     la = live_ads(brand)
-    return {"money": money(), "winners": winners(brand), "research": research(brand), "now": la["money"],
+    return {"loop": loop(brand), "money": money(), "winners": winners(brand), "research": research(brand), "now": la["money"],
             "off": [a for a in la["ads"] if a["call"] == "off"], "calls": [a for a in la["ads"] if a["call"] not in (None, "too_early", "keep", "off")],
             "calls_asof": la["calls_asof"], "vary": vary_candidates(la),
             "low_roas": sum(1 for a in la["ads"] if a["active"] and a["spend7"] >= 50 and (a["roas7"] or 0) < 0.5
