@@ -478,14 +478,14 @@ function route(){
   const h = decodeURIComponent(location.hash.slice(1) || 'today');
   const i = h.indexOf('/'); const v = i < 0 ? h : h.slice(0, i);
   const alias = {brands:'settings'};
-  S.view = alias[v] || (['portfolio', 'today', 'production', 'ads', 'swipes', 'swipe', 'approve', 'research', 'skills', 'settings', 'knowledge', 'asks', 'live', 'brief', 'pages', 'creators', 'market', 'usage', 'schedule', 'join'].includes(v) ? v : 'today');
+  S.view = alias[v] || (['portfolio', 'today', 'production', 'ads', 'swipes', 'swipe', 'approve', 'research', 'skills', 'settings', 'knowledge', 'asks', 'live', 'brief', 'pages', 'creators', 'market', 'usage', 'schedule', 'join', 'ledger'].includes(v) ? v : 'today');
   S.arg = i < 0 ? null : h.slice(i + 1);
   if (S.view === 'ads' && (!S.arg || S.arg === 'kill')) S.view = 'live';
-  const TAB = {ads:'production', swipes:'production', swipe:'production', live:'ads-top', approve:'ads-top', brief:'ads-top', pages:'ads-top', skills:'settings', usage:'settings', schedule:'settings', market:'research'};
+  const TAB = {ads:'production', swipes:'production', swipe:'production', live:'ads-top', approve:'ads-top', brief:'ads-top', pages:'ads-top', ledger:'ads-top', skills:'settings', usage:'settings', schedule:'settings', market:'research'};
   const tab = TAB[S.view] || S.view;
   document.querySelectorAll('[data-v]').forEach(a => a.classList.toggle('on', a.dataset.v === tab));
   $('#brand').value = S.view === 'portfolio' ? '*' : S.brand;
-  ({portfolio, today, production, ads:() => production('video'), swipes:() => production('swipes'), swipe:swipeView, approve, research, skills:skillsView, settings:brandSetup, knowledge:knowledgeView, asks:asksView, live:adsLive, brief:briefView, pages:pagesView, creators:creatorsView, market:marketView, usage:usageView, schedule:scheduleView, join:joinView})[S.view]();
+  ({portfolio, today, production, ads:() => production('video'), swipes:() => production('swipes'), swipe:swipeView, approve, research, skills:skillsView, settings:brandSetup, knowledge:knowledgeView, asks:asksView, live:adsLive, brief:briefView, pages:pagesView, creators:creatorsView, market:marketView, usage:usageView, schedule:scheduleView, join:joinView, ledger:ledgerView})[S.view]();
   approveBadge();
 }
 const brandMenu = () => ((S.menu && S.menu.brands) || []).find(b => b.id === S.brand);
@@ -553,6 +553,35 @@ function loopHtml(L){
   return `<div class="loop"><div class="card chart"><h3>${ib('chart', 'green')}Spend, sales, MER · floor ${t.mer || 'not set'}${t.hold_to ? ' · hold to ' + t.hold_to : ''}</h3>${chart}
       <div class="key"><span style="--hue:var(--green)"><i></i>Sales</span><span style="--hue:var(--indigo)"><i></i>Spend</span><span style="--hue:var(--cyan)"><i></i>Margin</span><span style="--hue:var(--violet)"><i></i>MER</span><span style="--hue:var(--coral)"><i></i>Line ${t.mer || ''}</span></div></div>${prop}</div>
 `;
+}
+/* ================= LEDGER: what the brand spent, earned and kept, and what its content cost ================= */
+async function ledgerView(){
+  const m = $('#main');
+  m.innerHTML = `<div class="ph"><h1>Ads</h1><span class="sub">ledger · last 30 days · from the warehouse and the runs, never Meta</span></div>${adsTabs('ledger')}<div class="skel">Adding it up…</div>`;
+  let d; try { d = await J('/api/desk/ledger?brand=' + encodeURIComponent(S.brand)); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
+  if (S.view !== 'ledger') return;
+  const mo = d.money, c = d.content;
+  const tile = (l, v, sub, hue) => `<div><span class="lbl">${l}</span><b ${hue ? `style="color:var(--${hue})"` : ''}>${v}</b>${sub ? `<span class="lbl">${sub}</span>` : ''}</div>`;
+  m.querySelector('.skel').outerHTML = `
+    <div class="card" style="margin-bottom:14px"><div class="nums" style="grid-template-columns:repeat(5,1fr)">
+      ${tile('Ad spend', usd(mo.spend), mo.from ? dayLabel(mo.from) + ' – ' + dayLabel(mo.to) : '')}
+      ${tile('Sales', usd(mo.sales), int(mo.orders) + ' orders')}
+      ${tile('MER', mo.mer ?? '—', 'sales ÷ spend', mo.mer >= 2.5 ? 'green' : 'coral')}
+      ${tile('Contribution', usd(mo.contribution), 'after product, freight, fees')}
+      ${tile('Kept', usd(d.kept_after_content), 'after ad spend and known costs', d.kept_after_content > 0 ? 'green' : 'coral')}</div></div>
+    <div class="grid2" style="margin-bottom:14px">
+      <div class="card"><h3>${ib('film', 'cyan')}What the content cost</h3><div class="nums" style="grid-template-columns:repeat(2,1fr);margin-top:10px">
+        ${tile('Writing (Claude)', usd(c.writing_usd), 'teardown to brief')}
+        ${tile('Higgsfield', int(c.credits) + ' credits', c.credits_usd != null ? usd(c.credits_usd) : '$ per credit not set')}
+        ${tile('Studio jobs', usd(c.jobs_usd), 'background asks')}
+        ${tile('Nightly pulls', usd(c.pulls_usd), 'feeds, sweeps')}</div></div>
+      <div class="card"><h3>${ib('layers', 'magenta')}Tools and other costs</h3>
+        ${(d.tools || []).length ? d.tools.map(t => `<div class="row"><b>${esc(t.name)}</b><span>${usd(t.monthly_usd)} a month</span></div>`).join('') : '<div class="empty">None entered yet</div>'}
+        ${(d.missing || []).length ? `<div class="note" style="margin-top:8px;font-size:12.5px">Still to fill in: ${esc(d.missing.join(' · '))}</div>` : ''}</div></div>
+    <div class="card" style="padding:0;overflow-x:auto"><table class="t"><tr><th>Brief</th><th style="text-align:right">Cost to make</th><th style="text-align:right">Credits</th><th style="text-align:right">Spend 30d</th><th style="text-align:right">Buys 30d</th><th style="text-align:right">CPA 30d</th><th></th></tr>
+      ${d.briefs.map(b => `<tr><td><a href="#brief/${encodeURIComponent(b.brief)}"><b class="bn">${esc(b.brief)}</b></a></td><td class="n">${b.made_usd != null ? usd(b.made_usd) : '<span class="lbl">not on file</span>'}</td><td class="n">${b.credits ? int(b.credits) : '—'}</td><td class="n">${usd(b.spend30)}</td><td class="n">${int(b.buys30)}</td><td class="n">${b.cpa30 != null ? usd(b.cpa30) : '—'}</td><td>${b.kpi_winner ? '<span class="pill p-ready">KPI winner</span>' : b.spend_winner ? '<span class="pill p-act">spend winner</span>' : ''}</td></tr>`).join('') || '<tr><td colspan="7" class="empty">No briefs with costs or spend yet</td></tr>'}</table></div>
+    <div class="lbl" style="margin-top:10px">Cost to make counts what the runs record: writing and Higgsfield credits. Briefs made outside the chain show "not on file".</div>`;
+  paintIcons(m);
 }
 async function today(){
   const m = $('#main');
@@ -637,7 +666,7 @@ document.addEventListener('click', async e => { const hb = e.target.closest('[da
 document.addEventListener('click', e => { if (e.target.closest('[data-hide]')) return; const t = e.target.closest('[data-ad]'); if (t) location.hash = 'ads/' + encodeURIComponent(t.dataset.ad); });
 const host = () => $('#sub') || $('#main');
 const tabBar = (items, cur) => `<div class="lanes">${items.map(([id, name, ic, hue, href, badge]) => `<a href="${href}" class="${id === cur ? 'on' : ''}" style="--hue:var(--${hue})"><i class="ic">${icon(ic)}</i>${name}${badge ? `<b class="nb">${badge}</b>` : ''}</a>`).join('')}</div>`;
-const adsTabs = cur => tabBar([['approve', 'To approve', 'send', 'amber', '#approve', S.waiting || ''], ['live', 'Live', 'target', 'indigo', '#ads'], ['pages', 'Pages', 'link', 'green', '#pages']], cur);
+const adsTabs = cur => tabBar([['approve', 'To approve', 'send', 'amber', '#approve', S.waiting || ''], ['live', 'Live', 'target', 'indigo', '#ads'], ['pages', 'Pages', 'link', 'green', '#pages'], ['ledger', 'Ledger', 'layers', 'magenta', '#ledger']], cur);
 const resTabs = cur => tabBar([['brand', 'This brand', 'search', 'violet', '#research'], ['market', 'Market', 'target', 'green', '#market']], cur);
 const setTabs = cur => tabBar([['brand', 'Brand setup', 'shield', 'indigo', '#settings'], ['skills', 'Skills', 'sparkles', 'violet', '#skills'], ['usage', 'Usage', 'zap', 'amber', '#usage'], ['schedule', 'Jobs', 'calendar', 'indigo', '#schedule']], cur);
 const blabel = b => (S.labels && S.labels[b] && S.labels[b] !== b) ? S.labels[b] : String(b).replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase());

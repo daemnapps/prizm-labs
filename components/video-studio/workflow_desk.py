@@ -1482,6 +1482,103 @@ def feedback_add(data):
     return rec
 
 
+# ---------- The ledger: what each brand spent, earned and kept, and what the content behind it cost ----------
+# The owner, 28 Nov 2026: spend, profitability, content production and costs in one place, at a glance, any brand.
+# Money from Outlier's warehouse feed (never Meta); content costs from the runs themselves; tools from a local list.
+
+def _costs_conf():
+    """~/.prizm/costs.json (local only): {"usd_per_credit": {"higgsfield": 0.0}, "tools": [{"name", "monthly_usd",
+    "brands": ["*"]}]}. Missing values stay blank on the page, never guessed."""
+    p = Path(os.environ.get("PRIZM_COSTS") or Path.home() / ".prizm/costs.json")
+    c = _read(p) if p.is_file() else None
+    return c if isinstance(c, dict) else {}
+
+
+def ledger(brand, days=30):
+    import datetime
+    since = (datetime.date.today() - datetime.timedelta(days=days)).isoformat()
+    g = _growth() or {}
+    daily = [d for d in (((g.get("brands") or {}).get(brand) or {}).get("daily") or []) if isinstance(d, dict)]
+    while daily and not daily[-1].get("spend"):
+        daily = daily[:-1]
+    daily = [d for d in daily if str(d.get("d") or "") >= since]
+    sm = lambda k: round(sum(d.get(k) or 0 for d in daily), 2)
+    money = {"days": len(daily), "from": daily[0]["d"] if daily else None, "to": daily[-1]["d"] if daily else None,
+             "spend": sm("spend"), "sales": sm("revenue"), "contribution": sm("contribution"), "profit": sm("profit"),
+             "orders": sm("orders")}
+    money["mer"] = round(money["sales"] / money["spend"], 2) if money["spend"] else None
+    conf = _costs_conf()
+    per_credit = ((conf.get("usd_per_credit") or {}).get("higgsfield"))
+    # content: writing (Claude cost the writing step reports), Higgsfield credits spent per film, Studio jobs
+    briefs, writing, credits = {}, 0.0, 0.0
+    label_brief = {}
+    for f in glob.glob(str(WS / "runs/video-teardown/_work/*/run.json")):
+        r = _read(f) or {}
+        if r.get("brand") != brand or str(r.get("opened") or "")[:10] < since:
+            continue
+        m = re.search(r"brief-(\d{4})", str(r.get("brief") or r.get("brief_key") or ""))
+        b = m.group(1) if m else None
+        label_brief[Path(f).parent.name] = b
+        c = (r.get("writing_v2_total") or {}).get("cost_usd") if isinstance(r.get("writing_v2_total"), dict) else None
+        if c:
+            writing += c
+            if b:
+                briefs.setdefault(b, {"brief": b, "writing": 0.0, "credits": 0.0})["writing"] += c
+    for f in glob.glob(str(WS / "runs/higgsfield" / brand / "*/lane.json")):
+        if datetime.date.fromtimestamp(os.path.getmtime(f)).isoformat() < since:
+            continue
+        l = _read(f) or {}
+        c = float(l.get("spent_credits") or 0)
+        credits += c
+        lab = re.sub(r"^(drama|singing)-ads-", "", Path(f).parent.name)
+        b = label_brief.get(lab)
+        if b and c:
+            briefs.setdefault(b, {"brief": b, "writing": 0.0, "credits": 0.0})["credits"] += c
+    jobs = 0.0
+    try:
+        import studio_asks as SA
+        jobs = sum(x["cost"] for x in SA.usage(brand)["rows"] if (x.get("month") or "") >= since[:7])
+    except Exception:  # noqa: BLE001
+        pass
+    meter = 0.0
+    lf = Path(os.path.expanduser(((_read(Path.home() / ".job-meter/jobs.json") or {}).get("ledger")) or "")) \
+        if (Path.home() / ".job-meter/jobs.json").is_file() else None
+    if lf and lf.is_file():
+        for line in lf.read_text(errors="replace").splitlines():
+            try:
+                x = json.loads(line)
+            except ValueError:
+                continue
+            if x.get("brand") == brand and str(x.get("at") or "")[:10] >= since:
+                meter += float(x.get("spend_usd") or x.get("usd") or 0)
+    tools = [t for t in (conf.get("tools") or []) if "*" in (t.get("brands") or ["*"]) or brand in (t.get("brands") or [])]
+    tools_usd = round(sum(float(t.get("monthly_usd") or 0) for t in tools) * days / 30, 2)
+    content = {"writing_usd": round(writing, 2), "credits": round(credits, 1),
+               "credits_usd": round(credits * per_credit, 2) if per_credit else None, "jobs_usd": round(jobs, 2),
+               "pulls_usd": round(meter, 2)}
+    known = content["writing_usd"] + content["jobs_usd"] + content["pulls_usd"] + (content["credits_usd"] or 0) + tools_usd
+    # results per brief, 30 days, from the warehouse copy
+    res = {}
+    for a in live_ads(brand)["ads"]:
+        if a["brief"]:
+            x = res.setdefault(a["brief"], {"spend30": 0.0, "buys30": 0.0, "value30": 0.0, "kpi": False, "spend_winner": False})
+            x["spend30"] += a["spend30"]; x["buys30"] += a["buys30"]; x["value30"] += a["value30"]
+            x["kpi"] = x["kpi"] or a["kpi_winner"]; x["spend_winner"] = x["spend_winner"] or a["spend_winner"]
+    rows = []
+    for b in set(briefs) | set(res):
+        c, r = briefs.get(b, {}), res.get(b, {})
+        cost = (c.get("writing") or 0) + ((c.get("credits") or 0) * per_credit if per_credit else 0)
+        rows.append({"brief": b, "writing": round(c.get("writing") or 0, 2), "credits": round(c.get("credits") or 0, 1),
+                     "made_usd": round(cost, 2) if cost else None, "spend30": round(r.get("spend30") or 0),
+                     "buys30": r.get("buys30") or 0, "cpa30": round(r["spend30"] / r["buys30"], 2) if r.get("buys30") else None,
+                     "spend_winner": r.get("spend_winner", False), "kpi_winner": r.get("kpi", False)})
+    rows.sort(key=lambda x: (-(x["spend30"] or 0), -(x["made_usd"] or 0)))
+    return {"brand": brand, "days": days, "money": money, "content": content, "tools": tools, "tools_usd": tools_usd,
+            "known_costs_usd": round(known, 2), "kept_after_content": round(money["contribution"] - money["spend"] - known, 2)
+            if money["days"] else None, "per_credit": per_credit, "briefs": rows[:80],
+            "missing": [x for x, ok in (("Higgsfield $ per credit", per_credit), ("your tools and subscriptions", tools)) if not ok]}
+
+
 def preset(brand, avatar):
     """The drama story preset for a no-swipe film (drama_start.py preset: free, no model)."""
     r = subprocess.run([PY, str(WS / "components/video-production/machine/drama_start.py"), "preset",
@@ -1725,6 +1822,8 @@ def handle(h, method, parts, query, body):
                 return h.send(404, {"error": "no such page"})
             if api == ["feedback"] and SAFE.match(q.get("brand", "")):
                 return h.send(200, feedback_list(q["brand"], q.get("item") or None))
+            if api == ["ledger"] and SAFE.match(q.get("brand", "")):
+                return h.send(200, ledger(q["brand"], int(q.get("days") or 30)))
             if api == ["ads"] and SAFE.match(q.get("brand", "")):
                 return h.send(200, live_ads(q["brand"]))
             if api == ["brief"] and SAFE.match(q.get("brand", "")) and re.fullmatch(r"\d{3,5}", q.get("n", "")):
