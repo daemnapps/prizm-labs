@@ -54,8 +54,8 @@ python3 components/promo-pack/machine/pack.py tick --brand <brand> --month <YYYY
 
    Add `--stock <file>` when a stock read is on hand (`components/promo-pack/skills/stock-check.md`).
 - It builds one pack per promotion touching the month (the offer bank's promo-calendar rows). A month with no promotion builds nothing.
-- It hands nothing off until the owner has approved the pack's offer words; once he has, the next run starts every hand-off and says `loaded` when all are in.
-- Report in one line: the packs built, and whether each waits on the owner's approval, is loading, or is loaded. The pack is `runs/promo-pack/<brand>/<moment>/PACK.md`.
+- It starts every hand-off that has a door (plans and drafts only: nothing goes live, sends or spends money) and says `loaded` when all are in. There is no approval step.
+- Report in one line: the packs built, and whether each is loading or loaded, plus any stock blockers and flagged sends. The pack is `runs/promo-pack/<brand>/<moment>/PACK.md`.
 
 ## What cannot be done from one command by a person
 

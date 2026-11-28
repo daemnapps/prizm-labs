@@ -3,22 +3,21 @@
 
     python3 components/promo-pack/machine/pack.py build  --brand <brand> --month <YYYY-MM> [--moment <name>]
                                                          [--stock <runway.json>] [--videos 5] [--statics 5]
-    python3 components/promo-pack/machine/pack.py approve --brand <brand> --moment <name> --by <who> --said "<words>"
     python3 components/promo-pack/machine/pack.py hand   --brand <brand> --moment <name> [--only static,video,sms] [--dry-run]
     python3 components/promo-pack/machine/pack.py status --brand <brand> --moment <name>
     python3 components/promo-pack/machine/pack.py tick   [--brand <brand>] [--lead-days 14] [--stock <runway.json>]
 
 `tick` is the trigger, run when a month's calendar is planned (marketing-calendar's skill runs it with --month):
-it builds the pack for every promotion touching that month, and once the owner has approved the words it hands
-everything off and says when the pack is loaded. With no --month it takes promotions within --lead-days.
+it builds the pack for every promotion touching that month, hands everything off and says when the pack is loaded.
+With no --month it takes promotions within --lead-days.
 
 Reads the brand's offer bank (brands/<brand>/products/offer-bank.md: the promo-calendar row for the month and every
 line the bank lets creative use word for word), the month's calendar (runs/marketing-calendar/<brand>/<YYYY-MM>/
 slots.json), the brand's winners (runs/winners/<brand>/bank.json) and, when given, a stock runway read.
 
 Writes runs/promo-pack/<brand>/<moment>/: pack.json (the contract), PACK.md (its copy for people) and
-handoffs/<id>/ (what each workflow is handed). Nothing goes live, sends or spends: `hand` runs only the doors that
-spend nothing, and only after the owner has approved the exact offer words the pack carries.
+handoffs/<id>/ (what each workflow is handed). Whoever triggers it, it runs: there is no approval step. Nothing it
+starts goes live, sends or spends money: the doors make plans and drafts, and going live stays inside each workflow.
 """
 import argparse
 import datetime as dt
@@ -310,7 +309,7 @@ def build(brand, month, moment=None, stock=None, n_videos=5, n_statics=5, base=N
     rows = [r for r in promo_rows(text) if r["start"] <= last.isoformat() and r["end"] >= first.isoformat()]
     if not rows:
         raise SystemExit("the offer bank has no promo-calendar row for %s: the offer change starts there "
-                         "(Offer change workflow), and the owner approves its words" % month)
+                         "(Offer change workflow)" % month)
     row = rows[0]
     start, end = dt.date.fromisoformat(row["start"]), dt.date.fromisoformat(row["end"])
 
@@ -433,38 +432,13 @@ def build(brand, month, moment=None, stock=None, n_videos=5, n_statics=5, base=N
     pack = {"brand": brand, "month": month, "moment": moment, "label": label, "built": today.isoformat(),
             "window": {"start": row["start"], "end": row["end"]}, "offer": offer, "stock": stock_info,
             "handoffs": handoffs, "gaps": gaps,
-            "gate": {"what": "The owner approves the offer words. Going live, sending and spending stay the owner's "
-                             "call in each workflow.", "fingerprint": offer["fingerprint"]},
+            "gate": {"what": "No approval step: whoever triggers the pack, it runs. Nothing it starts goes live, sends "
+                             "or spends money; going live stays inside each workflow.", "fingerprint": offer["fingerprint"]},
             "reads": {"offer_bank": "brands/%s/products/offer-bank.md" % brand,
                       "calendar": str(cal_file.relative_to(base)) if cal else None,
                       "winners": "runs/winners/%s/bank.json" % brand, "stock": stock_info.get("source")}}
-    pack["approval"] = approval_state(out, pack)
     write(out, pack)
     return pack, out
-
-
-# ------------------------------------------------------------------------------------------------ the gate --
-def approval_state(out, pack):
-    f = out / "approval.json"
-    if not f.is_file():
-        return {"state": "waiting"}
-    a = json.loads(f.read_text())
-    if a.get("fingerprint") != pack["offer"]["fingerprint"]:
-        return {"state": "stale", "why": "the offer words changed after they were approved", "was": a}
-    return dict(a, state="approved")
-
-
-def approve(brand, moment, by, said, drafts=False, base=None):
-    """The owner's approval of the offer words. `drafts` adds his go on the doors that only write drafts
-    (email and text copy): usage is spent, nothing is sent, uploaded or published."""
-    out = pack_dir(brand, moment, base)
-    pack = load(out)
-    a = {"by": by, "said": said, "drafts": bool(drafts), "fingerprint": pack["offer"]["fingerprint"],
-         "lead_line": pack["offer"]["lead_line"], "at": dt.datetime.now().isoformat(timespec="seconds")}
-    (out / "approval.json").write_text(json.dumps(a, indent=1, ensure_ascii=False))
-    pack["approval"] = dict(a, state="approved")
-    write(out, pack)
-    return pack
 
 
 def load(out):
@@ -496,18 +470,13 @@ DONE = ("handed", "loaded")
 
 
 def hand(brand, moment, only=None, dry_run=False, base=None, runner=None, now=None):
-    """Hand every wired workflow its part of the pack. Refused until the owner has approved these exact words.
-    Doors that spend nothing are run. Doors that only write drafts run when the approval also says go on drafts,
-    and only for what is not written yet. Every other spending door is written into the hand-off for the role's
-    holder. A hand-off already handed for these exact words is not run again."""
+    """Hand every wired workflow its part of the pack. Doors that spend nothing run, doors that only write drafts
+    run for what is not written yet, and any other spending door is written into the hand-off for the role's holder.
+    A hand-off already handed for these exact words is not run again."""
     base = base or root()
     now = now or dt.datetime.now()
     out = pack_dir(brand, moment, base)
     pack = load(out)
-    state = approval_state(out, pack)
-    if state["state"] != "approved":
-        raise SystemExit("held: the owner has not approved the offer words for %s (%s). Nothing was handed off."
-                         % (moment, state["state"]))
     fp = pack["offer"]["fingerprint"]
     runner = runner or (lambda argv: subprocess.run(argv, cwd=base, capture_output=True, text=True))
     done = []
@@ -544,14 +513,13 @@ def hand(brand, moment, only=None, dry_run=False, base=None, runner=None, now=No
             else:
                 cmds = [fill(door["argv"], args)]
             rec["commands"] = [" ".join(c) for c in cmds]
-            allowed = not door["spends"] or (door.get("drafts_only") and state.get("drafts"))
+            allowed = not door["spends"] or door.get("drafts_only")
             if not cmds:
                 rec["state"] = "loaded: everything is written"
             elif dry_run:
                 rec["state"] = "dry run: nothing run"
             elif not allowed:
-                rec["state"] = "waiting: the owner's go on drafts" if door.get("drafts_only") else \
-                    "written: the role's holder runs it under the workflow's own gates"
+                rec["state"] = "written: the role's holder runs it under the workflow's own gates"
             else:
                 if door["spends"]:
                     f.write_text(json.dumps(dict(rec, state="running"), indent=1, ensure_ascii=False))
@@ -594,8 +562,8 @@ def due(brand, today, lead_days, base):
 
 def tick(brands=None, lead_days=14, stock=None, base=None, today=None, runner=None, month=None):
     """The trigger: run when a month's calendar is planned (`month`), or with no month for every promotion within
-    `lead_days` of opening. Builds the pack from the newest bank, calendar, winners and stock; once the owner has
-    approved the words, hands it off; says when it is loaded.
+    `lead_days` of opening. Builds the pack from the newest bank, calendar, winners and stock, hands it off, and
+    says when it is loaded.
     Writes runs/promo-pack/<brand>/<moment>/status.json and one line per pack to runs/promo-pack/tick.log."""
     base = base or root()
     today = today or dt.date.today()
@@ -613,14 +581,10 @@ def tick(brands=None, lead_days=14, stock=None, base=None, today=None, runner=No
                 report.append({"brand": brand, "window": row["start"], "state": "held", "why": str(ex)})
                 continue
             st = {"brand": brand, "moment": pack["moment"], "window": pack["window"],
-                  "words": pack["approval"]["state"], "blockers": len(pack["stock"]["blockers"]),
-                  "at": dt.datetime.now().isoformat(timespec="seconds")}
-            if pack["approval"]["state"] == "approved":
-                hand(brand, pack["moment"], base=base, runner=runner)
-                st.update(loaded(pack, out))
-                st["state"] = "loaded" if st["loaded"] else "loading"
-            else:
-                st["state"] = "waiting on the owner's approval of the offer words"
+                  "blockers": len(pack["stock"]["blockers"]), "at": dt.datetime.now().isoformat(timespec="seconds")}
+            hand(brand, pack["moment"], base=base, runner=runner)
+            st.update(loaded(pack, out))
+            st["state"] = "loaded" if st["loaded"] else "loading"
             (out / "status.json").write_text(json.dumps(st, indent=1, ensure_ascii=False))
             report.append(st)
     log = base / "runs" / "promo-pack" / "tick.log"
@@ -633,7 +597,7 @@ def tick(brands=None, lead_days=14, stock=None, base=None, today=None, runner=No
 
 
 def fill_sprint(pack, base, label):
-    """Put the approved words into the statics sprint the door just started (only fields still empty)."""
+    """Put the pack's words into the statics sprint the door just started (only fields still empty)."""
     f = base / "runs" / "ad-variations" / pack["brand"] / label / "sprint.json"
     if not f.is_file():
         return None
@@ -651,10 +615,9 @@ def fill_sprint(pack, base, label):
 # -------------------------------------------------------------------------------------------------- writing --
 def md(pack):
     o, w = pack["offer"], pack["window"]
-    a = pack["approval"]
     L = ["# Promo pack: %s, %s" % (pack["moment"], pack["brand"]), "",
-         "Window %s to %s. Built %s. Offer words: **%s**." % (w["start"], w["end"], pack["built"], a["state"]), "",
-         "## The offer words (the owner approves these)", "", "Lead line: **%s**" % o["lead_line"], ""]
+         "Window %s to %s. Built %s." % (w["start"], w["end"], pack["built"]), "",
+         "## The offer words (from the offer bank)", "", "Lead line: **%s**" % o["lead_line"], ""]
     if o.get("order_by"):
         L += ["Order by: %s" % o["order_by"], ""]
     L += ["| Line | Where | Section |", "|---|---|---|"]
@@ -718,14 +681,10 @@ def main():
     t.add_argument("--lead-days", type=int, default=14)
     t.add_argument("--month", help="the month just planned on the calendar: every promotion touching it")
     t.add_argument("--stock")
-    for k in ("approve", "hand", "status"):
+    for k in ("hand", "status"):
         q = s.add_parser(k)
         q.add_argument("--brand", required=True)
         q.add_argument("--moment", required=True)
-        if k == "approve":
-            q.add_argument("--by", required=True)
-            q.add_argument("--said", required=True)
-            q.add_argument("--drafts", action="store_true", help="also go on the doors that only write drafts")
         if k == "hand":
             q.add_argument("--only")
             q.add_argument("--dry-run", action="store_true")
@@ -733,11 +692,8 @@ def main():
     if a.do == "build":
         pack, out = build(a.brand, a.month, a.moment, a.stock, a.videos, a.statics)
         print("pack: %s" % (out / "PACK.md").relative_to(root()))
-        print("offer words: %s · hand-offs: %d · gaps: %d · stock blockers: %d"
-              % (pack["approval"]["state"], len(pack["handoffs"]), len(pack["gaps"]), len(pack["stock"]["blockers"])))
-    elif a.do == "approve":
-        pack = approve(a.brand, a.moment, a.by, a.said, a.drafts)
-        print("approved: %s" % pack["offer"]["lead_line"])
+        print("hand-offs: %d · gaps: %d · stock blockers: %d"
+              % (len(pack["handoffs"]), len(pack["gaps"]), len(pack["stock"]["blockers"])))
     elif a.do == "tick":
         for r in tick(a.brand, a.lead_days, a.stock, month=a.month):
             print("%-10s %-14s %s" % (r["brand"], r.get("moment", r.get("window")), r["state"]))
@@ -747,7 +703,6 @@ def main():
     else:
         pack = load(pack_dir(a.brand, a.moment))
         out = pack_dir(a.brand, a.moment)
-        print("offer words: %s" % approval_state(out, pack)["state"])
         st = loaded(pack, out)
         for r in st["handoffs"]:
             print("%-7s %s" % (r["id"], r["state"]))

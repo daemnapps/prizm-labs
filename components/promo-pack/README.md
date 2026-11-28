@@ -1,18 +1,16 @@
 # Promo pack
 
-One offer change in, one pack out. Every workflow the offer has to reach gets its own hand-off.
+One offer change in, one pack out. Every workflow the offer has to reach gets its own hand-off, and it starts.
 
 1. Write the offer in the brand's offer bank: its lines word for word, and a row in the bank's promo calendar.
-2. Plan the month with the marketing calendar.
-3. Build the pack:
+2. Plan the month with the marketing calendar. Its skill then starts the pack:
 
    ```
-   python3 components/promo-pack/machine/pack.py build --brand <brand> --month <YYYY-MM> --stock <runway.json>
+   python3 components/promo-pack/machine/pack.py tick --brand <brand> --month <YYYY-MM> --stock <runway.json>
    ```
 
-4. The owner reads `runs/promo-pack/<brand>/<moment>/PACK.md` and approves the offer words.
-5. Hand it off: `pack.py hand --brand <brand> --moment <moment>`.
+3. Read `runs/promo-pack/<brand>/<moment>/PACK.md`: the words, the stock blockers, each hand-off and its state.
 
-Nothing goes live, sends or spends from here. Keys this tool needs: none.
+No approval step. Nothing it starts goes live, sends or spends money. Keys this tool needs: none.
 
 Details: `CLAUDE.md`. The hand-offs: `definitions/handoffs.json`.

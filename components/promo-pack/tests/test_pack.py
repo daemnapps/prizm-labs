@@ -185,20 +185,6 @@ class PackTest(unittest.TestCase):
         with self.assertRaises(SystemExit):
             P.build("brand-a", "2027-02", base=self.base)
 
-    def test_hand_off_is_held_until_the_owner_approves_the_words(self):
-        with self.assertRaises(SystemExit) as e:
-            P.hand("brand-a", "holidays", base=self.base, runner=lambda a: None)
-        self.assertIn("held", str(e.exception))
-        self.assertFalse((self.out / "handoffs").exists())
-
-    def test_changed_words_make_an_approval_stale(self):
-        P.approve("brand-a", "holidays", "the owner", "yes", base=self.base)
-        (self.base / "brands/brand-a/products/offer-bank.md").write_text(BANK.replace("Free Travel Case\"", "Free Case\""))
-        pack, out = P.build("brand-a", "2026-12", base=self.base)
-        self.assertEqual(pack["approval"]["state"], "stale")
-        with self.assertRaises(SystemExit):
-            P.hand("brand-a", "holidays", base=self.base, runner=lambda a: None)
-
     def runner(self, ran):
         def run(argv):
             ran.append(argv)
@@ -216,30 +202,26 @@ class PackTest(unittest.TestCase):
         self.assertIsNone(store["door"])
         self.assertIn("store", {g["handoff"] for g in pack["gaps"]})
 
-    def test_after_approval_free_doors_run_and_drafts_wait_for_their_go(self):
-        P.approve("brand-a", "holidays", "the owner", "yes", base=self.base)
+    def test_whoever_triggers_it_every_door_runs(self):
         ran = []
         done = {r["id"]: r for r in P.hand("brand-a", "holidays", base=self.base, runner=self.runner(ran))}
         self.assertEqual(done["funnel"]["state"], "gap")
         for k in ("static", "video", "store"):
             self.assertEqual(done[k]["state"], "handed", k)
-        self.assertTrue(done["email"]["state"].startswith("waiting"))
-        self.assertTrue(done["sms"]["state"].startswith("waiting"))
+        self.assertEqual(done["email"]["state"], "handed")
         self.assertEqual(len([a for a in ran if "run.py" in a[1]]), 2)                  # one plan per winner
-        self.assertFalse(any("run_month.py" in a[1] or "sms.py" in a[1] for a in ran))
         sp = json.loads((self.base / "runs/ad-variations/brand-a/holidays-2026-promo-pack/sprint.json").read_text())
         self.assertEqual(sp["offer"], "Glow Set + Free Travel Case")
         self.assertEqual(sp["until"], "2026-12-24")
         self.assertEqual(sp["never"], ["Free Travel Pouch"])
         plan = (self.base / "runs/promo-pack/brand-a/holidays/handoffs/video/campaign-plan.md").read_text()
         self.assertIn("Glow Set + Free Travel Case", plan)
-        self.assertFalse(P.loaded(P.load(self.out), self.out)["loaded"])
+        self.assertTrue(P.loaded(P.load(self.out), self.out)["loaded"])
         again = []
         P.hand("brand-a", "holidays", base=self.base, runner=self.runner(again))
-        self.assertEqual(again, [])                                                     # nothing runs twice
+        self.assertEqual([a for a in again if "run_month.py" not in a[1] and "sms.py" not in a[1]], [])
 
-    def test_the_go_on_drafts_writes_only_what_is_missing(self):
-        P.approve("brand-a", "holidays", "the owner", "yes", drafts=True, base=self.base)
+    def test_drafts_are_written_only_for_what_is_missing(self):
         ran = []
         P.hand("brand-a", "holidays", base=self.base, runner=self.runner(ran))
         email = [a for a in ran if "run_month.py" in a[1]]
@@ -251,9 +233,6 @@ class PackTest(unittest.TestCase):
     def test_tick_builds_the_pack_when_the_promotion_is_close(self):
         self.assertEqual(P.tick(["brand-a"], 14, base=self.base, today=date(2026, 11, 1)), [])
         r = P.tick(["brand-a"], 14, base=self.base, today=date(2026, 11, 20))
-        dec = [x for x in r if x.get("moment") == "holidays"]
-        self.assertEqual(dec[0]["state"], "waiting on the owner's approval of the offer words")
-        P.approve("brand-a", "holidays", "the owner", "yes", drafts=True, base=self.base)
         r = P.tick(["brand-a"], 14, base=self.base, today=date(2026, 11, 20), runner=self.runner([]))
         dec = [x for x in r if x.get("moment") == "holidays"][0]
         self.assertEqual(dec["state"], "loaded")
