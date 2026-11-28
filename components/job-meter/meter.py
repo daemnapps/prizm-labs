@@ -3,6 +3,7 @@
 
     meter.py run  --jobs FILE [--only ID[,ID]] [--dry-run]    run every job due today, in list order
     meter.py show --jobs FILE [--days 30] [--json]            per job: runs, ok, model, money, minutes, last result
+    meter.py switch --jobs FILE <job> on|off                  the owner's switch for one job (only the `off` field changes)
 
 The job list is private (it names brands and folders) and lives outside this repo. Its shape is in README.md.
 One ledger line per job per brand: when, how long, how it ended, the model it uses, what it spent, the cap.
@@ -193,6 +194,37 @@ def summary(doc, ledger, days):
             "spent_usd": round(sum(j["spent_usd"] for j in out), 2), "minutes": round(sum(j["minutes"] for j in out), 1)}
 
 
+def switch(jobs_file, job_id, on, by="owner"):
+    """Turn one job on or off in the list. Only the `off` field changes; the rest of the file is kept as it is."""
+    p = Path(jobs_file)
+    doc = json.loads(p.read_text())
+    job = next((j for j in doc.get("jobs", []) if j.get("id") == job_id), None)
+    if not job:
+        raise ValueError("no job called %s" % job_id)
+    if on:
+        job.pop("off", None)
+    else:
+        job["off"] = True
+    job["switched"] = {"on": bool(on), "by": by, "at": dt.datetime.now().isoformat(timespec="seconds")}
+    tmp = p.with_suffix(".tmp")
+    tmp.write_text(json.dumps(doc, indent=1) + "\n")
+    os.replace(tmp, p)
+    return job
+
+
+def jobs_view(jobs_file, days=30):
+    """Each job with its switch, model, cap and last run: what a settings screen shows."""
+    doc = load(jobs_file)
+    s = summary(doc, ledger_path(doc, jobs_file), days)
+    by_id = {j["id"]: j for j in doc.get("jobs", [])}
+    for j in s["jobs"]:
+        src = by_id[j["job"]]
+        j.update(on=not src.get("off"), brands=src.get("brands") or [], off_why=src.get("off_why"),
+                 switched=src.get("switched"))
+    s.update(where=doc.get("where", ""), at=doc.get("at", ""), server=doc.get("server"))
+    return s
+
+
 def cmd_show(a):
     doc = load(a.jobs)
     s = summary(doc, ledger_path(doc, a.jobs), a.days)
@@ -211,7 +243,12 @@ def main():
     sub = ap.add_subparsers(dest="do", required=True)
     r = sub.add_parser("run"); r.add_argument("--jobs", required=True); r.add_argument("--only"); r.add_argument("--dry-run", action="store_true")
     s = sub.add_parser("show"); s.add_argument("--jobs", required=True); s.add_argument("--days", type=int, default=30); s.add_argument("--json", action="store_true")
+    w = sub.add_parser("switch"); w.add_argument("--jobs", required=True); w.add_argument("job"); w.add_argument("state", choices=("on", "off"))
     a = ap.parse_args()
+    if a.do == "switch":
+        j = switch(a.jobs, a.job, a.state == "on")
+        print("%s is %s" % (j["id"], "on" if not j.get("off") else "off"))
+        return 0
     return cmd_run(a) if a.do == "run" else cmd_show(a)
 
 
