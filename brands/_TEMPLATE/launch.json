@@ -1,214 +1,66 @@
 {
- "_what": "Launch from zero: the checklist for a brand that has no website, customers, reviews or past ads yet. onboarding.json is for a brand that already sells; this one is for a brand being built. Steps run in order inside each phase. Each step names the tool that fills it and the file it fills.",
- "_rule": "The owner gives a hunch: one line naming a product or ingredient and the market. Nothing else of the owner's goes in. The research decides who the customer is, what he says, the problem, the angles and the story, every line with its receipt, and it is free to prove the hunch wrong.",
- "progress_file": "brands/<brand>/launch-progress.json",
- "progress_shape": {
-  "brand": "<brand>",
-  "done": [
-   "<step id>"
-  ],
-  "draft": [
-   "<step id>"
-  ],
-  "skipped": [
-   "<step id>"
-  ],
-  "updated": "<yyyy-mm-dd>"
- },
+ "_what": "Launch from zero: a brand with no site, customers or past ads yet. Every step names the tool in this repo that does it. A step this repo has no tool for says status \"gap\": it is not done and not improvised. It waits until a tool is built and added here.",
+ "_rule": "The owner gives a hunch: one line naming a product or ingredient and the market. Nothing else of the owner's goes in. The research decides the rest from receipts, and it may prove the hunch wrong.",
+ "progress_file": "<brand home>/launch-progress.json",
+ "progress_shape": {"brand": "<brand>", "done": ["<step id>"], "skipped": ["<step id>"], "updated": "<yyyy-mm-dd>"},
  "phases": [
   {
-   "id": "research",
-   "name": "1 \u00b7 Research",
+   "id": "home",
+   "name": "0 · The brand's home",
    "steps": [
-    {
-     "id": "brief",
-     "name": "The hunch",
-     "tool": "brand-launch (asks one line)",
-     "fills": "operations/brief.md",
-     "receipt": "one line, dated; research may prove it wrong"
-    },
-    {
-     "id": "problem",
-     "name": "The problem, in the market's words",
-     "tool": "avatar-profile (outside research: Reddit, YouTube, TikTok), research-fill",
-     "fills": "core-avatars/<avatar>/profile.md",
-     "receipt": "every line quoted with its link"
-    },
-    {
-     "id": "language",
-     "name": "The customer's own words",
-     "tool": "avatar-profile, research-gatherer (forums, competitor reviews); voice-pull once the brand has its own comments",
-     "fills": "core-avatars/<avatar>/language/",
-     "receipt": "verbatim, with source"
-    },
-    {
-     "id": "market",
-     "name": "What the market is buying",
-     "tool": "product-research (7\u201390 day winners), trendtrack",
-     "fills": "competitive/market.md",
-     "receipt": "sales and ad data with dates"
-    },
-    {
-     "id": "competitors",
-     "name": "Competitors: money, ads, pages, offers",
-     "tool": "product-research (one brand deep), trendtrack, swipe-paid",
-     "fills": "competitive/",
-     "receipt": "their live ads and pages"
-    },
-    {
-     "id": "formats",
-     "name": "What he watches and what's scaling",
-     "tool": "research-round, swipe-organic feeds",
-     "fills": "customer/swipes.md",
-     "receipt": "posts with view counts"
-    },
-    {
-     "id": "evidence",
-     "name": "The ingredient's evidence",
-     "tool": "by hand until a tool exists: trials, reviews, doses",
-     "fills": "products/<product>/evidence.md",
-     "receipt": "study links, numbers, sample sizes"
-    },
-    {
-     "id": "mechanism",
-     "name": "The unique mechanism",
-     "tool": "from the evidence step",
-     "fills": "position.md (mechanism slot)",
-     "receipt": "the study behind each line"
-    },
-    {
-     "id": "insight",
-     "name": "The insight and the angles",
-     "tool": "creative-strategist",
-     "fills": "strategy/angles.json",
-     "receipt": "each angle ties to a receipt above"
-    }
+    {"id": "hunch", "name": "The hunch, one line", "status": "ready", "tool": "skill brand-launch", "fills": "brands/<brand>/operations/brief.md"},
+    {"id": "workspace", "name": "Private offer workspace (the brand's own repo; Prizm stays private)", "status": "ready", "tool": "components/offer-workspaces (workspace.py, offer-workspace.json)", "fills": "a private repo: brands/<brand>/, offers/, runs/", "owner_click": "creates a private GitHub repo"}
+   ]
+  },
+  {
+   "id": "research",
+   "name": "1 · Research",
+   "_source": "the order is components/research-fill/process.json; run and check each with components/research-fill/fill.py",
+   "steps": [
+    {"id": "avatar", "name": "Name the avatar and build his profile", "status": "ready", "tool": "skill avatar-profile (outside research: Reddit, YouTube, TikTok)", "fills": "core-avatars/<avatar>/"},
+    {"id": "sources", "name": "Connect the brand's own words", "status": "later", "tool": "components/research-fill/connect.py", "note": "a brand from zero has no reviews, comments or inbox yet; connect each once it exists"},
+    {"id": "bank", "name": "Fill the language bank", "status": "ready", "tool": "components/research-gatherer/daily.py"},
+    {"id": "rooms", "name": "Find where he talks", "status": "ready", "tool": "components/research-gatherer/gather.py person --plan"},
+    {"id": "profile", "name": "Build and gate the profile", "status": "ready", "tool": "components/creative-strategist/machine/who.py build"},
+    {"id": "formats", "name": "What he watches", "status": "ready", "tool": "skill research-round"},
+    {"id": "problem", "name": "His problem", "status": "ready", "tool": "skill research-round (problem round)"},
+    {"id": "matrix", "name": "The matrix", "status": "ready", "tool": "skill research-round (step 7)"},
+    {"id": "market", "name": "What the market is buying; one competitor deep", "status": "ready", "tool": "skill product-research"},
+    {"id": "competitor-ads", "name": "Competitors' live ads and pages", "status": "ready", "tool": "skills trendtrack, swipe-paid"},
+    {"id": "evidence", "name": "The ingredient's studies, and the mechanism from them", "status": "gap", "tool": "none in this repo"},
+    {"id": "picks", "name": "Owner picks concepts on the matrix", "status": "ready", "tool": "the matrix page", "owner_click": "the picks"}
    ]
   },
   {
    "id": "brand",
-   "name": "2 \u00b7 Brand",
+   "name": "2 · Brand",
    "steps": [
-    {
-     "id": "name",
-     "name": "Brand name",
-     "tool": "naming",
-     "fills": "operations/brand.json"
-    },
-    {
-     "id": "position",
-     "name": "Position",
-     "tool": "from research; template rules",
-     "fills": "position.md"
-    },
-    {
-     "id": "story",
-     "name": "Story and tellers",
-     "tool": "from research",
-     "fills": "story.md"
-    },
-    {
-     "id": "look",
-     "name": "Look: logo, colours, fonts",
-     "tool": "design-mock, image-production",
-     "fills": "identity/"
-    },
-    {
-     "id": "core-message",
-     "name": "The one message",
-     "tool": "from position",
-     "fills": "strategy/core-message.json"
-    }
+    {"id": "position", "name": "Position, from the research", "status": "ready", "tool": "position.md template + components/marketing-doctrine/lint_position.py", "fills": "position.md"},
+    {"id": "story", "name": "Story and tellers, from the research", "status": "ready", "tool": "story.md template", "fills": "story.md"},
+    {"id": "angles", "name": "Insight and angles", "status": "ready", "tool": "skill creative-strategist", "fills": "strategy/angles.json"},
+    {"id": "name", "name": "Brand name", "status": "gap", "tool": "none in this repo (the naming skill names ad deliveries)"},
+    {"id": "look", "name": "Logo, colours, fonts", "status": "gap", "tool": "none in this repo for a new identity"}
    ]
   },
   {
-   "id": "supply",
-   "name": "3 \u00b7 Product and supply",
+   "id": "offer",
+   "name": "3 · Product and offer",
    "steps": [
-    {
-     "id": "spec",
-     "name": "Product spec: form, dose, count",
-     "tool": "from the evidence step",
-     "fills": "products/<product>/product.md"
-    },
-    {
-     "id": "quotes",
-     "name": "Supplier quotes",
-     "tool": "by hand; the owner says yes before any message goes out",
-     "fills": "products/<product>/suppliers.md"
-    },
-    {
-     "id": "samples",
-     "name": "Samples",
-     "tool": "by hand",
-     "fills": "products/<product>/suppliers.md"
-    },
-    {
-     "id": "lab",
-     "name": "Third-party lab test",
-     "tool": "by hand",
-     "fills": "products/<product>/coa/"
-    },
-    {
-     "id": "label",
-     "name": "Label",
-     "tool": "image-production",
-     "fills": "products/<product>/label/"
-    },
-    {
-     "id": "import",
-     "name": "Import, shipping, tariff",
-     "tool": "by hand",
-     "fills": "operations/supply.md"
-    },
-    {
-     "id": "offer",
-     "name": "Offer: price, bundles, guarantee",
-     "tool": "offer-workspaces",
-     "fills": "offers/offers.json"
-    }
+    {"id": "offer", "name": "The offer sheet, inside the owner's margin envelope", "status": "ready", "tool": "components/offer-workspaces/offer/scripts/offer.py", "fills": "offers/<offer-id>/", "owner_click": "sets the margin envelope"},
+    {"id": "supplier", "name": "Finding and choosing a supplier", "status": "gap", "tool": "none in this repo"},
+    {"id": "store", "name": "Store", "status": "gap", "tool": "none in this repo"}
    ]
   },
   {
    "id": "selling",
-   "name": "4 \u00b7 Selling",
+   "name": "4 · Selling",
    "steps": [
-    {
-     "id": "store",
-     "name": "Store",
-     "tool": "by hand",
-     "fills": "products/store.json"
-    },
-    {
-     "id": "profiles",
-     "name": "A profile per angle",
-     "tool": "avatar-profile",
-     "fills": "core-avatars/<avatar>/sub-avatars/"
-    },
-    {
-     "id": "pages",
-     "name": "A landing page per profile",
-     "tool": "page-draft, page-production",
-     "fills": "funnels/funnels.json"
-    },
-    {
-     "id": "ads",
-     "name": "Ads per profile",
-     "tool": "statics-sprint, video-writing, ad-variations",
-     "fills": "runs (private)"
-    },
-    {
-     "id": "accounts",
-     "name": "Ad account and keys",
-     "tool": "brand-activation",
-     "fills": "meta/account.json, .env"
-    },
-    {
-     "id": "first-run",
-     "name": "First teardown and first test",
-     "tool": "video-teardown, meta-upload",
-     "fills": "runs (private)"
-    }
+    {"id": "page", "name": "Product page from the customer evidence", "status": "ready", "tool": "components/product-page, components/page-production"},
+    {"id": "statics", "name": "Static ads", "status": "ready", "tool": "skill statics-sprint"},
+    {"id": "video", "name": "Video ads from swipes", "status": "ready", "tool": "skills video-teardown, video-writing, video-production"},
+    {"id": "variations", "name": "Variations", "status": "ready", "tool": "skill ad-variations"},
+    {"id": "keys", "name": "Keys and accounts", "status": "ready", "tool": "skill brand-activation"},
+    {"id": "drop", "name": "Drop kit for the ad account", "status": "ready", "tool": "skill meta-upload", "owner_click": "approval and going live"}
    ]
   }
  ]
