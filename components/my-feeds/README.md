@@ -13,6 +13,26 @@ those swipes, with no brand, creator or competitor named.
 | **Paid** | 6,269 live competitor ads across nine markets, reduced to the ten angle shapes that keep working. | [`paid/START-HERE.md`](paid/START-HERE.md) |
 | **Library** | The index over both: the organic formats, the angle shapes and the counts, published as a page. *Team-only build* — it reads our private workspace; the page is for everyone. | [`library/README.md`](library/README.md) |
 
+## The feed: Studio → Production → Swipes
+
+[`feed.py`](feed.py) is the one swipe feed the Studio shows (`/api/desk/feed`):
+
+- **One list, one filter:** All · Organic · Paid · Links I pasted, and a profile (who the feed was pulled for).
+  Each post has one identifier (platform and the post's own id), so a post pulled by two feeds, pasted again or
+  torn down twice shows once. Torn down folds repeat runs of the same swipe into one row.
+- **Paste a link:** the post downloads and goes to [`../video-teardown/`](../video-teardown/) in code
+  (`run.py … --to 2`, the teardown stages only). The same happens from any card's **Tear down**. A post already
+  torn down is never torn down twice.
+- **Paid** is the shop videos picked from the product finds (TrendTrack, Kalodata) plus ad-library sweeps of the
+  advertisers still in those finds. The paid brands tracked now are the shops in the newest finds.
+- **Clear out:** old posts (over a year, never torn down), last season's posts, profile feeds and advertisers
+  nobody pulls any more. They are kept off the feed and listed for the owner's yes; a yes is recorded in
+  `runs/my-feeds/decisions.json`. Nothing is deleted from the folders the feed reads.
+
+Where the feeds live is set per computer in `runs/my-feeds/sources.json` (`{"organic": [...], "paid": [...]}`);
+with none, this repo's own `components/swipe-organic/records/avatar-feeds` and `components/swipe-paid`.
+`python3 feed.py show|dead|torn --brand <brand>` prints the same from the command line.
+
 **How to use it:** pick a format or an angle shape, find a real example, then
 hand that example to [`../video-teardown/`](../video-teardown/) — the structure
 comes out, your brand goes in.

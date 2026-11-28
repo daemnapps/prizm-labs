@@ -1621,6 +1621,23 @@ def read_text(ref, limit=400_000):
 
 # ---------- HTTP (called from video_studio.py's handler) ----------
 
+_FEED = {}
+
+
+def _swipe_feed():
+    """The swipe feed module, loaded by file and reloaded when it changes (no Studio restart for a feed change)."""
+    f = WS / "components" / "my-feeds" / "feed.py"
+    m = os.path.getmtime(f)
+    if _FEED.get("at") != m:
+        spec = importlib.util.spec_from_file_location("my_feeds_feed", f)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        if _FEED.get("mod"):
+            mod._CACHE.update(_FEED["mod"]._CACHE)        # keep what was already read
+        _FEED.update(at=m, mod=mod)
+    return _FEED["mod"]
+
+
 def handle(h, method, parts, query, body):
     """Answer /desk and /api/desk/*. `h` is the Studio's request handler (send, file)."""
     q = {k: v[0] for k, v in parse_qs(query or "").items()}
@@ -1630,6 +1647,8 @@ def handle(h, method, parts, query, body):
         if parts == ["next"] and method == "GET":           # the new Studio: one app for every ad (studio-next.html)
             return h.send(200, (HERE / "studio-next.html").read_bytes(), "text/html; charset=utf-8")
         api = parts[2:]
+        if api[:1] == ["feed"]:                             # the swipe feed: components/my-feeds/feed.py
+            return _swipe_feed().handle(h, method, api[1:], q, body)
         if method == "GET":
             if api == ["lines"]:
                 return h.send(200, {"lines": LINES, "starts": STARTS})

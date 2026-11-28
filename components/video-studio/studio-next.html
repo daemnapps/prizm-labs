@@ -135,6 +135,10 @@ main{padding:28px 24px 60px;max-width:1440px;margin:0 auto}
 .fbk{display:grid;gap:8px;margin-bottom:14px;border-left:4px solid var(--amber)}.fbh{display:flex;align-items:center;gap:8px}.fbh b{font:600 14px var(--body)}.fbh .lbl{margin-left:auto}
 .fbk textarea{width:100%;box-sizing:border-box;border:1px solid var(--line-2,rgba(0,0,0,.2));border-radius:10px;padding:10px 12px;font:14.5px/1.55 var(--body);resize:vertical;background:var(--card);color:var(--ink)}
 .fbl{display:grid;gap:6px}.fbn{display:grid;gap:2px;font-size:13px;border-top:1px solid var(--line);padding-top:6px}
+.fbr{display:grid;gap:6px;margin-top:4px;padding:8px 10px;border-radius:10px;background:color-mix(in srgb,var(--green) 6%,transparent)}.fbr.held{background:color-mix(in srgb,var(--amber) 10%,transparent)}
+.fbc{display:grid;grid-template-columns:1fr 1fr;gap:6px}.fbc pre{margin:0;white-space:pre-wrap;font:12px/1.45 var(--mono);padding:6px 8px;border-radius:8px;max-height:160px;overflow:auto}
+.fbc .b4{background:color-mix(in srgb,var(--coral) 9%,transparent)}.fbc .af{background:color-mix(in srgb,var(--green) 12%,transparent)}.fbq{color:var(--ink-2);font-style:italic}
+@media(max-width:640px){.fbc{grid-template-columns:1fr}}
 .sx{display:grid;gap:2px;margin-bottom:14px;border-left:4px solid var(--amber)}.sx b{font:600 14px var(--body)}.sx span{color:var(--ink-2);font-size:13.5px}
 .sgrid{display:grid;grid-template-columns:300px 1fr;gap:16px;align-items:start}
 .sv{position:sticky;top:80px;display:grid;gap:10px;padding:10px}.sv video,.sv img{width:100%;border-radius:10px;background:#000;max-height:60vh;object-fit:contain}
@@ -646,8 +650,25 @@ function fbCard(kind, item, title){
 }
 async function fbLoad(id, kind, item, title){
   const box = document.getElementById(id); if (!box) return;
+  const STATE = {new: 'waiting for the revision', revising: 'revising…', revised: 'revision ready', 'in use': 'revision in use', 'nothing to change': 'read · nothing to change here'};
+  const fname = f => String(f || '').split('/').pop().replace(/\.md$/, '').replace(/^\d+[a-z]*-+/, '').replace(/-/g, ' ');
+  const rev = n => { const v = n.revision_view; if (!v) return '';
+    const ch = (v.changes || []).map(c => `<div style="display:grid;gap:4px"><span><b>${esc(fname(c.file))}</b> · ${esc(c.why || '')}</span>${c.quote ? `<span class="fbq">“${esc(c.quote)}”</span>` : ''}<div class="fbc"><pre class="b4">${esc(c.before)}</pre><pre class="af">${esc(c.after)}</pre></div></div>`).join('');
+    return `<div class="fbr ${v.passed === false ? 'held' : ''}">${v.summary || v.read ? `<b style="font-size:13px">${esc(v.summary || v.read)}</b>` : ''}
+      ${v.passed === false ? `<span class="pill p-wait">Held · ${esc(v.why_held || '')}</span>` : ''}${v.check_note ? `<span class="lbl">${esc(v.check_note)}</span>` : ''}
+      ${ch ? `<div class="fbc"><span class="lbl">Before</span><span class="lbl">After</span></div>${ch}` : ''}
+      ${(v.needs_paid || []).length ? `<span class="lbl">Needs money, stops at the price: ${esc(v.needs_paid.join(' · '))}</span>` : ''}
+      ${(v.not_done || []).length ? `<span class="lbl">Not changed here: ${esc(v.not_done.join(' · '))}</span>` : ''}
+      <div class="arow">${v.in_use ? '<span class="pill p-ready">In use · the old version is kept</span>' : (v.changes || []).length && v.passed !== false ? `<button class="btn wait" data-use="${esc(n.id)}">Use this</button>` : ''}<button class="btn" data-rev="${esc(n.id)}">Revise again</button><span class="lbl" style="margin-left:auto">${v.cost_usd != null ? '$' + Number(v.cost_usd).toFixed(2) : ''}</span></div></div>`; };
   const list = async () => { try { const r = await J(`/api/desk/feedback?brand=${encodeURIComponent(S.brand)}&item=${encodeURIComponent(item)}`, {keep:true});
-    box.querySelector('.fbl').innerHTML = (r.notes || []).map(n => `<div class="fbn"><span class="lbl">${esc(new Date(n.at).toLocaleString('en-GB', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'}))} · ${n.state === 'new' ? 'waiting for the revision' : esc(n.state)}</span>${n.text ? `<span>${esc(n.text)}</span>` : ''}${n.tella ? `<span class="pill p-act">Tella · ${esc(n.tella.title)}${n.tella.words ? ' · ' + int(n.tella.words) + ' words' : ''}</span>` : ''}</div>`).join(''); } catch {} };
+    const notes = r.notes || [];
+    box.querySelector('.fbl').innerHTML = notes.map(n => `<div class="fbn"><span class="lbl">${esc(new Date(n.at).toLocaleString('en-GB', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'}))} · ${esc(STATE[n.state] || n.state)}</span>${n.text ? `<span>${esc(n.text)}</span>` : ''}${n.tella ? `<span class="pill p-act">Tella · ${esc(n.tella.title)}${n.tella.words ? ' · ' + int(n.tella.words) + ' words' : ''}</span>` : ''}${n.state === 'new' ? `<div class="arow"><button class="btn wait" data-rev="${esc(n.id)}">Revise now</button></div>` : ''}${rev(n)}</div>`).join('');
+    box.querySelectorAll('[data-rev],[data-use]').forEach(b => b.onclick = () => job(b.dataset.use ? 'use ' + b.dataset.use : b.dataset.rev, b));
+    if (notes.some(n => n.state === 'revising')) setTimeout(() => { if (document.getElementById(id)) list(); }, 8000); } catch {} };
+  const job = async (input, btn) => { btn.disabled = true; btn.textContent = input.startsWith('use ') ? 'Putting it in place…' : 'Revising…';
+    try { await J('/api/desk/ask', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({kind: 'revise', input, brand: S.brand, to: 'here', by: store.get('st.by') || ''})});
+      toast(input.startsWith('use ') ? 'Putting the revision in place' : 'Revising · only the changes you asked for'); asksBadge(); setTimeout(list, 6000); }
+    catch (e) { toast(e.message); btn.disabled = false; } };
   const send = async (tella, btn) => { const ta = box.querySelector('textarea'); btn.disabled = true; const was = btn.textContent; if (tella) btn.textContent = 'Pulling your Tella…';
     try { await J('/api/desk/feedback', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({brand: S.brand, item, kind, title, text: ta.value, tella})}); ta.value = ''; toast(tella ? 'Tella attached' : 'Feedback saved'); list(); }
     catch (e) { toast(e.message); } btn.disabled = false; btn.textContent = was; };
@@ -811,39 +832,142 @@ document.addEventListener('submit', async e => {
   catch (err) { toast(err.message); btn.disabled = false; }
 });
 
-/* ================= SWIPES ================= */
+/* ================= SWIPES =================
+   One feed (components/my-feeds/feed.py, /api/desk/feed): organic and paid posts, each post once, filtered by what he
+   wants to see; a pasted link is downloaded and torn down on its own; Torn down lists each swipe once; Clear out lists
+   what looks dead for his yes. Styles live here so this lane stays one piece. */
 let swFilter = store.get('st.swf') || 'all';
+const SW_CSS = `<style>
+.sf-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.sf-row select,.sf-row input{border:1px solid var(--line-2);border-radius:var(--r4);padding:5px 12px;font:12px var(--mono);background:var(--card);color:var(--ink-2)}
+.sf-row .grow{flex:1}
+.sf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(186px,1fr));gap:14px}
+.sf-card{border:1px solid var(--line);border-radius:var(--r2);overflow:hidden;background:var(--card);display:grid;grid-template-rows:auto 1fr}
+.sf-card:hover{border-color:var(--violet)}
+.sf-pic{aspect-ratio:9/16;background:var(--bone);position:relative;display:block}
+.sf-pic img{width:100%;height:100%;object-fit:cover;display:block}
+.sf-pic .ph{position:absolute;inset:0;display:grid;place-items:center;align-content:center;gap:6px;padding:14px;text-align:center;color:var(--ink-3);font:11px var(--mono)}
+.sf-pic .ph b{font:600 13px var(--body);color:var(--ink-2)}
+.sf-pic .num{position:absolute;left:8px;bottom:8px;background:rgba(23,21,18,.72);color:#fff;border-radius:var(--r4);padding:2px 8px;font:500 11px var(--mono)}
+.sf-cap{padding:10px 11px;display:grid;gap:7px;align-content:start}
+.sf-cap .t{font-size:12.5px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;color:var(--ink)}
+.sf-cap .who{font:11px var(--mono);color:var(--ink-3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sf-cap .meta{display:flex;gap:5px;flex-wrap:wrap}
+.sf-cap .acts{display:flex;gap:6px;align-items:center;margin-top:2px}
+.sf-cap .acts .btn{padding:5px 10px;font-size:11.5px}
+.sf-cap .acts a.lk{font:11px var(--mono);color:var(--ink-3)}
+.sf-cap .acts button.x{margin-left:auto;border:0;background:none;color:var(--ink-3);font:11px var(--mono);padding:4px}
+.sf-shops{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px}
+.sf-shops a{flex:none;display:grid;grid-template-columns:34px auto;gap:2px 9px;align-items:center;border:1px solid var(--line);border-radius:var(--r2);padding:7px 11px 7px 7px;background:var(--card);color:var(--ink)}
+.sf-shops img{width:34px;height:34px;border-radius:6px;object-fit:cover;grid-row:span 2;background:var(--bone)}
+.sf-shops b{font:600 12px var(--body)}.sf-shops span{font:11px var(--mono);color:var(--ink-3)}
+.sf-dead{display:grid;gap:12px}
+.sf-dead .card{display:grid;grid-template-columns:1fr auto;gap:10px 16px;align-items:center}
+.sf-dead .card h3 .count{margin-left:10px}
+.sf-dead .why{color:var(--ink-2);font-size:13px}
+.sf-dead .peek{grid-column:1/-1;display:flex;gap:8px;overflow-x:auto}
+.sf-dead .peek a{flex:none;width:92px;color:var(--ink-3);font:10.5px var(--mono)}
+.sf-dead .peek .p{aspect-ratio:9/16;border-radius:6px;background:var(--bone);overflow:hidden;margin-bottom:4px}
+.sf-dead .peek img{width:100%;height:100%;object-fit:cover;display:block}
+.sf-dead .card.done{opacity:.55}
+@media (max-width:640px){.sf-grid{grid-template-columns:repeat(2,1fr)}.sf-dead .card{grid-template-columns:1fr}}
+</style>`;
+const swCover = p => p.cover ? `/api/desk/feed/cover?k=${encodeURIComponent(p.cover)}` : (p.cover_url || '');
+const swPh = p => `<div class="ph"><b>${esc(p.platform === 'meta' ? 'Ad library' : (p.platform || 'post'))}</b>${esc(p.author ? '@' + p.author : '')}</div>`;
+const swImg = p => { const c = swCover(p); return c ? `<img loading="lazy" src="${esc(c)}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'ph',innerHTML:'<b>${esc(p.platform || 'post')}</b>'}))">` : swPh(p); };
+const swNum = v => v == null ? '' : v >= 1e6 ? (v / 1e6).toFixed(v >= 1e7 ? 0 : 1) + 'M' : v >= 1e3 ? Math.round(v / 1e3) + 'K' : String(v);
+const SW_JOB = {queued: ['p-mute', 'queued'], downloading: ['p-mute', 'downloading'], tearing: ['p-mute', 'tearing down'], failed: ['p-stop', 'stopped'], done: ['p-ready', 'torn down'], handed: ['p-mute', 'handed to the team'], running: ['p-mute', 'tearing down']};
+
 async function swipes(){
   const m = host();
-  const sub = store.get('st.swsub') || 'feeds';
-  const tabsHtml = `<div class="filters" style="margin-bottom:14px"><button class="${sub === 'feeds' ? 'on' : ''}" data-swsub="feeds">My Feeds</button><button class="${sub === 'torn' ? 'on' : ''}" data-swsub="torn">Torn down</button></div>`;
-  if (sub === 'feeds') {
-    m.innerHTML = tabsHtml + `<div class="card" style="padding:0;overflow:hidden"><iframe src="http://127.0.0.1:8820/" title="My Feeds" style="width:100%;height:calc(100vh - 250px);border:0;display:block"></iframe></div>`;
-    m.querySelectorAll('[data-swsub]').forEach(b => b.onclick = () => { store.set('st.swsub', b.dataset.swsub); swipes(); });
-    return;
-  }
-  m.innerHTML = tabsHtml + `<form class="card arow" id="addsw" style="margin-bottom:16px"><i class="ib" style="--hue:var(--violet)">${icon('link')}</i><input name="u" type="url" required placeholder="Paste a post's link: it is saved and torn down" style="flex:1;min-width:220px;border:1px solid var(--line-2);border-radius:var(--r2);padding:9px 11px;font:14px var(--body)"><button class="btn go" type="submit">Add swipe</button></form>
-    <div class="ph" style="margin-bottom:14px"><span class="sub" id="swc"></span><div class="acts"><a class="btn" href="#production/new"><i class="ic" data-i="plus"></i>Make an ad from a swipe</a></div></div><div class="skel">Loading the library…</div>`;
-  $('#addsw').onsubmit = e => { e.preventDefault(); ask('swipe', e.target.u.value).then(r => { if (r) e.target.reset(); }); };
+  const sub = ['feed', 'torn', 'clear'].includes(store.get('st.swsub')) ? store.get('st.swsub') : 'feed';
+  const tabs = `<div class="filters" style="margin-bottom:14px"><button class="${sub === 'feed' ? 'on' : ''}" data-swsub="feed">Feed</button><button class="${sub === 'torn' ? 'on' : ''}" data-swsub="torn">Torn down</button><button class="${sub === 'clear' ? 'on' : ''}" data-swsub="clear">Clear out<span id="swdead"></span></button></div>`;
+  const paste = `<form class="card arow" id="addsw" style="margin-bottom:16px"><i class="ib" style="--hue:var(--violet)">${icon('link')}</i><input name="u" type="url" required placeholder="Paste a post's link: it downloads, the teardown runs, and it lands in the feed and in Torn down" style="flex:1;min-width:220px;border:1px solid var(--line-2);border-radius:var(--r2);padding:9px 11px;font:14px var(--body)"><button class="btn go" type="submit">Tear it down</button></form>`;
+  m.innerHTML = SW_CSS + tabs + (sub === 'feed' ? paste : '') + `<div id="swbody"><div class="skel">Loading…</div></div>`;
   paintIcons(m);
   m.querySelectorAll('[data-swsub]').forEach(b => b.onclick = () => { store.set('st.swsub', b.dataset.swsub); swipes(); });
-  let r; try { r = await J('/api/desk/swipes?brand=' + encodeURIComponent(S.brand)); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
-  if (!m.isConnected) return;
+  const f = m.querySelector('#addsw');
+  if (f) f.onsubmit = async e => { e.preventDefault(); const btn = f.querySelector('button'); btn.disabled = true;
+    try { const r = await J('/api/desk/feed/paste', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({url: f.u.value, brand: S.brand})});
+      toast(r.already && r.label ? 'Already torn down · ' + nice(r.label) : r.already ? 'Already on its way' : 'Saved · the teardown is running'); f.reset(); store.set('st.swshow', 'pasted'); swFeed(m); }
+    catch (err) { toast(err.message); } btn.disabled = false; };
+  J('/api/desk/feed/dead?brand=' + encodeURIComponent(S.brand)).then(r => { const n = (r.groups || []).filter(g => !g.cleared).length; const el = m.querySelector('#swdead'); if (el && n) el.textContent = ' · ' + n; }).catch(() => {});
+  if (sub === 'torn') return swTorn(m);
+  if (sub === 'clear') return swClear(m);
+  return swFeed(m);
+}
+
+async function swFeed(m){
+  const body = m.querySelector('#swbody');
+  const st = {show: store.get('st.swshow') || 'all', profile: store.get('st.swprof') || '', sort: store.get('st.swsort') || 'new', q: '', off: 0};
+  let data = null, rows = [], timer = null;
+  const url = () => `/api/desk/feed?brand=${encodeURIComponent(S.brand)}&show=${st.show}&sort=${st.sort}&n=60&off=${st.off}` + (st.profile ? '&profile=' + encodeURIComponent(st.profile) : '') + (st.q ? '&q=' + encodeURIComponent(st.q) : '');
+  const card = p => { const j = p.job, sj = j && SW_JOB[j.state], kinds = p.kinds || [p.kind];
+    return `<div class="sf-card" data-id="${esc(p.id)}"><a class="sf-pic" href="${esc(p.url)}" target="_blank" rel="noopener">${swImg(p)}${p.views ? `<span class="num">${swNum(p.views)} views</span>` : p.revenue ? `<span class="num">${usd(p.revenue)}</span>` : ''}</a>
+      <div class="sf-cap"><div class="t">${esc(p.caption || p.what || p.url)}</div><div class="who">${esc([p.author ? '@' + p.author : '', p.posted ? dayLabel(p.posted.slice(0, 10)) : '', p.product || ''].filter(Boolean).join(' · '))}</div>
+      <div class="meta">${kinds.map(k => `<span class="pill p-swipe">${k === 'pasted' ? 'pasted' : k}</span>`).join('')}${p.format ? `<span class="pill p-mute">${esc(p.format)}</span>` : ''}${(p.profiles || []).slice(0, 2).map(x => `<span class="pill p-mute">${esc(profName(x))}</span>`).join('')}${p.days_running ? `<span class="pill p-mute">${p.days_running} days running</span>` : ''}</div>
+      <div class="acts">${p.torn ? `<a class="btn" href="#swipe/${encodeURIComponent(p.torn)}"><span class="pill p-ready" style="padding:0 6px">torn down</span>Open</a>` : sj && j.state !== 'done' ? `<span class="pill ${sj[0]}" title="${esc(j.why || '')}">${sj[1]}</span>${j.state === 'failed' ? `<button class="btn" data-tear>Try again</button>` : ''}` : `<button class="btn go" data-tear>Tear down</button>`}<button class="x" data-hide title="Take it off the feed">hide</button></div></div></div>`; };
+  const profName = id => ((data && data.profiles) || []).find(x => x.id === id)?.name || String(id).replace(/-/g, ' ');
+  const paint = () => {
+    const c = data.counts || {};
+    const S2 = [['all', 'All'], ['organic', 'Organic'], ['paid', 'Paid'], ['pasted', 'Links I pasted']];
+    body.innerHTML = `<div class="sf-row"><div class="filters" style="margin:0">${S2.map(([k, n]) => `<button class="${k === st.show ? 'on' : ''}" data-show="${k}">${n} <span class="num">${int(c[k] || 0)}</span></button>`).join('')}</div>
+        <select id="swprof" title="Profile: who the feed was pulled for"><option value="">Every profile</option>${(data.profiles || []).map(p => `<option value="${esc(p.id)}" ${p.id === st.profile ? 'selected' : ''}>${esc(p.name)} · ${int(p.n)}</option>`).join('')}</select>
+        <select id="swsort"><option value="new" ${st.sort === 'new' ? 'selected' : ''}>Newest</option><option value="views" ${st.sort === 'views' ? 'selected' : ''}>Most views</option></select>
+        <span class="grow"></span><input id="swq" placeholder="Search the feed" value="${esc(st.q)}" style="min-width:200px"></div>
+      ${st.show === 'paid' && (data.tracked || []).length ? `<div class="lbl" style="margin-bottom:6px">Paid brands tracked now · from the newest TrendTrack and Kalodata finds</div><div class="sf-shops">${data.tracked.map(t => `<a href="${esc(t.link || '#')}" target="_blank" rel="noopener">${t.picture ? `<img loading="lazy" src="${esc(t.picture)}" alt="">` : '<img alt="">'}<b>${esc(t.shop)}</b><span>${esc(t.from.join(' + '))} · ${t.products} product${t.products > 1 ? 's' : ''}</span></a>`).join('')}</div>` : ''}
+      <div class="ph" style="margin-bottom:12px"><span class="sub">${int(data.total)} posts${data.waiting ? ` · ${int(data.waiting)} more wait in Clear out for your yes` : ''}</span></div>
+      ${rows.length ? `<div class="sf-grid">${rows.map(card).join('')}</div>${rows.length < data.total ? `<div style="text-align:center;margin-top:18px"><button class="btn" id="swmore">Show more</button></div>` : ''}` : `<div class="card note">${st.show === 'pasted' ? 'Nothing pasted yet. Paste a post\'s link above.' : 'Nothing here for this filter.'}</div>`}`;
+    body.querySelectorAll('[data-show]').forEach(b => b.onclick = () => { st.show = b.dataset.show; store.set('st.swshow', st.show); load(); });
+    body.querySelector('#swprof').onchange = e => { st.profile = e.target.value; store.set('st.swprof', st.profile); load(); };
+    body.querySelector('#swsort').onchange = e => { st.sort = e.target.value; store.set('st.swsort', st.sort); load(); };
+    const qi = body.querySelector('#swq'); let qt; qi.oninput = () => { clearTimeout(qt); qt = setTimeout(() => { st.q = qi.value.trim(); load().then(() => { const n = body.querySelector('#swq'); n.focus(); n.setSelectionRange(n.value.length, n.value.length); }); }, 350); };
+    const more = body.querySelector('#swmore'); if (more) more.onclick = async () => { st.off = rows.length; more.disabled = true; const r = await J(url()); rows = rows.concat(r.posts || []); st.off = 0; paint(); };
+    body.querySelectorAll('[data-tear]').forEach(b => b.onclick = async () => { const id = b.closest('[data-id]').dataset.id; b.disabled = true;
+      try { const r = await J('/api/desk/feed/tear', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({id, brand: S.brand})}); toast(r.already && r.label ? 'Already torn down' : 'The teardown is running'); load(); } catch (e) { toast(e.message); b.disabled = false; } });
+    body.querySelectorAll('[data-hide]').forEach(b => b.onclick = async () => { const el = b.closest('[data-id]');
+      try { await J('/api/desk/feed/hide', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({id: el.dataset.id})}); el.remove(); toast('Off the feed'); } catch (e) { toast(e.message); } });
+    clearTimeout(timer);
+    if (rows.some(p => p.job && ['queued', 'downloading', 'tearing'].includes(p.job.state))) timer = setTimeout(() => { if (body.isConnected) load(); }, 15000);
+  };
+  const load = async () => { st.off = 0; let r; try { r = await J(url()); } catch (e) { body.innerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
+    if (!body.isConnected) return; data = r; rows = r.posts || []; paint(); };
+  return load();
+}
+
+async function swTorn(m){
+  const body = m.querySelector('#swbody');
+  let r; try { r = await J('/api/desk/feed/torn?brand=' + encodeURIComponent(S.brand)); } catch (e) { body.innerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
+  if (!body.isConnected) return;
   const all = r.swipes || [];
   const F = [['all', 'All'], ['brief', 'Brief written'], ['organic', 'Organic'], ['own', 'Our own']];
   let q = '';
-  const pick = () => all.filter(s => (swFilter === 'all' || (swFilter === 'brief' && s.brief) || (swFilter === 'organic' && s.lane === 'ORGANIC') || (swFilter === 'own' && s.own)) && (!q || [s.label, s.format, s.product, s.avatar, s.lane].join(' ').toLowerCase().includes(q)));
+  const pick = () => all.filter(s => (swFilter === 'all' || (swFilter === 'brief' && s.brief) || (swFilter === 'organic' && s.lane === 'ORGANIC') || (swFilter === 'own' && s.own)) && (!q || [s.label, s.lane, s.post].join(' ').toLowerCase().includes(q)));
   const draw = () => {
-    const rows = pick();
-    $('#swc').textContent = rows.length + ' of ' + all.length + ' torn down';
-    m.querySelectorAll('.skel, .lib').forEach(x => x.remove());
-    m.insertAdjacentHTML('beforeend', `<div class="lib"><div class="filters">${F.map(([k, n]) => `<button class="${k === swFilter ? 'on' : ''}" data-f="${k}">${n}</button>`).join('')}<input id="swq" placeholder="Search swipes" value="${esc(q)}" style="margin-left:auto;border:1px solid var(--line-2);border-radius:var(--r4);padding:5px 12px;font:12px var(--mono);min-width:200px"></div>
-      ${rows.length ? `<div class="covers">${rows.map(s => `<a class="cover" href="#swipe/${encodeURIComponent(s.label)}"><div class="pic">${s.poster ? `<img loading="lazy" src="${media(s.poster)}" alt="">` : ''}</div><div class="cap"><b>${esc(nice(s.label))}</b><div class="meta">${s.brief ? '<span class="pill p-brief">brief</span>' : ''}${s.lane ? `<span class="pill p-swipe">${esc(s.lane.toLowerCase())}</span>` : ''}<span class="pill p-mute">${s.done}/${s.stages}</span></div></div></a>`).join('')}</div>` : '<div class="card note">No swipes here yet.</div>'}</div>`);
-    m.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { swFilter = b.dataset.f; store.set('st.swf', swFilter); draw(); });
-    const qi = m.querySelector('#swq'); qi.oninput = () => { q = qi.value.toLowerCase(); const pos = qi.selectionStart; draw(); const n = m.querySelector('#swq'); n.focus(); n.setSelectionRange(pos, pos); };
+    const rows = pick(), folded = all.reduce((n, s) => n + s.also.length, 0);
+    body.innerHTML = `<div class="sf-row"><div class="filters" style="margin:0">${F.map(([k, n]) => `<button class="${k === swFilter ? 'on' : ''}" data-f="${k}">${n}</button>`).join('')}</div><span class="grow"></span><span class="sub lbl">${int(rows.length)} swipes${folded ? ` · ${int(folded)} repeat runs folded in` : ''}</span><input id="swq" placeholder="Search swipes" value="${esc(q)}" style="min-width:200px"></div>
+      ${rows.length ? `<div class="covers">${rows.map(s => `<a class="cover" href="#swipe/${encodeURIComponent(s.label)}" title="${esc(s.also.length ? 'Also torn down as: ' + s.also.join(', ') : '')}"><div class="pic">${s.poster ? `<img loading="lazy" src="${media(s.poster)}" alt="">` : ''}</div><div class="cap"><b>${esc(nice(s.label))}</b><div class="meta">${s.brief ? '<span class="pill p-brief">brief</span>' : ''}${s.lane ? `<span class="pill p-swipe">${esc(s.lane.toLowerCase())}</span>` : ''}${s.own ? '<span class="pill p-mute">our own</span>' : ''}<span class="pill p-mute">${s.done}/${s.stages}</span>${s.also.length ? `<span class="pill p-mute">+${s.also.length} repeat</span>` : ''}</div></div></a>`).join('')}</div>` : '<div class="card note">No swipes here yet.</div>'}`;
+    body.querySelectorAll('[data-f]').forEach(b => b.onclick = () => { swFilter = b.dataset.f; store.set('st.swf', swFilter); draw(); });
+    const qi = body.querySelector('#swq'); qi.oninput = () => { q = qi.value.toLowerCase(); const pos = qi.selectionStart; draw(); const n = body.querySelector('#swq'); n.focus(); n.setSelectionRange(pos, pos); };
   };
   draw();
 }
+
+async function swClear(m){
+  const body = m.querySelector('#swbody');
+  let r; try { r = await J('/api/desk/feed/dead?brand=' + encodeURIComponent(S.brand)); } catch (e) { body.innerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
+  if (!body.isConnected) return;
+  const gs = r.groups || [], open = gs.filter(g => !g.cleared);
+  const KIND = {advertiser: 'Paid advertiser', feed: 'Profile feed', posts: 'Posts'};
+  body.innerHTML = `<div class="card note" style="margin-bottom:14px">These look dead: ${open.length} waiting for your yes. They are already off the feed. <b>Yes, clear</b> takes them off for good; nothing is deleted from the files, and <b>Undo</b> brings them back.</div>
+    <div class="sf-dead">${gs.map(g => `<div class="card ${g.cleared ? 'done' : ''}" data-g="${esc(g.id)}"><div><h3><span class="pill ${g.kind === 'advertiser' ? 'p-video' : 'p-swipe'}">${KIND[g.kind] || g.kind}</span>${esc(g.name)}<span class="count num">${int(g.n)} posts</span></h3><div class="why" style="margin-top:6px">${esc(g.why)}</div></div>
+      <div>${g.cleared ? `<span class="pill p-ready">cleared</span> <button class="btn" data-undo>Undo</button>` : `<button class="btn go" data-yes>Yes, clear</button>`}</div>
+      ${(g.sample || []).length ? `<div class="peek">${g.sample.map(p => `<a href="${esc(p.url)}" target="_blank" rel="noopener"><div class="p">${swCover(p) ? `<img loading="lazy" src="${esc(swCover(p))}" alt="" onerror="this.remove()">` : ''}</div>${esc((p.posted || '').slice(0, 10))}${p.views ? ' · ' + swNum(p.views) : ''}</a>`).join('')}</div>` : ''}</div>`).join('') || '<div class="card note">Nothing looks dead.</div>'}</div>`;
+  const post = (path, group) => J('/api/desk/feed/' + path, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({group, brand: S.brand, said: 'yes, on the Studio'})});
+  body.querySelectorAll('[data-yes]').forEach(b => b.onclick = async () => { b.disabled = true; try { const x = await post('clear', b.closest('[data-g]').dataset.g); toast(int(x.n) + ' off the feed'); swClear(m); } catch (e) { toast(e.message); b.disabled = false; } });
+  body.querySelectorAll('[data-undo]').forEach(b => b.onclick = async () => { try { await post('unclear', b.closest('[data-g]').dataset.g); swClear(m); } catch (e) { toast(e.message); } });
+}
+
 async function swipeView(){
   const m = $('#main'), label = S.arg;
   m.innerHTML = `<div class="ph"><a class="btn" href="#production/swipes">← Swipes</a><h1>${esc(nice(label))}</h1><div class="acts"><a class="btn go" href="#production/new/${encodeURIComponent(label)}"><i class="ic" data-i="plus"></i>Make an ad from this</a></div></div><div class="skel">Opening the teardown…</div>`;
