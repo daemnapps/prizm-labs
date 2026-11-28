@@ -98,6 +98,13 @@ main{padding:28px 24px 60px;max-width:1440px;margin:0 auto}
 .hub .ring{width:250px;height:250px;border-radius:50%;display:grid;place-items:center;align-content:center;gap:4px;background:var(--paper);border:1px solid var(--line)}
 .cvctl{position:absolute;right:12px;bottom:12px;display:flex;gap:6px}
 .cvctl button{width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:var(--card,#fff);font:600 16px var(--body);cursor:pointer}
+.mc{position:relative}.loop .chart svg.mcs,.mcs{width:100%;height:auto;display:block}.mcs .ax{font:500 10px var(--mono);fill:var(--ink-3)}
+.mtip{position:absolute;top:8px;min-width:170px;background:var(--card);border:1px solid var(--line-2);border-radius:10px;padding:8px 10px;display:grid;gap:3px;font-size:12.5px;box-shadow:0 8px 24px -10px rgba(23,21,18,.3);pointer-events:none}
+.mtip i{display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--hue);margin-right:6px}.mtip em{font-style:normal;color:var(--ink-3);font-size:11.5px}
+.mc-range{display:flex;gap:6px;margin:6px 0}.mc-range button,.mc-lines button{font:500 12px var(--body);border:1px solid var(--line-2);background:var(--card);border-radius:999px;padding:3px 10px;cursor:pointer;color:var(--ink-2)}
+.mc-range button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}.mc-lines{margin-left:auto;display:flex;gap:6px}.mc-lines button:hover{border-color:var(--coral)}
+.acts2{display:grid;gap:8px}.arow2{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;border-left:4px solid var(--hue)}
+.arow2 b{font:600 14px var(--body);display:block}.arow2 span{color:var(--ink-2);font-size:13px}.arow2 .abtn{display:grid;gap:4px;justify-items:end}
 .loop{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:16px}
 .loop .chart svg{width:100%;height:170px;display:block}
 .loop .key{display:flex;gap:14px;flex-wrap:wrap;font:500 11.5px var(--mono);color:var(--ink-3)}
@@ -478,14 +485,14 @@ function route(){
   const h = decodeURIComponent(location.hash.slice(1) || 'today');
   const i = h.indexOf('/'); const v = i < 0 ? h : h.slice(0, i);
   const alias = {brands:'settings'};
-  S.view = alias[v] || (['portfolio', 'today', 'production', 'ads', 'swipes', 'swipe', 'approve', 'research', 'skills', 'settings', 'knowledge', 'asks', 'live', 'brief', 'pages', 'creators', 'market', 'usage', 'schedule', 'join', 'ledger'].includes(v) ? v : 'today');
+  S.view = alias[v] || (['portfolio', 'today', 'production', 'ads', 'swipes', 'swipe', 'approve', 'research', 'skills', 'settings', 'knowledge', 'asks', 'live', 'brief', 'pages', 'creators', 'market', 'usage', 'schedule', 'join', 'ledger', 'actions'].includes(v) ? v : 'today');
   S.arg = i < 0 ? null : h.slice(i + 1);
   if (S.view === 'ads' && (!S.arg || S.arg === 'kill')) S.view = 'live';
-  const TAB = {ads:'production', swipes:'production', swipe:'production', live:'ads-top', approve:'ads-top', brief:'ads-top', pages:'ads-top', ledger:'ads-top', skills:'settings', usage:'settings', schedule:'settings', market:'research'};
+  const TAB = {ads:'production', swipes:'production', swipe:'production', live:'ads-top', approve:'ads-top', brief:'ads-top', pages:'ads-top', ledger:'ads-top', actions:'ads-top', skills:'settings', usage:'settings', schedule:'settings', market:'research'};
   const tab = TAB[S.view] || S.view;
   document.querySelectorAll('[data-v]').forEach(a => a.classList.toggle('on', a.dataset.v === tab));
   $('#brand').value = S.view === 'portfolio' ? '*' : S.brand;
-  ({portfolio, today, production, ads:() => production('video'), swipes:() => production('swipes'), swipe:swipeView, approve, research, skills:skillsView, settings:brandSetup, knowledge:knowledgeView, asks:asksView, live:adsLive, brief:briefView, pages:pagesView, creators:creatorsView, market:marketView, usage:usageView, schedule:scheduleView, join:joinView, ledger:ledgerView})[S.view]();
+  ({portfolio, today, production, ads:() => production('video'), swipes:() => production('swipes'), swipe:swipeView, approve, research, skills:skillsView, settings:brandSetup, knowledge:knowledgeView, asks:asksView, live:adsLive, brief:briefView, pages:pagesView, creators:creatorsView, market:marketView, usage:usageView, schedule:scheduleView, join:joinView, ledger:ledgerView, actions:actionsView})[S.view]();
   approveBadge();
 }
 const brandMenu = () => ((S.menu && S.menu.brands) || []).find(b => b.id === S.brand);
@@ -504,6 +511,43 @@ document.addEventListener('submit', async e => { if (e.target.id !== 'linesF') r
   const body = {brand: S.brand, hold_to: n('hold_to'), kpi_cpa: n('kpi_cpa'), top_share: v.top_share === '' ? null : n('top_share') / 100, mer: n('mer'), up: v.up === '' ? null : n('up') / 100, down: v.down === '' ? null : n('down') / 100, ceiling: n('ceiling')};
   if (v.b0 !== '' && v.b1 !== '') body.bands = [n('b0'), n('b1')];
   try { await J('/api/desk/targets', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)}); toast('Lines saved'); route(); } catch (err) { toast(err.message); } });
+/* The money chart: hover anywhere for that day's numbers (Stripe-style), range 7/14/30 days or today by the hour */
+function moneyChart(range){
+  const L = S.loopData, box = $('#mchart'); if (!L || !box) return;
+  const t = L.targets || {}, today = range === 'today';
+  const rows = today ? (L.hours || []).map(h => ({d: h.hour, revenue: h.sales, spend: h.spend, contribution: null, mer: h.mer}))
+    : (L.line || []).slice(-(+range || 30));
+  if (rows.length < 2) { box.innerHTML = '<div class="empty">Not enough days on file yet</div>'; return; }
+  const W = 640, H = 190, P = 8, M = 80, n = rows.length;
+  const mx = Math.max(1, ...rows.map(r => Math.max(r.revenue || 0, r.spend || 0, r.contribution || 0)));
+  const mm = Math.max(t.hold_to || 3, t.mer || 2.5, ...rows.map(r => r.mer || 0)) * 1.12;
+  const x = i => P + i * (W - 2 * P) / (n - 1), y = v => H - P - (v || 0) / mx * (H - 2 * P), ym = v => H + 14 + M - 6 - (v || 0) / mm * (M - 12);
+  const path = (k, f) => rows.map((r, i) => r[k] == null ? '' : (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + f(r[k]).toFixed(1)).join('');
+  const grid = [0.25, 0.5, 0.75, 1].map(g => `<line x1="${P}" x2="${W - P}" y1="${y(mx * g)}" y2="${y(mx * g)}" stroke="var(--line)" /><text x="${W - P}" y="${y(mx * g) - 3}" text-anchor="end" class="ax">${usd(mx * g)}</text>`).join('');
+  box.innerHTML = `<svg viewBox="0 0 ${W} ${H + 14 + M}" class="mcs">${grid}
+    <path d="${path('revenue', y)}" fill="none" stroke="var(--green)" stroke-width="2.2"/>
+    ${today ? '' : `<path d="${path('contribution', y)}" fill="none" stroke="var(--cyan)" stroke-width="2"/>`}
+    <path d="${path('spend', y)}" fill="none" stroke="var(--indigo)" stroke-width="2.2"/>
+    <line x1="${P}" x2="${W - P}" y1="${H + 6}" y2="${H + 6}" stroke="var(--line-2)"/>
+    ${t.mer ? `<line x1="${P}" x2="${W - P}" y1="${ym(t.mer)}" y2="${ym(t.mer)}" stroke="var(--coral)" stroke-dasharray="5 4"/><text x="${P}" y="${ym(t.mer) - 3}" class="ax">floor ${t.mer}</text>` : ''}
+    ${t.hold_to ? `<line x1="${P}" x2="${W - P}" y1="${ym(t.hold_to)}" y2="${ym(t.hold_to)}" stroke="var(--green)" stroke-dasharray="2 4"/><text x="${P}" y="${ym(t.hold_to) - 3}" class="ax">hold to ${t.hold_to}</text>` : ''}
+    <path d="${path('mer', ym)}" fill="none" stroke="var(--violet)" stroke-width="2.2"/>
+    <g class="hov" style="display:none"><line class="hl" y1="0" y2="${H + 14 + M}" stroke="var(--ink-3)" stroke-dasharray="3 3"/>
+      <circle class="d1" r="4" fill="var(--green)"/><circle class="d2" r="4" fill="var(--indigo)"/><circle class="d3" r="4" fill="var(--violet)"/></g>
+    <rect class="hit" x="0" y="0" width="${W}" height="${H + 14 + M}" fill="transparent"/></svg><div class="mtip" hidden></div>`;
+  const svg = box.querySelector('svg'), hov = box.querySelector('.hov'), tip = box.querySelector('.mtip');
+  const show = ev => { const r = svg.getBoundingClientRect(), px = (ev.clientX - r.left) / r.width * W, i = Math.max(0, Math.min(n - 1, Math.round((px - P) / (W - 2 * P) * (n - 1)))), d = rows[i];
+    hov.style.display = ''; hov.querySelector('.hl').setAttribute('x1', x(i)); hov.querySelector('.hl').setAttribute('x2', x(i));
+    [['d1', y(d.revenue)], ['d2', y(d.spend)], ['d3', ym(d.mer)]].forEach(([c, cy]) => { const e = hov.querySelector('.' + c); e.setAttribute('cx', x(i)); e.setAttribute('cy', cy); });
+    const st = d.mer == null ? '' : d.mer < (t.mer || 0) ? 'under the floor' : d.mer <= (t.hold_to || 99) ? 'hold' : 'over: room to raise';
+    tip.hidden = false; tip.innerHTML = `<b>${esc(today ? d.d : dayLabel(d.d))}</b><span><i style="--hue:var(--green)"></i>Sales <b>${usd(d.revenue)}</b></span><span><i style="--hue:var(--indigo)"></i>Spend <b>${usd(d.spend)}</b></span>${d.contribution != null ? `<span><i style="--hue:var(--cyan)"></i>Margin <b>${usd(d.contribution)}</b></span>` : ''}<span><i style="--hue:var(--violet)"></i>MER <b>${d.mer ?? '—'}</b> <em>${st}</em></span>`;
+    const left = x(i) / W * r.width; tip.style.left = Math.min(r.width - 190, Math.max(0, left + 12)) + 'px'; };
+  box.querySelector('.hit').onmousemove = show; box.querySelector('.hit').onmouseleave = () => { hov.style.display = 'none'; tip.hidden = true; };
+}
+document.addEventListener('click', e => {
+  const r = e.target.closest('[data-mr]'); if (r) { r.parentNode.querySelectorAll('button').forEach(b => b.classList.toggle('on', b === r)); moneyChart(r.dataset.mr); return; }
+  if (e.target.closest('[data-editlines]')) { const d = document.querySelector('.lines'); if (d) { d.open = true; d.scrollIntoView({block: 'center', behavior: 'smooth'}); } }
+});
 function loopHtml(L){
   if (!L) return '';
   const line = L.line || [], t = L.targets || {};
@@ -550,8 +594,11 @@ function loopHtml(L){
     const mm = Math.max(t.hold_to || 3, ...hrs.map(h => h.mer || 0)) * 1.15, ym = v => 88 - (v || 0) / mm * 84;
     chart = `<span class="lbl">Today, to date, hour by hour</span><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="width:100%;height:150px"><path d="${pth('sales')}" fill="none" stroke="var(--green)" stroke-width="2" vector-effect="non-scaling-stroke"/><path d="${pth('spend')}" fill="none" stroke="var(--indigo)" stroke-width="2" vector-effect="non-scaling-stroke"/>${hrs.map((h, i) => `<rect x="${(x(i) - 8).toFixed(1)}" y="0" width="16" height="${H}" fill="transparent"><title>${esc(h.hour)} · sales ${usd(h.sales)} · spend ${usd(h.spend)} · MER ${h.mer ?? '—'}</title></rect>`).join('')}</svg>
       <svg viewBox="0 0 ${W} 90" preserveAspectRatio="none" style="width:100%;height:70px">${t.mer ? `<line x1="0" x2="${W}" y1="${ym(t.mer).toFixed(1)}" y2="${ym(t.mer).toFixed(1)}" stroke="var(--coral)" stroke-dasharray="5 4" vector-effect="non-scaling-stroke"/>` : ''}<line x1="0" x2="${W}" y1="${ym(t.hold_to || 3).toFixed(1)}" y2="${ym(t.hold_to || 3).toFixed(1)}" stroke="var(--green)" stroke-dasharray="2 4" vector-effect="non-scaling-stroke"/><path d="${hrs.map((h, i) => (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + ym(h.mer).toFixed(1)).join('')}" fill="none" stroke="var(--violet)" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>` + `<span class="lbl" style="margin-top:8px">Last 30 days</span>` + chart; }
-  return `<div class="loop"><div class="card chart"><h3>${ib('chart', 'green')}Spend, sales, MER · floor ${t.mer || 'not set'}${t.hold_to ? ' · hold to ' + t.hold_to : ''}</h3>${chart}
-      <div class="key"><span style="--hue:var(--green)"><i></i>Sales</span><span style="--hue:var(--indigo)"><i></i>Spend</span><span style="--hue:var(--cyan)"><i></i>Margin</span><span style="--hue:var(--violet)"><i></i>MER</span><span style="--hue:var(--coral)"><i></i>Line ${t.mer || ''}</span></div></div>${prop}</div>
+  S.loopData = L;
+  return `<div class="loop"><div class="card chart"><h3>${ib('chart', 'green')}Spend, sales, MER<span class="mc-lines"><button data-editlines>Floor <b>${t.mer || '—'}</b> ✎</button><button data-editlines>Hold to <b>${t.hold_to || '—'}</b> ✎</button></span></h3>
+      <div class="mc-range">${hrs.length > 1 ? '<button data-mr="today">Today by hour</button>' : ''}<button data-mr="7">7 days</button><button data-mr="14">14 days</button><button data-mr="30" class="on">30 days</button></div>
+      <div class="mc" id="mchart"></div>
+      <div class="key"><span style="--hue:var(--green)"><i></i>Sales</span><span style="--hue:var(--indigo)"><i></i>Spend</span><span style="--hue:var(--cyan)"><i></i>Margin</span><span style="--hue:var(--violet)"><i></i>MER</span><span style="--hue:var(--coral)"><i></i>Floor</span><span style="--hue:var(--green)"><i></i>Hold to</span></div></div>${prop}</div>
 `;
 }
 /* ================= LEDGER: what the brand spent, earned and kept, and what its content cost ================= */
@@ -620,6 +667,27 @@ async function actionLog(){
       tr.insertAdjacentHTML('afterend', `<tr class="scr"><td></td><td colspan="6"><table class="t" style="background:var(--paper)"><tr><th>Days after</th><th>Share then</th>${reads.map(k => `<th>${READW[k]}</th>`).join('')}<th>CPA then</th><th>Brand MER before → after</th></tr>
         ${r.windows.map(w => w.reached ? `<tr ${w.days === win ? 'style="font-weight:600"' : ''}><td>${w.days}${w.new ? ' <span class="lbl">new</span>' : ''}</td><td>${w.share_after != null ? w.share_after + '%' : '—'}</td>${reads.map(k => `<td>${cell(w, k)}</td>`).join('')}<td>${w.cpa_after != null ? usd(w.cpa_after) : '—'}</td><td>${w.mer_before ?? '—'} → ${w.mer_after ?? '—'}</td></tr>` : `<tr><td>${w.days}</td><td colspan="${reads.length + 3}" class="lbl">not reached yet</td></tr>`).join('')}</table></td></tr>`); }
     catch (e) { toast(e.message); } b.disabled = false; b.textContent = 'Its return'; });
+}
+/* ================= ACTIONS: every action to take today, one place, with its numbers and its button ================= */
+async function actionsView(){
+  const m = $('#main');
+  m.innerHTML = `<div class="ph"><h1>Ads</h1><span class="sub">actions to take · from the morning read · proposals, your click</span></div>${adsTabs('actions')}<div class="skel">Reading the numbers…</div>`;
+  let d; try { d = await J('/api/desk/today?brand=' + encodeURIComponent(S.brand)); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
+  if (S.view !== 'actions') return;
+  const waiting = await approveCount();
+  const p = (d.loop || {}).proposal, pp = (d.proposals || {}).proposals || [];
+  const KIND = {variations: ['Make variations', 'p-stop'], matrix: ['Test the next column', 'p-act'], promo: ['Promo', 'p-brief'], 're-make': ['Re-make an old winner', 'p-swipe']};
+  const act = (hue, ic, title, why, btn) => `<div class="card arow2" style="--hue:var(--${hue})">${ib(ic, hue)}<div><b>${title}</b><span>${why}</span></div><div class="abtn">${btn}</div></div>`;
+  const rows = [];
+  if (p) rows.push(['Spend', act(p.dir === 'raise' ? 'green' : p.dir === 'hold' ? 'indigo' : 'amber', 'target', p.dir === 'hold' ? `Hold spend at ${usd(p.now)} a day` : `${p.dir === 'raise' ? 'Raise' : 'Lower'} spend ${usd(p.now)} → ${usd(p.to)} a day`,
+    `MER ${p.mer} (${esc(p.read.from)}) · floor ${p.line} · hold to ${p.hold_to} · ${esc(p.base || '')}`, `<a class="btn" href="#ads">See the chart</a><span class="lbl">proposal: carried out on your go</span>`)]);
+  for (const a of d.off || []) rows.push(['Turn off', act('coral', 'alert', `Turn off ${a.brief ? 'brief ' + esc(a.brief) : esc(a.name.slice(0, 40))}`, esc(a.why || ''), `<a class="btn" href="#ads/kill" style="border-color:var(--coral);color:var(--coral)">Open the kill list</a>`)]);
+  if (d.low_roas) rows.push(['Turn off', act('coral', 'alert', `${int(d.low_roas)} ads under 0.5 ROAS this week`, 'spent $50+ in 7 days and returned under half of it', `<a class="btn" href="#ads/kill">Kill list</a>`)]);
+  if (waiting) rows.push(['Launch', act('amber', 'send', `Review ${waiting} ${waiting === 1 ? 'ad' : 'ads'} waiting for approval`, 'made, checked and waiting for your yes', `<a class="btn wait" href="#approve">Review</a>`)]);
+  for (const x of pp) { const [w, c] = KIND[x.kind] || [x.kind, 'p-act']; rows.push(['Make', act('green', 'loop', `<span class="pill ${c}">${esc(w)}</span> ${esc(x.title)}`, esc(x.why), x.start ? `<button class="btn" data-ask="flywheel" data-input="${esc(x.start.input)}">Start</button><span class="lbl">dry run</span>` : '')]); }
+  const groups = ['Spend', 'Turn off', 'Launch', 'Make'];
+  m.querySelector('.skel').outerHTML = rows.length ? groups.map(g => { const r = rows.filter(x => x[0] === g); return r.length ? `<div class="g" style="margin:16px 0 8px"><span class="pill p-mute">${g}</span><span class="lbl">${r.length}</span></div><div class="acts2">${r.map(x => x[1]).join('')}</div>` : ''; }).join('') : '<div class="card note">Nothing to act on this morning.</div>';
+  paintIcons(m);
 }
 async function today(){
   const m = $('#main');
@@ -707,7 +775,7 @@ document.addEventListener('click', async e => { const hb = e.target.closest('[da
 document.addEventListener('click', e => { if (e.target.closest('[data-hide]')) return; const t = e.target.closest('[data-ad]'); if (t) location.hash = 'ads/' + encodeURIComponent(t.dataset.ad); });
 const host = () => $('#sub') || $('#main');
 const tabBar = (items, cur) => `<div class="lanes">${items.map(([id, name, ic, hue, href, badge]) => `<a href="${href}" class="${id === cur ? 'on' : ''}" style="--hue:var(--${hue})"><i class="ic">${icon(ic)}</i>${name}${badge ? `<b class="nb">${badge}</b>` : ''}</a>`).join('')}</div>`;
-const adsTabs = cur => tabBar([['approve', 'To approve', 'send', 'amber', '#approve', S.waiting || ''], ['live', 'Live', 'target', 'indigo', '#ads'], ['pages', 'Pages', 'link', 'green', '#pages'], ['ledger', 'Ledger', 'layers', 'magenta', '#ledger']], cur);
+const adsTabs = cur => tabBar([['approve', 'To approve', 'send', 'amber', '#approve', S.waiting || ''], ['live', 'Live', 'target', 'indigo', '#ads'], ['pages', 'Pages', 'link', 'green', '#pages'], ['actions', 'Actions', 'zap', 'coral', '#actions'], ['ledger', 'Ledger', 'layers', 'magenta', '#ledger']], cur);
 const resTabs = cur => tabBar([['brand', 'This brand', 'search', 'violet', '#research'], ['market', 'Market', 'target', 'green', '#market']], cur);
 const setTabs = cur => tabBar([['brand', 'Brand setup', 'shield', 'indigo', '#settings'], ['skills', 'Skills', 'sparkles', 'violet', '#skills'], ['usage', 'Usage', 'zap', 'amber', '#usage'], ['schedule', 'Jobs', 'calendar', 'indigo', '#schedule']], cur);
 const blabel = b => (S.labels && S.labels[b] && S.labels[b] !== b) ? S.labels[b] : String(b).replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase());
@@ -1429,7 +1497,7 @@ let adsSort = store.get('st.adsort') || 'spend7';
 async function adsLive(){
   const m = $('#main');
   m.innerHTML = `<div class="ph"><h1>Ads</h1><span class="sub" id="adsub">live numbers by brief · from the warehouse, never Meta</span></div>${adsTabs('live')}<div id="adloop"></div><div class="skel">Loading…</div>`;
-  J('/api/desk/today?brand=' + encodeURIComponent(S.brand)).then(t => { const el = $('#adloop'); if (el && S.view === 'live') { el.innerHTML = loopHtml(t.loop); paintIcons(el); } }).catch(() => {});
+  J('/api/desk/today?brand=' + encodeURIComponent(S.brand)).then(t => { const el = $('#adloop'); if (el && S.view === 'live') { el.innerHTML = loopHtml(t.loop); paintIcons(el); moneyChart((t.loop || {}).hours && t.loop.hours.length > 1 ? '30' : '30'); } }).catch(() => {});
   let d; try { d = await J('/api/desk/ads?brand=' + encodeURIComponent(S.brand)); } catch (e) { m.querySelector('.skel').outerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
   if (S.view !== 'live') return;
   if (!d.ads.length) { m.querySelector('.skel').outerHTML = '<div class="card note">No live ad numbers on file for this brand yet.</div>'; return; }
