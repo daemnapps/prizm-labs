@@ -27,6 +27,23 @@ PICK = 8                  # enough for the control and five hooks, all different
 STOP = set("the a an and or of to in on at my i me is was it that this with for her she you".split())
 
 
+def _avatar_folder(brand, name):
+    """The avatar's folder as the brand keeps it, from a profile id, a new name or an old name: through naming's
+    people.folders, the one door to a person (components/profiles). Without the door the name stands as given."""
+    if not name:
+        return name
+    try:
+        import importlib.util as _u
+        from pathlib import Path as _P
+        f = next(d / "naming" / "people.py" for d in _P(__file__).resolve().parents if d.name == "components")
+        spec = _u.spec_from_file_location("naming_people", f)
+        m = _u.module_from_spec(spec)
+        spec.loader.exec_module(m)
+        return m.folders(brand, name)[0] or name
+    except Exception:                                  # noqa: BLE001
+        return name
+
+
 def _home(brand, root=None):
     base = Path(root) if root else E.WORKSPACE
     return Path(base) / "runs" / "language-layer" / brand / "experience"
@@ -35,7 +52,7 @@ def _home(brand, root=None):
 def load(brand, avatar, root=None):
     """The index for one avatar, a filed brand copy first. [] when there is none."""
     base = Path(root) if root else E.WORKSPACE
-    for f in (base / "brands" / brand / "core-avatars" / avatar / "language" / "experiences.json",
+    for f in (base / "brands" / brand / "core-avatars" / _avatar_folder(brand, avatar) / "language" / "experiences.json",
               _home(brand, root) / f"{avatar}.json"):
         if f.is_file():
             try:

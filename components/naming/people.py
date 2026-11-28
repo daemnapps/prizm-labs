@@ -156,12 +156,29 @@ def canon(brand, avatar, sub=""):
         a, s, _ = folders(brand, avatar)
         return a, s
     b = aliases()["brands"].get(brand) or {"avatars": {}, "subs": {}}
+    was = b.get("was") or {}                                            # folders renamed (tidy_folders.py): an old folder name still reads
+    avatar = (was.get("avatars") or {}).get(avatar, avatar)
     new = b["avatars"].get(avatar, avatar)
+    if sub:
+        ws = (was.get("subs") or {}).get(new) or {}
+        sub = ws.get(re.sub(r"^sub-\d+-", "", sub), sub)
+    sub = ((b.get("renamed") or {}).get(new) or {}).get(sub, sub)      # a new name later replaced keeps working
     back = {v: k for k, v in b["avatars"].items()}
     subs = {v: k for k, v in (b["subs"].get(new) or {}).items()}
     if sub not in subs:                                       # the aliases file may list a sub-avatar under another avatar than its folder (PEOPLE.md, open call 1)
         subs = {v: k for m in b["subs"].values() for k, v in m.items()}
     return back.get(avatar, avatar), subs.get(sub, sub)
+
+
+def older(brand, avatar, sub=""):
+    """The older names a folder was known by (tidy_folders.py's `was`), newest first: what text written before the rename
+    (a culture map's headings, a slot's cited row ids) still calls it. [] when the folders were never renamed."""
+    b = aliases()["brands"].get(brand) or {}
+    was = b.get("was") or {}
+    a, s = canon(brand, avatar, sub)
+    if sub:
+        return [o for o, n in ((was.get("subs") or {}).get(a) or {}).items() if n == s]
+    return [o for o, n in (was.get("avatars") or {}).items() if n == a]
 
 
 def new_names(brand, avatar, sub=""):
@@ -220,7 +237,9 @@ def profile(brand, avatar, sub="", demo=""):
     named = not check("avatar", na) and (not ns or not check("sub", ns))
     parts = [x for x in (na, ns, d) if x]
     label = " \u00b7 ".join(x for x in (_title(na), sub_label(ns), demo_label(d)) if x)
-    return {"id": "_".join(parts), "label": label, "avatar": na, "sub": ns, "demographic": d, "old": {"avatar": oa, "sub": os_}, "named": named}
+    old_a = (older(brand, oa) or [oa])[0]                              # after a rename, `old` is still the name it had before
+    old_s = ((older(brand, oa, os_) or [os_])[0]) if os_ else os_
+    return {"id": "_".join(parts), "label": label, "avatar": na, "sub": ns, "demographic": d, "old": {"avatar": old_a, "sub": old_s}, "named": named}
 
 
 def parse(name):

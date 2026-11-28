@@ -79,7 +79,10 @@ def main():
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--quarantine-unreceipted", action="store_true",
                     help="mark this feed's rows that carry no receipt; no pull")
-    args = ap.parse_args()
+    import importlib.util as _u, pathlib as _pl
+    _s = _u.spec_from_file_location("profile_arg", next(q for q in _pl.Path(__file__).resolve().parents if q.name == "components") / "naming" / "profile_arg.py")
+    _PA = _u.module_from_spec(_s); _s.loader.exec_module(_PA)   # --profile <avatar>[_<sub>][_<demographic>] (naming/PEOPLE.md)
+    args = ap.parse_args(_PA.expand(None, has=('avatar',)))
     root = HERE / "records/avatar-feeds" / args.avatar
     items_f, obs_f, log_f = root / "items.json", root / "observations.jsonl", root / "sweeps.jsonl"
     if args.quarantine_unreceipted:

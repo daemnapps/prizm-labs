@@ -13,7 +13,7 @@
     python3 profiles.py show   --brand <b> --profile <name>
     python3 profiles.py gate   --brand <b> --profile <name>     evidence and distinctness (CREATE.md gates 3, 4)
     python3 profiles.py init   --brand <b>                      the new-brand checklist: what stands between each profile and ads
-    python3 profiles.py doors  [--save]
+    python3 profiles.py doors  [--save] [--strict]               --strict: every line building a person's path by hand
 
 Reads only. It writes nothing in brands/ and spends nothing. A profile is BUILT by creative-strategist's who.py (the
 card and the slots); this file joins what those wrote and says whether it meets the standard. Names: naming/PEOPLE.md.
@@ -246,7 +246,13 @@ def init(brand):
 
 
 _OLD = re.compile(r"add_argument\(\s*['\"]--(avatar|sub|sub-avatar)['\"]")
-_DOOR = ("profile_arg", "people.folders", "N.folders", "profile_args", "import profiles", "profiles.load")
+_DOOR = ("profile_arg", "people.folders", "N.folders", "profile_args", "import profiles", "profiles.load", "avatar_folder(")
+# a path to ONE person's folder built from a name: "core-avatars" / avatar, f".../core-avatars/{avatar}", brand_path(.., "core-avatars", avatar).
+# Brand-wide files (language index, objection bank, avatars.json, casting) and globs over every avatar are not a person.
+_PERSON_PATH = re.compile(r"""core-avatars["']\s*\)?\s*/\s*(?!["'(])[A-Za-z_]|core-avatars/\{|["']core-avatars["']\s*,\s*(?!["'])[A-Za-z_]""")
+# flags spelled like a person but meaning something else: swipe-organic's --sub is a culture-dig key (naming/PEOPLE.md, "Not moved")
+_NOT_PEOPLE = {"components/swipe-organic/affinity.py", "components/swipe-organic/recomment.py",
+               "components/language-layer/language_layer/engine.py"}      # its own --profile is a stage-profile file, so the person flag cannot be --profile
 
 
 def pick(brand, avatar, product="", seed=""):
@@ -280,6 +286,21 @@ def pick(brand, avatar, product="", seed=""):
     return {"id": prof["id"], "avatar": a, "sub": s, "demographic": prof.get("demographic") or "", "label": prof.get("label")}
 
 
+def strict(root=None):
+    """Every LINE that builds a person's folder path from a name by hand, door or no door in the same file: what must be
+    gone before a brand's folders are renamed (naming/tidy_folders.py)."""
+    root = Path(root or ROOT)
+    out = []
+    for f in sorted((root / "components").rglob("*.py")):
+        rel = str(f.relative_to(root))
+        if "/tests/" in rel or f.name.startswith("test_") or "components/naming" in rel or "components/profiles" in rel:
+            continue
+        for i, line in enumerate(f.read_text(errors="ignore").splitlines(), 1):
+            if _PERSON_PATH.search(line) and "avatar_folder(" not in line:
+                out.append({"file": "%s:%d" % (rel, i), "why": line.strip()[:100]})
+    return out
+
+
 def doors(root=None):
     """Tools that take a person by the old avatar/sub flags, or read a brand's avatar folders, without going through the door."""
     root = Path(root or ROOT)
@@ -294,10 +315,12 @@ def doors(root=None):
             except OSError:
                 continue
             door = any(x in s for x in _DOOR)
+            if rel in _NOT_PEOPLE:
+                continue
             if _OLD.search(s) and not door:
                 off.append({"file": rel, "why": "takes --avatar/--sub without the profile door"})
-            elif "core-avatars" in s and not door and "components/profiles" not in rel and "components/naming" not in rel:
-                off.append({"file": rel, "why": "reads core-avatars folders directly"})
+            elif not door and "components/profiles" not in rel and "components/naming" not in rel and _PERSON_PATH.search(s):
+                off.append({"file": rel, "why": "builds a person's folder path from a name, around the door"})
     return off
 
 
@@ -310,9 +333,10 @@ def main(argv=None):
     ap.add_argument("--brand")
     ap.add_argument("--profile")
     ap.add_argument("--save", action="store_true")
+    ap.add_argument("--strict", action="store_true", help="doors: every line that builds a person's path by hand")
     a = ap.parse_args(argv)
     if a.cmd == "doors":
-        off = doors()
+        off = strict() if a.strict else doors()
         if a.save:
             d = ROOT / "runs" / "profiles" / "_system"
             d.mkdir(parents=True, exist_ok=True)

@@ -105,9 +105,28 @@ def slots_file(brand, avatar, sub=""):
 def slots(brand, avatar, sub=""):
     f = slots_file(brand, avatar, sub)
     try:
-        return json.loads(f.read_text())
+        d = json.loads(f.read_text())
     except (OSError, ValueError):
         return {}
+    return _row_ids_now(brand, d)
+
+
+def _row_ids_now(brand, d):
+    """A slot written before the folders were renamed cites another avatar's line as `<old avatar>:<id>`; the bank now
+    keys it by the avatar's folder. Every cited id is read as the bank keys it."""
+    def fix(i):
+        if not isinstance(i, str) or ":" not in i:
+            return i
+        a, _, rest = i.partition(":")
+        return "%s:%s" % (N.canon(brand, a)[0], rest)
+
+    def walk(x):
+        if isinstance(x, dict):
+            return {k: ([fix(i) for i in v] if k == "rows" and isinstance(v, list) else walk(v)) for k, v in x.items()}
+        if isinstance(x, list):
+            return [walk(v) for v in x]
+        return x
+    return walk(d)
 
 
 def datasets(brand, avatar):
@@ -213,7 +232,9 @@ def objections(brand, avatar):
     if not t:
         return ""
     t = re.sub(r"\A---\n.*?\n---\n", "", t, flags=re.S)
-    names = [avatar, avatar.replace("-", " ")]
+    known = lambda a: [a] + N.older(brand, a)                    # the bank may head a part with a name the folder had before
+    names = [x for a in known(avatar) for x in (a, a.replace("-", " "))]
+    others = [x for o in avatars(brand) if o != avatar for a in known(o) for x in (a, a.replace("-", " "))]
     parts = re.split(r"^(?=#{1,2} )", t, flags=re.M)
     hit = [k for k, p in enumerate(parts) if any(n in p.split("\n", 1)[0].lower() for n in names)]
     if hit:
@@ -221,7 +242,7 @@ def objections(brand, avatar):
         for k in hit:
             out.append(parts[k])
             for p in parts[k + 1:]:
-                if any(a in p.split("\n", 1)[0].lower() or a.replace("-", " ") in p.split("\n", 1)[0].lower() for a in avatars(brand) if a != avatar):
+                if any(a in p.split("\n", 1)[0].lower() for a in others):
                     break
                 out.append(p)
         t = "".join(out)
@@ -253,8 +274,13 @@ def culture(brand, avatar, sub="", demographic=""):
     t = S.text_of(avatar_dir(brand, avatar) / "culture-map.md")
     if not t:
         return ""
-    names = {re.sub(r"[^a-z]+", " ", x.lower()).strip() for x in subs(brand, avatar)}
-    mine = re.sub(r"[^a-z]+", " ", (sub or "").lower()).strip()
+    def as_written(x):                     # a map written before the folders were renamed heads a part with the older name
+        for o in N.older(brand, avatar, x) if x else []:
+            if o in t:
+                return o
+        return x
+    names = {re.sub(r"[^a-z]+", " ", as_written(x).lower()).strip() for x in subs(brand, avatar)}
+    mine = re.sub(r"[^a-z]+", " ", as_written(sub or "").lower()).strip()
     # a demographic's words are matched, never its age band's digits
     demo = {w for w in re.findall(r"[a-z]{4,}", (demographic or "").lower())} - {"male", "female"}
     demo |= {a for w in demo for a in SAME.get(w, ())}
@@ -522,7 +548,7 @@ def where(brand, avatar):
                 if p is None:
                     m = re.match(r"language_%s_(.+?)_((?:customer|lead|churned)_.+)$" % re.escape(brand), i)
                     i = "%s:%s" % m.groups() if m else i
-                out[i.replace(pre, "")] = str(f.relative_to(S.root()))
+                out[re.sub(r"^language_%s_[^_]+_" % re.escape(brand), "", i) if p else i] = str(f.relative_to(S.root()))
         except (OSError, ValueError, AttributeError):
             continue
     return out
@@ -814,7 +840,7 @@ def catalog(brand):
                 profile = json.loads(raw)
                 if not isinstance(profile, dict) or not profile.get("name") or not profile.get("desire"):
                     raise ValueError("profile needs a name and desire")
-                if profile.get("avatar") != avatar or profile.get("sub") != sub:
+                if N.canon(brand, profile.get("avatar") or "", profile.get("sub") or "") != (avatar, sub):     # either spelling, one home
                     raise ValueError("profile avatar/sub do not match its home")
             except (OSError, ValueError) as e:
                 raise SystemExit("cannot read strategist profile %s: %s" % (source.relative_to(S.root()), e))

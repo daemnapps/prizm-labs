@@ -59,6 +59,23 @@ PII_HINTS = ("ceo", "ph.d", "@", "[phone]", "[address]", "[email]", "order [numb
 SIGNED = re.compile(r"(\n\s*[A-Z][a-z]+ [A-Z][a-z]+\s*$)|(\b[Mm]y (?:[Ss]on|[Dd]aughter|[Ww]ife|[Hh]usband|[Bb]rother|[Ss]ister|[Cc]ousin|[Ff]riend) [A-Z][a-z]+)")
 
 
+def _avatar_folder(brand, name):
+    """The avatar's folder as the brand keeps it, from a profile id, a new name or an old name: through naming's
+    people.folders, the one door to a person (components/profiles). Without the door the name stands as given."""
+    if not name:
+        return name
+    try:
+        import importlib.util as _u
+        from pathlib import Path as _P
+        f = next(d / "naming" / "people.py" for d in _P(__file__).resolve().parents if d.name == "components")
+        spec = _u.spec_from_file_location("naming_people", f)
+        m = _u.module_from_spec(spec)
+        spec.loader.exec_module(m)
+        return m.folders(brand, name)[0] or name
+    except Exception:                                  # noqa: BLE001
+        return name
+
+
 def pii(text):
     t = (text or "").lower()
     return any(h in t for h in PII_HINTS) or bool(SIGNED.search(text or ""))
@@ -366,7 +383,7 @@ def main(argv=None):
     (out / "queries.md").write_text("\n".join(L) + "\n")
 
     # the used-lane record, as a proposal
-    target = f"brands/{brand}/core-avatars/{avatar}/language/used/feedback-forms_{brand}_2026-09-29.json"
+    target = f"brands/{brand}/core-avatars/{_avatar_folder(brand, avatar)}/language/used/feedback-forms_{brand}_2026-09-29.json"
     uniq, seen = [], set()
     for u in used:
         k = (u["row_id"], u["where"])

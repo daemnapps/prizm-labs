@@ -61,7 +61,10 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--avatar", required=True)
     ap.add_argument("--dry-run", action="store_true")
-    a = ap.parse_args()
+    import importlib.util as _u, pathlib as _pl
+    _s = _u.spec_from_file_location("profile_arg", next(q for q in _pl.Path(__file__).resolve().parents if q.name == "components") / "naming" / "profile_arg.py")
+    _PA = _u.module_from_spec(_s); _s.loader.exec_module(_PA)   # --profile <avatar>[_<sub>][_<demographic>] (naming/PEOPLE.md)
+    a = ap.parse_args(_PA.expand(None, has=('avatar',)))
     root = D.FEEDS / a.avatar
     S = json.loads((root / "sources.json").read_text())
     cat = json.loads((root / "items.json").read_text())

@@ -31,6 +31,7 @@ A sub-avatar that fits two kinds is two sub-avatars. One that fits none is not a
 4. A name is unique inside its brand (avatar) and its avatar (sub-avatar). The same word may be used by two brands.
 5. Nothing live is renamed. Old names stay as aliases (`people-aliases.json`) and keep working in ads, ad sets and reports; new work uses the new name.
 6. Only the owner signs a new avatar or sub-avatar name. `people.py check` refuses one that breaks these rules.
+7. **A folder is spelled like its profile** (the convention, 2026-11-28). `brands/<brand>/core-avatars/<avatar>/sub-avatars/<sub>[_<demographic>].md`, beside its own folder of the same name (card, language, research); no number in front. A brand gets there once with `tidy_folders.py` (below); after that the aliases map each folder to itself and the older names sit under `was`, where they keep reading. **Not run on any brand yet:** it runs once `profiles.py doors --strict` lists no tool building a person's path by hand, and the before/after check (every profile's who-block, check and pick, and every test file) comes back the same.
 
 ## The profile (owner, 2026-11-27: "the profile is the combination of avatar, sub-avatar and some other elements")
 
@@ -63,3 +64,15 @@ A profile is ONE unit with ONE name: avatar + sub-avatar + demographic, written 
 - **The standard and the door** (2026-11-27): what every profile must hold and how to check it is `components/profiles/` (`SPEC.md`, `profiles.py audit|check|doors`); a tool reads a person through `profiles.load(brand, name)`. `profiles.py doors` lists every tool still taking a person around the door.
 
 
+
+## Renaming a brand's folders (any brand)
+
+`components/naming/tidy_folders.py`, three commands:
+
+| Command | Does |
+|---|---|
+| `plan --brand <b>` | lists every folder move and path rewrite; changes nothing |
+| `apply --brand <b>` | moves the avatar and sub-avatar folders (and the creative strategist's slots) to their PEOPLE.md names, rewrites folder paths in the brand's files, renames the ids in `avatars.json`, and writes the aliases (`folders: named`, old names under `was`) |
+| `sweep --brand <b>` | on any other copy, after it takes the renamed folders from the team: moves anything still under an old name (unsaved slots, drafts, research) into the new folders, rewriting the paths inside it |
+
+What stays as it was: names used as values (a language line's id `language_<brand>_<old avatar>_…`, an ad set, a feedback question). They keep reading through `was`. Every tool takes a person through the door (`people.folders`, `profiles.load`, `naming/profile_arg.py`), and `profile_arg` also spells any `--avatar` / `--sub` the way the folders are today, so no tool refuses an older name.

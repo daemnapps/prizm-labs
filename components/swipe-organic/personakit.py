@@ -29,7 +29,10 @@ HERE = Path(__file__).resolve().parent
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--avatar", required=True)
-    args = ap.parse_args()
+    import importlib.util as _u, pathlib as _pl
+    _s = _u.spec_from_file_location("profile_arg", next(q for q in _pl.Path(__file__).resolve().parents if q.name == "components") / "naming" / "profile_arg.py")
+    _PA = _u.module_from_spec(_s); _s.loader.exec_module(_PA)   # --profile <avatar>[_<sub>][_<demographic>] (naming/PEOPLE.md)
+    args = ap.parse_args(_PA.expand(None, has=('avatar',)))
     kdir = HERE / "records/persona-kits" / args.avatar
     cfg = json.loads((kdir / "config.json").read_text())
     feed = HERE / "records/avatar-feeds" / args.avatar

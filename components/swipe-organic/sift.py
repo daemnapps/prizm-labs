@@ -19,7 +19,10 @@ def main():
     ap.add_argument("--batch", type=int, default=40)
     ap.add_argument("--model", default="haiku")
     ap.add_argument("--redo", action="store_true", help="re-read posts sifted under an older prompt")
-    a = ap.parse_args()
+    import importlib.util as _u, pathlib as _pl
+    _s = _u.spec_from_file_location("profile_arg", next(q for q in _pl.Path(__file__).resolve().parents if q.name == "components") / "naming" / "profile_arg.py")
+    _PA = _u.module_from_spec(_s); _s.loader.exec_module(_PA)   # --profile <avatar>[_<sub>][_<demographic>] (naming/PEOPLE.md)
+    a = ap.parse_args(_PA.expand(None, has=('avatar',)))
     root = D.FEEDS / a.avatar
     S = json.loads((root / "sources.json").read_text())
     if not S.get("ask"):

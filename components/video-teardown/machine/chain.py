@@ -25,6 +25,23 @@ if str(MACHINE) not in sys.path:
 import workdir                                         # noqa: E402  — the working folder, named once (SI-56)
 
 
+def _avatar_folder(brand, name):
+    """The avatar's folder as the brand keeps it, from a profile id, a new name or an old name: through naming's
+    people.folders, the one door to a person (components/profiles). Without the door the name stands as given."""
+    if not name:
+        return name
+    try:
+        import importlib.util as _u
+        from pathlib import Path as _P
+        f = next(d / "naming" / "people.py" for d in _P(__file__).resolve().parents if d.name == "components")
+        spec = _u.spec_from_file_location("naming_people", f)
+        m = _u.module_from_spec(spec)
+        spec.loader.exec_module(m)
+        return m.folders(brand, name)[0] or name
+    except Exception:                                  # noqa: BLE001
+        return name
+
+
 def workspace(start=None, env=None):
     """The workspace root, FOUND rather than assumed (2026-09-20).
 
@@ -1192,7 +1209,7 @@ def resolve_source(src, brand, outputs, var=None):
             # not handed over twice. A `culture_call` on the run, when the idea makes one, brings the whole map to lead with.
             call = str(outputs.get("culture_call") or "").strip()
             who = str(outputs.get("avatar") or "").strip()
-            base = (WS / "brands" / brand / "core-avatars" / who) if (brand and who) else None
+            base = (WS / "brands" / brand / "core-avatars" / _avatar_folder(brand, who)) if (brand and who) else None
             for name in ("culture-map.md", "humor-map.md"):
                 f = base / name if base is not None else None
                 if f is not None and f.is_file():

@@ -514,7 +514,10 @@ def main():
     ap.add_argument("--brand-root", default=None,
                     help="tree holding brands/<brand>/ — defaults to the shared ai-workspace")
     ap.add_argument('--calendar-slot', help='Calendar handoff JSON from brief.py; not inferred from a folder label')
-    args = ap.parse_args()
+    import importlib.util as _u, pathlib as _pl
+    _s = _u.spec_from_file_location("profile_arg", next(q for q in _pl.Path(__file__).resolve().parents if q.name == "components") / "naming" / "profile_arg.py")
+    _PA = _u.module_from_spec(_s); _s.loader.exec_module(_PA)   # --profile <avatar>[_<sub>][_<demographic>] (naming/PEOPLE.md)
+    args = ap.parse_args(_PA.expand(None, has=('avatar', 'sub', 'demographic')))
     import calendar_handoff as CH
     calendar = json.loads(args.calendar_slot) if args.calendar_slot else None
     if calendar:

@@ -44,7 +44,7 @@ def expand(argv=None, has=("avatar", "sub", "demographic")):
     argv = list(sys.argv[1:] if argv is None else argv)
     profile, rest = _value(argv, "--profile")
     if profile is None:
-        return argv
+        return _spelled(argv, has)
     brand, _ = _value(rest, "--brand")
     if not brand:
         raise SystemExit("--profile needs --brand in the same command")
@@ -54,4 +54,39 @@ def expand(argv=None, has=("avatar", "sub", "demographic")):
     for k in ("avatar", "sub", "demographic"):
         if k in has and add[k] and given[k] is None:
             rest += ["--" + k, add[k]]
-    return rest
+    return _spelled(rest, has)
+
+
+def _spelled(argv, has):
+    """An --avatar / --sub given by any name the person has had (old folder name, PEOPLE.md name) comes back spelled as the
+    brand's folder is today, so a tool's own roster or path check never refuses a name that still means the same person."""
+    brand, _ = _value(argv, "--brand")
+    av, _ = _value(argv, "--avatar")
+    if not brand or not av or "avatar" not in has:
+        return argv
+    sub, _ = _value(argv, "--sub")
+    try:
+        a, s = _people().canon(brand, av, sub or "")
+    except SystemExit:
+        return argv
+    out = _set(argv, "--avatar", a)
+    if sub and "sub" in has and s:
+        out = _set(out, "--sub", s)
+    return out
+
+
+def _set(argv, flag, value):
+    out, i = [], 0
+    while i < len(argv):
+        x = argv[i]
+        if x == flag and i + 1 < len(argv):
+            out += [flag, value]
+            i += 2
+            continue
+        if x.startswith(flag + "="):
+            out.append("%s=%s" % (flag, value))
+            i += 1
+            continue
+        out.append(x)
+        i += 1
+    return out

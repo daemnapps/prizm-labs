@@ -87,7 +87,7 @@ def bank(brand, avatar):
             if not t or e.get("status") not in (None, "active"):
                 continue
             aw = e.get("awareness")
-            out[str(e.get("id", "")).replace(pre, "")] = {"text": t, "sub": e.get("sub"), "awareness": aw.get("level") if isinstance(aw, dict) else aw,
+            out[re.sub(r"^language_%s_[^_]+_" % re.escape(brand), "", str(e.get("id", "")))] = {"text": t, "sub": e.get("sub"), "awareness": aw.get("level") if isinstance(aw, dict) else aw,
                                                           "use": e.get("use"), "source": (e.get("source") or {}).get("name", "")}
     return out
 

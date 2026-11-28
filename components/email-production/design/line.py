@@ -780,6 +780,23 @@ def moment_of(slot):
     return occ if re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", occ) else None
 
 
+def _avatar_folder(brand, name):
+    """The avatar's folder as the brand keeps it, from a profile id, a new name or an old name: through naming's
+    people.folders, the one door to a person (components/profiles). Without the door the name stands as given."""
+    if not name:
+        return name
+    try:
+        import importlib.util as _u
+        from pathlib import Path as _P
+        f = next(d / "naming" / "people.py" for d in _P(__file__).resolve().parents if d.name == "components")
+        spec = _u.spec_from_file_location("naming_people", f)
+        m = _u.module_from_spec(spec)
+        spec.loader.exec_module(m)
+        return m.folders(brand, name)[0] or name
+    except Exception:                                  # noqa: BLE001
+        return name
+
+
 def moment_world(brand, avatar, moment, bdir, profile, culture, dry=False):
     """The moment's world for this avatar. Read from brands/<brand>/core-avatars/<avatar>/moments/<moment>.md
     when a person has filed it there; else from runs/moment-research/<brand>/<avatar>/<moment>.md, which this
@@ -789,13 +806,13 @@ def moment_world(brand, avatar, moment, bdir, profile, culture, dry=False):
     from run_kit import model as M
     import promises as PM
     lean_call = PM.lean()                    # LD-62 (lean model calls)
-    filed = bdir / "core-avatars" / avatar / "moments" / (moment + ".md")
+    filed = bdir / "core-avatars" / _avatar_folder(brand, avatar) / "moments" / (moment + ".md")
     if filed.exists():
         return filed.read_text()
     d = REPO / "runs" / "moment-research" / brand / avatar
     world, research = d / (moment + ".md"), d / (moment + ".research.md")
     if not research.exists():
-        research = bdir / "core-avatars" / avatar / "moments" / (moment + ".research.md")
+        research = bdir / "core-avatars" / _avatar_folder(brand, avatar) / "moments" / (moment + ".research.md")
     if world.exists():
         return world.read_text()
     if not research.exists() or dry:
@@ -832,6 +849,7 @@ def run_send(brand, run_dir, slot, lk, proof_ids, proof_txt, used, dry, directio
     rj = json.loads((run_dir / "run.json").read_text()) if (run_dir / "run.json").exists() else {}
     avatar = rj.get("avatar") or slot.get("avatar") or ""
     bdir = REPO / "brands" / brand
+    avatar = _avatar_folder(brand, avatar)
     culture = _read(bdir / "core-avatars" / avatar / "culture-map.md", 14000)
     profile = _read(bdir / "core-avatars" / avatar / "profile.md", 10000)
     hand = sorted((bdir / "core-avatars" / avatar).glob("culture-map.hand-*.md")) if avatar else []

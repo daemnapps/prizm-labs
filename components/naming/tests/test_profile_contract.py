@@ -69,9 +69,14 @@ class RealNames(unittest.TestCase):
     def test_no_alias_or_brand_avatar_name_contains_an_underscore(self):
         """`_` is what joins a profile's parts, so no avatar or sub-avatar name may use it."""
         for b, d in P.aliases()["brands"].items():
-            for x in itertools.chain(d["avatars"], d["avatars"].values(), d["demographics"], d["demographics"].values(),
-                                     *[list(m) + list(m.values()) for m in d["subs"].values()]):
+            narrowed = [k for k, v in d["demographics"].items() if isinstance(v, dict)]
+            names = itertools.chain(d["avatars"], d["avatars"].values(), [v for v in d["demographics"].values() if not isinstance(v, dict)],
+                                    [k for k in d["demographics"] if k not in narrowed], *[list(m) + list(m.values()) for m in d["subs"].values()])
+            for x in names:
                 self.assertNotIn("_", x, (b, x))
+            for k in narrowed:                    # a renamed folder for a sub-avatar narrowed by a demographic is `<sub>_<demographic>`
+                v = d["demographics"][k]
+                self.assertIn(k, (v["sub"] + "_" + v["demographic"], k if "_" not in k else None), (b, k))
         for d in P.BRANDS.glob("*/core-avatars/*"):
             if d.parent.parent.name.startswith("_"):
                 continue

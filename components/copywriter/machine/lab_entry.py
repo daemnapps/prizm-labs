@@ -47,7 +47,10 @@ def main(argv=None, env=None, run=subprocess.call):
     ap.add_argument("--avatar", default="")
     ap.add_argument("--write_as", default="")
     ap.add_argument("--dry_run", default="no")
-    args = ap.parse_args(argv)
+    import importlib.util as _u, pathlib as _pl
+    _s = _u.spec_from_file_location("profile_arg", next(q for q in _pl.Path(__file__).resolve().parents if q.name == "components") / "naming" / "profile_arg.py")
+    _PA = _u.module_from_spec(_s); _s.loader.exec_module(_PA)   # --profile <avatar>[_<sub>][_<demographic>] (naming/PEOPLE.md)
+    args = ap.parse_args(_PA.expand(argv, has=('avatar',)))
     brand, out = env.get("BRAND"), env.get("OUT")
     if not brand or not out:
         sys.exit("lab_entry: $BRAND and $OUT are set by lab-run; run copy_writer.py directly by hand")
