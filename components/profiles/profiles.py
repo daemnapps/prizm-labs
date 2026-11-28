@@ -6,6 +6,7 @@
     profiles.check(brand, name)                                 what is wrong with it, by the standard (SPEC.md)
     profiles.audit(brand)                                       every profile of a brand against the standard
     profiles.doors(root)                                        tools that still take a person around this door
+    profiles.pick(brand, avatar, product, seed)                 the profile a send speaks to when the plan names only the avatar
 
     python3 profiles.py audit  --brand <b>
     python3 profiles.py check  --brand <b> --profile <name>
@@ -248,6 +249,37 @@ _OLD = re.compile(r"add_argument\(\s*['\"]--(avatar|sub|sub-avatar)['\"]")
 _DOOR = ("profile_arg", "people.folders", "N.folders", "profile_args", "import profiles", "profiles.load")
 
 
+def pick(brand, avatar, product="", seed=""):
+    """The profile a send or an ad speaks to, when the plan names only the avatar: one of that avatar's profiles with a
+    filed card whose problem the product may be used for (who.fits), the same one every time for the same seed, spread
+    across the avatar's profiles as the seed changes. None when the avatar has no such profile: the run speaks to the
+    whole avatar, as before."""
+    if not avatar or avatar in ("none", "mixed"):
+        return None
+    try:
+        a = N.folders(brand, avatar)[0]
+    except SystemExit:
+        return None
+    pool = []
+    for s in W.subs(brand, a):
+        if product and W.fits(brand, product, a, s):
+            continue
+        if _card(brand, a, s)[1] != "filed":
+            continue
+        try:
+            if check(brand, N.profile(brand, a, s)["id"])[0]:                    # a profile that breaks the standard is not written to
+                continue
+        except SystemExit:
+            continue
+        pool.append(s)
+    if not pool:
+        return None
+    import hashlib
+    s = pool[int(hashlib.sha256(str(seed).encode()).hexdigest(), 16) % len(pool)]
+    prof = N.profile(brand, a, s)
+    return {"id": prof["id"], "avatar": a, "sub": s, "demographic": prof.get("demographic") or "", "label": prof.get("label")}
+
+
 def doors(root=None):
     """Tools that take a person by the old avatar/sub flags, or read a brand's avatar folders, without going through the door."""
     root = Path(root or ROOT)
@@ -271,7 +303,10 @@ def doors(root=None):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("cmd", choices=("audit", "check", "show", "gate", "init", "doors"))
+    ap.add_argument("cmd", choices=("audit", "check", "show", "gate", "init", "doors", "pick"))
+    ap.add_argument("--avatar")
+    ap.add_argument("--product", default="")
+    ap.add_argument("--seed", default="")
     ap.add_argument("--brand")
     ap.add_argument("--profile")
     ap.add_argument("--save", action="store_true")
@@ -288,6 +323,9 @@ def main(argv=None):
         return 1 if off else 0
     if not a.brand:
         raise SystemExit("--brand is required")
+    if a.cmd == "pick":
+        print(json.dumps(pick(a.brand, a.avatar, a.product, a.seed), indent=1))
+        return 0
     if a.cmd == "init":
         rows = init(a.brand)
         for r in rows:

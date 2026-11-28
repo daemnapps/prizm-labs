@@ -29,5 +29,11 @@ Runs by: person — a person asks for a profile to be built or checked; the mini
     python3 profiles.py gate  --brand <b> --profile <name>   evidence and distinctness against its siblings (CREATE.md)
     python3 profiles.py init  --brand <b>                    the new-brand checklist (what stands between each profile and ads)
     python3 profiles.py doors [--save]                       tools still around the door
+    python3 profiles.py pick  --brand <b> --avatar <a> [--product <p>] [--seed <s>]   the profile a send or ad speaks to when a plan names only the avatar
+
+`pick` is how planned work reaches a person: email-production (`brief.chain_argv`) and the promo pack call it when the
+calendar names only an avatar. It takes a profile with a filed card that passes `check` and that the product fits
+(`who.fits`), the same one for the same seed, spread across the avatar's profiles as the seed changes. None: the run
+speaks to the whole avatar.
 
 Skill: `avatar-profile` (create, check, audit, file). Tests: `tests/test_profiles.py`.

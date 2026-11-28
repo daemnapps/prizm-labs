@@ -90,6 +90,17 @@ class Brand(unittest.TestCase):
         f.write_text(json.dumps(d))
         self.assertNotIn("heel-pain_when-walking_female-45-54-black", P.siblings("acme", "heel-pain_when-walking"))
 
+    def test_pick_gives_a_filed_checked_profile_the_product_fits_and_the_same_one_per_seed(self):
+        with mock.patch.object(P, "_card", lambda b, a, s: (None, "filed")), \
+                mock.patch.object(P, "check", lambda b, n, d="": ([], [])), \
+                mock.patch.object(W, "fits", lambda b, prod, a, s: "ruled out" if s == "nurse" else None):
+            got = {P.pick("acme", "sore-foot", "insole", "send-%d" % i)["sub"] for i in range(40)}
+            self.assertEqual(got, {"runner", "walker"})                       # spread across, never the one the product does not fit
+            self.assertEqual(P.pick("acme", "sore-foot", "insole", "s1"), P.pick("acme", "sore-foot", "insole", "s1"))
+            self.assertTrue(P.pick("acme", "sore-foot", "", "s1")["id"].startswith("heel-pain_"))
+        self.assertIsNone(P.pick("acme", "none"))
+        self.assertIsNone(P.pick("acme", "sore-foot", "insole", "s1"))          # no filed card: the whole avatar, as before
+
     def test_init_lists_what_stands_between_each_profile_and_ads(self):
         rows = {r["id"]: r for r in P.init("acme")}
         self.assertIn("build its card (who.py build)", rows["heel-pain_when-running"]["todo"])

@@ -204,6 +204,24 @@ def chain_command(slot, brand, avatar=None, angle=None, label=None):
     return " \\\n    ".join(parts)
 
 
+def pick_profile(brand, avatar, product, seed):
+    """components/profiles' pick, or None when that component is not in this checkout or has no profile to give."""
+    try:
+        import importlib.util
+        f = HERE.parent / "profiles" / "profiles.py"
+        if not f.is_file():
+            return None
+        if "_profiles" not in globals():
+            spec = importlib.util.spec_from_file_location("profiles_door", f)
+            m = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(m)
+            globals()["_profiles"] = m
+        return globals()["_profiles"].pick(brand, avatar, product, seed)
+    except Exception as e:                       # the profile is an addition: a missing one never stops a send
+        print("  ! profile not picked (%s: %s)" % (type(e).__name__, str(e)[:100]))
+        return None
+
+
 def chain_argv(slot, brand, avatar=None, angle=None, label=None, brand_root=None,
                note=None):
     """Same run as chain_command, as a real argv list — no shell quoting to
@@ -224,6 +242,15 @@ def chain_argv(slot, brand, avatar=None, angle=None, label=None, brand_root=None
     av = avatar if avatar is not None else slot.get("avatar")
     if av and av not in ("none", "mixed"):
         argv += ["--avatar", av]
+        # the profile it speaks to (components/profiles): the slot's own when the plan named one, else the one the
+        # profiles door picks for this avatar and product, so the writer reads the person, not only the avatar
+        named = slot.get("profile")
+        sub = slot.get("sub") or (named.get("sub") if isinstance(named, dict) else None)
+        if not sub:
+            got = pick_profile(brand, av, slot.get("product") or "", "%s:%s" % (slot.get("id"), av))
+            sub = got and got["sub"]
+        if sub:
+            argv += ["--sub", sub]
     for flag in ("product",):
         v = slot.get(flag)
         if v and v != "none":

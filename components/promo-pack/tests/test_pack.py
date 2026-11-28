@@ -191,7 +191,8 @@ class PackTest(unittest.TestCase):
             if "natural_statics.py" in argv[1]:       # what the real door writes
                 d = self.base / "runs/ad-variations/brand-a" / argv[argv.index("--label") + 1]
                 d.mkdir(parents=True, exist_ok=True)
-                (d / "sprint.json").write_text(json.dumps({"offer": "", "moment": "", "until": "", "never": []}))
+                (d / "sprint.json").write_text(json.dumps({"offer": "", "moment": "", "until": "", "never": [],
+                                                           "ads": [{"id": "a", "sub_avatar": ""}]}))
             return R()
         return run
 
@@ -229,6 +230,19 @@ class PackTest(unittest.TestCase):
         self.assertEqual(email[0][email[0].index("--only") + 1], "dec-02,dec-03")
         self.assertTrue(any("sms.py" in a[1] and "--dry-run" not in a for a in ran))
         self.assertTrue(P.loaded(P.load(self.out), self.out)["loaded"])
+
+    def test_the_ads_speak_to_the_profile_the_profiles_door_picks(self):
+        door = self.base / "components/profiles/profiles.py"
+        door.parent.mkdir(parents=True, exist_ok=True)
+        door.write_text("def pick(brand, avatar, product, seed):\n"
+                        "    return {'id': avatar + '_when-x', 'avatar': avatar, 'sub': 'when-x', 'label': 'When x'}\n")
+        pack, _ = P.build("brand-a", "2026-12", base=self.base, today=date(2026, 11, 28))
+        self.assertEqual(pack["who"]["profile"]["id"], "core-buyer_when-x")
+        P.hand("brand-a", "holidays", base=self.base, runner=self.runner([]))
+        sp = json.loads((self.base / "runs/ad-variations/brand-a/holidays-2026-promo-pack/sprint.json").read_text())
+        self.assertEqual(sp["profile"], "core-buyer_when-x")
+        plan = (self.base / "runs/promo-pack/brand-a/holidays/handoffs/video/campaign-plan.md").read_text()
+        self.assertIn("core-buyer_when-x", plan)
 
     def test_tick_builds_the_pack_when_the_promotion_is_close(self):
         self.assertEqual(P.tick(["brand-a"], 14, base=self.base, today=date(2026, 11, 1)), [])

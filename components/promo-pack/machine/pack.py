@@ -234,6 +234,22 @@ def written(brand, slot_id, channel, words, dropped, base, gifts=()):
     return {"state": "written", "versions": len(files), "flags": flags}
 
 
+def profile_for(brand, avatar, product, seed, base):
+    """The profile the pack's ads speak to (components/profiles' pick: a filed, checked profile of the avatar the
+    calendar names, that the product fits). None when that component is not in this checkout or gives none."""
+    f = base / "components" / "profiles" / "profiles.py"
+    if not f.is_file() or not avatar or avatar == "core":
+        return None
+    try:
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("profiles_door", f)
+        m = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(m)
+        return m.pick(brand, avatar, product or "", seed)
+    except (Exception, SystemExit) as ex:
+        return {"error": "%s: %s" % (type(ex).__name__, str(ex)[:120])}
+
+
 # ------------------------------------------------------------------------------------------------ winners --
 def winners(brand, kind, n, start, base):
     """The brand's top winners of one format, ranked by spend in their latest audit, active in the last 6 months
@@ -365,6 +381,8 @@ def build(brand, month, moment=None, stock=None, n_videos=5, n_statics=5, base=N
     avatar = Counter(v.get("avatar") for s in win for v in s.get("variants") or []
                      if v.get("avatar") and v.get("avatar") != "mixed").most_common(1)
     avatar = avatar[0][0] if avatar else "core"
+    who = profile_for(brand, avatar, lead_key, label, base)
+    who = who if who and not who.get("error") else None
     handoffs = []
     for h in DEFS["handoffs"]:
         door = h["door"] if h["door"] and (not h["door"].get("requires")
@@ -400,7 +418,7 @@ def build(brand, month, moment=None, stock=None, n_videos=5, n_statics=5, base=N
                             "slots": ",".join(r["id"] for r in rows_ if r["id"] and r["written"]["state"] != "written")}
         elif h["id"] == "video":
             picked = winners(brand, "video", n_videos, start, base)
-            item.update(briefs=len(picked), winners=picked, ready_by=ready_open, dates=[row["start"]],
+            item.update(briefs=len(picked), winners=picked, ready_by=ready_open, dates=[row["start"]], profile=who,
                         ending=[x for x in [lead] + [w["line"] for w in words if w["line"].lower().startswith("order by")]
                                 if x],
                         args={"label": label, "plan_file": "runs/promo-pack/%s/%s/handoffs/video/campaign-plan.md"
@@ -409,7 +427,7 @@ def build(brand, month, moment=None, stock=None, n_videos=5, n_statics=5, base=N
             picked = winners(brand, "image", n_statics, start, base)
             item.update(briefs=max(len(picked), n_statics), winners=picked, ready_by=ready_open,
                         dates=[row["start"]],
-                        args={"label": label, "product": lead_key or "", "avatar": avatar})
+                        profile=who, args={"label": label, "product": lead_key or "", "avatar": avatar})
         elif h["id"] == "store":
             item.update(briefs=1, ready_by=ready_preview, dates=[row["start"], row["end"]],
                         words=[w["line"] for w in store_words], args={"moment": moment, "year": str(start.year)})
@@ -430,6 +448,7 @@ def build(brand, month, moment=None, stock=None, n_videos=5, n_statics=5, base=N
                      "gap": "no calendar for %s: run marketing-calendar first" % month})
 
     pack = {"brand": brand, "month": month, "moment": moment, "label": label, "built": today.isoformat(),
+            "who": {"avatar": avatar, "profile": who},
             "window": {"start": row["start"], "end": row["end"]}, "offer": offer, "stock": stock_info,
             "handoffs": handoffs, "gaps": gaps,
             "gate": {"what": "No approval step: whoever triggers the pack, it runs. Nothing it starts goes live, sends "
@@ -458,6 +477,9 @@ def campaign_plan(pack):
     lines = ["# Campaign plan: %s, %s to %s" % (pack["moment"], pack["window"]["start"], pack["window"]["end"]), "",
              "Change one thing in each winner: the offer ending. Keep everything else.", "",
              "Lead line, word for word: %s" % o["lead_line"]]
+    who = (pack.get("who") or {}).get("profile")
+    if who:
+        lines += ["Who it speaks to: profile %s (%s)" % (who["id"], who.get("label") or "")]
     if o.get("order_by"):
         lines.append("Order-by date: %s" % o["order_by"])
     lines += ["", "Every line the ads may use, word for word:"] + \
@@ -608,6 +630,12 @@ def fill_sprint(pack, base, label):
             sp[k] = v
     if not sp.get("never"):
         sp["never"] = [d["line"] for d in o["dropped"] if d["why"].startswith("retired")]
+    who = (pack.get("who") or {}).get("profile")
+    if who:
+        sp.setdefault("profile", who["id"])
+        for ad in sp.get("ads") or []:
+            if not ad.get("sub_avatar"):
+                ad["sub_avatar"] = who["sub"]
     f.write_text(json.dumps(sp, indent=1, ensure_ascii=False))
     return str(f.relative_to(base))
 
