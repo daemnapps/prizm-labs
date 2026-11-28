@@ -106,6 +106,15 @@ def pack(folder, role=None, record=None, slots=None):
             {'id': 'technical-review', 'text': 'Required format, dimensions, safe zones and export quality are checked; video sound, captions and sync are checked where applicable.'},
             {'id': 'brief-criteria', 'text': 'Every additional acceptance criterion in the brief has been checked; no missing requirement is hidden by a creative substitution.'},
         ]
+        # AI-made work brings its making back with it (owner, 28 Nov 2026): every generation tried and kept, the exact
+        # prompt for each, and what was changed between tries, so the brief's own prompts can be tightened and the cost
+        # per brief brought down. Read from the brief or its record: an AI route or a generation tool named.
+        ai = (str(rec.get('production_route') or rec.get('route') or '').lower() == 'ai'
+              or re.search(r'\b(higgsfield|seedance|kling|veo|wan \d|generat(ed|ion)s?|ai route)\b', text, re.I))
+        if ai:
+            criteria.append({'id': 'generation-record', 'text': 'GENERATIONS.json is returned beside the files: every generation tried and every one kept, '
+                             'each with its tool, its job or generation id (or link), the exact prompt used, the credits it cost when shown, '
+                             'and for each retry one line on what was changed in the prompt and why.'})
         if role == 'video-editor':
             criteria.append({'id': 'cover-review', 'text': 'Every final video has its own distinct finished cover, source-video record and successful image-production checks.'})
         # Carry structured checks and explicit acceptance/checklist sections without treating scene wording as a fixed script.
@@ -222,6 +231,14 @@ def validate(folder, submission=None):
         raise Incomplete('Submission needs its maker and timestamp')
     for rel in sub.get('production_records', []):
         inside(folder, rel)
+    if any(c['id'] == 'generation-record' for c in req['criteria']):
+        g = read(inside(folder, sub.get('generation_record') or 'GENERATIONS.json'))
+        runs = g.get('generations') if isinstance(g, dict) else g
+        if not isinstance(runs, list) or not runs:
+            raise Incomplete('Missing GENERATIONS.json: list every generation tried and kept, with its tool, id or link and exact prompt')
+        for i, x in enumerate(runs, 1):
+            if not isinstance(x, dict) or not str(x.get('prompt') or '').strip() or not (x.get('id') or x.get('link')):
+                raise Incomplete('GENERATIONS.json row %d needs its id or link and the exact prompt used' % i)
     for criterion in req['criteria']:
         check = sub.get('checks', {}).get(criterion['id'], {})
         if check.get('checked') is not True or not all(str(check.get(k) or '').strip() for k in ('by', 'at', 'evidence')):

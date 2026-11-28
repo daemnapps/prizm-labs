@@ -154,7 +154,10 @@
    {
     "from": "components/briefs",
     "to": "components/briefs",
-    "replace": true
+    "replace": true,
+    "patches": [
+     "components/chain-mirror/patches/briefs-generation-record.patch"
+    ]
    },
    {
     "from": "components/naming",
