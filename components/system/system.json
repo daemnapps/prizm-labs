@@ -385,6 +385,7 @@
   "from": "components/naming/stages.json",
   "order": [
    "set-up",
+   "plan",
    "swipe",
    "teardown",
    "writing",
@@ -394,6 +395,7 @@
   ],
   "not_in_the_stage_list_yet": [
    "set-up",
+   "plan",
    "swipe"
   ]
  },

@@ -15,6 +15,7 @@ Start with **brand activation**. It shows what a brand already has and which of 
 | Set up | Roles and ownership | `components/roles/` |
 | Set up | Always-on server (jobs, boards, keys and rendering off the laptop) | `tools/always-on/` |
 | Set up | Chain mirror (brings saved tools in from a source repo, names stripped, says how far behind) | `tools/chain-mirror/` |
+| Plan | Promo pack: one offer change, one hand-off per workflow, the owner approves the offer words | `tools/promo-pack/` |
 | Swipe | My Feeds | `tools/my-feeds/` |
 | Swipe | Paid and organic swipe | `components/swipe-paid/`, `components/swipe-organic/` |
 | Swipe | Intake | `components/intake/` |

@@ -794,6 +794,20 @@
    "stage": "",
    "steps": [],
    "basis": "draft"
+  },
+  {
+   "path": "components/promo-pack",
+   "kind": "tool",
+   "does": "Turns one offer change into a pack: the offer words for the owner, the stock that blocks it, one hand-off per workflow with its dates from the calendar",
+   "role": "growth-strategist",
+   "workflow": "all",
+   "stage": "plan",
+   "steps": [
+    "build",
+    "approve",
+    "hand"
+   ],
+   "basis": "draft"
   }
  ]
 }

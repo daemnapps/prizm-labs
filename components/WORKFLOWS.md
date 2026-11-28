@@ -22,7 +22,7 @@ Every deliverable is made by one of these workflows. Each one has a single name,
 | **Store promo workflow** | The promo on the store: top bar, code, offer box, pop-up, gift row | Offer bank + the moment's dates + the live store | `storefront-promo-edit` plan → owner picks the start date and says go → apply → readback; layout changes through `store-page-design` | The store showing the promo | Owner: go | Web developer |
 | **Funnel offer workflow** | The offer inside an acquisition funnel: packages, codes, offer box, page lines | Offer bank + the funnel repo | Branch in the funnel repo → packages / codes / page lines → `funnel-tracking` check → merge | The funnel selling the new offer | Owner: go to merge | Web developer |
 
-A whole promotion (an offer change across every channel) runs through the `promo-pack` skill: Offer change workflow → `stock-runway` for every item the offer gives away → switch list → one pack, with one lane per workflow above.
+A whole promotion (an offer change across every channel) runs through the `promo-pack` component (`components/promo-pack`, skill `promo-pack`): Offer change workflow → stock read for every item the offer gives away → `pack.py build` (one pack per moment, one hand-off per workflow above, dates from the calendar) → the owner approves the offer words → `pack.py hand` (starts the doors that spend nothing; store and funnel offer have no door yet and are listed as gaps).
 
 Older names point here:
 - "idea workflow" (the owner's storyboard board) and `ad-workflow` (the team skill) are the **Winner swipe ad workflow · video**.
