@@ -1,58 +1,214 @@
 {
  "_what": "Launch from zero: the checklist for a brand that has no website, customers, reviews or past ads yet. onboarding.json is for a brand that already sells; this one is for a brand being built. Steps run in order inside each phase. Each step names the tool that fills it and the file it fills.",
- "_rule": "Research is built from receipts: customer words, market data and studies, each with its source. What the owner says at the start is a brief, filed as owner input and marked so. It never stands in for research, and research replaces it where they differ.",
+ "_rule": "The owner gives a hunch: one line naming a product or ingredient and the market. Nothing else of the owner's goes in. The research decides who the customer is, what he says, the problem, the angles and the story, every line with its receipt, and it is free to prove the hunch wrong.",
  "progress_file": "brands/<brand>/launch-progress.json",
- "progress_shape": {"brand": "<brand>", "done": ["<step id>"], "draft": ["<step id>"], "skipped": ["<step id>"], "owner_input": ["<step id>"], "updated": "<yyyy-mm-dd>"},
+ "progress_shape": {
+  "brand": "<brand>",
+  "done": [
+   "<step id>"
+  ],
+  "draft": [
+   "<step id>"
+  ],
+  "skipped": [
+   "<step id>"
+  ],
+  "updated": "<yyyy-mm-dd>"
+ },
  "phases": [
   {
    "id": "research",
-   "name": "1 · Research",
+   "name": "1 \u00b7 Research",
    "steps": [
-    {"id": "brief", "name": "The owner's brief", "tool": "this checklist", "fills": "operations/brief.md", "receipt": "owner input, dated"},
-    {"id": "problem", "name": "The problem, in the market's words", "tool": "avatar-profile (outside research: Reddit, YouTube, TikTok), research-fill", "fills": "core-avatars/<avatar>/profile.md", "receipt": "every line quoted with its link"},
-    {"id": "language", "name": "The customer's own words", "tool": "avatar-profile, research-gatherer (forums, competitor reviews); voice-pull once the brand has its own comments", "fills": "core-avatars/<avatar>/language/", "receipt": "verbatim, with source"},
-    {"id": "market", "name": "What the market is buying", "tool": "product-research (7–90 day winners), trendtrack", "fills": "competitive/market.md", "receipt": "sales and ad data with dates"},
-    {"id": "competitors", "name": "Competitors: money, ads, pages, offers", "tool": "product-research (one brand deep), trendtrack, swipe-paid", "fills": "competitive/", "receipt": "their live ads and pages"},
-    {"id": "formats", "name": "What he watches and what's scaling", "tool": "research-round, swipe-organic feeds", "fills": "customer/swipes.md", "receipt": "posts with view counts"},
-    {"id": "evidence", "name": "The ingredient's evidence", "tool": "by hand until a tool exists: trials, reviews, doses", "fills": "products/<product>/evidence.md", "receipt": "study links, numbers, sample sizes"},
-    {"id": "mechanism", "name": "The unique mechanism", "tool": "from the evidence step", "fills": "position.md (mechanism slot)", "receipt": "the study behind each line"},
-    {"id": "insight", "name": "The insight and the angles", "tool": "creative-strategist", "fills": "strategy/angles.json", "receipt": "each angle ties to a receipt above"}
+    {
+     "id": "brief",
+     "name": "The hunch",
+     "tool": "brand-launch (asks one line)",
+     "fills": "operations/brief.md",
+     "receipt": "one line, dated; research may prove it wrong"
+    },
+    {
+     "id": "problem",
+     "name": "The problem, in the market's words",
+     "tool": "avatar-profile (outside research: Reddit, YouTube, TikTok), research-fill",
+     "fills": "core-avatars/<avatar>/profile.md",
+     "receipt": "every line quoted with its link"
+    },
+    {
+     "id": "language",
+     "name": "The customer's own words",
+     "tool": "avatar-profile, research-gatherer (forums, competitor reviews); voice-pull once the brand has its own comments",
+     "fills": "core-avatars/<avatar>/language/",
+     "receipt": "verbatim, with source"
+    },
+    {
+     "id": "market",
+     "name": "What the market is buying",
+     "tool": "product-research (7\u201390 day winners), trendtrack",
+     "fills": "competitive/market.md",
+     "receipt": "sales and ad data with dates"
+    },
+    {
+     "id": "competitors",
+     "name": "Competitors: money, ads, pages, offers",
+     "tool": "product-research (one brand deep), trendtrack, swipe-paid",
+     "fills": "competitive/",
+     "receipt": "their live ads and pages"
+    },
+    {
+     "id": "formats",
+     "name": "What he watches and what's scaling",
+     "tool": "research-round, swipe-organic feeds",
+     "fills": "customer/swipes.md",
+     "receipt": "posts with view counts"
+    },
+    {
+     "id": "evidence",
+     "name": "The ingredient's evidence",
+     "tool": "by hand until a tool exists: trials, reviews, doses",
+     "fills": "products/<product>/evidence.md",
+     "receipt": "study links, numbers, sample sizes"
+    },
+    {
+     "id": "mechanism",
+     "name": "The unique mechanism",
+     "tool": "from the evidence step",
+     "fills": "position.md (mechanism slot)",
+     "receipt": "the study behind each line"
+    },
+    {
+     "id": "insight",
+     "name": "The insight and the angles",
+     "tool": "creative-strategist",
+     "fills": "strategy/angles.json",
+     "receipt": "each angle ties to a receipt above"
+    }
    ]
   },
   {
    "id": "brand",
-   "name": "2 · Brand",
+   "name": "2 \u00b7 Brand",
    "steps": [
-    {"id": "name", "name": "Brand name", "tool": "naming", "fills": "operations/brand.json"},
-    {"id": "position", "name": "Position", "tool": "from research; template rules", "fills": "position.md"},
-    {"id": "story", "name": "Story and tellers", "tool": "from research and the owner's brief", "fills": "story.md"},
-    {"id": "look", "name": "Look: logo, colours, fonts", "tool": "design-mock, image-production", "fills": "identity/"},
-    {"id": "core-message", "name": "The one message", "tool": "from position", "fills": "strategy/core-message.json"}
+    {
+     "id": "name",
+     "name": "Brand name",
+     "tool": "naming",
+     "fills": "operations/brand.json"
+    },
+    {
+     "id": "position",
+     "name": "Position",
+     "tool": "from research; template rules",
+     "fills": "position.md"
+    },
+    {
+     "id": "story",
+     "name": "Story and tellers",
+     "tool": "from research",
+     "fills": "story.md"
+    },
+    {
+     "id": "look",
+     "name": "Look: logo, colours, fonts",
+     "tool": "design-mock, image-production",
+     "fills": "identity/"
+    },
+    {
+     "id": "core-message",
+     "name": "The one message",
+     "tool": "from position",
+     "fills": "strategy/core-message.json"
+    }
    ]
   },
   {
    "id": "supply",
-   "name": "3 · Product and supply",
+   "name": "3 \u00b7 Product and supply",
    "steps": [
-    {"id": "spec", "name": "Product spec: form, dose, count", "tool": "from the evidence step", "fills": "products/<product>/product.md"},
-    {"id": "quotes", "name": "Supplier quotes", "tool": "by hand; the owner says yes before any message goes out", "fills": "products/<product>/suppliers.md"},
-    {"id": "samples", "name": "Samples", "tool": "by hand", "fills": "products/<product>/suppliers.md"},
-    {"id": "lab", "name": "Third-party lab test", "tool": "by hand", "fills": "products/<product>/coa/"},
-    {"id": "label", "name": "Label", "tool": "image-production", "fills": "products/<product>/label/"},
-    {"id": "import", "name": "Import, shipping, tariff", "tool": "by hand", "fills": "operations/supply.md"},
-    {"id": "offer", "name": "Offer: price, bundles, guarantee", "tool": "offer-workspaces", "fills": "offers/offers.json"}
+    {
+     "id": "spec",
+     "name": "Product spec: form, dose, count",
+     "tool": "from the evidence step",
+     "fills": "products/<product>/product.md"
+    },
+    {
+     "id": "quotes",
+     "name": "Supplier quotes",
+     "tool": "by hand; the owner says yes before any message goes out",
+     "fills": "products/<product>/suppliers.md"
+    },
+    {
+     "id": "samples",
+     "name": "Samples",
+     "tool": "by hand",
+     "fills": "products/<product>/suppliers.md"
+    },
+    {
+     "id": "lab",
+     "name": "Third-party lab test",
+     "tool": "by hand",
+     "fills": "products/<product>/coa/"
+    },
+    {
+     "id": "label",
+     "name": "Label",
+     "tool": "image-production",
+     "fills": "products/<product>/label/"
+    },
+    {
+     "id": "import",
+     "name": "Import, shipping, tariff",
+     "tool": "by hand",
+     "fills": "operations/supply.md"
+    },
+    {
+     "id": "offer",
+     "name": "Offer: price, bundles, guarantee",
+     "tool": "offer-workspaces",
+     "fills": "offers/offers.json"
+    }
    ]
   },
   {
    "id": "selling",
-   "name": "4 · Selling",
+   "name": "4 \u00b7 Selling",
    "steps": [
-    {"id": "store", "name": "Store", "tool": "by hand", "fills": "products/store.json"},
-    {"id": "profiles", "name": "A profile per angle", "tool": "avatar-profile", "fills": "core-avatars/<avatar>/sub-avatars/"},
-    {"id": "pages", "name": "A landing page per profile", "tool": "page-draft, page-production", "fills": "funnels/funnels.json"},
-    {"id": "ads", "name": "Ads per profile", "tool": "statics-sprint, video-writing, ad-variations", "fills": "runs (private)"},
-    {"id": "accounts", "name": "Ad account and keys", "tool": "brand-activation", "fills": "meta/account.json, .env"},
-    {"id": "first-run", "name": "First teardown and first test", "tool": "video-teardown, meta-upload", "fills": "runs (private)"}
+    {
+     "id": "store",
+     "name": "Store",
+     "tool": "by hand",
+     "fills": "products/store.json"
+    },
+    {
+     "id": "profiles",
+     "name": "A profile per angle",
+     "tool": "avatar-profile",
+     "fills": "core-avatars/<avatar>/sub-avatars/"
+    },
+    {
+     "id": "pages",
+     "name": "A landing page per profile",
+     "tool": "page-draft, page-production",
+     "fills": "funnels/funnels.json"
+    },
+    {
+     "id": "ads",
+     "name": "Ads per profile",
+     "tool": "statics-sprint, video-writing, ad-variations",
+     "fills": "runs (private)"
+    },
+    {
+     "id": "accounts",
+     "name": "Ad account and keys",
+     "tool": "brand-activation",
+     "fills": "meta/account.json, .env"
+    },
+    {
+     "id": "first-run",
+     "name": "First teardown and first test",
+     "tool": "video-teardown, meta-upload",
+     "fills": "runs (private)"
+    }
    ]
   }
  ]
