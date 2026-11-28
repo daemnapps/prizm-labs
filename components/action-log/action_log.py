@@ -14,8 +14,9 @@ object ids, time, before and after (`score`).
     action_log.py verify                  the chain is whole: no entry edited or removed
 
 Where it lives: <runs>/action-log/log.jsonl (all brands; the brand is a field). Sources and their places are in
-SOURCES below, each relative to the runs folder; a source outside it (a Drive mirror) is named in a local file,
-~/.prizm/action-log.json {"sources": {"<name>": "<path>"}}, never in the repo.
+SOURCES below, each relative to the runs folder; a source outside it (a Drive mirror, or the team's live copy when
+this runs/ folder is private) is named in a local file, ~/.prizm/action-log.json {"sources": {"live_cards" |
+"approvals" | "queue": "<path>"}}, never in the repo.
 """
 from __future__ import annotations
 
@@ -207,8 +208,9 @@ def _live_cards():
 
 def _approvals():
     d = {}
+    src = _local_sources().get("approvals")             # the live team file when this copy's runs/ is private
     try:
-        d = json.loads((RUNS / "briefs/approved.json").read_text()).get("approved") or {}
+        d = json.loads(Path(os.path.expanduser(src) if src else RUNS / "briefs/approved.json").read_text()).get("approved") or {}
     except (OSError, ValueError):
         pass
     for key, r in d.items():
@@ -220,7 +222,8 @@ def _approvals():
 
 
 def _queue():
-    for i, r in enumerate(_jsonl(RUNS / "queue/decisions.jsonl")):
+    src = _local_sources().get("queue")
+    for i, r in enumerate(_jsonl(os.path.expanduser(src) if src else RUNS / "queue/decisions.jsonl")):
         idx = str(r.get("id") or "")
         brand = idx.split("_", 1)[0].split("/", 1)[0]
         yield ("queue:%d:%s" % (i, r.get("at")), {
