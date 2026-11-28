@@ -1,0 +1,30 @@
+{
+ "about": "The cheapest model that does each recurring job well. One row per kind of job, never per brand. Prices are list prices read on prices_read; the job ledger (meter.py) and each tool's own meter show what was actually spent.",
+ "prices_read": "2026-11-03",
+ "usd_per_1m_tokens": {
+  "claude-haiku-5-5": {"in": 0.10, "out": 0.50},
+  "claude-sonnet-5-5": {"in": 2.00, "out": 10.00},
+  "claude-opus-5-5": {"in": 4.00, "out": 20.00},
+  "claude-fable-5-2": {"in": 8.00, "out": 40.00},
+  "gemini-3-flash-preview": {"in": 0.50, "out": 3.00}
+ },
+ "rule": "The owner's own plan pays only for the top tier: studying great content and the final writing pass. Everything that runs on a clock is code (no model) or the cheapest tier that holds the job's own check. A job moves up a tier only when its check fails on the cheaper one, recorded in the ledger.",
+ "jobs": [
+  {"kind": "warehouse pulls (winners audit, score, signals, desk report, warehouse copy)", "model": "none", "plan": "free", "why": "numbers from the warehouse: code, no model"},
+  {"kind": "paid swipe sweep", "model": "none", "plan": "ad-library credits", "why": "a data pull; capped in credits per night"},
+  {"kind": "organic feed pull", "model": "none", "plan": "scraping dollars", "why": "a data pull; capped in dollars per night"},
+  {"kind": "feed sift (keep or drop a post)", "model": "claude-haiku-5-5", "plan": "cheapest", "why": "a yes/no read of a caption against a written rule"},
+  {"kind": "stage check (does each step's file exist and pass)", "model": "none", "plan": "free", "why": "file and rule checks are code"},
+  {"kind": "stage check, judged criteria", "model": "claude-haiku-5-5", "plan": "cheapest", "why": "format and rule checking"},
+  {"kind": "stage check, the fix note on a fail", "model": "claude-sonnet-5-5", "plan": "brand owner or API", "why": "has to write a usable fix"},
+  {"kind": "transcripts", "model": "whisper-large-v3-turbo (on the Mac)", "plan": "free", "why": "runs locally"},
+  {"kind": "video teardown, first pass (what is on screen, beats, hook)", "model": "gemini-3-flash-preview", "plan": "brand owner or API", "why": "watching video at the lowest price that reads frames well"},
+  {"kind": "image and page teardown, first pass", "model": "claude-sonnet-5-5", "plan": "brand owner or API", "why": "reading images and copy structure"},
+  {"kind": "first drafts (hooks, scripts, briefs, variations)", "model": "claude-sonnet-5-5", "plan": "brand owner or API", "why": "creative writing a person then tightens"},
+  {"kind": "background asks on a board (variations, setup, market scan, add a swipe)", "model": "claude-sonnet-5-5", "plan": "brand owner or API", "why": "today these run with no model named, so they take the signed-in default (the top tier); naming the model moves them down a tier"},
+  {"kind": "translation", "model": "typhoon-translate-1.5-4b (on the Mac)", "plan": "free", "why": "runs locally"},
+  {"kind": "draft pictures", "model": "flux2-klein-4b-q4 (on the Mac)", "plan": "free", "why": "runs locally; finals go through the generative model house"},
+  {"kind": "studying great content, the final writing pass", "model": "claude-opus-5-5", "plan": "owner's plan", "why": "the only work that earns the top tier"},
+  {"kind": "building tools", "model": "claude-sonnet-5-5", "plan": "builder's plan", "why": "Opus only for design calls"}
+ ]
+}

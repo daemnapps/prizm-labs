@@ -1,0 +1,12 @@
+{
+ "about": "Rented graphics machines, and whether any job needs one yet. Read 2026-11-28.",
+ "needed_now": false,
+ "why_not_yet": "Every free model in the registry runs on an Apple-silicon Mac (pictures, transcripts, upscaling, voice, short video drafts). Final video clips are made by the generative model house per clip. A rented machine pays only when a job runs an open model too big for the Mac, many hours a day.",
+ "turn_on_when": "a local model job queues longer than a night on the Mac, or a trained identity needs training",
+ "options": [
+  {"where": "Higgsfield GPU rental", "gpu": "L40S 48GB", "per_hour_usd": 3.55, "note": "71 credits an hour at 0.05 a credit"},
+  {"where": "Higgsfield GPU rental", "gpu": "RTX PRO 6000", "per_hour_usd": 4.90, "note": "98 credits an hour"},
+  {"where": "Higgsfield GPU rental", "gpu": "H100 80GB", "per_hour_usd": 6.00, "note": "120 credits an hour"},
+  {"where": "DigitalOcean GPU server", "gpu": "cheapest listed", "per_hour_usd": 0.76, "note": "needs account tier 2 or more; only some regions (always-on/prices.json)"}
+ ]
+}
