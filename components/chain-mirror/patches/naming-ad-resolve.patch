@@ -1,5 +1,5 @@
 diff --git a/components/naming/names.py b/components/naming/names.py
-index fbd232d5..5949db9a 100644
+index fbd232d5..99437ef7 100644
 --- a/components/naming/names.py
 +++ b/components/naming/names.py
 @@ -514,7 +514,7 @@ def _form(stem):
@@ -18,7 +18,7 @@ index fbd232d5..5949db9a 100644
 -    if form == "new" and len(parts) in (4, 5):
 -        return parse_short(stem)
 +    if form == "new" and 4 <= len(parts) <= 12:
-+        return parse_short(stem)              # short form, with any extra fields after the funnel (`_p-awnm`)
++        return parse_short(stem)              # short form, with any extra fields after the funnel (`_p-<tag>`)
      if len(parts) not in (13, 14) or not all(ok.match(p) for p in parts):
          return None
      d = dict(zip(FIELDS, parts))

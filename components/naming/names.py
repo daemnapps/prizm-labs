@@ -536,7 +536,7 @@ def parse_any(s):
     sep, ok = (SEP, SLUG) if form == "new" else (OLD_SEP, OLD_SLUG)
     parts = stem.split(sep)
     if form == "new" and 4 <= len(parts) <= 12:
-        return parse_short(stem)              # short form, with any extra fields after the funnel (`_p-awnm`)
+        return parse_short(stem)              # short form, with any extra fields after the funnel (`_p-<tag>`)
     if len(parts) not in (13, 14) or not all(ok.match(p) for p in parts):
         return None
     d = dict(zip(FIELDS, parts))
