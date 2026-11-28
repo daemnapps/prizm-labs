@@ -143,11 +143,12 @@ The input starts with the date and the proposal id (YYYY-MM-DD Pn). Read that ro
 runs/flywheel/{brand}/<date>/proposals.json: its kind, its numbers, `do` and `cmd`. Then do only that, dry:
 - variations: follow .claude/skills/ad-variations/SKILL.md; find the winner's teardown (its brief in
   runs/meta-upload/{brand}/ADS-INDEX.json) and run the plan with --dry-run. Nothing made, nothing spent.
-- matrix: when `matrix` is empty, fill the winner's 7 cells (who, awareness, argument, format, face, setting, look)
-  from the lists (components/creative-diversity/dimensions.json names them) by reading the ad's own pictures
-  (Shared Assets folder in the ADS-INDEX card); then `python3 components/flywheel/flywheel.py column --brand {brand}
-  <cells>` picks the column. Write the one new matrix row: the winner's cells with that column moved to a value on the
-  list (prefer `least_used`). Do not file it on the plan and do not write a brief.
+- matrix: when `matrix` is empty, run `python3 components/flywheel/flywheel.py cells --brand {brand}`: it lists the
+  winner's pictures and the lists. Look at the pictures and file its 7 cells with `flywheel.py cells-set --brand
+  {brand} --key "<the row's key>" --kind image|video profile=… awareness=… angle=… format=… face=… setting=… look=…`
+  (values from the lists; `new:<value>` when none fits), then `flywheel.py run --brand {brand}` names the column.
+  Write the one new matrix row: the winner's cells with that column moved to a value on the list (prefer
+  `least_used`). Do not file it on the plan and do not write a brief.
 - promo: run the row's cmd (pack.py hand … --dry-run, or build when there is no pack yet). Never approve the offer words.
 - re-make: find the ad's teardown (runs/video-teardown/{brand}/) and run ad-variations plan --n 1 --dry-run.
 Stop at the quote: if a step would spend, write its price and stop. In the result: the proposal's numbers (as given),

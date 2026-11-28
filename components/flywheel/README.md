@@ -21,20 +21,26 @@ stops at the quote, as the chain does.
   past; above its past but under 2x is creative limited. Window (draft): the last 3 and 7 days from the desk report
   against the ad's own 14 or 30 days.
 - **Next matrix column**: of the four seen columns (format, face, setting, look), the one whose value the most
-  running ads share. The said columns (person, awareness, angle) stay. A winner whose 7 cells are not on file gets a
-  row too: its job fills the cells first, then `flywheel.py column` picks.
+  running ads share (the ads spending now, from their cells; the tagged library fills in under 8). The said columns
+  (profile, awareness, angle) stay. A winner whose 7 cells are not on file gets a row too: `cells` lists its
+  pictures and the lists, `cells-set` files them (refused when a value is off the lists), and the next run names
+  the column. Cells live in `runs/creative-diversity/<brand>/live-cells.json`.
 - **Already varied**: `variation_of` in the brief register, an ad-variations run that names the brief, or a Studio job
   that asked for it.
 
 ## Run
 
 ```
-python3 components/flywheel/flywheel.py run  --brand <brand>       # writes runs/flywheel/<brand>/<date>/proposals.json
-python3 components/flywheel/flywheel.py show --brand <brand>
-python3 components/flywheel/flywheel.py column --brand <brand> who=… awareness=… argument=… format=… face=… setting=… look=…
+python3 components/flywheel/flywheel.py run   --brand <brand>|all   # writes runs/flywheel/<brand>/<date>/proposals.json
+python3 components/flywheel/flywheel.py show  --brand <brand>
+python3 components/flywheel/flywheel.py cells --brand <brand>        # winners with no cells: their pictures + the lists
+python3 components/flywheel/flywheel.py cells-set --brand <brand> --key "brief 0337" [--kind video] profile=… awareness=… angle=… format=… face=… setting=… look=…
+python3 components/flywheel/flywheel.py column --brand <brand> profile=… awareness=… angle=… format=… face=… setting=… look=…
 ```
 
-Scheduled through `components/job-meter` (job id `flywheel`), listed switched off; the owner turns it on in
+Any brand: `--brand all` runs every brand with a warehouse copy and a brand folder, and the brand's offer and
+lists come from its own folder. Scheduled through `components/job-meter` (job id `flywheel`, `run --brand all`),
+listed switched off; the owner turns it on in
 Studio → Settings → Jobs. The Start button is the Studio job kind `flywheel` (`components/video-studio/studio_asks.py`).
 
 ## Reads (never Meta)

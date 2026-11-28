@@ -15,6 +15,26 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
 LEVELS = ["unaware", "problem-aware", "solution-aware", "product-aware", "most-aware"]
+
+
+def offer_of(brand, root=None):
+    """The one offer every creative of a brand points at: {"product", "page", "match"}. From the brand's own folder
+    (brands/<brand>/products/heroes.json: the first hero and its sellable page), so any brand works; a brand still
+    named in dimensions.json `fixed.offer` keeps that entry. No offer on file reads as empty, never an error."""
+    root = Path(root or ROOT)
+    fixed = (json.loads((HERE / "dimensions.json").read_text()).get("fixed") or {}).get("offer") or {}
+    if isinstance(fixed.get(brand), dict):
+        return fixed[brand]
+    try:
+        h = json.loads((root / "brands" / brand / "products" / "heroes.json").read_text())
+    except (OSError, ValueError):
+        h = {}
+    heroes = [x for x in h.get("heroes") or [] if x]
+    sell = {s.get("handle"): s for s in h.get("sellable") or [] if isinstance(s, dict)}
+    product = heroes[0] if heroes else ""
+    page = (sell.get(product) or {}).get("url") or ""
+    match = [page.split("://", 1)[-1].rstrip("/")] if page else []
+    return {"product": product, "page": page, "match": match}
 BIG = ["profile", "awareness", "angle", "format", "face", "setting", "look"]
 # The system's words (26 Nov 2026): the person a creative is for is its PROFILE, its message is its ANGLE. Run files
 # written before then say `who` and `argument`; every reader goes through norm(), so they still read.
@@ -96,7 +116,7 @@ def build(brand, day=None):
     ads = json.loads((run / "ads.json").read_text())["ads"]
     tags = json.loads((run / "tags.json").read_text())["tags"]
     dims = json.loads((HERE / "dimensions.json").read_text())
-    offer = dims["fixed"]["offer"][brand]
+    offer = offer_of(brand)
     settings = json.loads((ROOT / "brands" / brand / "strategy" / "settings.json").read_text())["settings"]
     av = json.loads((ROOT / "brands" / brand / "core-avatars" / "avatars.json").read_text())["avatars"]
 

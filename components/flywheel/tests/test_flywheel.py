@@ -10,7 +10,7 @@ import flywheel as F  # noqa: E402
 
 DAY = "2026-11-28"
 TODAY = dt.date(2026, 11, 28)
-CELLS = {"who": "p1", "awareness": "most-aware", "argument": "promo", "format": "montage", "face": "none",
+CELLS = {"profile": "p1", "awareness": "most-aware", "angle": "promo", "format": "montage", "face": "none",
          "setting": "kitchen", "look": "phone-ugc"}
 
 
@@ -42,7 +42,7 @@ def make(base, monkeypatch, fatigue=True):
     put(base / "brands" / b / "briefs/briefs.json", {"briefs": [
         {"brief": "brief-0002", "moves": CELLS}, {"brief": "brief-0009", "variation_of": "brief-0003"}]})
     lib = base / "runs/creative-diversity" / b / "2026-10-06"
-    put(lib / "matrix.json", {"items": [{"asset": "a%d" % i, "moves": dict(CELLS, who="q%d" % i, format="f%d" % i, setting="s%d" % i, look="look%d" % (i % 3))}
+    put(lib / "matrix.json", {"items": [{"asset": "a%d" % i, "moves": dict(CELLS, profile="q%d" % i, format="f%d" % i, setting="s%d" % i, look="look%d" % (i % 3))}
                                         for i in range(5)]})
     put(lib / "ads.json", {"ads": []})
     put(base / "runs/winners" / b / "bank.json", {"rows": [
@@ -66,7 +66,7 @@ def test_proposals(tmp_path, monkeypatch):
     assert v["brief"] == "0001" and v["numbers"]["fatigue"]["state"] == "creative fatigue"
     assert v["numbers"]["fatigue"]["worst"] >= 2 and "--dry-run" in v["cmd"]
     assert m["brief"] == "0002" and m["matrix"]["column"] == "face"    # `none` face is on all 5 running ads
-    assert m["matrix"]["keeps"]["argument"] == "promo"
+    assert m["matrix"]["keeps"]["angle"] == "promo"
     assert p["numbers"]["start"] == "2026-12-01" and p["numbers"]["opens_in_days"] == 3
     assert r["key"] == "old-1" and r["numbers"]["purchases"] == 300 and "--dry-run" in r["cmd"]
     held = {h["key"]: h["why"] for h in doc["held"]}
@@ -93,6 +93,45 @@ def test_rows_carry_numbers_only(tmp_path, monkeypatch):
 
 
 def test_next_column_needs_two_seen_cells():
-    assert F.next_column({"who": "a", "format": "x"}, []) is None
+    assert F.next_column({"profile": "a", "format": "x"}, []) is None
     nc = F.next_column(CELLS, [dict(CELLS, look="other")] * 3)
     assert nc["column"] == "format" and nc["shared_by"] == 3       # first seen column with the most sharing
+
+
+def test_old_words_still_read():
+    old = {"who": "p1", "argument": "promo", "awareness": "most-aware", "format": "montage", "face": "none",
+           "setting": "kitchen", "look": "phone-ugc"}
+    assert F.norm(old) == CELLS
+
+
+def test_cells_set_files_and_refuses_off_list(tmp_path, monkeypatch):
+    b = make(tmp_path, monkeypatch)
+    lists = {"profile": ["p1"], "awareness": ["most-aware"], "angle": ["x"], "format": ["montage"], "face": ["none"],
+             "setting": ["kitchen"], "look": ["phone-ugc"]}
+    monkeypatch.setattr(F, "lists", lambda brand, kind="image", base=None: lists)
+    import pytest
+    with pytest.raises(SystemExit):
+        F.cells_set(b, "brief 0001", dict(CELLS, angle="promo"), base=tmp_path)          # promo is off the list
+    with pytest.raises(SystemExit):
+        F.cells_set(b, "brief 0001", {k: v for k, v in CELLS.items() if k != "look"}, base=tmp_path)
+    F.cells_set(b, "brief 0001", dict(CELLS, angle="new:promo"), base=tmp_path)
+    assert F.live_cells(b, tmp_path)["brief 0001"]["moves"]["angle"] == "new:promo"
+    # the live ad's cells now count as running and the winner gets a named column, not a tag row
+    doc = F.build(b, DAY, tmp_path, today=TODAY)
+    assert "1 live ads with cells" in doc["from"]["running"] or "live ads with cells" in doc["from"]["running"]
+
+
+def test_any_brand_with_numbers(tmp_path, monkeypatch):
+    make(tmp_path, monkeypatch)
+    (tmp_path / "runs/funnel-tracking/nofolder/2026-11-28").mkdir(parents=True)
+    (tmp_path / "runs/funnel-tracking/nofolder/2026-11-28/warehouse.json").write_text("{}")
+    assert F.brands_with_numbers(tmp_path) == ["testbrand"]
+
+
+def test_offer_from_the_brand_folder(tmp_path):
+    sys.path.insert(0, str(HERE.parents[1] / "creative-diversity"))
+    import matrix as M
+    put(tmp_path / "brands/anybrand/products/heroes.json",
+        {"heroes": ["kit"], "sellable": [{"handle": "kit", "url": "https://shop.test/kit/"}]})
+    assert M.offer_of("anybrand", tmp_path) == {"product": "kit", "page": "https://shop.test/kit/", "match": ["shop.test/kit"]}
+    assert M.offer_of("nothing-on-file", tmp_path) == {"product": "", "page": "", "match": []}

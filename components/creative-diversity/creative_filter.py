@@ -507,7 +507,11 @@ def start(out, wanted, runner=None, dest=None):
     [{"rank", "lane", "ask", "state", "door"}]; written to runs/creative-diversity/<brand>/filter/<date>-starts.json."""
     import subprocess
     brand = out["brand"]
-    dims = json.loads((HERE / "dimensions.json").read_text())["fixed"]["offer"].get(brand) or {}
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("creative_diversity_matrix_offer", str(HERE / "matrix.py"))
+    mx = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mx)
+    dims = mx.offer_of(brand, ROOT)
     ranks = {r["rank"] for r in out["batch"]} if wanted == "all" else set(wanted)
     done = []
     for r in out["batch"]:

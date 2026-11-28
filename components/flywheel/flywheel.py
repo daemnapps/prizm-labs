@@ -1,14 +1,18 @@
 #!/usr/bin/env python3
 """flywheel — the read joined to the plan: each morning, what the numbers say becomes brief proposals.
 
-    python3 components/flywheel/flywheel.py run  --brand <brand> [--date YYYY-MM-DD] [--lead-days 21]
-    python3 components/flywheel/flywheel.py show --brand <brand>            the newest proposals, as a table
+    python3 components/flywheel/flywheel.py run   --brand <brand>|all [--date YYYY-MM-DD] [--lead-days 21]
+    python3 components/flywheel/flywheel.py show  --brand <brand>            the newest proposals, as a table
+    python3 components/flywheel/flywheel.py cells --brand <brand>            spend winners with no cells: their pictures + the lists
+    python3 components/flywheel/flywheel.py cells-set --brand <brand> --key "brief 0337" profile=… awareness=… angle=… format=… face=… setting=… look=…
+    python3 components/flywheel/flywheel.py column --brand <brand> profile=… … look=…
 
 One step, any brand. It reads only what is already on file (never Meta):
   - the warehouse copy        runs/funnel-tracking/<brand>/<date>/warehouse.json   (through the desk's live_ads)
   - the desk report           runs/media-buying/<brand>/<date>/report.json        (its 3 / 7 / 14-day windows)
   - the winner rule           ~/.prizm/targets.json via the desk (spend winner, KPI winner)
-  - the creative matrix       brands/<brand>/briefs/briefs.json moves, the plan ledger, the tagged library
+  - the creative matrix       live ads' cells (runs/creative-diversity/<brand>/live-cells.json), the brief register's
+                              moves, the plan ledger, the tagged library
   - the brief register        variation_of, ad-variations runs and Studio jobs already asked
   - the promo-calendar        brands/<brand>/products/offer-bank.md, runs/promo-pack/<brand>/
   - the winners bank          runs/winners/<brand>/bank.json
@@ -44,10 +48,23 @@ ROOT = HERE.parents[1]
 # best longer window (14 or 30 days) — the desk keeps no single best 7 days yet.
 FATIGUE_AT = 2.0
 SEEN = ("format", "face", "setting", "look")
-COLS = ("who", "awareness", "argument") + SEEN
-NAMES = {"who": "person", "awareness": "awareness", "argument": "angle", "format": "format", "face": "face",
-         "setting": "setting", "look": "look"}
+SAID = ("profile", "awareness", "angle")
+COLS = SAID + SEEN
+NAMES = {c: c for c in COLS}
+OLD_WORDS = {"who": "profile", "argument": "angle"}   # run files written before 26 Nov 2026 say who / argument
 REMAKES = 3
+MIN_LIVE = 8          # fewer live ads with cells than this: the tagged library fills in what is running
+AGES = ("18-24", "25-34", "35-44", "45-54", "55-64", "65-plus")
+ETH = ("black", "white", "latino", "east-asian", "southeast-asian", "south-asian", "middle-eastern", "mixed")
+
+
+def norm(m):
+    """Cells in the system's words: an old `who` / `argument` reads as `profile` / `angle`."""
+    if not isinstance(m, dict):
+        return {}
+    out = {OLD_WORDS.get(k, k): v for k, v in m.items() if k not in OLD_WORDS.values()}
+    out.update({k: v for k, v in m.items() if k in OLD_WORDS.values()})
+    return out
 
 
 def root():
@@ -102,35 +119,67 @@ def _r(v, n=2):
 
 
 # ------------------------------------------------------------------------------------------------- the matrix --
-def moves_index(brand, base):
-    """{"brief": {"0323": moves}, "ad": {"<ad id>": moves}} from the brief register, the plan ledger and the newest
-    tagged library (ad -> asset -> moves). Only what is on file; nothing is inferred."""
-    by_brief, by_ad = {}, {}
+def cells_file(brand, base=None):
+    return (base or root()) / "runs" / "creative-diversity" / brand / "live-cells.json"
+
+
+def live_cells(brand, base=None):
+    """{"brief 0337" | "ad <id>": {"moves", "by", "at", "from"}}: the cells of live ads, filled from their own pictures."""
+    return ((_read(cells_file(brand, base)) or {}).get("cells")) or {}
+
+
+def moves_index(brand, base, live_keys=()):
+    """{"key": {"brief 0323" | "ad <id>": cells}, "running": [cells], "running_from": …} from, in order: the live ads'
+    cells (live-cells.json), the brief register, the plan ledger, the newest tagged library (ad -> asset -> cells).
+    `running` is the cells of the ads spending now (live_keys); the tagged library fills in when fewer than MIN_LIVE
+    of them have cells. Only what is on file; nothing is inferred."""
+    by = {}
+    for k, r in live_cells(brand, base).items():
+        if isinstance(r, dict) and r.get("moves"):
+            by[k] = norm(r["moves"])
     reg = _read(base / "brands" / brand / "briefs" / "briefs.json") or {}
     for r in reg.get("briefs") or []:
         m = re.search(r"(\d{4})", str(r.get("brief") or ""))
         if m and isinstance(r.get("moves"), dict):
-            by_brief[m.group(1)] = r["moves"]
+            by.setdefault("brief " + m.group(1), norm(r["moves"]))
     led = _read(base / "runs" / "creative-diversity" / brand / "planned.json") or {}
     for row in (led.get("ads") or {}).values() if isinstance(led, dict) else []:
         if isinstance(row, dict) and isinstance(row.get("moves"), dict):
             m = re.search(r"(\d{4})", str(row.get("brief") or ""))
             if m:
-                by_brief.setdefault(m.group(1), row.get("made") or row["moves"])
+                by.setdefault("brief " + m.group(1), norm(row.get("made") or row["moves"]))
     lib = sorted(glob.glob(str(base / "runs" / "creative-diversity" / brand / "2*" / "matrix.json")))
-    running = []
+    library = []
     if lib:
         day = Path(lib[-1]).parent
-        items = {i.get("asset"): i.get("moves") or {} for i in (_read(lib[-1]) or {}).get("items") or []}
-        running = [m for m in items.values() if m]
+        items = {i.get("asset"): norm(i.get("moves") or {}) for i in (_read(lib[-1]) or {}).get("items") or []}
+        library = [m for m in items.values() if m]
         ads = _read(day / "ads.json") or {}
         for a in ads.get("ads") or [] if isinstance(ads, dict) else []:
             for asset in a.get("assets") or []:
                 if items.get(asset):
-                    by_ad[str(a.get("ad_id"))] = items[asset]
+                    by.setdefault("ad " + str(a.get("ad_id")), items[asset])
                     break
-    return {"brief": by_brief, "ad": by_ad, "running": running,
-            "library": Path(lib[-1]).parent.name if lib else None}
+    live = [m for m in (next((by[k] for k in ks if k in by), None) for ks in live_keys) if m]
+    running = live + (library if len(live) < MIN_LIVE else [])
+    lib_day = Path(lib[-1]).parent.name if lib else None
+    src = "%d live ads with cells" % len(live) + (" + the tagged library of %s" % lib_day if len(live) < MIN_LIVE and library else "")
+    return {"key": by, "running": running, "running_from": src, "library": lib_day}
+
+
+def lists(brand, kind="image", base=None):
+    """{column: [values]} a cell may take, from the brand's own lists (creative-diversity), plus the profiles from
+    brands/<brand>/core-avatars/avatars.json. A value outside the lists is written `new:<value>`."""
+    base = base or root()
+    p = str(ROOT / "components" / "creative-diversity")
+    if p not in sys.path:
+        sys.path.insert(0, p)
+    import creative_matrix as CM
+    v = {k: x for k, x in CM.values(brand, kind).items() if not k.startswith("_")}
+    av = (_read(base / "brands" / brand / "core-avatars" / "avatars.json") or {}).get("avatars") or []
+    v["profile"] = [x for a in av for x in [a.get("id")] + list(a.get("sub_avatars") or []) if x]   # the avatar, or one narrower profile
+    v["face"] = ["none"] + ["%s/%s/%s" % (g, a, e) for g in ("male", "female") for a in AGES for e in ETH]
+    return v
 
 
 def known(m):
@@ -157,7 +206,7 @@ def next_column(moves, running):
     open_ = [v for v, _ in sorted(use[k].items(), key=lambda x: (x[1], str(x[0]))) if v != m[k] and not str(v).startswith("new:")][:3]
     return {"column": k, "name": NAMES[k], "holds": m[k], "shared_by": n, "of_running": total,
             "share": round(n / total, 2) if total else None, "least_used": open_,
-            "keeps": {c: m[c] for c in ("who", "awareness", "argument") if c in m}}
+            "keeps": {c: m[c] for c in SAID if c in m}}
 
 
 # ------------------------------------------------------------------------------------------------ the register --
@@ -218,6 +267,12 @@ def _ad_numbers(a, win=None):
     return n
 
 
+def live_keys(la):
+    """For each ad spending in the last 7 days, the keys its cells may sit under: its brief, then the ad itself."""
+    live = [a for a in la["ads"] if a["spend7"] > 0] or [a for a in la["ads"] if a["spend30"] > 0]   # a stale copy: its 30 days
+    return [(["brief " + a["brief"]] if a["brief"] else []) + ["ad " + str(a["id"])] for a in live]
+
+
 def _key(a):
     return ("brief " + a["brief"]) if a["brief"] else ("ad " + str(a["id"]))
 
@@ -226,11 +281,15 @@ def label(a):
     """How the owner knows the ad: its brief number, else its name up to the first separator."""
     if a["brief"]:
         return "Brief " + a["brief"]
+    m = re.search(r"brief-([A-Za-z0-9]+(?:-[0-9]+)?)", str(a.get("name") or ""))
+    if m:
+        return "Brief " + m.group(1)
     return re.split(r"_|\s+-\s+", str(a.get("name") or a["id"]))[0].strip()[:48]
 
 
 def said(a, kpi):
-    return "$%s spent in 30 days · %s buys · CPA $%s%s" % ("{:,.0f}".format(a["spend30"]), int(a["buys30"]), a["cpa30"],
+    return "$%s spent in 30 days · %s buys · CPA %s%s" % ("{:,.0f}".format(a["spend30"]), int(a["buys30"]),
+                                                        "$%s" % a["cpa30"] if a["cpa30"] is not None else "none yet",
                                                          " · KPI winner (target $%s)" % kpi if a["kpi_winner"] else "")
 
 
@@ -243,7 +302,7 @@ def build(brand, day=None, base=None, lead_days=21, today=None):
     rf = _newest(base, "runs/media-buying/%s/2*/report.json" % brand)
     report = _read(rf) if rf else None
     win = windows(report)
-    mx = moves_index(brand, base)
+    mx = moves_index(brand, base, live_keys(la))
     done = varied(brand, base)
     rows, held = [], []
 
@@ -271,8 +330,7 @@ def build(brand, day=None, base=None, lead_days=21, today=None):
         if a["brief"] and a["brief"] in done:
             held.append({"key": key, "why": "already varied: " + done[a["brief"]], "numbers": nums})
             continue
-        moves = mx["brief"].get(a["brief"]) if a["brief"] else None
-        moves = moves or mx["ad"].get(str(a["id"]))
+        moves = mx["key"].get(key) or mx["key"].get("ad " + str(a["id"]))
         nc = next_column(moves, mx["running"]) if moves else None
         if not nc:
             # never tagged: the job reads its pictures, fills the 7 cells from the lists, then the same rule picks
@@ -280,21 +338,20 @@ def build(brand, day=None, base=None, lead_days=21, today=None):
                          "title": "Tag, then test the next column: %s" % label(a),
                          "why": "%s · not yet varied · its 7 matrix cells are not on file" % said(a, kpi),
                          "numbers": dict(nums, kpi_winner=a["kpi_winner"]), "matrix": None,
-                         "do": "fill its 7 cells from the lists (the ad's own pictures, free), then "
-                               "`flywheel.py column` picks the seen column shared by the most running ads",
-                         "cmd": ["python3", "components/flywheel/flywheel.py", "column", "--brand", brand,
-                                 "who=<…>", "awareness=<…>", "argument=<…>", "format=<…>", "face=<…>", "setting=<…>", "look=<…>"]})
+                         "do": "fill its 7 cells from the lists by looking at the ad's own pictures (free), then the "
+                               "next run names the seen column shared by the most running ads",
+                         "cmd": ["python3", "components/flywheel/flywheel.py", "cells", "--brand", brand]})
             continue
         rows.append({"kind": "matrix", "key": key, "label": label(a), "ad": a["name"], "brief": a["brief"],
                      "title": "Test %s next: %s" % (nc["name"], label(a)),
-                     "why": "%s · %s `%s` is on %d of %d running ads (library %s); keep %s, move %s" % (
-                         said(a, kpi), nc["name"], nc["holds"], nc["shared_by"], nc["of_running"], mx["library"],
+                     "why": "%s · %s `%s` is on %d of %d running ads (%s); keep %s, move %s" % (
+                         said(a, kpi), nc["name"], nc["holds"], nc["shared_by"], nc["of_running"], mx["running_from"],
                          " · ".join("%s `%s`" % (NAMES[c], v) for c, v in nc["keeps"].items()) or "what it says", nc["name"]),
                      "numbers": dict(nums, kpi_winner=a["kpi_winner"]), "matrix": dict(nc, moves=known(moves)),
                      "do": "one new row in the creative matrix: this winner's cells with %s moved; the matrix check, "
                            "then the brief (free)" % nc["name"],
-                     "cmd": ["python3", "components/creative-diversity/check.py", "--brief", brand, "<new brief>"] +
-                            ["%s=%s" % (c, "<new>" if c == nc["column"] else v) for c, v in known(moves).items()]})
+                     "cmd": ["python3", "components/flywheel/flywheel.py", "column", "--brand", brand] +
+                            ["%s=%s" % (c, v) for c, v in known(moves).items()]})
 
     # promo windows coming up -> the promo pack's hand-offs
     try:
@@ -353,7 +410,7 @@ def build(brand, day=None, base=None, lead_days=21, today=None):
     return {"brand": brand, "date": day, "made": dt.datetime.now().isoformat(timespec="seconds"),
             "what": "what the numbers say, as brief proposals: no money decisions; nothing here spends",
             "from": {"warehouse": wf, "desk_report": _rel(base, rf), "desk_asof": (report or {}).get("asof"),
-                     "library": mx["library"], "winners_bank": "runs/winners/%s/bank.json" % brand if bank else None},
+                     "library": mx["library"], "running": mx["running_from"], "winners_bank": "runs/winners/%s/bank.json" % brand if bank else None},
             "winrule": la["winrule"], "fatigue_rule": {"at": FATIGUE_AT, "window": "last 3 and 7 days against the ad's own "
                                                        "14 or 30 days (draft)", "source": "components/creative-diversity/META.md"},
             "counts": {"ads": len(la["ads"]), "spend_winners": sum(a["spend_winner"] for a in la["ads"]),
@@ -379,6 +436,87 @@ def latest(brand, base=None):
     return doc
 
 
+def _cards_root():
+    """Where the ads' own folders are (meta-upload's root: META_CARDS_ROOT or the Drive mount), or None."""
+    p = str(ROOT / "components" / "meta-upload")
+    if p not in sys.path:
+        sys.path.append(p)
+    try:
+        import cards
+        r = cards.root()
+        return r if Path(r).is_dir() else None
+    except (Exception, SystemExit):                                                   # noqa: BLE001  no mount
+        return None
+
+
+def card_of(brand, a, base=None):
+    """The live card of one ad from the brand's ADS-INDEX: by its brief number, else by its ad id. {lane, folder}"""
+    idx = _read((base or root()) / "runs" / "meta-upload" / brand / "ADS-INDEX.json") or {}
+    for b in idx.get("briefs") or []:
+        for c in b.get("cards") or []:
+            ids = {str(m.get("ad_id")) for m in c.get("meta_ads") or []}
+            if (a.get("brief") and b.get("number") == a["brief"]) or str(a.get("id")) in ids:
+                if str(a.get("id")) in ids or not ids:
+                    return {"lane": c.get("lane"), "folder": c.get("folder")}
+    for b in idx.get("briefs") or []:                     # same brief, another batch's card
+        if a.get("brief") and b.get("number") == a["brief"] and b.get("cards"):
+            c = b["cards"][0]
+            return {"lane": c.get("lane"), "folder": c.get("folder")}
+    return None
+
+
+def untagged(brand, base=None):
+    """Spend winners not yet varied whose 7 cells are not on file, each with its pictures (when the ads' folders are
+    on this computer) and the lists a cell may take."""
+    base = base or root()
+    doc = build(brand, base=base)
+    rc = _cards_root()
+    out = []
+    for p in doc["proposals"]:
+        if p["kind"] != "matrix" or p.get("matrix"):
+            continue
+        a = {"brief": p.get("brief"), "id": p["key"][3:] if p["key"].startswith("ad ") else None}
+        c = card_of(brand, a, base)
+        files = []
+        if c and rc and c.get("folder"):
+            d = Path(rc) / c["folder"].replace("Shared Assets/meta/", "", 1).strip("/")
+            if d.is_dir():
+                files = sorted(str(f) for f in d.iterdir() if f.suffix.lower() in (".png", ".jpg", ".jpeg", ".mp4", ".mov", ".webp"))
+        out.append({"key": p["key"], "label": p.get("label"), "ad": p.get("ad"), "kind": "video" if (c or {}).get("lane") == "video" else "image",
+                    "card": (c or {}).get("folder"), "pictures": files})
+    return out
+
+
+def cells_set(brand, key, cells, by="flywheel", source=None, base=None):
+    """File one live ad's 7 cells, each a value on the brand's lists (or `new:<value>`). Returns the row written."""
+    base = base or root()
+    if not re.match(r"^(brief \d{4}|ad \d+)$", key):
+        raise SystemExit("key is `brief NNNN` or `ad <id>`")
+    cells = norm(cells)
+    kind = cells.pop("_kind", None) or "image"
+    allowed = lists(brand, kind, base)
+    bad = [c for c in COLS if not cells.get(c)]
+    bad += ["%s `%s` is not on the list" % (c, v) for c, v in cells.items()
+            if c in COLS and not str(v).startswith("new:") and allowed.get(c) and v not in allowed[c]]
+    if bad:
+        raise SystemExit("not filed: " + "; ".join(("%s is empty" % b) if b in COLS else b for b in bad))
+    f = cells_file(brand, base)
+    doc = _read(f) or {"_what": "The 7 matrix cells of live ads, filled from their own pictures (flywheel cells-set).", "cells": {}}
+    row = {"moves": {c: cells[c] for c in COLS}, "kind": kind, "by": by, "from": source,
+           "at": dt.datetime.now().isoformat(timespec="seconds")}
+    doc["cells"][key] = row
+    f.parent.mkdir(parents=True, exist_ok=True)
+    f.write_text(json.dumps(doc, indent=1, ensure_ascii=False))
+    return row
+
+
+def brands_with_numbers(base=None):
+    """Every brand with a warehouse copy and a brand folder: the job runs them all, whoever they are."""
+    base = base or root()
+    return sorted({Path(p).parts[-3] for p in glob.glob(str(base / "runs/funnel-tracking/*/2*/warehouse.json"))
+                   if (base / "brands" / Path(p).parts[-3]).is_dir()})
+
+
 def one(brand, day, pid, base=None):
     doc = _read(out_dir(brand, day, base) / "proposals.json") or {}
     return next((r for r in doc.get("proposals") or [] if r.get("id") == pid), None)
@@ -393,24 +531,47 @@ def main(argv=None):
     r.add_argument("--lead-days", type=int, default=21)
     s = sub.add_parser("show")
     s.add_argument("--brand", required=True)
-    c = sub.add_parser("column", help="the next column for one set of cells: who=… awareness=… … look=…")
+    c = sub.add_parser("column", help="the next column for one set of cells: profile=… awareness=… … look=…")
     c.add_argument("--brand", required=True)
     c.add_argument("cells", nargs="+")
+    u = sub.add_parser("cells", help="spend winners with no cells: their pictures and the lists")
+    u.add_argument("--brand", required=True)
+    w = sub.add_parser("cells-set", help="file one live ad's 7 cells")
+    w.add_argument("--brand", required=True)
+    w.add_argument("--key", required=True)
+    w.add_argument("--kind", default="image", choices=("image", "video"))
+    w.add_argument("--by", default="flywheel")
+    w.add_argument("--from", dest="source")
+    w.add_argument("cells", nargs="+")
     a = ap.parse_args(argv)
     if not re.match(r"^[a-z0-9][a-z0-9_-]*$", a.brand):
         raise SystemExit("bad brand id")
     if a.cmd == "run":
-        if not _newest(root(), "runs/funnel-tracking/%s/2*/warehouse.json" % a.brand):
-            print("no warehouse copy for %s yet: nothing to read" % a.brand)
-            return 3
-        doc, f = write(a.brand, a.date, lead_days=a.lead_days)
-        print("%s: %d proposals (%s) -> %s" % (a.brand, len(doc["proposals"]), ", ".join(
-            "%d %s" % (v, k) for k, v in doc["counts"].items() if k not in ("ads", "spend_winners", "kpi_winners") and v),
-            _rel(root(), f)))
+        todo = brands_with_numbers() if a.brand == "all" else [a.brand]
+        code = 3
+        for b in todo:
+            if not _newest(root(), "runs/funnel-tracking/%s/2*/warehouse.json" % b):
+                print("no warehouse copy for %s yet: nothing to read" % b)
+                continue
+            doc, f = write(b, a.date, lead_days=a.lead_days)
+            code = 0
+            print("%s: %d proposals (%s) -> %s" % (b, len(doc["proposals"]), ", ".join(
+                "%d %s" % (v, k) for k, v in doc["counts"].items() if k not in ("ads", "spend_winners", "kpi_winners") and v),
+                _rel(root(), f)))
+        return code
+    if a.cmd == "cells":
+        print(json.dumps({"untagged": untagged(a.brand), "lists": {k: lists(a.brand, k) for k in ("image", "video")}},
+                         indent=1, ensure_ascii=False))
+        return 0
+    if a.cmd == "cells-set":
+        cells = dict(x.split("=", 1) for x in a.cells if "=" in x)
+        cells["_kind"] = a.kind
+        print(json.dumps(cells_set(a.brand, a.key, cells, a.by, a.source), indent=1, ensure_ascii=False))
         return 0
     if a.cmd == "column":
         cells = dict(x.split("=", 1) for x in a.cells if "=" in x)
-        nc = next_column(cells, moves_index(a.brand, root())["running"])
+        WD = desk(root())
+        nc = next_column(norm(cells), moves_index(a.brand, root(), live_keys(WD.live_ads(a.brand)))["running"])
         print(json.dumps(nc or {"column": None, "why": "fewer than 2 seen cells known"}, indent=1, ensure_ascii=False))
         return 0 if nc else 3
     doc = latest(a.brand)

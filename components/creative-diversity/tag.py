@@ -45,6 +45,15 @@ def first_line(path, label):
     return ""
 
 
+def _matrix():
+    """This folder's matrix module (the offer lives there), whatever name another tool loaded first."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("creative_diversity_matrix_offer", str(HERE / "matrix.py"))
+    m = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(m)
+    return m
+
+
 def lists(brand):
     b = ROOT / "brands" / brand
     av = json.loads((b / "core-avatars" / "avatars.json").read_text())["avatars"]
@@ -63,7 +72,7 @@ def lists(brand):
     settings = json.loads((b / "strategy" / "settings.json").read_text())["settings"]
     core = json.loads((b / "brand-identity" / "core-message" / "core-message.json").read_text())["core"]
     dims = json.loads((HERE / "dimensions.json").read_text())
-    offer = dims["fixed"]["offer"][brand]
+    offer = _matrix().offer_of(brand, ROOT)
     pos = (b / "brand-identity" / "position.md").read_text()
     stage = next((l for l in pos.splitlines() if "MARKET STAGE" in l), "unknown")
     aw = "\n".join(f"- `{r['id']}`: {r.get('what', '')[:140]}" for r in rows("doctrine.awareness"))
