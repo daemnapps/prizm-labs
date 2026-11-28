@@ -25,7 +25,14 @@ reads a note and changes only what it asks for, in the file that owns that thing
 4. **Use it** (his click in the Studio, or `revise.py use --brand <brand> --note <id>`): the new files go in place,
    each old one kept as `<name>.before-rev-<id>.md`; then the stage check runs on the piece. It refuses if the live
    file moved on since the revision was made: revise again.
-5. **Report** in one line and point to the piece in the Studio, where each note shows its before and after.
+5. **The chain learns from it** (on Use this, never on a proposal): every kept edit and the lesson behind each ask
+   go into the chain's own learnings loop (`components/run-kit/run_kit/learnings.py`). A lesson he states as a
+   standing rule ("always", "never again", "last time I'm saying this") is in force at once; any other lesson, and
+   each kept edit, is a candidate that goes in force when the same change shows in a second run. Lessons are written
+   brand-free unless they only hold for one brand. Every later run is handed the rules in force at its station:
+   `writing` (video writing), `copy` (copywriter, emails), `video` (production), `image`. His own words stay in his
+   own node, never in the shared store. A revision he never uses teaches nothing.
+6. **Report** in one line and point to the piece in the Studio, where each note shows its before and after.
 
 ## Rules
 

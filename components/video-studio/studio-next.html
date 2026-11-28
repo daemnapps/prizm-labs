@@ -659,6 +659,7 @@ async function fbLoad(id, kind, item, title){
       ${ch ? `<div class="fbc"><span class="lbl">Before</span><span class="lbl">After</span></div>${ch}` : ''}
       ${(v.needs_paid || []).length ? `<span class="lbl">Needs money, stops at the price: ${esc(v.needs_paid.join(' · '))}</span>` : ''}
       ${(v.not_done || []).length ? `<span class="lbl">Not changed here: ${esc(v.not_done.join(' · '))}</span>` : ''}
+      ${(v.lessons || []).length ? `<div style="display:grid;gap:3px"><span class="lbl">${v.learned ? 'The chain learned' : 'The chain learns on Use this'}</span>${v.lessons.map(l => `<span style="font-size:12.5px">${(v.learned && (v.learned.in_force || []).includes(l.rule)) ? '<span class="pill p-ready">in force</span> ' : l.said ? '<span class="pill p-act">your rule</span> ' : '<span class="pill p-mute">after 2 runs</span> '}${esc(l.rule)}</span>`).join('')}</div>` : ''}
       <div class="arow">${v.in_use ? '<span class="pill p-ready">In use · the old version is kept</span>' : (v.changes || []).length && v.passed !== false ? `<button class="btn wait" data-use="${esc(n.id)}">Use this</button>` : ''}<button class="btn" data-rev="${esc(n.id)}">Revise again</button><span class="lbl" style="margin-left:auto">${v.cost_usd != null ? '$' + Number(v.cost_usd).toFixed(2) : ''}</span></div></div>`; };
   const list = async () => { try { const r = await J(`/api/desk/feedback?brand=${encodeURIComponent(S.brand)}&item=${encodeURIComponent(item)}`, {keep:true});
     const notes = r.notes || [];

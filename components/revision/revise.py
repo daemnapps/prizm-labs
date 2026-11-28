@@ -24,6 +24,10 @@ to his words), diff.patch, before/ and after/ (only the changed files), and the 
 <name>.before-rev-<id>.md (the chain's own naming for an earlier version). Nothing here spends beyond the two model
 passes: a change that needs new footage, clips or a voice is listed and stops at the quote, as the chain does.
 
+On `use` the chain learns from it: each kept edit and each ask's lesson go into run-kit's learnings loop (candidates;
+in force at once when he stated a standing rule, else once the same change recurs in a second run), and every later
+run is handed the rules in force at its station. A proposal he never uses teaches nothing.
+
 Python 3.9, standard library only.
 """
 import argparse
@@ -523,7 +527,12 @@ def view(rec):
             "needs_paid": [x.get("what") or x.get("quote") for x in rec.get("needs_paid") or []][:5],
             "not_done": [(x.get("quote") or "") + " — " + (x.get("why") or "") for x in
                          (rec.get("not_here") or []) + (rec.get("not_done") or [])][:5],
-            "record": "runs/revision/%s/%s" % (rec["brand"], rec["id"]), "cost_usd": rec.get("cost_usd")}
+            "record": "runs/revision/%s/%s" % (rec["brand"], rec["id"]), "cost_usd": rec.get("cost_usd"),
+            "lessons": [{"rule": a["lesson"], "said": bool(a.get("rule_said"))} for a in rec.get("asks") or []
+                        if (a.get("lesson") or "").strip()][:6],
+            "learned": {"filed": len(rec.get("learned") or []),
+                        "in_force": [x["rule"] for x in rec.get("learned") or [] if x["promoted"]][:6]}
+            if rec.get("in_use") else None}
 
 
 def why_md(rec):
@@ -543,6 +552,12 @@ def why_md(rec):
         L += ["### %d. `%s`" % (i, e["file"]), "", "- **Why:** %s" % e.get("why", ""),
               "- **His words:** “%s”" % e.get("quote", ""), "", "Before:", "", "```", e["find"].strip(), "```",
               "", "After:", "", "```", e["replace"].strip(), "```", ""]
+    lessons = [a for a in rec.get("asks") or [] if (a.get("lesson") or "").strip()]
+    if lessons:
+        L += ["## What the chain learns from it (filed on Use this)", ""] + [
+            "- %s %s%s" % ("NEVER:" if a.get("lesson_kind") == "never" else "DO:", a["lesson"],
+                           " (said as a rule: in force at once)" if a.get("rule_said") else " (in force once seen twice)")
+            for a in lessons] + [""]
     for title, rows in (("Needs money (stops at the quote)", rec.get("needs_paid")),
                         ("Not changed here", (rec.get("not_here") or []) + (rec.get("not_done") or [])),
                         ("Edits refused by the check", rec.get("refused"))):
@@ -550,6 +565,51 @@ def why_md(rec):
             L += ["## " + title, ""] + ["- “%s”: %s" % (r.get("quote", ""), r.get("what") or r.get("why")
                                                                    or r.get("refused", "")) for r in rows] + [""]
     return "\n".join(L)
+
+
+# ------------------------------------------------------------------ learn from it
+# The owner kept the change ("Use this"): the chain's own learnings loop (run-kit learnings.py) gets it, so the next
+# piece starts from it. Each kept line is a candidate (in force once the same fix shows in a second run); each ask's
+# lesson is a candidate too, in force at once when he stated it as a standing rule. His words stay in his own node.
+STATIONS = {"video": {"cast": ["writing", "video"], "look": ["writing", "video"]},
+            "email": {"brief": ["copy", "image"]}}
+DEFAULT_STATION = {"video": ["writing"], "email": ["copy"]}
+
+
+def stations_for(piece_type, owner):
+    return STATIONS.get(piece_type, {}).get(owner) or DEFAULT_STATION.get(piece_type, ["writing"])
+
+
+def _ln():
+    kit = str(COMPONENTS / "run-kit")
+    if kit not in sys.path:
+        sys.path.append(kit)
+    os.environ.setdefault("AI_WORKSPACE", str(WS))
+    from run_kit import learnings as LN
+    return LN
+
+
+def learn(rec):
+    """Hand a kept revision to the chain's learnings. Returns what was filed: [{id, rule, promoted, from}]."""
+    LN, out = _ln(), []
+    brand, run = rec["brand"], Path(rec["run"]).name
+    owner_of = {f: a.get("owner") for a in rec.get("asks") or [] for f in a.get("files") or []}
+    for e in rec.get("edits") or []:
+        st = stations_for(rec["piece_type"], owner_of.get(e["file"]))[0]
+        for r in LN.capture(brand, st, e["find"], e["replace"], run=run, file=e["file"], by="owner",
+                            said=e.get("quote") or ""):
+            out.append({"id": r["id"], "rule": r["rule"], "promoted": r.get("promoted", False), "from": "kept edit"})
+    for a in rec.get("asks") or []:
+        lesson = (a.get("lesson") or "").strip()
+        if not lesson:
+            continue
+        r = LN.note(brand if a.get("brand_only") else None, stations_for(rec["piece_type"], a.get("owner")), lesson,
+                    kind=a.get("lesson_kind") if a.get("lesson_kind") in ("do", "never") else "do", run=run,
+                    file=",".join(a.get("files") or []), src="revision", by="owner", said=a.get("quote") or "",
+                    said_rule=bool(a.get("rule_said")))
+        out.append({"id": r["id"], "rule": lesson, "promoted": r.get("promoted", False), "from": "lesson",
+                    "rule_said": bool(a.get("rule_said")), "stations": r["stations"]})
+    return out
 
 
 # ------------------------------------------------------------------ use it
@@ -594,6 +654,12 @@ def use(brand, nid, say=print):
     where = {"type": rec["piece_type"], "run": run}
     rec.update(in_use=True, used_at=now(), state="in use", old_versions=kept,
                stage_check=stage_check(where) if rec["piece_type"] == "video" else {"ran": False, "why": "no lane"})
+    try:
+        rec["learned"] = learn(rec)
+    except Exception as e:  # noqa: BLE001 -- a store that will not write never undoes his kept change
+        rec["learned_error"] = "%s: %s" % (type(e).__name__, str(e)[:200])
+    say("learned: %d candidate(s), %d now in force" % (len(rec.get("learned") or []),
+                                                       sum(1 for x in rec.get("learned") or [] if x["promoted"])))
     write_json(recp, rec)
     (out / "why.md").write_text(why_md(rec))
     mark(brand, nid, state="in use", revision_view=view(rec))

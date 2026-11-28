@@ -20,6 +20,8 @@ BRIEF = "# Brief\n\n## Lines\n\n| 1 | Stop scrolling. |\n| 2 | Here is why. |\n\
 
 def load(ws):
     os.environ["PRIZM_WS"] = str(ws)
+    os.environ["AI_WORKSPACE"] = str(ws)                       # the learnings store, in the temp folder
+    os.environ["OWNER_QUOTES"] = str(ws / "his-node" / "quotes.jsonl")
     spec = importlib.util.spec_from_file_location("revise_under_test", SRC)
     m = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(m)
@@ -43,6 +45,8 @@ def fake(route, edit):
 class Revise(unittest.TestCase):
     def setUp(self):
         self.ws = Path(tempfile.mkdtemp())
+        (self.ws / "brands").mkdir()          # the learnings store honours AI_WORKSPACE only where brands/ exists
+        (self.ws / "components").mkdir()
         run = self.ws / "runs/video-teardown/_work/brand_a-swipe-1"
         (run / "stages").mkdir(parents=True)
         (run / "run.json").write_text(json.dumps({"brand": "brand_a", "label": "brand_a-swipe-1"}))
@@ -65,7 +69,8 @@ class Revise(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(self.ws, ignore_errors=True)
-        os.environ.pop("PRIZM_WS", None)
+        for k in ("PRIZM_WS", "AI_WORKSPACE", "OWNER_QUOTES"):
+            os.environ.pop(k, None)
 
     def add(self, n):
         f = self.ws / "runs/studio-feedback/brand_a/feedback.jsonl"
@@ -86,6 +91,9 @@ class Revise(unittest.TestCase):
              "why": "the brief carries it", "quote": "Put the phone down."}], "not_done": [],
             "summary": "The first line is now his."}
         return fake(route, edit)
+
+    def test_the_learnings_store_is_the_temp_folder(self):
+        self.assertEqual(Path(self.R._ln().paths.repo()), self.ws)       # never the real store
 
     def test_typed_exact_words_make_a_proposal_and_leave_live_files(self):
         rec = self.R.revise("brand_a", "n1", runner=self.exact(), say=lambda *_: None)
@@ -113,6 +121,41 @@ class Revise(unittest.TestCase):
         n = self.R.note("brand_a", "n1")
         self.assertEqual(n["state"], "in use")
         self.assertTrue(n["revision_view"]["in_use"])
+
+    def lesson_run(self, said, brand_only=False):
+        route = {"read": "one scene", "asks": [{"quote": "this is the last time I'm gonna say this, combine the hook shots",
+                 "kind": "general", "owner": "brief", "files": ["stages/5-brief.md"],
+                 "lesson": "Put every hook shot in one scene, with the shots listed inside it", "lesson_kind": "do",
+                 "rule_said": said, "brand_only": brand_only}]}
+        edit = {"edits": [{"file": "stages/5-brief.md", "find": "| 1 | Stop scrolling. |\n| 2 | Here is why. |",
+                           "replace": "| 1 | Stop scrolling. Here is why. |", "why": "one scene", "quote": "combine"}]}
+        return fake(route, edit)
+
+    def learned(self, name):
+        f = self.ws / "runs/learnings" / name
+        return [json.loads(l) for l in f.read_text().splitlines()] if f.is_file() else []
+
+    def test_a_kept_revision_teaches_the_chain(self):
+        self.R.revise("brand_a", "n1", runner=self.lesson_run(said=True), say=lambda *_: None)
+        self.assertEqual(self.learned("candidates.jsonl"), [])         # a proposal teaches nothing yet
+        rec = self.R.use("brand_a", "n1", say=lambda *_: None)
+        rules = [r["rule"] for r in self.learned("_all.jsonl")]
+        self.assertIn("Put every hook shot in one scene, with the shots listed inside it", rules)   # said: in force
+        cands = self.learned("candidates.jsonl")
+        self.assertTrue(any(c["from"] == "kept edit" and c["stations"] == ["writing"] for c in cands))
+        self.assertTrue(any(x["promoted"] for x in rec["learned"]))
+        self.assertIn("Put every hook shot", " ".join(self.R.note("brand_a", "n1")["revision_view"]["learned"]["in_force"]))
+        for f in (self.ws / "runs/learnings").glob("*.jsonl"):
+            self.assertNotIn("last time I'm gonna say", f.read_text())    # his words stay in his own node
+        self.assertIn("last time I'm gonna say", (self.ws / "his-node/quotes.jsonl").read_text())
+        LN = self.R._ln()
+        self.assertIn("Put every hook shot", LN.handed(None, "writing", "brand_a"))   # the next writing run gets it
+
+    def test_a_lesson_not_said_as_a_rule_waits_for_a_second_run(self):
+        self.R.revise("brand_a", "n1", runner=self.lesson_run(said=False, brand_only=True), say=lambda *_: None)
+        self.R.use("brand_a", "n1", say=lambda *_: None)
+        self.assertEqual(self.learned("brand_a.jsonl"), [])
+        self.assertTrue(any(c["brand"] == "brand_a" for c in self.learned("candidates.jsonl")))
 
     def test_use_refuses_when_the_live_file_moved_on(self):
         self.R.revise("brand_a", "n1", runner=self.exact(), say=lambda *_: None)

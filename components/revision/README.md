@@ -14,6 +14,7 @@ You say "revise my notes" or press **Revise now** under a note in the Studio. Cl
 | **Writes** | A new version of only those files, as a proposal. Before, after, diff, and why, tied to his words |
 | **Checks** | His exact words are in; the owner's locked lines are still in the brief; the free script check, before and after |
 | **Use this** | His click puts the new files in place, keeps each old one beside it (`<name>.before-rev-<id>.md`), runs the stage check |
+| **Learns** | On Use this, the kept edits and the lesson behind each ask go into the chain's learnings (`run-kit/run_kit/learnings.py`). His stated rules are in force at once; the rest once seen in a second run. Every later writing, copy, video and image run is handed them |
 
 ## Where things land
 

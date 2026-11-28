@@ -31,6 +31,17 @@ The piece: {{PIECE}}
   `needs_paid` and do not route it to a file.
 - If something he says is not about this piece, or no file here holds it, put it in `not_here` with the reason.
 
+## The lesson behind each ask
+
+Every ask also teaches the chain something for the next piece. Write it as `lesson`: one rule the chain should
+follow on every future piece, in plain neutral words, with no brand, product or person named ("Put every hook shot
+in one scene, with the shots listed inside it", "Never open on a question"). Leave it empty when the ask only fixes
+this one piece (a wrong fact, a typo, one line he wants worded his way) and there is nothing to carry forward.
+- `lesson_kind`: "do" or "never".
+- `rule_said`: true only when he states it as a standing rule ("always", "every time", "never again", "this is the
+  last time I'm gonna say this", "from now on"); otherwise false, and the chain waits to see it twice.
+- `brand_only`: true when the lesson holds only for this brand (its product, its facts, its people).
+
 ## Answer
 
 Answer with one JSON object and nothing else:
@@ -38,6 +49,8 @@ Answer with one JSON object and nothing else:
 {"read": "one plain sentence: what he wants changed on this piece",
  "asks": [{"quote": "his words this ask comes from, verbatim", "kind": "exact or general",
            "shift": "what has to change, one plain line", "owner": "hook", "files": ["stages/4b-hooks.md"],
-           "exact_words": ["the words to use, verbatim (exact asks only)"]}],
+           "exact_words": ["the words to use, verbatim (exact asks only)"],
+           "lesson": "a rule for every future piece, or empty", "lesson_kind": "do", "rule_said": false,
+           "brand_only": false}],
  "needs_paid": [{"quote": "his words", "what": "what it would take"}],
  "not_here": [{"quote": "his words", "why": "why nothing here changes"}]}
