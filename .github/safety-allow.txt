@@ -15,3 +15,4 @@ components/research-gatherer/|@x.com
 components/research-gatherer/|@y.com
 components/research-gatherer/|me@mail.com
 components/workflow-teardown/|@0.5-morning.txt
+.claude/skills/next-campaigns-setup/SKILL.md|/Users/you/

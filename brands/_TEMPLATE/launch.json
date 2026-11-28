@@ -206,7 +206,7 @@
      "id": "store",
      "name": "Store on Next Commerce (29 Next), one shot",
      "status": "ready",
-     "tool": "skills next-theme-design, next-theme-dev, next-campaigns-setup (installed on this Mac, not in the Prizm repo)",
+     "tool": "skills next-theme-design, next-theme-dev, next-campaigns-setup (in Prizm)",
      "owner_click": "the store account and its keys"
     }
    ]
@@ -267,6 +267,6 @@
    ]
   }
  ],
- "_sources": "Prizm skills and components; Prizm skills-library (recipes/brand-from-zero.md, recipes/tool-map.md, catalog.json via tools/find.py); Next Commerce skills installed on this Mac.",
+ "_sources": "Prizm skills and components, and Prizm's skills-library (recipes/brand-from-zero.md, recipes/tool-map.md, catalog.json via tools/find.py).",
  "_runs_on": "Everything runs from Prizm Labs: Prizm's own keys (its .env, read through components/keys/loader.py) and Prizm's own private runs/ (components/run-lanes). Never the team workspace's keys, runs or tools."
 }
