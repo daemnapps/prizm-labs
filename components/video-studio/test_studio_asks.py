@@ -42,8 +42,25 @@ class Asks(unittest.TestCase):
         with self.assertRaises(ValueError):
             SA.create("connect", "", "no-slash")
         r = SA.create("deeper", "acme", "dry skin in winter")
-        self.assertEqual(r["state"], "queued")
+        self.assertEqual((r["state"], r["to"]), ("handed", "team"))       # a team brand: handed, not run on this Claude
+        self.assertTrue(Path(r["note"]).is_file())
         self.assertEqual(SA.listing("acme")[0]["id"], r["id"])
+        here = SA.create("deeper", "acme", "dry skin", to="here")
+        self.assertEqual((here["state"], here["to"]), ("queued", "here"))
+
+    def test_brand_in_its_own_repo_runs_its_own_jobs(self):
+        import os
+        ext = self.root / "theirs"
+        (ext / "brands" / "zeta").mkdir(parents=True)
+        os.environ["PRIZM_BRAND_ROOTS"] = str(ext)
+        try:
+            r = SA.create("swipe", "zeta", "https://example.com/p/1")
+            self.assertEqual((r["state"], r["to"]), ("handed", "owner"))
+            note = ext / "handoffs" / "from-studio" / (r["id"] + ".md")
+            self.assertTrue(note.is_file())
+            self.assertIn("swipe-intake", note.read_text())
+        finally:
+            del os.environ["PRIZM_BRAND_ROOTS"]
 
     def test_prompt_carries_the_rules(self):
         r = SA.create("tune", "acme", "copy")
@@ -53,7 +70,7 @@ class Asks(unittest.TestCase):
         self.assertIn(r["dir"] + "/result.md", p)
 
     def test_run_writes_result_and_done(self):
-        r = SA.create("deeper", "acme", "dry skin")
+        r = SA.create("deeper", "acme", "dry skin", to="here")
         def fake(cmd, d):
             (Path(d) / "result.md").write_text("Found it.\n")
             return 0, "ok"
@@ -62,7 +79,7 @@ class Asks(unittest.TestCase):
         self.assertEqual(SA.one("acme", r["id"])["result"], "Found it.\n")
 
     def test_usage_is_metered_per_brand_kind_and_brief(self):
-        r = SA.create("variations", "acme", "brief 0042 · acme_ad")
+        r = SA.create("variations", "acme", "brief 0042 · acme_ad", to="here")
         def fake(cmd, d):
             (Path(d) / "result.md").write_text("Planned.\n")
             (Path(d) / "run.log").write_text("")
@@ -75,7 +92,7 @@ class Asks(unittest.TestCase):
         self.assertEqual(u["by_kind"][0]["key"], "variations")
 
     def test_failed_run_says_why(self):
-        r = SA.create("deeper", "acme", "dry skin")
+        r = SA.create("deeper", "acme", "dry skin", to="here")
         out = SA.run_one(r, runner=lambda cmd, d: (1, "boom"))
         self.assertEqual(out["state"], "failed")
         self.assertIn("boom", out["why"])

@@ -841,10 +841,10 @@ async function portfolio(){
 }
 
 /* ================= PRODUCTION (one place: video, static, email, swipes, new ad) ================= */
-const LANES = [['video', 'Video', 'video', 'cyan'], ['static', 'Static', 'image', 'violet'], ['email', 'Email', 'mail', 'magenta'], ['swipes', 'Swipes', 'bookmark', 'violet']];
+const LANES = [['sauce', 'Sauce', 'pen', 'amber'], ['video', 'Video', 'video', 'cyan'], ['static', 'Static', 'image', 'violet'], ['email', 'Email', 'mail', 'magenta'], ['swipes', 'Swipes', 'bookmark', 'violet']];
 function production(lane){
   const parts = (S.arg || '').split('/');
-  lane = lane || parts[0] || 'video';
+  lane = lane || parts[0] || 'sauce';
   const m = $('#main');
   if (!m.querySelector('#sub') || m.dataset.lane !== lane) {
     m.dataset.lane = lane;
@@ -858,6 +858,7 @@ function production(lane){
   if (lane === 'static') return staticLane();
   if (lane === 'email') return emailLane(parts[1]);
   if (lane === 'creators') return creatorsLane();
+  if (lane === 'sauce') return sauceLane(parts.slice(1).join('/'));
   if (lane === 'new') return newAd(parts.slice(1).join('/'));
 }
 async function staticLane(){
@@ -939,7 +940,7 @@ async function skillsView(){
 async function ask(kind, input, brand){
   try {
     const r = await J('/api/desk/ask', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({kind, input, brand: brand === undefined ? S.brand : brand, by: store.get('st.by') || ''})});
-    toast('On it · ' + r.name); asksBadge(); return r;
+    toast(r.state === 'handed' ? 'Handed to ' + (HANDTO[r.to] || r.to) + ' · ' + r.name : 'On it · ' + r.name); asksBadge(); return r;
   } catch (e) { toast(e.message); return null; }
 }
 document.addEventListener('click', e => {
@@ -951,7 +952,8 @@ async function asksBadge(){
   try { const r = await J('/api/desk/asks?brand=' + encodeURIComponent(S.brand), {keep:true}); const n = r.asks.filter(a => a.state === 'queued' || a.state === 'running').length; const el = $('#wkn'); if (el) { el.textContent = n || ''; $('#wk').classList.toggle('busy', !!n); } } catch {}
 }
 setInterval(asksBadge, 15000);
-const ASKSTATE = {queued:['waiting its turn', 'wait'], running:['Claude is on it', 'act'], done:['ready for you', 'ready'], failed:['stopped', 'stop']};
+const ASKSTATE = {queued:['waiting its turn', 'wait'], running:['Claude is on it', 'act'], done:['ready for you', 'ready'], failed:['stopped', 'stop'], handed:['handed off', 'mute']};
+const HANDTO = {owner: "the brand's owner (their own Claude)", team: 'the team', here: 'your Claude, here'};
 async function asksView(){
   const m = $('#main'), [brand, id] = (S.arg || '').split('/');
   if (brand && id) return askOne(brand, id);
@@ -969,6 +971,8 @@ async function askOne(brand, id){
   const stage = a.state === 'done' ? 1 : 0;
   if ((a.next || []).length) h += `<div class="flow">${a.next.map((x, i) => `<span class="${i < stage ? 'done' : i === stage ? 'now' : ''}">${esc(x)}</span>`).join('<i>→</i>')}</div>`;
   const mins = t => t ? Math.max(0, Math.round((Date.now() - new Date(t)) / 60000)) : null;
+  if (a.state === 'handed') h += `<div class="card" style="margin-bottom:16px;display:grid;gap:10px"><h3>${ib('send', 'indigo')}Handed to ${esc(HANDTO[a.to] || a.to)}</h3><div style="color:var(--ink-2);font-size:13.5px">${a.to === 'owner' ? 'It sits in their own repository as a note for their Claude to pick up. It runs on their usage, not yours.' : 'It sits in the team\'s list for whoever runs jobs. It runs on their usage, not yours.'} The result lands here when it is done.</div>
+      <div class="arow"><button class="btn" data-hand="here">Run it here instead (uses your Claude)</button>${a.to !== 'team' ? '<button class="btn" data-hand="team">Hand to the team</button>' : ''}</div></div>`;
   if (a.state === 'queued') h += `<div class="card note">Waiting its turn: one job runs at a time. This page updates on its own.</div>`;
   if (a.state === 'running' || (a.steps && a.steps.count && a.state !== 'done')) h += `<div class="card" style="margin-bottom:16px"><h3>${ib('loop', 'indigo')}Claude is working on it<span class="lbl" style="margin-left:auto">${mins(a.started) ?? 0} min · ${a.steps ? a.steps.count : 0} steps</span></h3>
       <ol class="steps2">${((a.steps || {}).last || []).map(x => `<li>${esc(x)}</li>`).join('') || '<li class="lbl">Starting…</li>'}</ol></div>`;
@@ -980,6 +984,7 @@ async function askOne(brand, id){
   if (a.state === 'done' && a.steps && a.steps.count) h += `<details class="card" style="margin-top:16px"><summary class="lbl" style="cursor:pointer">What Claude did · ${a.steps.count} steps</summary><ol class="steps2">${a.steps.last.map(x => `<li>${esc(x)}</li>`).join('')}</ol></details>`;
   m.querySelector('.skel').outerHTML = `<div>${h}</div>`;
   paintIcons(m);
+  m.querySelectorAll('[data-hand]').forEach(b => b.onclick = async () => { b.disabled = true; try { await J('/api/desk/ask-hand', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({brand, id, to: b.dataset.hand})}); toast(b.dataset.hand === 'here' ? 'Running here' : 'Handed to the team'); askOne(brand, id); } catch (e) { toast(e.message); b.disabled = false; } });
   const mf = $('#makef'); if (mf) mf.onsubmit = e => { e.preventDefault(); ask('make', mf.which.value + ' · from job ' + a.id + ' (' + a.input + ')', brand).then(r => { if (r) location.hash = 'asks/' + encodeURIComponent(r.brand) + '/' + encodeURIComponent(r.id); }); };
   m.querySelectorAll('[data-taste]').forEach(b => b.onclick = async () => {
     b.disabled = true;
@@ -1279,6 +1284,31 @@ async function joinView(){
   if ($('#jpick')) $('#jpick').onchange = e => { location.hash = 'join/' + encodeURIComponent(e.target.value); };
 }
 const JOIN_TXT = [['They make their own repo', 'a private copy of Prizm, under their account'], ['They invite us', 'to that one repo'], ['Their Claude fills the brand folder', '"activate Prizm Lab": site, reviews, Drive first'], ['We send what\'s missing', 'one plain list'], ['First run', 'top ads by spend → teardowns → scripts → production']];
+
+
+/* ================= SAUCE: your own pass over the spiced script, the one job that is yours ================= */
+async function sauceLane(label){
+  const h = host(); h.innerHTML = '<div class="skel">Loading scripts…</div>';
+  let d; try { d = await J('/api/desk/sauce?brand=' + encodeURIComponent(S.brand)); } catch (e) { h.innerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
+  const list = d.scripts || [];
+  label = label || (list.find(x => !x.sauce) || list[0] || {}).label;
+  const todo = list.filter(x => !x.sauce).length;
+  h.innerHTML = `<div class="split"><div class="card list"><div class="g"><span class="pill p-wait">Ready for your sauce</span><span class="lbl">${todo}</span></div>
+      ${list.map(x => `<a class="ad ${x.label === label ? 'on' : ''}" href="#production/sauce/${encodeURIComponent(x.label)}" style="color:var(--ink)"><b>${esc(nice(x.label))}</b><span>${x.sauce ? 'sauced ' + new Date(x.sauced_at * 1000).toLocaleDateString('en-GB', {day:'numeric', month:'short'}) : 'spiced ' + new Date(x.at * 1000).toLocaleDateString('en-GB', {day:'numeric', month:'short'})}</span></a>`).join('') || '<div class="empty" style="padding:14px">No spiced scripts yet</div>'}</div>
+    <div class="detail" id="sdet">${label ? '<div class="skel">Opening…</div>' : '<div class="card note">Nothing to sauce yet.</div>'}</div></div>`;
+  if (!label) return;
+  let g; try { g = await J('/api/desk/sauce-one?label=' + encodeURIComponent(label)); } catch (e) { $('#sdet').innerHTML = `<div class="note stop">${esc(e.message)}</div>`; return; }
+  $('#sdet').innerHTML = `<div class="dh"><h2>${esc(nice(label))}</h2>${g.sauce ? '<span class="pill p-ready">sauced</span>' : '<span class="pill p-wait">spiced, needs your sauce</span>'}<div class="acts"><a class="btn" href="#swipe/${encodeURIComponent(label)}">The swipe</a></div></div>
+    <div class="grid2" style="align-items:start">
+      <div class="card" style="padding:0"><div style="padding:12px 16px;border-bottom:1px solid var(--line)"><h3>${ib('sparkles', 'violet')}What the tools wrote<span class="lbl" style="margin-left:auto">spice · the spoken script</span></h3></div><div class="md" style="padding:14px 16px;max-height:calc(100vh - 300px);overflow:auto;font-size:13.5px">${md(g.script)}</div></div>
+      <div class="card" style="padding:0;position:sticky;top:80px"><div style="padding:12px 16px;border-bottom:1px solid var(--line)"><h3>${ib('pen', 'amber')}Your sauce<span class="lbl" style="margin-left:auto">saved beside the spice; the spice is never changed</span></h3></div>
+        <textarea id="sauce" style="width:100%;min-height:calc(100vh - 360px);border:0;padding:14px 16px;font:14.5px/1.65 var(--body);resize:vertical;background:var(--card);color:var(--ink)">${esc(g.sauce || g.script)}</textarea>
+        <div class="arow" style="padding:10px 16px;border-top:1px solid var(--line)"><span class="lbl" id="scount"></span><button class="btn wait" id="ssave" style="margin-left:auto"><i class="ic" data-i="check"></i>Save sauce</button></div></div></div>`;
+  paintIcons($('#sdet'));
+  const ta = $('#sauce'), cnt = () => $('#scount').textContent = ta.value.trim().split(/\s+/).filter(Boolean).length + ' words';
+  ta.oninput = cnt; cnt();
+  $('#ssave').onclick = async () => { const b = $('#ssave'); b.disabled = true; try { await J('/api/desk/sauce', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({label, text: ta.value})}); toast('Sauce saved'); sauceLane(label); } catch (e) { toast(e.message); b.disabled = false; } };
+}
 
 boot();
 asksBadge();

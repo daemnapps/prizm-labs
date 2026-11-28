@@ -145,6 +145,7 @@ NEXT = {
     "setup": ["Claude fills the item as a draft", "You: confirm in Settings"],
     "connect": ["Claude reads the repository", "You: decide to connect it"],
     "market": ["Claude plans the read (free)", "You: go on the credits", "New products on the radar"],
+    "_handed": ["Handed off", "They run it on their own Claude", "The result comes back here"],
     "onboard": ["Claude checks access and reads their brand folder", "You: send them the ask list", "Their Claude fills the folder", "First run: top 5 ads → teardowns"],
 }
 
@@ -180,8 +181,53 @@ def _write(p, data):
     os.replace(tmp, p)
 
 
-def create(kind, brand, text, by=None):
-    """Queue one ask. Returns its record."""
+def default_hand(brand):
+    """Who runs a job by default: a brand that keeps its folder in its own repository runs its own heavy jobs (its
+    owner's Claude); every other brand's jobs go to the team. The owner's own Claude runs a job only when asked."""
+    try:
+        import workflow_desk as WD
+        d = WD.bdir(brand)
+        if d.is_dir() and not str(d).startswith(str(WS / "brands")):
+            return "owner"
+    except Exception:  # noqa: BLE001
+        pass
+    return "team"
+
+
+def _hand_text(rec):
+    return ("# Studio job: %s\n\nBrand: %s · asked %s · job %s\n\n## What to do\n\n%s\n\n"
+            "## When it is done\n\nWrite the result where the job says, then close this note.\n"
+            % (rec["name"], rec["brand"], rec["asked"], rec["id"], prompt_for(rec)))
+
+
+def hand(rec, to):
+    """Give a job to whoever runs it: 'owner' writes it into the brand's own repository (handoffs/from-studio/), for
+    the owner's Claude to pick up; 'team' writes a team handoff note for whoever runs jobs (the team workspace);
+    'here' runs it on this computer's Claude."""
+    d = WS / rec["dir"]
+    if to == "here":
+        rec.update(state="queued", to="here")
+        _write(d / "ask.json", rec)
+        start_worker()
+        WAKE.set()
+        return rec
+    if to == "owner":
+        import workflow_desk as WD
+        root = WD.bdir(rec["brand"]).parent.parent
+        p = root / "handoffs" / "from-studio" / (rec["id"] + ".md")
+    elif to == "team":
+        p = WS / "runs" / "studio-asks" / "_team" / (rec["id"] + ".md")
+    else:
+        raise ValueError("hand it to owner, team or here")
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(_hand_text(rec))
+    rec.update(state="handed", to=to, handed_at=now(), note=str(p))
+    _write(d / "ask.json", rec)
+    return rec
+
+
+def create(kind, brand, text, by=None, to=None):
+    """Make one ask and hand it to whoever runs it (default: the brand's owner or the team). Returns its record."""
     if kind not in KINDS:
         raise ValueError("unknown ask: " + str(kind))
     if not (kind in ("connect", "onboard") or (kind == "market" and not brand)) and (not brand or not SAFE.match(brand) or not _bdir(brand).is_dir()):
@@ -201,9 +247,7 @@ def create(kind, brand, text, by=None):
     rec = {"id": aid, "brand": brand, "kind": kind, "input": text, "name": KINDS[kind]["name"].format(input=text),
            "state": "queued", "asked": now(), "by": by, "dir": str(d.relative_to(WS))}
     _write(d / "ask.json", rec)
-    start_worker()
-    WAKE.set()
-    return rec
+    return hand(rec, to or ("here" if brand == "_portfolio" else default_hand(brand)))
 
 
 def listing(brand=None, limit=40):
@@ -432,7 +476,7 @@ def _next():
     q = []
     for f in root().glob("*/*/ask.json"):
         r = _read(f)
-        if isinstance(r, dict) and r.get("state") in ("queued", "running"):
+        if isinstance(r, dict) and r.get("state") in ("queued", "running") and r.get("to", "here") == "here":
             q.append(r)
     q.sort(key=lambda r: r.get("asked") or "")
     return q[0] if q else None

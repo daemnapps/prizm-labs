@@ -1068,6 +1068,55 @@ def ad_off(data):
         raise RuntimeError("Outlier did not turn it off: %s" % e)
 
 
+# ---------- Sauce: the owner's own pass over the spiced script ----------
+
+def _section(text, title):
+    m = re.search(r"^##\s*\d*\.?\s*" + re.escape(title) + r".*?$(.*?)(?=^##\s|\Z)", text or "", re.M | re.S | re.I)
+    return m.group(1).strip() if m else ""
+
+
+def sauce_list(brand):
+    """Every script of this brand that has been through spice, newest first, and whether it has its sauce yet."""
+    out = []
+    for f in glob.glob(str(WS / "runs/video-teardown/_work/*/stages/4g-spice.md")):
+        d = Path(f).parent.parent
+        r = _read(d / "run.json") or {}
+        if r.get("brand") != brand:
+            continue
+        out.append({"label": d.name, "at": os.path.getmtime(f), "poster": "runs/video-teardown/_work/%s/poster.jpg" % d.name
+                    if (d / "poster.jpg").is_file() else None, "sauce": (d / "stages/4h-sauce.md").is_file(),
+                    "sauced_at": os.path.getmtime(d / "stages/4h-sauce.md") if (d / "stages/4h-sauce.md").is_file() else None})
+    out.sort(key=lambda x: (x["sauce"], -x["at"]))
+    return {"scripts": out}
+
+
+def sauce_get(label):
+    d = WS / "runs/video-teardown/_work" / label
+    sp = d / "stages/4g-spice.md"
+    if not sp.is_file():
+        return None
+    spice = sp.read_text(errors="replace")
+    sauce = (d / "stages/4h-sauce.md").read_text(errors="replace") if (d / "stages/4h-sauce.md").is_file() else None
+    return {"label": label, "spice": spice, "script": _section(spice, "THE SPOKEN SCRIPT") or spice,
+            "sheet": _section(spice, "THE SPICE SHEET"), "sauce": sauce,
+            "poster": "runs/video-teardown/_work/%s/poster.jpg" % label if (d / "poster.jpg").is_file() else None}
+
+
+def sauce_save(label, text, by=None):
+    """The owner's sauce, saved beside the spice as stages/4h-sauce.md (the spice is never changed)."""
+    import datetime
+    d = WS / "runs/video-teardown/_work" / label
+    if not SAFE.match(label or "") or not (d / "stages/4g-spice.md").is_file():
+        raise ValueError("no spiced script with that name")
+    text = (text or "").strip()
+    if not text:
+        raise ValueError("nothing written")
+    (d / "stages/4h-sauce.md").write_text(text + "\n")
+    (d / "stages/4h-sauce.json").write_text(json.dumps({"at": datetime.datetime.now().isoformat(timespec="seconds"),
+                                                        "by": by or "owner", "chars": len(text), "from": "stages/4g-spice.md"}, indent=1))
+    return {"ok": True, "path": "runs/video-teardown/_work/%s/stages/4h-sauce.md" % label}
+
+
 def vary_candidates(la, n=6):
     """New ads worth varying: groups that carry a brief number or a creator (trybe) tag, that sold in the last 30 days
     and are under the desk's break-even (or that the desk says to keep or scale). Ranked by purchases."""
@@ -1352,6 +1401,11 @@ def handle(h, method, parts, query, body):
                 import studio_asks as SA
                 SA.start_worker()                               # a restarted Studio picks up asks still open
                 return h.send(200, {"asks": SA.listing(q.get("brand") if SAFE.match(q.get("brand", "")) else None)})
+            if api == ["sauce"] and SAFE.match(q.get("brand", "")):
+                return h.send(200, sauce_list(q["brand"]))
+            if api == ["sauce-one"] and SAFE.match(q.get("label", "")):
+                sg = sauce_get(q["label"])
+                return h.send(200, sg) if sg else h.send(404, {"error": "no spiced script with that name"})
             if api == ["joining"]:
                 return h.send(200, joining())
             if api == ["bill"] and SAFE.match(q.get("brand", "")):
@@ -1398,9 +1452,18 @@ def handle(h, method, parts, query, body):
                 return knowledge_ask(h, data)
             if api == ["ask"]:                                  # a Studio button hands one job to Claude
                 import studio_asks as SA
-                return h.send(200, SA.create(data.get("kind"), data.get("brand"), data.get("input"), data.get("by")))
+                return h.send(200, SA.create(data.get("kind"), data.get("brand"), data.get("input"), data.get("by"), data.get("to")))
+            if api == ["ask-hand"]:                             # move a job: to the brand's owner, the team, or here
+                import studio_asks as SA
+                rec = SA.one(str(data.get("brand") or ""), str(data.get("id") or ""))
+                if not rec:
+                    return h.send(404, {"error": "no such job"})
+                rec = {k: v for k, v in rec.items() if k not in ("result", "steps", "next", "draft", "live")}
+                return h.send(200, SA.hand(rec, data.get("to")))
             if api == ["joining"]:
                 return h.send(200, join_update(data))
+            if api == ["sauce"]:
+                return h.send(200, sauce_save(data.get("label"), data.get("text"), data.get("by")))
             if api == ["ad-off"]:
                 return h.send(200, ad_off(data))
             if api == ["hide"]:
