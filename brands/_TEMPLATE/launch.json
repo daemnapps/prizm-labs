@@ -103,9 +103,17 @@
     },
     {
      "id": "evidence",
-     "name": "The ingredient's studies, and the mechanism from them",
-     "status": "gap",
-     "tool": "none in this repo"
+     "name": "The ingredient's studies, strongest first",
+     "status": "ready",
+     "tool": "components/ingredient-evidence/evidence.py (PubMed)",
+     "fills": "products/<product>/evidence/"
+    },
+    {
+     "id": "mechanism",
+     "name": "The unique mechanism, from the studies only",
+     "status": "ready",
+     "tool": "reads products/<product>/evidence/EVIDENCE.md; each line cites its study",
+     "fills": "position.md (mechanism slot)"
     },
     {
      "id": "picks",
@@ -259,5 +267,6 @@
    ]
   }
  ],
- "_sources": "Prizm skills and components; Prizm skills-library (recipes/brand-from-zero.md, recipes/tool-map.md, catalog.json via tools/find.py); Next Commerce skills installed on this Mac; the team workspace's established skills, read and run in place, never written to."
+ "_sources": "Prizm skills and components; Prizm skills-library (recipes/brand-from-zero.md, recipes/tool-map.md, catalog.json via tools/find.py); Next Commerce skills installed on this Mac.",
+ "_runs_on": "Everything runs from Prizm Labs: Prizm's own keys (its .env, read through components/keys/loader.py) and Prizm's own private runs/ (components/run-lanes). Never the team workspace's keys, runs or tools."
 }

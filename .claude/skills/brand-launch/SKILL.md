@@ -8,7 +8,7 @@ description: Launch a brand from zero with one trigger. A hunch goes in (one lin
 > **Runs:** the checklist in `brands/_TEMPLATE/launch.json`, step by step, through the tool each step names.
 > A brand that already sells uses `brand-activation` instead.
 
-Only what is in this repo runs. Every step names its tool. A step marked `gap` has no tool here: do not do it by hand,
+Everything runs from Prizm Labs: Prizm's own keys (its `.env`) and Prizm's own private `runs/`; never the team workspace's keys, runs or tools. Only what is in this repo runs. Every step names its tool. A step marked `gap` has no tool here: do not do it by hand,
 do not fill it from general knowledge, do not invent its how-to. Show it on the page as a gap, so the tool gets built
 and added to `launch.json`.
 
