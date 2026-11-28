@@ -48,6 +48,22 @@ class Asks(unittest.TestCase):
         here = SA.create("deeper", "acme", "dry skin", to="here")
         self.assertEqual((here["state"], here["to"]), ("queued", "here"))
 
+    def test_revise_is_a_code_job_run_here(self):
+        with self.assertRaises(ValueError):
+            SA.create("revise", "acme", "not an id!")
+        r = SA.create("revise", "acme", "ab12cd34ef")
+        self.assertEqual((r["state"], r["to"]), ("queued", "here"))     # never handed: it is code on this computer
+        seen = []
+        def fake(cmd, d):
+            seen.append(cmd)
+            (Path(d) / "result.md").write_text("The hook is now his.\n")
+            return 0, ""
+        self.assertEqual(SA.run_one(r, runner=fake)["state"], "done")
+        self.assertIn("revise.py", seen[0][1])
+        self.assertEqual(seen[0][2:6], ["ask", "--brand", "acme", "--input"])
+        self.assertIsNone(SA.code_argv({"kind": "deeper"}))
+        self.assertIn("only the changes", SA.listing("acme")[0]["what"])
+
     def test_brand_in_its_own_repo_runs_its_own_jobs(self):
         import os
         ext = self.root / "theirs"

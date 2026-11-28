@@ -15,6 +15,7 @@ import os
 import re
 import shutil
 import subprocess
+import sys
 import threading
 import uuid
 from pathlib import Path
@@ -126,6 +127,13 @@ The brand owns its own repository and its own data; we only get access. Read too
 4. In the result: a table of the 23 items (filled / missing), then "What to ask the brand for": a short numbered
    list in plain words the owner can forward as is, then the first run once it is filled (their top 5 ads by spend
    → teardowns → scripts → production)."""},
+    "revise": {
+        "name": "Revise: {input}",
+        "cmd": True,                     # code, not a Claude session: components/revision/revise.py (two Sonnet passes)
+        "prompt": """Brand: {brand}. Job: revise one piece from the owner's feedback note "{input}" (an id in
+runs/studio-feedback/{brand}/feedback.jsonl; "use <id>" puts a ready revision in place). Run
+`python3 components/revision/revise.py ask --brand {brand} --input "{input}"` and follow
+.claude/skills/revision/SKILL.md. In the result: what changed, before and after, tied to his words."""},
     "connect": {
         "name": "Look at {input}",
         "prompt": """Job: say what this GitHub repository is, read-only: {input}
@@ -146,6 +154,7 @@ NEXT = {
     "connect": ["Claude reads the repository", "You: decide to connect it"],
     "market": ["Claude plans the read (free)", "You: go on the credits", "New products on the radar"],
     "_handed": ["Handed off", "They run it on their own Claude", "The result comes back here"],
+    "revise": ["The revision reads your note and makes only those changes", "You: Use this", "The chain carries on from it"],
     "onboard": ["Claude checks access and reads their brand folder", "You: send them the ask list", "Their Claude fills the folder", "First run: top 5 ads → teardowns"],
 }
 
@@ -193,6 +202,7 @@ ABOUT = {
     "setup": ("setup", "Fills one brand setup item as a draft from what's already on file. You confirm it in Settings."),
     "market": ("research", "Plans a read of the market for this category. Spends credits only on your go."),
     "onboard": ("setup", "Checks access to a new brand and reads its folder, then writes the list of what to ask them for."),
+    "revise": ("video", "Reads your feedback on this piece and makes only the changes you asked for. You see before and after, then Use this."),
     "connect": ("setup", "Reads a repository and says what's in it and whether to connect it."),
 }
 LANE_NAMES = {"research": "Research", "copy": "Copy", "video": "Video", "feed": "Feed", "setup": "Setup"}
@@ -257,6 +267,8 @@ def create(kind, brand, text, by=None, to=None):
         raise ValueError("tune one of: " + ", ".join(TASTES))
     if kind == "connect" and not re.fullmatch(r"[\w.-]+/[\w.-]+", text):
         raise ValueError("a repository as owner/name")
+    if kind == "revise" and not re.fullmatch(r"(use )?[a-zA-Z0-9_-]{4,40}", text):
+        raise ValueError("a feedback note's id")
     if kind == "swipe" and not re.match(r"https?://", text):
         raise ValueError("paste the post's link")
     brand = "_portfolio" if kind in ("connect", "onboard") or not brand else brand
@@ -269,7 +281,7 @@ def create(kind, brand, text, by=None, to=None):
     rec = {"id": aid, "brand": brand, "kind": kind, "input": text, "name": KINDS[kind]["name"].format(input=text),
            "state": "queued", "asked": now(), "by": by, "dir": str(d.relative_to(WS))}
     _write(d / "ask.json", rec)
-    return hand(rec, to or ("here" if brand == "_portfolio" else default_hand(brand)))
+    return hand(rec, to or ("here" if brand == "_portfolio" or KINDS[kind].get("cmd") else default_hand(brand)))
 
 
 def listing(brand=None, limit=40, dupes=False):
@@ -335,6 +347,15 @@ def prompt_for(rec):
     k = KINDS[rec["kind"]]
     return (k["prompt"].format(brand=rec["brand"], input=rec["input"]) + "\n\n"
             + RULES.format(brand=rec["brand"], out=out))
+
+
+def code_argv(rec):
+    """A code job (KINDS[kind]["cmd"]) runs its own command, not a Claude session; it names its own model in its code.
+    None for every Claude job."""
+    if not KINDS.get(rec.get("kind"), {}).get("cmd"):
+        return None
+    return [sys.executable, str(WS / "components" / "revision" / "revise.py"), "ask", "--brand", rec["brand"],
+            "--input", rec["input"], "--out", str(WS / rec["dir"] / "result.md")]
 
 
 def _alive(pid):
@@ -463,7 +484,7 @@ def run_one(rec, runner=None):
     if runner:                                          # tests: a fake run, in this process
         rec.update(state="running", started=now())
         _write(d / "ask.json", rec)
-        code, log = runner(["claude", "-p", prompt_for(rec)], d)
+        code, log = runner(code_argv(rec) or ["claude", "-p", prompt_for(rec), "--model", MODEL], d)
         (d / "run.log").write_text(log)
         return _finish(rec, code)
     if rec.get("state") == "running" and _alive(rec.get("pid")):
@@ -478,6 +499,7 @@ def run_one(rec, runner=None):
             pass
         cmd = ["claude", "-p", prompt_for(rec), "--model", MODEL, "--output-format", "stream-json", "--verbose",
                "--add-dir", *dirs, "--allowedTools", *TOOLS]
+        cmd = code_argv(rec) or cmd
         wrapper = 'cd "$1" && shift && "$@" > "$OUT/run.log" 2>&1; echo $? > "$OUT/exit.txt"'
         try:
             pr = subprocess.Popen(["/bin/sh", "-c", wrapper, "ask", str(WS), *cmd], start_new_session=True,

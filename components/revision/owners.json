@@ -1,0 +1,24 @@
+{
+ "about": "Which file of a piece's run owns which thing. The revision changes a thing in the file that owns it, and where the brief carries the same words, in the brief too. Paths are inside the piece's run folder; the first one that exists is used.",
+ "video": [
+  {"owner": "hook", "what": "the hook lines and their options", "files": ["stages/4b-hooks.md"]},
+  {"owner": "script", "what": "the spoken script, beat by beat (placement, expansion, close)", "files": ["stages/4cde-placement-expansion-close.md", "stages/4c-placement.md"]},
+  {"owner": "expansion", "what": "the middle of the script, when it is kept in its own file", "files": ["stages/4d-expansion.md"]},
+  {"owner": "close", "what": "the close and the offer line, when it is kept in its own file", "files": ["stages/4e-close.md"]},
+  {"owner": "spice", "what": "the spiced script: the lines after the spice pass", "files": ["stages/4g-spice.md"]},
+  {"owner": "brief", "what": "the one document the maker opens: scenes, lines, shots, cast, look, sound", "files": ["stages/5-brief.md", "5-brief.md"]},
+  {"owner": "cast", "what": "who is on screen: in the brief's cast part", "files": ["stages/5-brief.md", "5-brief.md"]},
+  {"owner": "look", "what": "how it looks: in the brief's look, scene and shot parts", "files": ["stages/5-brief.md", "5-brief.md"]},
+  {"owner": "locked", "what": "the owner's locked script: his own words; changed only when he gives the exact words", "files": ["owner-script.md"]},
+  {"owner": "injection", "what": "what we say in the swipe's form: the product, the claim, the angle", "files": ["stages/3-injection.md"]},
+  {"owner": "teardown", "what": "the read of the swipe itself: beats, hook, why it works", "files": ["stages/1-teardown.md"]}
+ ],
+ "email": [
+  {"owner": "subject", "what": "the subject lines and preview text", "files": ["stage5--subjects.md"]},
+  {"owner": "placement", "what": "the order of the email's parts", "files": ["stage4--placement.md"]},
+  {"owner": "close", "what": "the close and the call to action", "files": ["stage7--close.md"]},
+  {"owner": "copy", "what": "the email's words, block by block", "files": ["stage8--blocks.md"]},
+  {"owner": "brief", "what": "the design brief the email is built from", "files": ["stage9--brief.md"]},
+  {"owner": "injection", "what": "what the email says: the product, the claim, the angle", "files": ["stage3--injection.md"]}
+ ]
+}
